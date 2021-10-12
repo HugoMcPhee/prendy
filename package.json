@@ -1,0 +1,24 @@
+{
+  "name": "gamey",
+  "version": "0.0.1",
+  "description": "Make prerendered backdrop games with babylonjs and concepto",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaze23/unicorn-says-hello-world.git"
+  },
+  "keywords": [],
+  "author": "Hugo McPhee",
+  "license": "",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}

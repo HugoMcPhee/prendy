@@ -10,7 +10,7 @@ import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "shutils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
-import "./SpeechBubble.css";
+// import "./SpeechBubble.css";
 
 export function makeSpeechBubble<
   ConceptoFuncs extends GameyConceptoFuncs,

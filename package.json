@@ -1,6 +1,6 @@
 {
   "name": "gamey",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "prerendered backdrop games with babylonjs and concepto",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,7 @@
     "@babylonjs/loaders": "5.0.0-alpha.44",
     "react-babylonjs": "^3.0.22",
     "@types/react": "^17.0.29",
-    "concepto": "git+https://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@github.com/HugoMcPhee/concepto.git#v0.5.5",
+    "concepto": "git+https://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@github.com/HugoMcPhee/concepto.git#v0.5.6",
     "delay": "^5.0.0",
     "movers": "git+https://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@github.com/HugoMcPhee/movers.git#v0.5.1",
     "react": "^17.0.2",

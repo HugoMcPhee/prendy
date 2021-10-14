@@ -1,14 +1,25 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "strictNullChecks": true,
-    "target": "ESNext",
+    "target": "ES2019",
     "module": "ESNext",
     "outDir": "dist",
-    "lib": ["DOM", "ESNext"],
+    "lib": [
+      "ESNext",
+      "es5",
+      "dom",
+      "es2015.promise",
+      "es2015.collection",
+      "es2015.iterable",
+      "es2015.symbol.wellknown",
+      "es2020.bigint"
+    ],
     "jsx": "react",
     "sourceMap": false,
-    "rootDir": "src"
+    "allowSyntheticDefaultImports": true,
+    "rootDir": "src",
+    "moduleResolution": "node",
+    "skipLibCheck": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

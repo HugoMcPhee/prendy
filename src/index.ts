@@ -1,1 +1,1 @@
-export * from "./unicorn";
+export { makeGameyConcepts } from "./concepts";

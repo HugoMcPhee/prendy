@@ -1,6 +1,6 @@
 {
   "name": "gamey",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "prerendered backdrop games with babylonjs and concepto",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,6 +19,20 @@
   "author": "Hugo McPhee",
   "license": "",
   "devDependencies": {
+    "@babylonjs/core": "5.0.0-alpha.44",
+    "@babylonjs/gui": "5.0.0-alpha.12",
+    "@babylonjs/inspector": "5.0.0-alpha.44",
+    "@babylonjs/loaders": "5.0.0-alpha.44",
+    "react-babylonjs": "^3.0.22",
+    "@types/react": "^17.0.29",
+    "concepto": "git+https://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@github.com/HugoMcPhee/concepto.git#v0.5.5",
+    "delay": "^5.0.0",
+    "movers": "git+https://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@github.com/HugoMcPhee/movers.git#v0.5.1",
+    "react": "^17.0.2",
+    "react-promise-suspense": "^0.3.3",
+    "react-spring": "^9.3.0",
+    "shutils": "git+https://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@github.com/HugoMcPhee/shutils.git#v0.3.1",
+    "stringz": "^2.1.0",
     "typescript": "^4.4.3"
   }
 }

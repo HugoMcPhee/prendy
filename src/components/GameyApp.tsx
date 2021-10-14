@@ -17,7 +17,7 @@ import {
   PlaceholderGameyConcepts,
   PlaceInfoByNamePlaceholder,
 } from "../concepts/typedConceptoFuncs";
-import "./GameyApp.css";
+// import "./GameyApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";

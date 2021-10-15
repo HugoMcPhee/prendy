@@ -1,5 +1,5 @@
-import { ConceptsHelperTypes } from "concepto";
-import { createConcepts } from "concepto";
+import { ConceptsHelperTypes } from "concep";
+import { createConcepts } from "concep";
 import { gameyFlowNames } from ".";
 import { makeGetGameyStartOptions } from "../getGameyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";

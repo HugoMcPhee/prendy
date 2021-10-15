@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "concepto";
+import { ConceptsHelperTypes } from "concep";
 import { makeStackVidStoreUtils } from "../../concepts/stackVids/utils";
 import { minMaxRange } from "shutils/dist/numbers";
 import { SectionVidState } from ".";

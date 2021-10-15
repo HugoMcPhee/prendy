@@ -1,5 +1,5 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { moverMultiRefs, makeMoverStateMaker } from "movers";
+import { moverMultiRefs, makeMoverStateMaker } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
 import { ModelInfoByNamePlaceholder } from "../typedConceptoFuncs";
 //

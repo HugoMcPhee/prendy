@@ -1,6 +1,6 @@
 // import { getState, ItemState, setState } from "concepts";
 
-import { ConceptsHelperTypes } from "concepto";
+import { ConceptsHelperTypes } from "concep";
 import { GameyConceptoFuncs } from "../../typedConceptoFuncs";
 
 // type GlobalItemState = ItemState<"global">;

@@ -13,7 +13,7 @@ import {
   PlaceholderGameyConcepts,
 } from "../typedConceptoFuncs";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import { makeRunMovers } from "movers";
+import { makeRunMovers } from "concep-movers";
 import { PBRMaterial } from "@babylonjs/core";
 
 // const dollDynamicRules = makeDynamicRules({

@@ -6,7 +6,7 @@ import {
   Material,
   Skeleton,
 } from "@babylonjs/core";
-import { moverRefs, moverState, mover3dRefs, mover3dState } from "movers";
+import { moverRefs, moverState, mover3dRefs, mover3dState } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
 import {

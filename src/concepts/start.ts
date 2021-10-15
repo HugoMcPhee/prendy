@@ -41,7 +41,8 @@ export function makeStartGameyRules<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  StartState_Dolls extends GameyConcepts["dolls"]["startStates"],
+  StartState_Dolls extends GameyConcepts["dolls"]["startStates"] &
+    ReturnType<ConceptoFuncs["getState"]>["dolls"],
   AnyAnimationName extends string,
   AnimationNameByModel extends Record<ModelName, AnyAnimationName>
   // DollName extends keyof StartState_Dolls & string,

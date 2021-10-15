@@ -188,7 +188,51 @@ const conceptoFuncs = createConcepts(placeholderGameyConcepts, {
 });
 
 export type PlaceholderGameyConcepts = typeof placeholderGameyConcepts;
-export type GameyConceptoFuncs = typeof conceptoFuncs;
+
+// NOTE Change this to typeof conceptoFuncs to have known types while making backdops library
+// export type GameyConceptoFuncs = typeof conceptoFuncs;
+export type GameyConceptoFuncs = {
+  getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
+  getPreviousState: () => any;
+  getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
+  setState: (
+    ...args: any
+  ) => (
+    newState: Record<any, any> | ((state: any) => any),
+    callback?: (nextFrameDuration: number) => any
+  ) => any;
+  startItemEffect: (...args: any) => any;
+  startEffect: (...args: any) => any;
+  stopEffect: (...args: any) => any;
+  makeRules: (
+    ...args: any
+  ) => {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+  };
+  makeDynamicRules: (
+    ...args: any
+  ) => {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+  };
+  onNextTick: (...args: any) => any;
+  addItem: (...args: any) => any;
+  removeItem: (...args: any) => any;
+
+  getItem: (...args: any) => any;
+  useStore: (...args: any) => any;
+  useStoreItem: (...args: any) => any;
+  useStoreEffect: (...args: any) => any;
+  useStoreItemEffect: (...args: any) => any;
+  useStoreItemPropsEffect: (...args: any) => any;
+};
 
 type ItemType = keyof ReturnType<GameyConceptoFuncs["getState"]>;
 type HelperType<T extends ItemType> = ConceptsHelperTypes<

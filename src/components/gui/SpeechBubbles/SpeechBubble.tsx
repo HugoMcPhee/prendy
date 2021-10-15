@@ -28,7 +28,7 @@ export function makeSpeechBubble<
     conceptoFuncs
   );
 
-  type Props = { name: keyof AllItemsState<"speechBubbles"> };
+  type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 
   return function SpeechBubble({ name }: Props) {
     const theRectangle = useRef<HTMLDivElement>(null);

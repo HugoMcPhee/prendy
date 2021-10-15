@@ -187,20 +187,28 @@ const conceptoFuncs = createConcepts(placeholderGameyConcepts, {
   dontSetMeta: true,
 });
 
-export type PlaceholderGameyConcepts = typeof placeholderGameyConcepts;
-
-// NOTE Change this to typeof conceptoFuncs to have known types while making backdops library
+// NOTE Change these to typeof  to have known types while making backdops library
+// export type PlaceholderGameyConcepts = typeof placeholderGameyConcepts;
 // export type GameyConceptoFuncs = typeof conceptoFuncs;
+
+export type PlaceholderGameyConcepts = Record<
+  any,
+  {
+    state: (itemName: any) => any;
+    refs: (itemName: any, type: any) => any;
+    startStates?: Record<any, any>;
+  }
+>;
 export type GameyConceptoFuncs = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
-  getPreviousState: () => any;
+  getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
   setState: (
-    ...args: any
-  ) => (
-    newState: Record<any, any> | ((state: any) => any),
+    newState:
+      | Record<any, Record<any, Record<any, any | any[]>>>
+      | ((state: Record<any, Record<any, Record<any, any | any[]>>>) => any),
     callback?: (nextFrameDuration: number) => any
-  ) => any;
+  ) => void;
   startItemEffect: (...args: any) => any;
   startEffect: (...args: any) => any;
   stopEffect: (...args: any) => any;

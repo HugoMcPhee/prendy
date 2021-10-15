@@ -1,6 +1,6 @@
 {
   "name": "gamey",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "prerendered backdrop games with babylonjs and concepto",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

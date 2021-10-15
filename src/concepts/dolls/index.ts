@@ -9,7 +9,10 @@ import {
 import { moverRefs, moverState, mover3dRefs, mover3dState } from "movers";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
-import { ModelInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import {
+  DollOptionsPlaceholder,
+  ModelInfoByNamePlaceholder,
+} from "../typedConceptoFuncs";
 import makeDollIndexUtils from "./indexUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
@@ -19,6 +22,7 @@ export default function dolls<
   DollName extends string,
   AnySpotName extends string,
   AnyAnimationName extends string,
+  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>,
   AnimationNameByModel extends Record<ModelName, AnyAnimationName>,
   BoneNameByModel extends Record<ModelName, string>,
   MaterialNameByModel extends Record<ModelName, string>,
@@ -27,7 +31,8 @@ export default function dolls<
 >(
   modelNames: readonly ModelName[],
   dollNames: readonly DollName[],
-  modelInfoByName: ModelInfoByName
+  modelInfoByName: ModelInfoByName,
+  dollOptions: DollOptions
 ) {
   const {
     defaultInRange,
@@ -78,7 +83,7 @@ export default function dolls<
   // hacky way to get return type from generic function
   // from Colin at https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
   class StateReturnType_Generic_Helper<
-    T_A extends string,
+    T_A extends DollName,
     T_B extends ModelName
   > {
     // wrapped has no explicit return type so we can infer it
@@ -86,9 +91,10 @@ export default function dolls<
       return state<T_A, T_B>(a, b);
     }
   }
-  type StateReturnType<T_A extends string, T_B extends ModelName> = ReturnType<
-    StateReturnType_Generic_Helper<T_A, T_B>["wrapped"]
-  >;
+  type StateReturnType<
+    T_A extends DollName,
+    T_B extends ModelName
+  > = ReturnType<StateReturnType_Generic_Helper<T_A, T_B>["wrapped"]>;
 
   type DollAssetRefs<T_ModelName extends ModelName> = {
     meshes: Record<MeshNameByModel[T_ModelName] | "__root__", AbstractMesh>;
@@ -98,7 +104,7 @@ export default function dolls<
     materials: Record<MaterialNameByModel[T_ModelName], Material>;
   };
 
-  const refs = <T_DollName extends string, T_ModelName extends ModelName>(
+  const refs = <T_DollName extends DollName, T_ModelName extends ModelName>(
     dollName: T_DollName,
     itemState: StateReturnType<T_DollName, T_ModelName>
   ) => {
@@ -133,9 +139,9 @@ export default function dolls<
   };
 
   // automatically make atleast a doll for each model
-  type DollModelStartStates = {
-    [K_ModelName in ModelName]: StateReturnType<K_ModelName, K_ModelName>;
-  };
+  // type DollModelStartStates = {
+  //   [K_Doll in ModelName]: StateReturnType<K_ModelName, K_ModelName>;
+  // };
   // before moving the file into a function it used "ModelName & DollName"
   // type DollModelStartStates = {
   //   [K_ModelName in ModelName & DollName]: StateReturnType<
@@ -143,20 +149,28 @@ export default function dolls<
   //     K_ModelName
   //   >;
   // };
+
+  type DollStartStates = {
+    [K_DollName in DollName]: StateReturnType<
+      K_DollName,
+      DollOptions[K_DollName]["model"]
+    >;
+  };
+
   function makeAutmaticModelDollStartStates() {
-    const partialModelStates = {} as Partial<DollModelStartStates>;
-    forEach(modelNames, (modelName) => {
-      partialModelStates[modelName] = state(modelName, modelName) as any;
+    const partialDollStates = {} as Partial<DollStartStates>;
+    forEach(dollNames, (dollName) => {
+      partialDollStates[dollName] = state(
+        dollName,
+        dollOptions[dollName].model
+      );
     });
-    return partialModelStates as DollModelStartStates;
+    return partialDollStates as DollStartStates;
   }
 
   const startStates = {
-    // Automatically make one doll for each model
+    // Automatically make dolls
     ...makeAutmaticModelDollStartStates(),
-    // And more can be added here
-    // walker: state("walker_b", "walker"),
-    taptop2: state("taptop2", "taptop" as ModelName), // FIXME! use dolls Info from /art to automatically make these
   };
 
   return { startStates, state, refs };

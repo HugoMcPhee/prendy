@@ -13,6 +13,7 @@ import speechBubbles from "./speechBubbles";
 import stackVids from "./stackVids";
 import {
   CharacterOptionsPlaceholder,
+  DollOptionsPlaceholder,
   GameyStartOptionsUntyped,
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
@@ -59,9 +60,10 @@ export function makeGameyConcepts<
   GameyStartOptions extends GameyStartOptionsUntyped,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<PlaceName>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
+  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>,
   CharacterOptions extends CharacterOptionsPlaceholder<
     CharacterName,
-    ModelName,
+    DollName,
     FontName
   >,
   ModelName extends string,
@@ -91,6 +93,7 @@ export function makeGameyConcepts<
   gameyStartOptions: GameyStartOptions,
   placeInfoByName: PlaceInfoByName,
   modelInfoByName: ModelInfoByName,
+  dollOptions: DollOptions,
   characterOptions: CharacterOptions,
   placeNames: readonly PlaceName[],
   modelNames: readonly ModelName[],
@@ -122,19 +125,28 @@ export function makeGameyConcepts<
       DollName,
       AnySpotName,
       AnyAnimationName,
+      DollOptions,
       AnimationNameByModel,
       BoneNameByModel,
       MaterialNameByModel,
       MeshNameByModel,
       ModelInfoByName
-    >(modelNames, dollNames, modelInfoByName),
-    characters: characters<DollName, AnyTriggerName, AnyCameraName>(dollNames),
+    >(modelNames, dollNames, modelInfoByName, dollOptions),
+    characters: characters<
+      CharacterName,
+      DollName,
+      FontName,
+      AnyTriggerName,
+      AnyCameraName,
+      CharacterOptions
+    >(characterNames, dollNames, characterOptions),
     players: players<GameyStartOptions, AnyAnimationName>(gameyStartOptions),
     speechBubbles: speechBubbles<
       CharacterName,
+      DollName,
       FontName,
       SpeechVidName,
-      CharacterOptionsPlaceholder<CharacterName, ModelName, FontName>
+      CharacterOptionsPlaceholder<CharacterName, DollName, FontName>
     >(characterNames, characterOptions, fontNames),
     places: places<
       PlaceName,

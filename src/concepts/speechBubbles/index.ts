@@ -3,14 +3,17 @@
 import { CSSProperties } from "react";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition } from "shutils/dist/points2d";
+import { CharacterOptionsPlaceholder } from "../typedConceptoFuncs";
 
 export default function speechBubbles<
   CharacterName extends string,
+  DollName extends string,
   FontName extends string,
   SpeechvidName extends string,
-  CharacterOptions extends Record<
+  CharacterOptions extends CharacterOptionsPlaceholder<
     CharacterName,
-    { model: string; font: FontName }
+    DollName,
+    FontName
   >
 >(
   characterNames: readonly CharacterName[],

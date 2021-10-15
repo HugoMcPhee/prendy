@@ -1,10 +1,23 @@
 import { forEach } from "shutils/dist/loops";
+import { CharacterOptionsPlaceholder } from "../typedConceptoFuncs";
 
 export default function characters<
+  CharacterName extends string,
   DollName extends string,
+  FontName extends string,
   AnyTriggerName extends string,
-  AnyCameraName extends string
->(dollNames: readonly DollName[]) {
+  AnyCameraName extends string,
+  CharacterOptions extends CharacterOptionsPlaceholder<
+    CharacterName,
+    DollName,
+    FontName
+  >
+  // characterOptions
+>(
+  characterNames: readonly CharacterName[],
+  dollNames: readonly DollName[],
+  characterOptions: CharacterOptions
+) {
   const state = <T_CharacterName extends string, T_DollName extends DollName>(
     _characterName: T_CharacterName,
     dollName?: T_DollName
@@ -27,7 +40,7 @@ export default function characters<
   // hacky way to get return type from generic function
   // from Colin at https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
   class StateReturnType_Generic_Helper<
-    T_A extends string,
+    T_A extends CharacterName,
     T_B extends DollName
   > {
     // wrapped has no explicit return type so we can infer it
@@ -35,20 +48,27 @@ export default function characters<
       return state<T_A, T_B>(a, b);
     }
   }
-  type StateReturnType<T_A extends string, T_B extends DollName> = ReturnType<
-    StateReturnType_Generic_Helper<T_A, T_B>["wrapped"]
-  >;
+  type StateReturnType<
+    T_A extends CharacterName,
+    T_B extends DollName
+  > = ReturnType<StateReturnType_Generic_Helper<T_A, T_B>["wrapped"]>;
 
-  // automatically make atleast a doll for each model
-  type DollModelStartStates = {
-    [K_DollName in DollName]: StateReturnType<K_DollName, K_DollName>;
+  // automatically make atleast a character
+  type CharacterStartStates = {
+    [K_CharacterName in CharacterName]: StateReturnType<
+      K_CharacterName,
+      CharacterOptions[K_CharacterName]["doll"]
+    >;
   };
   function makeAutmaticCharacterStartStates() {
-    const partialModelStates = {} as Partial<DollModelStartStates>;
-    forEach(dollNames, (dollName) => {
-      partialModelStates[dollName] = state(dollName, dollName) as any;
+    const partialModelStates = {} as Partial<CharacterStartStates>;
+    forEach(characterNames, (characterName) => {
+      partialModelStates[characterName] = state(
+        characterName,
+        characterOptions[characterName].doll
+      );
     });
-    return partialModelStates as DollModelStartStates;
+    return partialModelStates as CharacterStartStates;
   }
 
   const startStates = {

@@ -100,21 +100,35 @@ const testStuff = {
       >,
     } as const,
   },
+  dollOptions: {
+    characterA: { model: "modelA" },
+    characterB: { model: "modelB" },
+  } as const,
   characterOptions: {
-    characterA: { model: "modelA", font: "fontA" },
-    characterB: { model: "modelB", font: "fontA" },
+    characterA: { doll: "dollA", font: "fontA" },
+    characterB: { doll: "dollB", font: "fontA" },
   } as const,
 };
 
 export type CharacterOptionsPlaceholder<
   CharacterName extends string,
-  ModelName extends string,
+  DollName extends string,
   FontName extends string
 > = Record<
   CharacterName,
   {
-    model: ModelName;
+    doll: DollName;
     font: FontName;
+  }
+>;
+
+export type DollOptionsPlaceholder<
+  DollName extends string,
+  ModelName extends string
+> = Record<
+  DollName,
+  {
+    model: ModelName;
   }
 >;
 
@@ -136,27 +150,37 @@ const placeholderGameyConcepts = {
   >(TEST_START_OPTIONS, testStuff.musicNames, testStuff.soundNames),
   models: models<any>(testStuff.modelNames), //ModelName
   dolls: dolls<
-    any, //ModelName
-    any, //DollName
-    any, //AnySpotName
-    any, //AnyAnimationName
-    Record<any, any>, //AnimationNameByModel
-    Record<any, any>, // BoneNameByModel,
-    Record<any, any>, // MaterialNameByModel,
-    Record<any, any>, // MeshNameByModel,
+    any, // ModelName
+    any, // DollName
+    any, // AnySpotName
+    any, // AnyAnimationName
+    Record<any, any>, // DollOptions
+    Record<any, any>, // AnimationNameByModel
+    Record<any, any>, // BoneNameByModel
+    Record<any, any>, // MaterialNameByModel
+    Record<any, any>, // MeshNameByModel
     typeof testStuff.modelInfoByName
-  >(testStuff.modelNames, testStuff.dollNames, testStuff.modelInfoByName),
+  >(
+    testStuff.modelNames,
+    testStuff.dollNames,
+    testStuff.modelInfoByName,
+    testStuff.dollOptions
+  ),
   characters: characters<
-    any, // DollName,
-    any, // AnyTriggerName,
-    any // AnyCameraName
-  >(testStuff.dollNames),
+    any, // CharacterName
+    any, // DollName
+    any, // FontName
+    any, // AnyTriggerName
+    any, // AnyCameraName
+    typeof testStuff.characterOptions // CharacterOptions
+  >(testStuff.characterNames, testStuff.dollNames, testStuff.characterOptions),
   players: players<
     typeof TEST_START_OPTIONS,
     any // AnyAnimationName
   >(TEST_START_OPTIONS),
   speechBubbles: speechBubbles<
     any, // CharacterName,
+    any, // DollName,
     any, // FontName,
     any, // SpeechVidName,
     typeof testStuff.characterOptions

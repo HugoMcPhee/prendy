@@ -1,3 +1,4 @@
+import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "shutils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
@@ -86,7 +87,7 @@ export function makeCharacterDynamicRules<
 
             let isAtLoopedCamCube = false;
 
-            forEach(camsRefs.camCubeMeshes, (loopedMesh) => {
+            forEach(camsRefs.camCubeMeshes, (loopedMesh: AbstractMesh) => {
               const isAtLoopedCamCubeMesh = !!(
                 itemRefs.meshRef &&
                 loopedMesh &&

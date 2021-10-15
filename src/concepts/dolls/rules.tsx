@@ -14,6 +14,7 @@ import {
 } from "../typedConceptoFuncs";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import { makeRunMovers } from "movers";
+import { PBRMaterial } from "@babylonjs/core";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -25,7 +26,8 @@ export function makeDollDynamicRules<
   ConceptoFuncs extends GameyConceptoFuncs,
   GameyStartOptions extends GameyStartOptionsUntyped,
   GameyConcepts extends PlaceholderGameyConcepts,
-  StartState_Dolls extends GameyConcepts["dolls"]["startStates"],
+  StartState_Dolls extends GameyConcepts["dolls"]["startStates"] &
+    ReturnType<ConceptoFuncs["getState"]>["dolls"],
   DollName extends keyof ReturnType<ConceptoFuncs["getState"]>["dolls"] &
     string,
   ModelName extends string,
@@ -100,7 +102,7 @@ export function makeDollDynamicRules<
           const modelRefs = getRefs().models[modelName];
 
           if (modelRefs.materialRefs) {
-            forEach(modelRefs.materialRefs, (materialRef) =>
+            forEach(modelRefs.materialRefs, (materialRef: PBRMaterial) =>
               setupLightMaterial(materialRef)
             );
           }
@@ -170,7 +172,8 @@ export function makeDollRules<
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
   ConceptoFuncs extends GameyConceptoFuncs,
   GameyConcepts extends PlaceholderGameyConcepts,
-  StartState_Dolls extends GameyConcepts["dolls"]["startStates"],
+  StartState_Dolls extends GameyConcepts["dolls"]["startStates"] &
+    ReturnType<ConceptoFuncs["getState"]>["dolls"],
   DollName extends keyof StartState_Dolls & string,
   ModelName extends string,
   AnyAnimationName extends string,

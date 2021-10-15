@@ -247,7 +247,7 @@ export function makeCameraChangeUtils<
     // if (!newCamRef.camera) return;
     if (!globalRefs.scenePlane) return;
 
-    forEach(modelNamesLoaded, (modelName) => {
+    forEach(modelNamesLoaded, (modelName: any & string) => {
       const modelRefs = getRefs().models[modelName];
 
       // console.log("camsRefs[placeState.nowCamName].probeTexture");

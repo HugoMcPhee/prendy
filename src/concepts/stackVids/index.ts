@@ -1,4 +1,4 @@
-import { InitialItemsState } from "concepto";
+import { InitialItemsState } from "concep";
 import { forEach } from "shutils/dist/loops";
 import { abLetters } from "../../utils/consts";
 

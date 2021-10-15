@@ -6,7 +6,7 @@ import {
   SolidParticleSystem,
   TargetCamera,
 } from "@babylonjs/core";
-import { mover2dRefs, mover2dState, moverRefs, moverState } from "movers";
+import { mover2dRefs, mover2dState, moverRefs, moverState } from "concep-movers";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 //

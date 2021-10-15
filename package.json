@@ -1,7 +1,7 @@
 {
-  "name": "gamey",
-  "version": "0.3.6",
-  "description": "prerendered backdrop games with babylonjs and concepto",
+  "name": "backdop",
+  "version": "0.3.7",
+  "description": "prerendered backdrop games with babylonjs and concep",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HugoMcPhee/gamey.git"
+    "url": "git+https://github.com/HugoMcPhee/backdop.git"
   },
   "keywords": [],
   "author": "Hugo McPhee",
@@ -25,9 +25,9 @@
     "@babylonjs/loaders": "5.0.0-alpha.44",
     "react-babylonjs": "^3.0.22",
     "@types/react": "^17.0.29",
-    "concepto": "git+https://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@github.com/HugoMcPhee/concepto.git#v0.5.6",
+    "concep": "git+https://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@github.com/HugoMcPhee/concep.git#v0.5.7",
     "delay": "^5.0.0",
-    "movers": "git+https://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@github.com/HugoMcPhee/movers.git#v0.5.1",
+    "concep-movers": "git+https://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@github.com/HugoMcPhee/concep-movers.git#v0.5.2",
     "react": "^17.0.2",
     "react-promise-suspense": "^0.3.3",
     "react-spring": "^9.3.0",

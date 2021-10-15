@@ -1,4 +1,4 @@
-import { InitialItemsState } from "concepto";
+import { InitialItemsState } from "concep";
 import { forEach } from "shutils/dist/loops";
 import { abLetters, vidTypes } from "../../utils/consts";
 import { PlaceInfoByNamePlaceholder } from "../typedConceptoFuncs";

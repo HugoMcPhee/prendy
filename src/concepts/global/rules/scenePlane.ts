@@ -1,5 +1,5 @@
 import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
-import { makeRunMovers } from "movers";
+import { makeRunMovers } from "concep-movers";
 import { copyPoint } from "shutils/dist/points2d";
 import {
   GameyConceptoFuncs,

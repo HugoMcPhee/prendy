@@ -6,7 +6,7 @@ import {
   GameyConceptoFuncs,
   PlaceholderGameyConcepts,
 } from "../typedConceptoFuncs";
-import { ConceptsHelperTypes } from "concepto";
+import { ConceptsHelperTypes } from "concep";
 
 let zIndexCounter = 100;
 /*

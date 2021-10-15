@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "concepto";
+import { ConceptsHelperTypes } from "concep";
 import { StackVidState } from ".";
 import { GameyConceptoFuncs } from "../typedConceptoFuncs";
 import { makeStackVidStoreUtils } from "./utils";

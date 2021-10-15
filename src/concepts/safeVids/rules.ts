@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "concepto";
+import { ConceptsHelperTypes } from "concep";
 import { VidState } from ".";
 import { GameyConceptoFuncs } from "../typedConceptoFuncs";
 import { makeVideoElementFromPath } from "./utils";

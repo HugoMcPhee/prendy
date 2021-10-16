@@ -1,0 +1,140 @@
+import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
+import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder } from "../typedConceptoFuncs";
+export default function dolls<ModelName extends string, DollName extends string, AnySpotName extends string, AnyAnimationName extends string, DollOptions extends DollOptionsPlaceholder<DollName, ModelName>, AnimationNameByModel extends Record<ModelName, AnyAnimationName>, BoneNameByModel extends Record<ModelName, string>, MaterialNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(modelNames: readonly ModelName[], dollNames: readonly DollName[], modelInfoByName: ModelInfoByName, dollOptions: DollOptions): {
+    startStates: { [K_DollName in DollName]: {
+        nowAnimation: string;
+        animationLoops: boolean;
+        inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
+        animWeights: Record<AnimationNameByModel[ModelName], number>;
+        animWeightsGoal: Record<AnimationNameByModel[ModelName], number>;
+        animWeightsIsMoving: boolean;
+        animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
+        animWeightsMoveConfigName: string;
+        animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        positionOnPlaneScene: import("shutils/dist/points2d").Point2D;
+        rotationY: number;
+        rotationYGoal: number;
+        rotationYIsMoving: boolean;
+        rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
+        rotationYMoveConfigName: string;
+        rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        position: import("shutils/dist/points3d").Point3D;
+        positionGoal: import("shutils/dist/points3d").Point3D;
+        positionIsMoving: boolean;
+        positionMoveMode: import("concep-movers/dist/types").MoveMode;
+        positionMoveConfigName: string;
+        positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        modelName: NonNullable<DollOptions[K_DollName]["model"]>;
+        nextSpotName: AnySpotName;
+    }; };
+    state: <T_DollName extends string, T_ModelName extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName) => {
+        nowAnimation: string;
+        animationLoops: boolean;
+        inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
+        animWeights: Record<AnimationNameByModel[ModelName], number>;
+        animWeightsGoal: Record<AnimationNameByModel[ModelName], number>;
+        animWeightsIsMoving: boolean;
+        animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
+        animWeightsMoveConfigName: string;
+        animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        positionOnPlaneScene: import("shutils/dist/points2d").Point2D;
+        rotationY: number;
+        rotationYGoal: number;
+        rotationYIsMoving: boolean;
+        rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
+        rotationYMoveConfigName: string;
+        rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        position: import("shutils/dist/points3d").Point3D;
+        positionGoal: import("shutils/dist/points3d").Point3D;
+        positionIsMoving: boolean;
+        positionMoveMode: import("concep-movers/dist/types").MoveMode;
+        positionMoveConfigName: string;
+        positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        modelName: NonNullable<T_ModelName>;
+        nextSpotName: AnySpotName;
+    };
+    refs: <T_DollName_1 extends DollName, T_ModelName_1 extends ModelName>(dollName: T_DollName_1, itemState: {
+        nowAnimation: string;
+        animationLoops: boolean;
+        inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
+        animWeights: Record<AnimationNameByModel[ModelName], number>;
+        animWeightsGoal: Record<AnimationNameByModel[ModelName], number>;
+        animWeightsIsMoving: boolean;
+        animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
+        animWeightsMoveConfigName: string;
+        animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        positionOnPlaneScene: import("shutils/dist/points2d").Point2D;
+        rotationY: number;
+        rotationYGoal: number;
+        rotationYIsMoving: boolean;
+        rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
+        rotationYMoveConfigName: string;
+        rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        position: import("shutils/dist/points3d").Point3D;
+        positionGoal: import("shutils/dist/points3d").Point3D;
+        positionIsMoving: boolean;
+        positionMoveMode: import("concep-movers/dist/types").MoveMode;
+        positionMoveConfigName: string;
+        positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        modelName: NonNullable<T_ModelName_1>;
+        nextSpotName: AnySpotName;
+    }) => {
+        animWeightsMoverRefs: {
+            stateNames: {
+                value: "animWeights";
+                valueGoal: "animWeightsGoal";
+                isMoving: "animWeightsIsMoving";
+                moveMode: "animWeightsMoveMode";
+                physicsConfigName: "animWeightsMoveConfigName";
+                physicsConfigs: "animWeightsMoveConfigs";
+            };
+            physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+            animRefs: Record<string, {
+                velocity: number;
+                recentSpeeds: number[];
+            }>;
+            animNames: readonly string[];
+        };
+        rotationYMoverRefs: {
+            velocity: number;
+            recentSpeeds: number[];
+            stateNames: {
+                value: "rotationY";
+                valueGoal: "rotationYGoal";
+                isMoving: "rotationYIsMoving";
+                moveMode: "rotationYMoveMode";
+                physicsConfigName: "rotationYMoveConfigName";
+                physicsConfigs: "rotationYMoveConfigs";
+            };
+            physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+        };
+        positionMoverRefs: {
+            velocity: import("shutils/dist/points3d").Point3D;
+            recentSpeeds: number[];
+            averageSpeed: number;
+            canRunOnSlow: boolean;
+            stateNames: {
+                value: "position";
+                valueGoal: "positionGoal";
+                isMoving: "positionIsMoving";
+                moveMode: "positionMoveMode";
+                physicsConfigName: "positionMoveConfigName";
+                physicsConfigs: "positionMoveConfigs";
+            };
+            physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+        };
+        meshRef: AbstractMesh;
+        otherMeshes: Record<MeshNameByModel[NonNullable<T_ModelName_1>], AbstractMesh>;
+        entriesRef: InstantiatedEntries;
+        aniGroupsRef: Record<AnimationNameByModel[T_ModelName_1], AnimationGroup>;
+        assetRefs: {
+            meshes: Record<"__root__" | MeshNameByModel[T_ModelName_1], AbstractMesh>;
+            skeleton: Skeleton;
+            bones: Record<BoneNameByModel[T_ModelName_1], Bone>;
+            aniGroups: Record<AnimationNameByModel[T_ModelName_1], AnimationGroup>;
+            materials: Record<MaterialNameByModel[T_ModelName_1], Material>;
+        };
+        groundRef: AbstractMesh;
+        checkCollisions: boolean;
+    };
+};

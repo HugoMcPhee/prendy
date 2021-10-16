@@ -22,8 +22,8 @@ export default function players<
     jumpButtonReleaseTime: Date.now(),
     pickupButtonPressTime: Date.now(),
     animationNames: {
-      walking: "dog_walking",
-      idle: "dog_idle",
+      walking: gameyStartOptions.playerAnimations.walking,
+      idle: gameyStartOptions.playerAnimations.idle,
     } as PlayerAnimationNames, // maybe typed somehow, from player character?
   });
 

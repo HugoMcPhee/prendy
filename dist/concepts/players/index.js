@@ -11,8 +11,8 @@ export default function players(gameyStartOptions) {
         jumpButtonReleaseTime: Date.now(),
         pickupButtonPressTime: Date.now(),
         animationNames: {
-            walking: "dog_walking",
-            idle: "dog_idle",
+            walking: gameyStartOptions.playerAnimations.walking,
+            idle: gameyStartOptions.playerAnimations.idle,
         }, // maybe typed somehow, from player character?
     });
     const refs = () => ({

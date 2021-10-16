@@ -93,6 +93,10 @@ export declare type GameyStartOptionsUntyped = {
     camera: string;
     heldPickups: string[];
     playerCharacter: string;
+    playerAnimations: {
+        walking: string;
+        idle: string;
+    };
     zoomLevels: {
         default: number;
         max: number;

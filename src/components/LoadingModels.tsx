@@ -9,6 +9,8 @@ import {
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";
 
+type Props = { children?: ReactNode };
+
 export function makeLoadingModels<
   ConceptoFuncs extends GameyConceptoFuncs,
   GameyConcepts extends PlaceholderGameyConcepts,
@@ -32,7 +34,8 @@ export function makeLoadingModels<
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[],
   dollNames: readonly DollName[],
-  soundFiles: SoundFiles
+  soundFiles: SoundFiles,
+  extraStuff?: React.ReactNode
 ) {
   const { useStore } = conceptoFuncs;
 
@@ -69,9 +72,7 @@ export function makeLoadingModels<
     return null;
   }
 
-  type Props = { extraStuff?: ReactNode };
-
-  return function LoadingModels({ extraStuff }: Props) {
+  return function LoadingModels({ children }: Props) {
     const { nowPlaceName } = useStore(({ global: { main } }) => main, {
       type: "global",
       name: "main",
@@ -92,6 +93,7 @@ export function makeLoadingModels<
         <Player />
         <Place name={nowPlaceName} key={nowPlaceName} />
         {/* <AllSmells /> */}
+        {children}
         {/* TODO extraStuff */}
       </Suspense>
     );

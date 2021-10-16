@@ -1,3 +1,15 @@
+v0.3.8
+
+- supports children
+
+v0.3.7
+
+- supports auto making dolls and characters
+
+v0.3.0 - v0.3.6
+
+- types fixes etc
+
 v0.3.0
 
 - moving everything to work as an importable package

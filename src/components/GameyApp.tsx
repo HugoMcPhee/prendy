@@ -7,7 +7,7 @@ import {
 } from "@babylonjs/core";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
-import React, { useCallback, useEffect } from "react";
+import React, { ReactNode, useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { toRadians } from "shutils/dist/speedAngleDistance";
 import {
@@ -21,6 +21,8 @@ import {
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
+
+type Props = { children?: ReactNode };
 
 export function makeGameyApp<
   ConceptoFuncs extends GameyConceptoFuncs,
@@ -87,7 +89,7 @@ export function makeGameyApp<
 
   const ScenePlane = makeScenePlane(conceptoFuncs, gameyStartOptions);
 
-  return function GameyApp() {
+  return function GameyApp({ children }: Props) {
     const globalRefs = getRefs().global.main;
 
     const scenePlaneCameraRef = useCallback(
@@ -145,7 +147,7 @@ export function makeGameyApp<
               rotation={new Vector3(toRadians(15), toRadians(0), 0)}
               fov={toRadians(50)}
             />
-            <LoadingModels />
+            <LoadingModels>{children}</LoadingModels>
           </Scene>
           <Scene
             clearColor={Color4.FromColor3(Color3.FromHexString("#000000"))}

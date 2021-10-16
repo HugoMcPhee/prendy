@@ -3,6 +3,7 @@ export function makeGetGameyStartOptions<
   PlaceName extends string,
   ModelName extends string,
   CharacterName extends string,
+  AnyAnimationName extends string,
   TriggerNameByPlace extends Record<PlaceName, string>,
   CameraNameByPlace extends Record<PlaceName, string>,
   SpotNameByPlace extends Record<PlaceName, string>,
@@ -22,7 +23,9 @@ export function makeGetGameyStartOptions<
     {
       [P_PlaceName in PlaceName]: Partial<
         {
-          [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: ToNewOption<P_PlaceName>;
+          [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: ToNewOption<
+            P_PlaceName
+          >;
         }
       >;
     }
@@ -37,6 +40,7 @@ export function makeGetGameyStartOptions<
     camera: T_Cam;
     heldPickups: PickupName[];
     playerCharacter: CharacterName;
+    playerAnimations: { walking: AnyAnimationName; idle: AnyAnimationName };
     zoomLevels: {
       default: number;
       max: number;

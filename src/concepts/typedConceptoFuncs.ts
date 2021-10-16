@@ -22,6 +22,7 @@ const testGetGameyStartOptions = makeGetGameyStartOptions<
   string, // PlaceName
   string, // ModelName
   string, // CharacterName
+  string, // AnyAnimationName
   Record<string, string>, // TriggerNameByPlace
   Record<string, string>, // CameraNameByPlace
   Record<string, string>, // SpotNameByPlace
@@ -38,11 +39,11 @@ const TEST_START_OPTIONS = testGetGameyStartOptions({
   camera: "test_low_cam",
   heldPickups: [],
   playerCharacter: "walker",
+  playerAnimations: { walking: "walker_walking", idle: "walker_idle" },
   zoomLevels: { default: 1.1, max: 2 },
   walkSpeed: 10,
   animationSpeed: 1,
   headHeightOffset: -0.5,
-
   doorsInfo: {
     street: {
       // test_trigger: {
@@ -338,6 +339,7 @@ export type GameyStartOptionsUntyped = {
   camera: string;
   heldPickups: string[];
   playerCharacter: string;
+  playerAnimations: { walking: string; idle: string };
   zoomLevels: {
     default: number;
     max: number;

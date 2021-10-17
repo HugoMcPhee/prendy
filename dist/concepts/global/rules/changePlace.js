@@ -9,7 +9,7 @@ export function makeGlobalChangePlaceRules(conceptoFuncs, gameyConcepts, gameySt
     const { getRefs, getState, makeRules, setState, onNextTick } = conceptoFuncs;
     const globalRefs = getRefs().global.main;
     const { getSectionVidVideo } = makeSectionVidStoreUtils(conceptoFuncs, placeInfoByName, dollNames);
-    const { updateTexturesForNowCamera } = makeCameraChangeUtils(conceptoFuncs, placeInfoByName, dollNames);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(conceptoFuncs, placeInfoByName, dollNames);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(conceptoFuncs, gameyStartOptions);
     const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
     function whenAllVideosLoadedForPlace() {
@@ -120,6 +120,13 @@ export function makeGlobalChangePlaceRules(conceptoFuncs, gameyConcepts, gameySt
                         // onNextTick because sometimes the character position was starting incorrect
                         // (maybe because the place-load story-rules werent reacting because it was the wrong flow)
                         setGlobalState({ isLoadingBetweenPlaces: false });
+                        onNextTick(() => {
+                            updateNowStuffWhenSectionChanged();
+                            // when a new place loads it handles checking and clearing nextSegmentNameWhenVidPlays  nextCamNameWhenVidPlays
+                            // otheriwse the video wont loop because it thinks its waiting for a section to change
+                            // its set to run when a vid starts playing, but its missing it , maybe because the new vid playing property is updating before theres a wanted next cam etc,
+                            //or maybe to do with the flow order
+                        });
                         if (wantedSegmentWhenNextPlaceLoads) {
                             setGlobalState({
                                 wantedSegmentWhenNextPlaceLoads: null,

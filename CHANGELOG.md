@@ -1,3 +1,9 @@
+v0.3.13
+
+- supports playerAnimations option
+- fixes changing place
+- alarm text working
+
 v0.3.9
 
 - includes built package so no installing needed

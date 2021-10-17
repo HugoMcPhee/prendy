@@ -2,21 +2,21 @@ import { makeGlobalStoreUtils } from "../global/utils";
 import { VidType } from "../../utils/consts";
 import { SectionVidState, VidSection } from ".";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
 
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
 export function makeGetSectionVidVideo<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceName extends string
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs, getState } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs, getState } = concepFuncs;
 
   return function getSectionVidVideo(
     itemName: PlaceName,
@@ -37,7 +37,7 @@ export function makeGetSectionVidVideo<
 }
 
 export function makeSectionVidStoreUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   PlaceName extends string,
   DollName extends string,
@@ -45,27 +45,27 @@ export function makeSectionVidStoreUtils<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[]
 ) {
-  const { getState, startItemEffect, stopEffect } = conceptoFuncs;
+  const { getState, startItemEffect, stopEffect } = concepFuncs;
 
-  const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  const getSectionVidVideo = makeGetSectionVidVideo<ConceptoFuncs, PlaceName>(
-    conceptoFuncs
+  const getSectionVidVideo = makeGetSectionVidVideo<ConcepFuncs, PlaceName>(
+    concepFuncs
   );
 
   const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     AnyCameraName,
     PlaceName,
     DollName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
   // __________________________
   // temporary rules

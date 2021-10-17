@@ -1,6 +1,6 @@
 import { Point2D } from "shutils/dist/points2d";
-import { GameyStartOptionsUntyped } from "../typedConceptoFuncs";
-export default function players<GameyStartOptions extends GameyStartOptionsUntyped, AnyAnimationName extends string>(gameyStartOptions: GameyStartOptions): {
+import { BackdopOptionsUntyped } from "../typedConcepFuncs";
+export default function players<BackdopOptions extends BackdopOptionsUntyped, AnyAnimationName extends string>(backdopStartOptions: BackdopOptions): {
     startStates: {
         main: {
             lastSafeInputAngle: number;

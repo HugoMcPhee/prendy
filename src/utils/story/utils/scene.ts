@@ -1,16 +1,16 @@
-import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
 
 export function makeSceneStoryUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,
   CameraNameByPlace extends Record<PlaceName, string>
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs, getState, startItemEffect, stopEffect } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs, getState, startItemEffect, stopEffect } = concepFuncs;
 
-  const getUsefulStoryStuff = makeGetUsefulStoryStuff(conceptoFuncs);
+  const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
   const globalRefs = getRefs().global.main;
 
   function getSegmentFromStoryRules<

@@ -2,8 +2,8 @@ import { makeGlobalStoreUtils } from "../global/utils";
 import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
-export function makeGetSectionVidVideo(conceptoFuncs) {
-    const { getRefs, getState } = conceptoFuncs;
+export function makeGetSectionVidVideo(concepFuncs) {
+    const { getRefs, getState } = concepFuncs;
     return function getSectionVidVideo(itemName, vidType = "color") {
         const sectionVidState = getState().sectionVids[itemName];
         const { stackVidId_playing } = sectionVidState;
@@ -18,11 +18,11 @@ export function makeGetSectionVidVideo(conceptoFuncs) {
         return colorVidRefs.videoElement;
     };
 }
-export function makeSectionVidStoreUtils(conceptoFuncs, placeInfoByName, dollNames) {
-    const { getState, startItemEffect, stopEffect } = conceptoFuncs;
-    const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const getSectionVidVideo = makeGetSectionVidVideo(conceptoFuncs);
-    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(conceptoFuncs, placeInfoByName, dollNames);
+export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames) {
+    const { getState, startItemEffect, stopEffect } = concepFuncs;
+    const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const getSectionVidVideo = makeGetSectionVidVideo(concepFuncs);
+    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames);
     // __________________________
     // temporary rules
     async function doWhenSectionVidPlayingAsync(sectionVidId) {

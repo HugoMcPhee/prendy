@@ -7,11 +7,11 @@ import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobal
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 import { rangeOptionsQuick, makeDollStoreUtils } from "./utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
-} from "../typedConceptoFuncs";
+  PlaceholderBackdopConcepts,
+} from "../typedConcepFuncs";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import { makeRunMovers } from "concep-movers";
 import { PBRMaterial } from "@babylonjs/core";
@@ -23,37 +23,37 @@ import { PBRMaterial } from "@babylonjs/core";
 // when the models isLoading becomes true
 
 export function makeDollDynamicRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  StartState_Dolls extends GameyConcepts["dolls"]["startStates"] &
-    ReturnType<ConceptoFuncs["getState"]>["dolls"],
-  DollName extends keyof ReturnType<ConceptoFuncs["getState"]>["dolls"] &
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
+    ReturnType<ConcepFuncs["getState"]>["dolls"],
+  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &
     string,
   ModelName extends string,
   AnyAnimationName extends string,
   AnimationNameByModel extends Record<ModelName, AnyAnimationName>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyStartOptions: GameyStartOptions,
-  gameyConcepts: GameyConcepts,
+  concepFuncs: ConcepFuncs,
+  backdopStartOptions: BackdopOptions,
+  backdopConcepts: BackdopConcepts,
   modelInfoByName: ModelInfoByName,
   dollNames: readonly DollName[]
 ) {
   const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils<
-    ConceptoFuncs,
-    GameyStartOptions,
-    GameyConcepts,
+    ConcepFuncs,
+    BackdopOptions,
+    BackdopConcepts,
     AnimationNameByModel,
     StartState_Dolls,
     DollName,
     ModelName,
     ModelInfoByName
   >(
-    conceptoFuncs,
-    gameyStartOptions,
-    gameyConcepts,
+    concepFuncs,
+    backdopStartOptions,
+    backdopConcepts,
     dollNames,
     modelInfoByName
   );
@@ -64,7 +64,7 @@ export function makeDollDynamicRules<
     makeDynamicRules,
     makeRules,
     setState,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
   return makeDynamicRules((addItemEffect, _addEffect) => ({
     waitForModelToLoad: addItemEffect(
@@ -142,15 +142,15 @@ export function makeDollDynamicRules<
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
 
 export function startDynamicDollRulesForInitialState<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
   DollName extends string
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   dollDynamicRules: DollDynamicRules,
   dollNames: readonly DollName[]
 ) {
-  const { getState } = conceptoFuncs;
+  const { getState } = concepFuncs;
 
   forEach(dollNames, (dollName) => {
     const { modelName } = getState().dolls[dollName];
@@ -168,23 +168,23 @@ export function startDynamicDollRulesForInitialState<
 }
 
 export function makeDollRules<
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  BackdopOptions extends BackdopOptionsUntyped,
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  StartState_Dolls extends GameyConcepts["dolls"]["startStates"] &
-    ReturnType<ConceptoFuncs["getState"]>["dolls"],
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
+    ReturnType<ConcepFuncs["getState"]>["dolls"],
   DollName extends keyof StartState_Dolls & string,
   ModelName extends string,
   AnyAnimationName extends string,
   AnimationNameByModel extends Record<ModelName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<string>
-  // DollName extends keyof ReturnType<ConceptoFuncs["getRefs"]>["dolls"] & string,
+  // DollName extends keyof ReturnType<ConcepFuncs["getRefs"]>["dolls"] & string,
 >(
-  gameyStartOptions: GameyStartOptions,
+  backdopStartOptions: BackdopOptions,
   dollDynamicRules: DollDynamicRules,
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
   modelInfoByName: ModelInfoByName,
   dollNames: readonly DollName[]
 ) {
@@ -194,25 +194,25 @@ export function makeDollRules<
     setDollAnimWeight,
     updateDollScreenPosition,
   } = makeDollStoreUtils<
-    ConceptoFuncs,
-    GameyStartOptions,
-    GameyConcepts,
+    ConcepFuncs,
+    BackdopOptions,
+    BackdopConcepts,
     AnimationNameByModel,
     StartState_Dolls,
     DollName,
     ModelName,
     ModelInfoByName
   >(
-    conceptoFuncs,
-    gameyStartOptions,
-    gameyConcepts,
+    concepFuncs,
+    backdopStartOptions,
+    backdopConcepts,
     dollNames,
     modelInfoByName
   );
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(
-    conceptoFuncs,
-    gameyStartOptions
+    concepFuncs,
+    backdopStartOptions
   );
 
   const {
@@ -221,9 +221,9 @@ export function makeDollRules<
     getState,
     setState,
     getRefs,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
-  const { runMover, runMover3d, runMoverMulti } = makeRunMovers(conceptoFuncs);
+  const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
 
   return makeRules((addItemEffect, addEffect) => ({
     // --------------------------------
@@ -321,9 +321,9 @@ export function makeDollRules<
           }
           if (
             aniRef &&
-            aniRef?.speedRatio !== gameyStartOptions.animationSpeed
+            aniRef?.speedRatio !== backdopStartOptions.animationSpeed
           ) {
-            aniRef.speedRatio = gameyStartOptions.animationSpeed;
+            aniRef.speedRatio = backdopStartOptions.animationSpeed;
           }
 
           const animWeight = animWeights[aniName];

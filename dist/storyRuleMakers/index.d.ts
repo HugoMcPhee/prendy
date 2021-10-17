@@ -1,7 +1,7 @@
-import { GameyConceptoFuncs, PlaceInfoByNamePlaceholder } from "../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs, PlaceInfoByNamePlaceholder } from "../concepts/typedConcepFuncs";
 declare const _default: "default";
 export default _default;
-export declare function makeGetUsefulStoryStuff<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): () => {
+export declare function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): () => {
     storyState: Record<any, any>;
     storyRefs: Record<any, any>;
     globalState: Record<any, any>;
@@ -16,9 +16,9 @@ export declare function makeGetUsefulStoryStuff<ConceptoFuncs extends GameyConce
     camsRefs: any;
     camRefs: any;
 };
-export declare function makeSetStoryState<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): (newState: Partial<Record<any, any>>) => void;
-export declare function makerAllStoryRuleMakers<ConceptoFuncs extends GameyConceptoFuncs, PlaceName extends string, DollName extends string, CharacterName extends string, PickupName extends string, StoryPartName extends string, // maybe not have?
-CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, TriggerNameByPlace extends Record<PlaceName, string>>(conceptoFuncs: ConceptoFuncs, placeInfoByName: PlaceInfoByName, characterNames: readonly CharacterName[], dollNames: readonly DollName[]): {
+export declare function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): (newState: Partial<Record<any, any>>) => void;
+export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs, PlaceName extends string, DollName extends string, CharacterName extends string, PickupName extends string, StoryPartName extends string, // maybe not have?
+CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, TriggerNameByPlace extends Record<PlaceName, string>>(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName, characterNames: readonly CharacterName[], dollNames: readonly DollName[]): {
     makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_TriggerName in CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
         storyState: Record<any, any>;
         storyRefs: Record<any, any>;

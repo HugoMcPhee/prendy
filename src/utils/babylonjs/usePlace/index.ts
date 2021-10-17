@@ -2,11 +2,11 @@
 import { Sound, Vector3 } from "@babylonjs/core";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConceptoFuncs";
+} from "../../../concepts/typedConcepFuncs";
 import { forEach } from "shutils/dist/loops";
 import { useEffect } from "react";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
@@ -15,8 +15,8 @@ import { makeUsePlaceUtils } from "./utils";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 
 export function makeUsePlace<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   PlaceName extends string,
   DollName extends string,
@@ -27,24 +27,24 @@ export function makeUsePlace<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[],
   soundFiles: SoundFiles
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-  const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
-  const useModelFile = makeUseModelFile(conceptoFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+  const useModelFile = makeUseModelFile(concepFuncs);
 
   const {
     loadNowVideosForPlace,
     loadProbeImagesForPlace,
     makeCameraFromModel,
   } = makeUsePlaceUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
     DollName,
@@ -52,7 +52,7 @@ export function makeUsePlace<
     AnyCameraName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
   const placesRefs = getRefs().places;
 
@@ -90,7 +90,7 @@ export function makeUsePlace<
       });
 
       const { modelNamesLoaded } = getState().global.main;
-      forEach(gameyStartOptions.modelNamesByPlace[placeName], (modelName) => {
+      forEach(backdopStartOptions.modelNamesByPlace[placeName], (modelName) => {
         if (!modelNamesLoaded.includes(modelName)) {
           setState({ models: { [modelName]: { wantToLoad: true } } });
         }

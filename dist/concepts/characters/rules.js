@@ -1,9 +1,9 @@
 import { forEach } from "shutils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-export function makeCharacterDynamicRules(conceptoFuncs, gameyStartOptions, characterNames, placeInfoByName) {
-    const { makeRules, getState, setState, getRefs, makeDynamicRules, } = conceptoFuncs;
-    const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(conceptoFuncs, gameyStartOptions);
+export function makeCharacterDynamicRules(concepFuncs, backdopStartOptions, characterNames, placeInfoByName) {
+    const { makeRules, getState, setState, getRefs, makeDynamicRules, } = concepFuncs;
+    const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
     // makeDynamicRules((addItemEffect)=> ({
@@ -107,8 +107,8 @@ export function makeCharacterDynamicRules(conceptoFuncs, gameyStartOptions, char
 // FIXME
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
-export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, conceptoFuncs) {
-    const { getState } = conceptoFuncs;
+export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs) {
+    const { getState } = concepFuncs;
     return function startDynamicCharacterRulesForInitialState() {
         forEach(characterNames, (characterName) => {
             const { dollName } = getState().characters[characterName];
@@ -126,8 +126,8 @@ export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRu
         };
     };
 }
-export function makeCharacterRules(conceptoFuncs, placeInfoByName) {
-    const { makeRules, getState, setState } = conceptoFuncs;
+export function makeCharacterRules(concepFuncs, placeInfoByName) {
+    const { makeRules, getState, setState } = concepFuncs;
     return makeRules((addItemEffect, addEffect) => ({
         // should be a  dynamic rule ?
         whenCameraChangesForPlanePosition: addEffect({

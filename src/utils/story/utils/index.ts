@@ -1,15 +1,15 @@
 import {
-  GameyConceptoFuncs,
-  PlaceholderGameyConcepts,
-} from "../../../concepts/typedConceptoFuncs";
+  BackdopConcepFuncs,
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 import { makeCharacterStoryUtils } from "./characters";
 import { makeDollStoryUtils } from "./dolls";
 import { makeSceneStoryUtils } from "./scene";
 import { makeSpotStoryUtils } from "./spots";
 
-export function makeGameyStoryUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
+export function makeBackdopStoryUtils<
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
   DollName extends string,
   PlaceName extends string,
   CharacterName extends string,
@@ -17,37 +17,37 @@ export function makeGameyStoryUtils<
   AnySegmentName extends string,
   CameraNameByPlace extends Record<PlaceName, string>,
   SpotNameByPlace extends Record<PlaceName, string>
->(conceptoFuncs: ConceptoFuncs, gameyConcepts: GameyConcepts) {
+>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
   const {
     get2DAngleBetweenCharacters,
     get2DAngleFromCharacterToSpot,
   } = makeCharacterStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     CharacterName,
     SpotNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
   const { getModelNameFromDoll } = makeDollStoryUtils<
-    ConceptoFuncs,
-    GameyConcepts,
+    ConcepFuncs,
+    BackdopConcepts,
     DollName
-  >(conceptoFuncs, gameyConcepts);
+  >(concepFuncs, backdopConcepts);
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
   } = makeSceneStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     AnyCameraName,
     AnySegmentName,
     PlaceName,
     CameraNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
   const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     SpotNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
 
   return {
     // characters

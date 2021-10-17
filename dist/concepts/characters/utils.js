@@ -1,12 +1,12 @@
 // async function testAnimWeights() {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
-export function makeGetCharDollStuff(conceptoFuncs) {
-    const { getRefs, getState } = conceptoFuncs;
+export function makeGetCharDollStuff(concepFuncs) {
+    const { getRefs, getState } = concepFuncs;
     // NOTE TODO all these types need to be made inside the places using them (like story helpers)
     // And getCharDollStuff there too
-    // type StartState_Characters = typeof gameyConcepts.characters.startStates;
-    // type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
+    // type StartState_Characters = typeof backdopConcepts.characters.startStates;
+    // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
     // type DollNameFromCharacter<T_CharacterName extends CharacterName> =
     //   StartState_Characters[T_CharacterName]["dollName"];
     // type ModelNameFromDoll<T_DollName extends DollName> =

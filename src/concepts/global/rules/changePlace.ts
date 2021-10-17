@@ -12,20 +12,20 @@ import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 // import { focusScenePlaneOnFocusedDoll } from "../../../utils/babylonjs/scenePlane/focusScenePlane";
 // import { updateTexturesForNowCamera } from "./whenCameraChanges";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../../typedConceptoFuncs";
+} from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalChangePlaceRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
-  DollName extends keyof ReturnType<ConceptoFuncs["getState"]>["dolls"] &
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
+  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &
     string, // DollNameParameter extends string
   PlaceName extends string,
   AnyCameraName extends string,
@@ -33,47 +33,47 @@ export function makeGlobalChangePlaceRules<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
   // AnimationNameByModel extends Record<string, string>,
-  // StartState_Dolls extends GameyConcepts["dolls"]["startStates"],
-  // StartState_Dolls extends ReturnType<ConceptoFuncs["getState"]>["dolls"],
+  // StartState_Dolls extends BackdopConcepts["dolls"]["startStates"],
+  // StartState_Dolls extends ReturnType<ConcepFuncs["getState"]>["dolls"],
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   dollNames: readonly DollName[],
   placeInfoByName: PlaceInfoByName
 ) {
-  const { getRefs, getState, makeRules, setState, onNextTick } = conceptoFuncs;
+  const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
 
   const globalRefs = getRefs().global.main;
 
   const { getSectionVidVideo } = makeSectionVidStoreUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
     DollName,
     AnyCameraName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
   const {
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
   } = makeCameraChangeUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     AnyCameraName,
     PlaceName,
     DollName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils<
-    ConceptoFuncs,
-    GameyStartOptions
-  >(conceptoFuncs, gameyStartOptions);
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+    ConcepFuncs,
+    BackdopOptions
+  >(concepFuncs, backdopStartOptions);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
   function whenAllVideosLoadedForPlace() {
     const { nowPlaceName } = getState().global.main;
@@ -201,7 +201,7 @@ export function makeGlobalChangePlaceRules<
         } = globalState;
         const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
 
-        const wantedModelsForPlace = gameyStartOptions.modelNamesByPlace[
+        const wantedModelsForPlace = backdopStartOptions.modelNamesByPlace[
           nowPlaceName
         ].sort();
         const loadedModelNames = modelNamesLoaded.sort();

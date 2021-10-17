@@ -12,7 +12,7 @@ import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
 import {
   DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 import makeDollIndexUtils from "./indexUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };

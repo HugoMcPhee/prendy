@@ -15,14 +15,14 @@ import {
   makeSectionVidStoreUtils,
 } from "../../../concepts/sectionVids/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../../typedConceptoFuncs";
+} from "../../typedConcepFuncs";
 
 export function makeCameraChangeUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   AnyCameraName extends string,
   PlaceName extends string,
@@ -30,18 +30,18 @@ export function makeCameraChangeUtils<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[]
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
-  const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-  const getSectionVidVideo = makeGetSectionVidVideo<ConceptoFuncs, PlaceName>(
-    conceptoFuncs
+  const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const getSectionVidVideo = makeGetSectionVidVideo<ConcepFuncs, PlaceName>(
+    concepFuncs
   );
 
   /*

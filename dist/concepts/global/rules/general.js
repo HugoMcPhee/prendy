@@ -1,8 +1,8 @@
 import { breakableForEach } from "shutils/dist/loops";
 import { makeGlobalStoreUtils } from "../utils";
-export function makeGlobalGeneralRules(conceptoFuncs) {
-    const { getRefs, getState, makeRules, setState } = conceptoFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+export function makeGlobalGeneralRules(concepFuncs) {
+    const { getRefs, getState, makeRules, setState } = concepFuncs;
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     return makeRules((addItemEffect, addEffect) => ({
         whenAnythingChangesForRendering: addEffect({
             onEffect() {

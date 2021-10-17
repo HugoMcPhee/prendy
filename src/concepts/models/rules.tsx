@@ -1,21 +1,21 @@
 import { addItemToUniqueArray } from "shutils/dist/arrays";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   ModelInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 
 // handle laoding here ??
 
 export function makeModelRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   ModelName extends string,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
->(conceptoFuncs: ConceptoFuncs, modelInfoByName: ModelInfoByName) {
-  const { makeRules, setState, getRefs } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs, modelInfoByName: ModelInfoByName) {
+  const { makeRules, setState, getRefs } = concepFuncs;
 
-  const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
+  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 
   async function startLoadingModel<T_ModelName extends ModelName>(
     modelName: T_ModelName

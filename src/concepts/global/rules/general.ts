@@ -1,12 +1,12 @@
 import { breakableForEach } from "shutils/dist/loops";
-import { GameyConceptoFuncs } from "../../typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 
 export function makeGlobalGeneralRules<
-  ConceptoFuncs extends GameyConceptoFuncs
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs, getState, makeRules, setState } = conceptoFuncs;
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  ConcepFuncs extends BackdopConcepFuncs
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs, getState, makeRules, setState } = concepFuncs;
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenAnythingChangesForRendering: addEffect({

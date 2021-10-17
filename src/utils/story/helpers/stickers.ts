@@ -1,9 +1,9 @@
-import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 
 export function makeStickerStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs
->(conceptoFuncs: ConceptoFuncs) {
-  const { setState } = conceptoFuncs;
+  ConcepFuncs extends BackdopConcepFuncs
+>(concepFuncs: ConcepFuncs) {
+  const { setState } = concepFuncs;
 
   function moveSticker(x: number, y: number) {
     setState({ story: { main: { screenStickerPosition: { x, y } } } });

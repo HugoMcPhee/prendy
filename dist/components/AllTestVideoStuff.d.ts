@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { GameyConceptoFuncs } from "../concepts/typedConceptoFuncs";
-export declare function makeAllTestVideoStuff<ConceptoFuncs extends GameyConceptoFuncs, PlaceName extends string>(conceptoFuncs: ConceptoFuncs, placeNames: readonly PlaceName[]): () => JSX.Element;
+import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
+export declare function makeAllTestVideoStuff<ConcepFuncs extends BackdopConcepFuncs, PlaceName extends string>(concepFuncs: ConcepFuncs, placeNames: readonly PlaceName[]): () => JSX.Element;

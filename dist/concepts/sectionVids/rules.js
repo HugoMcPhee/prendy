@@ -1,11 +1,11 @@
 import { makeStackVidStoreUtils } from "../../concepts/stackVids/utils";
 import { minMaxRange } from "shutils/dist/numbers";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
-export function makeSectionVidRules(conceptoFuncs, placeInfoByName, dollNames) {
+export function makeSectionVidRules(concepFuncs, placeInfoByName, dollNames) {
     // safe Section Stack Vid Rules
-    const { getState, makeRules, setState } = conceptoFuncs;
-    const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo, } = makeSectionVidStoreUtils(conceptoFuncs, placeInfoByName, dollNames);
-    const { doWhenStackVidPlayOrPause, doWhenStackVidStateReady, } = makeStackVidStoreUtils(conceptoFuncs);
+    const { getState, makeRules, setState } = concepFuncs;
+    const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo, } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
+    const { doWhenStackVidPlayOrPause, doWhenStackVidStateReady, } = makeStackVidStoreUtils(concepFuncs);
     return makeRules((addItemEffect) => ({
         rulesForSettingNewVideoStates: addItemEffect({
             onItemEffect({ newValue: vidState, itemName, itemState }) {

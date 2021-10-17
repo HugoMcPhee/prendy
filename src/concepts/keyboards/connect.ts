@@ -1,9 +1,9 @@
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 
 export function makeKeyboardConnectRules<
-  ConceptoFuncs extends GameyConceptoFuncs
->(conceptoFuncs: ConceptoFuncs) {
-  const { setState, getState } = conceptoFuncs;
+  ConcepFuncs extends BackdopConcepFuncs
+>(concepFuncs: ConcepFuncs) {
+  const { setState, getState } = concepFuncs;
 
   function handleKeyDown(event: KeyboardEvent) {
     const keyboardState = getState().keyboards.main;

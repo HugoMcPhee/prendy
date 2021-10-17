@@ -2,12 +2,12 @@
 import React, { CSSProperties } from "react";
 import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "shutils/dist/numbers";
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeScreenSticker<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeScreenSticker<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { useStore } = conceptoFuncs;
+  const { useStore } = concepFuncs;
 
   type Props = {};
 

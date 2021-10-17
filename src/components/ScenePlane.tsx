@@ -1,27 +1,27 @@
 import { AbstractMesh } from "@babylonjs/core";
 import React, { useCallback } from "react";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-} from "../concepts/typedConceptoFuncs";
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+} from "../concepts/typedConcepFuncs";
 import { makeScenePlaneUtils } from "../utils/babylonjs/scenePlane";
 
 export function makeScenePlane<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped
->(conceptoFuncs: ConceptoFuncs, gameyStartOptions: GameyStartOptions) {
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped
+>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions) {
   const {
     getRefs,
     getState,
     useStoreEffect,
     useStoreItemPropsEffect,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
   const globalRefs = getRefs().global.main;
 
   const { fitScenePlaneToScreen, applyPlanePosition } = makeScenePlaneUtils(
-    conceptoFuncs,
-    gameyStartOptions
+    concepFuncs,
+    backdopStartOptions
   );
 
   type Props = {};

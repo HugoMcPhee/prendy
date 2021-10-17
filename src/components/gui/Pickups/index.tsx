@@ -1,24 +1,24 @@
 // @refresh-reset
 import React, { useEffect } from "react";
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   PickupsInfoPlaceholder,
-} from "../../../concepts/typedConceptoFuncs";
+} from "../../../concepts/typedConcepFuncs";
 import { makePickupButton } from "./PickupButton";
 
 export function makePickups<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>
->(conceptoFuncs: ConceptoFuncs, pickupsInfo: PickupsInfo) {
-  const { getRefs, useStore } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs, pickupsInfo: PickupsInfo) {
+  const { getRefs, useStore } = concepFuncs;
 
   const globalRefs = getRefs().global.main;
 
   type Props = {};
 
-  const PickupButton = makePickupButton<ConceptoFuncs, PickupName, PickupsInfo>(
-    conceptoFuncs,
+  const PickupButton = makePickupButton<ConcepFuncs, PickupName, PickupsInfo>(
+    concepFuncs,
     pickupsInfo
   );
 

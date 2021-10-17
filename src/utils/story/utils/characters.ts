@@ -1,22 +1,22 @@
-import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import { subtractPoints } from "shutils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "shutils/dist/speedAngleDistance2d";
 //
 import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeCharacterStoryUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceName extends string,
   CharacterName extends string,
   SpotNameByPlace extends Record<PlaceName, string>
->(conceptoFuncs: ConceptoFuncs) {
-  const { getState } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs) {
+  const { getState } = concepFuncs;
 
   const { getSpotPosition } = makeSpotStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     SpotNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
 
   function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
     character: CharacterName,

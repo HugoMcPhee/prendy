@@ -3,22 +3,22 @@ import { forEach } from "shutils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   PlaceInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 
 export function makeCharacterDynamicRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped,
   CharacterName extends string,
   DollName extends string,
   AnyCameraName extends string,
   PlaceName extends string,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopStartOptions: BackdopOptions,
   characterNames: readonly CharacterName[],
   placeInfoByName: PlaceInfoByName
 ) {
@@ -28,11 +28,11 @@ export function makeCharacterDynamicRules<
     setState,
     getRefs,
     makeDynamicRules,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
   const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(
-    conceptoFuncs,
-    gameyStartOptions
+    concepFuncs,
+    backdopStartOptions
   );
 
   const refs = getRefs();
@@ -185,15 +185,15 @@ export function makeCharacterDynamicRules<
 // TODO add addOrRemovd rules for characters
 
 export function makeStartDynamicCharacterRulesForInitialState<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>,
   CharacterName extends string
 >(
   characterDynamicRules: CharacterDynamicRules,
   characterNames: readonly CharacterName[],
-  conceptoFuncs: ConceptoFuncs
+  concepFuncs: ConcepFuncs
 ) {
-  const { getState } = conceptoFuncs;
+  const { getState } = concepFuncs;
   return function startDynamicCharacterRulesForInitialState() {
     forEach(characterNames, (characterName) => {
       const { dollName } = getState().characters[characterName];
@@ -211,11 +211,11 @@ export function makeStartDynamicCharacterRulesForInitialState<
 }
 
 export function makeCharacterRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceName extends string,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
->(conceptoFuncs: ConceptoFuncs, placeInfoByName: PlaceInfoByName) {
-  const { makeRules, getState, setState } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName) {
+  const { makeRules, getState, setState } = concepFuncs;
 
   return makeRules((addItemEffect, addEffect) => ({
     // should be a  dynamic rule ?

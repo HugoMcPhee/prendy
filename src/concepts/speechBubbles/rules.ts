@@ -3,9 +3,9 @@ import { forEach } from "shutils/dist/loops";
 import { makeSpeechBubblesStoreUtils } from "./utils";
 import { CSSProperties } from "react";
 import {
-  GameyConceptoFuncs,
-  PlaceholderGameyConcepts,
-} from "../typedConceptoFuncs";
+  BackdopConcepFuncs,
+  PlaceholderBackdopConcepts,
+} from "../typedConcepFuncs";
 import { ConceptsHelperTypes } from "concep";
 
 let zIndexCounter = 100;
@@ -17,19 +17,19 @@ When characters position changes
 */
 
 export function makeSpeechBubbleRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts
->(conceptoFuncs: ConceptoFuncs, gameyConcepts: GameyConcepts) {
-  const { makeRules, setState, getRefs } = conceptoFuncs;
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts
+>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
+  const { makeRules, setState, getRefs } = concepFuncs;
 
   // AllItemsState,
   // ItemRefs,
   // ItemState,
 
-  type ItemType = keyof ReturnType<GameyConceptoFuncs["getState"]>;
+  type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]>;
   type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    GameyConceptoFuncs["getState"],
-    GameyConceptoFuncs["getRefs"],
+    BackdopConcepFuncs["getState"],
+    BackdopConcepFuncs["getRefs"],
     T
   >;
   type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
@@ -37,8 +37,8 @@ export function makeSpeechBubbleRules<
   type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
   const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(
-    conceptoFuncs,
-    gameyConcepts
+    concepFuncs,
+    backdopConcepts
   );
 
   return makeRules((addItemEffect, addEffect) => ({

@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
-export declare function makeSpeechBubble<ConceptoFuncs extends GameyConceptoFuncs, CharacterName extends string>(conceptoFuncs: ConceptoFuncs): ({ name }: {
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+export declare function makeSpeechBubble<ConcepFuncs extends BackdopConcepFuncs, CharacterName extends string>(concepFuncs: ConcepFuncs): ({ name }: {
     name: any;
 }) => JSX.Element;

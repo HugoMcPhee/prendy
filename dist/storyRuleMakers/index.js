@@ -2,8 +2,8 @@ import { breakableForEach, forEach } from "shutils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
 export default "default";
 // export each of the rule makers stuff from here :)
-export function makeGetUsefulStoryStuff(conceptoFuncs) {
-    const { getRefs, getState } = conceptoFuncs;
+export function makeGetUsefulStoryStuff(concepFuncs) {
+    const { getRefs, getState } = concepFuncs;
     return function getUsefulStoryStuff() {
         const storyState = getState().story.main;
         const storyRefs = getRefs().story.main;
@@ -33,16 +33,16 @@ export function makeGetUsefulStoryStuff(conceptoFuncs) {
         };
     };
 }
-export function makeSetStoryState(conceptoFuncs) {
-    const { getRefs, getState, setState } = conceptoFuncs;
+export function makeSetStoryState(concepFuncs) {
+    const { getRefs, getState, setState } = concepFuncs;
     return function setStoryState(newState) {
         setState({ story: { main: newState } });
     };
 }
-export function makerAllStoryRuleMakers(conceptoFuncs, placeInfoByName, characterNames, dollNames) {
-    const { getRefs, getState, makeRules, startItemEffect, stopEffect, } = conceptoFuncs;
-    const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
-    const getUsefulStoryStuff = makeGetUsefulStoryStuff(conceptoFuncs);
+export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNames, dollNames) {
+    const { getRefs, getState, makeRules, startItemEffect, stopEffect, } = concepFuncs;
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+    const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
     function makeCamChangeRules(callBacksObject) {
         return makeRules((addItemEffect) => ({
             whenCameraChanges: addItemEffect({

@@ -1,5 +1,5 @@
-import { GameyConceptoFuncs, GameyStartOptionsUntyped } from "../../typedConceptoFuncs";
-export declare function makeGlobalScenePlaneRules<ConceptoFuncs extends GameyConceptoFuncs, GameyStartOptions extends GameyStartOptionsUntyped>(conceptoFuncs: ConceptoFuncs, gameyStartOptions: GameyStartOptions): {
+import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../../typedConcepFuncs";
+export declare function makeGlobalScenePlaneRules<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

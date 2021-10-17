@@ -1,18 +1,18 @@
 import delay from "delay";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
-} from "../../../concepts/typedConceptoFuncs";
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
 import { makeCharacterStoryHelpers } from "./characters";
 
 export function makerPlayerStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   ModelName extends string,
   PlaceName extends string,
   DollName extends string,
@@ -24,20 +24,20 @@ export function makerPlayerStoryHelpers<
   SpotNameByPlace extends Record<PlaceName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   modelInfoByName: ModelInfoByName,
   characterNames: readonly CharacterName[]
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
   const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     ModelName,
     PlaceName,
     DollName,
@@ -47,9 +47,9 @@ export function makerPlayerStoryHelpers<
     SpotNameByPlace,
     ModelInfoByName
   >(
-    conceptoFuncs,
-    gameyConcepts,
-    gameyStartOptions,
+    concepFuncs,
+    backdopConcepts,
+    backdopStartOptions,
     modelInfoByName,
     characterNames
   );

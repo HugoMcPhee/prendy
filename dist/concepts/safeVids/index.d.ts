@@ -1,5 +1,5 @@
 import { InitialItemsState } from "concep";
-import { PlaceInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
 export declare type VidState = "beforePlay" | "waitingForPlay" | "readyToPlay" | "play" | "beforeSeek" | "waitingForSeek" | "beforePause" | "waitingForPause" | "pause" | "beforeLoad" | "waitingForLoad" | "beforeUnload" | "waitingForUnload" | "unloaded";
 export default function safeVids<PlaceName extends string, PlaceInfoByName extends PlaceInfoByNamePlaceholder<PlaceName>>(placeNames: readonly PlaceName[], placeInfoByName: PlaceInfoByName): {
     state: <T_ItemName extends string>(itemName: T_ItemName) => {

@@ -1,8 +1,8 @@
 import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-import { GameyStartOptionsUntyped, PlaceInfoByNamePlaceholder } from "../typedConceptoFuncs";
-export default function global<GameyStartOptions extends GameyStartOptionsUntyped, AnySegmentName extends string, PlaceName extends string, ModelName extends string, DollName extends string, PickupName extends string, CharacterName extends string, MusicName extends string, SoundName extends string, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>>(gameyStartOptions: GameyStartOptions, musicNames: readonly MusicName[], soundNames: readonly SoundName[]): {
+import { BackdopOptionsUntyped, PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
+export default function global<BackdopOptions extends BackdopOptionsUntyped, AnySegmentName extends string, PlaceName extends string, ModelName extends string, DollName extends string, PickupName extends string, CharacterName extends string, MusicName extends string, SoundName extends string, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>>(backdopStartOptions: BackdopOptions, musicNames: readonly MusicName[], soundNames: readonly SoundName[]): {
     startStates: {
         main: {
             planePosMoveConfigName: string;

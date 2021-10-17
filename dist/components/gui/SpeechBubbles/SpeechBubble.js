@@ -4,9 +4,9 @@ import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "shutils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 // import "./SpeechBubble.css";
-export function makeSpeechBubble(conceptoFuncs) {
-    const { getState, useStore, useStoreEffect } = conceptoFuncs;
-    const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
+export function makeSpeechBubble(concepFuncs) {
+    const { getState, useStore, useStoreEffect } = concepFuncs;
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     return function SpeechBubble({ name }) {
         var _a;
         const theRectangle = useRef(null);

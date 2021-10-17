@@ -9,14 +9,14 @@ import React, {
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "shutils/dist/elements";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeMiniBubble<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeMiniBubble<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { useStoreEffect, useStore, getState } = conceptoFuncs;
+  const { useStoreEffect, useStore, getState } = concepFuncs;
 
-  const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
   type GetState = typeof getState;
   type ItemType = keyof ReturnType<GetState>;

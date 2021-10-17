@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { CharacterOptionsPlaceholder } from "../typedConceptoFuncs";
+import { CharacterOptionsPlaceholder } from "../typedConcepFuncs";
 export default function speechBubbles<CharacterName extends string, DollName extends string, FontName extends string, SpeechvidName extends string, CharacterOptions extends CharacterOptionsPlaceholder<CharacterName, DollName, FontName>>(characterNames: readonly CharacterName[], characterOptions: CharacterOptions, fontNames: readonly FontName[]): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
         font?: FontName;

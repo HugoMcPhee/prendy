@@ -7,26 +7,26 @@ import {
   getVectorAngle,
 } from "shutils/dist/speedAngleDistance2d";
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   PlaceInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
 export function makePlayerRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   CharacterName extends string,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
->(conceptoFuncs: ConceptoFuncs, placeInfoByName: PlaceInfoByName) {
-  const { getRefs, getState, makeRules, setState } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName) {
+  const { getRefs, getState, makeRules, setState } = concepFuncs;
 
   const globalRefs = getRefs().global.main;
 
-  const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
 
   return makeRules((addItemEffect, addEffect) => ({

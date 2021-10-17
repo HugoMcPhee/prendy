@@ -1,4 +1,4 @@
-export default function players(gameyStartOptions) {
+export default function players(backdopStartOptions) {
     const state = () => ({
         // player input stuff
         lastSafeInputAngle: 0,
@@ -11,12 +11,12 @@ export default function players(gameyStartOptions) {
         jumpButtonReleaseTime: Date.now(),
         pickupButtonPressTime: Date.now(),
         animationNames: {
-            walking: gameyStartOptions.playerAnimations.walking,
-            idle: gameyStartOptions.playerAnimations.idle,
+            walking: backdopStartOptions.playerAnimations.walking,
+            idle: backdopStartOptions.playerAnimations.idle,
         }, // maybe typed somehow, from player character?
     });
     const refs = () => ({
-        walkSpeed: gameyStartOptions.walkSpeed,
+        walkSpeed: backdopStartOptions.walkSpeed,
         canJumpTimeout: null,
     });
     const startStates = { main: state() };

@@ -1,20 +1,20 @@
 import { Vector3 } from "@babylonjs/core";
 import React, { ReactNode, Suspense } from "react";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../concepts/typedConceptoFuncs";
+} from "../concepts/typedConcepFuncs";
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";
 
 type Props = { children?: ReactNode };
 
 export function makeLoadingModels<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,
@@ -28,20 +28,20 @@ export function makeLoadingModels<
   CameraNameByPlace extends Record<PlaceName, string>,
   SoundFiles extends Record<SoundName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[],
   dollNames: readonly DollName[],
   soundFiles: SoundFiles,
   extraStuff?: React.ReactNode
 ) {
-  const { useStore } = conceptoFuncs;
+  const { useStore } = concepFuncs;
 
   const Player = makePlayer<
-    ConceptoFuncs,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopOptions,
     AnyCameraName,
     AnySegmentName,
     PlaceName,
@@ -51,11 +51,11 @@ export function makeLoadingModels<
     WallNameByPlace,
     SegmentNameByPlace,
     CameraNameByPlace
-  >(conceptoFuncs, gameyStartOptions, placeInfoByName, characterNames);
+  >(concepFuncs, backdopStartOptions, placeInfoByName, characterNames);
 
   const usePlace = makeUsePlace<
-    ConceptoFuncs,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopOptions,
     PlaceInfoByName,
     PlaceName,
     DollName,
@@ -65,7 +65,7 @@ export function makeLoadingModels<
     SoundFiles,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, gameyStartOptions, placeInfoByName, dollNames, soundFiles);
+  >(concepFuncs, backdopStartOptions, placeInfoByName, dollNames, soundFiles);
 
   function Place({ name }: { name: PlaceName }) {
     usePlace(name);

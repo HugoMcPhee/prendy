@@ -2,11 +2,11 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeDollStoryHelpers } from "./dolls";
-export function makeCharacterStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName, characterNames) {
-    const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
-    const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(conceptoFuncs);
-    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName);
+export function makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames) {
+    const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+    const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(concepFuncs);
+    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
     function setCharAnimation(character, animation // AnimationNameFromModel might keep the type better
     ) {
         const { dollName } = getCharDollStuff(character);

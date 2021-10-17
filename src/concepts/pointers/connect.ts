@@ -1,10 +1,10 @@
 import { Point2D } from "shutils/dist/points2d";
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 
 export function makePointersConnectRules<
-  ConceptoFuncs extends GameyConceptoFuncs
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs, setState, addItem, removeItem } = conceptoFuncs;
+  ConcepFuncs extends BackdopConcepFuncs
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs, setState, addItem, removeItem } = concepFuncs;
 
   const onPointerDown = (event: PointerEvent) => {
     const pointerId = event.pointerId.toString();

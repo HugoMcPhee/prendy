@@ -3,15 +3,15 @@ import { makeStackVidStoreUtils } from "../../concepts/stackVids/utils";
 import { minMaxRange } from "shutils/dist/numbers";
 import { SectionVidState } from ".";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
 
 export function makeSectionVidRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   PlaceName extends string,
   DollName extends string,
@@ -19,19 +19,19 @@ export function makeSectionVidRules<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[]
 ) {
   // safe Section Stack Vid Rules
 
-  const { getState, makeRules, setState } = conceptoFuncs;
+  const { getState, makeRules, setState } = concepFuncs;
 
-  type ItemType = keyof ReturnType<GameyConceptoFuncs["getState"]> &
-    keyof ReturnType<GameyConceptoFuncs["getRefs"]>;
+  type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]> &
+    keyof ReturnType<BackdopConcepFuncs["getRefs"]>;
   type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    GameyConceptoFuncs["getState"],
-    GameyConceptoFuncs["getRefs"],
+    BackdopConcepFuncs["getState"],
+    BackdopConcepFuncs["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
@@ -41,19 +41,19 @@ export function makeSectionVidRules<
     getSectionEndTime,
     getSectionVidVideo,
   } = makeSectionVidStoreUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
     DollName,
     AnyCameraName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
   const {
     doWhenStackVidPlayOrPause,
     doWhenStackVidStateReady,
-  } = makeStackVidStoreUtils(conceptoFuncs);
+  } = makeStackVidStoreUtils(concepFuncs);
 
   return makeRules((addItemEffect) => ({
     rulesForSettingNewVideoStates: addItemEffect({

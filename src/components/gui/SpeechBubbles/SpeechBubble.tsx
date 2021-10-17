@@ -9,14 +9,14 @@ import React, {
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "shutils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 // import "./SpeechBubble.css";
 
 export function makeSpeechBubble<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   CharacterName extends string
->(conceptoFuncs: ConceptoFuncs) {
-  const { getState, useStore, useStoreEffect } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs) {
+  const { getState, useStore, useStoreEffect } = concepFuncs;
 
   type GetState = typeof getState;
   type ItemType = keyof ReturnType<GetState>;
@@ -24,8 +24,8 @@ export function makeSpeechBubble<
     GetState
   >[T_ItemType];
 
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };

@@ -1,5 +1,5 @@
 import { forEach } from "shutils/dist/loops";
-import { CharacterOptionsPlaceholder } from "../typedConceptoFuncs";
+import { CharacterOptionsPlaceholder } from "../typedConcepFuncs";
 
 export default function characters<
   CharacterName extends string,

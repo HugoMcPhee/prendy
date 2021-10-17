@@ -2,18 +2,18 @@ import { Vector3 } from "@babylonjs/core";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
-} from "../../../concepts/typedConceptoFuncs";
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeDollStoryHelpers } from "./dolls";
 
 export function makeCharacterStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   ModelName extends string,
   PlaceName extends string,
   DollName extends string,
@@ -23,20 +23,20 @@ export function makeCharacterStoryHelpers<
   SpotNameByPlace extends Record<PlaceName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   modelInfoByName: ModelInfoByName,
   characterNames: readonly CharacterName[]
 ) {
-  const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
 
-  type StartState_Characters = typeof gameyConcepts.characters.startStates;
-  type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
+  type StartState_Characters = typeof backdopConcepts.characters.startStates;
+  type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
 
   type DollNameFromCharacter<
     T_CharacterName extends CharacterName
@@ -51,11 +51,11 @@ export function makeCharacterStoryHelpers<
   > = ModelNameFromDoll<NonNullable<DollNameFromCharacter<T_CharacterName>>>;
 
   const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     CharacterName,
     SpotNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
 
   const {
     moveDollAt2DAngle,
@@ -65,9 +65,9 @@ export function makeCharacterStoryHelpers<
     springAddToDollRotationY,
     springDollRotationY,
   } = makeDollStoryHelpers<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     ModelName,
     PlaceName,
     DollName,
@@ -76,7 +76,7 @@ export function makeCharacterStoryHelpers<
     MeshNameByModel,
     SpotNameByPlace,
     ModelInfoByName
-  >(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName);
+  >(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
 
   function setCharAnimation<T_Character extends CharacterName>(
     character: T_Character,

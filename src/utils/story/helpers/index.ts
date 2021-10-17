@@ -1,10 +1,10 @@
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConceptoFuncs";
+} from "../../../concepts/typedConcepFuncs";
 import { makeCharacterStoryHelpers } from "./characters";
 import { makeDollStoryHelpers } from "./dolls";
 import { makerPlayerStoryHelpers } from "./players";
@@ -17,10 +17,10 @@ import { makeStickerStoryHelpers } from "./stickers";
 
 // function doThis
 
-export function makeGameyStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+export function makeBackdopStoryHelpers<
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   ModelName extends string,
   PlaceName extends string,
   DollName extends string,
@@ -40,9 +40,9 @@ export function makeGameyStoryHelpers<
   SegmentNameByPlace extends Record<PlaceName, string>,
   CameraNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   modelInfoByName: ModelInfoByName,
   characterNames: readonly CharacterName[],
   placeInfoByName: PlaceInfoByName,
@@ -59,9 +59,9 @@ export function makeGameyStoryHelpers<
     springAddToCharRotationY,
     springCharRotation,
   } = makeCharacterStoryHelpers<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     ModelName,
     PlaceName,
     DollName,
@@ -71,9 +71,9 @@ export function makeGameyStoryHelpers<
     SpotNameByPlace,
     ModelInfoByName
   >(
-    conceptoFuncs,
-    gameyConcepts,
-    gameyStartOptions,
+    concepFuncs,
+    backdopConcepts,
+    backdopStartOptions,
     modelInfoByName,
     characterNames
   );
@@ -92,9 +92,9 @@ export function makeGameyStoryHelpers<
     springDollToSpot,
     toggleDollMeshes,
   } = makeDollStoryHelpers<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     ModelName,
     PlaceName,
     DollName,
@@ -103,7 +103,7 @@ export function makeGameyStoryHelpers<
     MeshNameByModel,
     SpotNameByPlace,
     ModelInfoByName
-  >(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName);
+  >(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
 
   const {
     enableMovement,
@@ -112,9 +112,9 @@ export function makeGameyStoryHelpers<
     setPlayerToStartSpot,
     takePickup,
   } = makerPlayerStoryHelpers<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     ModelName,
     PlaceName,
     DollName,
@@ -126,9 +126,9 @@ export function makeGameyStoryHelpers<
     SpotNameByPlace,
     ModelInfoByName
   >(
-    conceptoFuncs,
-    gameyConcepts,
-    gameyStartOptions,
+    concepFuncs,
+    backdopConcepts,
+    backdopStartOptions,
     modelInfoByName,
     characterNames
   );
@@ -144,7 +144,7 @@ export function makeGameyStoryHelpers<
     setNextSegment,
     showStoryView,
   } = makeSceneStoryHelpers<
-    ConceptoFuncs,
+    ConcepFuncs,
     AnyCameraName,
     AnySegmentName,
     PlaceName,
@@ -154,13 +154,13 @@ export function makeGameyStoryHelpers<
     WallNameByPlace,
     SegmentNameByPlace,
     CameraNameByPlace
-  >(conceptoFuncs, placeInfoByName, characterNames);
+  >(concepFuncs, placeInfoByName, characterNames);
 
   const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers<
-    ConceptoFuncs,
+    ConcepFuncs,
     MusicName,
     MusicFiles
-  >(conceptoFuncs, musicNames, musicFiles);
+  >(concepFuncs, musicNames, musicFiles);
 
   const {
     hideMiniBubble,
@@ -168,15 +168,15 @@ export function makeGameyStoryHelpers<
     showMiniBubble,
     showSpeech,
   } = makeSpeechStoryHelpers<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     CharacterName
-  >(conceptoFuncs, gameyConcepts, gameyStartOptions, characterNames);
+  >(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
 
   const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers<
-    ConceptoFuncs
-  >(conceptoFuncs);
+    ConcepFuncs
+  >(concepFuncs);
 
   return {
     // characters

@@ -1,4 +1,4 @@
-export declare function makeGetGameyStartOptions<PickupName extends string, PlaceName extends string, ModelName extends string, CharacterName extends string, AnyAnimationName extends string, TriggerNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, string>, ModelNamesByPlaceLoose extends Record<PlaceName, ModelName[]>, SegmentNameByPlace extends Record<PlaceName, string>>(): <T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(options: {
+export declare function makeGetBackdopOptions<PickupName extends string, PlaceName extends string, ModelName extends string, CharacterName extends string, AnyAnimationName extends string, TriggerNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, string>, ModelNamesByPlaceLoose extends Record<PlaceName, ModelName[]>, SegmentNameByPlace extends Record<PlaceName, string>>(): <T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(options: {
     place: T_Place;
     segment: SegmentNameByPlace[T_Place];
     camera: T_Cam;

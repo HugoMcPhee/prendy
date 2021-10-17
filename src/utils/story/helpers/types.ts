@@ -1,10 +1,10 @@
 export default "default";
 
 // import { CharacterName } from "art/characters";
-// import { gameyConcepts } from "libraries/gamey/concepts";
+// import { backdopConcepts } from "backdop/concepts";
 //
-// const dollStartStates = gameyConcepts.dolls.startStates;
-// const characterStartStates = gameyConcepts.characters.startStates;
+// const dollStartStates = backdopConcepts.dolls.startStates;
+// const characterStartStates = backdopConcepts.characters.startStates;
 //
 // export type DollStartStates = typeof dollStartStates;
 // export type CharacterStartStates = typeof characterStartStates;

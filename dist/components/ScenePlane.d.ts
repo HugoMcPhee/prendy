@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { GameyConceptoFuncs, GameyStartOptionsUntyped } from "../concepts/typedConceptoFuncs";
-export declare function makeScenePlane<ConceptoFuncs extends GameyConceptoFuncs, GameyStartOptions extends GameyStartOptionsUntyped>(conceptoFuncs: ConceptoFuncs, gameyStartOptions: GameyStartOptions): (_: {}) => JSX.Element;
+import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../concepts/typedConcepFuncs";
+export declare function makeScenePlane<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions): (_: {}) => JSX.Element;

@@ -13,11 +13,11 @@ import { getPointDistanceQuick } from "shutils/dist/speedAngleDistance3d";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
-} from "../typedConceptoFuncs";
+  PlaceholderBackdopConcepts,
+} from "../typedConcepFuncs";
 
 const rangeOptions = {
   touch: 2,
@@ -53,36 +53,36 @@ export function enableCollisions(theMesh: AbstractMesh) {
 }
 
 export function makeDollStoreUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped,
-  GameyConcepts extends PlaceholderGameyConcepts,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
   AnimationNameByModel extends Record<string, string>,
-  // StartState_Dolls extends GameyConcepts["dolls"]["startStates"],
-  StartState_Dolls extends ReturnType<ConceptoFuncs["getState"]>["dolls"],
-  DollName extends keyof ReturnType<ConceptoFuncs["getState"]>["dolls"] &
+  // StartState_Dolls extends BackdopConcepts["dolls"]["startStates"],
+  StartState_Dolls extends ReturnType<ConcepFuncs["getState"]>["dolls"],
+  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &
     string, // DollNameParameter extends string
   ModelName extends string,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyStartOptions: GameyStartOptions,
-  gameyConcepts: GameyConcepts,
+  concepFuncs: ConcepFuncs,
+  backdopStartOptions: BackdopOptions,
+  backdopConcepts: BackdopConcepts,
   dollNames: readonly DollName[],
   modelInfoByName: ModelInfoByName
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
   const {
     convertScreenPointToPlaneScenePoint,
     convertPointOnPlaneToPointOnScreen,
     getPositionOnPlane,
-  } = makeScenePlaneUtils(conceptoFuncs, gameyStartOptions);
+  } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
 
   // type ConceptoState = ReturnType<typeof getState>;
   // type DollName = keyof ConceptoState["dolls"];
-  // type DollName = keyof typeof gameyConcepts.dolls.startStates;
-  // type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
-  // type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
+  // type DollName = keyof typeof backdopConcepts.dolls.startStates;
+  // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+  // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
 
   type ModelNameFromDoll<
     T_DollName extends DollName

@@ -12,9 +12,9 @@ import { makeRunMovers } from "concep-movers";
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
-export function makeDollDynamicRules(conceptoFuncs, gameyStartOptions, gameyConcepts, modelInfoByName, dollNames) {
-    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(conceptoFuncs, gameyStartOptions, gameyConcepts, dollNames, modelInfoByName);
-    const { getPreviousState, getRefs, getState, makeDynamicRules, makeRules, setState, } = conceptoFuncs;
+export function makeDollDynamicRules(concepFuncs, backdopStartOptions, backdopConcepts, modelInfoByName, dollNames) {
+    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConcepts, dollNames, modelInfoByName);
+    const { getPreviousState, getRefs, getState, makeDynamicRules, makeRules, setState, } = concepFuncs;
     return makeDynamicRules((addItemEffect, _addEffect) => ({
         waitForModelToLoad: addItemEffect(({ dollName, modelName, }) => ({
             onItemEffect() {
@@ -66,8 +66,8 @@ export function makeDollDynamicRules(conceptoFuncs, gameyStartOptions, gameyConc
 }
 // FIXME
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
-export function startDynamicDollRulesForInitialState(conceptoFuncs, dollDynamicRules, dollNames) {
-    const { getState } = conceptoFuncs;
+export function startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRules, dollNames) {
+    const { getState } = concepFuncs;
     forEach(dollNames, (dollName) => {
         const { modelName } = getState().dolls[dollName];
         if (!modelName)
@@ -83,11 +83,11 @@ export function startDynamicDollRulesForInitialState(conceptoFuncs, dollDynamicR
         });
     };
 }
-export function makeDollRules(gameyStartOptions, dollDynamicRules, conceptoFuncs, gameyConcepts, modelInfoByName, dollNames) {
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(conceptoFuncs, gameyStartOptions, gameyConcepts, dollNames, modelInfoByName);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(conceptoFuncs, gameyStartOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs, } = conceptoFuncs;
-    const { runMover, runMover3d, runMoverMulti } = makeRunMovers(conceptoFuncs);
+export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs, backdopConcepts, modelInfoByName, dollNames) {
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConcepts, dollNames, modelInfoByName);
+    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+    const { makeRules, getPreviousState, getState, setState, getRefs, } = concepFuncs;
+    const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
     return makeRules((addItemEffect, addEffect) => ({
         // --------------------------------
         // loading model stuff
@@ -176,8 +176,8 @@ export function makeDollRules(gameyStartOptions, dollDynamicRules, conceptoFuncs
                         console.warn("tried to use undefined animation", aniName);
                     }
                     if (aniRef &&
-                        (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== gameyStartOptions.animationSpeed) {
-                        aniRef.speedRatio = gameyStartOptions.animationSpeed;
+                        (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== backdopStartOptions.animationSpeed) {
+                        aniRef.speedRatio = backdopStartOptions.animationSpeed;
                     }
                     const animWeight = animWeights[aniName];
                     const animIsStopped = animWeight < 0.003;

@@ -1,7 +1,7 @@
 import { ConceptsHelperTypes } from "concep";
 import { createConcepts } from "concep";
-import { gameyFlowNames } from ".";
-import { makeGetGameyStartOptions } from "../getGameyOptions";
+import { backdopFlowNames } from ".";
+import { makeGetBackdopOptions } from "../getBackdopOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
 import dolls from "./dolls";
@@ -17,7 +17,7 @@ import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 import stackVids from "./stackVids";
 
-const testGetGameyStartOptions = makeGetGameyStartOptions<
+const testGetBackdopOptions = makeGetBackdopOptions<
   string, // PickupName
   string, // PlaceName
   string, // ModelName
@@ -30,7 +30,7 @@ const testGetGameyStartOptions = makeGetGameyStartOptions<
   Record<string, string> // SegmentNameByPlace
 >();
 
-const TEST_START_OPTIONS = testGetGameyStartOptions({
+const TEST_START_OPTIONS = testGetBackdopOptions({
   // place: "cave",
   // segment: "start",
   // camera: "View_Camera",
@@ -133,12 +133,12 @@ export type DollOptionsPlaceholder<
   }
 >;
 
-const placeholderGameyConcepts = {
+const placeholderBackdopConcepts = {
   keyboards: keyboards(),
   miniBubbles: miniBubbles<any>(), // CharacterName
   pointers: pointers(),
   global: global<
-    GameyStartOptionsUntyped, // typeof TEST_START_OPTIONS,
+    BackdopOptionsUntyped, // typeof TEST_START_OPTIONS,
     any, // AnySegmentName,
     any, // PlaceName,
     any, //  ModelName,
@@ -206,17 +206,17 @@ const placeholderGameyConcepts = {
   story: story_fake<any, any>(),
 };
 
-// const conceptoFuncs = _createConcepts_ForTypes(placeholderGameyConcepts, {
-const conceptoFuncs = createConcepts(placeholderGameyConcepts, {
-  flowNames: gameyFlowNames,
+// const concepFuncs = _createConcepts_ForTypes(placeholderBackdopConcepts, {
+const concepFuncs = createConcepts(placeholderBackdopConcepts, {
+  flowNames: backdopFlowNames,
   dontSetMeta: true,
 });
 
 // NOTE Change these to typeof  to have known types while making backdops library
-// export type PlaceholderGameyConcepts = typeof placeholderGameyConcepts;
-// export type GameyConceptoFuncs = typeof conceptoFuncs;
+// export type PlaceholderBackdopConcepts = typeof placeholderBackdopConcepts;
+// export type BackdopConcepFuncs = typeof concepFuncs;
 
-export type PlaceholderGameyConcepts = Record<
+export type PlaceholderBackdopConcepts = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -224,7 +224,7 @@ export type PlaceholderGameyConcepts = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type GameyConceptoFuncs = {
+export type BackdopConcepFuncs = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -267,10 +267,10 @@ export type GameyConceptoFuncs = {
   useStoreItemPropsEffect: (...args: any) => any;
 };
 
-type ItemType = keyof ReturnType<GameyConceptoFuncs["getState"]>;
+type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]>;
 type HelperType<T extends ItemType> = ConceptsHelperTypes<
-  GameyConceptoFuncs["getState"],
-  GameyConceptoFuncs["getRefs"],
+  BackdopConcepFuncs["getState"],
+  BackdopConcepFuncs["getRefs"],
   T
 >;
 export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
@@ -333,7 +333,7 @@ type ToNewOptionUntyped = {
   toSegment?: string;
 };
 
-export type GameyStartOptionsUntyped = {
+export type BackdopOptionsUntyped = {
   place: string;
   segment: string;
   camera: string;
@@ -366,7 +366,7 @@ type ToPlaceOption<
   toSegment?: AnySegmentName;
 };
 
-export type GameyStartOptionsGeneric<
+export type BackdopOptionsGeneric<
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,

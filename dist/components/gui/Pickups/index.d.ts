@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { GameyConceptoFuncs, PickupsInfoPlaceholder } from "../../../concepts/typedConceptoFuncs";
-export declare function makePickups<ConceptoFuncs extends GameyConceptoFuncs, PickupName extends string, PickupsInfo extends PickupsInfoPlaceholder<PickupName>>(conceptoFuncs: ConceptoFuncs, pickupsInfo: PickupsInfo): (_props: {}) => JSX.Element;
+import { BackdopConcepFuncs, PickupsInfoPlaceholder } from "../../../concepts/typedConcepFuncs";
+export declare function makePickups<ConcepFuncs extends BackdopConcepFuncs, PickupName extends string, PickupsInfo extends PickupsInfoPlaceholder<PickupName>>(concepFuncs: ConcepFuncs, pickupsInfo: PickupsInfo): (_props: {}) => JSX.Element;

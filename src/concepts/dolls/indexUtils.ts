@@ -1,7 +1,7 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { moverMultiRefs, makeMoverStateMaker } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
-import { ModelInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
 //
 
 export type InRangeForDoll = {

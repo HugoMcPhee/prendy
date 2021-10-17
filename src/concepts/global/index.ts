@@ -11,13 +11,13 @@ import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/Cus
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 //
 import {
-  GameyStartOptionsUntyped,
+  BackdopOptionsUntyped,
   PlaceInfoByNamePlaceholder,
-} from "../typedConceptoFuncs";
+} from "../typedConcepFuncs";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 
 export default function global<
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  BackdopOptions extends BackdopOptionsUntyped,
   AnySegmentName extends string,
   PlaceName extends string,
   ModelName extends string,
@@ -28,7 +28,7 @@ export default function global<
   SoundName extends string,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
 >(
-  gameyStartOptions: GameyStartOptions,
+  backdopStartOptions: BackdopOptions,
   musicNames: readonly MusicName[],
   soundNames: readonly SoundName[]
 ) {
@@ -67,7 +67,7 @@ export default function global<
     nextSegmentNameWhenVidPlays: null as MaybeSegment, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
     wantedSegmentNameAtLoop: null as MaybeSegment,
     wantedSegmentName: null as MaybeSegment,
-    nowSegmentName: gameyStartOptions.segment as AnySegmentName,
+    nowSegmentName: backdopStartOptions.segment as AnySegmentName,
     wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sectionVids
     // TODO? move nowCamName etc to here, since never change cam for non-now place
     //
@@ -75,14 +75,14 @@ export default function global<
     modelNamesLoaded: [] as ModelName[],
     newPlaceLoaded: false,
     isLoadingBetweenPlaces: true,
-    nowPlaceName: gameyStartOptions.place as PlaceName,
+    nowPlaceName: backdopStartOptions.place as PlaceName,
     readyToSwapPlace: false,
     nextPlaceName: null as null | PlaceName,
     loadingOverlayToggled: true,
     loadingOverlayFullyShowing: true,
     //
     // player
-    playerCharacter: gameyStartOptions.playerCharacter as CharacterName, // TODO Move to players ?
+    playerCharacter: backdopStartOptions.playerCharacter as CharacterName, // TODO Move to players ?
     gravityValue: 5, // currently only  while walking (not every frame, could update to every frame when not touching a flatish ground)
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
     focusedDoll: "walker" as DollName,
@@ -90,8 +90,8 @@ export default function global<
     // scene plane
     ...mover2dState("planePos"),
     ...moverState("planeZoom", {
-      value: gameyStartOptions.zoomLevels.default,
-      valueGoal: gameyStartOptions.zoomLevels.default,
+      value: backdopStartOptions.zoomLevels.default,
+      valueGoal: backdopStartOptions.zoomLevels.default,
     }), // (like scale)
     planePosMoveConfigName: "default", // todo move to mover2dState()
     //
@@ -99,7 +99,7 @@ export default function global<
     timeScreenResized: Date.now(),
     interactButtonPressTime: 0,
     // story
-    heldPickups: gameyStartOptions.heldPickups as PickupName[],
+    heldPickups: backdopStartOptions.heldPickups as PickupName[],
     storyOverlayToggled: false, // so the screen can fade out without affecting loading a new place
     alarmTextIsVisible: false,
     alarmText: "⚠ wobble detected ⚠",

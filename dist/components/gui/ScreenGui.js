@@ -8,15 +8,15 @@ import { makeScreenSticker } from "./ScreenSticker";
 import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualStick } from "./VirtualStick";
-export function makeScreenGui(conceptoFuncs, characterNames, pickupsInfo) {
-    const AlarmText = makeAlarmText(conceptoFuncs);
-    const LoadingOverlay = makeLoadingOverlay(conceptoFuncs);
-    const MiniBubble = makeMiniBubble(conceptoFuncs);
-    const Pickups = makePickups(conceptoFuncs, pickupsInfo);
-    const ScreenSticker = makeScreenSticker(conceptoFuncs);
-    const SpeechBubble = makeSpeechBubble(conceptoFuncs);
-    const StoryOverlay = makeStoryOverlay(conceptoFuncs);
-    const VirtualStick = makeVirtualStick(conceptoFuncs);
+export function makeScreenGui(concepFuncs, characterNames, pickupsInfo) {
+    const AlarmText = makeAlarmText(concepFuncs);
+    const LoadingOverlay = makeLoadingOverlay(concepFuncs);
+    const MiniBubble = makeMiniBubble(concepFuncs);
+    const Pickups = makePickups(concepFuncs, pickupsInfo);
+    const ScreenSticker = makeScreenSticker(concepFuncs);
+    const SpeechBubble = makeSpeechBubble(concepFuncs);
+    const StoryOverlay = makeStoryOverlay(concepFuncs);
+    const VirtualStick = makeVirtualStick(concepFuncs);
     return function ScreenGui(_) {
         return (React.createElement("div", { style: {
                 pointerEvents: "none",

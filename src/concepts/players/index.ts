@@ -1,10 +1,10 @@
 import { Point2D } from "shutils/dist/points2d";
-import { GameyStartOptionsUntyped } from "../typedConceptoFuncs";
+import { BackdopOptionsUntyped } from "../typedConcepFuncs";
 
 export default function players<
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  BackdopOptions extends BackdopOptionsUntyped,
   AnyAnimationName extends string
->(gameyStartOptions: GameyStartOptions) {
+>(backdopStartOptions: BackdopOptions) {
   type PlayerAnimationNames = {
     walking: AnyAnimationName;
     idle: AnyAnimationName;
@@ -22,13 +22,13 @@ export default function players<
     jumpButtonReleaseTime: Date.now(),
     pickupButtonPressTime: Date.now(),
     animationNames: {
-      walking: gameyStartOptions.playerAnimations.walking,
-      idle: gameyStartOptions.playerAnimations.idle,
+      walking: backdopStartOptions.playerAnimations.walking,
+      idle: backdopStartOptions.playerAnimations.idle,
     } as PlayerAnimationNames, // maybe typed somehow, from player character?
   });
 
   const refs = () => ({
-    walkSpeed: gameyStartOptions.walkSpeed,
+    walkSpeed: backdopStartOptions.walkSpeed,
     canJumpTimeout: null as null | ReturnType<typeof setTimeout>,
   });
 

@@ -2,9 +2,9 @@ import { subtractPoints } from "shutils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "shutils/dist/speedAngleDistance2d";
 //
 import { makeSpotStoryUtils } from "../utils/spots";
-export function makeCharacterStoryUtils(conceptoFuncs) {
-    const { getState } = conceptoFuncs;
-    const { getSpotPosition } = makeSpotStoryUtils(conceptoFuncs);
+export function makeCharacterStoryUtils(concepFuncs) {
+    const { getState } = concepFuncs;
+    const { getSpotPosition } = makeSpotStoryUtils(concepFuncs);
     function get2DAngleFromCharacterToSpot(character, place, spot) {
         const charactersState = getState().characters;
         const dollA = charactersState[character].dollName;

@@ -1,5 +1,5 @@
 import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
-import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
 export default function dolls<ModelName extends string, DollName extends string, AnySpotName extends string, AnyAnimationName extends string, DollOptions extends DollOptionsPlaceholder<DollName, ModelName>, AnimationNameByModel extends Record<ModelName, AnyAnimationName>, BoneNameByModel extends Record<ModelName, string>, MaterialNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(modelNames: readonly ModelName[], dollNames: readonly DollName[], modelInfoByName: ModelInfoByName, dollOptions: DollOptions): {
     startStates: { [K_DollName in DollName]: {
         nowAnimation: string;

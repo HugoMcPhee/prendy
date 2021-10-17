@@ -1,7 +1,7 @@
 // @refresh-reset
 import React from "react";
-export function makeAlarmText(conceptoFuncs) {
-    const { useStore } = conceptoFuncs;
+export function makeAlarmText(concepFuncs) {
+    const { useStore } = concepFuncs;
     return function AlarmText(_props) {
         const { alarmText, alarmTextIsVisible } = useStore(({ story: { main } }) => main, {
             type: "story",

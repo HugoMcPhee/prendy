@@ -1,21 +1,21 @@
 import { AbstractMesh, Camera, Matrix, Mesh, Vector3 } from "@babylonjs/core";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-} from "../../../concepts/typedConceptoFuncs";
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+} from "../../../concepts/typedConcepFuncs";
 import { shortenDecimals } from "shutils/dist/numbers";
 import { defaultPosition, Point2D } from "shutils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "shutils/dist/rects";
 import { defaultSize } from "shutils/dist/sizes";
 
 export function makeScenePlaneUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped
->(conceptoFuncs: ConceptoFuncs, gameyStartOptions: GameyStartOptions) {
-  const { getRefs, getState } = conceptoFuncs;
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped
+>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions) {
+  const { getRefs, getState } = concepFuncs;
 
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
   const globalRefs = getRefs().global.main;
 
   function getProjectionMatrixCustomSize(
@@ -70,7 +70,7 @@ export function makeScenePlaneUtils<
     if (!currentCamera) return new Vector3();
 
     // FIXME Temporary value to use the characters head position instead of center position
-    const Y_OFFSET = gameyStartOptions.headHeightOffset;
+    const Y_OFFSET = backdopStartOptions.headHeightOffset;
 
     return Vector3.Project(
       new Vector3(

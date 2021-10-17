@@ -1,5 +1,5 @@
-export function makeStackVidStoreUtils(conceptoFuncs) {
-    const { getState, setState, startEffect, startItemEffect, stopEffect, } = conceptoFuncs;
+export function makeStackVidStoreUtils(concepFuncs) {
+    const { getState, setState, startEffect, startItemEffect, stopEffect, } = concepFuncs;
     function doWhenStackVidStateChanges(stackVidId, checkShouldRun, callback, checkInitial = true) {
         const initialVidState = getState().stackVids[stackVidId].vidState;
         if (checkInitial && checkShouldRun(initialVidState)) {

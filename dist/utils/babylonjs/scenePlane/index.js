@@ -4,9 +4,9 @@ import { shortenDecimals } from "shutils/dist/numbers";
 import { defaultPosition } from "shutils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "shutils/dist/rects";
 import { defaultSize } from "shutils/dist/sizes";
-export function makeScenePlaneUtils(conceptoFuncs, gameyStartOptions) {
-    const { getRefs, getState } = conceptoFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+export function makeScenePlaneUtils(concepFuncs, backdopStartOptions) {
+    const { getRefs, getState } = concepFuncs;
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const globalRefs = getRefs().global.main;
     function getProjectionMatrixCustomSize(theCamera, theSize) {
         // Only for perspective camera here :)
@@ -36,7 +36,7 @@ export function makeScenePlaneUtils(conceptoFuncs, gameyStartOptions) {
         if (!currentCamera)
             return new Vector3();
         // FIXME Temporary value to use the characters head position instead of center position
-        const Y_OFFSET = gameyStartOptions.headHeightOffset;
+        const Y_OFFSET = backdopStartOptions.headHeightOffset;
         return Vector3.Project(new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z), Matrix.Identity(), currentCamera
             .getViewMatrix()
             // .multiply(currentCamera.getProjectionMatrix()),

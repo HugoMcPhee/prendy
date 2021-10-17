@@ -19,37 +19,37 @@ import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
 import { makeStackVidRules } from "./stackVids/rules";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "./typedConceptoFuncs";
+} from "./typedConcepFuncs";
 
-export function makeStartGameyRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+export function makeStartBackdopRules<
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,
-  // DollName extends keyof ReturnType<ConceptoFuncs["getState"]>["dolls"] &     string, // DollNameParameter extends string
+  // DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &     string, // DollNameParameter extends string
   DollName extends string, // DollNameParameter extends string
   ModelName extends string,
   CharacterName extends string,
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  StartState_Dolls extends GameyConcepts["dolls"]["startStates"] &
-    ReturnType<ConceptoFuncs["getState"]>["dolls"],
+  StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
+    ReturnType<ConcepFuncs["getState"]>["dolls"],
   AnyAnimationName extends string,
   AnimationNameByModel extends Record<ModelName, AnyAnimationName>
   // DollName extends keyof StartState_Dolls & string,
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[],
   characterNames: readonly CharacterName[],
@@ -57,12 +57,12 @@ export function makeStartGameyRules<
 ) {
   // making rules
 
-  const keyboardConnectRules = makeKeyboardConnectRules(conceptoFuncs);
-  const pointerConnectRules = makePointersConnectRules(conceptoFuncs);
+  const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
+  const pointerConnectRules = makePointersConnectRules(concepFuncs);
   const startAllGlobalRules = makeStartAllGlobalRules<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     PlaceInfoByName,
     AnyCameraName,
     AnySegmentName,
@@ -71,28 +71,28 @@ export function makeStartGameyRules<
     CameraNameByPlace,
     SegmentNameByPlace
   >(
-    conceptoFuncs,
-    gameyConcepts,
-    gameyStartOptions,
+    concepFuncs,
+    backdopConcepts,
+    backdopStartOptions,
     placeInfoByName,
     dollNames
   );
 
-  const modelRules = makeModelRules<ConceptoFuncs, ModelName, ModelInfoByName>(
-    conceptoFuncs,
+  const modelRules = makeModelRules<ConcepFuncs, ModelName, ModelInfoByName>(
+    concepFuncs,
     modelInfoByName
   );
 
   const playerRules = makePlayerRules<
-    ConceptoFuncs,
+    ConcepFuncs,
     CharacterName,
     PlaceInfoByName
-  >(conceptoFuncs, placeInfoByName);
+  >(concepFuncs, placeInfoByName);
 
   const dollDynamicRules = makeDollDynamicRules<
-    ConceptoFuncs,
-    GameyStartOptions,
-    GameyConcepts,
+    ConcepFuncs,
+    BackdopOptions,
+    BackdopConcepts,
     StartState_Dolls,
     DollName,
     ModelName,
@@ -100,18 +100,18 @@ export function makeStartGameyRules<
     AnimationNameByModel,
     ModelInfoByName
   >(
-    conceptoFuncs,
-    gameyStartOptions,
-    gameyConcepts,
+    concepFuncs,
+    backdopStartOptions,
+    backdopConcepts,
     modelInfoByName,
     dollNames
   );
 
   const dollRules = makeDollRules<
-    GameyStartOptions,
+    BackdopOptions,
     ReturnType<typeof makeDollDynamicRules>,
-    ConceptoFuncs,
-    GameyConcepts,
+    ConcepFuncs,
+    BackdopConcepts,
     StartState_Dolls,
     DollName,
     ModelName,
@@ -119,59 +119,59 @@ export function makeStartGameyRules<
     AnimationNameByModel,
     ModelInfoByName
   >(
-    gameyStartOptions,
+    backdopStartOptions,
     dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
-    conceptoFuncs,
-    gameyConcepts,
+    concepFuncs,
+    backdopConcepts,
     modelInfoByName,
     dollNames
   );
 
-  const speechBubbleRules = makeSpeechBubbleRules<ConceptoFuncs, GameyConcepts>(
-    conceptoFuncs,
-    gameyConcepts
+  const speechBubbleRules = makeSpeechBubbleRules<ConcepFuncs, BackdopConcepts>(
+    concepFuncs,
+    backdopConcepts
   );
 
-  const safeVidRules = makeSafeVidRules(conceptoFuncs);
+  const safeVidRules = makeSafeVidRules(concepFuncs);
 
   const safeSectionStackVidRules = makeSectionVidRules<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
     DollName,
     AnyCameraName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
-  const safeStackVidRules = makeStackVidRules(conceptoFuncs);
+  const safeStackVidRules = makeStackVidRules(concepFuncs);
 
   const characterDynamicRules = makeCharacterDynamicRules<
-    ConceptoFuncs,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopOptions,
     CharacterName,
     DollName,
     AnyCameraName,
     PlaceName,
     PlaceInfoByName
-  >(conceptoFuncs, gameyStartOptions, characterNames, placeInfoByName);
+  >(concepFuncs, backdopStartOptions, characterNames, placeInfoByName);
 
   const characterRules = makeCharacterRules<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     PlaceInfoByName
-  >(conceptoFuncs, placeInfoByName);
+  >(concepFuncs, placeInfoByName);
 
   const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState<
-    ConceptoFuncs,
+    ConcepFuncs,
     ReturnType<typeof makeCharacterDynamicRules>,
     CharacterName
-  >(characterDynamicRules, characterNames, conceptoFuncs);
+  >(characterDynamicRules, characterNames, concepFuncs);
 
   // ----------------------------------------------
   // starting and stopping rules
 
-  function startGameyMainRules() {
+  function startBackdopMainRules() {
     keyboardConnectRules.startAll();
     pointerConnectRules.startAll();
     // keyboardRules.startAll(); // NOTE does nothing
@@ -183,11 +183,11 @@ export function makeStartGameyRules<
     /*dolls*/
     dollRules.startAll();
     const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState<
-      ConceptoFuncs,
+      ConcepFuncs,
       ReturnType<typeof makeDollDynamicRules>,
       DollName
     >(
-      conceptoFuncs,
+      concepFuncs,
       dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
       dollNames
     );
@@ -198,7 +198,7 @@ export function makeStartGameyRules<
     safeStackVidRules.startAll();
     safeSectionStackVidRules.startAll();
 
-    return function stopGameyMainRules() {
+    return function stopBackdopMainRules() {
       keyboardConnectRules.stopAll();
       pointerConnectRules.stopAll();
       // keyboardRules.stopAll();
@@ -226,16 +226,16 @@ export function makeStartGameyRules<
 
   let didDoOneTimeStartStuff = false;
 
-  return function startGameyRules(fontNames: readonly string[]) {
-    const stopGameyMainRules = startGameyMainRules();
+  return function startBackdopRules(fontNames: readonly string[]) {
+    const stopBackdopMainRules = startBackdopMainRules();
     if (!didDoOneTimeStartStuff) {
       loadGoogleFonts(fontNames); // Auto-import fonts from google fonts :)
       // connectInputsToState();
       didDoOneTimeStartStuff = true;
     }
 
-    return function stopGameyRules() {
-      stopGameyMainRules();
+    return function stopBackdopRules() {
+      stopBackdopMainRules();
     };
   };
 }

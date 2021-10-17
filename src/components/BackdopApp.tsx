@@ -11,23 +11,23 @@ import React, { ReactNode, useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { toRadians } from "shutils/dist/speedAngleDistance";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   PickupsInfoPlaceholder,
-  PlaceholderGameyConcepts,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../concepts/typedConceptoFuncs";
-// import "./GameyApp.css";
+} from "../concepts/typedConcepFuncs";
+// import "./BackdopApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
 
 type Props = { children?: ReactNode };
 
-export function makeGameyApp<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+export function makeBackdopApp<
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,
@@ -43,28 +43,28 @@ export function makeGameyApp<
   SoundFiles extends Record<SoundName, string>,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[],
   dollNames: readonly DollName[],
   soundFiles: SoundFiles,
   pickupsInfo: PickupsInfo
 ) {
-  const { getRefs, onNextTick, setState } = conceptoFuncs;
+  const { getRefs, onNextTick, setState } = concepFuncs;
 
   const ScreenGuiDom = makeScreenGui<
-    ConceptoFuncs,
+    ConcepFuncs,
     CharacterName,
     PickupName,
     PickupsInfo
-  >(conceptoFuncs, characterNames, pickupsInfo);
+  >(concepFuncs, characterNames, pickupsInfo);
 
   const LoadingModels = makeLoadingModels<
-    ConceptoFuncs,
-    GameyConcepts,
-    GameyStartOptions,
+    ConcepFuncs,
+    BackdopConcepts,
+    BackdopOptions,
     AnyCameraName,
     AnySegmentName,
     PlaceName,
@@ -78,18 +78,18 @@ export function makeGameyApp<
     CameraNameByPlace,
     SoundFiles
   >(
-    conceptoFuncs,
-    gameyConcepts,
-    gameyStartOptions,
+    concepFuncs,
+    backdopConcepts,
+    backdopStartOptions,
     placeInfoByName,
     characterNames,
     dollNames,
     soundFiles
   );
 
-  const ScenePlane = makeScenePlane(conceptoFuncs, gameyStartOptions);
+  const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
 
-  return function GameyApp({ children }: Props) {
+  return function BackdopApp({ children }: Props) {
     const globalRefs = getRefs().global.main;
 
     const scenePlaneCameraRef = useCallback(

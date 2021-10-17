@@ -1,5 +1,5 @@
-import { GameyConceptoFuncs } from "../../typedConceptoFuncs";
-export declare function makeGlobalGeneralRules<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): {
+import { BackdopConcepFuncs } from "../../typedConcepFuncs";
+export declare function makeGlobalGeneralRules<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

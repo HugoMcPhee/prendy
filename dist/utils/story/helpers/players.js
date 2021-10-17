@@ -2,10 +2,10 @@ import delay from "delay";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
 import { makeCharacterStoryHelpers } from "./characters";
-export function makerPlayerStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName, characterNames) {
-    const { getRefs, getState, setState } = conceptoFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName, characterNames);
+export function makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames) {
+    const { getRefs, getState, setState } = concepFuncs;
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
     async function enableMovement(canMove = true, revertDelay) {
         setGlobalState({ playerMovingPaused: !canMove });
         if (revertDelay) {

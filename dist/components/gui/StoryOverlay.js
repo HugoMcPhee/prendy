@@ -1,8 +1,8 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeStoryOverlay(conceptoFuncs) {
-    const { useStoreItemPropsEffect } = conceptoFuncs;
+export function makeStoryOverlay(concepFuncs) {
+    const { useStoreItemPropsEffect } = concepFuncs;
     return function StoryOverlay(_props) {
         const theOverlay = useRef(null);
         const [overlaySpring, overlaySpringApi] = useSpring(() => ({

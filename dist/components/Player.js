@@ -1,6 +1,6 @@
 import { breakableForEach } from "shutils/dist/loops";
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
-export function makePlayer(conceptoFuncs, gameyStartOptions, placeInfoByName, characterNames) {
+export function makePlayer(concepFuncs, backdopStartOptions, placeInfoByName, characterNames) {
     // type AnyToPlaceOption = {
     //   toPlace: PlaceName;
     //   toSpot: AnySpotName;
@@ -16,8 +16,8 @@ export function makePlayer(conceptoFuncs, gameyStartOptions, placeInfoByName, ch
     //   toCam?: string;
     //   toSegment?: string;
     // };
-    const { useStoreItemPropsEffect, getState, setState, useStore, } = conceptoFuncs;
-    const { goToNewPlace } = makeSceneStoryHelpers(conceptoFuncs, placeInfoByName, characterNames);
+    const { useStoreItemPropsEffect, getState, setState, useStore, } = concepFuncs;
+    const { goToNewPlace } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
     return function Player(_props) {
         const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
             type: "global",
@@ -54,7 +54,7 @@ export function makePlayer(conceptoFuncs, gameyStartOptions, placeInfoByName, ch
                     breakableForEach(placeInfoByName[nowPlaceName].triggerNames, (triggerName) => {
                         var _a;
                         if (atTriggers[triggerName]) {
-                            const toOption = (_a = gameyStartOptions.doorsInfo[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName];
+                            const toOption = (_a = backdopStartOptions.doorsInfo[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName];
                             if (toOption) {
                                 goToNewPlace(toOption, charName);
                                 return true; // break

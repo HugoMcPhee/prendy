@@ -1,5 +1,5 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { ModelInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
 export declare type InRangeForDoll = {
     touch: boolean;
     talk: boolean;

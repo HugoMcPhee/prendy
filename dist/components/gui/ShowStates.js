@@ -1,7 +1,7 @@
 // @refresh-reset
 import React from "react";
-export function makeShowStates(conceptoFuncs) {
-    const { useStore } = conceptoFuncs;
+export function makeShowStates(concepFuncs) {
+    const { useStore } = concepFuncs;
     return function ShowStates(_props) {
         const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage, } = useStore((state) => state.global.main, {
             type: "global",

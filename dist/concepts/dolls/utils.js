@@ -28,9 +28,9 @@ export function enableCollisions(theMesh) {
     theMesh.useOctreeForCollisions = true;
     theMesh.rotationQuaternion = null; // allow euler rotation again
 }
-export function makeDollStoreUtils(conceptoFuncs, gameyStartOptions, gameyConcepts, dollNames, modelInfoByName) {
-    const { getRefs, getState, setState } = conceptoFuncs;
-    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, } = makeScenePlaneUtils(conceptoFuncs, gameyStartOptions);
+export function makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConcepts, dollNames, modelInfoByName) {
+    const { getRefs, getState, setState } = concepFuncs;
+    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
             dolls: {

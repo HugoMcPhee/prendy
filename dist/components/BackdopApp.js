@@ -4,16 +4,16 @@ import { Camera, Color3, Color4, FxaaPostProcess, Vector3, } from "@babylonjs/co
 import React, { useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { toRadians } from "shutils/dist/speedAngleDistance";
-// import "./GameyApp.css";
+// import "./BackdopApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
-export function makeGameyApp(conceptoFuncs, gameyConcepts, gameyStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, pickupsInfo) {
-    const { getRefs, onNextTick, setState } = conceptoFuncs;
-    const ScreenGuiDom = makeScreenGui(conceptoFuncs, characterNames, pickupsInfo);
-    const LoadingModels = makeLoadingModels(conceptoFuncs, gameyConcepts, gameyStartOptions, placeInfoByName, characterNames, dollNames, soundFiles);
-    const ScenePlane = makeScenePlane(conceptoFuncs, gameyStartOptions);
-    return function GameyApp({ children }) {
+export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, pickupsInfo) {
+    const { getRefs, onNextTick, setState } = concepFuncs;
+    const ScreenGuiDom = makeScreenGui(concepFuncs, characterNames, pickupsInfo);
+    const LoadingModels = makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles);
+    const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
+    return function BackdopApp({ children }) {
         const globalRefs = getRefs().global.main;
         const scenePlaneCameraRef = useCallback((node) => {
             globalRefs.scenePlaneCamera = node;

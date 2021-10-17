@@ -1,6 +1,6 @@
-import { GameyConceptoFuncs, GameyStartOptionsUntyped, PlaceholderGameyConcepts } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs, BackdopOptionsUntyped, PlaceholderBackdopConcepts } from "../../../concepts/typedConcepFuncs";
 import { CSSProperties } from "react";
-export declare function makeSpeechStoryHelpers<ConceptoFuncs extends GameyConceptoFuncs, GameyConcepts extends PlaceholderGameyConcepts, GameyStartOptions extends GameyStartOptionsUntyped, CharacterName extends string>(conceptoFuncs: ConceptoFuncs, gameyConcepts: GameyConcepts, gameyStartOptions: GameyStartOptions, characterNames: readonly CharacterName[]): {
+export declare function makeSpeechStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, BackdopOptions extends BackdopOptionsUntyped, CharacterName extends string>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, characterNames: readonly CharacterName[]): {
     showSpeech: (text: string, options?: {
         time?: number;
         showOnce?: boolean;

@@ -5,11 +5,11 @@ import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { forEach } from "shutils/dist/loops";
 import { vector3ToPoint3d } from "..";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
-export function makeUsePlaceUtils(conceptoFuncs, placeInfoByName, dollNames) {
-    const { getRefs, getState, setState } = conceptoFuncs;
-    const { doWhenSectionVidPlayingAsync, getSectionForPlace, } = makeSectionVidStoreUtils(conceptoFuncs, placeInfoByName, dollNames);
-    const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
-    const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
+export function makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames) {
+    const { getRefs, getState, setState } = concepFuncs;
+    const { doWhenSectionVidPlayingAsync, getSectionForPlace, } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const placesRefs = getRefs().places;
     async function loadVideoBlob(filepath) {
         const result = await fetch(filepath);

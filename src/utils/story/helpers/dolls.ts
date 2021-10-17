@@ -1,11 +1,11 @@
 import { Vector3 } from "@babylonjs/core";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
-  PlaceholderGameyConcepts,
-} from "../../../concepts/typedConceptoFuncs";
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 import { forEach } from "shutils/dist/loops";
 import { getVectorFromSpeedAndAngle } from "shutils/dist/speedAngleDistance2d";
 import { vector3ToPoint3d } from "../../babylonjs";
@@ -13,9 +13,9 @@ import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeDollStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   ModelName extends string,
   PlaceName extends string,
   DollName extends string,
@@ -25,17 +25,17 @@ export function makeDollStoryHelpers<
   SpotNameByPlace extends Record<PlaceName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   modelInfoByName: ModelInfoByName
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type StartState_Characters = typeof gameyConcepts.characters.startStates;
-  type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
+  type StartState_Characters = typeof backdopConcepts.characters.startStates;
+  type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
 
   type DollNameFromCharacter<
     T_CharacterName extends CharacterName
@@ -57,21 +57,21 @@ export function makeDollStoryHelpers<
     T_DollName extends DollName
   > = MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-  const dollStartStates = gameyConcepts.dolls.startStates;
+  const dollStartStates = backdopConcepts.dolls.startStates;
 
   type DollStartStates = typeof dollStartStates;
 
   const { getModelNameFromDoll } = makeDollStoryUtils<
-    ConceptoFuncs,
-    GameyConcepts,
+    ConcepFuncs,
+    BackdopConcepts,
     DollName
-  >(conceptoFuncs, gameyConcepts);
+  >(concepFuncs, backdopConcepts);
 
   const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     SpotNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
 
   // --------------------------------------------------------------
 
@@ -144,8 +144,8 @@ export function makeDollStoryHelpers<
       focusedDoll: dollName,
       planeZoomGoal:
         zoom !== undefined
-          ? Math.min(zoom, gameyStartOptions.zoomLevels.max)
-          : gameyStartOptions.zoomLevels.default,
+          ? Math.min(zoom, backdopStartOptions.zoomLevels.max)
+          : backdopStartOptions.zoomLevels.default,
     });
   }
 

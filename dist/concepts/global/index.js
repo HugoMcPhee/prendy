@@ -1,6 +1,6 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "concep-movers";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
-export default function global(gameyStartOptions, musicNames, soundNames) {
+export default function global(backdopStartOptions, musicNames, soundNames) {
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs, } = makerGlobalStoreIndexUtils(musicNames, soundNames);
     // State
     const state = () => ({
@@ -9,7 +9,7 @@ export default function global(gameyStartOptions, musicNames, soundNames) {
         nextSegmentNameWhenVidPlays: null,
         wantedSegmentNameAtLoop: null,
         wantedSegmentName: null,
-        nowSegmentName: gameyStartOptions.segment,
+        nowSegmentName: backdopStartOptions.segment,
         wantToLoop: false,
         // TODO? move nowCamName etc to here, since never change cam for non-now place
         //
@@ -17,14 +17,14 @@ export default function global(gameyStartOptions, musicNames, soundNames) {
         modelNamesLoaded: [],
         newPlaceLoaded: false,
         isLoadingBetweenPlaces: true,
-        nowPlaceName: gameyStartOptions.place,
+        nowPlaceName: backdopStartOptions.place,
         readyToSwapPlace: false,
         nextPlaceName: null,
         loadingOverlayToggled: true,
         loadingOverlayFullyShowing: true,
         //
         // player
-        playerCharacter: gameyStartOptions.playerCharacter,
+        playerCharacter: backdopStartOptions.playerCharacter,
         gravityValue: 5,
         playerMovingPaused: false,
         focusedDoll: "walker",
@@ -32,8 +32,8 @@ export default function global(gameyStartOptions, musicNames, soundNames) {
         // scene plane
         ...mover2dState("planePos"),
         ...moverState("planeZoom", {
-            value: gameyStartOptions.zoomLevels.default,
-            valueGoal: gameyStartOptions.zoomLevels.default,
+            value: backdopStartOptions.zoomLevels.default,
+            valueGoal: backdopStartOptions.zoomLevels.default,
         }),
         planePosMoveConfigName: "default",
         //
@@ -41,7 +41,7 @@ export default function global(gameyStartOptions, musicNames, soundNames) {
         timeScreenResized: Date.now(),
         interactButtonPressTime: 0,
         // story
-        heldPickups: gameyStartOptions.heldPickups,
+        heldPickups: backdopStartOptions.heldPickups,
         storyOverlayToggled: false,
         alarmTextIsVisible: false,
         alarmText: "⚠ wobble detected ⚠",

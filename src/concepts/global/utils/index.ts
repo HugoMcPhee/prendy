@@ -1,15 +1,15 @@
 // import { getState, ItemState, setState } from "concepts";
 
 import { ConceptsHelperTypes } from "concep";
-import { GameyConceptoFuncs } from "../../typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../typedConcepFuncs";
 
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
 
-export function makeGlobalStoreUtils<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeGlobalStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { getState, getRefs, setState } = conceptoFuncs;
+  const { getState, getRefs, setState } = concepFuncs;
 
   type ItemType = keyof ReturnType<typeof getState>;
 

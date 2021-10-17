@@ -10,25 +10,25 @@ import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
 import { makeStackVidRules } from "./stackVids/rules";
-export function makeStartGameyRules(conceptoFuncs, gameyConcepts, gameyStartOptions, placeInfoByName, dollNames, characterNames, modelInfoByName) {
+export function makeStartBackdopRules(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, dollNames, characterNames, modelInfoByName) {
     // making rules
-    const keyboardConnectRules = makeKeyboardConnectRules(conceptoFuncs);
-    const pointerConnectRules = makePointersConnectRules(conceptoFuncs);
-    const startAllGlobalRules = makeStartAllGlobalRules(conceptoFuncs, gameyConcepts, gameyStartOptions, placeInfoByName, dollNames);
-    const modelRules = makeModelRules(conceptoFuncs, modelInfoByName);
-    const playerRules = makePlayerRules(conceptoFuncs, placeInfoByName);
-    const dollDynamicRules = makeDollDynamicRules(conceptoFuncs, gameyStartOptions, gameyConcepts, modelInfoByName, dollNames);
-    const dollRules = makeDollRules(gameyStartOptions, dollDynamicRules, conceptoFuncs, gameyConcepts, modelInfoByName, dollNames);
-    const speechBubbleRules = makeSpeechBubbleRules(conceptoFuncs, gameyConcepts);
-    const safeVidRules = makeSafeVidRules(conceptoFuncs);
-    const safeSectionStackVidRules = makeSectionVidRules(conceptoFuncs, placeInfoByName, dollNames);
-    const safeStackVidRules = makeStackVidRules(conceptoFuncs);
-    const characterDynamicRules = makeCharacterDynamicRules(conceptoFuncs, gameyStartOptions, characterNames, placeInfoByName);
-    const characterRules = makeCharacterRules(conceptoFuncs, placeInfoByName);
-    const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, conceptoFuncs);
+    const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
+    const pointerConnectRules = makePointersConnectRules(concepFuncs);
+    const startAllGlobalRules = makeStartAllGlobalRules(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, dollNames);
+    const modelRules = makeModelRules(concepFuncs, modelInfoByName);
+    const playerRules = makePlayerRules(concepFuncs, placeInfoByName);
+    const dollDynamicRules = makeDollDynamicRules(concepFuncs, backdopStartOptions, backdopConcepts, modelInfoByName, dollNames);
+    const dollRules = makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs, backdopConcepts, modelInfoByName, dollNames);
+    const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, backdopConcepts);
+    const safeVidRules = makeSafeVidRules(concepFuncs);
+    const safeSectionStackVidRules = makeSectionVidRules(concepFuncs, placeInfoByName, dollNames);
+    const safeStackVidRules = makeStackVidRules(concepFuncs);
+    const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, backdopStartOptions, characterNames, placeInfoByName);
+    const characterRules = makeCharacterRules(concepFuncs, placeInfoByName);
+    const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs);
     // ----------------------------------------------
     // starting and stopping rules
-    function startGameyMainRules() {
+    function startBackdopMainRules() {
         keyboardConnectRules.startAll();
         pointerConnectRules.startAll();
         // keyboardRules.startAll(); // NOTE does nothing
@@ -39,14 +39,14 @@ export function makeStartGameyRules(conceptoFuncs, gameyConcepts, gameyStartOpti
         const stopDynamicCharacterRulesForInitialState = startDynamicCharacterRulesForInitialState();
         /*dolls*/
         dollRules.startAll();
-        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(conceptoFuncs, dollDynamicRules, dollNames);
+        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRules, dollNames);
         /**/
         playerRules.startAll();
         speechBubbleRules.startAll();
         safeVidRules.startAll();
         safeStackVidRules.startAll();
         safeSectionStackVidRules.startAll();
-        return function stopGameyMainRules() {
+        return function stopBackdopMainRules() {
             keyboardConnectRules.stopAll();
             pointerConnectRules.stopAll();
             // keyboardRules.stopAll();
@@ -71,15 +71,15 @@ export function makeStartGameyRules(conceptoFuncs, gameyConcepts, gameyStartOpti
         // connectPointerInputsToState();
     }
     let didDoOneTimeStartStuff = false;
-    return function startGameyRules(fontNames) {
-        const stopGameyMainRules = startGameyMainRules();
+    return function startBackdopRules(fontNames) {
+        const stopBackdopMainRules = startBackdopMainRules();
         if (!didDoOneTimeStartStuff) {
             loadGoogleFonts(fontNames); // Auto-import fonts from google fonts :)
             // connectInputsToState();
             didDoOneTimeStartStuff = true;
         }
-        return function stopGameyRules() {
-            stopGameyMainRules();
+        return function stopBackdopRules() {
+            stopBackdopMainRules();
         };
     };
 }

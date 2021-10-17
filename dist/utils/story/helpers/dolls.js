@@ -4,12 +4,12 @@ import { getVectorFromSpeedAndAngle } from "shutils/dist/speedAngleDistance2d";
 import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
-export function makeDollStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOptions, modelInfoByName) {
-    const { getRefs, getState, setState } = conceptoFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const dollStartStates = gameyConcepts.dolls.startStates;
-    const { getModelNameFromDoll } = makeDollStoryUtils(conceptoFuncs, gameyConcepts);
-    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(conceptoFuncs);
+export function makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName) {
+    const { getRefs, getState, setState } = concepFuncs;
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const dollStartStates = backdopConcepts.dolls.startStates;
+    const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs, backdopConcepts);
+    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
     // --------------------------------------------------------------
     function setDollPosition(dollName, newPositon) {
         const dollRefs = getRefs().dolls[dollName];
@@ -61,8 +61,8 @@ export function makeDollStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOpt
         setGlobalState({
             focusedDoll: dollName,
             planeZoomGoal: zoom !== undefined
-                ? Math.min(zoom, gameyStartOptions.zoomLevels.max)
-                : gameyStartOptions.zoomLevels.default,
+                ? Math.min(zoom, backdopStartOptions.zoomLevels.max)
+                : backdopStartOptions.zoomLevels.default,
         });
     }
     function setDollToSpot({ place, spot, doll: dollName, dontSetRotationState, }) {

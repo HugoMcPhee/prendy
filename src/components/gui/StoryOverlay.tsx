@@ -1,12 +1,12 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeStoryOverlay<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeStoryOverlay<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { useStoreItemPropsEffect } = conceptoFuncs;
+  const { useStoreItemPropsEffect } = concepFuncs;
 
   type Props = {};
 

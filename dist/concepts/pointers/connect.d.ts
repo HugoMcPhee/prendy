@@ -1,5 +1,5 @@
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
-export declare function makePointersConnectRules<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): {
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
+export declare function makePointersConnectRules<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
     startAll: () => void;
     stopAll: () => void;
 };

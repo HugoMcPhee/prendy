@@ -1,5 +1,5 @@
 import { TargetCamera, AbstractMesh, Vector3, Sound, CubeTexture } from "@babylonjs/core";
-import { PlaceInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
 export default function places<PlaceName extends string, AnyCameraName extends string, TriggerNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>, SoundspotNameByPlace extends Record<PlaceName, string>, WallNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>>(placeNames: readonly PlaceName[], placeInfoByName: PlaceInfoByName): {
     startStates: { [P_PlaceName in PlaceName]: {
         wantedCamNameAtLoop: CameraNameByPlace[P_PlaceName];

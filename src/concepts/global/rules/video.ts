@@ -3,16 +3,16 @@ import { VidSection } from "../../../concepts/sectionVids";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
-} from "../../typedConceptoFuncs";
+} from "../../typedConcepFuncs";
 
 export function makeGlobalVideoRules<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   AnyCameraName extends string,
   AnySegmentName extends string,
@@ -21,40 +21,40 @@ export function makeGlobalVideoRules<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[]
 ) {
-  const { getRefs, getState, makeRules, setState } = conceptoFuncs;
+  const { getRefs, getState, makeRules, setState } = concepFuncs;
 
   const {
     getSectionForPlace,
     getSectionVidVideo,
     checkForVideoLoop,
   } = makeSectionVidStoreUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
     DollName,
     AnyCameraName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
   const {
     getSafeSegmentName,
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
   } = makeCameraChangeUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     AnyCameraName,
     PlaceName,
     DollName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenWantToChooseVideoSection: addEffect({

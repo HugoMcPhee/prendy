@@ -3,15 +3,15 @@ import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConceptoFuncs";
+} from "../../../concepts/typedConcepFuncs";
 import { forEach } from "shutils/dist/loops";
 import { vector3ToPoint3d } from "..";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 
 export function makeUsePlaceUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   PlaceName extends string,
   DollName extends string,
@@ -20,29 +20,29 @@ export function makeUsePlaceUtils<
   CameraNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[]
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
   const {
     doWhenSectionVidPlayingAsync,
     getSectionForPlace,
   } = makeSectionVidStoreUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
     DollName,
     AnyCameraName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(conceptoFuncs, placeInfoByName, dollNames);
+  >(concepFuncs, placeInfoByName, dollNames);
 
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
-  const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
+  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 
   const placesRefs = getRefs().places;
 

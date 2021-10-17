@@ -5,11 +5,11 @@ import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle, } from "s
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makePlayerRules(conceptoFuncs, placeInfoByName) {
-    const { getRefs, getState, makeRules, setState } = conceptoFuncs;
+export function makePlayerRules(concepFuncs, placeInfoByName) {
+    const { getRefs, getState, makeRules, setState } = concepFuncs;
     const globalRefs = getRefs().global.main;
-    const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
-    const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
+    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     return makeRules((addItemEffect, addEffect) => ({
         whenDirectionKeysPressed: addEffect({
             onEffect() {

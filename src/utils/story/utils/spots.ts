@@ -1,12 +1,12 @@
-import { GameyConceptoFuncs } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 
 export function makeSpotStoryUtils<
   // SpotName extends string,
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceName extends string,
   SpotNameByPlace extends Record<PlaceName, string>
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs } = concepFuncs;
 
   function getSpotPosition<T_Place extends PlaceName>(
     place: T_Place,

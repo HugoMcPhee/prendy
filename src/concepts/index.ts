@@ -14,12 +14,12 @@ import stackVids from "./stackVids";
 import {
   CharacterOptionsPlaceholder,
   DollOptionsPlaceholder,
-  GameyStartOptionsUntyped,
+  BackdopOptionsUntyped,
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
-} from "./typedConceptoFuncs";
+} from "./typedConcepFuncs";
 
-export const gameyFlowNames = [
+export const backdopFlowNames = [
   // updating internal video states
   "safeVidStateUpdates",
   "stackVidStateUpdates",
@@ -54,10 +54,10 @@ export const gameyFlowNames = [
   "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ] as const;
 
-export type FlowName = typeof gameyFlowNames[number];
+export type FlowName = typeof backdopFlowNames[number];
 
-export function makeGameyConcepts<
-  GameyStartOptions extends GameyStartOptionsUntyped,
+export function makeBackdopConcepts<
+  BackdopOptions extends BackdopOptionsUntyped,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<PlaceName>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
   DollOptions extends DollOptionsPlaceholder<DollName, ModelName>,
@@ -90,7 +90,7 @@ export function makeGameyConcepts<
   MaterialNameByModel extends Record<ModelName, string>,
   MeshNameByModel extends Record<ModelName, string>
 >(
-  gameyStartOptions: GameyStartOptions,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   modelInfoByName: ModelInfoByName,
   dollOptions: DollOptions,
@@ -108,7 +108,7 @@ export function makeGameyConcepts<
     miniBubbles: miniBubbles<CharacterName>(),
     pointers: pointers(),
     global: global<
-      GameyStartOptions,
+      BackdopOptions,
       AnySegmentName,
       PlaceName,
       ModelName,
@@ -118,7 +118,7 @@ export function makeGameyConcepts<
       MusicName,
       SoundName,
       PlaceInfoByName
-    >(gameyStartOptions, musicNames, soundNames),
+    >(backdopStartOptions, musicNames, soundNames),
     models: models<ModelName>(modelNames),
     dolls: dolls<
       ModelName,
@@ -140,7 +140,7 @@ export function makeGameyConcepts<
       AnyCameraName,
       CharacterOptions
     >(characterNames, dollNames, characterOptions),
-    players: players<GameyStartOptions, AnyAnimationName>(gameyStartOptions),
+    players: players<BackdopOptions, AnyAnimationName>(backdopStartOptions),
     speechBubbles: speechBubbles<
       CharacterName,
       DollName,

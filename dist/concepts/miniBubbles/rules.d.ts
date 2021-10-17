@@ -1,5 +1,5 @@
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
-export declare function makeMiniBubbleRules<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): {
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
+export declare function makeMiniBubbleRules<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

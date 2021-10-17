@@ -1,5 +1,5 @@
-export function makeStickerStoryHelpers(conceptoFuncs) {
-    const { setState } = conceptoFuncs;
+export function makeStickerStoryHelpers(concepFuncs) {
+    const { setState } = concepFuncs;
     function moveSticker(x, y) {
         setState({ story: { main: { screenStickerPosition: { x, y } } } });
     }

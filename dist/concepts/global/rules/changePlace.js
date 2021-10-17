@@ -5,13 +5,13 @@ import { forEach } from "shutils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalChangePlaceRules(conceptoFuncs, gameyConcepts, gameyStartOptions, dollNames, placeInfoByName) {
-    const { getRefs, getState, makeRules, setState, onNextTick } = conceptoFuncs;
+export function makeGlobalChangePlaceRules(concepFuncs, backdopConcepts, backdopStartOptions, dollNames, placeInfoByName) {
+    const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
     const globalRefs = getRefs().global.main;
-    const { getSectionVidVideo } = makeSectionVidStoreUtils(conceptoFuncs, placeInfoByName, dollNames);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(conceptoFuncs, placeInfoByName, dollNames);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(conceptoFuncs, gameyStartOptions);
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+    const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames);
+    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     function whenAllVideosLoadedForPlace() {
         var _a, _b;
         const { nowPlaceName } = getState().global.main;
@@ -107,7 +107,7 @@ export function makeGlobalChangePlaceRules(conceptoFuncs, gameyConcepts, gameySt
             onItemEffect({ itemState: globalState }) {
                 const { nowPlaceName, newPlaceLoaded, modelNamesLoaded, wantedSegmentWhenNextPlaceLoads, } = globalState;
                 const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
-                const wantedModelsForPlace = gameyStartOptions.modelNamesByPlace[nowPlaceName].sort();
+                const wantedModelsForPlace = backdopStartOptions.modelNamesByPlace[nowPlaceName].sort();
                 const loadedModelNames = modelNamesLoaded.sort();
                 let allModelsAreLoaded = true;
                 forEach(wantedModelsForPlace, (loopedCharacterName) => {

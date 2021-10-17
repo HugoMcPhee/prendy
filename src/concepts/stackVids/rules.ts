@@ -1,17 +1,17 @@
 import { ConceptsHelperTypes } from "concep";
 import { StackVidState } from ".";
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 import { makeStackVidStoreUtils } from "./utils";
 
-export function makeStackVidRules<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeStackVidRules<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { getRefs, getState, makeRules, onNextTick, setState } = conceptoFuncs;
+  const { getRefs, getState, makeRules, onNextTick, setState } = concepFuncs;
 
-  type ItemType = keyof ReturnType<GameyConceptoFuncs["getState"]>;
+  type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]>;
   type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    GameyConceptoFuncs["getState"],
-    GameyConceptoFuncs["getRefs"],
+    BackdopConcepFuncs["getState"],
+    BackdopConcepFuncs["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
@@ -21,7 +21,7 @@ export function makeStackVidRules<ConceptoFuncs extends GameyConceptoFuncs>(
     doWhenBothSafeVidsReady,
     doWhenStackVidPlay,
     setBothSafeVidsState,
-  } = makeStackVidStoreUtils(conceptoFuncs);
+  } = makeStackVidStoreUtils(concepFuncs);
 
   const safeVidRefs = getRefs().safeVids;
 

@@ -1,9 +1,9 @@
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
-export function makeGlobalVideoRules(conceptoFuncs, gameyConcepts, gameyStartOptions, placeInfoByName, dollNames) {
-    const { getRefs, getState, makeRules, setState } = conceptoFuncs;
-    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop, } = makeSectionVidStoreUtils(conceptoFuncs, placeInfoByName, dollNames);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(conceptoFuncs, placeInfoByName, dollNames);
+export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, dollNames) {
+    const { getRefs, getState, makeRules, setState } = concepFuncs;
+    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop, } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
+    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames);
     return makeRules((addItemEffect, addEffect) => ({
         whenWantToChooseVideoSection: addEffect({
             onEffect() {

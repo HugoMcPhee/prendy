@@ -1,9 +1,9 @@
-// import { VideoGui } from "libraries/gamey/utils/babylonjs/VideoGui";
+// import { VideoGui } from "backdop/utils/babylonjs/VideoGui";
 //
 import { CSSProperties } from "react";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition } from "shutils/dist/points2d";
-import { CharacterOptionsPlaceholder } from "../typedConceptoFuncs";
+import { CharacterOptionsPlaceholder } from "../typedConcepFuncs";
 
 export default function speechBubbles<
   CharacterName extends string,

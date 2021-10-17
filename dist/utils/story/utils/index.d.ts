@@ -1,5 +1,5 @@
-import { GameyConceptoFuncs, PlaceholderGameyConcepts } from "../../../concepts/typedConceptoFuncs";
-export declare function makeGameyStoryUtils<ConceptoFuncs extends GameyConceptoFuncs, GameyConcepts extends PlaceholderGameyConcepts, DollName extends string, PlaceName extends string, CharacterName extends string, AnyCameraName extends string, AnySegmentName extends string, CameraNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, string>>(conceptoFuncs: ConceptoFuncs, gameyConcepts: GameyConcepts): {
+import { BackdopConcepFuncs, PlaceholderBackdopConcepts } from "../../../concepts/typedConcepFuncs";
+export declare function makeBackdopStoryUtils<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, DollName extends string, PlaceName extends string, CharacterName extends string, AnyCameraName extends string, AnySegmentName extends string, CameraNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, string>>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts): {
     get2DAngleBetweenCharacters: (charA: CharacterName, charB: CharacterName) => number;
     get2DAngleFromCharacterToSpot: <T_Place extends PlaceName>(character: CharacterName, place: T_Place, spot: SpotNameByPlace[T_Place]) => number;
     getModelNameFromDoll: <T_DollName extends DollName>(dollName: T_DollName) => any;

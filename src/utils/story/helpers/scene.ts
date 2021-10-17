@@ -2,15 +2,15 @@ import delay from "delay";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConceptoFuncs";
+} from "../../../concepts/typedConcepFuncs";
 import { makeSetStoryState } from "../../../storyRuleMakers";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 
 export function makeSceneStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,
@@ -21,11 +21,11 @@ export function makeSceneStoryHelpers<
   SegmentNameByPlace extends Record<PlaceName, string>,
   CameraNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[]
 ) {
-  const { getRefs, getState, onNextTick, setState } = conceptoFuncs;
+  const { getRefs, getState, onNextTick, setState } = concepFuncs;
 
   type CameraNameFromPlace<
     T_Place extends keyof PlaceInfoByName
@@ -39,32 +39,32 @@ export function makeSceneStoryHelpers<
     toSegment?: SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
 
-  const setStoryState = makeSetStoryState(conceptoFuncs);
+  const setStoryState = makeSetStoryState(concepFuncs);
 
   const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     PlaceName,
     CharacterName,
     SpotNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
 
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
   } = makeSceneStoryUtils<
-    ConceptoFuncs,
+    ConcepFuncs,
     AnyCameraName,
     AnySegmentName,
     PlaceName,
     CameraNameByPlace
-  >(conceptoFuncs);
+  >(concepFuncs);
 
   async function changeSegmentAtLoop<
     T_Place extends PlaceName,

@@ -1,5 +1,5 @@
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
-export declare function makeGetSceneOrEngineUtils<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): {
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+export declare function makeGetSceneOrEngineUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
     getScene: (sceneType?: "backdrop" | "main") => any;
     getEngine: () => any;
 };

@@ -1,4 +1,4 @@
-import { CharacterOptionsPlaceholder } from "../typedConceptoFuncs";
+import { CharacterOptionsPlaceholder } from "../typedConcepFuncs";
 export default function characters<CharacterName extends string, DollName extends string, FontName extends string, AnyTriggerName extends string, AnyCameraName extends string, CharacterOptions extends CharacterOptionsPlaceholder<CharacterName, DollName, FontName>>(characterNames: readonly CharacterName[], dollNames: readonly DollName[], characterOptions: CharacterOptions): {
     startStates: { [K_CharacterName in CharacterName]: {
         dollName: DollName;

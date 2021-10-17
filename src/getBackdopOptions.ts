@@ -1,4 +1,4 @@
-export function makeGetGameyStartOptions<
+export function makeGetBackdopOptions<
   PickupName extends string,
   PlaceName extends string,
   ModelName extends string,
@@ -31,7 +31,7 @@ export function makeGetGameyStartOptions<
     }
   >;
 
-  return function getGameyStartOptions<
+  return function getBackdopOptions<
     T_Place extends PlaceName,
     T_Cam extends CameraNameByPlace[T_Place] // NOTE could limit to the chosen segment,
   >(options: {

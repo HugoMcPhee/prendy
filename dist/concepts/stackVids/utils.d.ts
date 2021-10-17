@@ -1,7 +1,7 @@
 import { VidState } from "../../concepts/safeVids";
 import { StackVidState } from ".";
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
-export declare function makeStackVidStoreUtils<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): {
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
+export declare function makeStackVidStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
     doWhenStackVidStateReady: (stackVidId: string, vidStateToCheck: StackVidState, callback: () => void, checkInitial?: boolean) => string;
     doWhenStackVidStateReadyOrInstant: (stackVidId: string, vidStateToCheck: StackVidState, callback: () => void) => string;
     doWhenStackVidPlay: (stackVidId: string, callback: () => void, checkInitial?: boolean) => string;

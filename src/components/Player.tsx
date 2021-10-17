@@ -1,14 +1,14 @@
 import { breakableForEach } from "shutils/dist/loops";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   PlaceInfoByNamePlaceholder,
-} from "../concepts/typedConceptoFuncs";
+} from "../concepts/typedConcepFuncs";
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
 
 export function makePlayer<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped,
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,
@@ -19,8 +19,8 @@ export function makePlayer<
   SegmentNameByPlace extends Record<PlaceName, string>,
   CameraNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopStartOptions: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[]
 ) {
@@ -57,10 +57,10 @@ export function makePlayer<
     getState,
     setState,
     useStore,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
   const { goToNewPlace } = makeSceneStoryHelpers<
-    ConceptoFuncs,
+    ConcepFuncs,
     AnyCameraName,
     AnySegmentName,
     PlaceName,
@@ -70,7 +70,7 @@ export function makePlayer<
     WallNameByPlace,
     SegmentNameByPlace,
     CameraNameByPlace
-  >(conceptoFuncs, placeInfoByName, characterNames);
+  >(concepFuncs, placeInfoByName, characterNames);
 
   type Props = {};
 
@@ -121,7 +121,7 @@ export function makePlayer<
               placeInfoByName[nowPlaceName].triggerNames,
               (triggerName) => {
                 if (atTriggers[triggerName]) {
-                  const toOption = (gameyStartOptions.doorsInfo as DoorsInfoLoose)[
+                  const toOption = (backdopStartOptions.doorsInfo as DoorsInfoLoose)[
                     nowPlaceName as PlaceName
                   ]?.[triggerName];
                   if (toOption) {

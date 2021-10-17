@@ -1,18 +1,18 @@
 import {
-  GameyConceptoFuncs,
-  PlaceholderGameyConcepts,
-} from "../../../concepts/typedConceptoFuncs";
+  BackdopConcepFuncs,
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 
 export function makeDollStoryUtils<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
   DollName extends string
->(conceptoFuncs: ConceptoFuncs, gameyConcepts: GameyConcepts) {
-  const { getState } = conceptoFuncs;
-  // const { getState, startItemEffect } = conceptoFuncs;
-  // const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
+  const { getState } = concepFuncs;
+  // const { getState, startItemEffect } = concepFuncs;
+  // const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
+  type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
 
   type ModelNameFromDoll<
     T_DollName extends DollName

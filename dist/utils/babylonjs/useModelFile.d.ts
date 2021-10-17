@@ -1,7 +1,7 @@
 import { AnimationGroup, AssetContainer, Camera, Mesh, PBRMaterial, Skeleton, Texture, TransformNode } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
-export declare function makeUseModelFile<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): <T_Names extends {
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+export declare function makeUseModelFile<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): <T_Names extends {
     meshes: any;
     materials: any;
     animationGroups: any;

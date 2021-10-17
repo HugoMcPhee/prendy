@@ -5,12 +5,12 @@ import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/uti
 import { makeSetStoryState } from "../../../storyRuleMakers";
 import { clearTimeoutSafe } from "../../../utils";
 import { length } from "stringz";
-export function makeSpeechStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartOptions, characterNames) {
-    const { getState, onNextTick, setState, startItemEffect, stopEffect, } = conceptoFuncs;
-    const getCharDollStuff = makeGetCharDollStuff(conceptoFuncs);
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(conceptoFuncs, gameyConcepts);
-    const setStoryState = makeSetStoryState(conceptoFuncs);
+export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, characterNames) {
+    const { getState, onNextTick, setState, startItemEffect, stopEffect, } = concepFuncs;
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(concepFuncs, backdopConcepts);
+    const setStoryState = makeSetStoryState(concepFuncs);
     const showSpeechRefs = {
         closeTimeouts: {},
         waitTimeouts: {},
@@ -68,7 +68,7 @@ export function makeSpeechStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartO
                 showSpeechRefs.originalZoomAmount = prevPlaneZoom;
                 showSpeechRefs.aSpeechIsShowing = true;
             }
-            const newPlaneZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, gameyStartOptions.zoomLevels.max);
+            const newPlaneZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, backdopStartOptions.zoomLevels.max);
             setState({
                 speechBubbles: {
                     [character]: {
@@ -91,7 +91,7 @@ export function makeSpeechStoryHelpers(conceptoFuncs, gameyConcepts, gameyStartO
                     focusedDoll: playerDollName,
                     planeZoomGoal: returnToZoomBeforeConversation
                         ? showSpeechRefs.originalZoomAmount
-                        : gameyStartOptions.zoomLevels.default,
+                        : backdopStartOptions.zoomLevels.default,
                 });
             }
             function whenWaitingDone() {

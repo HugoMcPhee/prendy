@@ -7,7 +7,7 @@ import {
 } from "@babylonjs/core";
 
 import { forEach } from "shutils/dist/loops";
-import { PlaceInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
 
 const defaultCamRefs = () => ({
   camera: null as null | TargetCamera,

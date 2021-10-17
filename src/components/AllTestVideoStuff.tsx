@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { GameyConceptoFuncs } from "../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
 import { andLayout } from "../utils/styles";
 
 export function makeAllTestVideoStuff<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceName extends string
->(conceptoFuncs: ConceptoFuncs, placeNames: readonly PlaceName[]) {
-  const { useStore, useStoreItemPropsEffect } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs, placeNames: readonly PlaceName[]) {
+  const { useStore, useStoreItemPropsEffect } = concepFuncs;
 
   function TestVideos({ placeName }: { placeName: PlaceName }) {
     const mainRef = useRef<HTMLDivElement>(null);

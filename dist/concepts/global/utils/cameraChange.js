@@ -4,12 +4,12 @@ import { makeGlobalStoreUtils } from "./";
 import { chooseClosestBeforeItemInArray } from "shutils/dist/arrays";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import { makeGetSectionVidVideo, } from "../../../concepts/sectionVids/utils";
-export function makeCameraChangeUtils(conceptoFuncs, placeInfoByName, dollNames) {
-    const { getRefs, getState, setState } = conceptoFuncs;
+export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
+    const { getRefs, getState, setState } = concepFuncs;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
-    const { getGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const getSectionVidVideo = makeGetSectionVidVideo(conceptoFuncs);
+    const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const getSectionVidVideo = makeGetSectionVidVideo(concepFuncs);
     function getSafeCamName(cam) {
         if (cam === null) {
             return null;

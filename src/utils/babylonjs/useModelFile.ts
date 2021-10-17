@@ -10,16 +10,16 @@ import {
   TransformNode,
 } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 import { keyBy } from "shutils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
 import { makeGetSceneOrEngineUtils } from "./getSceneOrEngine";
 
-export function makeUseModelFile<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeUseModelFile<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
+  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 
   return function useModelFile<
     T_Names extends {

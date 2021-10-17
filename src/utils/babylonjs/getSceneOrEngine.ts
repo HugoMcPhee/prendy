@@ -1,9 +1,9 @@
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
 export function makeGetSceneOrEngineUtils<
-  ConceptoFuncs extends GameyConceptoFuncs
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs } = conceptoFuncs;
+  ConcepFuncs extends BackdopConcepFuncs
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs } = concepFuncs;
 
   function getScene(sceneType?: "backdrop" | "main") {
     const globalRefs = getRefs().global.main;

@@ -1,7 +1,7 @@
 import { makeStackVidStoreUtils } from "./utils";
-export function makeStackVidRules(conceptoFuncs) {
-    const { getRefs, getState, makeRules, onNextTick, setState } = conceptoFuncs;
-    const { doWhenBothSafeVidsForStackPlayOrPause, doWhenBothSafeVidsReady, doWhenStackVidPlay, setBothSafeVidsState, } = makeStackVidStoreUtils(conceptoFuncs);
+export function makeStackVidRules(concepFuncs) {
+    const { getRefs, getState, makeRules, onNextTick, setState } = concepFuncs;
+    const { doWhenBothSafeVidsForStackPlayOrPause, doWhenBothSafeVidsReady, doWhenStackVidPlay, setBothSafeVidsState, } = makeStackVidStoreUtils(concepFuncs);
     const safeVidRefs = getRefs().safeVids;
     return makeRules((addItemEffect) => ({
         // rulesForRespondingToUpdatedVideoStates: addItemEffect({

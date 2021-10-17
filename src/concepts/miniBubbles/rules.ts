@@ -1,5 +1,5 @@
 import { forEach } from "shutils/dist/loops";
-import { GameyConceptoFuncs } from "../typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 
 /*
 Dynamic rules
@@ -8,10 +8,10 @@ When characters position changes
   bubble position to character
 */
 
-export function makeMiniBubbleRules<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeMiniBubbleRules<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { makeRules, setState } = conceptoFuncs;
+  const { makeRules, setState } = concepFuncs;
 
   return makeRules((addItemEffect, addEffect) => ({
     // The position changing based on camera and character position are inside the MiniBubble component

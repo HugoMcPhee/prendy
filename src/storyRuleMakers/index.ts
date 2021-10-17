@@ -1,18 +1,18 @@
 import { breakableForEach, forEach } from "shutils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   PlaceInfoByNamePlaceholder,
-} from "../concepts/typedConceptoFuncs";
+} from "../concepts/typedConcepFuncs";
 
 export default "default";
 
 // export each of the rule makers stuff from here :)
 
-export function makeGetUsefulStoryStuff<
-  ConceptoFuncs extends GameyConceptoFuncs
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs, getState } = conceptoFuncs;
+export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
+) {
+  const { getRefs, getState } = concepFuncs;
 
   return function getUsefulStoryStuff() {
     const storyState = getState().story.main;
@@ -45,10 +45,10 @@ export function makeGetUsefulStoryStuff<
   };
 }
 
-export function makeSetStoryState<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { getRefs, getState, setState } = conceptoFuncs;
+  const { getRefs, getState, setState } = concepFuncs;
 
   // ItemState
 
@@ -66,8 +66,8 @@ export function makeSetStoryState<ConceptoFuncs extends GameyConceptoFuncs>(
   };
 }
 
-export function makerAllStoryRuleMakers<
-  ConceptoFuncs extends GameyConceptoFuncs,
+export function makeAllStoryRuleMakers<
+  ConcepFuncs extends BackdopConcepFuncs,
   PlaceName extends string,
   DollName extends string,
   CharacterName extends string,
@@ -77,7 +77,7 @@ export function makerAllStoryRuleMakers<
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   TriggerNameByPlace extends Record<PlaceName, string>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[],
   dollNames: readonly DollName[]
@@ -88,7 +88,7 @@ export function makerAllStoryRuleMakers<
     makeRules,
     startItemEffect,
     stopEffect,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
   type SegmentNameFromCameraAndPlace<
     T_Place extends keyof PlaceInfoByName,
@@ -111,11 +111,11 @@ export function makerAllStoryRuleMakers<
     }
   >;
 
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
 
-  const getUsefulStoryStuff = makeGetUsefulStoryStuff(conceptoFuncs);
+  const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
 
   type StoryCallback = (
     usefulStuff: ReturnType<typeof getUsefulStoryStuff>

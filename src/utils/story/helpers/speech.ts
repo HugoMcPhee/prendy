@@ -3,24 +3,24 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
 import {
-  GameyConceptoFuncs,
-  GameyStartOptionsUntyped,
-  PlaceholderGameyConcepts,
-} from "../../../concepts/typedConceptoFuncs";
+  BackdopConcepFuncs,
+  BackdopOptionsUntyped,
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 import { makeSetStoryState } from "../../../storyRuleMakers";
 import { clearTimeoutSafe } from "../../../utils";
 import { CSSProperties } from "react";
 import { length } from "stringz";
 
 export function makeSpeechStoryHelpers<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  GameyConcepts extends PlaceholderGameyConcepts,
-  GameyStartOptions extends GameyStartOptionsUntyped,
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  BackdopOptions extends BackdopOptionsUntyped,
   CharacterName extends string
 >(
-  conceptoFuncs: ConceptoFuncs,
-  gameyConcepts: GameyConcepts,
-  gameyStartOptions: GameyStartOptions,
+  concepFuncs: ConcepFuncs,
+  backdopConcepts: BackdopConcepts,
+  backdopStartOptions: BackdopOptions,
   characterNames: readonly CharacterName[]
 ) {
   const {
@@ -29,20 +29,20 @@ export function makeSpeechStoryHelpers<
     setState,
     startItemEffect,
     stopEffect,
-  } = conceptoFuncs;
+  } = concepFuncs;
 
-  const getCharDollStuff = makeGetCharDollStuff<ConceptoFuncs, CharacterName>(
-    conceptoFuncs
+  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+    concepFuncs
   );
 
-  const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
   const { getTypingDelayForText } = makeSpeechBubblesStoreUtils<
-    ConceptoFuncs,
-    GameyConcepts
-  >(conceptoFuncs, gameyConcepts);
-  const setStoryState = makeSetStoryState(conceptoFuncs);
+    ConcepFuncs,
+    BackdopConcepts
+  >(concepFuncs, backdopConcepts);
+  const setStoryState = makeSetStoryState(concepFuncs);
 
-  type SpeechBubbleName = keyof typeof gameyConcepts.speechBubbles.startStates;
+  type SpeechBubbleName = keyof typeof backdopConcepts.speechBubbles.startStates;
 
   type ATimeout = ReturnType<typeof setTimeout> | undefined;
 
@@ -141,7 +141,7 @@ export function makeSpeechStoryHelpers<
 
       const newPlaneZoom = Math.min(
         showSpeechRefs.originalZoomAmount * zoomAmount,
-        gameyStartOptions.zoomLevels.max
+        backdopStartOptions.zoomLevels.max
       );
 
       setState({
@@ -168,7 +168,7 @@ export function makeSpeechStoryHelpers<
           focusedDoll: playerDollName,
           planeZoomGoal: returnToZoomBeforeConversation
             ? showSpeechRefs.originalZoomAmount
-            : gameyStartOptions.zoomLevels.default,
+            : backdopStartOptions.zoomLevels.default,
         });
       }
 

@@ -1,30 +1,30 @@
 import {
-  GameyConceptoFuncs,
-  // PlaceholderGameyConcepts,
-} from "../typedConceptoFuncs";
+  BackdopConcepFuncs,
+  // PlaceholderBackdopConcepts,
+} from "../typedConcepFuncs";
 
 // async function testAnimWeights() {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
 
 export function makeGetCharDollStuff<
-  ConceptoFuncs extends GameyConceptoFuncs,
-  // GameyConcepts extends PlaceholderGameyConcepts,
+  ConcepFuncs extends BackdopConcepFuncs,
+  // BackdopConcepts extends PlaceholderBackdopConcepts,
   CharacterName extends string
-  // CharacterName extends keyof GameyConcepts["characters"]["startStates"] &
+  // CharacterName extends keyof BackdopConcepts["characters"]["startStates"] &
   //   string
-  // DollName extends keyof GameyConcepts["dolls"]["startStates"] & string,
+  // DollName extends keyof BackdopConcepts["dolls"]["startStates"] & string,
   // ModelName extends string,
   // AnimationNameByModel extends Record<ModelName, string>,
   // MeshNameByModel extends Record<ModelName, string>
->(conceptoFuncs: ConceptoFuncs) {
-  const { getRefs, getState } = conceptoFuncs;
+>(concepFuncs: ConcepFuncs) {
+  const { getRefs, getState } = concepFuncs;
 
   // NOTE TODO all these types need to be made inside the places using them (like story helpers)
   // And getCharDollStuff there too
 
-  // type StartState_Characters = typeof gameyConcepts.characters.startStates;
-  // type StartState_Dolls = typeof gameyConcepts.dolls.startStates;
+  // type StartState_Characters = typeof backdopConcepts.characters.startStates;
+  // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
 
   // type DollNameFromCharacter<T_CharacterName extends CharacterName> =
   //   StartState_Characters[T_CharacterName]["dollName"];

@@ -1,7 +1,7 @@
 import { AbstractMesh, Mesh, Vector3 } from "@babylonjs/core";
-import { GameyConceptoFuncs, GameyStartOptionsUntyped } from "../../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../../../concepts/typedConcepFuncs";
 import { Point2D } from "shutils/dist/points2d";
-export declare function makeScenePlaneUtils<ConceptoFuncs extends GameyConceptoFuncs, GameyStartOptions extends GameyStartOptionsUntyped>(conceptoFuncs: ConceptoFuncs, gameyStartOptions: GameyStartOptions): {
+export declare function makeScenePlaneUtils<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions): {
     getPositionOnPlane: (theMesh: AbstractMesh) => Vector3;
     updatePlanePositionToFocusOnMesh: ({ meshRef, instant, }: {
         meshRef: AbstractMesh;

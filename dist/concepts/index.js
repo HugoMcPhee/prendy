@@ -11,7 +11,7 @@ import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 import stackVids from "./stackVids";
-export const gameyFlowNames = [
+export const backdopFlowNames = [
     // updating internal video states
     "safeVidStateUpdates",
     "stackVidStateUpdates",
@@ -45,16 +45,16 @@ export const gameyFlowNames = [
     "default",
     "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ];
-export function makeGameyConcepts(gameyStartOptions, placeInfoByName, modelInfoByName, dollOptions, characterOptions, placeNames, modelNames, dollNames, characterNames, musicNames, soundNames, fontNames) {
+export function makeBackdopConcepts(backdopStartOptions, placeInfoByName, modelInfoByName, dollOptions, characterOptions, placeNames, modelNames, dollNames, characterNames, musicNames, soundNames, fontNames) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(),
         pointers: pointers(),
-        global: global(gameyStartOptions, musicNames, soundNames),
+        global: global(backdopStartOptions, musicNames, soundNames),
         models: models(modelNames),
         dolls: dolls(modelNames, dollNames, modelInfoByName, dollOptions),
         characters: characters(characterNames, dollNames, characterOptions),
-        players: players(gameyStartOptions),
+        players: players(backdopStartOptions),
         speechBubbles: speechBubbles(characterNames, characterOptions, fontNames),
         places: places(placeNames, placeInfoByName),
         safeVids: safeVids(placeNames, placeInfoByName),

@@ -1,11 +1,11 @@
 // @refresh-reset
 import React from "react";
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeAlarmText<ConceptoFuncs extends GameyConceptoFuncs>(
-  conceptoFuncs: ConceptoFuncs
+export function makeAlarmText<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
 ) {
-  const { useStore } = conceptoFuncs;
+  const { useStore } = concepFuncs;
 
   type Props = {};
 

@@ -1,5 +1,5 @@
-export function makeDollStoryUtils(conceptoFuncs, gameyConcepts) {
-    const { getState } = conceptoFuncs;
+export function makeDollStoryUtils(concepFuncs, backdopConcepts) {
+    const { getState } = concepFuncs;
     function getModelNameFromDoll(dollName) {
         return getState().dolls[dollName].modelName;
     }

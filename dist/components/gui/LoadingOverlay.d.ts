@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { GameyConceptoFuncs } from "../../concepts/typedConceptoFuncs";
-export declare function makeLoadingOverlay<ConceptoFuncs extends GameyConceptoFuncs>(conceptoFuncs: ConceptoFuncs): (_props: {}) => JSX.Element;
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+export declare function makeLoadingOverlay<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): (_props: {}) => JSX.Element;

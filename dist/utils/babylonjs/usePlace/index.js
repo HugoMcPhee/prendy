@@ -7,12 +7,12 @@ import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
-export function makeUsePlace(conceptoFuncs, gameyStartOptions, placeInfoByName, dollNames, soundFiles) {
-    const { getRefs, getState, setState } = conceptoFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(conceptoFuncs);
-    const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
-    const useModelFile = makeUseModelFile(conceptoFuncs);
-    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(conceptoFuncs, placeInfoByName, dollNames);
+export function makeUsePlace(concepFuncs, backdopStartOptions, placeInfoByName, dollNames, soundFiles) {
+    const { getRefs, getState, setState } = concepFuncs;
+    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+    const useModelFile = makeUseModelFile(concepFuncs);
+    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames);
     const placesRefs = getRefs().places;
     const addToHelpFixRotationVector = new Vector3(0, Math.PI, Math.PI); // Math.PI same as toRadians(180)?
     const multiplyToHelpFixRotationVector = new Vector3(-1, 1, -1);
@@ -31,7 +31,7 @@ export function makeUsePlace(conceptoFuncs, gameyStartOptions, placeInfoByName, 
                 camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
             });
             const { modelNamesLoaded } = getState().global.main;
-            forEach(gameyStartOptions.modelNamesByPlace[placeName], (modelName) => {
+            forEach(backdopStartOptions.modelNamesByPlace[placeName], (modelName) => {
                 if (!modelNamesLoaded.includes(modelName)) {
                     setState({ models: { [modelName]: { wantToLoad: true } } });
                 }

@@ -1,7 +1,7 @@
 import { InitialItemsState } from "concep";
 import { forEach } from "shutils/dist/loops";
 import { abLetters, vidTypes } from "../../utils/consts";
-import { PlaceInfoByNamePlaceholder } from "../typedConceptoFuncs";
+import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
 
 export type VidState = 
   | "beforePlay" // (this is what triggers the play to happen)

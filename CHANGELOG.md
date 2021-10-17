@@ -1,3 +1,8 @@
+v0.4.0
+
+- reamed gamey and concepto stuff to backdop and cocnep
+- more things exported from index :)
+
 v0.3.13
 
 - supports playerAnimations option

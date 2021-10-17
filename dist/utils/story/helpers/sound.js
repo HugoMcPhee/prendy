@@ -1,9 +1,9 @@
 import { Sound } from "@babylonjs/core";
 import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
 import { forEach } from "shutils/dist/loops";
-export function makeSoundStoryHelpers(conceptoFuncs, musicNames, musicFiles) {
-    const { getRefs } = conceptoFuncs;
-    const { getScene } = makeGetSceneOrEngineUtils(conceptoFuncs);
+export function makeSoundStoryHelpers(concepFuncs, musicNames, musicFiles) {
+    const { getRefs } = concepFuncs;
+    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const globalRefs = getRefs().global.main;
     // Auto load music and play it, and stop other music if it's already playing
     function playNewMusic(newMusicName) {

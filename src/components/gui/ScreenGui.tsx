@@ -1,8 +1,8 @@
 // @refresh-reset
 import {
-  GameyConceptoFuncs,
+  BackdopConcepFuncs,
   PickupsInfoPlaceholder,
-} from "../../concepts/typedConceptoFuncs";
+} from "../../concepts/typedConcepFuncs";
 import React from "react";
 import { makeAlarmText } from "./AlarmText";
 import { makeLoadingOverlay } from "./LoadingOverlay";
@@ -15,27 +15,27 @@ import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualStick } from "./VirtualStick";
 
 export function makeScreenGui<
-  ConceptoFuncs extends GameyConceptoFuncs,
+  ConcepFuncs extends BackdopConcepFuncs,
   CharacterName extends string,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>
 >(
-  conceptoFuncs: ConceptoFuncs,
+  concepFuncs: ConcepFuncs,
   characterNames: readonly CharacterName[],
   pickupsInfo: PickupsInfo
 ) {
-  const AlarmText = makeAlarmText(conceptoFuncs);
-  const LoadingOverlay = makeLoadingOverlay(conceptoFuncs);
-  const MiniBubble = makeMiniBubble(conceptoFuncs);
-  const Pickups = makePickups<ConceptoFuncs, PickupName, PickupsInfo>(
-    conceptoFuncs,
+  const AlarmText = makeAlarmText(concepFuncs);
+  const LoadingOverlay = makeLoadingOverlay(concepFuncs);
+  const MiniBubble = makeMiniBubble(concepFuncs);
+  const Pickups = makePickups<ConcepFuncs, PickupName, PickupsInfo>(
+    concepFuncs,
     pickupsInfo
   );
-  const ScreenSticker = makeScreenSticker(conceptoFuncs);
-  const SpeechBubble = makeSpeechBubble(conceptoFuncs);
-  const StoryOverlay = makeStoryOverlay(conceptoFuncs);
-  const VirtualStick = makeVirtualStick(conceptoFuncs);
-  // const ShowStates = makeShowStates(conceptoFuncs);
+  const ScreenSticker = makeScreenSticker(concepFuncs);
+  const SpeechBubble = makeSpeechBubble(concepFuncs);
+  const StoryOverlay = makeStoryOverlay(concepFuncs);
+  const VirtualStick = makeVirtualStick(concepFuncs);
+  // const ShowStates = makeShowStates(concepFuncs);
 
   type Props = {};
 

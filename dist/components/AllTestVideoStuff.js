@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { andLayout } from "../utils/styles";
-export function makeAllTestVideoStuff(conceptoFuncs, placeNames) {
-    const { useStore, useStoreItemPropsEffect } = conceptoFuncs;
+export function makeAllTestVideoStuff(concepFuncs, placeNames) {
+    const { useStore, useStoreItemPropsEffect } = concepFuncs;
     function TestVideos({ placeName }) {
         const mainRef = useRef(null);
         const vidContainerRefA = useRef(null);

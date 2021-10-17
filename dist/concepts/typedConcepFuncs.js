@@ -1,6 +1,6 @@
 import { createConcepts } from "concep";
-import { gameyFlowNames } from ".";
-import { makeGetGameyStartOptions } from "../getGameyOptions";
+import { backdopFlowNames } from ".";
+import { makeGetBackdopOptions } from "../getBackdopOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
 import dolls from "./dolls";
@@ -15,8 +15,8 @@ import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 import stackVids from "./stackVids";
-const testGetGameyStartOptions = makeGetGameyStartOptions();
-const TEST_START_OPTIONS = testGetGameyStartOptions({
+const testGetBackdopOptions = makeGetBackdopOptions();
+const TEST_START_OPTIONS = testGetBackdopOptions({
     // place: "cave",
     // segment: "start",
     // camera: "View_Camera",
@@ -90,7 +90,7 @@ const testStuff = {
         characterB: { doll: "dollB", font: "fontA" },
     },
 };
-const placeholderGameyConcepts = {
+const placeholderBackdopConcepts = {
     keyboards: keyboards(),
     miniBubbles: miniBubbles(),
     pointers: pointers(),
@@ -107,8 +107,8 @@ const placeholderGameyConcepts = {
     //
     story: story_fake(),
 };
-// const conceptoFuncs = _createConcepts_ForTypes(placeholderGameyConcepts, {
-const conceptoFuncs = createConcepts(placeholderGameyConcepts, {
-    flowNames: gameyFlowNames,
+// const concepFuncs = _createConcepts_ForTypes(placeholderBackdopConcepts, {
+const concepFuncs = createConcepts(placeholderBackdopConcepts, {
+    flowNames: backdopFlowNames,
     dontSetMeta: true,
 });

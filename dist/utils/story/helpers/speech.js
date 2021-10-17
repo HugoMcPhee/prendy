@@ -2,7 +2,6 @@ import delay from "delay";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
-import { makeSetStoryState } from "../../../storyRuleMakers";
 import { clearTimeoutSafe } from "../../../utils";
 import { length } from "stringz";
 export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, characterNames) {
@@ -10,7 +9,6 @@ export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStar
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(concepFuncs, backdopConcepts);
-    const setStoryState = makeSetStoryState(concepFuncs);
     const showSpeechRefs = {
         closeTimeouts: {},
         waitTimeouts: {},
@@ -123,9 +121,9 @@ export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStar
     }
     async function showAlarmText(text, time) {
         // NOTE alarm text in 'global' instead of project-specific 'story' ?
-        setStoryState({ alarmText: text, alarmTextIsVisible: true });
+        setGlobalState({ alarmText: text, alarmTextIsVisible: true });
         await delay(time);
-        setStoryState({ alarmTextIsVisible: false });
+        setGlobalState({ alarmTextIsVisible: false });
     }
     return {
         showSpeech,

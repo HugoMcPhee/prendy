@@ -18,7 +18,7 @@ export function makeSpeechBubble<
 >(concepFuncs: ConcepFuncs) {
   const { getState, useStore, useStoreEffect } = concepFuncs;
 
-  type GetState = typeof getState;
+  type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<
     GetState

@@ -45,8 +45,6 @@ export function makeSceneStoryHelpers<
     concepFuncs
   );
 
-  const setStoryState = makeSetStoryState(concepFuncs);
-
   const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils<
     ConcepFuncs,
     PlaceName,
@@ -158,7 +156,7 @@ export function makeSceneStoryHelpers<
 
   async function showStoryView(isVisible: boolean = true) {
     const GUESSED_FADE_TIME = 1000; // note could listen to something like isFullyFaded and return here, but maybe a set time is okay
-    setStoryState({ storyOverlayToggled: !isVisible });
+    setGlobalState({ storyOverlayToggled: !isVisible });
     await delay(GUESSED_FADE_TIME);
   }
 

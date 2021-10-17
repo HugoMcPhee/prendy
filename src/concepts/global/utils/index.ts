@@ -9,29 +9,26 @@ import { BackdopConcepFuncs } from "../../typedConcepFuncs";
 export function makeGlobalStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
-  const { getState, getRefs, setState } = concepFuncs;
+  const { getState, setState } = concepFuncs;
 
-  type ItemType = keyof ReturnType<typeof getState>;
+  type AllState = ReturnType<ConcepFuncs["getState"]>;
 
-  type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    typeof getState,
-    typeof getRefs,
-    T
-  >;
+  // type GlobalItemState = AllState["global"]["main"];
 
-  type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
+  // type PartialGlobalState = Partial<GlobalItemState>;
 
-  // type ItemState =
-  type GlobalItemState = ItemState<"global">;
-  type PartialGlobalState = Partial<GlobalItemState>;
-
-  function setGlobalState(
+  function setGlobalState<
+    GlobalItemState extends AllState["global"]["main"] & Record<any, any>,
+    PartialGlobalState extends Partial<GlobalItemState>
+  >(
     newState:
       | PartialGlobalState
       | ((state: GlobalItemState) => PartialGlobalState)
   ) {
     if (typeof newState === "function") {
-      setState((state) => ({ global: { main: newState(state.global.main) } }));
+      setState((state) => ({
+        global: { main: newState(state.global.main as GlobalItemState) },
+      }));
     } else {
       setState({ global: { main: newState } });
     }

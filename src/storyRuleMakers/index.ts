@@ -14,15 +14,26 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
 ) {
   const { getRefs, getState } = concepFuncs;
 
+  type AllState = ReturnType<ConcepFuncs["getState"]>;
+  type AllRefs = ReturnType<ConcepFuncs["getRefs"]>;
+
+  type StoryState = AllState["story"]["main"];
+  type StoryRefs = AllRefs["story"]["main"];
+  type GlobalState = AllState["global"]["main"];
+
+  type AllPlacesState = AllState["places"];
+  type AllPlacesRefs = AllRefs["places"];
+
   return function getUsefulStoryStuff() {
-    const storyState = getState().story.main;
-    const storyRefs = getRefs().story.main;
-    const globalState = getState().global.main;
+    const storyState = getState().story.main as StoryState;
+    const storyRefs = getRefs().story.main as StoryRefs;
+    const globalState = getState().global.main as GlobalState;
     const { chapterName, storyPart } = storyState;
     const { nowPlaceName, nowSegmentName } = globalState;
-    const placeState = getState().places[nowPlaceName];
+    const allPlacesState = getState().places as AllPlacesState;
+    const placeState = allPlacesState[nowPlaceName];
     const { nowCamName } = placeState;
-    const placesRefs = getRefs().places;
+    const placesRefs = getRefs().places as AllPlacesRefs;
     const placeRefs = placesRefs[nowPlaceName];
     const { camsRefs } = placesRefs[nowPlaceName];
     const camRefs = camsRefs[nowCamName];
@@ -48,20 +59,23 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
 export function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { setState } = concepFuncs;
 
   // ItemState
 
-  type GetState = typeof getState;
-  type GetRefs = typeof getRefs;
-  // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
-  type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
+  // type GetState = typeof getState;
+  // type GetRefs = typeof getRefs;
+  // // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
+  // type ItemType = keyof ReturnType<GetState>;
+  //
+  // type ItemState<T_ItemType extends ItemType> = ReturnType<
+  //   GetState
+  // >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 
-  type ItemState<T_ItemType extends ItemType> = ReturnType<
-    GetState
-  >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
+  type AllState = ReturnType<ConcepFuncs["getState"]>;
+  type StoryState = AllState["story"]["main"];
 
-  return function setStoryState(newState: Partial<ItemState<"story">>) {
+  return function setStoryState(newState: Partial<StoryState>) {
     setState({ story: { main: newState } });
   };
 }

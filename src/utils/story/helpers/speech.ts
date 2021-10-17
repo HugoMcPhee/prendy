@@ -40,7 +40,6 @@ export function makeSpeechStoryHelpers<
     ConcepFuncs,
     BackdopConcepts
   >(concepFuncs, backdopConcepts);
-  const setStoryState = makeSetStoryState(concepFuncs);
 
   type SpeechBubbleName = keyof typeof backdopConcepts.speechBubbles.startStates;
 
@@ -214,9 +213,9 @@ export function makeSpeechStoryHelpers<
 
   async function showAlarmText(text: string, time: number) {
     // NOTE alarm text in 'global' instead of project-specific 'story' ?
-    setStoryState({ alarmText: text, alarmTextIsVisible: true });
+    setGlobalState({ alarmText: text, alarmTextIsVisible: true });
     await delay(time);
-    setStoryState({ alarmTextIsVisible: false });
+    setGlobalState({ alarmTextIsVisible: false });
   }
 
   return {

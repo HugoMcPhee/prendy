@@ -18,11 +18,12 @@ export function makeMiniBubble<ConcepFuncs extends BackdopConcepFuncs>(
 
   const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
-  type GetState = typeof getState;
+  type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<
     GetState
-  >[T_ItemType];
+  >[T_ItemType] &
+    Record<any, any>;
 
   type Props = { name: keyof AllItemsState<"miniBubbles"> };
 

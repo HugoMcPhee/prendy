@@ -59,8 +59,7 @@ export function makeDollStoreUtils<
   AnimationNameByModel extends Record<string, string>,
   // StartState_Dolls extends BackdopConcepts["dolls"]["startStates"],
   StartState_Dolls extends ReturnType<ConcepFuncs["getState"]>["dolls"],
-  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &
-    string, // DollNameParameter extends string
+  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] & string, // DollNameParameter extends string
   ModelName extends string,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(
@@ -78,7 +77,7 @@ export function makeDollStoreUtils<
     getPositionOnPlane,
   } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
 
-  // type ConceptoState = ReturnType<typeof getState>;
+  // type ConceptoState = ReturnType<ConcepFuncs["getState"]>;
   // type DollName = keyof ConceptoState["dolls"];
   // type DollName = keyof typeof backdopConcepts.dolls.startStates;
   // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;

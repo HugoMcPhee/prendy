@@ -25,8 +25,7 @@ export function makeGlobalChangePlaceRules<
   ConcepFuncs extends BackdopConcepFuncs,
   BackdopConcepts extends PlaceholderBackdopConcepts,
   BackdopOptions extends BackdopOptionsUntyped,
-  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &
-    string, // DollNameParameter extends string
+  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] & string, // DollNameParameter extends string
   PlaceName extends string,
   AnyCameraName extends string,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,

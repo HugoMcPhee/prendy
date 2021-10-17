@@ -10,7 +10,8 @@ export function makeGetUsefulStoryStuff(concepFuncs) {
         const globalState = getState().global.main;
         const { chapterName, storyPart } = storyState;
         const { nowPlaceName, nowSegmentName } = globalState;
-        const placeState = getState().places[nowPlaceName];
+        const allPlacesState = getState().places;
+        const placeState = allPlacesState[nowPlaceName];
         const { nowCamName } = placeState;
         const placesRefs = getRefs().places;
         const placeRefs = placesRefs[nowPlaceName];
@@ -34,7 +35,7 @@ export function makeGetUsefulStoryStuff(concepFuncs) {
     };
 }
 export function makeSetStoryState(concepFuncs) {
-    const { getRefs, getState, setState } = concepFuncs;
+    const { setState } = concepFuncs;
     return function setStoryState(newState) {
         setState({ story: { main: newState } });
     };

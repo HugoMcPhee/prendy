@@ -1,3 +1,7 @@
+v0.4.1
+
+- fixed types for story helpers (and parts using typeof getState)
+
 v0.4.0
 
 - reamed gamey and concepto stuff to backdop and cocnep

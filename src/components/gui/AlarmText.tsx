@@ -35,26 +35,26 @@ export function makeAlarmText<ConceptoFuncs extends GameyConceptoFuncs>(
       </div>
     );
   };
-
-  const styles = {
-    container: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      pointerEvents: "none",
-    },
-    text: {
-      color: "rgb(233, 233, 233)",
-      fontFamily: "Jua",
-      fontSize: 120,
-      zIndex: 1000,
-      textAlign: "center",
-      maxWidth: 800,
-    },
-  } as const;
 }
+
+const styles = {
+  container: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "none",
+  },
+  text: {
+    color: "rgb(233, 233, 233)",
+    fontFamily: "Jua",
+    fontSize: 120,
+    zIndex: 1000,
+    textAlign: "center",
+    maxWidth: 800,
+  },
+} as const;

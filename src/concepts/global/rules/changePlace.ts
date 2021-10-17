@@ -56,7 +56,10 @@ export function makeGlobalChangePlaceRules<
     SegmentNameByPlace
   >(conceptoFuncs, placeInfoByName, dollNames);
 
-  const { updateTexturesForNowCamera } = makeCameraChangeUtils<
+  const {
+    updateTexturesForNowCamera,
+    updateNowStuffWhenSectionChanged,
+  } = makeCameraChangeUtils<
     ConceptoFuncs,
     PlaceInfoByName,
     AnyCameraName,
@@ -215,6 +218,14 @@ export function makeGlobalChangePlaceRules<
             // onNextTick because sometimes the character position was starting incorrect
             // (maybe because the place-load story-rules werent reacting because it was the wrong flow)
             setGlobalState({ isLoadingBetweenPlaces: false });
+
+            onNextTick(() => {
+              updateNowStuffWhenSectionChanged();
+              // when a new place loads it handles checking and clearing nextSegmentNameWhenVidPlays  nextCamNameWhenVidPlays
+              // otheriwse the video wont loop because it thinks its waiting for a section to change
+              // its set to run when a vid starts playing, but its missing it , maybe because the new vid playing property is updating before theres a wanted next cam etc,
+              //or maybe to do with the flow order
+            });
 
             if (wantedSegmentWhenNextPlaceLoads) {
               setGlobalState({

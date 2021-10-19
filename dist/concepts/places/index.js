@@ -22,7 +22,7 @@ export default function places(placeNames, placeInfoByName) {
     };
     // Refs
     function refs(placeName) {
-        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
+        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames, } = placeInfoByName[placeName];
         const spotPositions = {};
         const spotRotations = {};
         const soundspotSounds = {};
@@ -86,6 +86,6 @@ export default function places(placeNames, placeInfoByName) {
     return {
         startStates: startStates,
         state: state,
-        refs: refs,
+        refs: refs, // TODO change to PlaceRefs<T_PlaceName> when ReturnType is generic
     };
 }

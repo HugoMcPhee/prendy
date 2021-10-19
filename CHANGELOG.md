@@ -1,6 +1,6 @@
 TODO
 
-v0.4.2
+v0.4.3
 
 - storyPart and chapterName types in makeGetUsefulStoryStuff
 - fix types for place refs

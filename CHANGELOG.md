@@ -1,3 +1,11 @@
+TODO
+
+v0.4.2
+
+- storyPart and chapterName types in makeGetUsefulStoryStuff
+- fix types for place refs
+- added makeOtherUsefulBackdopUtils
+
 v0.4.1
 
 - fixed types for story helpers (and parts using typeof getState)

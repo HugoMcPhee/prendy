@@ -40,8 +40,8 @@ export default function places<
       wantedCamNameAtLoop: null as MaybeCam<T_PlaceName>,
       wantedCamName: null as MaybeCam<T_PlaceName>,
       nowCamName:
-        ((placeInfoByName as any)?.[placeName as any]
-          ?.cameraNames?.[0] as unknown as AnyCameraName) ??
+        (((placeInfoByName as any)?.[placeName as any]
+          ?.cameraNames?.[0] as unknown) as AnyCameraName) ??
         ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
     };
   };
@@ -85,9 +85,16 @@ export default function places<
   };
 
   // Refs
-  function refs<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
-    const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } =
-      placeInfoByName[placeName];
+  function refs<T_PlaceName extends PlaceName>(
+    placeName: T_PlaceName
+  ): PlaceRefs<T_PlaceName> {
+    const {
+      spotNames,
+      soundspotNames,
+      triggerNames,
+      wallNames,
+      cameraNames,
+    } = placeInfoByName[placeName];
 
     const spotPositions: Partial<SpotPositions<T_PlaceName>> = {};
     const spotRotations: Partial<SpotRotations<T_PlaceName>> = {};
@@ -169,7 +176,7 @@ export default function places<
       itemName: T_PlaceName | string
     ) => ReturnType<typeof state>,
     refs: refs as <T_PlaceName extends PlaceName>(
-      itemName: T_PlaceName | string
-    ) => PlaceRefs<T_PlaceName>,
+      itemName: T_PlaceName & string
+    ) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<T_PlaceName> when ReturnType is generic
   };
 }

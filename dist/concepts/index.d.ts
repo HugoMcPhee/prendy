@@ -500,14 +500,14 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             wantedCamName: CameraNameByPlace[PlaceName];
             nowCamName: AnyCameraName;
         };
-        refs: <T_PlaceName_1 extends PlaceName>(itemName: string | T_PlaceName_1) => {
+        refs: <T_PlaceName_1 extends PlaceName>(itemName: T_PlaceName_1 & string) => {
             rootMesh: import("@babylonjs/core").AbstractMesh;
-            spotPositions: { [P_SpotName in SpotNameByPlace[T_PlaceName_1]]: import("@babylonjs/core").Vector3; };
-            spotRotations: { [P_SpotName_1 in SpotNameByPlace[T_PlaceName_1]]: import("@babylonjs/core").Vector3; };
-            soundspotSounds: { [P_SoundName in SoundspotNameByPlace[T_PlaceName_1]]: import("@babylonjs/core").Sound; };
-            triggerMeshes: { [P_TriggerName in TriggerNameByPlace[T_PlaceName_1]]: import("@babylonjs/core").AbstractMesh; };
-            wallMeshes: { [P_TriggerName_1 in WallNameByPlace[T_PlaceName_1]]: import("@babylonjs/core").AbstractMesh; };
-            camsRefs: { [P_CameraName in CameraNameByPlace[T_PlaceName_1]]: {
+            spotPositions: { [P_SpotName in SpotNameByPlace[PlaceName]]: import("@babylonjs/core").Vector3; };
+            spotRotations: { [P_SpotName_1 in SpotNameByPlace[PlaceName]]: import("@babylonjs/core").Vector3; };
+            soundspotSounds: { [P_SoundName in SoundspotNameByPlace[PlaceName]]: import("@babylonjs/core").Sound; };
+            triggerMeshes: { [P_TriggerName in TriggerNameByPlace[PlaceName]]: import("@babylonjs/core").AbstractMesh; };
+            wallMeshes: { [P_TriggerName_1 in WallNameByPlace[PlaceName]]: import("@babylonjs/core").AbstractMesh; };
+            camsRefs: { [P_CameraName in CameraNameByPlace[PlaceName]]: {
                 camera: import("@babylonjs/core").TargetCamera;
                 camCubeMeshes: import("@babylonjs/core").AbstractMesh[];
                 probeTexture: import("@babylonjs/core").CubeTexture;

@@ -1,3 +1,4 @@
+import { Engine, Scene } from "@babylonjs/core";
 import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
 export function makeGetSceneOrEngineUtils<
@@ -7,15 +8,16 @@ export function makeGetSceneOrEngineUtils<
 
   function getScene(sceneType?: "backdrop" | "main") {
     const globalRefs = getRefs().global.main;
-    if (sceneType === "backdrop") return globalRefs.scenes.backdrop;
+    if (sceneType === "backdrop")
+      return globalRefs.scenes.backdrop as null | Scene;
 
-    return globalRefs.scenes.main;
+    return globalRefs.scenes.main as null | Scene;
   }
 
   function getEngine() {
     const scene = getScene();
     const engine = scene ? scene.getEngine() : null;
-    return engine;
+    return engine as null | Engine;
   }
 
   return {

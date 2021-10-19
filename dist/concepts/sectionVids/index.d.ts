@@ -6,14 +6,14 @@ export declare type VidSection = {
 };
 export default function sectionVids<PlaceName extends string>(placeNames: readonly PlaceName[]): {
     state: <T_ItemName extends string>(itemName: T_ItemName) => {
-        stackVidId_playing: string;
-        stackVidId_waiting: string;
+        stackVidId_playing: string | null;
+        stackVidId_waiting: string | null;
         sectionVidState: SectionVidState;
         nowSection: {
             time: number;
             duration: number;
         };
-        wantedSection: VidSection;
+        wantedSection: VidSection | null;
         wantToLoad: boolean;
         wantToUnload: boolean;
         wantToLoop: boolean;
@@ -22,18 +22,18 @@ export default function sectionVids<PlaceName extends string>(placeNames: readon
         nowSectionSeekedTime: number;
     };
     refs: () => {
-        waitingForPlayToDoLoopRuleName: string;
-        waitingForPlayToChangeSectionRuleName: string;
+        waitingForPlayToDoLoopRuleName: string | null;
+        waitingForPlayToChangeSectionRuleName: string | null;
     };
     startStates: Record<PlaceName, {
-        stackVidId_playing: string;
-        stackVidId_waiting: string;
+        stackVidId_playing: string | null;
+        stackVidId_waiting: string | null;
         sectionVidState: SectionVidState;
         nowSection: {
             time: number;
             duration: number;
         };
-        wantedSection: VidSection;
+        wantedSection: VidSection | null;
         wantToLoad: boolean;
         wantToUnload: boolean;
         wantToLoop: boolean;

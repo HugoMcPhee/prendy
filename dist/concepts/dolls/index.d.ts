@@ -25,9 +25,9 @@ export default function dolls<ModelName extends string, DollName extends string,
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<DollOptions[K_DollName]["model"]>;
-        nextSpotName: AnySpotName;
+        nextSpotName: AnySpotName | null;
     }; };
-    state: <T_DollName extends string, T_ModelName extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName) => {
+    state: <T_DollName extends string, T_ModelName extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
         nowAnimation: string;
         animationLoops: boolean;
         inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
@@ -51,7 +51,7 @@ export default function dolls<ModelName extends string, DollName extends string,
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<T_ModelName>;
-        nextSpotName: AnySpotName;
+        nextSpotName: AnySpotName | null;
     };
     refs: <T_DollName_1 extends DollName, T_ModelName_1 extends ModelName>(dollName: T_DollName_1, itemState: {
         nowAnimation: string;
@@ -77,7 +77,7 @@ export default function dolls<ModelName extends string, DollName extends string,
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<T_ModelName_1>;
-        nextSpotName: AnySpotName;
+        nextSpotName: AnySpotName | null;
     }) => {
         animWeightsMoverRefs: {
             stateNames: {
@@ -123,18 +123,18 @@ export default function dolls<ModelName extends string, DollName extends string,
             };
             physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
         };
-        meshRef: AbstractMesh;
-        otherMeshes: Record<MeshNameByModel[NonNullable<T_ModelName_1>], AbstractMesh>;
-        entriesRef: InstantiatedEntries;
-        aniGroupsRef: Record<AnimationNameByModel[T_ModelName_1], AnimationGroup>;
+        meshRef: AbstractMesh | null;
+        otherMeshes: Record<MeshNameByModel[NonNullable<T_ModelName_1>], AbstractMesh | null>;
+        entriesRef: InstantiatedEntries | null;
+        aniGroupsRef: Record<AnimationNameByModel[T_ModelName_1], AnimationGroup> | null;
         assetRefs: {
             meshes: Record<"__root__" | MeshNameByModel[T_ModelName_1], AbstractMesh>;
             skeleton: Skeleton;
             bones: Record<BoneNameByModel[T_ModelName_1], Bone>;
             aniGroups: Record<AnimationNameByModel[T_ModelName_1], AnimationGroup>;
             materials: Record<MaterialNameByModel[T_ModelName_1], Material>;
-        };
-        groundRef: AbstractMesh;
+        } | null;
+        groundRef: AbstractMesh | null;
         checkCollisions: boolean;
     };
 };

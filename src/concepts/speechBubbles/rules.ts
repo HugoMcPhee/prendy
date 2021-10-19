@@ -89,8 +89,9 @@ export function makeSpeechBubbleRules<
         forEach(diffInfo.itemsRemoved.speechBubbles, (itemName) => {
           // speechBubbleDynamicRules.stopAll
           const speechBubblesRefs = getRefs().speechBubbles;
-          const { currentTimeout } =
-            speechBubblesRefs[itemName as keyof typeof speechBubblesRefs];
+          const { currentTimeout } = speechBubblesRefs[
+            itemName as keyof typeof speechBubblesRefs
+          ];
           if (currentTimeout !== null) clearTimeout(currentTimeout);
         });
       },

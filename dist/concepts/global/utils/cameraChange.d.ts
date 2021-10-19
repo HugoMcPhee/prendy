@@ -8,8 +8,8 @@ export declare function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepF
         place: T_PlaceName;
         cam: T_CameraName;
         segment: T_SegmentName;
-        useStorySegmentRules?: boolean;
-    }) => any;
+        useStorySegmentRules?: boolean | undefined;
+    }) => T_SegmentName;
     updateTexturesForNowCamera: (newCameraName: AnyCameraName) => void;
     updateNowStuffWhenSectionChanged: () => void;
 };

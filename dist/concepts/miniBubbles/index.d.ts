@@ -4,20 +4,20 @@ export default function miniBubbles<CharacterName extends string>(): {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: CharacterName;
+        forCharacter: CharacterName | null;
         position: Point2D;
     };
     refs: () => {
         bubbleRef: any;
         textRef: any;
-        videoRef: HTMLVideoElement;
+        videoRef: HTMLVideoElement | null;
     };
     startStates: {
         walkerMiniBubble: {
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: CharacterName;
+            forCharacter: CharacterName | null;
             position: Point2D;
         };
     };

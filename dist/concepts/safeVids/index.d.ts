@@ -5,7 +5,7 @@ export default function safeVids<PlaceName extends string, PlaceInfoByName exten
     state: <T_ItemName extends string>(itemName: T_ItemName) => {
         vidState: VidState;
         playType: "pause" | "play";
-        wantedSeekTime: number;
+        wantedSeekTime: number | null;
         wantToPlay: boolean;
         wantToPause: boolean;
         wantToUnload: boolean;
@@ -14,12 +14,12 @@ export default function safeVids<PlaceName extends string, PlaceInfoByName exten
         autoplay: boolean;
     };
     refs: () => {
-        videoElement: HTMLVideoElement;
+        videoElement: HTMLVideoElement | null;
     };
     startStates: InitialItemsState<(<T_ItemName extends string>(itemName: T_ItemName) => {
         vidState: VidState;
         playType: "pause" | "play";
-        wantedSeekTime: number;
+        wantedSeekTime: number | null;
         wantToPlay: boolean;
         wantToPause: boolean;
         wantToUnload: boolean;

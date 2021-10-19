@@ -12,7 +12,7 @@ export function makeDollStoryUtils<
   // const { getState, startItemEffect } = concepFuncs;
   // const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+  type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
 
   type ModelNameFromDoll<
     T_DollName extends DollName

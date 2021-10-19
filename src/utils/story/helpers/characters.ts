@@ -35,11 +35,13 @@ export function makeCharacterStoryHelpers<
     concepFuncs
   );
 
-  type StartState_Characters = typeof backdopConcepts.characters.startStates;
-  type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+  type StartState_Characters = NonNullable<
+    BackdopConcepts["characters"]["startStates"]
+  >;
+  type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
 
   type DollNameFromCharacter<
-    T_CharacterName extends CharacterName
+    T_CharacterName extends CharacterName & keyof StartState_Characters
   > = StartState_Characters[T_CharacterName]["dollName"] & DollName; // NOTE the & might be messing with the returned type
 
   type ModelNameFromDoll<

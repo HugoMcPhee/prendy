@@ -7,7 +7,6 @@ import { makeSpotStoryUtils } from "../utils/spots";
 export function makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName) {
     const { getRefs, getState, setState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const dollStartStates = backdopConcepts.dolls.startStates;
     const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs, backdopConcepts);
     const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
     // --------------------------------------------------------------

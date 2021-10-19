@@ -11,6 +11,6 @@ export declare function makeOtherUsefulBackdopUtils<ConcepFuncs extends BackdopC
     setStoryState: (newState: Partial<ReturnType<ConcepFuncs["getState"]>["story"]["main"]>) => void;
     getGlobalState: () => Record<any, any>;
     setGlobalState: <GlobalItemState extends ReturnType<ConcepFuncs["getState"]>["global"]["main"] & Record<any, any>, PartialGlobalState extends Partial<GlobalItemState>>(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState)) => void;
-    getScene: (sceneType?: "main" | "backdrop") => import("@babylonjs/core").Scene;
-    getEngine: () => import("@babylonjs/core").Engine;
+    getScene: (sceneType?: "main" | "backdrop" | undefined) => import("@babylonjs/core").Scene | null;
+    getEngine: () => import("@babylonjs/core").Engine | null;
 };

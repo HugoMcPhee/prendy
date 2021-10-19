@@ -11,8 +11,8 @@ export default function models<ModelName extends string>(modelNames: readonly Mo
         isLoaded: boolean;
     };
     refs: <T_ModelName_1 extends ModelName>(_modelName: T_ModelName_1) => {
-        container: AssetContainer;
-        materialRef: PBRMaterial;
-        materialRefs: PBRMaterial[];
+        container: AssetContainer | null;
+        materialRef: PBRMaterial | null;
+        materialRefs: PBRMaterial[] | null;
     };
 };

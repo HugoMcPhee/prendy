@@ -17,13 +17,13 @@ declare type AndLayoutOptions = {
 export declare function andLayout(options: AndLayoutOptions | "center"): {
     display: string;
     flexDirection: "column";
-    alignItems: string;
-    justifyContent: string;
+    alignItems: string | undefined;
+    justifyContent: string | undefined;
 } | {
     display: string;
     flexDirection: "row";
-    justifyContent: string;
-    alignItems: string;
+    justifyContent: string | undefined;
+    alignItems: string | undefined;
 };
 declare type StyleNumber = number | string;
 declare type AndFixedOptions = {
@@ -36,9 +36,9 @@ declare type AndFixedOptions = {
 };
 export declare function andFixed(options?: AndFixedOptions): {
     position: "absolute";
-    top: string;
-    left: string;
-    bottom: string;
-    right: string;
+    top: string | undefined;
+    left: string | undefined;
+    bottom: string | undefined;
+    right: string | undefined;
 };
 export {};

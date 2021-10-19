@@ -6,13 +6,13 @@ export default function characters<CharacterName extends string, DollName extend
         atCamCubes: Partial<Record<AnyCameraName, boolean>>;
         hasLeftFirstTrigger: boolean;
     }; };
-    state: <T_CharacterName extends string, T_DollName extends DollName>(_characterName: T_CharacterName, dollName?: T_DollName) => {
+    state: <T_CharacterName extends string, T_DollName extends DollName>(_characterName: T_CharacterName, dollName?: T_DollName | undefined) => {
         dollName: DollName;
         atTriggers: Partial<Record<AnyTriggerName, boolean>>;
         atCamCubes: Partial<Record<AnyCameraName, boolean>>;
         hasLeftFirstTrigger: boolean;
     };
     refs: <T_CharacterName_1 extends string>(_characterName: T_CharacterName_1) => {
-        testRef: any;
+        testRef: null;
     };
 };

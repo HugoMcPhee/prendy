@@ -28,8 +28,7 @@ export function makeDollDynamicRules<
   BackdopConcepts extends PlaceholderBackdopConcepts,
   StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
     ReturnType<ConcepFuncs["getState"]>["dolls"],
-  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &
-    string,
+  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] & string,
   ModelName extends string,
   AnyAnimationName extends string,
   AnimationNameByModel extends Record<ModelName, AnyAnimationName>,
@@ -562,7 +561,7 @@ export function makeDollRules<
           }
         });
 
-        setState({ dolls: newDollsState });
+        setState({ dolls: newDollsState as Record<any, any> });
       },
       check: { type: "dolls", prop: ["position"] },
       whenToRun: "subscribe",

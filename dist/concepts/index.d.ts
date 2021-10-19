@@ -49,20 +49,20 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: CharacterName;
+            forCharacter: CharacterName | null;
             position: import("shutils/dist/points2d").Point2D;
         };
         refs: () => {
             bubbleRef: any;
             textRef: any;
-            videoRef: HTMLVideoElement;
+            videoRef: HTMLVideoElement | null;
         };
         startStates: {
             walkerMiniBubble: {
                 isVisible: boolean;
                 isFullyHidden: boolean;
                 text: string;
-                forCharacter: CharacterName;
+                forCharacter: CharacterName | null;
                 position: import("shutils/dist/points2d").Point2D;
             };
         };
@@ -103,10 +103,10 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
                 planePosIsMoving: boolean;
                 planePosMoveMode: import("concep-movers/dist/types").MoveMode;
                 planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-                wantedSegmentWhenNextPlaceLoads: AnySegmentName;
-                nextSegmentNameWhenVidPlays: AnySegmentName;
-                wantedSegmentNameAtLoop: AnySegmentName;
-                wantedSegmentName: AnySegmentName;
+                wantedSegmentWhenNextPlaceLoads: AnySegmentName | null;
+                nextSegmentNameWhenVidPlays: AnySegmentName | null;
+                wantedSegmentNameAtLoop: AnySegmentName | null;
+                wantedSegmentName: AnySegmentName | null;
                 nowSegmentName: AnySegmentName;
                 wantToLoop: boolean;
                 modelNamesLoaded: ModelName[];
@@ -114,7 +114,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
                 isLoadingBetweenPlaces: boolean;
                 nowPlaceName: PlaceName;
                 readyToSwapPlace: boolean;
-                nextPlaceName: PlaceName;
+                nextPlaceName: PlaceName | null;
                 loadingOverlayToggled: boolean;
                 loadingOverlayFullyShowing: boolean;
                 playerCharacter: CharacterName;
@@ -146,10 +146,10 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             planePosIsMoving: boolean;
             planePosMoveMode: import("concep-movers/dist/types").MoveMode;
             planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            wantedSegmentWhenNextPlaceLoads: AnySegmentName;
-            nextSegmentNameWhenVidPlays: AnySegmentName;
-            wantedSegmentNameAtLoop: AnySegmentName;
-            wantedSegmentName: AnySegmentName;
+            wantedSegmentWhenNextPlaceLoads: AnySegmentName | null;
+            nextSegmentNameWhenVidPlays: AnySegmentName | null;
+            wantedSegmentNameAtLoop: AnySegmentName | null;
+            wantedSegmentName: AnySegmentName | null;
             nowSegmentName: AnySegmentName;
             wantToLoop: boolean;
             modelNamesLoaded: ModelName[];
@@ -157,7 +157,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             isLoadingBetweenPlaces: boolean;
             nowPlaceName: PlaceName;
             readyToSwapPlace: boolean;
-            nextPlaceName: PlaceName;
+            nextPlaceName: PlaceName | null;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
             playerCharacter: CharacterName;
@@ -166,19 +166,19 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             focusedDoll: DollName;
         };
         refs: () => {
-            sounds: { [K_SoundName in SoundName]: import("@babylonjs/core").Sound; };
-            music: { [K_MusicName in MusicName]: import("@babylonjs/core").Sound; };
+            sounds: { [K_SoundName in SoundName]: import("@babylonjs/core").Sound | null; };
+            music: { [K_MusicName in MusicName]: import("@babylonjs/core").Sound | null; };
             musicEffects: {
-                lowPass: BiquadFilterNode;
-                compress: DynamicsCompressorNode;
-                extraGain: GainNode;
+                lowPass: BiquadFilterNode | null;
+                compress: DynamicsCompressorNode | null;
+                extraGain: GainNode | null;
             };
             isHoveringPickupButton: boolean;
             solidParticleSystems: Record<string, import("@babylonjs/core").SolidParticleSystem>;
             timerSpeed: number;
-            aConvoIsHappening_timeout: number;
-            camSegmentRulesOptions: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_CamName in keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }>;
-            onPickupButtonClick: (pickupName: any) => void;
+            aConvoIsHappening_timeout: number | null;
+            camSegmentRulesOptions: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_CamName in keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+            onPickupButtonClick: ((pickupName: any) => void) | null;
             hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
             planeZoomMoverRefs: {
                 velocity: number;
@@ -208,18 +208,18 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
                 };
                 physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
             };
-            depthVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture;
-            colorVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture;
+            depthVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture | null;
+            colorVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture | null;
             scenes: {
-                main: import("@babylonjs/core").Scene;
-                backdrop: import("@babylonjs/core").Scene;
+                main: import("@babylonjs/core").Scene | null;
+                backdrop: import("@babylonjs/core").Scene | null;
             };
-            depthRenderer: import("../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize").DepthRendererWithSize;
-            sceneRenderTarget: import("@babylonjs/core").RenderTargetTexture;
-            depthRenderTarget: import("@babylonjs/core").RenderTargetTexture;
-            scenePlane: import("@babylonjs/core").Mesh;
-            scenePlaneMaterial: import("@babylonjs/core").ShaderMaterial;
-            scenePlaneCamera: import("@babylonjs/core").TargetCamera;
+            depthRenderer: import("../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize").DepthRendererWithSize | null;
+            sceneRenderTarget: import("@babylonjs/core").RenderTargetTexture | null;
+            depthRenderTarget: import("@babylonjs/core").RenderTargetTexture | null;
+            scenePlane: import("@babylonjs/core").Mesh | null;
+            scenePlaneMaterial: import("@babylonjs/core").ShaderMaterial | null;
+            scenePlaneCamera: import("@babylonjs/core").TargetCamera | null;
             backdropImageSize: {
                 width: number;
                 height: number;
@@ -246,9 +246,9 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             isLoaded: boolean;
         };
         refs: <T_ModelName_1 extends ModelName>(_modelName: T_ModelName_1) => {
-            container: import("@babylonjs/core").AssetContainer;
-            materialRef: import("@babylonjs/core").PBRMaterial;
-            materialRefs: import("@babylonjs/core").PBRMaterial[];
+            container: import("@babylonjs/core").AssetContainer | null;
+            materialRef: import("@babylonjs/core").PBRMaterial | null;
+            materialRefs: import("@babylonjs/core").PBRMaterial[] | null;
         };
     };
     dolls: {
@@ -276,9 +276,9 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             positionMoveConfigName: string;
             positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<DollOptions[K_DollName]["model"]>;
-            nextSpotName: AnySpotName;
+            nextSpotName: AnySpotName | null;
         }; };
-        state: <T_DollName extends string, T_ModelName_2 extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName_2) => {
+        state: <T_DollName extends string, T_ModelName_2 extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName_2 | undefined) => {
             nowAnimation: string;
             animationLoops: boolean;
             inRange: Record<DollName, import("./dolls/indexUtils").InRangeForDoll>;
@@ -302,7 +302,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             positionMoveConfigName: string;
             positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_ModelName_2>;
-            nextSpotName: AnySpotName;
+            nextSpotName: AnySpotName | null;
         };
         refs: <T_DollName_1 extends DollName, T_ModelName_3 extends ModelName>(dollName: T_DollName_1, itemState: {
             nowAnimation: string;
@@ -328,7 +328,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             positionMoveConfigName: string;
             positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_ModelName_3>;
-            nextSpotName: AnySpotName;
+            nextSpotName: AnySpotName | null;
         }) => {
             animWeightsMoverRefs: {
                 stateNames: {
@@ -374,18 +374,18 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
                 };
                 physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
             };
-            meshRef: import("@babylonjs/core").AbstractMesh;
-            otherMeshes: Record<MeshNameByModel[NonNullable<T_ModelName_3>], import("@babylonjs/core").AbstractMesh>;
-            entriesRef: import("@babylonjs/core").InstantiatedEntries;
-            aniGroupsRef: Record<AnimationNameByModel[T_ModelName_3], import("@babylonjs/core").AnimationGroup>;
+            meshRef: import("@babylonjs/core").AbstractMesh | null;
+            otherMeshes: Record<MeshNameByModel[NonNullable<T_ModelName_3>], import("@babylonjs/core").AbstractMesh | null>;
+            entriesRef: import("@babylonjs/core").InstantiatedEntries | null;
+            aniGroupsRef: Record<AnimationNameByModel[T_ModelName_3], import("@babylonjs/core").AnimationGroup> | null;
             assetRefs: {
                 meshes: Record<"__root__" | MeshNameByModel[T_ModelName_3], import("@babylonjs/core").AbstractMesh>;
                 skeleton: import("@babylonjs/core").Skeleton;
                 bones: Record<BoneNameByModel[T_ModelName_3], import("@babylonjs/core").Bone>;
                 aniGroups: Record<AnimationNameByModel[T_ModelName_3], import("@babylonjs/core").AnimationGroup>;
                 materials: Record<MaterialNameByModel[T_ModelName_3], import("@babylonjs/core").Material>;
-            };
-            groundRef: import("@babylonjs/core").AbstractMesh;
+            } | null;
+            groundRef: import("@babylonjs/core").AbstractMesh | null;
             checkCollisions: boolean;
         };
     };
@@ -396,20 +396,20 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             atCamCubes: Partial<Record<AnyCameraName, boolean>>;
             hasLeftFirstTrigger: boolean;
         }; };
-        state: <T_CharacterName extends string, T_DollName_2 extends DollName>(_characterName: T_CharacterName, dollName?: T_DollName_2) => {
+        state: <T_CharacterName extends string, T_DollName_2 extends DollName>(_characterName: T_CharacterName, dollName?: T_DollName_2 | undefined) => {
             dollName: DollName;
             atTriggers: Partial<Record<AnyTriggerName, boolean>>;
             atCamCubes: Partial<Record<AnyCameraName, boolean>>;
             hasLeftFirstTrigger: boolean;
         };
         refs: <T_CharacterName_1 extends string>(_characterName: T_CharacterName_1) => {
-            testRef: any;
+            testRef: null;
         };
     };
     players: {
         startStates: {
             main: {
-                lastSafeInputAngle: number;
+                lastSafeInputAngle: number | null;
                 inputVelocity: import("shutils/dist/points2d").Point2D;
                 isJumping: boolean;
                 isOnGround: boolean;
@@ -425,7 +425,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             };
         };
         state: () => {
-            lastSafeInputAngle: number;
+            lastSafeInputAngle: number | null;
             inputVelocity: import("shutils/dist/points2d").Point2D;
             isJumping: boolean;
             isOnGround: boolean;
@@ -441,14 +441,14 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
         };
         refs: () => {
             walkSpeed: number;
-            canJumpTimeout: number;
+            canJumpTimeout: number | null;
         };
     };
     speechBubbles: {
         state: <T_ItemName_1 extends string>(_itemName: T_ItemName_1, options?: {
-            font?: FontName;
-            character?: CharacterName;
-        }) => {
+            font?: FontName | undefined;
+            character?: CharacterName | undefined;
+        } | undefined) => {
             isVisible: boolean;
             isFullyHidden: boolean;
             goalText: string;
@@ -457,7 +457,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             stylesBySpecialText: Record<string, import("react").CSSProperties>;
             _specialTextByLetterIndex: Record<number, string>;
             _goalTextWordLetterArrays: string[][];
-            forCharacter: CharacterName;
+            forCharacter: CharacterName | null;
             position: import("shutils/dist/points2d").Point2D;
             typingFinished: boolean;
             nowVideoName: SpeechVidName;
@@ -467,8 +467,8 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
         refs: () => {
             bubbleRef: any;
             textRef: any;
-            currentTimeout: number;
-            videoRef: HTMLVideoElement;
+            currentTimeout: number | null;
+            videoRef: HTMLVideoElement | null;
         };
         startStates: { [K_CharacterName_1 in CharacterName]: {
             isVisible: boolean;
@@ -479,7 +479,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             stylesBySpecialText: Record<string, import("react").CSSProperties>;
             _specialTextByLetterIndex: Record<number, string>;
             _goalTextWordLetterArrays: string[][];
-            forCharacter: CharacterName;
+            forCharacter: CharacterName | null;
             position: import("shutils/dist/points2d").Point2D;
             typingFinished: boolean;
             nowVideoName: SpeechVidName;
@@ -489,28 +489,28 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
     };
     places: {
         startStates: { [P_PlaceName_1 in PlaceName]: {
-            wantedCamNameAtLoop: CameraNameByPlace[P_PlaceName_1];
-            wantedCamName: CameraNameByPlace[P_PlaceName_1];
+            wantedCamNameAtLoop: CameraNameByPlace[P_PlaceName_1] | null;
+            wantedCamName: CameraNameByPlace[P_PlaceName_1] | null;
             nowCamName: CameraNameByPlace[P_PlaceName_1];
         }; };
         state: <T_PlaceName extends PlaceName>(itemName: string | T_PlaceName) => {
-            wantedCamWhenNextPlaceLoads: CameraNameByPlace[PlaceName];
-            nextCamNameWhenVidPlays: CameraNameByPlace[PlaceName];
-            wantedCamNameAtLoop: CameraNameByPlace[PlaceName];
-            wantedCamName: CameraNameByPlace[PlaceName];
+            wantedCamWhenNextPlaceLoads: CameraNameByPlace[PlaceName] | null;
+            nextCamNameWhenVidPlays: CameraNameByPlace[PlaceName] | null;
+            wantedCamNameAtLoop: CameraNameByPlace[PlaceName] | null;
+            wantedCamName: CameraNameByPlace[PlaceName] | null;
             nowCamName: AnyCameraName;
         };
         refs: <T_PlaceName_1 extends PlaceName>(itemName: T_PlaceName_1 & string) => {
-            rootMesh: import("@babylonjs/core").AbstractMesh;
+            rootMesh: import("@babylonjs/core").AbstractMesh | null;
             spotPositions: { [P_SpotName in SpotNameByPlace[PlaceName]]: import("@babylonjs/core").Vector3; };
             spotRotations: { [P_SpotName_1 in SpotNameByPlace[PlaceName]]: import("@babylonjs/core").Vector3; };
-            soundspotSounds: { [P_SoundName in SoundspotNameByPlace[PlaceName]]: import("@babylonjs/core").Sound; };
-            triggerMeshes: { [P_TriggerName in TriggerNameByPlace[PlaceName]]: import("@babylonjs/core").AbstractMesh; };
-            wallMeshes: { [P_TriggerName_1 in WallNameByPlace[PlaceName]]: import("@babylonjs/core").AbstractMesh; };
+            soundspotSounds: { [P_SoundName in SoundspotNameByPlace[PlaceName]]: import("@babylonjs/core").Sound | null; };
+            triggerMeshes: { [P_TriggerName in TriggerNameByPlace[PlaceName]]: import("@babylonjs/core").AbstractMesh | null; };
+            wallMeshes: { [P_TriggerName_1 in WallNameByPlace[PlaceName]]: import("@babylonjs/core").AbstractMesh | null; };
             camsRefs: { [P_CameraName in CameraNameByPlace[PlaceName]]: {
-                camera: import("@babylonjs/core").TargetCamera;
+                camera: import("@babylonjs/core").TargetCamera | null;
                 camCubeMeshes: import("@babylonjs/core").AbstractMesh[];
-                probeTexture: import("@babylonjs/core").CubeTexture;
+                probeTexture: import("@babylonjs/core").CubeTexture | null;
                 isTriggerable: boolean;
             }; };
         };
@@ -519,7 +519,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
         state: <T_ItemName_2 extends string>(itemName: T_ItemName_2) => {
             vidState: import("./safeVids").VidState;
             playType: "pause" | "play";
-            wantedSeekTime: number;
+            wantedSeekTime: number | null;
             wantToPlay: boolean;
             wantToPause: boolean;
             wantToUnload: boolean;
@@ -528,12 +528,12 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             autoplay: boolean;
         };
         refs: () => {
-            videoElement: HTMLVideoElement;
+            videoElement: HTMLVideoElement | null;
         };
         startStates: import("concep").InitialItemsState<(<T_ItemName_2 extends string>(itemName: T_ItemName_2) => {
             vidState: import("./safeVids").VidState;
             playType: "pause" | "play";
-            wantedSeekTime: number;
+            wantedSeekTime: number | null;
             wantToPlay: boolean;
             wantToPause: boolean;
             wantToUnload: boolean;
@@ -544,11 +544,11 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
     };
     stackVids: {
         state: <T_ItemName_3 extends string>(itemName: T_ItemName_3) => {
-            vidAId: string;
-            vidBId: string;
+            vidAId: string | null;
+            vidBId: string | null;
             vidState: import("./stackVids").StackVidState;
             playType: "pause" | "play";
-            wantedSeekTime: number;
+            wantedSeekTime: number | null;
             wantToPlay: boolean;
             wantToPause: boolean;
             wantToUnload: boolean;
@@ -558,11 +558,11 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
         };
         refs: () => {};
         startStates: import("concep").InitialItemsState<(<T_ItemName_3 extends string>(itemName: T_ItemName_3) => {
-            vidAId: string;
-            vidBId: string;
+            vidAId: string | null;
+            vidBId: string | null;
             vidState: import("./stackVids").StackVidState;
             playType: "pause" | "play";
-            wantedSeekTime: number;
+            wantedSeekTime: number | null;
             wantToPlay: boolean;
             wantToPause: boolean;
             wantToUnload: boolean;
@@ -573,14 +573,14 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
     };
     sectionVids: {
         state: <T_ItemName_4 extends string>(itemName: T_ItemName_4) => {
-            stackVidId_playing: string;
-            stackVidId_waiting: string;
+            stackVidId_playing: string | null;
+            stackVidId_waiting: string | null;
             sectionVidState: import("./sectionVids").SectionVidState;
             nowSection: {
                 time: number;
                 duration: number;
             };
-            wantedSection: import("./sectionVids").VidSection;
+            wantedSection: import("./sectionVids").VidSection | null;
             wantToLoad: boolean;
             wantToUnload: boolean;
             wantToLoop: boolean;
@@ -589,18 +589,18 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             nowSectionSeekedTime: number;
         };
         refs: () => {
-            waitingForPlayToDoLoopRuleName: string;
-            waitingForPlayToChangeSectionRuleName: string;
+            waitingForPlayToDoLoopRuleName: string | null;
+            waitingForPlayToChangeSectionRuleName: string | null;
         };
         startStates: Record<PlaceName, {
-            stackVidId_playing: string;
-            stackVidId_waiting: string;
+            stackVidId_playing: string | null;
+            stackVidId_waiting: string | null;
             sectionVidState: import("./sectionVids").SectionVidState;
             nowSection: {
                 time: number;
                 duration: number;
             };
-            wantedSection: import("./sectionVids").VidSection;
+            wantedSection: import("./sectionVids").VidSection | null;
             wantToLoad: boolean;
             wantToUnload: boolean;
             wantToLoop: boolean;

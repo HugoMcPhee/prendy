@@ -1,12 +1,12 @@
 import { Vector3 } from "@babylonjs/core";
 import { BackdopConcepFuncs, BackdopOptionsUntyped, ModelInfoByNamePlaceholder, PlaceholderBackdopConcepts } from "../../../concepts/typedConcepFuncs";
 export declare function makeCharacterStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, BackdopOptions extends BackdopOptionsUntyped, ModelName extends string, PlaceName extends string, DollName extends string, CharacterName extends string, AnimationNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>, SpotNameByPlace extends Record<PlaceName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, modelInfoByName: ModelInfoByName, characterNames: readonly CharacterName[]): {
-    setCharAnimation: <T_Character extends CharacterName>(character: T_Character, animation: AnimationNameByModel[any]) => void;
+    setCharAnimation: <T_Character extends CharacterName>(character: T_Character, animation: AnimationNameByModel[NonNullable<BackdopConcepts["dolls"]["startStates"]>[NonNullable<NonNullable<BackdopConcepts["characters"]["startStates"]>[T_Character]["dollName"] & DollName>]["modelName"] & ModelName]) => void;
     setCharPosition: (charName: CharacterName, newPosition: Vector3) => void;
     setCharRotationY: (charName: CharacterName, newRotationY: number) => void;
     springCharRotation: (charName: CharacterName, newRotationY: number) => void;
     springAddToCharRotationY: (charName: CharacterName, addedRotation: number) => void;
-    lookAtOtherCharacter: (charA: CharacterName, charB?: CharacterName) => void;
+    lookAtOtherCharacter: (charA: CharacterName, charB?: CharacterName | undefined) => void;
     lookAtEachother: (characterA: CharacterName, characterB?: CharacterName) => void;
     moveCharacterAt2DAngle: (charName: CharacterName, angle: number) => void;
 };

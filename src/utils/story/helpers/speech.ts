@@ -89,9 +89,14 @@ export function makeSpeechStoryHelpers<
       const { dollName: playerDollName } = getCharDollStuff(
         playerCharacter as CharacterName
       );
-      getTypingDelayForText(text, character);
+      getTypingDelayForText(text, character as any); // NOTE at the moment CharacterName and SpeechBubbleName are the same
       const timeBasedOnText =
-        MIN_AUTO_SPEECH_TIME + getTypingDelayForText(text, character) * 2;
+        MIN_AUTO_SPEECH_TIME +
+        getTypingDelayForText(
+          text,
+          character as any // NOTE at the moment CharacterName and SpeechBubbleName are the same
+        ) *
+          2;
       const editedTime = time ?? timeBasedOnText;
 
       if (showOnce && showSpeechRefs.shownTextBools[text]) return;

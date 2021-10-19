@@ -5,9 +5,9 @@ export declare function makeScenePlaneUtils<ConcepFuncs extends BackdopConcepFun
     getPositionOnPlane: (theMesh: AbstractMesh) => Vector3;
     updatePlanePositionToFocusOnMesh: ({ meshRef, instant, }: {
         meshRef: AbstractMesh;
-        instant?: boolean;
+        instant?: boolean | undefined;
     }) => void;
-    focusScenePlaneOnFocusedDoll: (instant?: "instant") => void;
+    focusScenePlaneOnFocusedDoll: (instant?: "instant" | undefined) => void;
     getViewSize: () => {
         width: any;
         height: any;

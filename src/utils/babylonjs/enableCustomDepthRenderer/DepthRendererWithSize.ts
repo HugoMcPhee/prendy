@@ -249,7 +249,7 @@ export class DepthRendererWithSize {
       return false;
     }
 
-    var defines = [];
+    var defines = [] as string[];
 
     var attribs = [VertexBuffer.PositionKind];
 

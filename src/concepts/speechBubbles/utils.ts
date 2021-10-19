@@ -9,7 +9,7 @@ export function makeSpeechBubblesStoreUtils<
 >(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
   const { getState } = concepFuncs;
 
-  type SpeechBubbleName = keyof typeof backdopConcepts.speechBubbles.startStates;
+  type SpeechBubbleName = keyof BackdopConcepts["speechBubbles"]["startStates"];
 
   function getTypingDelayForLetter(
     letter: string,

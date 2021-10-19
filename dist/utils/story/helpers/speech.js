@@ -28,8 +28,11 @@ export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStar
             const { dollName } = getCharDollStuff(character);
             const { playerCharacter, planeZoom: prevPlaneZoom, } = getState().global.main;
             const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
-            getTypingDelayForText(text, character);
-            const timeBasedOnText = MIN_AUTO_SPEECH_TIME + getTypingDelayForText(text, character) * 2;
+            getTypingDelayForText(text, character); // NOTE at the moment CharacterName and SpeechBubbleName are the same
+            const timeBasedOnText = MIN_AUTO_SPEECH_TIME +
+                getTypingDelayForText(text, character // NOTE at the moment CharacterName and SpeechBubbleName are the same
+                ) *
+                    2;
             const editedTime = time !== null && time !== void 0 ? time : timeBasedOnText;
             if (showOnce && showSpeechRefs.shownTextBools[text])
                 return;

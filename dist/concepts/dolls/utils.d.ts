@@ -19,6 +19,6 @@ ModelName extends string, ModelInfoByName extends ModelInfoByNamePlaceholder<Mod
     }) => void;
     updateDollScreenPosition: ({ dollName, instant, }: {
         dollName: DollName;
-        instant?: boolean;
+        instant?: boolean | undefined;
     }) => void;
 };

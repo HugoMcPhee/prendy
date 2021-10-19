@@ -99,7 +99,7 @@ CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends Pla
         placeRefs: Record<any, any>;
         camsRefs: any;
         camRefs: any;
-    }) => void; }>; }>; }>, characterName?: CharacterName) => <T_PickupName extends PickupName>(pickupName: T_PickupName) => boolean;
+    }) => void; }>; }>; }>, characterName?: CharacterName) => <T_PickupName extends PickupName>(pickupName: T_PickupName) => false | undefined;
     makeOnUsePickupGenerally: (callBacksObject: Partial<{ [P_PickupName_1 in PickupName]: (usefulStuff: {
         storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
         storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
@@ -129,7 +129,7 @@ CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends Pla
         placeRefs: Record<any, any>;
         camsRefs: any;
         camRefs: any;
-    }) => void; }>; }>, characterName?: CharacterName) => <T_PickupName_2 extends PickupName>(pickupName: T_PickupName_2) => boolean;
+    }) => void; }>; }>, characterName?: CharacterName) => <T_PickupName_2 extends PickupName>(pickupName: T_PickupName_2) => false | undefined;
     makePlaceLoadRules: (atStartOfEachPlace: (usefulStuff: {
         storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
         storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
@@ -222,10 +222,10 @@ CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends Pla
         camsRefs: any;
         camRefs: any;
     }) => void; }>, options?: {
-        characterName?: CharacterName;
-        distanceType?: "touch" | "talk";
-        whenLeave?: boolean;
-    }) => {
+        characterName?: CharacterName | undefined;
+        distanceType?: "touch" | "talk" | undefined;
+        whenLeave?: boolean | undefined;
+    } | undefined) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
@@ -247,9 +247,9 @@ CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends Pla
         camsRefs: any;
         camRefs: any;
     }) => void; }>; }>, options?: {
-        characterName?: CharacterName;
-        whenLeave?: boolean;
-    }) => {
+        characterName?: CharacterName | undefined;
+        whenLeave?: boolean | undefined;
+    } | undefined) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;

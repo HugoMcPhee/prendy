@@ -27,10 +27,10 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
             planePosIsMoving: boolean;
             planePosMoveMode: import("concep-movers/dist/types").MoveMode;
             planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            wantedSegmentWhenNextPlaceLoads: AnySegmentName;
-            nextSegmentNameWhenVidPlays: AnySegmentName;
-            wantedSegmentNameAtLoop: AnySegmentName;
-            wantedSegmentName: AnySegmentName;
+            wantedSegmentWhenNextPlaceLoads: AnySegmentName | null;
+            nextSegmentNameWhenVidPlays: AnySegmentName | null;
+            wantedSegmentNameAtLoop: AnySegmentName | null;
+            wantedSegmentName: AnySegmentName | null;
             nowSegmentName: AnySegmentName;
             wantToLoop: boolean;
             modelNamesLoaded: ModelName[];
@@ -38,7 +38,7 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
             isLoadingBetweenPlaces: boolean;
             nowPlaceName: PlaceName;
             readyToSwapPlace: boolean;
-            nextPlaceName: PlaceName;
+            nextPlaceName: PlaceName | null;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
             playerCharacter: CharacterName;
@@ -70,10 +70,10 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
         planePosIsMoving: boolean;
         planePosMoveMode: import("concep-movers/dist/types").MoveMode;
         planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-        wantedSegmentWhenNextPlaceLoads: AnySegmentName;
-        nextSegmentNameWhenVidPlays: AnySegmentName;
-        wantedSegmentNameAtLoop: AnySegmentName;
-        wantedSegmentName: AnySegmentName;
+        wantedSegmentWhenNextPlaceLoads: AnySegmentName | null;
+        nextSegmentNameWhenVidPlays: AnySegmentName | null;
+        wantedSegmentNameAtLoop: AnySegmentName | null;
+        wantedSegmentName: AnySegmentName | null;
         nowSegmentName: AnySegmentName;
         wantToLoop: boolean;
         modelNamesLoaded: ModelName[];
@@ -81,7 +81,7 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
         isLoadingBetweenPlaces: boolean;
         nowPlaceName: PlaceName;
         readyToSwapPlace: boolean;
-        nextPlaceName: PlaceName;
+        nextPlaceName: PlaceName | null;
         loadingOverlayToggled: boolean;
         loadingOverlayFullyShowing: boolean;
         playerCharacter: CharacterName;
@@ -90,19 +90,19 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
         focusedDoll: DollName;
     };
     refs: () => {
-        sounds: { [K_SoundName in SoundName]: import("@babylonjs/core").Sound; };
-        music: { [K_MusicName in MusicName]: import("@babylonjs/core").Sound; };
+        sounds: { [K_SoundName in SoundName]: import("@babylonjs/core").Sound | null; };
+        music: { [K_MusicName in MusicName]: import("@babylonjs/core").Sound | null; };
         musicEffects: {
-            lowPass: BiquadFilterNode;
-            compress: DynamicsCompressorNode;
-            extraGain: GainNode;
+            lowPass: BiquadFilterNode | null;
+            compress: DynamicsCompressorNode | null;
+            extraGain: GainNode | null;
         };
         isHoveringPickupButton: boolean;
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
-        aConvoIsHappening_timeout: number;
-        camSegmentRulesOptions: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_CamName in keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }>;
-        onPickupButtonClick: (pickupName: any) => void;
+        aConvoIsHappening_timeout: number | null;
+        camSegmentRulesOptions: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_CamName in keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+        onPickupButtonClick: ((pickupName: any) => void) | null;
         hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
         planeZoomMoverRefs: {
             velocity: number;
@@ -132,18 +132,18 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
             };
             physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
         };
-        depthVideoTex: CustomVideoTexture;
-        colorVideoTex: CustomVideoTexture;
+        depthVideoTex: CustomVideoTexture | null;
+        colorVideoTex: CustomVideoTexture | null;
         scenes: {
-            main: Scene;
-            backdrop: Scene;
+            main: Scene | null;
+            backdrop: Scene | null;
         };
-        depthRenderer: DepthRendererWithSize;
-        sceneRenderTarget: RenderTargetTexture;
-        depthRenderTarget: RenderTargetTexture;
-        scenePlane: Mesh;
-        scenePlaneMaterial: ShaderMaterial;
-        scenePlaneCamera: TargetCamera;
+        depthRenderer: DepthRendererWithSize | null;
+        sceneRenderTarget: RenderTargetTexture | null;
+        depthRenderTarget: RenderTargetTexture | null;
+        scenePlane: Mesh | null;
+        scenePlaneMaterial: ShaderMaterial | null;
+        scenePlaneCamera: TargetCamera | null;
         backdropImageSize: {
             width: number;
             height: number;

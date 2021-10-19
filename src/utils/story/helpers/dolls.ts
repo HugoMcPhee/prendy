@@ -34,8 +34,10 @@ export function makeDollStoryHelpers<
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type StartState_Characters = typeof backdopConcepts.characters.startStates;
-  type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+  type StartState_Characters = NonNullable<
+    BackdopConcepts["characters"]["startStates"]
+  >;
+  type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
 
   type DollNameFromCharacter<
     T_CharacterName extends CharacterName
@@ -56,10 +58,6 @@ export function makeDollStoryHelpers<
   type MeshNamesFromDoll<
     T_DollName extends DollName
   > = MeshNameByModel[ModelNameFromDoll<T_DollName>];
-
-  const dollStartStates = backdopConcepts.dolls.startStates;
-
-  type DollStartStates = typeof dollStartStates;
 
   const { getModelNameFromDoll } = makeDollStoryUtils<
     ConcepFuncs,
@@ -130,7 +128,7 @@ export function makeDollStoryHelpers<
 
   function setDollAnimation<T_Doll extends DollName>(
     doll: T_Doll,
-    animation: AnimationNameByModel[DollStartStates[T_Doll]["modelName"] &
+    animation: AnimationNameByModel[StartState_Dolls[T_Doll]["modelName"] &
       ModelName] // NOTE & ModelName might mess with the type
   ) {
     setState({ dolls: { [doll]: { nowAnimation: animation } } });
@@ -246,7 +244,7 @@ export function makeDollStoryHelpers<
 
     const otherMeshes = getRefs().dolls[dollName].otherMeshes;
     const modelName = getModelNameFromDoll(dollName);
-    const modelInfo = modelInfoByName[modelName as ModelName];
+    const modelInfo = modelInfoByName[(modelName as unknown) as ModelName];
     const typedMeshNames = (modelInfo.meshNames as unknown) as MeshNamesFromDoll<
       T_DollName
     >[];

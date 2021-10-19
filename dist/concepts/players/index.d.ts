@@ -3,7 +3,7 @@ import { BackdopOptionsUntyped } from "../typedConcepFuncs";
 export default function players<BackdopOptions extends BackdopOptionsUntyped, AnyAnimationName extends string>(backdopStartOptions: BackdopOptions): {
     startStates: {
         main: {
-            lastSafeInputAngle: number;
+            lastSafeInputAngle: number | null;
             inputVelocity: Point2D;
             isJumping: boolean;
             isOnGround: boolean;
@@ -19,7 +19,7 @@ export default function players<BackdopOptions extends BackdopOptionsUntyped, An
         };
     };
     state: () => {
-        lastSafeInputAngle: number;
+        lastSafeInputAngle: number | null;
         inputVelocity: Point2D;
         isJumping: boolean;
         isOnGround: boolean;
@@ -35,6 +35,6 @@ export default function players<BackdopOptions extends BackdopOptionsUntyped, An
     };
     refs: () => {
         walkSpeed: number;
-        canJumpTimeout: number;
+        canJumpTimeout: number | null;
     };
 };

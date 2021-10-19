@@ -18,9 +18,9 @@ export declare function makeGetBackdopOptions<PickupName extends string, PlaceNa
     doorsInfo?: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: { [P_PlaceName_1 in Exclude<PlaceName, P_PlaceName>]: {
         toPlace: P_PlaceName_1;
         toSpot: SpotNameByPlace[P_PlaceName_1];
-        toCam?: CameraNameByPlace[P_PlaceName_1];
-        toSegment?: SegmentNameByPlace[P_PlaceName_1];
-    }; }[Exclude<PlaceName, P_PlaceName>]; }>; }>;
+        toCam?: CameraNameByPlace[P_PlaceName_1] | undefined;
+        toSegment?: SegmentNameByPlace[P_PlaceName_1] | undefined;
+    }; }[Exclude<PlaceName, P_PlaceName>]; }>; }> | undefined;
     modelNamesByPlace: ModelNamesByPlaceLoose;
 }) => {
     place: T_Place;
@@ -42,8 +42,8 @@ export declare function makeGetBackdopOptions<PickupName extends string, PlaceNa
     doorsInfo?: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: { [P_PlaceName_1 in Exclude<PlaceName, P_PlaceName>]: {
         toPlace: P_PlaceName_1;
         toSpot: SpotNameByPlace[P_PlaceName_1];
-        toCam?: CameraNameByPlace[P_PlaceName_1];
-        toSegment?: SegmentNameByPlace[P_PlaceName_1];
-    }; }[Exclude<PlaceName, P_PlaceName>]; }>; }>;
+        toCam?: CameraNameByPlace[P_PlaceName_1] | undefined;
+        toSegment?: SegmentNameByPlace[P_PlaceName_1] | undefined;
+    }; }[Exclude<PlaceName, P_PlaceName>]; }>; }> | undefined;
     modelNamesByPlace: ModelNamesByPlaceLoose;
 };

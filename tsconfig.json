@@ -19,7 +19,8 @@
     "allowSyntheticDefaultImports": true,
     "rootDir": "src",
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strictNullChecks": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

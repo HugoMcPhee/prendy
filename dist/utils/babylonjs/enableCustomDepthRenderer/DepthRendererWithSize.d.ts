@@ -30,7 +30,7 @@ export declare class DepthRendererWithSize {
      * @param camera The camera to be used to render the depth map (default: scene's active camera)
      * @param storeNonLinearDepth Defines whether the depth is stored linearly like in Babylon Shadows or directly like glFragCoord.z
      */
-    constructor(scene: Scene, type: number, camera: Nullable<Camera>, storeNonLinearDepth: boolean, customSize: {
+    constructor(scene: Scene, type: number | undefined, camera: Nullable<Camera> | undefined, storeNonLinearDepth: boolean | undefined, customSize: {
         width: number;
         height: number;
     });

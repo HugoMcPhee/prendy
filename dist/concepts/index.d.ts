@@ -253,7 +253,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
     };
     dolls: {
         startStates: { [K_DollName in DollName]: {
-            nowAnimation: string;
+            nowAnimation: AnyAnimationName;
             animationLoops: boolean;
             inRange: Record<DollName, import("./dolls/indexUtils").InRangeForDoll>;
             animWeights: Record<AnimationNameByModel[ModelName], number>;
@@ -279,7 +279,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             nextSpotName: AnySpotName | null;
         }; };
         state: <T_DollName extends string, T_ModelName_2 extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName_2 | undefined) => {
-            nowAnimation: string;
+            nowAnimation: AnyAnimationName;
             animationLoops: boolean;
             inRange: Record<DollName, import("./dolls/indexUtils").InRangeForDoll>;
             animWeights: Record<AnimationNameByModel[ModelName], number>;
@@ -305,7 +305,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             nextSpotName: AnySpotName | null;
         };
         refs: <T_DollName_1 extends DollName, T_ModelName_3 extends ModelName>(dollName: T_DollName_1, itemState: {
-            nowAnimation: string;
+            nowAnimation: AnyAnimationName;
             animationLoops: boolean;
             inRange: Record<DollName, import("./dolls/indexUtils").InRangeForDoll>;
             animWeights: Record<AnimationNameByModel[ModelName], number>;

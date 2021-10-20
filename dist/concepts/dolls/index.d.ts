@@ -2,7 +2,7 @@ import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skel
 import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
 export default function dolls<ModelName extends string, DollName extends string, AnySpotName extends string, AnyAnimationName extends string, DollOptions extends DollOptionsPlaceholder<DollName, ModelName>, AnimationNameByModel extends Record<ModelName, AnyAnimationName>, BoneNameByModel extends Record<ModelName, string>, MaterialNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(modelNames: readonly ModelName[], dollNames: readonly DollName[], modelInfoByName: ModelInfoByName, dollOptions: DollOptions): {
     startStates: { [K_DollName in DollName]: {
-        nowAnimation: string;
+        nowAnimation: AnyAnimationName;
         animationLoops: boolean;
         inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
         animWeights: Record<AnimationNameByModel[ModelName], number>;
@@ -28,7 +28,7 @@ export default function dolls<ModelName extends string, DollName extends string,
         nextSpotName: AnySpotName | null;
     }; };
     state: <T_DollName extends string, T_ModelName extends ModelName>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
-        nowAnimation: string;
+        nowAnimation: AnyAnimationName;
         animationLoops: boolean;
         inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
         animWeights: Record<AnimationNameByModel[ModelName], number>;
@@ -54,7 +54,7 @@ export default function dolls<ModelName extends string, DollName extends string,
         nextSpotName: AnySpotName | null;
     };
     refs: <T_DollName_1 extends DollName, T_ModelName_1 extends ModelName>(dollName: T_DollName_1, itemState: {
-        nowAnimation: string;
+        nowAnimation: AnyAnimationName;
         animationLoops: boolean;
         inRange: Record<DollName, import("./indexUtils").InRangeForDoll>;
         animWeights: Record<AnimationNameByModel[ModelName], number>;

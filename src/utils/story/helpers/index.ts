@@ -1,6 +1,8 @@
 import {
   BackdopConcepFuncs,
   BackdopOptionsUntyped,
+  CharacterOptionsPlaceholder,
+  DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
@@ -30,15 +32,22 @@ export function makeBackdopStoryHelpers<
   AnyAnimationName extends string,
   PickupName extends string,
   MusicName extends string,
+  FontName extends string,
   MusicFiles extends Record<MusicName, string>,
-  AnimationNameByModel extends Record<ModelName, string>,
+  AnimationNameByModel extends Record<any, string>,
   MeshNameByModel extends Record<ModelName, string>,
   SpotNameByPlace extends Record<PlaceName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   WallNameByPlace extends Record<PlaceName, string>,
   SegmentNameByPlace extends Record<PlaceName, string>,
-  CameraNameByPlace extends Record<PlaceName, string>
+  CameraNameByPlace extends Record<PlaceName, string>,
+  CharacterOptions extends CharacterOptionsPlaceholder<
+    CharacterName,
+    DollName,
+    FontName
+  >,
+  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
@@ -66,10 +75,13 @@ export function makeBackdopStoryHelpers<
     PlaceName,
     DollName,
     CharacterName,
+    FontName,
     AnimationNameByModel,
     MeshNameByModel,
     SpotNameByPlace,
-    ModelInfoByName
+    ModelInfoByName,
+    CharacterOptions,
+    DollOptions
   >(
     concepFuncs,
     backdopConcepts,
@@ -99,10 +111,13 @@ export function makeBackdopStoryHelpers<
     PlaceName,
     DollName,
     CharacterName,
+    FontName,
     AnimationNameByModel,
     MeshNameByModel,
     SpotNameByPlace,
-    ModelInfoByName
+    ModelInfoByName,
+    CharacterOptions,
+    DollOptions
   >(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
 
   const {
@@ -121,10 +136,13 @@ export function makeBackdopStoryHelpers<
     CharacterName,
     AnyAnimationName,
     PickupName,
+    FontName,
     AnimationNameByModel,
     MeshNameByModel,
     SpotNameByPlace,
-    ModelInfoByName
+    ModelInfoByName,
+    CharacterOptions,
+    DollOptions
   >(
     concepFuncs,
     backdopConcepts,

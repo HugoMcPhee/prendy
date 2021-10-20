@@ -78,7 +78,7 @@ export default function dolls<
       // nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName],
       // animation Weights mover
       ...makeModelAnimWeightsMoverState(safeModelName)("animWeights"),
-      nowAnimation: animationNames[0],
+      nowAnimation: animationNames[0] as AnyAnimationName, // NOTE AnimationNameFromDoll might work here?
       animationLoops: true,
       //
       inRange: defaultInRange(),

@@ -3,6 +3,8 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
   BackdopConcepFuncs,
   BackdopOptionsUntyped,
+  CharacterOptionsPlaceholder,
+  DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
 } from "../../../concepts/typedConcepFuncs";
@@ -19,10 +21,17 @@ export function makerPlayerStoryHelpers<
   CharacterName extends string,
   AnyAnimationName extends string,
   PickupName extends string,
-  AnimationNameByModel extends Record<ModelName, string>,
+  FontName extends string,
+  AnimationNameByModel extends Record<any, string>,
   MeshNameByModel extends Record<ModelName, string>,
   SpotNameByPlace extends Record<PlaceName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
+  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
+  CharacterOptions extends CharacterOptionsPlaceholder<
+    CharacterName,
+    DollName,
+    FontName
+  >,
+  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
@@ -42,10 +51,13 @@ export function makerPlayerStoryHelpers<
     PlaceName,
     DollName,
     CharacterName,
+    FontName,
     AnimationNameByModel,
     MeshNameByModel,
     SpotNameByPlace,
-    ModelInfoByName
+    ModelInfoByName,
+    CharacterOptions,
+    DollOptions
   >(
     concepFuncs,
     backdopConcepts,

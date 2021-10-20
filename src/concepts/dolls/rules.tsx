@@ -176,7 +176,7 @@ export function makeDollRules<
   DollName extends keyof StartState_Dolls & string,
   ModelName extends string,
   AnyAnimationName extends string,
-  AnimationNameByModel extends Record<ModelName, string>,
+  AnimationNameByModel extends Record<any, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<string>
   // DollName extends keyof ReturnType<ConcepFuncs["getRefs"]>["dolls"] & string,
 >(

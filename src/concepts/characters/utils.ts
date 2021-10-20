@@ -15,7 +15,7 @@ export function makeGetCharDollStuff<
   //   string
   // DollName extends keyof BackdopConcepts["dolls"]["startStates"] & string,
   // ModelName extends string,
-  // AnimationNameByModel extends Record<ModelName, string>,
+  // AnimationNameByModel extends Record<any, string>,
   // MeshNameByModel extends Record<ModelName, string>
 >(concepFuncs: ConcepFuncs) {
   const { getRefs, getState } = concepFuncs;

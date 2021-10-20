@@ -11,7 +11,7 @@ export declare function defaultInRangeForDoll(): {
     see: boolean;
 };
 export declare function getDefaultInRangeFunction<DollName extends string>(dollNames: readonly DollName[]): () => Record<DollName, InRangeForDoll>;
-export default function makeDollIndexUtils<DollName extends string, ModelName extends string, AnimationNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(dollNames: readonly DollName[], modelInfoByName: ModelInfoByName): {
+export default function makeDollIndexUtils<DollName extends string, ModelName extends string, AnimationNameByModel extends Record<any, string>, MeshNameByModel extends Record<ModelName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(dollNames: readonly DollName[], modelInfoByName: ModelInfoByName): {
     makeModelAnimWeightsMoverState: <T_ModelName extends ModelName>(modelName: T_ModelName) => <T_Name extends string, T_PhysicsNames extends string, T_InitialState extends {
         value?: Record<AnimationNameByModel[T_ModelName], number> | undefined;
         valueGoal?: Record<AnimationNameByModel[T_ModelName], number> | undefined;

@@ -118,8 +118,8 @@ export type CharacterOptionsPlaceholder<
 > = Record<
   CharacterName,
   {
-    doll: DollName;
-    font: FontName;
+    doll: any;
+    font: any;
   }
 >;
 
@@ -129,7 +129,7 @@ export type DollOptionsPlaceholder<
 > = Record<
   DollName,
   {
-    model: ModelName;
+    model: any;
   }
 >;
 

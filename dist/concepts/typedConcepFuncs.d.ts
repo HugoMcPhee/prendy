@@ -1,10 +1,10 @@
 import { ConceptsHelperTypes } from "concep";
 export declare type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
-    doll: DollName;
-    font: FontName;
+    doll: any;
+    font: any;
 }>;
 export declare type DollOptionsPlaceholder<DollName extends string, ModelName extends string> = Record<DollName, {
-    model: ModelName;
+    model: any;
 }>;
 export declare type PlaceholderBackdopConcepts = Record<any, {
     state: (itemName: any) => any;

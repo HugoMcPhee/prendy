@@ -38,7 +38,7 @@ export function getDefaultInRangeFunction<DollName extends string>(
 export default function makeDollIndexUtils<
   DollName extends string,
   ModelName extends string,
-  AnimationNameByModel extends Record<ModelName, string>,
+  AnimationNameByModel extends Record<any, string>,
   MeshNameByModel extends Record<ModelName, string>,
   ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
 >(dollNames: readonly DollName[], modelInfoByName: ModelInfoByName) {

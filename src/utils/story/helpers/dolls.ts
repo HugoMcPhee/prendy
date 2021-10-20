@@ -3,6 +3,8 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
   BackdopConcepFuncs,
   BackdopOptionsUntyped,
+  CharacterOptionsPlaceholder,
+  DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
 } from "../../../concepts/typedConcepFuncs";
@@ -20,10 +22,17 @@ export function makeDollStoryHelpers<
   PlaceName extends string,
   DollName extends string,
   CharacterName extends string,
-  AnimationNameByModel extends Record<ModelName, string>,
+  FontName extends string,
+  AnimationNameByModel extends Record<any, string>,
   MeshNameByModel extends Record<ModelName, string>,
   SpotNameByPlace extends Record<PlaceName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
+  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
+  CharacterOptions extends CharacterOptionsPlaceholder<
+    CharacterName,
+    DollName,
+    FontName
+  >,
+  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
@@ -34,22 +43,17 @@ export function makeDollStoryHelpers<
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type StartState_Characters = NonNullable<
-    BackdopConcepts["characters"]["startStates"]
-  >;
-  type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
-
   type DollNameFromCharacter<
     T_CharacterName extends CharacterName
-  > = StartState_Characters[T_CharacterName]["dollName"] & DollName; // NOTE the & might be messing with the returned type
+  > = CharacterOptions[T_CharacterName]["doll"];
 
   type ModelNameFromDoll<
     T_DollName extends DollName
-  > = StartState_Dolls[T_DollName]["modelName"] & ModelName; // NOTE the & might be messing with the returned type
+  > = DollOptions[T_DollName]["model"];
 
   type ModelNameFromCharacter<
     T_CharacterName extends CharacterName
-  > = ModelNameFromDoll<NonNullable<DollNameFromCharacter<T_CharacterName>>>;
+  > = ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
 
   type AnimationNameFromCharacter<
     T_CharacterName extends CharacterName
@@ -128,8 +132,7 @@ export function makeDollStoryHelpers<
 
   function setDollAnimation<T_Doll extends DollName>(
     doll: T_Doll,
-    animation: AnimationNameByModel[StartState_Dolls[T_Doll]["modelName"] &
-      ModelName] // NOTE & ModelName might mess with the type
+    animation: AnimationNameByModel[ModelNameFromDoll<T_Doll>]
   ) {
     setState({ dolls: { [doll]: { nowAnimation: animation } } });
   }

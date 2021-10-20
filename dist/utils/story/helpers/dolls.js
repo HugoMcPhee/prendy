@@ -52,8 +52,7 @@ export function makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartO
             },
         }));
     }
-    function setDollAnimation(doll, animation // NOTE & ModelName might mess with the type
-    ) {
+    function setDollAnimation(doll, animation) {
         setState({ dolls: { [doll]: { nowAnimation: animation } } });
     }
     function focusOnDoll(dollName, zoom) {

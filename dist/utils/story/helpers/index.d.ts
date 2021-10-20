@@ -1,10 +1,10 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs, BackdopOptionsUntyped, ModelInfoByNamePlaceholder, PlaceholderBackdopConcepts, PlaceInfoByNamePlaceholder } from "../../../concepts/typedConcepFuncs";
-export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, BackdopOptions extends BackdopOptionsUntyped, ModelName extends string, PlaceName extends string, DollName extends string, CharacterName extends string, AnyCameraName extends string, AnySegmentName extends string, AnyAnimationName extends string, PickupName extends string, MusicName extends string, MusicFiles extends Record<MusicName, string>, AnimationNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>, SpotNameByPlace extends Record<PlaceName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, WallNameByPlace extends Record<PlaceName, string>, SegmentNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, modelInfoByName: ModelInfoByName, characterNames: readonly CharacterName[], placeInfoByName: PlaceInfoByName, musicNames: readonly MusicName[], musicFiles: MusicFiles): {
+import { BackdopConcepFuncs, BackdopOptionsUntyped, CharacterOptionsPlaceholder, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceholderBackdopConcepts, PlaceInfoByNamePlaceholder } from "../../../concepts/typedConcepFuncs";
+export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, BackdopOptions extends BackdopOptionsUntyped, ModelName extends string, PlaceName extends string, DollName extends string, CharacterName extends string, AnyCameraName extends string, AnySegmentName extends string, AnyAnimationName extends string, PickupName extends string, MusicName extends string, FontName extends string, MusicFiles extends Record<MusicName, string>, AnimationNameByModel extends Record<any, string>, MeshNameByModel extends Record<ModelName, string>, SpotNameByPlace extends Record<PlaceName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, WallNameByPlace extends Record<PlaceName, string>, SegmentNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>, CharacterOptions extends CharacterOptionsPlaceholder<CharacterName, DollName, FontName>, DollOptions extends DollOptionsPlaceholder<DollName, ModelName>>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, modelInfoByName: ModelInfoByName, characterNames: readonly CharacterName[], placeInfoByName: PlaceInfoByName, musicNames: readonly MusicName[], musicFiles: MusicFiles): {
     lookAtEachother: (characterA: CharacterName, characterB?: CharacterName) => void;
     lookAtOtherCharacter: (charA: CharacterName, charB?: CharacterName | undefined) => void;
     moveCharacterAt2DAngle: (charName: CharacterName, angle: number) => void;
-    setCharAnimation: <T_Character extends CharacterName>(character: T_Character, animation: AnimationNameByModel[NonNullable<BackdopConcepts["dolls"]["startStates"]>[NonNullable<NonNullable<BackdopConcepts["characters"]["startStates"]>[T_Character]["dollName"] & DollName>]["modelName"] & ModelName]) => void;
+    setCharAnimation: <T_Character extends CharacterName>(character: T_Character, animation: AnimationNameByModel[DollOptions[CharacterOptions[T_Character]["doll"]]["model"]]) => void;
     setCharPosition: (charName: CharacterName, newPosition: import("@babylonjs/core").Vector3) => void;
     setCharRotationY: (charName: CharacterName, newRotationY: number) => void;
     springAddToCharRotationY: (charName: CharacterName, addedRotation: number) => void;
@@ -12,7 +12,7 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     focusOnDoll: <T_Doll extends DollName>(dollName: T_Doll, zoom?: number | undefined) => void;
     hideDoll: (dollName: DollName, shouldHide?: boolean) => void;
     moveDollAt2DAngle: (dollName: DollName, angle: number) => void;
-    setDollAnimation: <T_Doll_1 extends DollName>(doll: T_Doll_1, animation: AnimationNameByModel[NonNullable<BackdopConcepts["dolls"]["startStates"]>[T_Doll_1]["modelName"] & ModelName]) => void;
+    setDollAnimation: <T_Doll_1 extends DollName>(doll: T_Doll_1, animation: AnimationNameByModel[DollOptions[T_Doll_1]["model"]]) => void;
     setDollPosition: (dollName: DollName, newPositon: import("@babylonjs/core").Vector3) => void;
     setDollRotation: (dollName: DollName, newRotation: import("@babylonjs/core").Vector3) => void;
     setDollRotationY: (dollName: DollName, newRotationY: number) => void;
@@ -29,7 +29,7 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
         spot: SpotNameByPlace[T_PlaceName_1];
         doll: DollName;
     }) => void;
-    toggleDollMeshes: <T_DollName extends DollName>(dollName: T_DollName, toggledMeshes: Partial<Record<MeshNameByModel[NonNullable<BackdopConcepts["dolls"]["startStates"]>[T_DollName]["modelName"] & ModelName], boolean>>) => void;
+    toggleDollMeshes: <T_DollName extends DollName>(dollName: T_DollName, toggledMeshes: Partial<Record<MeshNameByModel[DollOptions[T_DollName]["model"]], boolean>>) => void;
     enableMovement: (canMove?: boolean, revertDelay?: number | undefined) => Promise<void>;
     isHolding: (pickupName: PickupName) => any;
     setPlayerAnimations: (newAnimationNames: {

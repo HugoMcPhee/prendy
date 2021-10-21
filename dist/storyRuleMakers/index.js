@@ -23,14 +23,14 @@ export function makeGetUsefulStoryStuff(concepFuncs) {
             globalState,
             chapterName: chapterName,
             storyPart: storyPart,
-            nowSegmentName,
-            nowPlaceName,
-            placeState,
-            nowCamName,
+            nowSegmentName: nowSegmentName,
+            nowPlaceName: nowPlaceName,
+            placeState: placeState,
+            nowCamName: nowCamName,
             placesRefs,
-            placeRefs,
-            camsRefs,
-            camRefs,
+            placeRefs: placeRefs,
+            camsRefs: camsRefs,
+            camRefs: camRefs,
         };
     };
 }

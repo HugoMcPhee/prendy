@@ -1,8 +1,8 @@
 TODO
 
-v0.4.5
+v0.4.6
 
-- storyPart and chapterName types in makeGetUsefulStoryStuff
+- more types in makeGetUsefulStoryStuff
 - fix types for place refs
 - added makeOtherUsefulBackdopUtils
 - supports nullable types

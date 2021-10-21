@@ -24,6 +24,9 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
   type AllPlacesState = AllState["places"];
   type AllPlacesRefs = AllRefs["places"];
 
+  type APlaceRefs = AllPlacesRefs[keyof AllPlacesRefs];
+  type APlaceRefsCamsRefs = APlaceRefs["camsRefs"];
+
   return function getUsefulStoryStuff() {
     const storyState = getState().story.main as StoryState;
     const storyRefs = getRefs().story.main as StoryRefs;
@@ -44,14 +47,14 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
       globalState,
       chapterName: chapterName as StoryState["chapterName"],
       storyPart: storyPart as StoryState["storyPart"],
-      nowSegmentName,
-      nowPlaceName,
-      placeState,
-      nowCamName,
+      nowSegmentName: nowSegmentName as GlobalState["nowSegmentName"],
+      nowPlaceName: nowPlaceName as GlobalState["nowPlaceName"],
+      placeState: placeState as AllPlacesState[keyof AllPlacesState],
+      nowCamName: nowCamName as AllPlacesState[keyof AllPlacesState]["nowCamName"],
       placesRefs,
-      placeRefs,
-      camsRefs,
-      camRefs,
+      placeRefs: placeRefs as APlaceRefs,
+      camsRefs: camsRefs as APlaceRefsCamsRefs,
+      camRefs: camRefs as APlaceRefsCamsRefs[keyof APlaceRefsCamsRefs],
     };
   };
 }

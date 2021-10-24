@@ -17,7 +17,8 @@ export function makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartO
         const prevCollisionsEnabled = dollRefs.checkCollisions;
         dollRefs.checkCollisions = false;
         setState({ dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } }, () => {
-            dollRefs.checkCollisions = prevCollisionsEnabled;
+            // dollRefs.checkCollisions = prevCollisionsEnabled;
+            dollRefs.checkCollisions = true;
         });
     }
     function springDollPosition(dollName, newPositon) { }

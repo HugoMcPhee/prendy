@@ -1,5 +1,10 @@
 TODO
 
+v0.4.7
+
+- stop gravity while checkCollisions is false
+- fix show story view
+
 v0.4.6
 
 - more types in makeGetUsefulStoryStuff

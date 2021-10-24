@@ -87,7 +87,8 @@ export function makeDollStoryHelpers<
     setState(
       { dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } },
       () => {
-        dollRefs.checkCollisions = prevCollisionsEnabled;
+        // dollRefs.checkCollisions = prevCollisionsEnabled;
+        dollRefs.checkCollisions = true;
       }
     );
   }
@@ -248,9 +249,7 @@ export function makeDollStoryHelpers<
     const otherMeshes = getRefs().dolls[dollName].otherMeshes;
     const modelName = getModelNameFromDoll(dollName);
     const modelInfo = modelInfoByName[(modelName as unknown) as ModelName];
-    const typedMeshNames = (modelInfo.meshNames as unknown) as MeshNamesFromDoll<
-      T_DollName
-    >[];
+    const typedMeshNames = (modelInfo.meshNames as unknown) as MeshNamesFromDoll<T_DollName>[];
 
     forEach(typedMeshNames, (meshName) => {
       const newToggle = toggledMeshes[meshName];

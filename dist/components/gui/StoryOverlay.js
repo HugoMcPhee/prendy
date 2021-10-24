@@ -9,7 +9,7 @@ export function makeStoryOverlay(concepFuncs) {
             opacity: 0,
             config: { tension: 300 },
         }));
-        useStoreItemPropsEffect({ type: "story", name: "main" }, {
+        useStoreItemPropsEffect({ type: "global", name: "main" }, {
             storyOverlayToggled({ newValue: isFadeToggled }) {
                 overlaySpringApi.start({
                     opacity: isFadeToggled ? 1 : 0,

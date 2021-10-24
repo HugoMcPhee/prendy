@@ -19,7 +19,7 @@ export function makeStoryOverlay<ConcepFuncs extends BackdopConcepFuncs>(
     }));
 
     useStoreItemPropsEffect(
-      { type: "story", name: "main" },
+      { type: "global", name: "main" },
       {
         storyOverlayToggled({ newValue: isFadeToggled }) {
           overlaySpringApi.start({

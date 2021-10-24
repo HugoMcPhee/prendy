@@ -300,6 +300,8 @@ export function makePlayerRules<
           getCharDollStuff(playerCharacter as CharacterName) ?? {};
         const { isJumping, isOnGround } = getState().players.main;
 
+        if (!dollRefs.checkCollisions) return;
+
         const { scenes } = globalRefs;
         const { meshRef } = dollRefs;
         const scene = getScene();

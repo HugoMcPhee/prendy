@@ -105,6 +105,7 @@ export function makeAllStoryRuleMakers<
     makeRules,
     startItemEffect,
     stopEffect,
+    onNextTick,
   } = concepFuncs;
 
   type SegmentNameFromCameraAndPlace<
@@ -416,7 +417,7 @@ export function makeAllStoryRuleMakers<
     return makeRules((addItemEffect) => ({
       whenPlaceFinishedLoading: addItemEffect({
         onItemEffect() {
-          // setState({}, () => {
+          // onNextTick(() => {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { nowPlaceName } = usefulStoryStuff;
 

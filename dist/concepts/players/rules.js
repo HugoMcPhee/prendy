@@ -211,6 +211,8 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { isJumping, isOnGround } = getState().players.main;
+                if (!dollRefs.checkCollisions)
+                    return;
                 const { scenes } = globalRefs;
                 const { meshRef } = dollRefs;
                 const scene = getScene();

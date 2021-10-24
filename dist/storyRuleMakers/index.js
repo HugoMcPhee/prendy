@@ -41,7 +41,7 @@ export function makeSetStoryState(concepFuncs) {
     };
 }
 export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNames, dollNames) {
-    const { getRefs, getState, makeRules, startItemEffect, stopEffect, } = concepFuncs;
+    const { getRefs, getState, makeRules, startItemEffect, stopEffect, onNextTick, } = concepFuncs;
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
     function makeCamChangeRules(callBacksObject) {
@@ -181,7 +181,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
             whenPlaceFinishedLoading: addItemEffect({
                 onItemEffect() {
                     var _a, _b;
-                    // setState({}, () => {
+                    // onNextTick(() => {
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { nowPlaceName } = usefulStoryStuff;
                     atStartOfEachPlace === null || atStartOfEachPlace === void 0 ? void 0 : atStartOfEachPlace(usefulStoryStuff);

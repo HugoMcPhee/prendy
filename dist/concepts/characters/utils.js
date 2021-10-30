@@ -22,6 +22,11 @@ export function makeGetCharDollStuff(concepFuncs) {
         const dollState = getState().dolls[dollName];
         const dollRefs = getRefs().dolls[dollName];
         const { meshRef } = dollRefs;
-        return { dollName, meshRef, dollRefs, dollState };
+        return {
+            dollName: dollName,
+            meshRef: meshRef,
+            dollRefs: dollRefs,
+            dollState: dollState,
+        };
     };
 }

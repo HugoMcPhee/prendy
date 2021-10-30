@@ -165,6 +165,22 @@ export function makeAllStoryRuleMakers<
       }),
     }));
   }
+  function makeCamLeaveRules(callBacksObject: CamChangeRulesOptions) {
+    return makeRules((addItemEffect) => ({
+      whenCameraChanges: addItemEffect({
+        onItemEffect({ previousValue: prevCamName }) {
+          const usefulStoryStuff = getUsefulStoryStuff();
+          const { nowPlaceName } = usefulStoryStuff;
+          (callBacksObject as Record<any, any>)[nowPlaceName]?.[prevCamName]?.(
+            usefulStoryStuff
+          );
+        },
+        check: { prop: "nowCamName", type: "places" },
+        flow: "cameraChange",
+        whenToRun: "subscribe",
+      }),
+    }));
+  }
 
   // --------------------------------------------------
   //
@@ -612,6 +628,7 @@ export function makeAllStoryRuleMakers<
 
   return {
     makeCamChangeRules,
+    makeCamLeaveRules,
     makeCamSegmentRules,
     makeOnInteractAtTrigger,
     makeOnInteractToTalk,

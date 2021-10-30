@@ -35,7 +35,7 @@ export function makeGlobalStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
   }
 
   function getGlobalState() {
-    return getState().global.main;
+    return getState().global.main as AllState["global"]["main"];
   }
 
   return { setGlobalState, getGlobalState };

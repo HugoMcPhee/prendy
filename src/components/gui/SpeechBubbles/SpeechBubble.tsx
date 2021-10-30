@@ -20,9 +20,8 @@ export function makeSpeechBubble<
 
   type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
-  type AllItemsState<T_ItemType extends ItemType> = ReturnType<
-    GetState
-  >[T_ItemType];
+  type AllItemsState<T_ItemType extends ItemType> =
+    ReturnType<GetState>[T_ItemType];
 
   const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
     concepFuncs

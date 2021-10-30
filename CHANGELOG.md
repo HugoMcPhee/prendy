@@ -1,5 +1,9 @@
 TODO
 
+v0.4.8
+
+- fixed getGlobalState type
+
 v0.4.7
 
 - stop gravity while checkCollisions is false

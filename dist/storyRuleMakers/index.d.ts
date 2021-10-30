@@ -40,6 +40,27 @@ CameraNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends Pla
         stop: (...args: any) => any;
         ruleNames: any[];
     };
+    makeCamLeaveRules: (callBacksObject: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_TriggerName in CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>) => {
+        stopAll: (...args: any) => any;
+        startAll: (...args: any) => any;
+        start: (...args: any) => any;
+        stop: (...args: any) => any;
+        ruleNames: any[];
+    };
     makeCamSegmentRules: (callBacksObject: Partial<{ [P_PlaceName_1 in PlaceName]: Partial<{ [P_CamName in keyof PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"]]: (usefulStuff: {
         storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
         storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];

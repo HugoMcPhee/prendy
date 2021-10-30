@@ -1,5 +1,10 @@
 TODO
 
+v0.4.9
+
+- added makeCamLeaveRules story helper
+- better types for makeGetCharDollStuff
+
 v0.4.8
 
 - fixed getGlobalState type

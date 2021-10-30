@@ -1,3 +1,4 @@
+import { AbstractMesh } from "@babylonjs/core";
 import {
   BackdopConcepFuncs,
   // PlaceholderBackdopConcepts,
@@ -10,7 +11,7 @@ import {
 export function makeGetCharDollStuff<
   ConcepFuncs extends BackdopConcepFuncs,
   // BackdopConcepts extends PlaceholderBackdopConcepts,
-  CharacterName extends string
+  CharacterName extends keyof ReturnType<ConcepFuncs["getState"]>["characters"]
   // CharacterName extends keyof BackdopConcepts["characters"]["startStates"] &
   //   string
   // DollName extends keyof BackdopConcepts["dolls"]["startStates"] & string,
@@ -19,6 +20,10 @@ export function makeGetCharDollStuff<
   // MeshNameByModel extends Record<ModelName, string>
 >(concepFuncs: ConcepFuncs) {
   const { getRefs, getState } = concepFuncs;
+
+  // NOTE could have character start options as a type to get accurate return types
+  type DollStates = ReturnType<ConcepFuncs["getState"]>["dolls"];
+  type DollRefs = ReturnType<ConcepFuncs["getRefs"]>["dolls"];
 
   // NOTE TODO all these types need to be made inside the places using them (like story helpers)
   // And getCharDollStuff there too
@@ -49,6 +54,11 @@ export function makeGetCharDollStuff<
     const dollRefs = getRefs().dolls[dollName];
     const { meshRef } = dollRefs;
 
-    return { dollName, meshRef, dollRefs, dollState };
+    return {
+      dollName: dollName as keyof DollStates,
+      meshRef: meshRef as AbstractMesh | null,
+      dollRefs: dollRefs as DollRefs[keyof DollRefs],
+      dollState: dollState as DollStates[keyof DollStates],
+    };
   };
 }

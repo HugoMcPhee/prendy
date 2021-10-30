@@ -59,6 +59,21 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
             }),
         }));
     }
+    function makeCamLeaveRules(callBacksObject) {
+        return makeRules((addItemEffect) => ({
+            whenCameraChanges: addItemEffect({
+                onItemEffect({ previousValue: prevCamName }) {
+                    var _a, _b;
+                    const usefulStoryStuff = getUsefulStoryStuff();
+                    const { nowPlaceName } = usefulStoryStuff;
+                    (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[prevCamName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
+                },
+                check: { prop: "nowCamName", type: "places" },
+                flow: "cameraChange",
+                whenToRun: "subscribe",
+            }),
+        }));
+    }
     //  This sets an options object in global refs that gets checked when changing segment
     function makeCamSegmentRules(callBacksObject) {
         setTimeout(() => {
@@ -305,6 +320,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
     }
     return {
         makeCamChangeRules,
+        makeCamLeaveRules,
         makeCamSegmentRules,
         makeOnInteractAtTrigger,
         makeOnInteractToTalk,

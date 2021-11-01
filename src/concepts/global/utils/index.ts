@@ -23,14 +23,18 @@ export function makeGlobalStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
   >(
     newState:
       | PartialGlobalState
-      | ((state: GlobalItemState) => PartialGlobalState)
+      | ((state: GlobalItemState) => PartialGlobalState),
+    callback?: () => void
   ) {
     if (typeof newState === "function") {
-      setState((state) => ({
-        global: { main: newState(state.global.main as GlobalItemState) },
-      }));
+      setState(
+        (state) => ({
+          global: { main: newState(state.global.main as GlobalItemState) },
+        }),
+        callback
+      );
     } else {
-      setState({ global: { main: newState } });
+      setState({ global: { main: newState } }, callback);
     }
   }
 

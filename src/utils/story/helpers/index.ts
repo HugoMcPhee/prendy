@@ -153,13 +153,11 @@ export function makeBackdopStoryHelpers<
 
   // NOTE maybe return in categores like players.enableMovement()
   const {
-    changeCameraAtLoop,
-    changeSegmentAtLoop,
     goToNewPlace,
     hideWallIf,
     lookAtSpot,
     setCamera,
-    setNextSegment,
+    setSegment,
     showStoryView,
   } = makeSceneStoryHelpers<
     ConcepFuncs,
@@ -192,9 +190,11 @@ export function makeBackdopStoryHelpers<
     CharacterName
   >(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
 
-  const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers<
-    ConcepFuncs
-  >(concepFuncs);
+  const {
+    hideSticker,
+    moveSticker,
+    showSticker,
+  } = makeStickerStoryHelpers<ConcepFuncs>(concepFuncs);
 
   return {
     // characters
@@ -226,14 +226,12 @@ export function makeBackdopStoryHelpers<
     setPlayerToStartSpot,
     takePickup,
     // scene
-    changeCameraAtLoop,
-    changeSegmentAtLoop,
     goToNewPlace,
     hideWallIf,
     lookAtSpot,
-    setCamera,
-    setNextSegment,
     showStoryView,
+    setCamera,
+    setSegment,
     // sound
     playNewMusic,
     stopAllMusic,

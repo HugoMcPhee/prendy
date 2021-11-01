@@ -10,6 +10,11 @@ export default function players(backdopStartOptions) {
         jumpButtonPressTime: Date.now(),
         jumpButtonReleaseTime: Date.now(),
         pickupButtonPressTime: Date.now(),
+        //
+        virtualControlsPressTime: Date.now(),
+        virtualControlsReleaseTime: Date.now(),
+        canShowVirtualButtons: false,
+        //
         animationNames: {
             walking: backdopStartOptions.playerAnimations.walking,
             idle: backdopStartOptions.playerAnimations.idle,
@@ -18,6 +23,8 @@ export default function players(backdopStartOptions) {
     const refs = () => ({
         walkSpeed: backdopStartOptions.walkSpeed,
         canJumpTimeout: null,
+        canShowVirtualButtonsTimeout: null,
+        canHideVirtualButtonsTimeout: null,
     });
     const startStates = { main: state() };
     return { startStates, state, refs };

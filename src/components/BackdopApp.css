@@ -3,6 +3,15 @@
   height: 100vh;
 }
 
+/* html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+} */
+
 * {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
@@ -12,6 +21,8 @@
   -ms-user-select: none;
   user-select: none;
   outline: none;
+  /* doesn't seem to work */
+  /* box-sizing: border-box !important; */
 }
 
 /* #scene-canvas {

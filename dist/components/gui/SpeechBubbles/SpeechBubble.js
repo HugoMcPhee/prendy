@@ -4,11 +4,14 @@ import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "shutils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 // import "./SpeechBubble.css";
-export function makeSpeechBubble(concepFuncs) {
+const BUBBLE_WIDTH = 230;
+const BUBBLE_HEIGHT_RATIO = 0.74814;
+const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
+export function makeSpeechBubble(concepFuncs, speechVidFiles) {
     const { getState, useStore, useStoreEffect } = concepFuncs;
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     return function SpeechBubble({ name }) {
-        var _a;
+        var _a, _b;
         const theRectangle = useRef(null);
         const theTextRectangle = useRef(null);
         const theTriangle = useRef(null);
@@ -23,10 +26,11 @@ export function makeSpeechBubble(concepFuncs) {
             theText,
             theTextHolder,
         };
-        const { goalText, isVisible, font, zIndex, visibleLetterAmount, _goalTextWordLetterArrays, _specialTextByLetterIndex, stylesBySpecialText, } = useStore((state) => state.speechBubbles[name], {
+        const { goalText, isVisible, font, zIndex, visibleLetterAmount, _goalTextWordLetterArrays, _specialTextByLetterIndex, stylesBySpecialText, nowVideoName, } = useStore((state) => state.speechBubbles[name], {
             name,
             type: ["speechBubbles"],
             prop: [
+                // TODO fix types?
                 "goalText",
                 "isVisible",
                 "font",
@@ -35,28 +39,40 @@ export function makeSpeechBubble(concepFuncs) {
                 "_goalTextWordLetterArrays",
                 "_specialTextByLetterIndex",
                 "stylesBySpecialText",
+                "nowVideoName",
             ],
         });
         const { nowPlaceName } = useStore((state) => state.global.main, {
             type: "global",
             prop: ["nowPlaceName"],
         });
-        const [theSpring, theSpringApi] = useSpring(() => ({
-            height: isVisible ? measuredHeight : 0,
-            position: [0, 0],
-            opacity: isVisible ? 1 : 0,
-            scale: isVisible ? 1 : 0.1,
-            config: { tension: 400, friction: 50 },
-            onChange() {
-                positionSpeechBubbleToCharacter();
-            },
-        }), [isVisible]);
+        const videoIsPlaying = !!nowVideoName;
+        const [theSpring, theSpringApi] = useSpring(() => {
+            let height = 0;
+            if (videoIsPlaying) {
+                height = 240;
+            }
+            else {
+                if (isVisible)
+                    height = measuredHeight;
+            }
+            return {
+                height: isVisible ? measuredHeight : 0,
+                position: [0, 0],
+                opacity: isVisible ? 1 : 0,
+                scale: isVisible ? 1 : 0.1,
+                config: { tension: 400, friction: 50 },
+                onChange() {
+                    positionSpeechBubbleToCharacter();
+                },
+            };
+        }, [isVisible, videoIsPlaying]);
         useEffect(() => {
             const newMeasuredHeight = sizeFromRef(refs.theTextHolder.current).height;
             if (newMeasuredHeight !== 0) {
                 setMeasuredHeight(newMeasuredHeight);
             }
-        }, [goalText, refs.theTextHolder]);
+        }, [goalText, refs.theTextHolder, nowVideoName]);
         useEffect(() => {
             theSpringApi.start({ height: measuredHeight });
         }, [measuredHeight, theSpringApi]);
@@ -101,7 +117,7 @@ export function makeSpeechBubble(concepFuncs) {
                 // color: "rgb(197, 217, 61)",
                 // opacity: 0,
                 fontSize: "30px",
-                padding: "15px",
+                padding: videoIsPlaying ? "0" : "15px",
                 fontFamily: font,
                 // textAlign: "center",
                 // verticalAlign: "middle", // to center emojis with text?
@@ -120,7 +136,7 @@ export function makeSpeechBubble(concepFuncs) {
                 transform: `translate(0px, -15px) rotate(45deg) scale(0.8) `,
                 backgroundColor: "white",
             },
-        }), [font]);
+        }), [font, videoIsPlaying]);
         const containerStyle = useMemo(() => ({
             pointerEvents: "none",
             position: "absolute",
@@ -141,7 +157,7 @@ export function makeSpeechBubble(concepFuncs) {
         }), [zIndex]);
         return (React.createElement("div", { id: `speech-bubble-${name}`, style: containerStyle },
             React.createElement(animated.div, { ref: refs.theRectangle, key: `theRectangle`, id: `theRectangle`, style: {
-                    width: "230px",
+                    width: `${BUBBLE_WIDTH}px`,
                     //   zIndex: 100,
                     opacity: theSpring.opacity,
                     transform: interpolate([
@@ -156,7 +172,7 @@ export function makeSpeechBubble(concepFuncs) {
                 } },
                 React.createElement(animated.div, { ref: refs.theTextRectangle, key: `textRectangle`, id: `textRectangle`, style: {
                         backgroundColor: "white",
-                        width: "230px",
+                        width: `${BUBBLE_WIDTH}px`,
                         borderRadius: "40px",
                         borderWidth: "1px",
                         paddingBottom: "5px",
@@ -166,21 +182,25 @@ export function makeSpeechBubble(concepFuncs) {
                         willChange: "height",
                         position: "relative", // fixes overflow not working
                     } },
-                    React.createElement("div", { ref: theTextHolder, style: styles.hiddenGoalText }, _goalTextWordLetterArrays.map((wordLetters, wordIndex) => {
-                        let letterAmountFromPreviousWords = wordIndex > 0
-                            ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat()
-                                .length
-                            : 0;
-                        return (React.createElement("span", { className: "SpeechBubble-wordLettersHolder" }, wordLetters.map((letter, wordLetterIndex) => {
-                            const textLetterIndex = (letterAmountFromPreviousWords || -1) + wordLetterIndex;
-                            const isVisible = textLetterIndex < visibleLetterAmount;
-                            // NOTE this is maybe undefiend, but typescript rules dont treat it like that atm
-                            const customStyle = stylesBySpecialText[_specialTextByLetterIndex[textLetterIndex + 1]];
-                            return (React.createElement("div", { className: isVisible
-                                    ? "SpeechBubble-visibleLetter"
-                                    : "SpeechBubble-hiddenLetter", style: customStyle }, `${letter}`));
-                        })));
-                    }))),
+                    React.createElement("div", { ref: theTextHolder, style: styles.hiddenGoalText },
+                        videoIsPlaying && (React.createElement("video", { 
+                            // width="100%"
+                            width: `${BUBBLE_WIDTH}px`, height: `${BUBBLE_HEIGHT}px`, autoPlay: true, loop: true, src: (_b = speechVidFiles[nowVideoName !== null && nowVideoName !== void 0 ? nowVideoName : ""]) !== null && _b !== void 0 ? _b : "" })),
+                        _goalTextWordLetterArrays.map((wordLetters, wordIndex) => {
+                            let letterAmountFromPreviousWords = wordIndex > 0
+                                ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat()
+                                    .length
+                                : 0;
+                            return (React.createElement("span", { className: "SpeechBubble-wordLettersHolder" }, wordLetters.map((letter, wordLetterIndex) => {
+                                const textLetterIndex = (letterAmountFromPreviousWords || -1) + wordLetterIndex;
+                                const isVisible = textLetterIndex < visibleLetterAmount;
+                                // NOTE this is maybe undefiend, but typescript rules dont treat it like that atm
+                                const customStyle = stylesBySpecialText[_specialTextByLetterIndex[textLetterIndex + 1]];
+                                return (React.createElement("div", { className: isVisible
+                                        ? "SpeechBubble-visibleLetter"
+                                        : "SpeechBubble-hiddenLetter", style: customStyle }, `${letter}`));
+                            })));
+                        }))),
                 React.createElement("div", { ref: refs.theTriangle, key: `theTriangle`, id: `theTriangle`, style: styles.triangle }))));
     };
 }

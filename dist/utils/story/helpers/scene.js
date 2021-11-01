@@ -4,7 +4,7 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames) {
-    const { getRefs, getState, onNextTick, setState } = concepFuncs;
+    const { getRefs, getState, onNextTick, setState, startItemEffect, stopEffect, } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(concepFuncs);
@@ -12,6 +12,7 @@ export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNam
     async function changeSegmentAtLoop(_place, newSegmentName) {
         // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
         // to fix: could listen to changes to wantedSegmentNameAtLoop
+        // might be fixed now that doWhenNowSegmentChanges listens to any change, instead of waiting for the expected segment name
         // FIXME this can not work? (the async resolve part)
         return new Promise((resolve, _reject) => {
             onNextTick(() => {
@@ -65,20 +66,34 @@ export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNam
         if (wallMesh)
             wallMesh.checkCollisions = !isDisabled;
     }
-    function setNextSegment(_placeName, segmentName) {
-        setGlobalState({ wantedSegmentName: segmentName });
-    }
     async function showStoryView(isVisible = true) {
         const GUESSED_FADE_TIME = 1000; // note could listen to something like isFullyFaded and return here, but maybe a set time is okay
         setGlobalState({ storyOverlayToggled: !isVisible });
         await delay(GUESSED_FADE_TIME);
     }
-    function setCamera(_place, newCam) {
-        const { nowPlaceName } = getState().global.main;
-        setState({
-            places: {
-                [nowPlaceName]: { wantedCamNameAtLoop: newCam }, // AnyCameraName needed if there's only 1 place
-            },
+    function setSegment(_placeName, segmentName, whenToRun = "now") {
+        return new Promise((resolve, _reject) => {
+            if (whenToRun === "now") {
+                setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
+            }
+            else if (whenToRun === "at loop") {
+                changeSegmentAtLoop(_placeName, segmentName).finally(() => resolve());
+            }
+        });
+    }
+    function setCamera(_placeName, cameraName, whenToRun = "now") {
+        return new Promise((resolve, _reject) => {
+            if (whenToRun === "now") {
+                const { nowPlaceName } = getState().global.main;
+                setState({
+                    places: {
+                        [nowPlaceName]: { wantedCamName: cameraName }, // AnyCameraName needed if there's only 1 place
+                    },
+                }, () => resolve());
+            }
+            else if (whenToRun === "at loop") {
+                changeCameraAtLoop(_placeName, cameraName).finally(() => resolve());
+            }
         });
     }
     function goToNewPlace(toOption, charName = characterNames[0]) {
@@ -124,12 +139,12 @@ export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNam
     // disable/enable camCubes ?
     // start/stop characterFollowinglayer ?
     return {
-        changeSegmentAtLoop,
-        changeCameraAtLoop,
+        // changeSegmentAtLoop,
+        // changeCameraAtLoop,
         lookAtSpot,
         hideWallIf,
-        setNextSegment,
         showStoryView,
+        setSegment,
         setCamera,
         goToNewPlace,
     };

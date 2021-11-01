@@ -10,7 +10,7 @@ export { makeAllStoryRuleMakers } from "./storyRuleMakers";
 export declare function makeOtherUsefulBackdopUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
     setStoryState: (newState: Partial<ReturnType<ConcepFuncs["getState"]>["story"]["main"]>) => void;
     getGlobalState: () => ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-    setGlobalState: <GlobalItemState extends ReturnType<ConcepFuncs["getState"]>["global"]["main"] & Record<any, any>, PartialGlobalState extends Partial<GlobalItemState>>(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState)) => void;
+    setGlobalState: <GlobalItemState extends ReturnType<ConcepFuncs["getState"]>["global"]["main"] & Record<any, any>, PartialGlobalState extends Partial<GlobalItemState>>(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: (() => void) | undefined) => void;
     getScene: (sceneType?: "main" | "backdrop" | undefined) => import("@babylonjs/core").Scene | null;
     getEngine: () => import("@babylonjs/core").Engine | null;
 };

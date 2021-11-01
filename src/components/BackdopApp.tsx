@@ -41,7 +41,8 @@ export function makeBackdopApp<
   SegmentNameByPlace extends Record<PlaceName, string>,
   CameraNameByPlace extends Record<PlaceName, string>,
   SoundFiles extends Record<SoundName, string>,
-  PickupsInfo extends PickupsInfoPlaceholder<PickupName>
+  PickupsInfo extends PickupsInfoPlaceholder<PickupName>,
+  SpeechVidFiles extends Record<string, string>
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
@@ -50,16 +51,25 @@ export function makeBackdopApp<
   characterNames: readonly CharacterName[],
   dollNames: readonly DollName[],
   soundFiles: SoundFiles,
-  pickupsInfo: PickupsInfo
+  pickupsInfo: PickupsInfo,
+  speechVidFiles: SpeechVidFiles
 ) {
   const { getRefs, onNextTick, setState } = concepFuncs;
 
   const ScreenGuiDom = makeScreenGui<
     ConcepFuncs,
+    BackdopOptions,
     CharacterName,
     PickupName,
-    PickupsInfo
-  >(concepFuncs, characterNames, pickupsInfo);
+    PickupsInfo,
+    SpeechVidFiles
+  >(
+    concepFuncs,
+    backdopStartOptions,
+    characterNames,
+    pickupsInfo,
+    speechVidFiles
+  );
 
   const LoadingModels = makeLoadingModels<
     ConcepFuncs,

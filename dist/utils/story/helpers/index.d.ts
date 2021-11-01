@@ -38,19 +38,17 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     }) => void;
     setPlayerToStartSpot: () => void;
     takePickup: (pickup: PickupName, toHolding?: boolean) => void;
-    changeCameraAtLoop: <T_Place extends PlaceName, T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"] & AnyCameraName>(_place: T_Place, newCamName: T_Cam) => Promise<void>;
-    changeSegmentAtLoop: <T_Place_1 extends PlaceName, T_Segment extends SegmentNameByPlace[T_Place_1] & AnySegmentName>(_place: T_Place_1, newSegmentName: T_Segment) => Promise<void>;
     goToNewPlace: <T_PlaceName_2 extends PlaceName>(toOption: {
         toPlace: T_PlaceName_2;
         toSpot: SpotNameByPlace[T_PlaceName_2];
         toCam?: CameraNameByPlace[T_PlaceName_2] | undefined;
         toSegment?: SegmentNameByPlace[T_PlaceName_2] | undefined;
     }, charName?: CharacterName) => void;
-    hideWallIf: <T_Place_2 extends PlaceName, T_Wall extends WallNameByPlace[T_Place_2]>(placeName: T_Place_2, wallName: T_Wall, isDisabled: boolean) => void;
-    lookAtSpot: <T_Place_3 extends PlaceName>(place: T_Place_3, spot: SpotNameByPlace[T_Place_3], character?: CharacterName | undefined) => void;
-    setCamera: <T_Place_4 extends PlaceName, T_Cam_1 extends keyof PlaceInfoByName[T_Place_4]["segmentTimesByCamera"] & AnyCameraName>(_place: T_Place_4, newCam: T_Cam_1) => void;
-    setNextSegment: <T_Place_5 extends PlaceName, T_Segment_1 extends SegmentNameByPlace[T_Place_5]>(_placeName: T_Place_5, segmentName: T_Segment_1) => void;
+    hideWallIf: <T_Place extends PlaceName, T_Wall extends WallNameByPlace[T_Place]>(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) => void;
+    lookAtSpot: <T_Place_1 extends PlaceName>(place: T_Place_1, spot: SpotNameByPlace[T_Place_1], character?: CharacterName | undefined) => void;
     showStoryView: (isVisible?: boolean) => Promise<void>;
+    setCamera: <T_Place_2 extends PlaceName, T_Cam extends keyof PlaceInfoByName[T_Place_2]["segmentTimesByCamera"] & AnyCameraName>(_placeName: T_Place_2, cameraName: T_Cam, whenToRun?: "now" | "at loop") => Promise<void>;
+    setSegment: <T_Place_3 extends PlaceName, T_Segment extends SegmentNameByPlace[T_Place_3]>(_placeName: T_Place_3, segmentName: T_Segment, whenToRun?: "now" | "at loop") => Promise<void>;
     playNewMusic: (newMusicName: MusicName) => void;
     stopAllMusic: () => void;
     hideMiniBubble: () => void;

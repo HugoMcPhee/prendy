@@ -16,7 +16,7 @@ export default function speechBubbles<CharacterName extends string, DollName ext
         forCharacter: CharacterName | null;
         position: import("shutils/dist/points2d").Point2D;
         typingFinished: boolean;
-        nowVideoName: SpeechvidName;
+        nowVideoName: SpeechvidName | null;
         font: FontName;
         zIndex: number;
     };
@@ -38,7 +38,7 @@ export default function speechBubbles<CharacterName extends string, DollName ext
         forCharacter: CharacterName | null;
         position: import("shutils/dist/points2d").Point2D;
         typingFinished: boolean;
-        nowVideoName: SpeechvidName;
+        nowVideoName: SpeechvidName | null;
         font: FontName;
         zIndex: number;
     }; };

@@ -23,9 +23,7 @@ export function makeGetBackdopOptions<
     {
       [P_PlaceName in PlaceName]: Partial<
         {
-          [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: ToNewOption<
-            P_PlaceName
-          >;
+          [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: ToNewOption<P_PlaceName>;
         }
       >;
     }
@@ -51,6 +49,8 @@ export function makeGetBackdopOptions<
     doorsInfo?: DoorsInfo;
     modelNamesByPlace: ModelNamesByPlaceLoose; // NOTE Could include chapter too so it can load models later (like fly in eggventure)
     // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)
+    hasInteracting?: boolean; // hides the interact button
+    hasJumping?: boolean; // hides the jump button
   }) {
     return options;
   };

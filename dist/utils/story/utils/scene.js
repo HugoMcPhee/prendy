@@ -18,7 +18,9 @@ export function makeSceneStoryUtils(concepFuncs) {
         startItemEffect({
             name: ruleName,
             onItemEffect: ({ newValue: newNowSegmentName }) => {
-                if (newNowSegmentName !== checkingSegmentName)
+                // if (newNowSegmentName !== checkingSegmentName) return;
+                // wait until the segment changed from the original (even if it doesn't change to the new one)
+                if (newNowSegmentName === initialNowSegmentName)
                     return;
                 stopEffect(ruleName);
                 callback();
@@ -44,7 +46,8 @@ export function makeSceneStoryUtils(concepFuncs) {
             onItemEffect: ({ newValue: newNowCamName, itemName }) => {
                 if (itemName !== nowPlaceName)
                     return;
-                if (newNowCamName !== checkingCamName)
+                // if (newNowCamName !== checkingCamName) return;
+                if (newNowCamName === initialNowCamName)
                     return;
                 stopEffect(ruleName);
                 callback();

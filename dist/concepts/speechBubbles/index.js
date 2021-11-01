@@ -19,7 +19,7 @@ export default function speechBubbles(characterNames, characterOptions, fontName
             forCharacter: ((_a = options === null || options === void 0 ? void 0 : options.character) !== null && _a !== void 0 ? _a : "walker"),
             position: defaultPosition(),
             typingFinished: true,
-            nowVideoName: "flying_stork",
+            nowVideoName: null,
             // font: options?.font ?? ("Schoolbell" as FontName),
             font: (_b = options === null || options === void 0 ? void 0 : options.font) !== null && _b !== void 0 ? _b : fontNames[0],
             // shouldStartRemovoing: false, // (so it can fade out)

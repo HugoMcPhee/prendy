@@ -6,7 +6,12 @@ import {
   SolidParticleSystem,
   TargetCamera,
 } from "@babylonjs/core";
-import { mover2dRefs, mover2dState, moverRefs, moverState } from "concep-movers";
+import {
+  mover2dRefs,
+  mover2dState,
+  moverRefs,
+  moverState,
+} from "concep-movers";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 //
@@ -83,7 +88,7 @@ export default function global<
     //
     // player
     playerCharacter: backdopStartOptions.playerCharacter as CharacterName, // TODO Move to players ?
-    gravityValue: 5, // currently only  while walking (not every frame, could update to every frame when not touching a flatish ground)
+    gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
     focusedDoll: "walker" as DollName,
     //

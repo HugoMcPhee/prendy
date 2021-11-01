@@ -418,6 +418,9 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
                 jumpButtonPressTime: number;
                 jumpButtonReleaseTime: number;
                 pickupButtonPressTime: number;
+                virtualControlsPressTime: number;
+                virtualControlsReleaseTime: number;
+                canShowVirtualButtons: boolean;
                 animationNames: {
                     walking: AnyAnimationName;
                     idle: AnyAnimationName;
@@ -434,6 +437,9 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             jumpButtonPressTime: number;
             jumpButtonReleaseTime: number;
             pickupButtonPressTime: number;
+            virtualControlsPressTime: number;
+            virtualControlsReleaseTime: number;
+            canShowVirtualButtons: boolean;
             animationNames: {
                 walking: AnyAnimationName;
                 idle: AnyAnimationName;
@@ -442,6 +448,8 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
         refs: () => {
             walkSpeed: number;
             canJumpTimeout: number | null;
+            canShowVirtualButtonsTimeout: number | null;
+            canHideVirtualButtonsTimeout: number | null;
         };
     };
     speechBubbles: {
@@ -460,7 +468,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             forCharacter: CharacterName | null;
             position: import("shutils/dist/points2d").Point2D;
             typingFinished: boolean;
-            nowVideoName: SpeechVidName;
+            nowVideoName: SpeechVidName | null;
             font: FontName;
             zIndex: number;
         };
@@ -482,7 +490,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             forCharacter: CharacterName | null;
             position: import("shutils/dist/points2d").Point2D;
             typingFinished: boolean;
-            nowVideoName: SpeechVidName;
+            nowVideoName: SpeechVidName | null;
             font: FontName;
             zIndex: number;
         }; };

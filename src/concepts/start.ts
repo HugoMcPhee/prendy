@@ -49,7 +49,7 @@ export function makeStartBackdopRules<
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
+  BACKDOP_OPTIONS: BackdopOptions,
   placeInfoByName: PlaceInfoByName,
   dollNames: readonly DollName[],
   characterNames: readonly CharacterName[],
@@ -70,13 +70,7 @@ export function makeStartBackdopRules<
     DollName,
     CameraNameByPlace,
     SegmentNameByPlace
-  >(
-    concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    placeInfoByName,
-    dollNames
-  );
+  >(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, placeInfoByName, dollNames);
 
   const modelRules = makeModelRules<ConcepFuncs, ModelName, ModelInfoByName>(
     concepFuncs,
@@ -85,9 +79,10 @@ export function makeStartBackdopRules<
 
   const playerRules = makePlayerRules<
     ConcepFuncs,
+    BackdopOptions,
     CharacterName,
     PlaceInfoByName
-  >(concepFuncs, placeInfoByName);
+  >(concepFuncs, BACKDOP_OPTIONS, placeInfoByName);
 
   const dollDynamicRules = makeDollDynamicRules<
     ConcepFuncs,
@@ -99,13 +94,7 @@ export function makeStartBackdopRules<
     AnyAnimationName,
     AnimationNameByModel,
     ModelInfoByName
-  >(
-    concepFuncs,
-    backdopStartOptions,
-    backdopConcepts,
-    modelInfoByName,
-    dollNames
-  );
+  >(concepFuncs, BACKDOP_OPTIONS, backdopConcepts, modelInfoByName, dollNames);
 
   const dollRules = makeDollRules<
     BackdopOptions,
@@ -119,7 +108,7 @@ export function makeStartBackdopRules<
     AnimationNameByModel,
     ModelInfoByName
   >(
-    backdopStartOptions,
+    BACKDOP_OPTIONS,
     dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
     concepFuncs,
     backdopConcepts,
@@ -154,7 +143,7 @@ export function makeStartBackdopRules<
     AnyCameraName,
     PlaceName,
     PlaceInfoByName
-  >(concepFuncs, backdopStartOptions, characterNames, placeInfoByName);
+  >(concepFuncs, BACKDOP_OPTIONS, characterNames, placeInfoByName);
 
   const characterRules = makeCharacterRules<
     ConcepFuncs,

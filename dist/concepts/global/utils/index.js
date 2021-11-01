@@ -5,14 +5,14 @@ export function makeGlobalStoreUtils(concepFuncs) {
     const { getState, setState } = concepFuncs;
     // type GlobalItemState = AllState["global"]["main"];
     // type PartialGlobalState = Partial<GlobalItemState>;
-    function setGlobalState(newState) {
+    function setGlobalState(newState, callback) {
         if (typeof newState === "function") {
             setState((state) => ({
                 global: { main: newState(state.global.main) },
-            }));
+            }), callback);
         }
         else {
-            setState({ global: { main: newState } });
+            setState({ global: { main: newState } }, callback);
         }
     }
     function getGlobalState() {

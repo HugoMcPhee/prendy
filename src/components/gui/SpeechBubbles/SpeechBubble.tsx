@@ -12,16 +12,22 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 // import "./SpeechBubble.css";
 
+const BUBBLE_WIDTH = 230;
+const BUBBLE_HEIGHT_RATIO = 0.74814;
+const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
+
 export function makeSpeechBubble<
   ConcepFuncs extends BackdopConcepFuncs,
-  CharacterName extends string
->(concepFuncs: ConcepFuncs) {
+  CharacterName extends string,
+  SpeechVidFiles extends Record<string, string>
+>(concepFuncs: ConcepFuncs, speechVidFiles: SpeechVidFiles) {
   const { getState, useStore, useStoreEffect } = concepFuncs;
 
   type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
-  type AllItemsState<T_ItemType extends ItemType> =
-    ReturnType<GetState>[T_ItemType];
+  type AllItemsState<
+    T_ItemType extends ItemType
+  > = ReturnType<GetState>[T_ItemType];
 
   const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
     concepFuncs
@@ -58,10 +64,12 @@ export function makeSpeechBubble<
       _goalTextWordLetterArrays,
       _specialTextByLetterIndex,
       stylesBySpecialText,
+      nowVideoName,
     } = useStore((state) => state.speechBubbles[name], {
       name,
       type: ["speechBubbles"],
       prop: [
+        // TODO fix types?
         "goalText",
         "isVisible",
         "font",
@@ -70,6 +78,7 @@ export function makeSpeechBubble<
         "_goalTextWordLetterArrays",
         "_specialTextByLetterIndex",
         "stylesBySpecialText",
+        "nowVideoName",
       ],
     });
 
@@ -78,8 +87,17 @@ export function makeSpeechBubble<
       prop: ["nowPlaceName"],
     });
 
-    const [theSpring, theSpringApi] = useSpring(
-      () => ({
+    const videoIsPlaying = !!nowVideoName;
+
+    const [theSpring, theSpringApi] = useSpring(() => {
+      let height = 0;
+      if (videoIsPlaying) {
+        height = 240;
+      } else {
+        if (isVisible) height = measuredHeight;
+      }
+
+      return {
         height: isVisible ? measuredHeight : 0,
         position: [0, 0],
         opacity: isVisible ? 1 : 0,
@@ -88,16 +106,15 @@ export function makeSpeechBubble<
         onChange() {
           positionSpeechBubbleToCharacter();
         },
-      }),
-      [isVisible]
-    );
+      };
+    }, [isVisible, videoIsPlaying]);
 
     useEffect(() => {
       const newMeasuredHeight = sizeFromRef(refs.theTextHolder.current).height;
       if (newMeasuredHeight !== 0) {
         setMeasuredHeight(newMeasuredHeight);
       }
-    }, [goalText, refs.theTextHolder]);
+    }, [goalText, refs.theTextHolder, nowVideoName]);
 
     useEffect(() => {
       theSpringApi.start({ height: measuredHeight });
@@ -154,7 +171,7 @@ export function makeSpeechBubble<
             // color: "rgb(197, 217, 61)",
             // opacity: 0,
             fontSize: "30px",
-            padding: "15px",
+            padding: videoIsPlaying ? "0" : "15px",
             fontFamily: font,
             // textAlign: "center",
             // verticalAlign: "middle", // to center emojis with text?
@@ -174,7 +191,7 @@ export function makeSpeechBubble<
             backgroundColor: "white",
           },
         } as const),
-      [font]
+      [font, videoIsPlaying]
     );
 
     const containerStyle = useMemo(
@@ -207,7 +224,7 @@ export function makeSpeechBubble<
           key={`theRectangle`}
           id={`theRectangle`}
           style={{
-            width: "230px",
+            width: `${BUBBLE_WIDTH}px`,
             //   zIndex: 100,
             opacity: theSpring.opacity,
             transform: interpolate(
@@ -230,7 +247,7 @@ export function makeSpeechBubble<
             id={`textRectangle`}
             style={{
               backgroundColor: "white",
-              width: "230px",
+              width: `${BUBBLE_WIDTH}px`,
               borderRadius: "40px",
               borderWidth: "1px",
               paddingBottom: "5px",
@@ -247,6 +264,16 @@ export function makeSpeechBubble<
       </div> */}
             {/* visible typed text */}
             <div ref={theTextHolder} style={styles.hiddenGoalText}>
+              {videoIsPlaying && (
+                <video
+                  // width="100%"
+                  width={`${BUBBLE_WIDTH}px`}
+                  height={`${BUBBLE_HEIGHT}px`}
+                  autoPlay
+                  loop
+                  src={speechVidFiles[nowVideoName ?? ""] ?? ""}
+                ></video>
+              )}
               {_goalTextWordLetterArrays.map((wordLetters, wordIndex) => {
                 let letterAmountFromPreviousWords =
                   wordIndex > 0

@@ -8,9 +8,9 @@ import { toRadians } from "shutils/dist/speedAngleDistance";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
-export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, pickupsInfo) {
+export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, pickupsInfo, speechVidFiles) {
     const { getRefs, onNextTick, setState } = concepFuncs;
-    const ScreenGuiDom = makeScreenGui(concepFuncs, characterNames, pickupsInfo);
+    const ScreenGuiDom = makeScreenGui(concepFuncs, backdopStartOptions, characterNames, pickupsInfo, speechVidFiles);
     const LoadingModels = makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles);
     const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
     return function BackdopApp({ children }) {

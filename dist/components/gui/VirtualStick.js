@@ -67,30 +67,34 @@ export function makeVirtualStick(concepFuncs) {
                 circleOpacity: 1.0,
                 outerOpacity: 0.9,
             });
+            setState({ players: { main: { virtualControlsPressTime: Date.now() } } });
+        }, []);
+        const pointerUpEvent = useCallback((_event) => {
+            local.isDown = false;
+            const { inputVelocity } = getState().players.main;
+            opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
+            springApi.start({ position: [0, 0], immediate: false });
+            // check if its been a short time since pressing down,
+            // and if the stick hasnt moved much?
+            const timeSincePointerDown = Date.now() - local.pointerDownTime;
+            const wasAShortTime = timeSincePointerDown < 250;
+            const didntMoveJoystickFar = getVectorSpeed(inputVelocity) < 0.1;
+            if (wasAShortTime && didntMoveJoystickFar) {
+                if (!globalRefs.isHoveringPickupButton) {
+                    setState({
+                        players: { main: { interactButtonPressTime: Date.now() } },
+                    });
+                }
+            }
+            else {
+                // set the input velocity to 0 if the virtual stick wasn't pressed
+                setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
+            }
+            setState({
+                players: { main: { virtualControlsReleaseTime: Date.now() } },
+            });
         }, []);
         useEffect(() => {
-            const pointerUpEvent = (_event) => {
-                local.isDown = false;
-                const { inputVelocity } = getState().players.main;
-                opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
-                springApi.start({ position: [0, 0], immediate: false });
-                // check if its been a short time since pressing down,
-                // and if the stick hasnt moved much?
-                const timeSincePointerDown = Date.now() - local.pointerDownTime;
-                const wasAShortTime = timeSincePointerDown < 250;
-                const didntMoveJoystickFar = getVectorSpeed(inputVelocity) < 0.1;
-                if (wasAShortTime && didntMoveJoystickFar) {
-                    if (!globalRefs.isHoveringPickupButton) {
-                        setState({
-                            players: { main: { interactButtonPressTime: Date.now() } },
-                        });
-                    }
-                }
-                else {
-                    // set the input velocity to 0 if the virtual stick wasn't pressed
-                    setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
-                }
-            };
             // leftThumbContainer.onPointerUpObservable.add((coordinates) => {});
             const pointerMoveEvent = (event) => {
                 // const { playerMovingPaused } = getGlobalState();
@@ -115,56 +119,57 @@ export function makeVirtualStick(concepFuncs) {
                     x: event.clientX,
                     y: event.clientY,
                 };
-                if (local.isDown) {
-                    local.xAddPos =
-                        coordinates.x -
-                            SIZES.leftThumbContainer * 0.5 -
-                            local.leftJoystickOffset;
-                    local.yAddPos =
-                        coordinates.y -
-                            SIZES.leftThumbContainer * 0.5 -
-                            local.topJoystickOffset;
-                    const limitedOffset = 35;
-                    const { angle, speed } = getSpeedAndAngleFromVector({
-                        x: local.xAddPos,
-                        y: local.yAddPos,
-                    });
-                    let editedSpeed = speed > limitedOffset ? limitedOffset : speed;
-                    const clampedPosition = getVectorFromSpeedAndAngle(editedSpeed, angle);
-                    const normalizedPosition = getVectorFromSpeedAndAngle(editedSpeed / limitedOffset, angle);
-                    local.floatLeft = clampedPosition.x;
-                    local.floatTop = clampedPosition.y;
-                    springApi.start({
-                        position: [local.floatLeft, local.floatTop],
-                        immediate: true,
-                    });
-                    setState({
-                        players: {
-                            main: { inputVelocity: normalizedPosition },
-                        },
-                    });
-                }
+                if (!local.isDown)
+                    return;
+                local.xAddPos =
+                    coordinates.x -
+                        SIZES.leftThumbContainer * 0.5 -
+                        local.leftJoystickOffset;
+                local.yAddPos =
+                    coordinates.y -
+                        SIZES.leftThumbContainer * 0.5 -
+                        local.topJoystickOffset;
+                const limitedOffset = 35;
+                const { angle, speed } = getSpeedAndAngleFromVector({
+                    x: local.xAddPos,
+                    y: local.yAddPos,
+                });
+                let editedSpeed = speed > limitedOffset ? limitedOffset : speed;
+                const clampedPosition = getVectorFromSpeedAndAngle(editedSpeed, angle);
+                const normalizedPosition = getVectorFromSpeedAndAngle(editedSpeed / limitedOffset, angle);
+                local.floatLeft = clampedPosition.x;
+                local.floatTop = clampedPosition.y;
+                springApi.start({
+                    position: [local.floatLeft, local.floatTop],
+                    immediate: true,
+                });
+                setState({
+                    players: {
+                        main: { inputVelocity: normalizedPosition },
+                    },
+                });
             };
-            window.addEventListener("pointerup", pointerUpEvent);
+            // window.addEventListener("pointerup", pointerUpEvent);
             // window.addEventListener("pointercancel", pointerUpEvent);
             // window.addEventListener("pointerdown", pointerDownEvent);
             window.addEventListener("pointermove", pointerMoveEvent);
             return () => {
-                window.removeEventListener("pointerup", pointerUpEvent);
+                // window.removeEventListener("pointerup", pointerUpEvent);
                 // window.removeEventListener("pointercancel", pointerUpEvent);
                 // window.removeEventListener("pointerdown", pointerDownEvent);
                 window.removeEventListener("pointermove", pointerMoveEvent);
             };
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
-        return (React.createElement("div", { id: "virtual-stick", onPointerDown: pointerDownEvent, style: {
+        return (React.createElement("div", { id: "virtual-stick", onPointerDown: pointerDownEvent, onPointerUp: pointerUpEvent, style: {
                 pointerEvents: "auto",
                 position: "absolute",
                 top: 0,
                 left: 0,
                 width: "100vw",
                 height: "100vh",
-                zIndex: 1000,
+                zIndex: 100,
+                overflow: "hidden",
             } },
             React.createElement(animated.div, { ref: refs.leftThumbContainer, style: {
                     position: "relative",

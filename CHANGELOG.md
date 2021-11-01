@@ -1,5 +1,14 @@
 TODO
 
+v0.5.0
+
+- supports speech bubble vids
+- mobile jump and interact buttons!
+- added hasInteracting and hasJumping options
+- added callback to setGLobalState
+- simpler and safer setCamera and setSegment story helpers
+- always allow gravity, and allow walking up steeper slopes
+
 v0.4.9
 
 - added makeCamLeaveRules story helper

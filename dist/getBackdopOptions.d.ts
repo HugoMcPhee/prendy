@@ -22,6 +22,8 @@ export declare function makeGetBackdopOptions<PickupName extends string, PlaceNa
         toSegment?: SegmentNameByPlace[P_PlaceName_1] | undefined;
     }; }[Exclude<PlaceName, P_PlaceName>]; }>; }> | undefined;
     modelNamesByPlace: ModelNamesByPlaceLoose;
+    hasInteracting?: boolean | undefined;
+    hasJumping?: boolean | undefined;
 }) => {
     place: T_Place;
     segment: SegmentNameByPlace[T_Place];
@@ -46,4 +48,6 @@ export declare function makeGetBackdopOptions<PickupName extends string, PlaceNa
         toSegment?: SegmentNameByPlace[P_PlaceName_1] | undefined;
     }; }[Exclude<PlaceName, P_PlaceName>]; }>; }> | undefined;
     modelNamesByPlace: ModelNamesByPlaceLoose;
+    hasInteracting?: boolean | undefined;
+    hasJumping?: boolean | undefined;
 };

@@ -21,6 +21,13 @@ export default function players<
     jumpButtonPressTime: Date.now(),
     jumpButtonReleaseTime: Date.now(),
     pickupButtonPressTime: Date.now(),
+    //
+    virtualControlsPressTime: Date.now(),
+    virtualControlsReleaseTime: Date.now(),
+    canShowVirtualButtons: false,
+
+    //
+
     animationNames: {
       walking: backdopStartOptions.playerAnimations.walking,
       idle: backdopStartOptions.playerAnimations.idle,
@@ -30,6 +37,8 @@ export default function players<
   const refs = () => ({
     walkSpeed: backdopStartOptions.walkSpeed,
     canJumpTimeout: null as null | ReturnType<typeof setTimeout>,
+    canShowVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
+    canHideVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
   });
 
   const startStates = { main: state() };

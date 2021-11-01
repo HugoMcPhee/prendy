@@ -12,10 +12,10 @@ export function makeBackdopStoryHelpers(concepFuncs, backdopConcepts, backdopSta
     const { focusOnDoll, hideDoll, moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, springDollToSpot, toggleDollMeshes, } = makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
     const { enableMovement, isHolding, setPlayerAnimations, setPlayerToStartSpot, takePickup, } = makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
     // NOTE maybe return in categores like players.enableMovement()
-    const { changeCameraAtLoop, changeSegmentAtLoop, goToNewPlace, hideWallIf, lookAtSpot, setCamera, setNextSegment, showStoryView, } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
+    const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView, } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
     const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers(concepFuncs, musicNames, musicFiles);
     const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech, } = makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
-    const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(concepFuncs);
+    const { hideSticker, moveSticker, showSticker, } = makeStickerStoryHelpers(concepFuncs);
     return {
         // characters
         lookAtEachother,
@@ -46,14 +46,12 @@ export function makeBackdopStoryHelpers(concepFuncs, backdopConcepts, backdopSta
         setPlayerToStartSpot,
         takePickup,
         // scene
-        changeCameraAtLoop,
-        changeSegmentAtLoop,
         goToNewPlace,
         hideWallIf,
         lookAtSpot,
-        setCamera,
-        setNextSegment,
         showStoryView,
+        setCamera,
+        setSegment,
         // sound
         playNewMusic,
         stopAllMusic,

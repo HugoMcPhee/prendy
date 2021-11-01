@@ -5,7 +5,7 @@ import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle, } from "s
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makePlayerRules(concepFuncs, placeInfoByName) {
+export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
     const { getRefs, getState, makeRules, setState } = concepFuncs;
     const globalRefs = getRefs().global.main;
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
@@ -69,6 +69,8 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
         }),
         whenJumpKeyPressed: addItemEffect({
             onItemEffect() {
+                if (!BACKDOP_OPTIONS.hasJumping)
+                    return;
                 setState({ players: { main: { jumpButtonPressTime: Date.now() } } });
             },
             flow: "input",
@@ -76,6 +78,8 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
         }),
         whenJumpKeyReleased: addItemEffect({
             onItemEffect() {
+                if (!BACKDOP_OPTIONS.hasJumping)
+                    return;
                 setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
             },
             flow: "input",
@@ -203,6 +207,39 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
             flow: "input",
             whenToRun: "subscribe",
         }),
+        whenVirtualControlsPressed: addItemEffect({
+            onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
+                clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
+                playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
+                    const { virtualControlsPressTime, virtualControlsReleaseTime, } = getState().players[playerName];
+                    if (virtualControlsReleaseTime > virtualControlsPressTime)
+                        return;
+                    setState({
+                        players: { [playerName]: { canShowVirtualButtons: true } },
+                    });
+                }, 200); // wait 200 milliseconds, to prevent buttons showing from small mouse clicks
+            },
+            check: { type: "players", prop: "virtualControlsPressTime" },
+            flow: "input",
+            whenToRun: "subscribe",
+        }),
+        whenVirtualControlsReleased: addItemEffect({
+            onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
+                clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
+                playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
+                    const { virtualControlsPressTime, virtualControlsReleaseTime, } = getState().players[playerName];
+                    if (virtualControlsPressTime > virtualControlsReleaseTime)
+                        return;
+                    setState({
+                        players: { [playerName]: { canShowVirtualButtons: false } },
+                    });
+                }, 5000); // wait 5 seconds
+            },
+            check: { type: "players", prop: ["virtualControlsReleaseTime", ""] },
+            flow: "input",
+            whenToRun: "subscribe",
+        }),
+        // Jumping
         onEachFrame: addItemEffect({
             onItemEffect({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs, frameDuration, }) {
                 var _a;
@@ -211,8 +248,7 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { isJumping, isOnGround } = getState().players.main;
-                if (!dollRefs.checkCollisions)
-                    return;
+                // if (!dollRefs.checkCollisions) return;
                 const { scenes } = globalRefs;
                 const { meshRef } = dollRefs;
                 const scene = getScene();
@@ -252,7 +288,8 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
                     /*mesh*/ meshRef, 
                     /*direction*/ new Vector3(0, -0.995, 0), 
                     /*relativeOrigin*/ new Vector3(0, -1, 0), 
-                    /*length*/ 0.25);
+                    /*length*/ 0.3 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan
+                    );
                     const pick = scene.pickWithRay(ray, (mesh) => {
                         return (floorNames.includes(mesh.name) || wallNames.includes(mesh.name));
                     }, true);
@@ -270,8 +307,8 @@ export function makePlayerRules(concepFuncs, placeInfoByName) {
                 if (newIsOnGround) {
                     dollRefs.positionMoverRefs.velocity.y = Math.max(0, dollRefs.positionMoverRefs.velocity.y);
                 }
-                if (!playerMovingPaused)
-                    newPositionMoveMode = "push";
+                // if (!playerMovingPaused) newPositionMoveMode = "push";
+                newPositionMoveMode = "push";
                 setState({ players: { main: { isOnGround: newIsOnGround } } });
             },
             check: { type: "global", prop: "frameTick" },

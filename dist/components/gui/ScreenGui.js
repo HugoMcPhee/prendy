@@ -8,15 +8,17 @@ import { makeScreenSticker } from "./ScreenSticker";
 import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualStick } from "./VirtualStick";
-export function makeScreenGui(concepFuncs, characterNames, pickupsInfo) {
+import { makeVirtualButtons } from "./VirtualButtons";
+export function makeScreenGui(concepFuncs, BACKDOP_OPTIONS, characterNames, pickupsInfo, speechVidFiles) {
     const AlarmText = makeAlarmText(concepFuncs);
     const LoadingOverlay = makeLoadingOverlay(concepFuncs);
     const MiniBubble = makeMiniBubble(concepFuncs);
     const Pickups = makePickups(concepFuncs, pickupsInfo);
     const ScreenSticker = makeScreenSticker(concepFuncs);
-    const SpeechBubble = makeSpeechBubble(concepFuncs);
+    const SpeechBubble = makeSpeechBubble(concepFuncs, speechVidFiles);
     const StoryOverlay = makeStoryOverlay(concepFuncs);
     const VirtualStick = makeVirtualStick(concepFuncs);
+    const VirtualButtons = makeVirtualButtons(concepFuncs, BACKDOP_OPTIONS);
     return function ScreenGui(_) {
         return (React.createElement("div", { style: {
                 pointerEvents: "none",
@@ -34,6 +36,7 @@ export function makeScreenGui(concepFuncs, characterNames, pickupsInfo) {
             React.createElement(MiniBubble, { name: "walkerMiniBubble" }),
             React.createElement(ScreenSticker, null),
             React.createElement(VirtualStick, null),
+            React.createElement(VirtualButtons, null),
             React.createElement(Pickups, null)));
     };
 }

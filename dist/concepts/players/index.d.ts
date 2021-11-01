@@ -12,6 +12,9 @@ export default function players<BackdopOptions extends BackdopOptionsUntyped, An
             jumpButtonPressTime: number;
             jumpButtonReleaseTime: number;
             pickupButtonPressTime: number;
+            virtualControlsPressTime: number;
+            virtualControlsReleaseTime: number;
+            canShowVirtualButtons: boolean;
             animationNames: {
                 walking: AnyAnimationName;
                 idle: AnyAnimationName;
@@ -28,6 +31,9 @@ export default function players<BackdopOptions extends BackdopOptionsUntyped, An
         jumpButtonPressTime: number;
         jumpButtonReleaseTime: number;
         pickupButtonPressTime: number;
+        virtualControlsPressTime: number;
+        virtualControlsReleaseTime: number;
+        canShowVirtualButtons: boolean;
         animationNames: {
             walking: AnyAnimationName;
             idle: AnyAnimationName;
@@ -36,5 +42,7 @@ export default function players<BackdopOptions extends BackdopOptionsUntyped, An
     refs: () => {
         walkSpeed: number;
         canJumpTimeout: number | null;
+        canShowVirtualButtonsTimeout: number | null;
+        canHideVirtualButtonsTimeout: number | null;
     };
 };

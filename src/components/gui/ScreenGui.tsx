@@ -1,6 +1,7 @@
 // @refresh-reset
 import {
   BackdopConcepFuncs,
+  BackdopOptionsUntyped,
   PickupsInfoPlaceholder,
 } from "../../concepts/typedConcepFuncs";
 import React from "react";
@@ -13,16 +14,21 @@ import { makeScreenSticker } from "./ScreenSticker";
 import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualStick } from "./VirtualStick";
+import { makeVirtualButtons } from "./VirtualButtons";
 
 export function makeScreenGui<
   ConcepFuncs extends BackdopConcepFuncs,
+  BackdopOptions extends BackdopOptionsUntyped,
   CharacterName extends string,
   PickupName extends string,
-  PickupsInfo extends PickupsInfoPlaceholder<PickupName>
+  PickupsInfo extends PickupsInfoPlaceholder<PickupName>,
+  SpeechVidFiles extends Record<string, string>
 >(
   concepFuncs: ConcepFuncs,
+  BACKDOP_OPTIONS: BackdopOptions,
   characterNames: readonly CharacterName[],
-  pickupsInfo: PickupsInfo
+  pickupsInfo: PickupsInfo,
+  speechVidFiles: SpeechVidFiles
 ) {
   const AlarmText = makeAlarmText(concepFuncs);
   const LoadingOverlay = makeLoadingOverlay(concepFuncs);
@@ -32,9 +38,14 @@ export function makeScreenGui<
     pickupsInfo
   );
   const ScreenSticker = makeScreenSticker(concepFuncs);
-  const SpeechBubble = makeSpeechBubble(concepFuncs);
+  const SpeechBubble = makeSpeechBubble<
+    ConcepFuncs,
+    CharacterName,
+    SpeechVidFiles
+  >(concepFuncs, speechVidFiles);
   const StoryOverlay = makeStoryOverlay(concepFuncs);
   const VirtualStick = makeVirtualStick(concepFuncs);
+  const VirtualButtons = makeVirtualButtons(concepFuncs, BACKDOP_OPTIONS);
   // const ShowStates = makeShowStates(concepFuncs);
 
   type Props = {};
@@ -61,6 +72,7 @@ export function makeScreenGui<
         <MiniBubble name="walkerMiniBubble" />
         <ScreenSticker />
         <VirtualStick />
+        <VirtualButtons />
         <Pickups />
         {/* <ShowStates /> */}
       </div>

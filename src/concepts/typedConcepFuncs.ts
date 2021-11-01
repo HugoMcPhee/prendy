@@ -352,6 +352,8 @@ export type BackdopOptionsUntyped = {
   >;
   modelNamesByPlace: Record<string, string[]>;
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)
+  hasInteracting?: boolean;
+  hasJumping?: boolean;
 };
 
 type ToPlaceOption<

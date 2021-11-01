@@ -38,7 +38,7 @@ export default function speechBubbles<
     forCharacter: (options?.character ?? "walker") as CharacterName | null,
     position: defaultPosition(),
     typingFinished: true,
-    nowVideoName: "flying_stork" as SpeechvidName,
+    nowVideoName: null as null | SpeechvidName,
     // font: options?.font ?? ("Schoolbell" as FontName),
     font: options?.font ?? fontNames[0],
     // shouldStartRemovoing: false, // (so it can fade out)

@@ -106,6 +106,8 @@ export declare type BackdopOptionsUntyped = {
     headHeightOffset: number;
     doorsInfo?: Partial<Record<string, Partial<Record<string, ToNewOptionUntyped>>>>;
     modelNamesByPlace: Record<string, string[]>;
+    hasInteracting?: boolean;
+    hasJumping?: boolean;
 };
 declare type ToPlaceOption<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, AnySpotName extends string> = {
     toPlace: PlaceName;

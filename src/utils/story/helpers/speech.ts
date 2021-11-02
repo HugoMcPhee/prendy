@@ -41,7 +41,7 @@ export function makeSpeechStoryHelpers<
     BackdopConcepts
   >(concepFuncs, backdopConcepts);
 
-  type SpeechBubbleName = keyof typeof backdopConcepts.speechBubbles.startStates;
+  type SpeechBubbleName = keyof BackdopConcepts["speechBubbles"]["startStates"];
 
   type ATimeout = ReturnType<typeof setTimeout> | undefined;
 
@@ -63,7 +63,7 @@ export function makeSpeechStoryHelpers<
     options?: {
       time?: number;
       showOnce?: boolean;
-      character?: SpeechBubbleName & CharacterName; // NOTE SpeechBubble names and ChaarcterNames match at the moment
+      character?: SpeechBubbleName & CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
       zoomAmount?: number;
       lookAtPlayer?: boolean;
       returnToZoomBeforeConversation?: boolean; // remembers the previous zoom instead of going to the default when the convo ends

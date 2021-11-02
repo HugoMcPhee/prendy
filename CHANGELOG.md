@@ -1,5 +1,9 @@
 TODO
 
+v0.5.1
+
+- fixes showSpeech character type
+
 v0.5.0
 
 - supports speech bubble vids

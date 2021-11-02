@@ -4,7 +4,7 @@ export declare function makeSpeechStoryHelpers<ConcepFuncs extends BackdopConcep
     showSpeech: (text: string, options?: {
         time?: number | undefined;
         showOnce?: boolean | undefined;
-        character?: undefined;
+        character?: (keyof BackdopConcepts["speechBubbles"]["startStates"] & CharacterName) | undefined;
         zoomAmount?: number | undefined;
         lookAtPlayer?: boolean | undefined;
         returnToZoomBeforeConversation?: boolean | undefined;

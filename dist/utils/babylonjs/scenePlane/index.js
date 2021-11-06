@@ -184,6 +184,11 @@ export function makeScenePlaneUtils(concepFuncs, backdopStartOptions) {
         return pointOnScreen;
     }
     //
+    // NOTE WARNING this migh tnot work chen rotating phoen or changing screen size,
+    const cachedParams = {
+        identityMatrix: null,
+        // scenePlaneCamTransformMatrix: null as null | Matrix,
+    };
     function getScenePlanePositionOnScreen(thePosition) {
         if (!globalRefs.scenePlane)
             return new Vector3();
@@ -191,9 +196,16 @@ export function makeScenePlaneUtils(concepFuncs, backdopStartOptions) {
         if (!currentCamera)
             return new Vector3();
         const viewSize = getViewSize();
-        return Vector3.Project(thePosition, Matrix.Identity(), currentCamera
+        if (!cachedParams.identityMatrix) {
+            cachedParams.identityMatrix = Matrix.Identity();
+        }
+        // if (!cachedParams.scenePlaneCamTransformMatrix) {
+        //   cachedParams.scenePlaneCamTransformMatrix = currentCamera
+        //     .getViewMatrix()
+        //     .multiply(currentCamera.getProjectionMatrix());
+        // }
+        return Vector3.Project(thePosition, cachedParams.identityMatrix, currentCamera
             .getViewMatrix()
-            // .multiply(currentCamera.getProjectionMatrix()),
             .multiply(currentCamera.getProjectionMatrix()), currentCamera.viewport.toGlobal(viewSize.width, viewSize.height));
     }
     function getScenePlaneOverScreenEdgesAmount(newPosition) {

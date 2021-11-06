@@ -94,7 +94,8 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { isOnGround, canJump } = playerState;
                 const { scenes } = globalRefs;
-                const activeCamera = (_b = scenes === null || scenes === void 0 ? void 0 : scenes.main) === null || _b === void 0 ? void 0 : _b.activeCamera;
+                // const activeCamera = scenes?.main?.activeCamera;
+                const activeCamera = (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.sceneRenderTarget) === null || _b === void 0 ? void 0 : _b.activeCamera;
                 if (!dollRefs || !dollState || !dollName || !activeCamera)
                     return;
                 if (playerMovingPaused || !canJump)
@@ -128,7 +129,8 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { scenes } = globalRefs;
-                const activeCamera = (_b = scenes === null || scenes === void 0 ? void 0 : scenes.main) === null || _b === void 0 ? void 0 : _b.activeCamera;
+                // const activeCamera = scenes?.main?.activeCamera;
+                const activeCamera = (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.sceneRenderTarget) === null || _b === void 0 ? void 0 : _b.activeCamera;
                 if (!dollRefs || !dollState || !dollName || !activeCamera)
                     return;
                 const { lastSafeInputAngle } = playerState;
@@ -242,7 +244,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
         // Jumping
         onEachFrame: addItemEffect({
             onItemEffect({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs, frameDuration, }) {
-                var _a;
+                var _a, _b;
                 // NOTE should be a dynamic rule for each player listening to frame
                 const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName, } = getState().global.main;
                 const { timerSpeed } = globalRefs;
@@ -252,7 +254,8 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
                 const { scenes } = globalRefs;
                 const { meshRef } = dollRefs;
                 const scene = getScene();
-                const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
+                // const activeCamera = scene?.activeCamera;
+                const activeCamera = (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.sceneRenderTarget) === null || _b === void 0 ? void 0 : _b.activeCamera;
                 const placeInfo = placeInfoByName[nowPlaceName];
                 const floorNames = placeInfo.floorNames;
                 const wallNames = placeInfo.wallNames;

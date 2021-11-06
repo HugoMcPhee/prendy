@@ -139,7 +139,8 @@ export function makePlayerRules<
         const { isOnGround, canJump } = playerState;
         const { scenes } = globalRefs;
 
-        const activeCamera = scenes?.main?.activeCamera;
+        // const activeCamera = scenes?.main?.activeCamera;
+        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
 
         if (!dollRefs || !dollState || !dollName || !activeCamera) return;
 
@@ -186,7 +187,8 @@ export function makePlayerRules<
 
         const { scenes } = globalRefs;
 
-        const activeCamera = scenes?.main?.activeCamera;
+        // const activeCamera = scenes?.main?.activeCamera;
+        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
 
         if (!dollRefs || !dollState || !dollName || !activeCamera) return;
         const { lastSafeInputAngle } = playerState;
@@ -351,7 +353,8 @@ export function makePlayerRules<
         const { scenes } = globalRefs;
         const { meshRef } = dollRefs;
         const scene = getScene();
-        const activeCamera = scene?.activeCamera;
+        // const activeCamera = scene?.activeCamera;
+        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
 
         const placeInfo = placeInfoByName[nowPlaceName];
 

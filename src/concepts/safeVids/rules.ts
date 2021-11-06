@@ -104,9 +104,10 @@ export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
           if (itemRefs.videoElement) {
             setVidState("waitingForUnload");
 
-            itemRefs.videoElement.currentTime = 0.1;
-            itemRefs.videoElement.src = ""; // empty source
+            // itemRefs.videoElement.currentTime = 0.1;
+            itemRefs.videoElement.pause();
             itemRefs.videoElement.removeAttribute("src"); // empty source
+            itemRefs.videoElement.src = ""; // empty source
             itemRefs.videoElement.load();
             itemRefs.videoElement = null;
 

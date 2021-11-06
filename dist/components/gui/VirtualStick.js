@@ -67,7 +67,9 @@ export function makeVirtualStick(concepFuncs) {
                 circleOpacity: 1.0,
                 outerOpacity: 0.9,
             });
-            setState({ players: { main: { virtualControlsPressTime: Date.now() } } });
+            setState({
+                players: { main: { virtualControlsPressTime: Date.now() } },
+            });
         }, []);
         const pointerUpEvent = useCallback((_event) => {
             local.isDown = false;

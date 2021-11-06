@@ -1,5 +1,15 @@
 TODO
 
+v0.5.2
+
+- uses only one scene!
+- doesn't dispose and recreate render target related stuff on camera changes
+- tries to freeze meshes and the scenePlane material if possible
+- runs react-spring in the same concep requestAnimationFrame
+- prevents setting doll mesh position if position didn't change
+- concep update that runs onNextTick at the end of the same frame
+- updated babylonjs to alpha 60 (except gui)
+
 v0.5.1
 
 - fixes showSpeech character type

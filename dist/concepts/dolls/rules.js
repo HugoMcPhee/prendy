@@ -1,6 +1,7 @@
 import { forEach } from "shutils/dist/loops";
 import { toRadians } from "shutils/dist/speedAngleDistance";
 import { getShortestAngle } from "shutils/dist/speedAngleDistance2d";
+import { samePoints as samePoints3d } from "shutils/dist/points3d";
 import { point3dToVector3, vector3ToSafePoint3d } from "../../utils/babylonjs";
 //
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
@@ -269,8 +270,10 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
         // ___________________________________
         // position
         whenPositionChangesToEdit: addItemEffect({
-            onItemEffect({ newValue: newPosition, itemRefs, itemName: dollName }) {
+            onItemEffect({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName, }) {
                 if (!itemRefs.meshRef)
+                    return;
+                if (samePoints3d(newPosition, prevPosition))
                     return;
                 // if (dollName === "key") {
                 //   console.log("sdkfksfdlfsdkkfsdlkfsd");

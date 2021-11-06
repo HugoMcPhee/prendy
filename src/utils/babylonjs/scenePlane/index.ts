@@ -284,18 +284,33 @@ export function makeScenePlaneUtils<
 
   //
 
+  // NOTE WARNING this migh tnot work chen rotating phoen or changing screen size,
+  const cachedParams = {
+    identityMatrix: null as null | Matrix,
+    // scenePlaneCamTransformMatrix: null as null | Matrix,
+  };
+
   function getScenePlanePositionOnScreen(thePosition: Vector3) {
     if (!globalRefs.scenePlane) return new Vector3();
     const currentCamera = globalRefs.scenePlaneCamera;
     if (!currentCamera) return new Vector3();
     const viewSize = getViewSize();
 
+    if (!cachedParams.identityMatrix) {
+      cachedParams.identityMatrix = Matrix.Identity();
+    }
+
+    // if (!cachedParams.scenePlaneCamTransformMatrix) {
+    //   cachedParams.scenePlaneCamTransformMatrix = currentCamera
+    //     .getViewMatrix()
+    //     .multiply(currentCamera.getProjectionMatrix());
+    // }
+
     return Vector3.Project(
       thePosition,
-      Matrix.Identity(),
+      cachedParams.identityMatrix,
       currentCamera
         .getViewMatrix()
-        // .multiply(currentCamera.getProjectionMatrix()),
         .multiply(currentCamera.getProjectionMatrix()),
       currentCamera.viewport.toGlobal(viewSize.width, viewSize.height)
     );

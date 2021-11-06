@@ -18,6 +18,8 @@ const defaultCamRefs = () => ({
   isTriggerable: true,
 });
 
+export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
+
 export default function places<
   PlaceName extends string,
   AnyCameraName extends string,

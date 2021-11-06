@@ -9,7 +9,7 @@ export function setGlobalPositionWithCollisions(theMesh, newMeshPos) {
     const positionDidChange = !movementAmount.equals(Vector3.Zero());
     if (positionDidChange) {
         theMesh.moveWithCollisions(movementAmount);
-        theMesh.computeWorldMatrix(true);
+        // theMesh.computeWorldMatrix(true);
         collidedMeshPos = theMesh.getAbsolutePosition().clone();
         const collidedPosOffset = subtractPointsSafer(newMeshPos, collidedMeshPos);
         positionWasEdited = !pointIsZero(collidedPosOffset);

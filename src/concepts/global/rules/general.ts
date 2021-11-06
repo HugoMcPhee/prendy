@@ -1,10 +1,11 @@
-import { breakableForEach } from "shutils/dist/loops";
+import { Scene } from "@babylonjs/core";
+import { breakableForEach, forEach } from "shutils/dist/loops";
 import { BackdopConcepFuncs } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 
-export function makeGlobalGeneralRules<
-  ConcepFuncs extends BackdopConcepFuncs
->(concepFuncs: ConcepFuncs) {
+export function makeGlobalGeneralRules<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
+) {
   const { getRefs, getState, makeRules, setState } = concepFuncs;
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
@@ -13,8 +14,24 @@ export function makeGlobalGeneralRules<
       onEffect() {
         const globalRefs = getRefs().global.main;
         // Renders the scene manually
-        globalRefs.scenes.main?.render();
-        globalRefs.scenes.backdrop?.render();
+        // (globalRefs.scenes.main as Scene)?.render();
+
+        // if (globalRefs.depthRenderer) {
+        //   (globalRefs.depthRenderer as DepthRendererWithSize).getDepthMap();
+        // }
+        // (globalRefs.sceneRenderTarget as RenderTargetTexture)?.activeCamera.outputRenderTarget;
+        // (globalRefs.sceneRenderTarget as RenderTargetTexture)?.render();
+        // (globalRefs.depthRenderTarget as RenderTargetTexture)?.render();
+
+        forEach(
+          (globalRefs.scenes.main as Scene)?.skeletons ?? [],
+          (skeleton) => {
+            skeleton.prepare();
+          }
+        );
+        (globalRefs.scenes.main as Scene)?.render(false, false);
+
+        // globalRefs.scenes.backdrop?.render();
 
         // runs in a callback to set before the new concepo frame
         setState({}, () => {

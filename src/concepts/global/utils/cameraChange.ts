@@ -271,9 +271,11 @@ export function makeCameraChangeUtils<
       forEach(dollMeshNames, (meshName) => {
         const loopedMesh = dollMeshes[meshName];
 
-        loopedMesh.alwaysSelectAsActiveMesh = true;
-        globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
-        globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
+        if (loopedMesh) {
+          loopedMesh.alwaysSelectAsActiveMesh = true;
+          globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
+          globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
+        }
       });
     });
 

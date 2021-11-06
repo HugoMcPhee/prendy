@@ -144,9 +144,11 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
             forEach(dollMeshNames, (meshName) => {
                 var _a, _b, _c, _d;
                 const loopedMesh = dollMeshes[meshName];
-                loopedMesh.alwaysSelectAsActiveMesh = true;
-                (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(loopedMesh);
-                (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(loopedMesh);
+                if (loopedMesh) {
+                    loopedMesh.alwaysSelectAsActiveMesh = true;
+                    (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(loopedMesh);
+                    (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(loopedMesh);
+                }
             });
         });
         scenes.main.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional

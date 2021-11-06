@@ -1,5 +1,15 @@
 TODO
 
+- fix particles not showing (some small particles show in atleast the first alley in smelldog)
+- fix jump arrow svg not showing, and interact emoji in ios
+- fix jump button not handling holding on andorid and ios
+- fix android jump button moving vrtual stick
+- fix virtual buttons being cutoff on android and ios
+
+v0.5.3
+
+- fix issue with undefined doll meshes in cameraChange (global/utils)
+
 v0.5.2
 
 - uses only one scene!

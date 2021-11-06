@@ -115,7 +115,7 @@ export function makeGlobalChangePlaceRules<
 
     // fix for chrome video texture being black / not ready when the video is?
     // (setion vidElement.autoplay or preload true also fixed it, but those can make things less predictable without videos appended on the page )
-    updateTexturesForNowCamera(nowCamName as AnyCameraName); // sometimes it still starts blank
+    updateTexturesForNowCamera(nowCamName as AnyCameraName, true);
     setState({
       global: {
         main: {

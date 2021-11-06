@@ -43,7 +43,9 @@ export class CustomVideoTexture extends Texture {
                 this.wrapV = Texture.CLAMP_ADDRESSMODE;
                 this._generateMipMaps = false;
             }
-            this._texture = this._getEngine().createDynamicTexture(this.video.videoWidth, this.video.videoHeight, this._generateMipMaps, this.samplingMode);
+            this._texture = this._getEngine().createDynamicTexture(this.video.videoWidth, this.video.videoHeight, this._generateMipMaps, 
+            // false,
+            this.samplingMode);
             if (!this.video.autoplay) {
                 // let oldHandler = this.video.onplaying;
                 // let error = false;

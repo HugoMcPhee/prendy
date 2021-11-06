@@ -43,7 +43,7 @@ export const backdopFlowNames = [
   "loadNewPlaceModels", //
   "loadNewPlace", // might ned a load new place, and respondToNewPlace seperate parts
   // deciding and changing for next videos
-  "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSection" , so mvoed to the last flow as a quick probably temporary fix
+  // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSection" , so mvoed to the last flow as a quick probably temporary fix
   "chooseVideoSection", // when game logic changes to choose a new video section ( like when wantedCamera or segment changes)
   "sectionVidWantsToPlay",
   "sectionVidWantsToPlay2", // just a easier way to react to a second subscriber in sectionVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes

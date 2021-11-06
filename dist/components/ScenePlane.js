@@ -2,7 +2,7 @@ import { AbstractMesh } from "@babylonjs/core";
 import React, { useCallback } from "react";
 import { makeScenePlaneUtils } from "../utils/babylonjs/scenePlane";
 export function makeScenePlane(concepFuncs, backdopStartOptions) {
-    const { getRefs, getState, useStoreEffect, useStoreItemPropsEffect, } = concepFuncs;
+    const { getRefs, getState, useStoreEffect, useStoreItemPropsEffect } = concepFuncs;
     const globalRefs = getRefs().global.main;
     const { fitScenePlaneToScreen, applyPlanePosition } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     return function ScenePlane(_) {

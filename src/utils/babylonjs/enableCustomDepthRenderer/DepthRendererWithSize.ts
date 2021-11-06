@@ -255,6 +255,8 @@ export class DepthRendererWithSize {
 
     var mesh = subMesh.getMesh();
 
+    // console.log(mesh.name);
+
     // Alpha test
     if (
       material &&

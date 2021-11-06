@@ -10,12 +10,8 @@ export function makeScenePlane<
   ConcepFuncs extends BackdopConcepFuncs,
   BackdopOptions extends BackdopOptionsUntyped
 >(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions) {
-  const {
-    getRefs,
-    getState,
-    useStoreEffect,
-    useStoreItemPropsEffect,
-  } = concepFuncs;
+  const { getRefs, getState, useStoreEffect, useStoreItemPropsEffect } =
+    concepFuncs;
 
   const globalRefs = getRefs().global.main;
 

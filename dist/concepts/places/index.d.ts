@@ -1,5 +1,12 @@
 import { TargetCamera, AbstractMesh, Vector3, Sound, CubeTexture } from "@babylonjs/core";
 import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
+declare const defaultCamRefs: () => {
+    camera: TargetCamera | null;
+    camCubeMeshes: AbstractMesh[];
+    probeTexture: CubeTexture | null;
+    isTriggerable: boolean;
+};
+export declare type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 export default function places<PlaceName extends string, AnyCameraName extends string, TriggerNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>, SoundspotNameByPlace extends Record<PlaceName, string>, WallNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, string>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>>(placeNames: readonly PlaceName[], placeInfoByName: PlaceInfoByName): {
     startStates: { [P_PlaceName in PlaceName]: {
         wantedCamNameAtLoop: CameraNameByPlace[P_PlaceName] | null;
@@ -28,3 +35,4 @@ export default function places<PlaceName extends string, AnyCameraName extends s
         }; };
     };
 };
+export {};

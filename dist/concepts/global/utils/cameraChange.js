@@ -49,10 +49,11 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
             smallArray: camSegmentNames,
         });
     }
-    function updateTexturesForNowCamera(newCameraName) {
-        var _a, _b, _c, _d, _e;
+    function updateTexturesForNowCamera(newCameraName, didChangePlace = false) {
         const { nowPlaceName } = getState().global.main;
-        const { scenes, backdropRenderSize } = globalRefs;
+        // const { scenes, backdropRenderSize } = globalRefs;
+        const { backdropRenderSize } = globalRefs;
+        const scenes = globalRefs.scenes;
         const placeRef = placesRefs[nowPlaceName];
         const { camsRefs } = placeRef;
         const newCamRef = camsRefs[newCameraName];
@@ -64,32 +65,55 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
             return;
         if (!globalRefs.scenePlane)
             return;
-        scenes.main.activeCamera = newCamRef.camera;
+        // if (!globalRefs.sceneRenderTarget) return;
+        // scenes.main.activeCamera = newCamRef.camera;
+        // scenes.main.activeCamera = newCamRef.camera;
         // playerCharRefs.cameraRef = scenes.main.activeCamera as TargetCamera;
         // Render target
-        (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.dispose();
-        globalRefs.sceneRenderTarget = new RenderTargetTexture("screenShot", backdropRenderSize, scenes.main, false, false, Constants.TEXTURETYPE_UNSIGNED_INT, false, Texture.NEAREST_SAMPLINGMODE, undefined, undefined, undefined, Engine.TEXTUREFORMAT_RGBA);
-        (_b = globalRefs.depthRenderer) === null || _b === void 0 ? void 0 : _b.dispose();
-        globalRefs.depthRenderer = enableCustomDepthRenderer(scenes.main, getRefs().global.main.depthRenderSize, newCamRef.camera, false);
-        (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.dispose();
-        globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
-        scenes.main.customRenderTargets = [
-            globalRefs.sceneRenderTarget,
-            globalRefs.depthRenderTarget,
-        ];
-        scenes.main.meshes.forEach((loopedMesh) => {
-            var _a, _b, _c, _d;
-            (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(loopedMesh);
-            (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(loopedMesh);
-        });
-        const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
-        particleSystemNames.forEach((particleSystemName) => {
-            var _a, _b, _c, _d;
-            const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
-            (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(particleSystem.mesh);
-            (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(particleSystem.mesh);
-            particleSystem._camera = newCamRef.camera;
-        });
+        // globalRefs.sceneRenderTarget?.dispose();
+        if (!globalRefs.sceneRenderTarget) {
+            globalRefs.sceneRenderTarget = new RenderTargetTexture("screenShot", backdropRenderSize, scenes.main, false, false, Constants.TEXTURETYPE_UNSIGNED_INT, false, Texture.NEAREST_SAMPLINGMODE, undefined, undefined, undefined, Engine.TEXTUREFORMAT_RGBA);
+        }
+        globalRefs.sceneRenderTarget.activeCamera = newCamRef.camera;
+        // globalRefs.depthRenderer?.dispose();
+        if (!globalRefs.depthRenderer) {
+            globalRefs.depthRenderer = enableCustomDepthRenderer(scenes.main, getRefs().global.main.depthRenderSize, newCamRef.camera, false);
+        }
+        // const depthRenderer = globalRefs.depthRenderer as DepthRendererWithSize;
+        // depthRenderer.useOnlyInActiveCamera = true;
+        // globalRefs.depthRenderTarget?.dispose();
+        if (!globalRefs.depthRenderTarget) {
+            globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
+        }
+        globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
+        // scenes.main._depthRenderer = globalRefs.depthRenderer;
+        // scenes.main.enableDepthRenderer();
+        // newCamRef.camera.customRenderTargets = [
+        //   globalRefs.sceneRenderTarget,
+        //   globalRefs.depthRenderTarget,
+        // ];
+        if (!scenes.main.customRenderTargets.length) {
+            scenes.main.customRenderTargets = [
+                globalRefs.sceneRenderTarget,
+                globalRefs.depthRenderTarget,
+            ];
+            // scenes.main.cameras.forEach((camera) => {
+            // camera.outputRenderTarget = globalRefs.sceneRenderTarget;
+            // camera.customRenderTargets = [globalRefs.depthRenderTarget];
+            // camera.cuso
+            // });
+            // newCamRef.camera.unfreezeProjectionMatrix();
+            // scenes.main.cameras.forEach((camera) => {
+            //   if (camera !== newCamRef.camera) {
+            //     camera.freezeProjectionMatrix();
+            //     camera.setEnabled(false);
+            //     // camera.;
+            //   }
+            // });
+            // setTimeout(() => {
+            // }, 2000);
+            addMeshesToRenderLists(newCamRef);
+        }
         // Plane material
         if (!globalRefs.scenePlaneMaterial) {
             globalRefs.scenePlaneMaterial = new ShaderMaterial("backdropAndDepthShader", scenes.backdrop, "./backdropAndDepth", {
@@ -97,7 +121,46 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
                 uniforms: ["worldViewProjection"],
             });
             globalRefs.scenePlane.material = globalRefs.scenePlaneMaterial;
+            globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+            globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+            updateVideoTexturesForNewPlace(nowPlaceName);
+            globalRefs.scenePlane.material.freeze();
         }
+        if (didChangePlace) {
+            addMeshesToRenderLists(newCamRef);
+            updateVideoTexturesForNewPlace(nowPlaceName);
+        }
+        applyProbeToAllDollMaterials();
+        applyProbeToAllParticleMaterials();
+    }
+    function addMeshesToRenderLists(newCamRef) {
+        const scenes = globalRefs.scenes;
+        scenes.main.freezeActiveMeshes();
+        globalRefs.sceneRenderTarget.renderList = [];
+        globalRefs.depthRenderTarget.renderList = [];
+        forEach(dollNames, (dollName) => {
+            const dollMeshes = getRefs().dolls[dollName].otherMeshes;
+            const dollMeshNames = Object.keys(dollMeshes);
+            forEach(dollMeshNames, (meshName) => {
+                var _a, _b, _c, _d;
+                const loopedMesh = dollMeshes[meshName];
+                loopedMesh.alwaysSelectAsActiveMesh = true;
+                (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(loopedMesh);
+                (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(loopedMesh);
+            });
+        });
+        scenes.main.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
+        const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
+        forEach(particleSystemNames, (particleSystemName) => {
+            var _a, _b, _c, _d;
+            const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
+            (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(particleSystem.mesh);
+            (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(particleSystem.mesh);
+            particleSystem._camera = newCamRef.camera;
+        });
+    }
+    function updateVideoTexturesForNewPlace(nowPlaceName) {
+        var _a, _b;
         if (globalRefs.colorVideoTex && globalRefs.depthVideoTex) {
             const colorVidElement = getSectionVidVideo(nowPlaceName);
             const depthVidElement = getSectionVidVideo(nowPlaceName, "depth");
@@ -106,13 +169,9 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
                 globalRefs.colorVideoTex.updateVid(colorVidElement);
                 globalRefs.depthVideoTex.updateVid(depthVidElement);
             }
-            (_d = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _d === void 0 ? void 0 : _d.setTexture("BackdropTextureSample", globalRefs.colorVideoTex);
-            (_e = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _e === void 0 ? void 0 : _e.setTexture("DepthTextureSample", globalRefs.depthVideoTex);
         }
-        globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-        globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
-        applyProbeToAllDollMaterials();
-        applyProbeToAllParticleMaterials();
+        (_a = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _a === void 0 ? void 0 : _a.setTexture("BackdropTextureSample", globalRefs.colorVideoTex);
+        (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _b === void 0 ? void 0 : _b.setTexture("DepthTextureSample", globalRefs.depthVideoTex);
     }
     function applyProbeToAllDollMaterials() {
         const { nowPlaceName, modelNamesLoaded } = getState().global.main;

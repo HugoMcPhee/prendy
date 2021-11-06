@@ -35,7 +35,7 @@ export const backdopFlowNames = [
     "loadNewPlaceModels",
     "loadNewPlace",
     // deciding and changing for next videos
-    "checkVideoLoop",
+    // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSection" , so mvoed to the last flow as a quick probably temporary fix
     "chooseVideoSection",
     "sectionVidWantsToPlay",
     "sectionVidWantsToPlay2",

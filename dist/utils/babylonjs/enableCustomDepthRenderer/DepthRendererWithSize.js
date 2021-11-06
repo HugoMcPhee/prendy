@@ -135,6 +135,7 @@ export class DepthRendererWithSize {
         var defines = [];
         var attribs = [VertexBuffer.PositionKind];
         var mesh = subMesh.getMesh();
+        // console.log(mesh.name);
         // Alpha test
         if (material &&
             material.needAlphaTesting() &&

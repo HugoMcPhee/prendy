@@ -91,7 +91,9 @@ export function makeVirtualStick<ConcepFuncs extends BackdopConcepFuncs>(
           outerOpacity: 0.9,
         });
 
-        setState({ players: { main: { virtualControlsPressTime: Date.now() } } });
+        setState({
+          players: { main: { virtualControlsPressTime: Date.now() } },
+        });
       },
       []
     );

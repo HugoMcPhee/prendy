@@ -76,9 +76,8 @@ export function makeUsePlace<
       wallNames,
     } = placeInfo;
 
-    const { container, meshes, cameras, transformNodes } = useModelFile<any>(
-      modelFile
-    );
+    const { container, meshes, cameras, transformNodes } =
+      useModelFile<any>(modelFile);
 
     useEffect(() => {
       // this runs after useModelFile finished
@@ -126,6 +125,8 @@ export function makeUsePlace<
         meshes[loopedName].collisionGroup = 11;
         meshes[loopedName].useOctreeForCollisions = true;
         meshes[loopedName].isVisible = false;
+        meshes[loopedName].freezeWorldMatrix();
+        meshes[loopedName].doNotSyncBoundingInfo = true;
       });
 
       forEach(wallNames, (loopedName) => {
@@ -133,11 +134,16 @@ export function makeUsePlace<
         meshes[loopedName].collisionGroup = 11;
         meshes[loopedName].useOctreeForCollisions = true;
         meshes[loopedName].isVisible = false;
+        meshes[loopedName].freezeWorldMatrix();
+        meshes[loopedName].doNotSyncBoundingInfo = true;
         placeRefs.wallMeshes[loopedName] = meshes[loopedName];
       });
 
       forEach(triggerNames, (loopedName) => {
         meshes[loopedName].isVisible = false;
+
+        meshes[loopedName].freezeWorldMatrix();
+        meshes[loopedName].doNotSyncBoundingInfo = true;
         // const { material } = meshes[loopedName];
         // if (material) material.alpha = 0.5;
         placeRefs.triggerMeshes[loopedName] = meshes[loopedName];
@@ -148,6 +154,8 @@ export function makeUsePlace<
         placeRefs.spotPositions[spotName] = spotNode.getAbsolutePosition();
         spotNode.computeWorldMatrix(true);
         placeRefs.spotRotations[spotName] = getAbsoluteRotation(spotNode);
+
+        spotNode.freezeWorldMatrix();
       });
 
       forEach(soundspotNames, (loopedName) => {
@@ -175,6 +183,9 @@ export function makeUsePlace<
             "."
           )[0] as AnyCameraName;
           loopedMesh.isVisible = false;
+
+          loopedMesh.freezeWorldMatrix();
+          loopedMesh.doNotSyncBoundingInfo = true;
 
           const camRef = placeRefs.camsRefs[cameraName];
           if (camRef) camRef.camCubeMeshes.push(loopedMesh);

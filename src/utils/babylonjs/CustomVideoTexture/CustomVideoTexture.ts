@@ -137,6 +137,7 @@ export class CustomVideoTexture extends Texture {
       this.video.videoWidth,
       this.video.videoHeight,
       this._generateMipMaps,
+      // false,
       this.samplingMode
     );
 

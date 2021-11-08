@@ -461,7 +461,7 @@ export function makeAllStoryRuleMakers<
           let ruleName = startItemEffect({
             onItemEffect() {
               stopEffect(ruleName);
-              console.log("unload rules for", prevPlace);
+              // console.log("unload rules for", prevPlace);
               const usefulStoryStuff = getUsefulStoryStuff();
               (callBacksObject as Record<any, any>)[prevPlace]?.(
                 usefulStoryStuff

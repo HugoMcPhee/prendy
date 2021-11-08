@@ -3,8 +3,10 @@ import {
   Color3,
   Color4,
   FxaaPostProcess,
+  TargetCamera,
   Vector3,
 } from "@babylonjs/core";
+import loadStyles from "../utils/loadStyles";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
 import React, { ReactNode, useCallback, useEffect } from "react";
@@ -18,10 +20,13 @@ import {
   PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
 } from "../concepts/typedConcepFuncs";
+// import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
 // import "./BackdopApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
+
+loadStyles();
 
 type Props = { children?: ReactNode };
 
@@ -102,12 +107,26 @@ export function makeBackdopApp<
 
   const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
 
+  // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
+  //   "city",
+  //   "cityb",
+  //   "beanshop",
+  // ]);
+
   return function BackdopApp({ children }: Props) {
     const globalRefs = getRefs().global.main;
 
     const scenePlaneCameraRef = useCallback(
-      (node) => {
+      (node: TargetCamera) => {
         globalRefs.scenePlaneCamera = node;
+
+        // setTimeout(() => {
+        // const activeMeshes = node._activeMeshes;
+        // const activeMeshes = node.getActiveMeshes();
+        // console.log("______________________");
+        // console.log("activeMeshes");
+        // console.log(activeMeshes);
+        // }, 5000);
       },
       [globalRefs]
     );
@@ -130,10 +149,12 @@ export function makeBackdopApp<
           style={{ display: "none", position: "absolute" }}
         ></div>
         */}
-        {/* <AllTestVideoStuff /> */}
+        {/*
+        <AllTestVideoStuff />
+        */}
 
         <Engine
-          canvasId="scene-canvas"
+          canvasId="sce ne-canvas"
           adaptToDeviceRatio={false}
           engineOptions={{
             disableWebGL2Support: false,
@@ -141,19 +162,24 @@ export function makeBackdopApp<
           }}
         >
           <Scene
-            clearColor={Color4.FromColor3(Color3.FromHexString("#aca898"), 0.0)}
+            clearColor={Color4.FromColor3(Color3.FromHexString("#000000"), 0.0)}
             // onSceneMount={(info) => (globalRefs.scenes.main = info.scene)}
             onSceneMount={(info) => {
+              const engine = info.scene.getEngine();
+              // Each frame is rendered manually inside the video looping check function atm
+              engine.stopRenderLoop();
+              engine.disableUniformBuffers = true;
               info.scene.autoClear = false;
               info.scene.autoClearDepthAndStencil = false;
+
+              info.scene.skipFrustumClipping = true;
+
               // info.scene.blockMaterialDirtyMechanism = true;
               // setTimeout(() => {
               // info.scene.freezeActiveMeshes();
               // }, 5000);
               globalRefs.scenes.main = info.scene;
               globalRefs.scenes.backdrop = info.scene;
-
-              const engine = info.scene.getEngine();
 
               // engine.setHardwareScalingLevel(8);
               // if (engine._workingCanvas) {
@@ -167,32 +193,29 @@ export function makeBackdopApp<
                 });
               });
 
-              onNextTick(() => {
-                if (globalRefs.scenes.backdrop) {
-                  // const postProcess =
-                  new FxaaPostProcess(
-                    "fxaa",
-                    1.0,
-                    globalRefs.scenes.backdrop.activeCamera
-                  );
-                }
-              });
-
-              // engine.setHardwareScalingLevel(1);
-              // Each frame is rendered manually inside the video looping check function atm
-              engine.stopRenderLoop();
+              // onNextTick(() => {
+              //   if (globalRefs.scenes.backdrop) {
+              //     // const postProcess =
+              //     new FxaaPostProcess(
+              //       "fxaa",
+              //       1.0,
+              //       globalRefs.scenes.backdrop.activeCamera
+              //     );
+              //   }
+              // });
             }}
           >
             <LoadingModels>{children}</LoadingModels>
 
+            {/*  scene plane stuff */}
             <targetCamera
               name="camera1"
               position={new Vector3(0, 0, -2)}
               rotation={new Vector3(toRadians(0), toRadians(0), 0)}
               mode={Camera.ORTHOGRAPHIC_CAMERA}
               ref={scenePlaneCameraRef}
+              layerMask={23}
             />
-            {/*  might need to make scene plane programatically, to make sure it's not in the the scene view? */}
             <ScenePlane />
           </Scene>
         </Engine>

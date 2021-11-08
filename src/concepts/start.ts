@@ -17,7 +17,6 @@ import { makePointersConnectRules } from "./pointers";
 import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
-import { makeStackVidRules } from "./stackVids/rules";
 import {
   BackdopConcepFuncs,
   BackdopOptionsUntyped,
@@ -123,7 +122,7 @@ export function makeStartBackdopRules<
 
   const safeVidRules = makeSafeVidRules(concepFuncs);
 
-  const safeSectionStackVidRules = makeSectionVidRules<
+  const safeSectionVidRules = makeSectionVidRules<
     ConcepFuncs,
     PlaceInfoByName,
     PlaceName,
@@ -132,8 +131,6 @@ export function makeStartBackdopRules<
     CameraNameByPlace,
     SegmentNameByPlace
   >(concepFuncs, placeInfoByName, dollNames);
-
-  const safeStackVidRules = makeStackVidRules(concepFuncs);
 
   const characterDynamicRules = makeCharacterDynamicRules<
     ConcepFuncs,
@@ -151,11 +148,12 @@ export function makeStartBackdopRules<
     PlaceInfoByName
   >(concepFuncs, placeInfoByName);
 
-  const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState<
-    ConcepFuncs,
-    ReturnType<typeof makeCharacterDynamicRules>,
-    CharacterName
-  >(characterDynamicRules, characterNames, concepFuncs);
+  const startDynamicCharacterRulesForInitialState =
+    makeStartDynamicCharacterRulesForInitialState<
+      ConcepFuncs,
+      ReturnType<typeof makeCharacterDynamicRules>,
+      CharacterName
+    >(characterDynamicRules, characterNames, concepFuncs);
 
   // ----------------------------------------------
   // starting and stopping rules
@@ -168,24 +166,25 @@ export function makeStartBackdopRules<
     modelRules.startAll();
     /*characters*/
     characterRules.startAll();
-    const stopDynamicCharacterRulesForInitialState = startDynamicCharacterRulesForInitialState();
+    const stopDynamicCharacterRulesForInitialState =
+      startDynamicCharacterRulesForInitialState();
     /*dolls*/
     dollRules.startAll();
-    const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState<
-      ConcepFuncs,
-      ReturnType<typeof makeDollDynamicRules>,
-      DollName
-    >(
-      concepFuncs,
-      dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
-      dollNames
-    );
+    const stopDynamicDollRulesForInitialState =
+      startDynamicDollRulesForInitialState<
+        ConcepFuncs,
+        ReturnType<typeof makeDollDynamicRules>,
+        DollName
+      >(
+        concepFuncs,
+        dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
+        dollNames
+      );
     /**/
     playerRules.startAll();
     speechBubbleRules.startAll();
     safeVidRules.startAll();
-    safeStackVidRules.startAll();
-    safeSectionStackVidRules.startAll();
+    safeSectionVidRules.startAll();
 
     return function stopBackdopMainRules() {
       keyboardConnectRules.stopAll();
@@ -203,8 +202,7 @@ export function makeStartBackdopRules<
       playerRules.stopAll();
       speechBubbleRules.stopAll();
       safeVidRules.stopAll();
-      safeStackVidRules.stopAll();
-      safeSectionStackVidRules.stopAll();
+      safeSectionVidRules.stopAll();
     };
   }
 

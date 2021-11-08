@@ -14,7 +14,6 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-import stackVids from "./stackVids";
 const testGetBackdopOptions = makeGetBackdopOptions();
 const TEST_START_OPTIONS = testGetBackdopOptions({
     // place: "cave",
@@ -68,7 +67,7 @@ const testStuff = {
     placeInfoByName: {
         placeA: {
             modelFile: "test",
-            videoFiles: { color: "test", depth: "test" },
+            videoFiles: { backdrop: "test" },
             cameraNames: testNames,
             segmentDurations: { start: 1 },
             segmentNames: testNames,
@@ -102,7 +101,6 @@ const placeholderBackdopConcepts = {
     speechBubbles: speechBubbles(testStuff.characterNames, testStuff.characterOptions, testStuff.fontNames),
     places: places(testStuff.placeNames, testStuff.placeInfoByName),
     safeVids: safeVids(testStuff.placeNames, testStuff.placeInfoByName),
-    stackVids: stackVids(testStuff.placeNames),
     sectionVids: sectionVids(testStuff.placeNames),
     //
     story: story_fake(),

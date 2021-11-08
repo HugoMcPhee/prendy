@@ -124,7 +124,7 @@ export function makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConc
             // TODO
             // this keeps meshes rendering outside of the main camera view (ideally the 'frustrum'
             // could change so it works for the scene rendered to texture, but for now it's okay cause there's not many meshes
-            meshes[loopedMeshName].alwaysSelectAsActiveMesh = true;
+            // meshes[loopedMeshName].alwaysSelectAsActiveMesh = true;
         });
         enableCollisions(dollRefs.meshRef);
     }

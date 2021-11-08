@@ -55,16 +55,7 @@ export default function places(placeNames, placeInfoByName) {
             triggerMeshes,
             wallMeshes,
             camsRefs,
-            colorVid: null,
-            depthVid: null,
-            vidARefs: {
-                colorVid: null,
-                depthVid: null,
-            },
-            vidBRefs: {
-                colorVid: null,
-                depthVid: null,
-            },
+            backdropVid: null,
         };
     }
     // const startStates: InitialItemsState<typeof state> = {

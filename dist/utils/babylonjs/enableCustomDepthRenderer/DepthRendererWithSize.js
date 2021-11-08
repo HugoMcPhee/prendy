@@ -128,6 +128,8 @@ export class DepthRendererWithSize {
      * @returns if the depth renderer is ready to render the depth map
      */
     isReady(subMesh, useInstances) {
+        if (this._cachedDefines)
+            return this._effect.isReady(); // NOTE WARNING added thi srecently
         var material = subMesh.getMaterial();
         if (material.disableDepthWrite) {
             return false;

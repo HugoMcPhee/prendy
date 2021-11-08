@@ -120,8 +120,7 @@ export default function global<
 
   // Refs
   const refs = () => ({
-    depthVideoTex: null as null | CustomVideoTexture,
-    colorVideoTex: null as null | CustomVideoTexture,
+    backdropVideoTex: null as null | CustomVideoTexture,
     //
     scenes: {
       main: null as null | Scene,

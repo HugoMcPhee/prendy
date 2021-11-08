@@ -1,3 +1,4 @@
+export const speechBubbleStyles = `
 /* @keyframes SpeechBubble-visibleLetterAnimation {
   0% {
     opacity: 0.75;
@@ -36,3 +37,5 @@
   flex-wrap: no-wrap;
   white-space: pre;
 }
+
+`;

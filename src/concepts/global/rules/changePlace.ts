@@ -78,34 +78,18 @@ export function makeGlobalChangePlaceRules<
     const { nowPlaceName } = getState().global.main;
     const { nowCamName } = getState().places[nowPlaceName];
 
-    globalRefs.colorVideoTex?.dispose();
-    globalRefs.depthVideoTex?.dispose();
+    globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
 
-    const colorVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
-    const depthVidElement = getSectionVidVideo(
-      nowPlaceName as PlaceName,
-      "depth"
-    );
+    const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
 
-    if (colorVidElement) {
-      globalRefs.colorVideoTex = new CustomVideoTexture(
-        "colorVideoTex",
-        colorVidElement,
+    if (backdropVidElement) {
+      globalRefs.backdropVideoTex = new CustomVideoTexture(
+        "backdropVideoTex",
+        backdropVidElement,
         globalRefs.scenes.backdrop,
         false,
         false,
-        Texture.TRILINEAR_SAMPLINGMODE,
-        { autoPlay: false, loop: false, autoUpdateTexture: true }
-      );
-    }
-    if (depthVidElement) {
-      globalRefs.depthVideoTex = new CustomVideoTexture(
-        "depthVideoTex",
-        depthVidElement,
-        globalRefs.scenes.backdrop,
-        false,
-        false,
-        Texture.NEAREST_SAMPLINGMODE,
+        Texture.TRILINEAR_SAMPLINGMODE, // Texture.NEAREST_SAMPLINGMODE, might be better for depth
         { autoPlay: false, loop: false, autoUpdateTexture: true }
       );
     }

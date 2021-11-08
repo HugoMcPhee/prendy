@@ -1,9 +1,10 @@
 import { Constants, Engine, PBRMaterial, RenderTargetTexture, ShaderMaterial, Texture, } from "@babylonjs/core";
-import { forEach } from "shutils/dist/loops";
-import { makeGlobalStoreUtils } from "./";
+import shaders from "../../..//utils/shaders";
 import { chooseClosestBeforeItemInArray } from "shutils/dist/arrays";
+import { forEach } from "shutils/dist/loops";
+import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
-import { makeGetSectionVidVideo, } from "../../../concepts/sectionVids/utils";
+import { makeGlobalStoreUtils } from "./";
 export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
     const { getRefs, getState, setState } = concepFuncs;
     const globalRefs = getRefs().global.main;
@@ -31,7 +32,7 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
         // if the camera isn't in the nowPlace, then use the first camera for the nowPlace
         const safeCam = getSafeCamName(cam);
         if (nowPlaceName !== place) {
-            console.warn("tried to gtSafeSegment name for not current place", place);
+            console.warn("tried to getSafeSegment name for not current place", place);
         }
         // if (segmentTimesByCamera[cam]) {
         // segmentTimesByCamera[cam]
@@ -116,7 +117,7 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
         }
         // Plane material
         if (!globalRefs.scenePlaneMaterial) {
-            globalRefs.scenePlaneMaterial = new ShaderMaterial("backdropAndDepthShader", scenes.backdrop, "./backdropAndDepth", {
+            globalRefs.scenePlaneMaterial = new ShaderMaterial("backdropAndDepthShader", scenes.backdrop, shaders.backdropAndDepth, {
                 attributes: ["position", "uv"],
                 uniforms: ["worldViewProjection"],
             });
@@ -135,7 +136,8 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
     }
     function addMeshesToRenderLists(newCamRef) {
         const scenes = globalRefs.scenes;
-        scenes.main.freezeActiveMeshes();
+        // scenes.main.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
+        // scenes.main.freezeActiveMeshes(true);
         globalRefs.sceneRenderTarget.renderList = [];
         globalRefs.depthRenderTarget.renderList = [];
         forEach(dollNames, (dollName) => {
@@ -145,13 +147,13 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
                 var _a, _b, _c, _d;
                 const loopedMesh = dollMeshes[meshName];
                 if (loopedMesh) {
-                    loopedMesh.alwaysSelectAsActiveMesh = true;
+                    loopedMesh.isInFrustum = () => true;
+                    // loopedMesh.alwaysSelectAsActiveMesh = true;
                     (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(loopedMesh);
                     (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(loopedMesh);
                 }
             });
         });
-        scenes.main.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
         const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
         forEach(particleSystemNames, (particleSystemName) => {
             var _a, _b, _c, _d;
@@ -160,20 +162,56 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
             (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(particleSystem.mesh);
             particleSystem._camera = newCamRef.camera;
         });
+        scenes.main._skipEvaluateActiveMeshesCompletely = true;
+        // (scenes.main as any)._evaluateActiveMeshes = () => {
+        //   return;
+        //   // console.log("evaluation", (scenes.main as any)._frameId);
+        //   // mesh.computeWorldMatrix();
+        //
+        //   if (globalRefs.scenePlane) {
+        //     // globalRefs.scenePlane.computeWorldMatrix();
+        //   }
+        //
+        //   // forEach(dollNames, (dollName) => {
+        //   //   const dollMeshes = getRefs().dolls[dollName].otherMeshes;
+        //   //
+        //   //   const dollMeshNames = Object.keys(dollMeshes);
+        //   //
+        //   //   forEach(dollMeshNames, (meshName) => {
+        //   //     const loopedMesh = dollMeshes[meshName] as AbstractMesh;
+        //   //
+        //   //     if (loopedMesh) {
+        //   //       // loopedMesh.computeWorldMatrix();
+        //   //       if (loopedMesh.skeleton) {
+        //   //         loopedMesh.skeleton.prepare();
+        //   //       }
+        //   //       // forEach(
+        //   //       //   (globalRefs.scenes.main as Scene)?.skeletons ?? [],
+        //   //       //   (skeleton) => {
+        //   //       //     skeleton.prepare();
+        //   //       //   }
+        //   //       // );
+        //   //       // loopedMesh.alwaysSelectAsActiveMesh = true;
+        //   //       // globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
+        //   //       // globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
+        //   //     }
+        //   //   });
+        //   // });
+        // };
     }
     function updateVideoTexturesForNewPlace(nowPlaceName) {
-        var _a, _b;
-        if (globalRefs.colorVideoTex && globalRefs.depthVideoTex) {
-            const colorVidElement = getSectionVidVideo(nowPlaceName);
-            const depthVidElement = getSectionVidVideo(nowPlaceName, "depth");
-            if (colorVidElement && depthVidElement) {
-                // console.log("UPDATING TEXTURE HERE 1");
-                globalRefs.colorVideoTex.updateVid(colorVidElement);
-                globalRefs.depthVideoTex.updateVid(depthVidElement);
+        // console.log("globalRefs.backdropVideoTex");
+        // console.log(globalRefs.backdropVideoTex);
+        var _a;
+        if (globalRefs.backdropVideoTex) {
+            const backdropVidElement = getSectionVidVideo(nowPlaceName);
+            if (backdropVidElement) {
+                globalRefs.backdropVideoTex.updateVid(backdropVidElement);
             }
         }
-        (_a = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _a === void 0 ? void 0 : _a.setTexture("BackdropTextureSample", globalRefs.colorVideoTex);
-        (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _b === void 0 ? void 0 : _b.setTexture("DepthTextureSample", globalRefs.depthVideoTex);
+        // console.log("globalRefs?.scenePlaneMaterial");
+        // console.log(globalRefs?.scenePlaneMaterial);
+        (_a = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.scenePlaneMaterial) === null || _a === void 0 ? void 0 : _a.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
     }
     function applyProbeToAllDollMaterials() {
         const { nowPlaceName, modelNamesLoaded } = getState().global.main;
@@ -215,7 +253,9 @@ export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
             // dollRefs.materialRef = modelRefs.materialRef;
             // dollRefs.materialRef = modelRefs.materialRef;
             if (dollRefs.meshRef) {
+                // (modelRefs.materialRef as PBRMaterial).isReadyForSubMesh = () => false;
                 dollRefs.meshRef.material = modelRefs.materialRef;
+                dollRefs.meshRef.material.freeze();
             }
         });
         // forEach(dollNames, (dollName) => {

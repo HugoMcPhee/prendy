@@ -9,7 +9,7 @@ export function makeVirtualButtons(concepFuncs, BACKDOP_OPTIONS) {
     };
     function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled, }) {
         const [isPressed, setIsPressed] = useState(false);
-        console.log("disabled", disabled);
+        // console.log("disabled", disabled);
         const styles = useMemo(() => ({
             container: {
                 width: "100px",

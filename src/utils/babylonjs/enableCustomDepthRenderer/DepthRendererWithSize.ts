@@ -244,6 +244,8 @@ export class DepthRendererWithSize {
    * @returns if the depth renderer is ready to render the depth map
    */
   public isReady(subMesh: SubMesh, useInstances: boolean): boolean {
+    if (this._cachedDefines) return this._effect.isReady(); // NOTE WARNING added thi srecently
+
     var material: any = subMesh.getMaterial();
     if (material.disableDepthWrite) {
       return false;
@@ -327,6 +329,7 @@ export class DepthRendererWithSize {
 
     // Get correct effect
     var join = defines.join("\n");
+
     if (this._cachedDefines !== join) {
       this._cachedDefines = join;
       this._effect = this._scene

@@ -4,18 +4,13 @@ import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange"
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 export function makeGetSectionVidVideo(concepFuncs) {
     const { getRefs, getState } = concepFuncs;
-    return function getSectionVidVideo(itemName, vidType = "color") {
+    return function getSectionVidVideo(itemName) {
         const sectionVidState = getState().sectionVids[itemName];
-        const { stackVidId_playing } = sectionVidState;
-        if (!stackVidId_playing)
+        const { safeVidId_playing } = sectionVidState;
+        if (!safeVidId_playing)
             return;
-        const stackVidState = getState().stackVids[stackVidId_playing];
-        const { vidAId, vidBId } = stackVidState;
-        if (!vidAId || !vidBId)
-            return;
-        const isDepth = vidType === "depth";
-        const colorVidRefs = getRefs().safeVids[isDepth ? vidBId : vidAId];
-        return colorVidRefs.videoElement;
+        const backdropVidRefs = getRefs().safeVids[safeVidId_playing];
+        return backdropVidRefs.videoElement;
     };
 }
 export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames) {
@@ -31,8 +26,7 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
         });
     }
     function doWhenSectionVidStateChanges(sectionVidId, checkShouldRun, callback) {
-        const initialVidState = getState().sectionVids[sectionVidId]
-            .sectionVidState;
+        const initialVidState = getState().sectionVids[sectionVidId].sectionVidState;
         // console.log(" - - - doWhenSectionVidStateChanges initial", initialVidState);
         if (checkShouldRun(initialVidState)) {
             callback();
@@ -88,16 +82,15 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
     }
     // runs on changes to tick, in the checkVideoLoop flow
     function checkForVideoLoop(itemName) {
-        var _a, _b;
+        var _a;
         // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSection for too many frames, then do something?
         const itemState = getState().sectionVids[itemName];
         const { nowSection, sectionVidState } = itemState;
-        const colorVid = getSectionVidVideo(itemName);
-        const depthVid = getSectionVidVideo(itemName, "depth");
+        const backdropVid = getSectionVidVideo(itemName);
         // if (sectionVidState !== "play") {
         //   console.log(sectionVidState);
         // }
-        // console.log(colorVid?.currentTime, endTime);
+        // console.log(backdropVid?.currentTime, endTime);
         /*
     
       !nextSegmentNameWhenVidPlays &&
@@ -108,7 +101,7 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
         sectionVidState !== "unloaded" &&
             sectionVidState !== "waitingForUnload") {
             // console.log(sectionVidState);
-            const currentTime = (_b = (_a = colorVid === null || colorVid === void 0 ? void 0 : colorVid.currentTime) !== null && _a !== void 0 ? _a : depthVid === null || depthVid === void 0 ? void 0 : depthVid.currentTime) !== null && _b !== void 0 ? _b : 0;
+            const currentTime = (_a = backdropVid === null || backdropVid === void 0 ? void 0 : backdropVid.currentTime) !== null && _a !== void 0 ? _a : 0;
             const endTime = getSectionEndTime(nowSection);
             const isAtOrAfterEndOfLoop = currentTime >= endTime;
             const isBeforeStartOfLoop = currentTime < nowSection.time; // if the current time is before the video sections start time

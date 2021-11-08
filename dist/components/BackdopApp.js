@@ -1,24 +1,39 @@
-import { Camera, Color3, Color4, FxaaPostProcess, Vector3, } from "@babylonjs/core";
+import { Camera, Color3, Color4, Vector3, } from "@babylonjs/core";
+import loadStyles from "../utils/loadStyles";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
 import React, { useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import { toRadians } from "shutils/dist/speedAngleDistance";
+// import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
 // import "./BackdopApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
+loadStyles();
 export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, pickupsInfo, speechVidFiles) {
     const { getRefs, onNextTick, setState } = concepFuncs;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
     const ScreenGuiDom = makeScreenGui(concepFuncs, backdopStartOptions, characterNames, pickupsInfo, speechVidFiles);
     const LoadingModels = makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles);
     const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
+    // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
+    //   "city",
+    //   "cityb",
+    //   "beanshop",
+    // ]);
     return function BackdopApp({ children }) {
         const globalRefs = getRefs().global.main;
         const scenePlaneCameraRef = useCallback((node) => {
             globalRefs.scenePlaneCamera = node;
+            // setTimeout(() => {
+            // const activeMeshes = node._activeMeshes;
+            // const activeMeshes = node.getActiveMeshes();
+            // console.log("______________________");
+            // console.log("activeMeshes");
+            // console.log(activeMeshes);
+            // }, 5000);
         }, [globalRefs]);
         useEffect(() => {
             setState({ global: { main: { frameTick: Date.now() } } });
@@ -26,22 +41,26 @@ export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions
             // tryingSafeSectionStackVid();
         }, []);
         return (React.createElement("div", { id: "app", style: { width: "100vw", height: "100vh", overflow: "hidden" } },
-            React.createElement(Engine, { canvasId: "scene-canvas", adaptToDeviceRatio: false, engineOptions: {
+            React.createElement(Engine, { canvasId: "sce ne-canvas", adaptToDeviceRatio: false, engineOptions: {
                     disableWebGL2Support: false,
                     powerPreference: "high-performance",
                 } },
-                React.createElement(Scene, { clearColor: Color4.FromColor3(Color3.FromHexString("#aca898"), 0.0), 
+                React.createElement(Scene, { clearColor: Color4.FromColor3(Color3.FromHexString("#000000"), 0.0), 
                     // onSceneMount={(info) => (globalRefs.scenes.main = info.scene)}
                     onSceneMount: (info) => {
+                        const engine = info.scene.getEngine();
+                        // Each frame is rendered manually inside the video looping check function atm
+                        engine.stopRenderLoop();
+                        engine.disableUniformBuffers = true;
                         info.scene.autoClear = false;
                         info.scene.autoClearDepthAndStencil = false;
+                        info.scene.skipFrustumClipping = true;
                         // info.scene.blockMaterialDirtyMechanism = true;
                         // setTimeout(() => {
                         // info.scene.freezeActiveMeshes();
                         // }, 5000);
                         globalRefs.scenes.main = info.scene;
                         globalRefs.scenes.backdrop = info.scene;
-                        const engine = info.scene.getEngine();
                         // engine.setHardwareScalingLevel(8);
                         // if (engine._workingCanvas) {
                         // engine._workingCanvas.width = 1280;
@@ -52,18 +71,19 @@ export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions
                                 global: { main: { timeScreenResized: Date.now() } },
                             });
                         });
-                        onNextTick(() => {
-                            if (globalRefs.scenes.backdrop) {
-                                // const postProcess =
-                                new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
-                            }
-                        });
-                        // engine.setHardwareScalingLevel(1);
-                        // Each frame is rendered manually inside the video looping check function atm
-                        engine.stopRenderLoop();
+                        // onNextTick(() => {
+                        //   if (globalRefs.scenes.backdrop) {
+                        //     // const postProcess =
+                        //     new FxaaPostProcess(
+                        //       "fxaa",
+                        //       1.0,
+                        //       globalRefs.scenes.backdrop.activeCamera
+                        //     );
+                        //   }
+                        // });
                     } },
                     React.createElement(LoadingModels, null, children),
-                    React.createElement("targetCamera", { name: "camera1", position: new Vector3(0, 0, -2), rotation: new Vector3(toRadians(0), toRadians(0), 0), mode: Camera.ORTHOGRAPHIC_CAMERA, ref: scenePlaneCameraRef }),
+                    React.createElement("targetCamera", { name: "camera1", position: new Vector3(0, 0, -2), rotation: new Vector3(toRadians(0), toRadians(0), 0), mode: Camera.ORTHOGRAPHIC_CAMERA, ref: scenePlaneCameraRef, layerMask: 23 }),
                     React.createElement(ScenePlane, null))),
             React.createElement(ScreenGuiDom, null)));
     };

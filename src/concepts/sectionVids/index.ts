@@ -28,8 +28,8 @@ export default function sectionVids<PlaceName extends string>(
   placeNames: readonly PlaceName[]
 ) {
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
-    stackVidId_playing: `${itemName}_a` as string | null,
-    stackVidId_waiting: `${itemName}_b` as string | null,
+    safeVidId_playing: `${itemName}_a` as string | null,
+    safeVidId_waiting: `${itemName}_b` as string | null,
     //
     sectionVidState: "unloaded" as SectionVidState,
     //

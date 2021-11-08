@@ -51,8 +51,7 @@ export declare type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 export declare type PlaceInfoByNamePlaceholder<PlaceName extends string> = Record<PlaceName, {
     modelFile: string;
     videoFiles: {
-        color: string;
-        depth: string;
+        backdrop: string;
     };
     cameraNames: readonly string[];
     segmentDurations: Record<string, number>;

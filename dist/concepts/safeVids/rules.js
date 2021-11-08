@@ -1,5 +1,5 @@
 import { makeVideoElementFromPath } from "./utils";
-// import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
+import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 export function makeSafeVidRules(concepFuncs) {
     const { getState, makeRules, onNextTick, setState } = concepFuncs;
@@ -7,7 +7,7 @@ export function makeSafeVidRules(concepFuncs) {
         rulesForSettingNewVideoStates: addItemEffect({
             onItemEffect({ newValue: vidState, itemState, itemRefs, itemName }) {
                 var _a;
-                const { wantedSeekTime } = itemState;
+                const { wantedSeekTime, autoplay } = itemState;
                 function setItemState(newState) {
                     setState({ safeVids: { [itemName]: newState } });
                 }
@@ -23,15 +23,22 @@ export function makeSafeVidRules(concepFuncs) {
                         (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.removeEventListener("loadedmetadata", onLoad);
                         // uncomment to test videos
                         // itemRefs.videoElement &&
-                        //   testAppendVideo(itemRefs.videoElement, itemName, itemName);
+                        testAppendVideo(itemRefs.videoElement, itemName, itemName);
                     }
                     // NOTE canplay doesn't work on safari?
                     itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);
                     // manual alternative for preload / autoplay, make sure the video is loaded and has played like 1 frame
                     (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.play().finally(() => {
                         var _a;
-                        (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.pause();
-                        setItemState({ vidState: "pause" });
+                        // console.log("itemRefs.videoEleme nt");
+                        // console.log(itemRefs.videoElement);
+                        if (autoplay) {
+                            setItemState({ vidState: "play", playType: "play" });
+                        }
+                        else {
+                            (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.pause();
+                            setItemState({ vidState: "pause", playType: "pause" });
+                        }
                     });
                 }
                 // beforeSeek
@@ -100,6 +107,7 @@ export function makeSafeVidRules(concepFuncs) {
         // wants
         whenWantToLoad: addItemEffect({
             onItemEffect({ itemName, itemState: { vidState } }) {
+                console.log("want to load");
                 if (vidState === "unloaded") {
                     setState({
                         safeVids: {
@@ -108,7 +116,7 @@ export function makeSafeVidRules(concepFuncs) {
                     });
                 }
                 else {
-                    console.warn("treid to load", itemName, " when it wasn't unloaded");
+                    console.warn("tried to load", itemName, " when it wasn't unloaded");
                     setState({ safeVids: { [itemName]: { wantToLoad: false } } });
                 }
             },
@@ -125,7 +133,7 @@ export function makeSafeVidRules(concepFuncs) {
                     });
                 }
                 else {
-                    console.warn("treid to unload", itemName, " when it was unloaded");
+                    console.warn("tried to unload", itemName, " when it was unloaded");
                     setState({ safeVids: { [itemName]: { wantToUnload: false } } });
                 }
             },

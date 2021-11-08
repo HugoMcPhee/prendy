@@ -3,7 +3,7 @@ import { forEach } from "shutils/dist/loops";
 import { abLetters, vidTypes } from "../../utils/consts";
 import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
 
-export type VidState = 
+export type VidState =
   | "beforePlay" // (this is what triggers the play to happen)
   | "waitingForPlay" // ( while not playing but waiting to play )
   | "readyToPlay"
@@ -40,10 +40,9 @@ export default function safeVids<
     wantToPause: false,
     wantToUnload: false,
     wantToLoad: false,
-    videoSource: itemName.includes("color")
-      ? placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.color
-      : placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.depth,
-    autoplay: false, // maybe doesn't work well with stackvids (cause they both woudn't play)
+    videoSource:
+      placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.backdrop,
+    autoplay: false, // maybe doesn't work well with stackvids beofre (cause they both woudn't play)
     //
     // isControlledExternally: true, // to wait for vidState to be updated externally before playing etc,
   });
@@ -58,10 +57,8 @@ export default function safeVids<
 
     forEach(placeNames, (placeName) => {
       forEach(abLetters, (letter) => {
-        forEach(vidTypes, (vidType) => {
-          const loopedName = `${placeName}_${letter}_${vidType}`;
-          newStartStates[loopedName] = state(loopedName);
-        });
+        const loopedName = `${placeName}_${letter}`;
+        newStartStates[loopedName] = state(loopedName);
       });
     });
     return newStartStates;

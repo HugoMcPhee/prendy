@@ -1,8 +1,8 @@
 import { forEach } from "shutils/dist/loops";
 export default function sectionVids(placeNames) {
     const state = (itemName) => ({
-        stackVidId_playing: `${itemName}_a`,
-        stackVidId_waiting: `${itemName}_b`,
+        safeVidId_playing: `${itemName}_a`,
+        safeVidId_waiting: `${itemName}_b`,
         //
         sectionVidState: "unloaded",
         //

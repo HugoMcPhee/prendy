@@ -56,8 +56,7 @@ export default function global(backdopStartOptions, musicNames, soundNames) {
     });
     // Refs
     const refs = () => ({
-        depthVideoTex: null,
-        colorVideoTex: null,
+        backdropVideoTex: null,
         //
         scenes: {
             main: null,

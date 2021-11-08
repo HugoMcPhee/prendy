@@ -221,7 +221,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
                         onItemEffect() {
                             var _a, _b;
                             stopEffect(ruleName);
-                            console.log("unload rules for", prevPlace);
+                            // console.log("unload rules for", prevPlace);
                             const usefulStoryStuff = getUsefulStoryStuff();
                             (_b = (_a = callBacksObject)[prevPlace]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
                         },

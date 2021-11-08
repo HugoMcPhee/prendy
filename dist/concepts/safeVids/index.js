@@ -1,5 +1,5 @@
 import { forEach } from "shutils/dist/loops";
-import { abLetters, vidTypes } from "../../utils/consts";
+import { abLetters } from "../../utils/consts";
 export default function safeVids(placeNames, placeInfoByName) {
     function vidNameToPlaceName(vidName) {
         // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
@@ -13,10 +13,8 @@ export default function safeVids(placeNames, placeInfoByName) {
         wantToPause: false,
         wantToUnload: false,
         wantToLoad: false,
-        videoSource: itemName.includes("color")
-            ? placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.color
-            : placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.depth,
-        autoplay: false, // maybe doesn't work well with stackvids (cause they both woudn't play)
+        videoSource: placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.backdrop,
+        autoplay: false, // maybe doesn't work well with stackvids beofre (cause they both woudn't play)
         //
         // isControlledExternally: true, // to wait for vidState to be updated externally before playing etc,
     });
@@ -28,10 +26,8 @@ export default function safeVids(placeNames, placeInfoByName) {
         // { windynest_a_color: state("windynest_a_color") }
         forEach(placeNames, (placeName) => {
             forEach(abLetters, (letter) => {
-                forEach(vidTypes, (vidType) => {
-                    const loopedName = `${placeName}_${letter}_${vidType}`;
-                    newStartStates[loopedName] = state(loopedName);
-                });
+                const loopedName = `${placeName}_${letter}`;
+                newStartStates[loopedName] = state(loopedName);
             });
         });
         return newStartStates;

@@ -1,3 +1,90 @@
+import { VidState } from "../../concepts/safeVids";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
+
+export function makeSafeVidStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
+) {
+  const { getState, startItemEffect, stopEffect } = concepFuncs;
+
+  function doWhenSafeVidStateChanges(
+    safeVidId: string,
+    checkShouldRun: (newVidState: VidState) => boolean,
+    callback: () => void,
+    checkInitial: boolean = true
+  ) {
+    const initialVidState = getState().safeVids[safeVidId].vidState;
+    if (checkInitial && checkShouldRun(initialVidState)) {
+      callback();
+      return null;
+    }
+
+    const ruleName = "doWhenSafeVidStateChanges" + Math.random();
+    startItemEffect({
+      name: ruleName,
+      onItemEffect: ({ newValue: newVidState }) => {
+        if (!checkShouldRun(newVidState)) return;
+        stopEffect(ruleName);
+        callback();
+      },
+      check: { type: "safeVids", prop: "vidState", name: safeVidId },
+      whenToRun: "subscribe",
+      flow: "safeVidStateUpdates",
+    });
+    return ruleName;
+  }
+
+  // the same but waits for checkShouldRun to be false before checking for true
+
+  // function doWhenSafeVidStateChangesSafer(
+  //   safeVidId: string,
+  //   checkShouldRun: (newVidState: VidState) => boolean,
+  //   callback: () => void
+  // ) {
+  //   return doWhenSafeVidStateChanges(
+  //     safeVidId,
+  //     (newState) => !checkShouldRun(newState),
+  //     () =>
+  //       doWhenSafeVidStateChanges(
+  //         safeVidId,
+  //         (newState) => checkShouldRun(newState),
+  //         callback
+  //       )
+  //   );
+  // }
+
+  function doWhenSafeVidStateReady(
+    safeVidId: string,
+    vidStateToCheck: VidState,
+    callback: () => void,
+    checkInitial: boolean = true
+  ) {
+    return doWhenSafeVidStateChanges(
+      safeVidId,
+      (newState) => newState === vidStateToCheck,
+      callback,
+      checkInitial
+    );
+  }
+
+  function doWhenSafeVidPlayOrPause(
+    safeVidId: string,
+    callback: () => void,
+    checkInitial: boolean = true
+  ) {
+    return doWhenSafeVidStateChanges(
+      safeVidId,
+      (newState) => newState === "play" || newState === "pause",
+      callback,
+      checkInitial
+    );
+  }
+
+  return {
+    doWhenSafeVidPlayOrPause,
+    doWhenSafeVidStateReady,
+  };
+}
+
 export function makeVideoElementFromPath(filepath: string) {
   const videoElement = document.createElement("video");
   videoElement.controls = false;

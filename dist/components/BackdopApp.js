@@ -41,7 +41,7 @@ export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions
             // tryingSafeSectionStackVid();
         }, []);
         return (React.createElement("div", { id: "app", style: { width: "100vw", height: "100vh", overflow: "hidden" } },
-            React.createElement(Engine, { canvasId: "sce ne-canvas", adaptToDeviceRatio: false, engineOptions: {
+            React.createElement(Engine, { canvasId: "scene-canvas", adaptToDeviceRatio: false, engineOptions: {
                     disableWebGL2Support: false,
                     powerPreference: "high-performance",
                 } },

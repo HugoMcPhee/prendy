@@ -154,7 +154,7 @@ export function makeBackdopApp<
         */}
 
         <Engine
-          canvasId="sce ne-canvas"
+          canvasId="scene-canvas"
           adaptToDeviceRatio={false}
           engineOptions={{
             disableWebGL2Support: false,

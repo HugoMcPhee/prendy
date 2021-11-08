@@ -48,7 +48,7 @@ export function makeVirtualButtons<
     disabled,
   }: VirtualButtonProps) {
     const [isPressed, setIsPressed] = useState(false);
-    console.log("disabled", disabled);
+    // console.log("disabled", disabled);
 
     const styles = useMemo(
       () => ({

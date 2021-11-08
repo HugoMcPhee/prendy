@@ -22,6 +22,12 @@ export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartO
                 let decided_shouldKeepTime = true;
                 let decided_wantedSection = null;
                 const alreadyWaitingForASectionToChange = nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
+                // if (videoIsOutsideOfCurrentLoop) {
+                //   console.log(
+                //     "alreadyWaitingForASectionToChange",
+                //     alreadyWaitingForASectionToChange
+                //   );
+                // }
                 // if there's a nextPlaceName, so its starting to load the next-place
                 if (nextPlaceName) {
                     // NOTE , might still want to loop the videos when it's loading a new place ?
@@ -88,9 +94,6 @@ export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartO
                     decided_wantedCamName = wantedCamName || wantedCamNameAtLoop;
                     decided_wantedSegmentName =
                         wantedSegmentName || wantedSegmentNameAtLoop;
-                    console.log("_________________________________");
-                    console.log("decided_wantedSegmentName 1111", decided_wantedSegmentName);
-                    ___shouldLog = true;
                     new_wantedCamNameAtLoop = null;
                     new_wantedSegmentNameAtLoop = null;
                 }
@@ -216,18 +219,16 @@ export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartO
         // it might be okay to run when nowCamName changed (since it always swaps the video between a-b vid_wait to vid_play
         whenPlayingVidElementsChanged: addItemEffect({
             onItemEffect({ itemName: videoPlaceName }) {
-                var _a, _b;
+                var _a;
                 // so video texture updates for looping vids (and when section changes)
                 const { nowPlaceName } = getState().global.main;
                 const globalRefs = getRefs().global.main;
                 if (videoPlaceName !== nowPlaceName)
                     return;
-                const colorVidElement = getSectionVidVideo(nowPlaceName);
-                const depthVidElement = getSectionVidVideo(nowPlaceName, "depth");
-                if (!colorVidElement || !depthVidElement)
+                const backdropVidElement = getSectionVidVideo(nowPlaceName);
+                if (!backdropVidElement)
                     return;
-                (_a = globalRefs.colorVideoTex) === null || _a === void 0 ? void 0 : _a.updateVid(colorVidElement);
-                (_b = globalRefs.depthVideoTex) === null || _b === void 0 ? void 0 : _b.updateVid(depthVidElement);
+                (_a = globalRefs.backdropVideoTex) === null || _a === void 0 ? void 0 : _a.updateVid(backdropVidElement);
             },
             check: { type: "sectionVids", prop: "newplayingVidStartedTime" },
             flow: "cameraChange",

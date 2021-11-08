@@ -2,7 +2,7 @@ import { ConceptsHelperTypes } from "concep";
 import { VidState } from ".";
 import { BackdopConcepFuncs } from "../typedConcepFuncs";
 import { makeVideoElementFromPath } from "./utils";
-// import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
+import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
@@ -23,7 +23,7 @@ export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
   return makeRules((addItemEffect) => ({
     rulesForSettingNewVideoStates: addItemEffect({
       onItemEffect({ newValue: vidState, itemState, itemRefs, itemName }) {
-        const { wantedSeekTime } = itemState;
+        const { wantedSeekTime, autoplay } = itemState;
         function setItemState(newState: Partial<ItemState<"safeVids">>) {
           setState({ safeVids: { [itemName]: newState } });
         }
@@ -45,14 +45,20 @@ export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
             );
             // uncomment to test videos
             // itemRefs.videoElement &&
-            //   testAppendVideo(itemRefs.videoElement, itemName, itemName);
+            testAppendVideo(itemRefs.videoElement, itemName, itemName);
           }
           // NOTE canplay doesn't work on safari?
           itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);
           // manual alternative for preload / autoplay, make sure the video is loaded and has played like 1 frame
           itemRefs.videoElement?.play().finally(() => {
-            itemRefs.videoElement?.pause();
-            setItemState({ vidState: "pause" });
+            // console.log("itemRefs.videoEleme nt");
+            // console.log(itemRefs.videoElement);
+            if (autoplay) {
+              setItemState({ vidState: "play", playType: "play" });
+            } else {
+              itemRefs.videoElement?.pause();
+              setItemState({ vidState: "pause", playType: "pause" });
+            }
           });
         }
         // beforeSeek
@@ -123,6 +129,8 @@ export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
     // wants
     whenWantToLoad: addItemEffect({
       onItemEffect({ itemName, itemState: { vidState } }) {
+        console.log("want to load");
+
         if (vidState === "unloaded") {
           setState({
             safeVids: {
@@ -130,7 +138,7 @@ export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
             },
           });
         } else {
-          console.warn("treid to load", itemName, " when it wasn't unloaded");
+          console.warn("tried to load", itemName, " when it wasn't unloaded");
           setState({ safeVids: { [itemName]: { wantToLoad: false } } });
         }
       },
@@ -146,7 +154,7 @@ export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
             },
           });
         } else {
-          console.warn("treid to unload", itemName, " when it was unloaded");
+          console.warn("tried to unload", itemName, " when it was unloaded");
           setState({ safeVids: { [itemName]: { wantToUnload: false } } });
         }
       },

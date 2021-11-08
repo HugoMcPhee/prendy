@@ -10,6 +10,18 @@ import { forEach } from "shutils/dist/loops";
 import { vector3ToPoint3d } from "..";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 
+export function testAppendVideo(
+  theVideo: HTMLVideoElement,
+  id: string,
+  elementTag = "app"
+) {
+  theVideo.width = 160;
+  theVideo.height = 90;
+  theVideo.id = id;
+  // theVideo.preload = "auto";
+  document.getElementById(elementTag)?.appendChild(theVideo);
+}
+
 export function makeUsePlaceUtils<
   ConcepFuncs extends BackdopConcepFuncs,
   PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
@@ -87,18 +99,6 @@ export function makeUsePlaceUtils<
 
     dollRefs.meshRef.position = newSpotPosition;
     setState({ dolls: { [dollName]: { position: newSpotPoint } } });
-  }
-
-  function testAppendVideo(
-    theVideo: HTMLVideoElement,
-    id: string,
-    elementTag = "app"
-  ) {
-    theVideo.width = 160;
-    theVideo.height = 90;
-    theVideo.id = id;
-    // theVideo.preload = "auto";
-    document.getElementById(elementTag)?.appendChild(theVideo);
   }
 
   async function loadNowVideosForPlace() {

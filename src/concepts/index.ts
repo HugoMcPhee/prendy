@@ -10,7 +10,6 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-import stackVids from "./stackVids";
 import {
   CharacterOptionsPlaceholder,
   DollOptionsPlaceholder,
@@ -22,7 +21,6 @@ import {
 export const backdopFlowNames = [
   // updating internal video states
   "safeVidStateUpdates",
-  "stackVidStateUpdates",
   "sectionVidStateUpdates",
   // game stuff
   "respondToNewPlace", // TODO Maybe use this for when a place loads, and the other "loadNewPlace" for starting to load a place?
@@ -47,7 +45,6 @@ export const backdopFlowNames = [
   "chooseVideoSection", // when game logic changes to choose a new video section ( like when wantedCamera or segment changes)
   "sectionVidWantsToPlay",
   "sectionVidWantsToPlay2", // just a easier way to react to a second subscriber in sectionVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes
-  "stackVidWantsToPlay",
   "safeVidWantsToPlay",
   // drawing to the screen
   "default", // draw components
@@ -159,7 +156,6 @@ export function makeBackdopConcepts<
       PlaceInfoByName
     >(placeNames, placeInfoByName),
     safeVids: safeVids<PlaceName, PlaceInfoByName>(placeNames, placeInfoByName),
-    stackVids: stackVids(placeNames),
     sectionVids: sectionVids(placeNames),
   };
 }

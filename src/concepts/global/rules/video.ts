@@ -68,6 +68,7 @@ export function makeGlobalVideoRules<
           nextPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets wantedSegmentName and wantedCamName also sets nextPlaceName
           isLoadingBetweenPlaces,
         } = getState().global.main;
+
         const {
           nextCamNameWhenVidPlays,
           wantedCamNameAtLoop,
@@ -97,6 +98,13 @@ export function makeGlobalVideoRules<
 
         const alreadyWaitingForASectionToChange =
           nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
+
+        // if (videoIsOutsideOfCurrentLoop) {
+        //   console.log(
+        //     "alreadyWaitingForASectionToChange",
+        //     alreadyWaitingForASectionToChange
+        //   );
+        // }
 
         // if there's a nextPlaceName, so its starting to load the next-place
         if (nextPlaceName) {
@@ -175,13 +183,6 @@ export function makeGlobalVideoRules<
           decided_wantedCamName = wantedCamName || wantedCamNameAtLoop;
           decided_wantedSegmentName =
             wantedSegmentName || wantedSegmentNameAtLoop;
-
-          console.log("_________________________________");
-          console.log(
-            "decided_wantedSegmentName 1111",
-            decided_wantedSegmentName
-          );
-          ___shouldLog = true;
 
           new_wantedCamNameAtLoop = null;
           new_wantedSegmentNameAtLoop = null;
@@ -347,15 +348,12 @@ export function makeGlobalVideoRules<
         const globalRefs = getRefs().global.main;
         if (videoPlaceName !== nowPlaceName) return;
 
-        const colorVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
-        const depthVidElement = getSectionVidVideo(
-          nowPlaceName as PlaceName,
-          "depth"
+        const backdropVidElement = getSectionVidVideo(
+          nowPlaceName as PlaceName
         );
-        if (!colorVidElement || !depthVidElement) return;
+        if (!backdropVidElement) return;
 
-        globalRefs.colorVideoTex?.updateVid(colorVidElement);
-        globalRefs.depthVideoTex?.updateVid(depthVidElement);
+        globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
       },
       check: { type: "sectionVids", prop: "newplayingVidStartedTime" },
       flow: "cameraChange",

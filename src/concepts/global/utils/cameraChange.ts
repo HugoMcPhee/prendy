@@ -1,4 +1,5 @@
 import {
+  AbstractMesh,
   Constants,
   Engine,
   PBRMaterial,
@@ -7,21 +8,17 @@ import {
   ShaderMaterial,
   Texture,
 } from "@babylonjs/core";
-import { forEach } from "shutils/dist/loops";
-import { makeGlobalStoreUtils } from "./";
+import shaders from "../../..//utils/shaders";
 import { chooseClosestBeforeItemInArray } from "shutils/dist/arrays";
+import { forEach } from "shutils/dist/loops";
+import { DefaultCameraRefs } from "../../..//concepts/places";
+import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import {
-  makeGetSectionVidVideo,
-  makeSectionVidStoreUtils,
-} from "../../../concepts/sectionVids/utils";
-import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PlaceholderBackdopConcepts,
   PlaceInfoByNamePlaceholder,
 } from "../../typedConcepFuncs";
-import { DefaultCameraRefs } from "../../..//concepts/places";
+import { makeGlobalStoreUtils } from "./";
 
 export function makeCameraChangeUtils<
   ConcepFuncs extends BackdopConcepFuncs,
@@ -97,7 +94,7 @@ export function makeCameraChangeUtils<
     const safeCam = getSafeCamName(cam);
 
     if (nowPlaceName !== place) {
-      console.warn("tried to gtSafeSegment name for not current place", place);
+      console.warn("tried to getSafeSegment name for not current place", place);
     }
     // if (segmentTimesByCamera[cam]) {
     // segmentTimesByCamera[cam]
@@ -225,7 +222,7 @@ export function makeCameraChangeUtils<
       globalRefs.scenePlaneMaterial = new ShaderMaterial(
         "backdropAndDepthShader",
         scenes.backdrop,
-        "./backdropAndDepth",
+        shaders.backdropAndDepth,
         {
           attributes: ["position", "uv"],
           uniforms: ["worldViewProjection"],
@@ -258,7 +255,9 @@ export function makeCameraChangeUtils<
   function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
     const scenes = globalRefs.scenes as { main: Scene; backdrop: Scene };
 
-    scenes.main.freezeActiveMeshes();
+    // scenes.main.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
+
+    // scenes.main.freezeActiveMeshes(true);
 
     globalRefs.sceneRenderTarget.renderList = [];
     globalRefs.depthRenderTarget.renderList = [];
@@ -269,17 +268,16 @@ export function makeCameraChangeUtils<
       const dollMeshNames = Object.keys(dollMeshes);
 
       forEach(dollMeshNames, (meshName) => {
-        const loopedMesh = dollMeshes[meshName];
+        const loopedMesh = dollMeshes[meshName] as AbstractMesh;
 
         if (loopedMesh) {
-          loopedMesh.alwaysSelectAsActiveMesh = true;
+          loopedMesh.isInFrustum = () => true;
+          // loopedMesh.alwaysSelectAsActiveMesh = true;
           globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
           globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
         }
       });
     });
-
-    scenes.main.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     forEach(particleSystemNames, (particleSystemName) => {
@@ -289,29 +287,62 @@ export function makeCameraChangeUtils<
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
       (particleSystem as any)._camera = newCamRef.camera;
     });
+
+    (scenes.main as any)._skipEvaluateActiveMeshesCompletely = true;
+    // (scenes.main as any)._evaluateActiveMeshes = () => {
+    //   return;
+    //   // console.log("evaluation", (scenes.main as any)._frameId);
+    //   // mesh.computeWorldMatrix();
+    //
+    //   if (globalRefs.scenePlane) {
+    //     // globalRefs.scenePlane.computeWorldMatrix();
+    //   }
+    //
+    //   // forEach(dollNames, (dollName) => {
+    //   //   const dollMeshes = getRefs().dolls[dollName].otherMeshes;
+    //   //
+    //   //   const dollMeshNames = Object.keys(dollMeshes);
+    //   //
+    //   //   forEach(dollMeshNames, (meshName) => {
+    //   //     const loopedMesh = dollMeshes[meshName] as AbstractMesh;
+    //   //
+    //   //     if (loopedMesh) {
+    //   //       // loopedMesh.computeWorldMatrix();
+    //   //       if (loopedMesh.skeleton) {
+    //   //         loopedMesh.skeleton.prepare();
+    //   //       }
+    //   //       // forEach(
+    //   //       //   (globalRefs.scenes.main as Scene)?.skeletons ?? [],
+    //   //       //   (skeleton) => {
+    //   //       //     skeleton.prepare();
+    //   //       //   }
+    //   //       // );
+    //   //       // loopedMesh.alwaysSelectAsActiveMesh = true;
+    //   //       // globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
+    //   //       // globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
+    //   //     }
+    //   //   });
+    //   // });
+    // };
   }
 
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
-    if (globalRefs.colorVideoTex && globalRefs.depthVideoTex) {
-      const colorVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
-      const depthVidElement = getSectionVidVideo(
-        nowPlaceName as PlaceName,
-        "depth"
-      );
-      if (colorVidElement && depthVidElement) {
-        // console.log("UPDATING TEXTURE HERE 1");
-        globalRefs.colorVideoTex.updateVid(colorVidElement);
-        globalRefs.depthVideoTex.updateVid(depthVidElement);
+    // console.log("globalRefs.backdropVideoTex");
+    // console.log(globalRefs.backdropVideoTex);
+
+    if (globalRefs.backdropVideoTex) {
+      const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
+
+      if (backdropVidElement) {
+        globalRefs.backdropVideoTex.updateVid(backdropVidElement);
       }
     }
+    // console.log("globalRefs?.scenePlaneMaterial");
+    // console.log(globalRefs?.scenePlaneMaterial);
 
     globalRefs?.scenePlaneMaterial?.setTexture(
       "BackdropTextureSample",
-      globalRefs.colorVideoTex
-    );
-    globalRefs?.scenePlaneMaterial?.setTexture(
-      "DepthTextureSample",
-      globalRefs.depthVideoTex
+      globalRefs.backdropVideoTex
     );
   }
 
@@ -362,7 +393,9 @@ export function makeCameraChangeUtils<
       // dollRefs.materialRef = modelRefs.materialRef;
       // dollRefs.materialRef = modelRefs.materialRef;
       if (dollRefs.meshRef) {
+        // (modelRefs.materialRef as PBRMaterial).isReadyForSubMesh = () => false;
         dollRefs.meshRef.material = modelRefs.materialRef;
+        dollRefs.meshRef.material.freeze();
       }
     });
 

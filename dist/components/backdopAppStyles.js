@@ -1,3 +1,4 @@
+export const backdopAppStyles = `
 .App {
   width: 100vw;
   height: 100vh;
@@ -60,3 +61,5 @@ button.babylonUnmuteIcon#babylonUnmuteIconBtn {
   background-position: center;
   background-position-y: 62%;
 }
+
+`;

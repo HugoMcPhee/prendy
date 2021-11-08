@@ -13,18 +13,14 @@ export function makeGlobalChangePlaceRules(concepFuncs, backdopConcepts, backdop
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     function whenAllVideosLoadedForPlace() {
-        var _a, _b;
+        var _a;
         const { nowPlaceName } = getState().global.main;
         const { nowCamName } = getState().places[nowPlaceName];
-        (_a = globalRefs.colorVideoTex) === null || _a === void 0 ? void 0 : _a.dispose();
-        (_b = globalRefs.depthVideoTex) === null || _b === void 0 ? void 0 : _b.dispose();
-        const colorVidElement = getSectionVidVideo(nowPlaceName);
-        const depthVidElement = getSectionVidVideo(nowPlaceName, "depth");
-        if (colorVidElement) {
-            globalRefs.colorVideoTex = new CustomVideoTexture("colorVideoTex", colorVidElement, globalRefs.scenes.backdrop, false, false, Texture.TRILINEAR_SAMPLINGMODE, { autoPlay: false, loop: false, autoUpdateTexture: true });
-        }
-        if (depthVidElement) {
-            globalRefs.depthVideoTex = new CustomVideoTexture("depthVideoTex", depthVidElement, globalRefs.scenes.backdrop, false, false, Texture.NEAREST_SAMPLINGMODE, { autoPlay: false, loop: false, autoUpdateTexture: true });
+        (_a = globalRefs.backdropVideoTex) === null || _a === void 0 ? void 0 : _a.dispose(); // NOTE maybe don't dispose it?
+        const backdropVidElement = getSectionVidVideo(nowPlaceName);
+        if (backdropVidElement) {
+            globalRefs.backdropVideoTex = new CustomVideoTexture("backdropVideoTex", backdropVidElement, globalRefs.scenes.backdrop, false, false, Texture.TRILINEAR_SAMPLINGMODE, // Texture.NEAREST_SAMPLINGMODE, might be better for depth
+            { autoPlay: false, loop: false, autoUpdateTexture: true });
         }
         // focus on the player
         focusScenePlaneOnFocusedDoll();

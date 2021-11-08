@@ -27,7 +27,7 @@ export function makeLoadingOverlay<ConcepFuncs extends BackdopConcepFuncs>(
             config: { tension: 100, precision: 0.1, bounce: 0 },
             onRest({ value: { opacity } }) {
               if (opacity > 0.5) {
-                console.log("about to sey loadingOverlayFullyShowing");
+                // console.log("about to sey loadingOverlayFullyShowing");
 
                 setState({
                   global: { main: { loadingOverlayFullyShowing: true } },

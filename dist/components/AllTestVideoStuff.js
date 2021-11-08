@@ -17,7 +17,7 @@ export function makeAllTestVideoStuff(concepFuncs, placeNames) {
         }, []);
         // show one vid at a time
         useStoreItemPropsEffect({ type: "sectionVids", name: placeName }, {
-            stackVidId_playing() {
+            safeVidId_playing() {
                 // vidLetter_play({ newValue }) {
                 // if (!newValue) return;
                 // const playingVidId = getLetterVidId("house", newValue);
@@ -50,9 +50,9 @@ export function makeAllTestVideoStuff(concepFuncs, placeNames) {
     }
     function TestVideoState({ placeName }) {
         const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, { type: "sectionVids", prop: ["sectionVidState"], name: placeName });
-        const { stackVidId_waiting, stackVidId_playing } = useStore((state) => state.sectionVids[placeName], {
+        const { safeVidId_waiting, safeVidId_playing } = useStore((state) => state.sectionVids[placeName], {
             type: "sectionVids",
-            prop: ["stackVidId_waiting", "stackVidId_playing"],
+            prop: ["safeVidId_waiting", "safeVidId_playing"],
             name: placeName,
         });
         return (React.createElement("div", { style: {
@@ -60,8 +60,8 @@ export function makeAllTestVideoStuff(concepFuncs, placeNames) {
                 width: 100,
             } },
             React.createElement("div", null, sectionVidState),
-            React.createElement("div", null, `▶ ${stackVidId_waiting}`),
-            React.createElement("div", null, `➰ ${stackVidId_playing}`)));
+            React.createElement("div", null, `▶ ${safeVidId_playing}`),
+            React.createElement("div", null, `➰ ${safeVidId_waiting}`)));
     }
     return function AllTestVideoStuff() {
         return (React.createElement(React.Fragment, null,

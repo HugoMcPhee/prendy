@@ -132,8 +132,7 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
             };
             physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
         };
-        depthVideoTex: CustomVideoTexture | null;
-        colorVideoTex: CustomVideoTexture | null;
+        backdropVideoTex: CustomVideoTexture | null;
         scenes: {
             main: Scene | null;
             backdrop: Scene | null;

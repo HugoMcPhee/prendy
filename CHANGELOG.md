@@ -6,6 +6,12 @@ TODO
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
 
+v0.6.0
+
+- performance on mobile!
+- uses one video for color and depth (no more stack vids)
+- uses inline shaders and styles so files don't need to be included in projects
+
 v0.5.3
 
 - fix issue with undefined doll meshes in cameraChange (global/utils)

@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import { CharacterOptionsPlaceholder, DollOptionsPlaceholder, BackdopOptionsUntyped, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./typedConcepFuncs";
-export declare const backdopFlowNames: readonly ["safeVidStateUpdates", "stackVidStateUpdates", "sectionVidStateUpdates", "respondToNewPlace", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "planePosition", "planePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSection", "sectionVidWantsToPlay", "sectionVidWantsToPlay2", "stackVidWantsToPlay", "safeVidWantsToPlay", "default", "rendering"];
+export declare const backdopFlowNames: readonly ["safeVidStateUpdates", "sectionVidStateUpdates", "respondToNewPlace", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "planePosition", "planePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSection", "sectionVidWantsToPlay", "sectionVidWantsToPlay2", "safeVidWantsToPlay", "default", "rendering"];
 export declare type FlowName = typeof backdopFlowNames[number];
 export declare function makeBackdopConcepts<BackdopOptions extends BackdopOptionsUntyped, PlaceInfoByName extends PlaceInfoByNamePlaceholder<PlaceName>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>, DollOptions extends DollOptionsPlaceholder<DollName, ModelName>, CharacterOptions extends CharacterOptionsPlaceholder<CharacterName, DollName, FontName>, ModelName extends string, DollName extends string, CharacterName extends string, AnyCameraName extends string, AnySegmentName extends string, AnySpotName extends string, AnyTriggerName extends string, PlaceName extends string, PickupName extends string, AnyAnimationName extends string, SoundName extends string, MusicName extends string, FontName extends string, SpeechVidName extends string, CameraNameByPlace extends Record<PlaceName, AnyCameraName>, SoundspotNameByPlace extends Record<PlaceName, string>, SpotNameByPlace extends Record<PlaceName, AnySpotName>, TriggerNameByPlace extends Record<PlaceName, AnyTriggerName>, WallNameByPlace extends Record<PlaceName, string>, AnimationNameByModel extends Record<ModelName, AnyAnimationName>, BoneNameByModel extends Record<ModelName, string>, MaterialNameByModel extends Record<ModelName, string>, MeshNameByModel extends Record<ModelName, string>>(backdopStartOptions: BackdopOptions, placeInfoByName: PlaceInfoByName, modelInfoByName: ModelInfoByName, dollOptions: DollOptions, characterOptions: CharacterOptions, placeNames: readonly PlaceName[], modelNames: readonly ModelName[], dollNames: readonly DollName[], characterNames: readonly CharacterName[], musicNames: readonly MusicName[], soundNames: readonly SoundName[], fontNames: readonly FontName[]): {
     keyboards: {
@@ -208,8 +208,7 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
                 };
                 physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
             };
-            depthVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture | null;
-            colorVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture | null;
+            backdropVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture | null;
             scenes: {
                 main: import("@babylonjs/core").Scene | null;
                 backdrop: import("@babylonjs/core").Scene | null;
@@ -550,39 +549,10 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             autoplay: boolean;
         })>;
     };
-    stackVids: {
-        state: <T_ItemName_3 extends string>(itemName: T_ItemName_3) => {
-            vidAId: string | null;
-            vidBId: string | null;
-            vidState: import("./stackVids").StackVidState;
-            playType: "pause" | "play";
-            wantedSeekTime: number | null;
-            wantToPlay: boolean;
-            wantToPause: boolean;
-            wantToUnload: boolean;
-            wantToLoad: boolean;
-            videoSourcePath: string;
-            autoplay: boolean;
-        };
-        refs: () => {};
-        startStates: import("concep").InitialItemsState<(<T_ItemName_3 extends string>(itemName: T_ItemName_3) => {
-            vidAId: string | null;
-            vidBId: string | null;
-            vidState: import("./stackVids").StackVidState;
-            playType: "pause" | "play";
-            wantedSeekTime: number | null;
-            wantToPlay: boolean;
-            wantToPause: boolean;
-            wantToUnload: boolean;
-            wantToLoad: boolean;
-            videoSourcePath: string;
-            autoplay: boolean;
-        })>;
-    };
     sectionVids: {
-        state: <T_ItemName_4 extends string>(itemName: T_ItemName_4) => {
-            stackVidId_playing: string | null;
-            stackVidId_waiting: string | null;
+        state: <T_ItemName_3 extends string>(itemName: T_ItemName_3) => {
+            safeVidId_playing: string | null;
+            safeVidId_waiting: string | null;
             sectionVidState: import("./sectionVids").SectionVidState;
             nowSection: {
                 time: number;
@@ -601,8 +571,8 @@ export declare function makeBackdopConcepts<BackdopOptions extends BackdopOption
             waitingForPlayToChangeSectionRuleName: string | null;
         };
         startStates: Record<PlaceName, {
-            stackVidId_playing: string | null;
-            stackVidId_waiting: string | null;
+            safeVidId_playing: string | null;
+            safeVidId_waiting: string | null;
             sectionVidState: import("./sectionVids").SectionVidState;
             nowSection: {
                 time: number;

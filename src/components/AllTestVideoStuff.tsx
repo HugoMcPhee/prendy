@@ -28,7 +28,7 @@ export function makeAllTestVideoStuff<
     useStoreItemPropsEffect(
       { type: "sectionVids", name: placeName },
       {
-        stackVidId_playing() {
+        safeVidId_playing() {
           // vidLetter_play({ newValue }) {
           // if (!newValue) return;
           // const playingVidId = getLetterVidId("house", newValue);
@@ -80,11 +80,11 @@ export function makeAllTestVideoStuff<
       (state) => state.sectionVids[placeName].sectionVidState,
       { type: "sectionVids", prop: ["sectionVidState"], name: placeName }
     );
-    const { stackVidId_waiting, stackVidId_playing } = useStore(
+    const { safeVidId_waiting, safeVidId_playing } = useStore(
       (state) => state.sectionVids[placeName],
       {
         type: "sectionVids",
-        prop: ["stackVidId_waiting", "stackVidId_playing"],
+        prop: ["safeVidId_waiting", "safeVidId_playing"],
         name: placeName,
       }
     );
@@ -97,8 +97,8 @@ export function makeAllTestVideoStuff<
         }}
       >
         <div>{sectionVidState}</div>
-        <div>{`▶ ${stackVidId_waiting}`}</div>
-        <div>{`➰ ${stackVidId_playing}`}</div>
+        <div>{`▶ ${safeVidId_playing}`}</div>
+        <div>{`➰ ${safeVidId_waiting}`}</div>
         {/* <div>{`⏭ ${vidLetter_nextSection}`}</div> */}
       </div>
     );

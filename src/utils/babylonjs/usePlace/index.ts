@@ -76,8 +76,9 @@ export function makeUsePlace<
       wallNames,
     } = placeInfo;
 
-    const { container, meshes, cameras, transformNodes } =
-      useModelFile<any>(modelFile);
+    const { container, meshes, cameras, transformNodes } = useModelFile<any>(
+      modelFile
+    );
 
     useEffect(() => {
       // this runs after useModelFile finished

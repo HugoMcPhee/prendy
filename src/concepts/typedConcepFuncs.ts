@@ -15,7 +15,6 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-import stackVids from "./stackVids";
 
 const testGetBackdopOptions = makeGetBackdopOptions<
   string, // PickupName
@@ -85,7 +84,7 @@ const testStuff = {
   placeInfoByName: {
     placeA: {
       modelFile: "test",
-      videoFiles: { color: "test", depth: "test" },
+      videoFiles: { backdrop: "test" },
       cameraNames: testNames,
       segmentDurations: { start: 1 } as Record<string, number>,
       segmentNames: testNames,
@@ -200,7 +199,6 @@ const placeholderBackdopConcepts = {
     any, // PlaceName
     typeof testStuff.placeInfoByName
   >(testStuff.placeNames, testStuff.placeInfoByName),
-  stackVids: stackVids(testStuff.placeNames),
   sectionVids: sectionVids(testStuff.placeNames),
   //
   story: story_fake<any, any>(),
@@ -237,18 +235,14 @@ export type BackdopConcepFuncs = {
   startItemEffect: (...args: any) => any;
   startEffect: (...args: any) => any;
   stopEffect: (...args: any) => any;
-  makeRules: (
-    ...args: any
-  ) => {
+  makeRules: (...args: any) => {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
   };
-  makeDynamicRules: (
-    ...args: any
-  ) => {
+  makeDynamicRules: (...args: any) => {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
@@ -284,7 +278,7 @@ export type PlaceInfoByNamePlaceholder<
   PlaceName,
   {
     modelFile: string;
-    videoFiles: { color: string; depth: string };
+    videoFiles: { backdrop: string };
     cameraNames: readonly string[];
     segmentDurations: Record<string, number>;
     segmentNames: readonly string[];

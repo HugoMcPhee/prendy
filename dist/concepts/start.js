@@ -9,7 +9,6 @@ import { makePointersConnectRules } from "./pointers";
 import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
-import { makeStackVidRules } from "./stackVids/rules";
 export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, placeInfoByName, dollNames, characterNames, modelInfoByName) {
     // making rules
     const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
@@ -21,8 +20,7 @@ export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTI
     const dollRules = makeDollRules(BACKDOP_OPTIONS, dollDynamicRules, concepFuncs, backdopConcepts, modelInfoByName, dollNames);
     const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, backdopConcepts);
     const safeVidRules = makeSafeVidRules(concepFuncs);
-    const safeSectionStackVidRules = makeSectionVidRules(concepFuncs, placeInfoByName, dollNames);
-    const safeStackVidRules = makeStackVidRules(concepFuncs);
+    const safeSectionVidRules = makeSectionVidRules(concepFuncs, placeInfoByName, dollNames);
     const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, BACKDOP_OPTIONS, characterNames, placeInfoByName);
     const characterRules = makeCharacterRules(concepFuncs, placeInfoByName);
     const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs);
@@ -44,8 +42,7 @@ export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTI
         playerRules.startAll();
         speechBubbleRules.startAll();
         safeVidRules.startAll();
-        safeStackVidRules.startAll();
-        safeSectionStackVidRules.startAll();
+        safeSectionVidRules.startAll();
         return function stopBackdopMainRules() {
             keyboardConnectRules.stopAll();
             pointerConnectRules.stopAll();
@@ -62,8 +59,7 @@ export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTI
             playerRules.stopAll();
             speechBubbleRules.stopAll();
             safeVidRules.stopAll();
-            safeStackVidRules.stopAll();
-            safeSectionStackVidRules.stopAll();
+            safeSectionVidRules.stopAll();
         };
     }
     function connectInputsToState() {

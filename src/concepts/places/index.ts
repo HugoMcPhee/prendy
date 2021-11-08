@@ -132,16 +132,7 @@ export default function places<
       triggerMeshes,
       wallMeshes,
       camsRefs,
-      colorVid: null as null | HTMLVideoElement,
-      depthVid: null as null | HTMLVideoElement,
-      vidARefs: {
-        colorVid: null,
-        depthVid: null,
-      },
-      vidBRefs: {
-        colorVid: null,
-        depthVid: null,
-      },
+      backdropVid: null as null | HTMLVideoElement,
     } as PlaceRefs<T_PlaceName>;
   }
 

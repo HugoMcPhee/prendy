@@ -5,6 +5,14 @@ import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { forEach } from "shutils/dist/loops";
 import { vector3ToPoint3d } from "..";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
+export function testAppendVideo(theVideo, id, elementTag = "app") {
+    var _a;
+    theVideo.width = 160;
+    theVideo.height = 90;
+    theVideo.id = id;
+    // theVideo.preload = "auto";
+    (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
+}
 export function makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames) {
     const { getRefs, getState, setState } = concepFuncs;
     const { doWhenSectionVidPlayingAsync, getSectionForPlace, } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
@@ -42,14 +50,6 @@ export function makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames) {
         const newSpotPoint = vector3ToPoint3d(newSpotPosition);
         dollRefs.meshRef.position = newSpotPosition;
         setState({ dolls: { [dollName]: { position: newSpotPoint } } });
-    }
-    function testAppendVideo(theVideo, id, elementTag = "app") {
-        var _a;
-        theVideo.width = 160;
-        theVideo.height = 90;
-        theVideo.id = id;
-        // theVideo.preload = "auto";
-        (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
     }
     async function loadNowVideosForPlace() {
         const { nowPlaceName, nowSegmentName, wantedSegmentName, } = getState().global.main;

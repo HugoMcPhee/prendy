@@ -10,11 +10,9 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-import stackVids from "./stackVids";
 export const backdopFlowNames = [
     // updating internal video states
     "safeVidStateUpdates",
-    "stackVidStateUpdates",
     "sectionVidStateUpdates",
     // game stuff
     "respondToNewPlace",
@@ -39,7 +37,6 @@ export const backdopFlowNames = [
     "chooseVideoSection",
     "sectionVidWantsToPlay",
     "sectionVidWantsToPlay2",
-    "stackVidWantsToPlay",
     "safeVidWantsToPlay",
     // drawing to the screen
     "default",
@@ -58,7 +55,6 @@ export function makeBackdopConcepts(backdopStartOptions, placeInfoByName, modelI
         speechBubbles: speechBubbles(characterNames, characterOptions, fontNames),
         places: places(placeNames, placeInfoByName),
         safeVids: safeVids(placeNames, placeInfoByName),
-        stackVids: stackVids(placeNames),
         sectionVids: sectionVids(placeNames),
     };
 }

@@ -6,6 +6,11 @@ TODO
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
 
+v0.6.2
+
+- fixes styles with typo in cnavas id, and sets styles in a simpler way
+- fixes unanimated dolls animating :skull: :dolls: :dancers:
+
 v0.6.0
 
 - performance on mobile!

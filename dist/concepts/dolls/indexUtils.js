@@ -1,4 +1,4 @@
-import { moverMultiRefs, makeMoverStateMaker } from "concep-movers";
+import { makeMoverStateMaker, moverMultiRefs } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
 export function defaultInRangeForDoll() {
     return {
@@ -17,7 +17,8 @@ export function getDefaultInRangeFunction(dollNames) {
     }
     return defaultInRange;
 }
-export default function makeDollIndexUtils(dollNames, modelInfoByName) {
+export default function makeDollIndexUtils(backdopArt) {
+    const { dollNames, modelInfoByName } = backdopArt;
     function makeModelAnimWeightsMoverState(modelName) {
         const modelInfo = modelInfoByName[modelName];
         const { animationNames } = modelInfo;

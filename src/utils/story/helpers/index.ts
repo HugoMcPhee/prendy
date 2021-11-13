@@ -1,11 +1,7 @@
+import { BackdopArt, BackdopOptions } from "../../../declarations";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  CharacterOptionsPlaceholder,
-  DollOptionsPlaceholder,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
 } from "../../../concepts/typedConcepFuncs";
 import { makeCharacterStoryHelpers } from "./characters";
 import { makeDollStoryHelpers } from "./dolls";
@@ -21,43 +17,21 @@ import { makeStickerStoryHelpers } from "./stickers";
 
 export function makeBackdopStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  ModelName extends string,
-  PlaceName extends string,
-  DollName extends string,
-  CharacterName extends string,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  AnyAnimationName extends string,
-  PickupName extends string,
-  MusicName extends string,
-  FontName extends string,
-  MusicFiles extends Record<MusicName, string>,
-  AnimationNameByModel extends Record<any, string>,
-  MeshNameByModel extends Record<ModelName, string>,
-  SpotNameByPlace extends Record<PlaceName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  WallNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  CharacterOptions extends CharacterOptionsPlaceholder<
-    CharacterName,
-    DollName,
-    FontName
-  >,
-  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
-  modelInfoByName: ModelInfoByName,
-  characterNames: readonly CharacterName[],
-  placeInfoByName: PlaceInfoByName,
-  musicNames: readonly MusicName[],
-  musicFiles: MusicFiles
+  backdopArt: BackdopArt
 ) {
+  const {
+    modelInfoByName,
+    characterNames,
+    placeInfoByName,
+    musicNames,
+    musicFiles,
+  } = backdopArt;
+
   const {
     lookAtEachother,
     lookAtOtherCharacter,
@@ -67,22 +41,7 @@ export function makeBackdopStoryHelpers<
     setCharRotationY,
     springAddToCharRotationY,
     springCharRotation,
-  } = makeCharacterStoryHelpers<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    ModelName,
-    PlaceName,
-    DollName,
-    CharacterName,
-    FontName,
-    AnimationNameByModel,
-    MeshNameByModel,
-    SpotNameByPlace,
-    ModelInfoByName,
-    CharacterOptions,
-    DollOptions
-  >(
+  } = makeCharacterStoryHelpers<ConcepFuncs, BackdopConcepts>(
     concepFuncs,
     backdopConcepts,
     backdopStartOptions,
@@ -103,22 +62,12 @@ export function makeBackdopStoryHelpers<
     springDollRotationY,
     springDollToSpot,
     toggleDollMeshes,
-  } = makeDollStoryHelpers<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    ModelName,
-    PlaceName,
-    DollName,
-    CharacterName,
-    FontName,
-    AnimationNameByModel,
-    MeshNameByModel,
-    SpotNameByPlace,
-    ModelInfoByName,
-    CharacterOptions,
-    DollOptions
-  >(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
+  } = makeDollStoryHelpers<ConcepFuncs, BackdopConcepts>(
+    concepFuncs,
+    backdopConcepts,
+    backdopStartOptions,
+    modelInfoByName
+  );
 
   const {
     enableMovement,
@@ -126,24 +75,7 @@ export function makeBackdopStoryHelpers<
     setPlayerAnimations,
     setPlayerToStartSpot,
     takePickup,
-  } = makerPlayerStoryHelpers<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    ModelName,
-    PlaceName,
-    DollName,
-    CharacterName,
-    AnyAnimationName,
-    PickupName,
-    FontName,
-    AnimationNameByModel,
-    MeshNameByModel,
-    SpotNameByPlace,
-    ModelInfoByName,
-    CharacterOptions,
-    DollOptions
-  >(
+  } = makerPlayerStoryHelpers(
     concepFuncs,
     backdopConcepts,
     backdopStartOptions,
@@ -159,42 +91,24 @@ export function makeBackdopStoryHelpers<
     setCamera,
     setSegment,
     showStoryView,
-  } = makeSceneStoryHelpers<
-    ConcepFuncs,
-    AnyCameraName,
-    AnySegmentName,
-    PlaceName,
-    CharacterName,
-    PlaceInfoByName,
-    SpotNameByPlace,
-    WallNameByPlace,
-    SegmentNameByPlace,
-    CameraNameByPlace
-  >(concepFuncs, placeInfoByName, characterNames);
+  } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
 
-  const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers<
-    ConcepFuncs,
-    MusicName,
-    MusicFiles
-  >(concepFuncs, musicNames, musicFiles);
+  const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers(
+    concepFuncs,
+    musicNames,
+    musicFiles
+  );
 
-  const {
-    hideMiniBubble,
-    showAlarmText,
-    showMiniBubble,
-    showSpeech,
-  } = makeSpeechStoryHelpers<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    CharacterName
-  >(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
+  const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } =
+    makeSpeechStoryHelpers<ConcepFuncs, BackdopConcepts>(
+      concepFuncs,
+      backdopConcepts,
+      backdopStartOptions,
+      characterNames
+    );
 
-  const {
-    hideSticker,
-    moveSticker,
-    showSticker,
-  } = makeStickerStoryHelpers<ConcepFuncs>(concepFuncs);
+  const { hideSticker, moveSticker, showSticker } =
+    makeStickerStoryHelpers(concepFuncs);
 
   return {
     // characters

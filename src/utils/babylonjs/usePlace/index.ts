@@ -1,39 +1,40 @@
 // import React, { useEffect } from "react";
 import { Sound, Vector3 } from "@babylonjs/core";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConcepFuncs";
-import { forEach } from "shutils/dist/loops";
 import { useEffect } from "react";
+import { forEach } from "shutils/dist/loops";
+import {
+  AnyCameraName,
+  BackdopArt,
+  BackdopOptions,
+  PlaceName,
+  SoundName,
+} from "../../..//declarations";
+import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
-import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 
 export function makeUsePlace<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  PlaceName extends string,
-  DollName extends string,
-  AnyCameraName extends string,
-  CharacterName extends string,
-  SoundName extends string,
-  SoundFiles extends Record<SoundName, string>,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
+  ConcepFuncs extends BackdopConcepFuncs
+  // BackdopOptions extends BackdopOptionsUntyped,
+  // PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
+  // PlaceName extends string,
+  // DollName extends string,
+  // AnyCameraName extends string,
+  // CharacterName extends string,
+  // SoundName extends string,
+  // SoundFiles extends Record<SoundName, string>,
+  // CameraNameByPlace extends Record<PlaceName, string>,
+  // SegmentNameByPlace extends Record<PlaceName, string>
 >(
   concepFuncs: ConcepFuncs,
   backdopStartOptions: BackdopOptions,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[],
-  soundFiles: SoundFiles
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
+  const { placeInfoByName, soundFiles } = backdopArt;
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
@@ -43,16 +44,7 @@ export function makeUsePlace<
     loadNowVideosForPlace,
     loadProbeImagesForPlace,
     makeCameraFromModel,
-  } = makeUsePlaceUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    PlaceName,
-    DollName,
-    CharacterName,
-    AnyCameraName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  } = makeUsePlaceUtils(concepFuncs, backdopArt);
 
   const placesRefs = getRefs().places;
 
@@ -76,9 +68,8 @@ export function makeUsePlace<
       wallNames,
     } = placeInfo;
 
-    const { container, meshes, cameras, transformNodes } = useModelFile<any>(
-      modelFile
-    );
+    const { container, meshes, cameras, transformNodes } =
+      useModelFile<any>(modelFile);
 
     useEffect(() => {
       // this runs after useModelFile finished

@@ -1,3 +1,4 @@
+import { BackdopArt, BackdopOptions } from "../declarations";
 import characters from "./characters";
 import dolls from "./dolls";
 import global from "./global";
@@ -10,13 +11,6 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-import {
-  CharacterOptionsPlaceholder,
-  DollOptionsPlaceholder,
-  BackdopOptionsUntyped,
-  ModelInfoByNamePlaceholder,
-  PlaceInfoByNamePlaceholder,
-} from "./typedConcepFuncs";
 
 export const backdopFlowNames = [
   // updating internal video states
@@ -53,109 +47,22 @@ export const backdopFlowNames = [
 
 export type FlowName = typeof backdopFlowNames[number];
 
-export function makeBackdopConcepts<
-  BackdopOptions extends BackdopOptionsUntyped,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<PlaceName>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>,
-  CharacterOptions extends CharacterOptionsPlaceholder<
-    CharacterName,
-    DollName,
-    FontName
-  >,
-  ModelName extends string,
-  DollName extends string,
-  CharacterName extends string,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  AnySpotName extends string,
-  AnyTriggerName extends string,
-  PlaceName extends string,
-  PickupName extends string,
-  AnyAnimationName extends string,
-  SoundName extends string,
-  MusicName extends string,
-  FontName extends string,
-  SpeechVidName extends string,
-  CameraNameByPlace extends Record<PlaceName, AnyCameraName>,
-  SoundspotNameByPlace extends Record<PlaceName, string>,
-  SpotNameByPlace extends Record<PlaceName, AnySpotName>,
-  TriggerNameByPlace extends Record<PlaceName, AnyTriggerName>,
-  WallNameByPlace extends Record<PlaceName, string>,
-  AnimationNameByModel extends Record<ModelName, AnyAnimationName>,
-  BoneNameByModel extends Record<ModelName, string>,
-  MaterialNameByModel extends Record<ModelName, string>,
-  MeshNameByModel extends Record<ModelName, string>
->(
+export function makeBackdopConcepts(
   backdopStartOptions: BackdopOptions,
-  placeInfoByName: PlaceInfoByName,
-  modelInfoByName: ModelInfoByName,
-  dollOptions: DollOptions,
-  characterOptions: CharacterOptions,
-  placeNames: readonly PlaceName[],
-  modelNames: readonly ModelName[],
-  dollNames: readonly DollName[],
-  characterNames: readonly CharacterName[],
-  musicNames: readonly MusicName[],
-  soundNames: readonly SoundName[],
-  fontNames: readonly FontName[]
+  backdopArt: BackdopArt
 ) {
   return {
     keyboards: keyboards(),
-    miniBubbles: miniBubbles<CharacterName>(),
+    miniBubbles: miniBubbles(),
     pointers: pointers(),
-    global: global<
-      BackdopOptions,
-      AnySegmentName,
-      PlaceName,
-      ModelName,
-      DollName,
-      PickupName,
-      CharacterName,
-      MusicName,
-      SoundName,
-      PlaceInfoByName
-    >(backdopStartOptions, musicNames, soundNames),
-    models: models<ModelName>(modelNames),
-    dolls: dolls<
-      ModelName,
-      DollName,
-      AnySpotName,
-      AnyAnimationName,
-      DollOptions,
-      AnimationNameByModel,
-      BoneNameByModel,
-      MaterialNameByModel,
-      MeshNameByModel,
-      ModelInfoByName
-    >(modelNames, dollNames, modelInfoByName, dollOptions),
-    characters: characters<
-      CharacterName,
-      DollName,
-      FontName,
-      AnyTriggerName,
-      AnyCameraName,
-      CharacterOptions
-    >(characterNames, dollNames, characterOptions),
-    players: players<BackdopOptions, AnyAnimationName>(backdopStartOptions),
-    speechBubbles: speechBubbles<
-      CharacterName,
-      DollName,
-      FontName,
-      SpeechVidName,
-      CharacterOptionsPlaceholder<CharacterName, DollName, FontName>
-    >(characterNames, characterOptions, fontNames),
-    places: places<
-      PlaceName,
-      AnyCameraName,
-      TriggerNameByPlace,
-      CameraNameByPlace,
-      SoundspotNameByPlace,
-      WallNameByPlace,
-      SpotNameByPlace,
-      PlaceInfoByName
-    >(placeNames, placeInfoByName),
-    safeVids: safeVids<PlaceName, PlaceInfoByName>(placeNames, placeInfoByName),
-    sectionVids: sectionVids(placeNames),
+    global: global(backdopStartOptions, backdopArt),
+    models: models(backdopArt),
+    dolls: dolls(backdopArt),
+    characters: characters(backdopArt),
+    players: players(backdopStartOptions),
+    speechBubbles: speechBubbles(backdopArt),
+    places: places(backdopArt),
+    safeVids: safeVids(backdopArt),
+    sectionVids: sectionVids(backdopArt),
   };
 }

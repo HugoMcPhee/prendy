@@ -1,45 +1,35 @@
 import delay from "delay";
+import { CSSProperties } from "react";
+import { length } from "stringz";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
   PlaceholderBackdopConcepts,
 } from "../../../concepts/typedConcepFuncs";
-import { makeSetStoryState } from "../../../storyRuleMakers";
+import { BackdopOptions, CharacterName } from "../../../declarations";
 import { clearTimeoutSafe } from "../../../utils";
-import { CSSProperties } from "react";
-import { length } from "stringz";
 
 export function makeSpeechStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  CharacterName extends string
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
   characterNames: readonly CharacterName[]
 ) {
-  const {
-    getState,
-    onNextTick,
-    setState,
-    startItemEffect,
-    stopEffect,
-  } = concepFuncs;
+  const { getState, onNextTick, setState, startItemEffect, stopEffect } =
+    concepFuncs;
 
-  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
-    concepFuncs
-  );
+  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-  const { getTypingDelayForText } = makeSpeechBubblesStoreUtils<
-    ConcepFuncs,
-    BackdopConcepts
-  >(concepFuncs, backdopConcepts);
+  const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(
+    concepFuncs,
+    backdopConcepts
+  );
 
   type SpeechBubbleName = keyof BackdopConcepts["speechBubbles"]["startStates"];
 
@@ -82,10 +72,8 @@ export function makeSpeechStoryHelpers<
       } = options ?? {};
 
       const { dollName } = getCharDollStuff(character);
-      const {
-        playerCharacter,
-        planeZoom: prevPlaneZoom,
-      } = getState().global.main;
+      const { playerCharacter, planeZoom: prevPlaneZoom } =
+        getState().global.main;
       const { dollName: playerDollName } = getCharDollStuff(
         playerCharacter as CharacterName
       );
@@ -102,9 +90,8 @@ export function makeSpeechStoryHelpers<
       if (showOnce && showSpeechRefs.shownTextBools[text]) return;
 
       function handlePressButton() {
-        const { typingFinished, goalText } = getState().speechBubbles[
-          character
-        ];
+        const { typingFinished, goalText } =
+          getState().speechBubbles[character];
 
         if (typingFinished) {
           // reading done!

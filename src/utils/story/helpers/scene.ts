@@ -1,38 +1,27 @@
 import delay from "delay";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
-  BackdopConcepFuncs,
-  PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConcepFuncs";
-import { makeSetStoryState } from "../../../storyRuleMakers";
+  AnyCameraName,
+  AnySegmentName,
+  CameraNameByPlace,
+  CharacterName,
+  PlaceInfoByName,
+  PlaceName,
+  SegmentNameByPlace,
+  SpotNameByPlace,
+  WallNameByPlace,
+} from "../../../declarations";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 
-export function makeSceneStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  CharacterName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  SpotNameByPlace extends Record<PlaceName, string>,
-  WallNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>,
-  CameraNameByPlace extends Record<PlaceName, string>
->(
+export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
   placeInfoByName: PlaceInfoByName,
   characterNames: readonly CharacterName[]
 ) {
-  const {
-    getRefs,
-    getState,
-    onNextTick,
-    setState,
-    startItemEffect,
-    stopEffect,
-  } = concepFuncs;
+  const { getRefs, getState, onNextTick, setState } = concepFuncs;
 
   type CameraNameFromPlace<
     T_Place extends keyof PlaceInfoByName
@@ -47,33 +36,19 @@ export function makeSceneStoryHelpers<
   };
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-
-  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
+  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(
     concepFuncs
   );
-
-  const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils<
-    ConcepFuncs,
-    PlaceName,
-    CharacterName,
-    SpotNameByPlace
-  >(concepFuncs);
-
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
-  } = makeSceneStoryUtils<
-    ConcepFuncs,
-    AnyCameraName,
-    AnySegmentName,
-    PlaceName,
-    CameraNameByPlace
-  >(concepFuncs);
+  } = makeSceneStoryUtils(concepFuncs);
 
   async function changeSegmentAtLoop<
     T_Place extends PlaceName,
-    T_Segment extends SegmentNameByPlace[T_Place] & AnySegmentName // NOTE & might mes with the tye here
+    T_Segment extends AnySegmentName // NOTE & might mes with the tye here
   >(_place: T_Place, newSegmentName: T_Segment) {
     // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
     // to fix: could listen to changes to wantedSegmentNameAtLoop

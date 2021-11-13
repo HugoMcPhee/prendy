@@ -1,5 +1,6 @@
 import { forEach } from "shutils/dist/loops";
-export default function models(modelNames) {
+export default function models(backdopArt) {
+    const { modelNames } = backdopArt;
     const state = (_modelName) => {
         return {
             wantToLoad: false,

@@ -7,6 +7,17 @@ import {
   TargetCamera,
 } from "@babylonjs/core";
 import {
+  AnySegmentName,
+  BackdopArt,
+  BackdopOptions,
+  CharacterName,
+  DollName,
+  ModelName,
+  PickupName,
+  PlaceInfoByName,
+  PlaceName,
+} from "../../declarations";
+import {
   mover2dRefs,
   mover2dState,
   moverRefs,
@@ -14,56 +25,34 @@ import {
 } from "concep-movers";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-//
-import {
-  BackdopOptionsUntyped,
-  PlaceInfoByNamePlaceholder,
-} from "../typedConcepFuncs";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 
-export default function global<
-  BackdopOptions extends BackdopOptionsUntyped,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  ModelName extends string,
-  DollName extends string,
-  PickupName extends string,
-  CharacterName extends string,
-  MusicName extends string,
-  SoundName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
->(
+type MaybeSegment = null | AnySegmentName;
+
+type SegmentNameFromCameraAndPlace<
+  T_Place extends keyof PlaceInfoByName,
+  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
+> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+
+type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
+  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+
+type CamSegmentRulesOptionsUntyped = Partial<{
+  [P_PlaceName in PlaceName]: Partial<{
+    [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
+      usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
+    ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+  }>;
+}>;
+
+export default function global(
   backdopStartOptions: BackdopOptions,
-  musicNames: readonly MusicName[],
-  soundNames: readonly SoundName[]
+  backdopArt: BackdopArt
 ) {
-  type MaybeSegment = null | AnySegmentName;
+  const { musicNames, soundNames } = backdopArt;
 
-  type SegmentNameFromCameraAndPlace<
-    T_Place extends keyof PlaceInfoByName,
-    T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-  > = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
-
-  type CameraNameFromPlace<
-    T_Place extends keyof PlaceInfoByName
-  > = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
-
-  type CamSegmentRulesOptionsUntyped = Partial<
-    {
-      [P_PlaceName in PlaceName]: Partial<
-        {
-          [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
-            usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
-          ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
-        }
-      >;
-    }
-  >;
-
-  const {
-    makeAutomaticMusicStartRefs,
-    makeAutomaticSoundStartRefs,
-  } = makerGlobalStoreIndexUtils(musicNames, soundNames);
+  const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } =
+    makerGlobalStoreIndexUtils(musicNames, soundNames);
 
   // State
   const state = () => ({

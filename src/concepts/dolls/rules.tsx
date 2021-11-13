@@ -1,21 +1,26 @@
+import { PBRMaterial } from "@babylonjs/core";
+import { makeRunMovers } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
+import { samePoints as samePoints3d } from "shutils/dist/points3d";
 import { toRadians } from "shutils/dist/speedAngleDistance";
 import { getShortestAngle } from "shutils/dist/speedAngleDistance2d";
-import { samePoints as samePoints3d } from "shutils/dist/points3d";
+import {
+  AnyAnimationName,
+  BackdopArt,
+  BackdopOptions,
+  DollName,
+  ModelName,
+} from "../../declarations";
 import { point3dToVector3, vector3ToSafePoint3d } from "../../utils/babylonjs";
+import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 //
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
-import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
-import { rangeOptionsQuick, makeDollStoreUtils } from "./utils";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
 } from "../typedConcepFuncs";
-import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import { makeRunMovers } from "concep-movers";
-import { PBRMaterial } from "@babylonjs/core";
+import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
+import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -25,46 +30,20 @@ import { PBRMaterial } from "@babylonjs/core";
 
 export function makeDollDynamicRules<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
-    ReturnType<ConcepFuncs["getState"]>["dolls"],
-  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] & string,
-  ModelName extends string,
-  AnyAnimationName extends string,
-  AnimationNameByModel extends Record<ModelName, AnyAnimationName>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopStartOptions: BackdopOptions,
   backdopConcepts: BackdopConcepts,
-  modelInfoByName: ModelInfoByName,
-  dollNames: readonly DollName[]
+  backdopArt: BackdopArt
 ) {
-  const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils<
-    ConcepFuncs,
-    BackdopOptions,
-    BackdopConcepts,
-    AnimationNameByModel,
-    StartState_Dolls,
-    DollName,
-    ModelName,
-    ModelInfoByName
-  >(
+  const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(
     concepFuncs,
-    backdopStartOptions,
     backdopConcepts,
-    dollNames,
-    modelInfoByName
+    backdopStartOptions,
+    backdopArt
   );
-  const {
-    getPreviousState,
-    getRefs,
-    getState,
-    makeDynamicRules,
-    makeRules,
-    setState,
-  } = concepFuncs;
+  const { getRefs, makeDynamicRules } = concepFuncs;
 
   return makeDynamicRules((addItemEffect, _addEffect) => ({
     waitForModelToLoad: addItemEffect(
@@ -143,8 +122,7 @@ export function makeDollDynamicRules<
 
 export function startDynamicDollRulesForInitialState<
   ConcepFuncs extends BackdopConcepFuncs,
-  DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
-  DollName extends string
+  DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>
 >(
   concepFuncs: ConcepFuncs,
   dollDynamicRules: DollDynamicRules,
@@ -168,46 +146,28 @@ export function startDynamicDollRulesForInitialState<
 }
 
 export function makeDollRules<
-  BackdopOptions extends BackdopOptionsUntyped,
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
-    ReturnType<ConcepFuncs["getState"]>["dolls"],
-  DollName extends keyof StartState_Dolls & string,
-  ModelName extends string,
-  AnyAnimationName extends string,
-  AnimationNameByModel extends Record<any, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<string>
-  // DollName extends keyof ReturnType<ConcepFuncs["getRefs"]>["dolls"] & string,
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   backdopStartOptions: BackdopOptions,
   dollDynamicRules: DollDynamicRules,
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
-  modelInfoByName: ModelInfoByName,
-  dollNames: readonly DollName[]
+  backdopArt: BackdopArt
 ) {
+  const { modelInfoByName, dollNames } = backdopArt;
+
   const {
     getQuickDistanceBetweenDolls,
     inRangesAreTheSame,
     setDollAnimWeight,
     updateDollScreenPosition,
-  } = makeDollStoreUtils<
-    ConcepFuncs,
-    BackdopOptions,
-    BackdopConcepts,
-    AnimationNameByModel,
-    StartState_Dolls,
-    DollName,
-    ModelName,
-    ModelInfoByName
-  >(
+  } = makeDollStoreUtils(
     concepFuncs,
-    backdopStartOptions,
     backdopConcepts,
-    dollNames,
-    modelInfoByName
+    backdopStartOptions,
+    backdopArt
   );
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(
@@ -215,13 +175,8 @@ export function makeDollRules<
     backdopStartOptions
   );
 
-  const {
-    makeRules,
-    getPreviousState,
-    getState,
-    setState,
-    getRefs,
-  } = concepFuncs;
+  const { makeRules, getPreviousState, getState, setState, getRefs } =
+    concepFuncs;
 
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
 
@@ -263,15 +218,16 @@ export function makeDollRules<
     whenNowAnimationChanged: addItemEffect({
       onItemEffect({ newValue: nowAnimation, itemState, itemName: dollName }) {
         const { modelName } = itemState;
-        const { animationNames } = modelInfoByName[modelName];
+        const animationNames = modelInfoByName[modelName]
+          .animationNames as AnyAnimationName[];
 
-        type T_ModelName = typeof modelName;
+        // type T_ModelName = typeof modelName;
 
         // let newWeights = {} as Record<
         //   AnimationNameByModel[T_ModelName],
         //   number
         // >;
-        let newWeights = {} as Record<string, number>;
+        let newWeights = {} as Record<DollName, number>;
         forEach(animationNames, (aniName) => {
           newWeights[aniName] = nowAnimation === aniName ? 1 : 0;
         });
@@ -306,7 +262,8 @@ export function makeDollRules<
     whenAnimWeightsChanged: addItemEffect({
       onItemEffect({ newValue: animWeights, itemState, itemRefs }) {
         const { modelName } = itemState;
-        const { animationNames } = modelInfoByName[modelName];
+        const animationNames = modelInfoByName[modelName]
+          .animationNames as AnyAnimationName[];
 
         if (!itemRefs.aniGroupsRef) return;
         forEach(animationNames, (aniName) => {
@@ -450,13 +407,8 @@ export function makeDollRules<
 
         if (itemRefs.checkCollisions) {
           const newMeshPosition = point3dToVector3(newPosition);
-          const {
-            editedPosition,
-            positionWasEdited,
-          } = setGlobalPositionWithCollisions(
-            itemRefs.meshRef,
-            newMeshPosition
-          );
+          const { editedPosition, positionWasEdited } =
+            setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
 
           // if a collision cauhed the mesh to not reach the position, update the position state
           if (positionWasEdited) {
@@ -542,9 +494,8 @@ export function makeDollRules<
             }
 
             // FIXME type?
-            (newQuickDistancesMap as any)[dollName]![
-              otherDollName
-            ] = quickDistance;
+            (newQuickDistancesMap as any)[dollName]![otherDollName] =
+              quickDistance;
 
             tempNewDollsState[dollName]!.inRange![otherDollName].touch =
               quickDistance < rangeOptionsQuick.touch;

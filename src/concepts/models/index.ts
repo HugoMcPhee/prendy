@@ -1,9 +1,10 @@
 import { AssetContainer, PBRMaterial } from "@babylonjs/core";
+import { BackdopArt, ModelName } from "../../declarations";
 import { forEach } from "shutils/dist/loops";
 
-export default function models<ModelName extends string>(
-  modelNames: readonly ModelName[]
-) {
+export default function models(backdopArt: BackdopArt) {
+  const { modelNames } = backdopArt;
+
   const state = <T_ModelName extends ModelName>(_modelName: T_ModelName) => {
     return {
       wantToLoad: false,

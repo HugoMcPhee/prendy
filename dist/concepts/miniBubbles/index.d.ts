@@ -1,10 +1,10 @@
 import { Point2D } from "shutils/dist/points2d";
-export default function miniBubbles<CharacterName extends string>(): {
+export default function miniBubbles(): {
     state: <T_ItemName extends string>(_itemName: T_ItemName) => {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: CharacterName | null;
+        forCharacter: string | null;
         position: Point2D;
     };
     refs: () => {
@@ -17,7 +17,7 @@ export default function miniBubbles<CharacterName extends string>(): {
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: CharacterName | null;
+            forCharacter: string | null;
             position: Point2D;
         };
     };

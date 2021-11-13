@@ -1,10 +1,11 @@
+import { BackdopArt } from "../../declarations";
 export declare type SectionVidState = "beforeDoLoop" | "waitingForDoLoop" | "beforeChangeSection" | "waitingForChangeSection" | "play" | "pause" | "beforeUnload" | "waitingForUnload" | "unloaded" | "beforeLoad" | "waitingForLoad";
 export declare type VidLetter = "a" | "b";
 export declare type VidSection = {
     time: number;
     duration: number;
 };
-export default function sectionVids<PlaceName extends string>(placeNames: readonly PlaceName[]): {
+export default function sectionVids(backdopArt: BackdopArt): {
     state: <T_ItemName extends string>(itemName: T_ItemName) => {
         safeVidId_playing: string | null;
         safeVidId_waiting: string | null;
@@ -25,7 +26,7 @@ export default function sectionVids<PlaceName extends string>(placeNames: readon
         waitingForPlayToDoLoopRuleName: string | null;
         waitingForPlayToChangeSectionRuleName: string | null;
     };
-    startStates: Record<PlaceName, {
+    startStates: Record<string, {
         safeVidId_playing: string | null;
         safeVidId_waiting: string | null;
         sectionVidState: SectionVidState;

@@ -1,16 +1,19 @@
 import { AssetContainer, PBRMaterial } from "@babylonjs/core";
-export default function models<ModelName extends string>(modelNames: readonly ModelName[]): {
-    startStates: { [K_ModelName in ModelName]: {
-        wantToLoad: boolean;
-        isLoading: boolean;
-        isLoaded: boolean;
-    }; };
-    state: <T_ModelName extends ModelName>(_modelName: T_ModelName) => {
+import { BackdopArt } from "../../declarations";
+export default function models(backdopArt: BackdopArt): {
+    startStates: {
+        [x: string]: {
+            wantToLoad: boolean;
+            isLoading: boolean;
+            isLoaded: boolean;
+        };
+    };
+    state: <T_ModelName extends string>(_modelName: T_ModelName) => {
         wantToLoad: boolean;
         isLoading: boolean;
         isLoaded: boolean;
     };
-    refs: <T_ModelName_1 extends ModelName>(_modelName: T_ModelName_1) => {
+    refs: <T_ModelName_1 extends string>(_modelName: T_ModelName_1) => {
         container: AssetContainer | null;
         materialRef: PBRMaterial | null;
         materialRefs: PBRMaterial[] | null;

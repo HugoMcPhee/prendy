@@ -1,39 +1,33 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
-import { clearTimeoutSafe } from "../../utils";
 import { defaultPosition, pointIsZero } from "shutils/dist/points2d";
 import {
   getShortestAngle,
   getSpeedAndAngleFromVector,
   getVectorAngle,
 } from "shutils/dist/speedAngleDistance2d";
-import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PlaceInfoByNamePlaceholder,
-} from "../typedConcepFuncs";
-import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
+import { BackdopArt, CharacterName } from "../../declarations";
+import { clearTimeoutSafe } from "../../utils";
+import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
+import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../typedConcepFuncs";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
 export function makePlayerRules<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped,
-  CharacterName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
+  BackdopOptions extends BackdopOptionsUntyped
 >(
   concepFuncs: ConcepFuncs,
   BACKDOP_OPTIONS: BackdopOptions,
-  placeInfoByName: PlaceInfoByName
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, makeRules, setState } = concepFuncs;
+  const { placeInfoByName } = backdopArt;
 
   const globalRefs = getRefs().global.main;
 
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
-  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
-    concepFuncs
-  );
+  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenDirectionKeysPressed: addEffect({
@@ -127,11 +121,8 @@ export function makePlayerRules<
         itemRefs: playerRefs,
         frameDuration,
       }) {
-        const {
-          playerCharacter,
-          playerMovingPaused,
-          gravityValue,
-        } = getState().global.main;
+        const { playerCharacter, playerMovingPaused, gravityValue } =
+          getState().global.main;
         const { timerSpeed } = globalRefs;
         const { dollRefs, dollState, dollName } =
           getCharDollStuff(playerCharacter as CharacterName) ?? {};
@@ -176,11 +167,8 @@ export function makePlayerRules<
         itemState: playerState,
         itemRefs: playerRefs,
       }) {
-        const {
-          playerCharacter,
-          playerMovingPaused,
-          gravityValue,
-        } = getState().global.main;
+        const { playerCharacter, playerMovingPaused, gravityValue } =
+          getState().global.main;
         const { timerSpeed } = globalRefs;
         const { dollRefs, dollState, dollName } =
           getCharDollStuff(playerCharacter as CharacterName) ?? {};
@@ -295,10 +283,8 @@ export function makePlayerRules<
       onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
         playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
-          const {
-            virtualControlsPressTime,
-            virtualControlsReleaseTime,
-          } = getState().players[playerName];
+          const { virtualControlsPressTime, virtualControlsReleaseTime } =
+            getState().players[playerName];
           if (virtualControlsReleaseTime > virtualControlsPressTime) return;
           setState({
             players: { [playerName]: { canShowVirtualButtons: true } },
@@ -313,10 +299,8 @@ export function makePlayerRules<
       onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
         playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
-          const {
-            virtualControlsPressTime,
-            virtualControlsReleaseTime,
-          } = getState().players[playerName];
+          const { virtualControlsPressTime, virtualControlsReleaseTime } =
+            getState().players[playerName];
           if (virtualControlsPressTime > virtualControlsReleaseTime) return;
           setState({
             players: { [playerName]: { canShowVirtualButtons: false } },

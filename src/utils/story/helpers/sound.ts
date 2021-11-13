@@ -1,19 +1,15 @@
 import { Sound } from "@babylonjs/core";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
-import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
 import { forEach } from "shutils/dist/loops";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { MusicFiles, MusicName } from "../../../declarations";
+import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
 
-export function makeSoundStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  MusicName extends string,
-  MusicFiles extends Record<MusicName, string>
->(
+export function makeSoundStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
   musicNames: readonly MusicName[],
   musicFiles: MusicFiles
 ) {
   const { getRefs } = concepFuncs;
-
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 
   const globalRefs = getRefs().global.main;

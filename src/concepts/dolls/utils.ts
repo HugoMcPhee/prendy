@@ -10,14 +10,20 @@ import {
 import { keyBy } from "shutils/dist/arrays";
 import { breakableForEach, forEach } from "shutils/dist/loops";
 import { getPointDistanceQuick } from "shutils/dist/speedAngleDistance3d";
-import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
+import {
+  AnimationNameByModel,
+  BackdopArt,
+  BackdopOptions,
+  DollName,
+  ModelInfoByName,
+  ModelName,
+} from "../../declarations";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
 } from "../typedConcepFuncs";
+import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 
 const rangeOptions = {
   touch: 2,
@@ -54,22 +60,15 @@ export function enableCollisions(theMesh: AbstractMesh) {
 
 export function makeDollStoreUtils<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  AnimationNameByModel extends Record<string, string>,
-  // StartState_Dolls extends BackdopConcepts["dolls"]["startStates"],
-  StartState_Dolls extends ReturnType<ConcepFuncs["getState"]>["dolls"],
-  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] & string, // DollNameParameter extends string
-  ModelName extends string,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
+  _backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
-  backdopConcepts: BackdopConcepts,
-  dollNames: readonly DollName[],
-  modelInfoByName: ModelInfoByName
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
+  const { dollNames, modelInfoByName } = backdopArt;
 
   const {
     convertScreenPointToPlaneScenePoint,
@@ -83,9 +82,11 @@ export function makeDollStoreUtils<
   // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
   // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
 
-  type ModelNameFromDoll<
-    T_DollName extends DollName
-  > = StartState_Dolls[T_DollName]["modelName"];
+  type StartState_Dolls = BackdopConcepts["dolls"]["startStates"] &
+    ReturnType<ConcepFuncs["getState"]>["dolls"];
+
+  type ModelNameFromDoll<T_DollName extends DollName> =
+    StartState_Dolls[T_DollName]["modelName"];
 
   function setDollAnimWeight<
     T_DollName extends DollName,
@@ -179,12 +180,8 @@ export function makeDollStoreUtils<
     );
     dollRefs.entriesRef = entries;
 
-    const {
-      meshNames,
-      boneNames,
-      animationNames,
-      materialNames,
-    } = modelInfoByName[modelName];
+    const { meshNames, boneNames, animationNames, materialNames } =
+      modelInfoByName[modelName];
 
     type T_Mesh = typeof meshNames[number];
     type T_BoneName = typeof boneNames[number];
@@ -203,9 +200,9 @@ export function makeDollStoreUtils<
     >;
 
     const skeleton = entries.skeletons[0];
-    const bones = (skeleton?.bones
-      ? keyBy(skeleton.bones, "name", removePrefix)
-      : {}) as Record<T_BoneName, Bone>;
+    const bones = (
+      skeleton?.bones ? keyBy(skeleton.bones, "name", removePrefix) : {}
+    ) as Record<T_BoneName, Bone>;
 
     const aniGroups = keyBy(entries.animationGroups) as Record<
       T_AnimationName,

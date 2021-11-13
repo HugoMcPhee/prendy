@@ -1,10 +1,12 @@
 // @refresh-reset
-import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PickupsInfoPlaceholder,
-} from "../../concepts/typedConcepFuncs";
 import React from "react";
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import {
+  BackdopArt,
+  BackdopOptions,
+  PickupName,
+  PickupsInfo,
+} from "../../declarations";
 import { makeAlarmText } from "./AlarmText";
 import { makeLoadingOverlay } from "./LoadingOverlay";
 import { makeMiniBubble } from "./MiniBubble";
@@ -13,23 +15,16 @@ import { makeScreenSticker } from "./ScreenSticker";
 // import { makeShowStates } from "./ShowStates";
 import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
-import { makeVirtualStick } from "./VirtualStick";
 import { makeVirtualButtons } from "./VirtualButtons";
+import { makeVirtualStick } from "./VirtualStick";
 
-export function makeScreenGui<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped,
-  CharacterName extends string,
-  PickupName extends string,
-  PickupsInfo extends PickupsInfoPlaceholder<PickupName>,
-  SpeechVidFiles extends Record<string, string>
->(
+export function makeScreenGui<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
   BACKDOP_OPTIONS: BackdopOptions,
-  characterNames: readonly CharacterName[],
-  pickupsInfo: PickupsInfo,
-  speechVidFiles: SpeechVidFiles
+  backdopArt: BackdopArt
 ) {
+  const { pickupsInfo, speechVidFiles, characterNames } = backdopArt;
+
   const AlarmText = makeAlarmText(concepFuncs);
   const LoadingOverlay = makeLoadingOverlay(concepFuncs);
   const MiniBubble = makeMiniBubble(concepFuncs);
@@ -38,11 +33,7 @@ export function makeScreenGui<
     pickupsInfo
   );
   const ScreenSticker = makeScreenSticker(concepFuncs);
-  const SpeechBubble = makeSpeechBubble<
-    ConcepFuncs,
-    CharacterName,
-    SpeechVidFiles
-  >(concepFuncs, speechVidFiles);
+  const SpeechBubble = makeSpeechBubble(concepFuncs, speechVidFiles);
   const StoryOverlay = makeStoryOverlay(concepFuncs);
   const VirtualStick = makeVirtualStick(concepFuncs);
   const VirtualButtons = makeVirtualButtons(concepFuncs, BACKDOP_OPTIONS);

@@ -1,5 +1,5 @@
-import { makeGlobalStoreUtils } from "../global/utils";
 import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
+import { makeGlobalStoreUtils } from "../global/utils";
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 export function makeGetSectionVidVideo(concepFuncs) {
@@ -13,11 +13,12 @@ export function makeGetSectionVidVideo(concepFuncs) {
         return backdropVidRefs.videoElement;
     };
 }
-export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames) {
+export function makeSectionVidStoreUtils(concepFuncs, backdopArt) {
     const { getState, startItemEffect, stopEffect } = concepFuncs;
+    const { placeInfoByName } = backdopArt;
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getSectionVidVideo = makeGetSectionVidVideo(concepFuncs);
-    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames);
+    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(concepFuncs, backdopArt);
     // __________________________
     // temporary rules
     async function doWhenSectionVidPlayingAsync(sectionVidId) {
@@ -75,10 +76,7 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
         const placeSegmentDurations = placeInfoByName[safePlace].segmentDurations;
         const newTime = placeSegmentTimesByCamera[typedCamName][safeSegmentName];
         const newDuration = placeSegmentDurations[safeSegmentName];
-        return {
-            time: newTime,
-            duration: newDuration,
-        };
+        return { time: newTime, duration: newDuration };
     }
     // runs on changes to tick, in the checkVideoLoop flow
     function checkForVideoLoop(itemName) {
@@ -87,12 +85,7 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
         const itemState = getState().sectionVids[itemName];
         const { nowSection, sectionVidState } = itemState;
         const backdropVid = getSectionVidVideo(itemName);
-        // if (sectionVidState !== "play") {
-        //   console.log(sectionVidState);
-        // }
-        // console.log(backdropVid?.currentTime, endTime);
         /*
-    
       !nextSegmentNameWhenVidPlays &&
       !nextCamNameWhenVidPlays
       */
@@ -100,7 +93,6 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
         // sectionVidState === "play" // might've been getting skipped sometimes?
         sectionVidState !== "unloaded" &&
             sectionVidState !== "waitingForUnload") {
-            // console.log(sectionVidState);
             const currentTime = (_a = backdropVid === null || backdropVid === void 0 ? void 0 : backdropVid.currentTime) !== null && _a !== void 0 ? _a : 0;
             const endTime = getSectionEndTime(nowSection);
             const isAtOrAfterEndOfLoop = currentTime >= endTime;
@@ -120,8 +112,6 @@ export function makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames
             if ((isAtOrAfterEndOfLoop || isBeforeStartOfLoop) &&
                 // isAtOrAfterEndOfLoop &&
                 !isAlreadyLoopingOrChangingSection) {
-                // setState({ sectionVids: { [itemName]: { wantToLoop: true } } }); // global handles setting wantToLoop for sectionVids now :)
-                // setState({ global: { main: { wantToLoop: true } } });
                 return true;
             }
         }

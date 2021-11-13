@@ -7,50 +7,38 @@ import {
   Skeleton,
 } from "@babylonjs/core";
 import {
-  moverRefs,
-  moverState,
+  AnimationNameByModel,
+  AnyAnimationName,
+  AnySpotName,
+  BackdopArt,
+  BoneNameByModel,
+  DollName,
+  DollOptions,
+  MaterialNameByModel,
+  MeshNameByModel,
+  ModelName,
+} from "../../declarations";
+import {
   mover3dRefs,
   mover3dState,
+  moverRefs,
+  moverState,
 } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
-import {
-  DollOptionsPlaceholder,
-  ModelInfoByNamePlaceholder,
-} from "../typedConcepFuncs";
 import makeDollIndexUtils from "./indexUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 
-export default function dolls<
-  ModelName extends string,
-  DollName extends string,
-  AnySpotName extends string,
-  AnyAnimationName extends string,
-  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>,
-  AnimationNameByModel extends Record<ModelName, AnyAnimationName>,
-  BoneNameByModel extends Record<ModelName, string>,
-  MaterialNameByModel extends Record<ModelName, string>,
-  MeshNameByModel extends Record<ModelName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
->(
-  modelNames: readonly ModelName[],
-  dollNames: readonly DollName[],
-  modelInfoByName: ModelInfoByName,
-  dollOptions: DollOptions
-) {
+export default function dolls(backdopArt: BackdopArt) {
+  const { modelNames, dollNames, modelInfoByName, dollOptions } = backdopArt;
+
   const {
     defaultInRange,
     makeModelAnimWeightsMoverState,
     modelMoverRefs,
     modelOtherMeshesRefs,
-  } = makeDollIndexUtils<
-    DollName,
-    ModelName,
-    AnimationNameByModel,
-    MeshNameByModel,
-    ModelInfoByName
-  >(dollNames, modelInfoByName);
+  } = makeDollIndexUtils(backdopArt);
 
   const defaultModelName = modelNames[0];
 

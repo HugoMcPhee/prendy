@@ -7,15 +7,16 @@ import { makeSpeechStoryHelpers } from "./speech";
 import { makeStickerStoryHelpers } from "./stickers";
 // importing each of the helpers
 // function doThis
-export function makeBackdopStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames, placeInfoByName, musicNames, musicFiles) {
+export function makeBackdopStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt) {
+    const { modelInfoByName, characterNames, placeInfoByName, musicNames, musicFiles, } = backdopArt;
     const { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } = makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
     const { focusOnDoll, hideDoll, moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, springDollToSpot, toggleDollMeshes, } = makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
     const { enableMovement, isHolding, setPlayerAnimations, setPlayerToStartSpot, takePickup, } = makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
     // NOTE maybe return in categores like players.enableMovement()
     const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView, } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
     const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers(concepFuncs, musicNames, musicFiles);
-    const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech, } = makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
-    const { hideSticker, moveSticker, showSticker, } = makeStickerStoryHelpers(concepFuncs);
+    const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } = makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
+    const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(concepFuncs);
     return {
         // characters
         lookAtEachother,

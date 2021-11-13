@@ -1,38 +1,46 @@
 import { Vector3 } from "@babylonjs/core";
+import { forEach } from "shutils/dist/loops";
+import { getVectorFromSpeedAndAngle } from "shutils/dist/speedAngleDistance2d";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  CharacterOptionsPlaceholder,
-  DollOptionsPlaceholder,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
 } from "../../../concepts/typedConcepFuncs";
-import { forEach } from "shutils/dist/loops";
-import { getVectorFromSpeedAndAngle } from "shutils/dist/speedAngleDistance2d";
+import {
+  AnimationNameByModel,
+  BackdopOptions,
+  CharacterName,
+  CharacterOptions,
+  DollName,
+  DollOptions,
+  MeshNameByModel,
+  ModelInfoByName,
+  ModelName,
+  PlaceName,
+  SpotNameByPlace,
+} from "../../../declarations";
 import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
 
+type DollNameFromCharacter<T_CharacterName extends CharacterName> =
+  CharacterOptions[T_CharacterName]["doll"];
+
+type ModelNameFromDoll<T_DollName extends DollName> =
+  DollOptions[T_DollName]["model"];
+
+type ModelNameFromCharacter<T_CharacterName extends CharacterName> =
+  ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
+
+type AnimationNameFromCharacter<T_CharacterName extends CharacterName> =
+  AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
+
+type MeshNamesFromDoll<T_DollName extends DollName> =
+  MeshNameByModel[ModelNameFromDoll<T_DollName>];
+
 export function makeDollStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  ModelName extends string,
-  PlaceName extends string,
-  DollName extends string,
-  CharacterName extends string,
-  FontName extends string,
-  AnimationNameByModel extends Record<any, string>,
-  MeshNameByModel extends Record<ModelName, string>,
-  SpotNameByPlace extends Record<PlaceName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  CharacterOptions extends CharacterOptionsPlaceholder<
-    CharacterName,
-    DollName,
-    FontName
-  >,
-  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
@@ -43,37 +51,12 @@ export function makeDollStoryHelpers<
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type DollNameFromCharacter<
-    T_CharacterName extends CharacterName
-  > = CharacterOptions[T_CharacterName]["doll"];
+  const { getModelNameFromDoll } = makeDollStoryUtils(
+    concepFuncs,
+    backdopConcepts
+  );
 
-  type ModelNameFromDoll<
-    T_DollName extends DollName
-  > = DollOptions[T_DollName]["model"];
-
-  type ModelNameFromCharacter<
-    T_CharacterName extends CharacterName
-  > = ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
-
-  type AnimationNameFromCharacter<
-    T_CharacterName extends CharacterName
-  > = AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
-
-  type MeshNamesFromDoll<
-    T_DollName extends DollName
-  > = MeshNameByModel[ModelNameFromDoll<T_DollName>];
-
-  const { getModelNameFromDoll } = makeDollStoryUtils<
-    ConcepFuncs,
-    BackdopConcepts,
-    DollName
-  >(concepFuncs, backdopConcepts);
-
-  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils<
-    ConcepFuncs,
-    PlaceName,
-    SpotNameByPlace
-  >(concepFuncs);
+  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
 
   // --------------------------------------------------------------
 
@@ -248,8 +231,9 @@ export function makeDollStoryHelpers<
 
     const otherMeshes = getRefs().dolls[dollName].otherMeshes;
     const modelName = getModelNameFromDoll(dollName);
-    const modelInfo = modelInfoByName[(modelName as unknown) as ModelName];
-    const typedMeshNames = (modelInfo.meshNames as unknown) as MeshNamesFromDoll<T_DollName>[];
+    const modelInfo = modelInfoByName[modelName as unknown as ModelName];
+    const typedMeshNames =
+      modelInfo.meshNames as unknown as MeshNamesFromDoll<T_DollName>[];
 
     forEach(typedMeshNames, (meshName) => {
       const newToggle = toggledMeshes[meshName];

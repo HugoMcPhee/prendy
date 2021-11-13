@@ -1,9 +1,9 @@
-import { makeCameraChangeUtils } from "../utils/cameraChange";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
-export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, dollNames) {
+import { makeCameraChangeUtils } from "../utils/cameraChange";
+export function makeGlobalVideoRules(concepFuncs, _backdopConcepts, _backdopStartOptions, backdopArt) {
     const { getRefs, getState, makeRules, setState } = concepFuncs;
-    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop, } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames);
+    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
+    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, backdopArt);
     return makeRules((addItemEffect, addEffect) => ({
         whenWantToChooseVideoSection: addEffect({
             onEffect() {
@@ -87,7 +87,6 @@ export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartO
                     return;
                 }
                 // console.log("here");
-                let ___shouldLog = false;
                 if (videoIsOutsideOfCurrentLoop &&
                     (wantedCamNameAtLoop || wantedSegmentNameAtLoop)) {
                     // it should now go to a new section from thw wanted segment or cam at loop
@@ -104,7 +103,7 @@ export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartO
                     decided_wantedSegmentName =
                         decided_wantedSegmentName || nowSegmentName;
                     // make sure its a safe segment
-                    // TODO retye intital state to have srgmens as strings
+                    // TODO retye intital state to have segments as strings
                     decided_wantedSegmentName = getSafeSegmentName({
                         cam: decided_wantedCamName,
                         place: nowPlaceName,
@@ -130,13 +129,7 @@ export function makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartO
                     decided_wantToLoop = true;
                     decided_wantedSection = null;
                 }
-                if (decided_wantToLoop) {
-                    // console.log("decided_wantToLoop", decided_wantToLoop);
-                }
                 // set State for the global and place state, and also the sectionState
-                if (___shouldLog) {
-                    console.log("decided_wantedSegmentName 2222", decided_wantedSegmentName);
-                }
                 setState({
                     global: {
                         main: {

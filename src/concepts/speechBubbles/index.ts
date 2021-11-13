@@ -1,25 +1,19 @@
 // import { VideoGui } from "backdopdev/utils/babylonjs/VideoGui";
 //
+import {
+  CharacterOptions,
+  CharacterName,
+  FontName,
+  SpeechVidName,
+  BackdopArt,
+} from "../../declarations";
 import { CSSProperties } from "react";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition } from "shutils/dist/points2d";
-import { CharacterOptionsPlaceholder } from "../typedConcepFuncs";
 
-export default function speechBubbles<
-  CharacterName extends string,
-  DollName extends string,
-  FontName extends string,
-  SpeechvidName extends string,
-  CharacterOptions extends CharacterOptionsPlaceholder<
-    CharacterName,
-    DollName,
-    FontName
-  >
->(
-  characterNames: readonly CharacterName[],
-  characterOptions: CharacterOptions,
-  fontNames: readonly FontName[]
-) {
+export default function speechBubbles(backdopArt: BackdopArt) {
+  const { characterNames, characterOptions, fontNames } = backdopArt;
+
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,
     options?: { font?: FontName; character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
@@ -38,7 +32,7 @@ export default function speechBubbles<
     forCharacter: (options?.character ?? "walker") as CharacterName | null,
     position: defaultPosition(),
     typingFinished: true,
-    nowVideoName: null as null | SpeechvidName,
+    nowVideoName: null as null | SpeechVidName,
     // font: options?.font ?? ("Schoolbell" as FontName),
     font: options?.font ?? fontNames[0],
     // shouldStartRemovoing: false, // (so it can fade out)

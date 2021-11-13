@@ -1,60 +1,39 @@
 // import { getRefs, getState, makeRules, setState } from "concepts";
 import { VidSection } from "../../../concepts/sectionVids";
-import { makeCameraChangeUtils } from "../utils/cameraChange";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import {
+  AnyCameraName,
+  AnySegmentName,
+  BackdopArt,
+  BackdopOptions,
+  CameraNameByPlace,
+  PlaceName,
+  SegmentNameByPlace,
+} from "../../../declarations";
+import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
   PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
 } from "../../typedConcepFuncs";
+import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalVideoRules<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  DollName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[]
+  _backdopConcepts: BackdopConcepts,
+  _backdopStartOptions: BackdopOptions,
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, makeRules, setState } = concepFuncs;
 
-  const {
-    getSectionForPlace,
-    getSectionVidVideo,
-    checkForVideoLoop,
-  } = makeSectionVidStoreUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    PlaceName,
-    DollName,
-    AnyCameraName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } =
+    makeSectionVidStoreUtils(concepFuncs, backdopArt);
   const {
     getSafeSegmentName,
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    AnyCameraName,
-    PlaceName,
-    DollName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  } = makeCameraChangeUtils(concepFuncs, backdopArt);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenWantToChooseVideoSection: addEffect({
@@ -173,8 +152,6 @@ export function makeGlobalVideoRules<
         }
         // console.log("here");
 
-        let ___shouldLog = false;
-
         if (
           videoIsOutsideOfCurrentLoop &&
           (wantedCamNameAtLoop || wantedSegmentNameAtLoop)
@@ -198,13 +175,14 @@ export function makeGlobalVideoRules<
 
           // make sure its a safe segment
 
-          // TODO retye intital state to have srgmens as strings
+          // TODO retye intital state to have segments as strings
           decided_wantedSegmentName = getSafeSegmentName({
             cam: decided_wantedCamName as CameraNameByPlace[PlaceName] &
               AnyCameraName,
             place: nowPlaceName as PlaceName,
-            segment: decided_wantedSegmentName as SegmentNameByPlace[PlaceName] &
-              AnySegmentName,
+            segment:
+              decided_wantedSegmentName as SegmentNameByPlace[PlaceName] &
+                AnySegmentName,
             useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
           });
 
@@ -241,18 +219,7 @@ export function makeGlobalVideoRules<
           decided_wantedSection = null;
         }
 
-        if (decided_wantToLoop) {
-          // console.log("decided_wantToLoop", decided_wantToLoop);
-        }
-
         // set State for the global and place state, and also the sectionState
-
-        if (___shouldLog) {
-          console.log(
-            "decided_wantedSegmentName 2222",
-            decided_wantedSegmentName
-          );
-        }
 
         setState({
           global: {

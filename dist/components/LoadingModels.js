@@ -2,10 +2,10 @@ import { Vector3 } from "@babylonjs/core";
 import React, { Suspense } from "react";
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";
-export function makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, extraStuff) {
+export function makeLoadingModels(concepFuncs, _backdopConcepts, backdopStartOptions, backdopArt) {
     const { useStore } = concepFuncs;
-    const Player = makePlayer(concepFuncs, backdopStartOptions, placeInfoByName, characterNames);
-    const usePlace = makeUsePlace(concepFuncs, backdopStartOptions, placeInfoByName, dollNames, soundFiles);
+    const Player = makePlayer(concepFuncs, backdopStartOptions, backdopArt);
+    const usePlace = makeUsePlace(concepFuncs, backdopStartOptions, backdopArt);
     function Place({ name }) {
         usePlace(name);
         return null;

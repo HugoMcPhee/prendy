@@ -1,37 +1,22 @@
 import delay from "delay";
+import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  CharacterOptionsPlaceholder,
-  DollOptionsPlaceholder,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
 } from "../../../concepts/typedConcepFuncs";
-import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
+import {
+  AnyAnimationName,
+  BackdopOptions,
+  CharacterName,
+  ModelInfoByName,
+  PickupName,
+} from "../../../declarations";
 import { makeCharacterStoryHelpers } from "./characters";
 
 export function makerPlayerStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  ModelName extends string,
-  PlaceName extends string,
-  DollName extends string,
-  CharacterName extends string,
-  AnyAnimationName extends string,
-  PickupName extends string,
-  FontName extends string,
-  AnimationNameByModel extends Record<any, string>,
-  MeshNameByModel extends Record<ModelName, string>,
-  SpotNameByPlace extends Record<PlaceName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  CharacterOptions extends CharacterOptionsPlaceholder<
-    CharacterName,
-    DollName,
-    FontName
-  >,
-  DollOptions extends DollOptionsPlaceholder<DollName, ModelName>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
@@ -43,22 +28,7 @@ export function makerPlayerStoryHelpers<
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    ModelName,
-    PlaceName,
-    DollName,
-    CharacterName,
-    FontName,
-    AnimationNameByModel,
-    MeshNameByModel,
-    SpotNameByPlace,
-    ModelInfoByName,
-    CharacterOptions,
-    DollOptions
-  >(
+  const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers(
     concepFuncs,
     backdopConcepts,
     backdopStartOptions,
@@ -90,9 +60,8 @@ export function makerPlayerStoryHelpers<
     // TODO Hack to start at different start spot at place, could use nextSpotName or something if it's set
     let startSpotName = "spot_start" as const;
 
-    const startPosition = placesRefs[nowPlaceName].spotPositions[
-      startSpotName
-    ].clone();
+    const startPosition =
+      placesRefs[nowPlaceName].spotPositions[startSpotName].clone();
 
     setCharPosition(playerCharacter as CharacterName, startPosition);
     setCharRotationY(playerCharacter as CharacterName, rotationY);

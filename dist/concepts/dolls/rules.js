@@ -1,21 +1,21 @@
+import { makeRunMovers } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
+import { samePoints as samePoints3d } from "shutils/dist/points3d";
 import { toRadians } from "shutils/dist/speedAngleDistance";
 import { getShortestAngle } from "shutils/dist/speedAngleDistance2d";
-import { samePoints as samePoints3d } from "shutils/dist/points3d";
 import { point3dToVector3, vector3ToSafePoint3d } from "../../utils/babylonjs";
+import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 //
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
 import { getDefaultInRangeFunction } from "./indexUtils";
-import { rangeOptionsQuick, makeDollStoreUtils } from "./utils";
-import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import { makeRunMovers } from "concep-movers";
+import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
-export function makeDollDynamicRules(concepFuncs, backdopStartOptions, backdopConcepts, modelInfoByName, dollNames) {
-    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConcepts, dollNames, modelInfoByName);
-    const { getPreviousState, getRefs, getState, makeDynamicRules, makeRules, setState, } = concepFuncs;
+export function makeDollDynamicRules(concepFuncs, backdopStartOptions, backdopConcepts, backdopArt) {
+    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
+    const { getRefs, makeDynamicRules } = concepFuncs;
     return makeDynamicRules((addItemEffect, _addEffect) => ({
         waitForModelToLoad: addItemEffect(({ dollName, modelName, }) => ({
             onItemEffect() {
@@ -84,10 +84,11 @@ export function startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRul
         });
     };
 }
-export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs, backdopConcepts, modelInfoByName, dollNames) {
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConcepts, dollNames, modelInfoByName);
+export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs, backdopConcepts, backdopArt) {
+    const { modelInfoByName, dollNames } = backdopArt;
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs, } = concepFuncs;
+    const { makeRules, getPreviousState, getState, setState, getRefs } = concepFuncs;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
     return makeRules((addItemEffect, addEffect) => ({
         // --------------------------------
@@ -122,7 +123,9 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
         whenNowAnimationChanged: addItemEffect({
             onItemEffect({ newValue: nowAnimation, itemState, itemName: dollName }) {
                 const { modelName } = itemState;
-                const { animationNames } = modelInfoByName[modelName];
+                const animationNames = modelInfoByName[modelName]
+                    .animationNames;
+                // type T_ModelName = typeof modelName;
                 // let newWeights = {} as Record<
                 //   AnimationNameByModel[T_ModelName],
                 //   number
@@ -162,7 +165,8 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
         whenAnimWeightsChanged: addItemEffect({
             onItemEffect({ newValue: animWeights, itemState, itemRefs }) {
                 const { modelName } = itemState;
-                const { animationNames } = modelInfoByName[modelName];
+                const animationNames = modelInfoByName[modelName]
+                    .animationNames;
                 if (!itemRefs.aniGroupsRef)
                     return;
                 forEach(animationNames, (aniName) => {
@@ -285,7 +289,7 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
                 // }
                 if (itemRefs.checkCollisions) {
                     const newMeshPosition = point3dToVector3(newPosition);
-                    const { editedPosition, positionWasEdited, } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
+                    const { editedPosition, positionWasEdited } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
                     // if a collision cauhed the mesh to not reach the position, update the position state
                     if (positionWasEdited) {
                         setState(() => ({
@@ -354,7 +358,8 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
                             quickDistance = getQuickDistanceBetweenDolls(dollName, otherDollName);
                         }
                         // FIXME type?
-                        newQuickDistancesMap[dollName][otherDollName] = quickDistance;
+                        newQuickDistancesMap[dollName][otherDollName] =
+                            quickDistance;
                         tempNewDollsState[dollName].inRange[otherDollName].touch =
                             quickDistance < rangeOptionsQuick.touch;
                         tempNewDollsState[dollName].inRange[otherDollName].talk =

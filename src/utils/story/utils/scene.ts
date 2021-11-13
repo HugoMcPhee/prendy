@@ -1,13 +1,15 @@
 import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import {
+  AnyCameraName,
+  AnySegmentName,
+  CameraNameByPlace,
+  PlaceName,
+} from "../../../declarations";
 import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
 
-export function makeSceneStoryUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>
->(concepFuncs: ConcepFuncs) {
+export function makeSceneStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
+) {
   const { getRefs, getState, startItemEffect, stopEffect } = concepFuncs;
 
   const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);

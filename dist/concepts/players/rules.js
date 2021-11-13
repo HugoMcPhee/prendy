@@ -1,12 +1,13 @@
 import { Ray, RayHelper, Vector3 } from "@babylonjs/core";
-import { clearTimeoutSafe } from "../../utils";
 import { defaultPosition, pointIsZero } from "shutils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle, } from "shutils/dist/speedAngleDistance2d";
-import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
+import { clearTimeoutSafe } from "../../utils";
+import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
+export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt) {
     const { getRefs, getState, makeRules, setState } = concepFuncs;
+    const { placeInfoByName } = backdopArt;
     const globalRefs = getRefs().global.main;
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
@@ -89,7 +90,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
         whenJumpPressed: addItemEffect({
             onItemEffect({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs, frameDuration, }) {
                 var _a, _b;
-                const { playerCharacter, playerMovingPaused, gravityValue, } = getState().global.main;
+                const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { isOnGround, canJump } = playerState;
@@ -125,7 +126,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
         whenJoystickMoves: addItemEffect({
             onItemEffect({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs, }) {
                 var _a, _b;
-                const { playerCharacter, playerMovingPaused, gravityValue, } = getState().global.main;
+                const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { scenes } = globalRefs;
@@ -213,7 +214,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
             onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
                 clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
                 playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
-                    const { virtualControlsPressTime, virtualControlsReleaseTime, } = getState().players[playerName];
+                    const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
                     if (virtualControlsReleaseTime > virtualControlsPressTime)
                         return;
                     setState({
@@ -229,7 +230,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName) {
             onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
                 clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
                 playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
-                    const { virtualControlsPressTime, virtualControlsReleaseTime, } = getState().players[playerName];
+                    const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
                     if (virtualControlsPressTime > virtualControlsReleaseTime)
                         return;
                     setState({

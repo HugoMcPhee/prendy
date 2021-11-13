@@ -1,8 +1,9 @@
 import { forEach } from "shutils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-export function makeCharacterDynamicRules(concepFuncs, backdopStartOptions, characterNames, placeInfoByName) {
-    const { makeRules, getState, setState, getRefs, makeDynamicRules, } = concepFuncs;
+export function makeCharacterDynamicRules(concepFuncs, backdopStartOptions, backdopArt) {
+    const { getState, setState, getRefs, makeDynamicRules } = concepFuncs;
+    const { placeInfoByName } = backdopArt;
     const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
@@ -18,8 +19,10 @@ export function makeCharacterDynamicRules(concepFuncs, backdopStartOptions, char
                 // Also listen to dolls positions, and return if not the same dollNAme (easier than dynamic rules for now)
                 if (!itemRefs.meshRef)
                     return;
-                const { nowPlaceName, loadingOverlayToggled, focusedDoll, } = getState().global.main;
-                const { cameraNames, triggerNames } = placeInfoByName[nowPlaceName];
+                const { nowPlaceName, loadingOverlayToggled, focusedDoll } = getState().global.main;
+                const nowPlaceInfo = placeInfoByName[nowPlaceName];
+                const triggerNames = nowPlaceInfo.triggerNames;
+                const cameraNames = nowPlaceInfo.cameraNames;
                 if (loadingOverlayToggled === true)
                     return;
                 const characterState = getState().characters[characterName];
@@ -126,8 +129,9 @@ export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRu
         };
     };
 }
-export function makeCharacterRules(concepFuncs, placeInfoByName) {
+export function makeCharacterRules(concepFuncs, backdopArt) {
     const { makeRules, getState, setState } = concepFuncs;
+    const { placeInfoByName } = backdopArt;
     return makeRules((addItemEffect, addEffect) => ({
         // should be a  dynamic rule ?
         whenCameraChangesForPlanePosition: addEffect({
@@ -144,7 +148,8 @@ export function makeCharacterRules(concepFuncs, placeInfoByName) {
                     return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
                 const { nowPlaceName } = getState().global.main;
                 const { nowCamName } = getState().places[nowPlaceName];
-                const { cameraNames } = placeInfoByName[nowPlaceName];
+                const cameraNames = placeInfoByName[nowPlaceName]
+                    .cameraNames;
                 forEach(cameraNames, (loopedCameraName) => {
                     if (loopedCameraName !== nowCamName &&
                         newAtCamCubes[loopedCameraName] &&

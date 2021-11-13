@@ -1,12 +1,4 @@
-import {
-  Camera,
-  Color3,
-  Color4,
-  FxaaPostProcess,
-  TargetCamera,
-  Vector3,
-} from "@babylonjs/core";
-import loadStyles from "../utils/loadStyles";
+import { Camera, Color3, Color4, TargetCamera, Vector3 } from "@babylonjs/core";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
 import React, { ReactNode, useCallback, useEffect } from "react";
@@ -15,11 +7,10 @@ import { Globals } from "react-spring";
 import { toRadians } from "shutils/dist/speedAngleDistance";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PickupsInfoPlaceholder,
   PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
 } from "../concepts/typedConcepFuncs";
+import { BackdopArt, BackdopOptions } from "../declarations";
+import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
 // import "./BackdopApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
@@ -32,77 +23,35 @@ type Props = { children?: ReactNode };
 
 export function makeBackdopApp<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  CharacterName extends string,
-  DollName extends string,
-  SoundName extends string,
-  PickupName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  SpotNameByPlace extends Record<PlaceName, string>,
-  WallNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SoundFiles extends Record<SoundName, string>,
-  PickupsInfo extends PickupsInfoPlaceholder<PickupName>,
-  SpeechVidFiles extends Record<string, string>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
-  placeInfoByName: PlaceInfoByName,
-  characterNames: readonly CharacterName[],
-  dollNames: readonly DollName[],
-  soundFiles: SoundFiles,
-  pickupsInfo: PickupsInfo,
-  speechVidFiles: SpeechVidFiles
+  backdopArt: BackdopArt
+  //
+  // placeInfoByName: PlaceInfoByName,
+  // characterNames: readonly CharacterName[],
+  // dollNames: readonly DollName[],
+  // soundFiles: SoundFiles,
+  // pickupsInfo: PickupsInfo,
+  // speechVidFiles: SpeechVidFiles
 ) {
   const { getRefs, onNextTick, setState } = concepFuncs;
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
-  const ScreenGuiDom = makeScreenGui<
-    ConcepFuncs,
-    BackdopOptions,
-    CharacterName,
-    PickupName,
-    PickupsInfo,
-    SpeechVidFiles
-  >(
+  const ScreenGuiDom = makeScreenGui(
     concepFuncs,
     backdopStartOptions,
-    characterNames,
-    pickupsInfo,
-    speechVidFiles
+    backdopArt
   );
 
-  const LoadingModels = makeLoadingModels<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    AnyCameraName,
-    AnySegmentName,
-    PlaceName,
-    CharacterName,
-    DollName,
-    SoundName,
-    PlaceInfoByName,
-    SpotNameByPlace,
-    WallNameByPlace,
-    SegmentNameByPlace,
-    CameraNameByPlace,
-    SoundFiles
-  >(
+  const LoadingModels = makeLoadingModels<ConcepFuncs, BackdopConcepts>(
     concepFuncs,
     backdopConcepts,
     backdopStartOptions,
-    placeInfoByName,
-    characterNames,
-    dollNames,
-    soundFiles
+    backdopArt
   );
 
   const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);

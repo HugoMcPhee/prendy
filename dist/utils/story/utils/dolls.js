@@ -1,7 +1,8 @@
-export function makeDollStoryUtils(concepFuncs, backdopConcepts) {
+export function makeDollStoryUtils(concepFuncs, _backdopConcepts) {
     const { getState } = concepFuncs;
     function getModelNameFromDoll(dollName) {
-        return getState().dolls[dollName].modelName;
+        return getState().dolls[dollName]
+            .modelName;
     }
     // function stickDollToFloor() {
     //   // Sticking on ground

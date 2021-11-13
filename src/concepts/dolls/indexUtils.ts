@@ -1,7 +1,13 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { moverMultiRefs, makeMoverStateMaker } from "concep-movers";
+import {
+  AnimationNameByModel,
+  BackdopArt,
+  DollName,
+  MeshNameByModel,
+  ModelName,
+} from "../../declarations";
+import { makeMoverStateMaker, moverMultiRefs } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
-import { ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
 //
 
 export type InRangeForDoll = {
@@ -18,11 +24,9 @@ export function defaultInRangeForDoll() {
   };
 }
 
-export function getDefaultInRangeFunction<DollName extends string>(
-  dollNames: readonly DollName[]
-) {
-  type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
+type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
 
+export function getDefaultInRangeFunction(dollNames: readonly DollName[]) {
   function defaultInRange() {
     const untypedInRangeObject = {} as Record<string, InRangeForDoll>;
 
@@ -35,13 +39,9 @@ export function getDefaultInRangeFunction<DollName extends string>(
   return defaultInRange;
 }
 
-export default function makeDollIndexUtils<
-  DollName extends string,
-  ModelName extends string,
-  AnimationNameByModel extends Record<any, string>,
-  MeshNameByModel extends Record<ModelName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>
->(dollNames: readonly DollName[], modelInfoByName: ModelInfoByName) {
+export default function makeDollIndexUtils(backdopArt: BackdopArt) {
+  const { dollNames, modelInfoByName } = backdopArt;
+
   function makeModelAnimWeightsMoverState<T_ModelName extends ModelName>(
     modelName: T_ModelName
   ) {

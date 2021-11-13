@@ -8,7 +8,8 @@ const defaultCamRefs = () => ({
     //
     isTriggerable: true,
 });
-export default function places(placeNames, placeInfoByName) {
+export default function places(backdopArt) {
+    const { placeNames, placeInfoByName } = backdopArt;
     // State
     const state = (placeName) => {
         var _a, _b, _c, _d;
@@ -22,7 +23,7 @@ export default function places(placeNames, placeInfoByName) {
     };
     // Refs
     function refs(placeName) {
-        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames, } = placeInfoByName[placeName];
+        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
         const spotPositions = {};
         const spotRotations = {};
         const soundspotSounds = {};

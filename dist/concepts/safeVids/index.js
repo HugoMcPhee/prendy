@@ -1,6 +1,7 @@
 import { forEach } from "shutils/dist/loops";
 import { abLetters } from "../../utils/consts";
-export default function safeVids(placeNames, placeInfoByName) {
+export default function safeVids(backdopArt) {
+    const { placeNames, placeInfoByName } = backdopArt;
     function vidNameToPlaceName(vidName) {
         // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
         return vidName.match(/.*?(?=_|$)/i)[0];

@@ -1,4 +1,5 @@
 import { AbstractMesh } from "@babylonjs/core";
+import { CharacterName } from "../../declarations";
 import {
   BackdopConcepFuncs,
   // PlaceholderBackdopConcepts,
@@ -8,17 +9,9 @@ import {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
 
-export function makeGetCharDollStuff<
-  ConcepFuncs extends BackdopConcepFuncs,
-  // BackdopConcepts extends PlaceholderBackdopConcepts,
-  CharacterName extends keyof ReturnType<ConcepFuncs["getState"]>["characters"]
-  // CharacterName extends keyof BackdopConcepts["characters"]["startStates"] &
-  //   string
-  // DollName extends keyof BackdopConcepts["dolls"]["startStates"] & string,
-  // ModelName extends string,
-  // AnimationNameByModel extends Record<any, string>,
-  // MeshNameByModel extends Record<ModelName, string>
->(concepFuncs: ConcepFuncs) {
+export function makeGetCharDollStuff<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs
+) {
   const { getRefs, getState } = concepFuncs;
 
   // NOTE could have character start options as a type to get accurate return types

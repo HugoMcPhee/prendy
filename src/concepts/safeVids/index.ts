@@ -1,7 +1,7 @@
 import { InitialItemsState } from "concep";
 import { forEach } from "shutils/dist/loops";
-import { abLetters, vidTypes } from "../../utils/consts";
-import { PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
+import { BackdopArt, PlaceName } from "../../declarations";
+import { abLetters } from "../../utils/consts";
 
 export type VidState =
   | "beforePlay" // (this is what triggers the play to happen)
@@ -23,10 +23,9 @@ export type VidState =
   | "waitingForUnload"
   | "unloaded";
 
-export default function safeVids<
-  PlaceName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<PlaceName>
->(placeNames: readonly PlaceName[], placeInfoByName: PlaceInfoByName) {
+export default function safeVids(backdopArt: BackdopArt) {
+  const { placeNames, placeInfoByName } = backdopArt;
+
   function vidNameToPlaceName(vidName: string) {
     // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
     return vidName.match(/.*?(?=_|$)/i)![0] as PlaceName;
@@ -65,7 +64,8 @@ export default function safeVids<
   }
 
   // const startStates: InitialItemsState<typeof state> = {
-  const startStates: InitialItemsState<typeof state> = makeStartStatesForPlaces();
+  const startStates: InitialItemsState<typeof state> =
+    makeStartStatesForPlaces();
 
   return { state, refs, startStates };
 }

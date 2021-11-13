@@ -1,5 +1,3 @@
-export function makeGetBackdopOptions() {
-    return function getBackdopOptions(options) {
-        return options;
-    };
+export function getBackdopOptions(options) {
+    return options;
 }

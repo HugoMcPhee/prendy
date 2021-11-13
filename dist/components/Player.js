@@ -1,22 +1,8 @@
 import { breakableForEach } from "shutils/dist/loops";
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
-export function makePlayer(concepFuncs, backdopStartOptions, placeInfoByName, characterNames) {
-    // type AnyToPlaceOption = {
-    //   toPlace: PlaceName;
-    //   toSpot: AnySpotName;
-    //   toCam?: AnyCameraName;
-    //   toSegment?: AnySegmentName;
-    // };
-    // type DoorsInfoLoose = Partial<
-    //   Record<PlaceName, Partial<Record<AnyTriggerName, AnyToPlaceOption>>>
-    // >;
-    // type AnyToPlaceOption = {
-    //   toPlace: PlaceName;
-    //   toSpot: string;
-    //   toCam?: string;
-    //   toSegment?: string;
-    // };
-    const { useStoreItemPropsEffect, getState, setState, useStore, } = concepFuncs;
+export function makePlayer(concepFuncs, backdopStartOptions, backdopArt) {
+    const { placeInfoByName, characterNames } = backdopArt;
+    const { useStoreItemPropsEffect, getState, setState, useStore } = concepFuncs;
     const { goToNewPlace } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
     return function Player(_props) {
         const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {

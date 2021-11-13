@@ -1,55 +1,56 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs, BackdopOptionsUntyped, CharacterOptionsPlaceholder, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceholderBackdopConcepts, PlaceInfoByNamePlaceholder } from "../../../concepts/typedConcepFuncs";
-export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, BackdopOptions extends BackdopOptionsUntyped, ModelName extends string, PlaceName extends string, DollName extends string, CharacterName extends string, AnyCameraName extends string, AnySegmentName extends string, AnyAnimationName extends string, PickupName extends string, MusicName extends string, FontName extends string, MusicFiles extends Record<MusicName, string>, AnimationNameByModel extends Record<any, string>, MeshNameByModel extends Record<ModelName, string>, SpotNameByPlace extends Record<PlaceName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, WallNameByPlace extends Record<PlaceName, string>, SegmentNameByPlace extends Record<PlaceName, string>, CameraNameByPlace extends Record<PlaceName, string>, CharacterOptions extends CharacterOptionsPlaceholder<CharacterName, DollName, FontName>, DollOptions extends DollOptionsPlaceholder<DollName, ModelName>>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, modelInfoByName: ModelInfoByName, characterNames: readonly CharacterName[], placeInfoByName: PlaceInfoByName, musicNames: readonly MusicName[], musicFiles: MusicFiles): {
-    lookAtEachother: (characterA: CharacterName, characterB?: CharacterName) => void;
-    lookAtOtherCharacter: (charA: CharacterName, charB?: CharacterName | undefined) => void;
-    moveCharacterAt2DAngle: (charName: CharacterName, angle: number) => void;
-    setCharAnimation: <T_Character extends CharacterName>(character: T_Character, animation: AnimationNameByModel[DollOptions[CharacterOptions[T_Character]["doll"]]["model"]]) => void;
-    setCharPosition: (charName: CharacterName, newPosition: import("@babylonjs/core").Vector3) => void;
-    setCharRotationY: (charName: CharacterName, newRotationY: number) => void;
-    springAddToCharRotationY: (charName: CharacterName, addedRotation: number) => void;
-    springCharRotation: (charName: CharacterName, newRotationY: number) => void;
-    focusOnDoll: <T_Doll extends DollName>(dollName: T_Doll, zoom?: number | undefined) => void;
-    hideDoll: (dollName: DollName, shouldHide?: boolean) => void;
-    moveDollAt2DAngle: (dollName: DollName, angle: number) => void;
-    setDollAnimation: <T_Doll_1 extends DollName>(doll: T_Doll_1, animation: AnimationNameByModel[DollOptions[T_Doll_1]["model"]]) => void;
-    setDollPosition: (dollName: DollName, newPositon: import("@babylonjs/core").Vector3) => void;
-    setDollRotation: (dollName: DollName, newRotation: import("@babylonjs/core").Vector3) => void;
-    setDollRotationY: (dollName: DollName, newRotationY: number) => void;
-    setDollToSpot: <T_PlaceName extends PlaceName>({ place, spot, doll: dollName, dontSetRotationState, }: {
+import { BackdopArt, BackdopOptions } from "../../../declarations";
+import { BackdopConcepFuncs, PlaceholderBackdopConcepts } from "../../../concepts/typedConcepFuncs";
+export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, backdopArt: BackdopArt): {
+    lookAtEachother: (characterA: string, characterB?: string) => void;
+    lookAtOtherCharacter: (charA: string, charB?: string | undefined) => void;
+    moveCharacterAt2DAngle: (charName: string, angle: number) => void;
+    setCharAnimation: <T_Character extends string>(character: T_Character, animation: any) => void;
+    setCharPosition: (charName: string, newPosition: import("@babylonjs/core").Vector3) => void;
+    setCharRotationY: (charName: string, newRotationY: number) => void;
+    springAddToCharRotationY: (charName: string, addedRotation: number) => void;
+    springCharRotation: (charName: string, newRotationY: number) => void;
+    focusOnDoll: <T_Doll extends string>(dollName: T_Doll, zoom?: number | undefined) => void;
+    hideDoll: (dollName: string, shouldHide?: boolean) => void;
+    moveDollAt2DAngle: (dollName: string, angle: number) => void;
+    setDollAnimation: <T_Doll_1 extends string>(doll: T_Doll_1, animation: any) => void;
+    setDollPosition: (dollName: string, newPositon: import("@babylonjs/core").Vector3) => void;
+    setDollRotation: (dollName: string, newRotation: import("@babylonjs/core").Vector3) => void;
+    setDollRotationY: (dollName: string, newRotationY: number) => void;
+    setDollToSpot: <T_PlaceName extends string>({ place, spot, doll: dollName, dontSetRotationState, }: {
         place: T_PlaceName;
-        spot: SpotNameByPlace[T_PlaceName];
-        doll: DollName;
+        spot: any;
+        doll: string;
         dontSetRotationState?: boolean | undefined;
     }) => void;
-    springAddToDollRotationY: (dollName: DollName, addedRotation: number) => void;
-    springDollRotationY: (dollName: DollName, newRotation: number) => void;
-    springDollToSpot: <T_PlaceName_1 extends PlaceName>({ place, spot, doll: dollName, }: {
+    springAddToDollRotationY: (dollName: string, addedRotation: number) => void;
+    springDollRotationY: (dollName: string, newRotation: number) => void;
+    springDollToSpot: <T_PlaceName_1 extends string>({ place, spot, doll: dollName, }: {
         place: T_PlaceName_1;
-        spot: SpotNameByPlace[T_PlaceName_1];
-        doll: DollName;
+        spot: any;
+        doll: string;
     }) => void;
-    toggleDollMeshes: <T_DollName extends DollName>(dollName: T_DollName, toggledMeshes: Partial<Record<MeshNameByModel[DollOptions[T_DollName]["model"]], boolean>>) => void;
+    toggleDollMeshes: <T_DollName extends string>(dollName: T_DollName, toggledMeshes: Partial<Record<any, boolean>>) => void;
     enableMovement: (canMove?: boolean, revertDelay?: number | undefined) => Promise<void>;
-    isHolding: (pickupName: PickupName) => any;
+    isHolding: (pickupName: string) => any;
     setPlayerAnimations: (newAnimationNames: {
-        walking: AnyAnimationName;
-        idle: AnyAnimationName;
+        walking: string;
+        idle: string;
     }) => void;
     setPlayerToStartSpot: () => void;
-    takePickup: (pickup: PickupName, toHolding?: boolean) => void;
-    goToNewPlace: <T_PlaceName_2 extends PlaceName>(toOption: {
+    takePickup: (pickup: string, toHolding?: boolean) => void;
+    goToNewPlace: <T_PlaceName_2 extends string>(toOption: {
         toPlace: T_PlaceName_2;
-        toSpot: SpotNameByPlace[T_PlaceName_2];
-        toCam?: CameraNameByPlace[T_PlaceName_2] | undefined;
-        toSegment?: SegmentNameByPlace[T_PlaceName_2] | undefined;
-    }, charName?: CharacterName) => void;
-    hideWallIf: <T_Place extends PlaceName, T_Wall extends WallNameByPlace[T_Place]>(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) => void;
-    lookAtSpot: <T_Place_1 extends PlaceName>(place: T_Place_1, spot: SpotNameByPlace[T_Place_1], character?: CharacterName | undefined) => void;
+        toSpot: any;
+        toCam?: any;
+        toSegment?: any;
+    }, charName?: string) => void;
+    hideWallIf: <T_Place extends string, T_Wall extends unknown>(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) => void;
+    lookAtSpot: <T_Place_1 extends string>(place: T_Place_1, spot: any, character?: string | undefined) => void;
     showStoryView: (isVisible?: boolean) => Promise<void>;
-    setCamera: <T_Place_2 extends PlaceName, T_Cam extends keyof PlaceInfoByName[T_Place_2]["segmentTimesByCamera"] & AnyCameraName>(_placeName: T_Place_2, cameraName: T_Cam, whenToRun?: "now" | "at loop") => Promise<void>;
-    setSegment: <T_Place_3 extends PlaceName, T_Segment extends SegmentNameByPlace[T_Place_3]>(_placeName: T_Place_3, segmentName: T_Segment, whenToRun?: "now" | "at loop") => Promise<void>;
-    playNewMusic: (newMusicName: MusicName) => void;
+    setCamera: <T_Place_2 extends string, T_Cam extends string>(_placeName: T_Place_2, cameraName: T_Cam, whenToRun?: "now" | "at loop") => Promise<void>;
+    setSegment: <T_Place_3 extends string, T_Segment extends unknown>(_placeName: T_Place_3, segmentName: T_Segment, whenToRun?: "now" | "at loop") => Promise<void>;
+    playNewMusic: (newMusicName: string) => void;
     stopAllMusic: () => void;
     hideMiniBubble: () => void;
     showAlarmText: (text: string, time: number) => Promise<void>;
@@ -57,7 +58,7 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     showSpeech: (text: string, options?: {
         time?: number | undefined;
         showOnce?: boolean | undefined;
-        character?: (keyof BackdopConcepts["speechBubbles"]["startStates"] & CharacterName) | undefined;
+        character?: (keyof BackdopConcepts["speechBubbles"]["startStates"] & string) | undefined;
         zoomAmount?: number | undefined;
         lookAtPlayer?: boolean | undefined;
         returnToZoomBeforeConversation?: boolean | undefined;

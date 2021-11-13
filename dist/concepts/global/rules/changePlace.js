@@ -1,15 +1,16 @@
 import { Texture } from "@babylonjs/core";
+import { forEach } from "shutils/dist/loops";
 import { CustomVideoTexture } from "../../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
-import { forEach } from "shutils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalChangePlaceRules(concepFuncs, backdopConcepts, backdopStartOptions, dollNames, placeInfoByName) {
+export function makeGlobalChangePlaceRules(concepFuncs, _backdopConcepts, backdopStartOptions, backdopArt) {
     const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
+    const { placeInfoByName } = backdopArt;
     const globalRefs = getRefs().global.main;
-    const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames);
+    const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeCameraChangeUtils(concepFuncs, backdopArt);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     function whenAllVideosLoadedForPlace() {
@@ -75,7 +76,8 @@ export function makeGlobalChangePlaceRules(concepFuncs, backdopConcepts, backdop
                 // run on the start of the next concepto frame, so all the flows can run again
                 setState({}, () => {
                     const { nowPlaceName, nextPlaceName } = globalState;
-                    const { cameraNames } = placeInfoByName[nowPlaceName];
+                    const cameraNames = placeInfoByName[nowPlaceName]
+                        .cameraNames;
                     const placeRefs = getRefs().places[nowPlaceName];
                     setState({ sectionVids: { [nowPlaceName]: { wantToUnload: true } } });
                     forEach(cameraNames, (camName) => {

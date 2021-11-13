@@ -1,3 +1,4 @@
+import { DollName } from "../../../declarations";
 import {
   BackdopConcepFuncs,
   PlaceholderBackdopConcepts,
@@ -5,25 +6,22 @@ import {
 
 export function makeDollStoryUtils<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  DollName extends string
->(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
+  BackdopConcepts extends PlaceholderBackdopConcepts
+>(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts) {
   const { getState } = concepFuncs;
   // const { getState, startItemEffect } = concepFuncs;
   // const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
   type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
 
-  type ModelNameFromDoll<
-    T_DollName extends DollName
-  > = StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<T_DollName extends DollName> =
+    StartState_Dolls[T_DollName]["modelName"];
 
   function getModelNameFromDoll<T_DollName extends DollName>(
     dollName: T_DollName
   ): ModelNameFromDoll<T_DollName> {
-    return getState().dolls[dollName].modelName as ModelNameFromDoll<
-      T_DollName
-    >;
+    return getState().dolls[dollName]
+      .modelName as ModelNameFromDoll<T_DollName>;
   }
 
   // function stickDollToFloor() {

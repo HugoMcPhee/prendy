@@ -1,7 +1,8 @@
+import { BackdopArt } from "../declarations";
 import { ConceptsHelperTypes } from "concep";
 import { createConcepts } from "concep";
 import { backdopFlowNames } from ".";
-import { makeGetBackdopOptions } from "../getBackdopOptions";
+import { getBackdopOptions } from "../getBackdopOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
 import dolls from "./dolls";
@@ -16,20 +17,7 @@ import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 
-const testGetBackdopOptions = makeGetBackdopOptions<
-  string, // PickupName
-  string, // PlaceName
-  string, // ModelName
-  string, // CharacterName
-  string, // AnyAnimationName
-  Record<string, string>, // TriggerNameByPlace
-  Record<string, string>, // CameraNameByPlace
-  Record<string, string>, // SpotNameByPlace
-  Record<string, string[]>, // ModelNamesByPlaceLoose
-  Record<string, string> // SegmentNameByPlace
->();
-
-const TEST_START_OPTIONS = testGetBackdopOptions({
+const TEST_START_OPTIONS = getBackdopOptions({
   // place: "cave",
   // segment: "start",
   // camera: "View_Camera",
@@ -56,7 +44,7 @@ const TEST_START_OPTIONS = testGetBackdopOptions({
   modelNamesByPlace: {
     street: ["walker", "cat", "chef", "fakefish", "fish", "ladder", "taptop"],
   },
-});
+} as any);
 
 const testNames = ["testA", "testB"] as const;
 
@@ -69,7 +57,7 @@ const getModelInfoByName = () => ({
   skeletonName: "test",
 });
 
-const testStuff = {
+const testArtStuff = {
   modelNames: ["modelA", "modelB"] as readonly any[],
   dollNames: ["dollA", "dollB"] as readonly any[],
   placeNames: ["placeA"] as readonly any[],
@@ -108,7 +96,9 @@ const testStuff = {
     characterA: { doll: "dollA", font: "fontA" },
     characterB: { doll: "dollB", font: "fontA" },
   } as const,
-};
+} as unknown as BackdopArt;
+
+// NOTE to get types working, might need to hard-type backdopArt, while working on the libray
 
 export type CharacterOptionsPlaceholder<
   CharacterName extends string,
@@ -134,72 +124,17 @@ export type DollOptionsPlaceholder<
 
 const placeholderBackdopConcepts = {
   keyboards: keyboards(),
-  miniBubbles: miniBubbles<any>(), // CharacterName
+  miniBubbles: miniBubbles(),
   pointers: pointers(),
-  global: global<
-    BackdopOptionsUntyped, // typeof TEST_START_OPTIONS,
-    any, // AnySegmentName,
-    any, // PlaceName,
-    any, //  ModelName,
-    any, //  DollName,
-    any, // PickupName,
-    any, // CharacterName
-    any, // MusicName
-    any, // SoundName
-    typeof testStuff.placeInfoByName // PlaceInfoByName
-  >(TEST_START_OPTIONS, testStuff.musicNames, testStuff.soundNames),
-  models: models<any>(testStuff.modelNames), //ModelName
-  dolls: dolls<
-    any, // ModelName
-    any, // DollName
-    any, // AnySpotName
-    any, // AnyAnimationName
-    Record<any, any>, // DollOptions
-    Record<any, any>, // AnimationNameByModel
-    Record<any, any>, // BoneNameByModel
-    Record<any, any>, // MaterialNameByModel
-    Record<any, any>, // MeshNameByModel
-    typeof testStuff.modelInfoByName
-  >(
-    testStuff.modelNames,
-    testStuff.dollNames,
-    testStuff.modelInfoByName,
-    testStuff.dollOptions
-  ),
-  characters: characters<
-    any, // CharacterName
-    any, // DollName
-    any, // FontName
-    any, // AnyTriggerName
-    any, // AnyCameraName
-    typeof testStuff.characterOptions // CharacterOptions
-  >(testStuff.characterNames, testStuff.dollNames, testStuff.characterOptions),
-  players: players<
-    typeof TEST_START_OPTIONS,
-    any // AnyAnimationName
-  >(TEST_START_OPTIONS),
-  speechBubbles: speechBubbles<
-    any, // CharacterName,
-    any, // DollName,
-    any, // FontName,
-    any, // SpeechVidName,
-    typeof testStuff.characterOptions
-  >(testStuff.characterNames, testStuff.characterOptions, testStuff.fontNames),
-  places: places<
-    any, // PlaceName,
-    any, // AnyCameraName,
-    Record<any, any>, // TriggerNameByPlace,
-    Record<any, any>, // CameraNameByPlace,
-    Record<any, any>, // SoundspotNameByPlace,
-    Record<any, any>, // WallNameByPlace,
-    Record<any, any>, // SpotNameByPlace,
-    typeof testStuff.placeInfoByName
-  >(testStuff.placeNames, testStuff.placeInfoByName),
-  safeVids: safeVids<
-    any, // PlaceName
-    typeof testStuff.placeInfoByName
-  >(testStuff.placeNames, testStuff.placeInfoByName),
-  sectionVids: sectionVids(testStuff.placeNames),
+  global: global(TEST_START_OPTIONS as any, testArtStuff),
+  models: models(testArtStuff),
+  dolls: dolls(testArtStuff),
+  characters: characters(testArtStuff),
+  players: players(TEST_START_OPTIONS as any),
+  speechBubbles: speechBubbles(testArtStuff),
+  places: places(testArtStuff),
+  safeVids: safeVids(testArtStuff),
+  sectionVids: sectionVids(testArtStuff),
   //
   story: story_fake<any, any>(),
 };

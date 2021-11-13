@@ -1,13 +1,14 @@
-import { makeGlobalStoreUtils } from "../global/utils";
-import { VidType } from "../../utils/consts";
 import { SectionVidState, VidSection } from ".";
-import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
-} from "../typedConcepFuncs";
 import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
+import {
+  AnyCameraName,
+  BackdopArt,
+  CameraNameByPlace,
+  PlaceName,
+  SegmentNameByPlace,
+} from "../../declarations";
+import { makeGlobalStoreUtils } from "../global/utils";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
@@ -29,19 +30,10 @@ export function makeGetSectionVidVideo<
 }
 
 export function makeSectionVidStoreUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  PlaceName extends string,
-  DollName extends string,
-  AnyCameraName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
->(
-  concepFuncs: ConcepFuncs,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[]
-) {
+  ConcepFuncs extends BackdopConcepFuncs
+>(concepFuncs: ConcepFuncs, backdopArt: BackdopArt) {
   const { getState, startItemEffect, stopEffect } = concepFuncs;
+  const { placeInfoByName } = backdopArt;
 
   const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
@@ -49,15 +41,10 @@ export function makeSectionVidStoreUtils<
     concepFuncs
   );
 
-  const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    AnyCameraName,
-    PlaceName,
-    DollName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(
+    concepFuncs,
+    backdopArt
+  );
 
   // __________________________
   // temporary rules
@@ -149,10 +136,7 @@ export function makeSectionVidStoreUtils<
         safeSegmentName as keyof typeof placeSegmentDurations
       ];
 
-    return {
-      time: newTime,
-      duration: newDuration,
-    };
+    return { time: newTime, duration: newDuration };
   }
 
   // runs on changes to tick, in the checkVideoLoop flow
@@ -163,13 +147,7 @@ export function makeSectionVidStoreUtils<
     const { nowSection, sectionVidState } = itemState;
     const backdropVid = getSectionVidVideo(itemName);
 
-    // if (sectionVidState !== "play") {
-    //   console.log(sectionVidState);
-    // }
-    // console.log(backdropVid?.currentTime, endTime);
-
     /*
-
   !nextSegmentNameWhenVidPlays &&
   !nextCamNameWhenVidPlays
   */
@@ -179,8 +157,8 @@ export function makeSectionVidStoreUtils<
       sectionVidState !== "unloaded" &&
       sectionVidState !== "waitingForUnload"
     ) {
-      // console.log(sectionVidState);
       const currentTime = backdropVid?.currentTime ?? 0;
+
       const endTime = getSectionEndTime(nowSection);
       const isAtOrAfterEndOfLoop = currentTime >= endTime;
       const isBeforeStartOfLoop = currentTime < nowSection.time; // if the current time is before the video sections start time
@@ -205,8 +183,6 @@ export function makeSectionVidStoreUtils<
         // isAtOrAfterEndOfLoop &&
         !isAlreadyLoopingOrChangingSection
       ) {
-        // setState({ sectionVids: { [itemName]: { wantToLoop: true } } }); // global handles setting wantToLoop for sectionVids now :)
-        // setState({ global: { main: { wantToLoop: true } } });
         return true;
       }
     }

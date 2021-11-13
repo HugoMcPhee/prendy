@@ -10,28 +10,25 @@ import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "shutils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { CharacterName, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 
-export function makeSpeechBubble<
-  ConcepFuncs extends BackdopConcepFuncs,
-  CharacterName extends string,
-  SpeechVidFiles extends Record<string, string>
->(concepFuncs: ConcepFuncs, speechVidFiles: SpeechVidFiles) {
+export function makeSpeechBubble<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs,
+  speechVidFiles: SpeechVidFiles
+) {
   const { getState, useStore, useStoreEffect } = concepFuncs;
 
   type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
-  type AllItemsState<
-    T_ItemType extends ItemType
-  > = ReturnType<GetState>[T_ItemType];
+  type AllItemsState<T_ItemType extends ItemType> =
+    ReturnType<GetState>[T_ItemType];
 
-  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
-    concepFuncs
-  );
+  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 

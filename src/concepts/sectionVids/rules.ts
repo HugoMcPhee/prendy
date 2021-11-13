@@ -1,27 +1,14 @@
 import { ConceptsHelperTypes } from "concep";
-import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";
 import { minMaxRange } from "shutils/dist/numbers";
 import { SectionVidState } from ".";
-import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
-} from "../typedConcepFuncs";
+import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";
+import { BackdopArt, PlaceName } from "../../declarations";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
 
-export function makeSectionVidRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  PlaceName extends string,
-  DollName extends string,
-  AnyCameraName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
->(
+export function makeSectionVidRules<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[]
+  backdopArt: BackdopArt
 ) {
   // safe Section Stack Vid Rules
 
@@ -37,15 +24,7 @@ export function makeSectionVidRules<
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
   const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } =
-    makeSectionVidStoreUtils<
-      ConcepFuncs,
-      PlaceInfoByName,
-      PlaceName,
-      DollName,
-      AnyCameraName,
-      CameraNameByPlace,
-      SegmentNameByPlace
-    >(concepFuncs, placeInfoByName, dollNames);
+    makeSectionVidStoreUtils(concepFuncs, backdopArt);
 
   const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } =
     makeSafeVidStoreUtils(concepFuncs);

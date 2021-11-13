@@ -1,12 +1,13 @@
 import { Constants, Engine, PBRMaterial, RenderTargetTexture, ShaderMaterial, Texture, } from "@babylonjs/core";
-import shaders from "../../..//utils/shaders";
 import { chooseClosestBeforeItemInArray } from "shutils/dist/arrays";
 import { forEach } from "shutils/dist/loops";
+import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import { makeGlobalStoreUtils } from "./";
-export function makeCameraChangeUtils(concepFuncs, placeInfoByName, dollNames) {
+export function makeCameraChangeUtils(concepFuncs, backdopArt) {
     const { getRefs, getState, setState } = concepFuncs;
+    const { placeInfoByName, dollNames } = backdopArt;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);

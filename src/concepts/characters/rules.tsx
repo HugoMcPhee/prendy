@@ -1,34 +1,25 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "shutils/dist/loops";
+import {
+  AnyCameraName,
+  AnyTriggerName,
+  BackdopArt,
+  BackdopOptions,
+  CharacterName,
+} from "../../declarations";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  PlaceInfoByNamePlaceholder,
-} from "../typedConcepFuncs";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
 
 export function makeCharacterDynamicRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped,
-  CharacterName extends string,
-  DollName extends string,
-  AnyCameraName extends string,
-  PlaceName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
+  ConcepFuncs extends BackdopConcepFuncs
 >(
   concepFuncs: ConcepFuncs,
   backdopStartOptions: BackdopOptions,
-  characterNames: readonly CharacterName[],
-  placeInfoByName: PlaceInfoByName
+  backdopArt: BackdopArt
 ) {
-  const {
-    makeRules,
-    getState,
-    setState,
-    getRefs,
-    makeDynamicRules,
-  } = concepFuncs;
+  const { getState, setState, getRefs, makeDynamicRules } = concepFuncs;
+  const { placeInfoByName } = backdopArt;
 
   const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(
     concepFuncs,
@@ -62,12 +53,11 @@ export function makeCharacterDynamicRules<
 
           if (!itemRefs.meshRef) return;
 
-          const {
-            nowPlaceName,
-            loadingOverlayToggled,
-            focusedDoll,
-          } = getState().global.main;
-          const { cameraNames, triggerNames } = placeInfoByName[nowPlaceName];
+          const { nowPlaceName, loadingOverlayToggled, focusedDoll } =
+            getState().global.main;
+          const nowPlaceInfo = placeInfoByName[nowPlaceName];
+          const triggerNames = nowPlaceInfo.triggerNames as AnyTriggerName[];
+          const cameraNames = nowPlaceInfo.cameraNames as AnyCameraName[];
 
           if (loadingOverlayToggled === true) return;
 
@@ -186,8 +176,7 @@ export function makeCharacterDynamicRules<
 
 export function makeStartDynamicCharacterRulesForInitialState<
   ConcepFuncs extends BackdopConcepFuncs,
-  CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>,
-  CharacterName extends string
+  CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>
 >(
   characterDynamicRules: CharacterDynamicRules,
   characterNames: readonly CharacterName[],
@@ -210,12 +199,12 @@ export function makeStartDynamicCharacterRulesForInitialState<
   };
 }
 
-export function makeCharacterRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  PlaceName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>
->(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName) {
+export function makeCharacterRules<ConcepFuncs extends BackdopConcepFuncs>(
+  concepFuncs: ConcepFuncs,
+  backdopArt: BackdopArt
+) {
   const { makeRules, getState, setState } = concepFuncs;
+  const { placeInfoByName } = backdopArt;
 
   return makeRules((addItemEffect, addEffect) => ({
     // should be a  dynamic rule ?
@@ -239,7 +228,8 @@ export function makeCharacterRules<
 
         const { nowPlaceName } = getState().global.main;
         const { nowCamName } = getState().places[nowPlaceName];
-        const { cameraNames } = placeInfoByName[nowPlaceName];
+        const cameraNames = placeInfoByName[nowPlaceName]
+          .cameraNames as AnyCameraName[];
 
         forEach(cameraNames, (loopedCameraName) => {
           if (

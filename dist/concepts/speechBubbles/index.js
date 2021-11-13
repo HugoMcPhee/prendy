@@ -1,6 +1,7 @@
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition } from "shutils/dist/points2d";
-export default function speechBubbles(characterNames, characterOptions, fontNames) {
+export default function speechBubbles(backdopArt) {
+    const { characterNames, characterOptions, fontNames } = backdopArt;
     const state = (_itemName, options // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
     ) => {
         var _a, _b;

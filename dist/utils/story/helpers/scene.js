@@ -4,7 +4,7 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames) {
-    const { getRefs, getState, onNextTick, setState, startItemEffect, stopEffect, } = concepFuncs;
+    const { getRefs, getState, onNextTick, setState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(concepFuncs);

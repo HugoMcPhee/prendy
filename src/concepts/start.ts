@@ -1,3 +1,9 @@
+import {
+  BackdopArt,
+  BackdopOptions,
+  ModelInfoByName,
+  ModelName,
+} from "../declarations";
 import loadGoogleFonts from "../utils/loadGoogleFonts";
 import {
   makeCharacterDynamicRules,
@@ -19,140 +25,61 @@ import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
 } from "./typedConcepFuncs";
 
 export function makeStartBackdopRules<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  // DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] &     string, // DollNameParameter extends string
-  DollName extends string, // DollNameParameter extends string
-  ModelName extends string,
-  CharacterName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>,
-  ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>,
-  StartState_Dolls extends BackdopConcepts["dolls"]["startStates"] &
-    ReturnType<ConcepFuncs["getState"]>["dolls"],
-  AnyAnimationName extends string,
-  AnimationNameByModel extends Record<ModelName, AnyAnimationName>
-  // DollName extends keyof StartState_Dolls & string,
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
   BACKDOP_OPTIONS: BackdopOptions,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[],
-  characterNames: readonly CharacterName[],
-  modelInfoByName: ModelInfoByName
+  backdopArt: BackdopArt
 ) {
+  const { dollNames, characterNames } = backdopArt;
+
   // making rules
 
   const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
   const pointerConnectRules = makePointersConnectRules(concepFuncs);
-  const startAllGlobalRules = makeStartAllGlobalRules<
-    ConcepFuncs,
-    BackdopConcepts,
-    BackdopOptions,
-    PlaceInfoByName,
-    AnyCameraName,
-    AnySegmentName,
-    PlaceName,
-    DollName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, placeInfoByName, dollNames);
-
-  const modelRules = makeModelRules<ConcepFuncs, ModelName, ModelInfoByName>(
+  const startAllGlobalRules = makeStartAllGlobalRules(
     concepFuncs,
-    modelInfoByName
+    backdopConcepts,
+    BACKDOP_OPTIONS,
+    backdopArt
   );
 
-  const playerRules = makePlayerRules<
-    ConcepFuncs,
-    BackdopOptions,
-    CharacterName,
-    PlaceInfoByName
-  >(concepFuncs, BACKDOP_OPTIONS, placeInfoByName);
-
-  const dollDynamicRules = makeDollDynamicRules<
-    ConcepFuncs,
-    BackdopOptions,
-    BackdopConcepts,
-    StartState_Dolls,
-    DollName,
-    ModelName,
-    AnyAnimationName,
-    AnimationNameByModel,
-    ModelInfoByName
-  >(concepFuncs, BACKDOP_OPTIONS, backdopConcepts, modelInfoByName, dollNames);
-
-  const dollRules = makeDollRules<
-    BackdopOptions,
-    ReturnType<typeof makeDollDynamicRules>,
-    ConcepFuncs,
-    BackdopConcepts,
-    StartState_Dolls,
-    DollName,
-    ModelName,
-    AnyAnimationName,
-    AnimationNameByModel,
-    ModelInfoByName
-  >(
+  const modelRules = makeModelRules(concepFuncs, backdopArt);
+  const playerRules = makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt);
+  const dollDynamicRules = makeDollDynamicRules(
+    concepFuncs,
+    BACKDOP_OPTIONS,
+    backdopConcepts,
+    backdopArt
+  );
+  const dollRules = makeDollRules(
     BACKDOP_OPTIONS,
     dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
     concepFuncs,
     backdopConcepts,
-    modelInfoByName,
-    dollNames
+    backdopArt
   );
-
-  const speechBubbleRules = makeSpeechBubbleRules<ConcepFuncs, BackdopConcepts>(
-    concepFuncs,
-    backdopConcepts
-  );
-
+  const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, backdopConcepts);
   const safeVidRules = makeSafeVidRules(concepFuncs);
+  const safeSectionVidRules = makeSectionVidRules(concepFuncs, backdopArt);
 
-  const safeSectionVidRules = makeSectionVidRules<
-    ConcepFuncs,
-    PlaceInfoByName,
-    PlaceName,
-    DollName,
-    AnyCameraName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
-
-  const characterDynamicRules = makeCharacterDynamicRules<
-    ConcepFuncs,
-    BackdopOptions,
-    CharacterName,
-    DollName,
-    AnyCameraName,
-    PlaceName,
-    PlaceInfoByName
-  >(concepFuncs, BACKDOP_OPTIONS, characterNames, placeInfoByName);
-
-  const characterRules = makeCharacterRules<
-    ConcepFuncs,
-    PlaceName,
-    PlaceInfoByName
-  >(concepFuncs, placeInfoByName);
+  const characterDynamicRules = makeCharacterDynamicRules(
+    concepFuncs,
+    BACKDOP_OPTIONS,
+    backdopArt
+  );
+  const characterRules = makeCharacterRules(concepFuncs, backdopArt);
 
   const startDynamicCharacterRulesForInitialState =
     makeStartDynamicCharacterRulesForInitialState<
       ConcepFuncs,
-      ReturnType<typeof makeCharacterDynamicRules>,
-      CharacterName
+      ReturnType<typeof makeCharacterDynamicRules>
     >(characterDynamicRules, characterNames, concepFuncs);
 
   // ----------------------------------------------
@@ -173,8 +100,7 @@ export function makeStartBackdopRules<
     const stopDynamicDollRulesForInitialState =
       startDynamicDollRulesForInitialState<
         ConcepFuncs,
-        ReturnType<typeof makeDollDynamicRules>,
-        DollName
+        ReturnType<typeof makeDollDynamicRules>
       >(
         concepFuncs,
         dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,

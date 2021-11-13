@@ -1,5 +1,6 @@
-import { BackdopConcepFuncs, ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
-export declare function makeModelRules<ConcepFuncs extends BackdopConcepFuncs, ModelName extends string, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(concepFuncs: ConcepFuncs, modelInfoByName: ModelInfoByName): {
+import { BackdopArt } from "../../declarations";
+import { BackdopConcepFuncs } from "../typedConcepFuncs";
+export declare function makeModelRules<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, backdopArt: BackdopArt): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

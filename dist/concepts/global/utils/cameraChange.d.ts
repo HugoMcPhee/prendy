@@ -1,10 +1,11 @@
-import { BackdopConcepFuncs, PlaceInfoByNamePlaceholder } from "../../typedConcepFuncs";
-export declare function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepFuncs, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, AnyCameraName extends string, PlaceName extends string, DollName extends string, CameraNameByPlace extends Record<PlaceName, string>, SegmentNameByPlace extends Record<PlaceName, string>>(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName, dollNames: readonly DollName[]): {
+import { AnyCameraName, BackdopArt } from "../../../declarations";
+import { BackdopConcepFuncs } from "../../typedConcepFuncs";
+export declare function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, backdopArt: BackdopArt): {
     getSafeCamName: {
         (cam: AnyCameraName): AnyCameraName;
         (cam: null): null;
     };
-    getSafeSegmentName: <T_PlaceName extends PlaceName, T_CameraName extends CameraNameByPlace[T_PlaceName] & AnyCameraName, T_SegmentName extends SegmentNameByPlace[T_PlaceName]>({ cam, place, segment, useStorySegmentRules, }: {
+    getSafeSegmentName: <T_PlaceName extends string, T_CameraName extends string, T_SegmentName extends string>({ cam, place, segment, useStorySegmentRules, }: {
         place: T_PlaceName;
         cam: T_CameraName;
         segment: T_SegmentName;

@@ -42,19 +42,19 @@ export const backdopFlowNames = [
     "default",
     "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ];
-export function makeBackdopConcepts(backdopStartOptions, placeInfoByName, modelInfoByName, dollOptions, characterOptions, placeNames, modelNames, dollNames, characterNames, musicNames, soundNames, fontNames) {
+export function makeBackdopConcepts(backdopStartOptions, backdopArt) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(),
         pointers: pointers(),
-        global: global(backdopStartOptions, musicNames, soundNames),
-        models: models(modelNames),
-        dolls: dolls(modelNames, dollNames, modelInfoByName, dollOptions),
-        characters: characters(characterNames, dollNames, characterOptions),
+        global: global(backdopStartOptions, backdopArt),
+        models: models(backdopArt),
+        dolls: dolls(backdopArt),
+        characters: characters(backdopArt),
         players: players(backdopStartOptions),
-        speechBubbles: speechBubbles(characterNames, characterOptions, fontNames),
-        places: places(placeNames, placeInfoByName),
-        safeVids: safeVids(placeNames, placeInfoByName),
-        sectionVids: sectionVids(placeNames),
+        speechBubbles: speechBubbles(backdopArt),
+        places: places(backdopArt),
+        safeVids: safeVids(backdopArt),
+        sectionVids: sectionVids(backdopArt),
     };
 }

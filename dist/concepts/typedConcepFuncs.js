@@ -1,6 +1,6 @@
 import { createConcepts } from "concep";
 import { backdopFlowNames } from ".";
-import { makeGetBackdopOptions } from "../getBackdopOptions";
+import { getBackdopOptions } from "../getBackdopOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
 import dolls from "./dolls";
@@ -14,8 +14,7 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-const testGetBackdopOptions = makeGetBackdopOptions();
-const TEST_START_OPTIONS = testGetBackdopOptions({
+const TEST_START_OPTIONS = getBackdopOptions({
     // place: "cave",
     // segment: "start",
     // camera: "View_Camera",
@@ -52,7 +51,7 @@ const getModelInfoByName = () => ({
     materialNames: testNames,
     skeletonName: "test",
 });
-const testStuff = {
+const testArtStuff = {
     modelNames: ["modelA", "modelB"],
     dollNames: ["dollA", "dollB"],
     placeNames: ["placeA"],
@@ -93,15 +92,15 @@ const placeholderBackdopConcepts = {
     keyboards: keyboards(),
     miniBubbles: miniBubbles(),
     pointers: pointers(),
-    global: global(TEST_START_OPTIONS, testStuff.musicNames, testStuff.soundNames),
-    models: models(testStuff.modelNames),
-    dolls: dolls(testStuff.modelNames, testStuff.dollNames, testStuff.modelInfoByName, testStuff.dollOptions),
-    characters: characters(testStuff.characterNames, testStuff.dollNames, testStuff.characterOptions),
+    global: global(TEST_START_OPTIONS, testArtStuff),
+    models: models(testArtStuff),
+    dolls: dolls(testArtStuff),
+    characters: characters(testArtStuff),
     players: players(TEST_START_OPTIONS),
-    speechBubbles: speechBubbles(testStuff.characterNames, testStuff.characterOptions, testStuff.fontNames),
-    places: places(testStuff.placeNames, testStuff.placeInfoByName),
-    safeVids: safeVids(testStuff.placeNames, testStuff.placeInfoByName),
-    sectionVids: sectionVids(testStuff.placeNames),
+    speechBubbles: speechBubbles(testArtStuff),
+    places: places(testArtStuff),
+    safeVids: safeVids(testArtStuff),
+    sectionVids: sectionVids(testArtStuff),
     //
     story: story_fake(),
 };

@@ -2,10 +2,9 @@ import { Vector3 } from "@babylonjs/core";
 import React, { ReactNode, Suspense } from "react";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
   PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
 } from "../concepts/typedConcepFuncs";
+import { BackdopArt, BackdopOptions, PlaceName } from "../declarations";
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";
 
@@ -13,59 +12,16 @@ type Props = { children?: ReactNode };
 
 export function makeLoadingModels<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  PlaceName extends string,
-  CharacterName extends string,
-  DollName extends string,
-  SoundName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  SpotNameByPlace extends Record<PlaceName, string>,
-  WallNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SoundFiles extends Record<SoundName, string>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
+  _backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
-  placeInfoByName: PlaceInfoByName,
-  characterNames: readonly CharacterName[],
-  dollNames: readonly DollName[],
-  soundFiles: SoundFiles,
-  extraStuff?: React.ReactNode
+  backdopArt: BackdopArt
 ) {
   const { useStore } = concepFuncs;
-
-  const Player = makePlayer<
-    ConcepFuncs,
-    BackdopOptions,
-    AnyCameraName,
-    AnySegmentName,
-    PlaceName,
-    CharacterName,
-    PlaceInfoByName,
-    SpotNameByPlace,
-    WallNameByPlace,
-    SegmentNameByPlace,
-    CameraNameByPlace
-  >(concepFuncs, backdopStartOptions, placeInfoByName, characterNames);
-
-  const usePlace = makeUsePlace<
-    ConcepFuncs,
-    BackdopOptions,
-    PlaceInfoByName,
-    PlaceName,
-    DollName,
-    AnyCameraName,
-    CharacterName,
-    SoundName,
-    SoundFiles,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, backdopStartOptions, placeInfoByName, dollNames, soundFiles);
+  const Player = makePlayer(concepFuncs, backdopStartOptions, backdopArt);
+  const usePlace = makeUsePlace(concepFuncs, backdopStartOptions, backdopArt);
 
   function Place({ name }: { name: PlaceName }) {
     usePlace(name);
@@ -94,7 +50,6 @@ export function makeLoadingModels<
         <Place name={nowPlaceName} key={nowPlaceName} />
         {/* <AllSmells /> */}
         {children}
-        {/* TODO extraStuff */}
       </Suspense>
     );
   };

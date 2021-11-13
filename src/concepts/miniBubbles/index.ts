@@ -1,7 +1,8 @@
+import { CharacterName } from "../../declarations";
 import { defaultPosition, Point2D } from "shutils/dist/points2d";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
 
-export default function miniBubbles<CharacterName extends string>() {
+export default function miniBubbles() {
   const state = <T_ItemName extends string>(_itemName: T_ItemName) => ({
     isVisible: false,
     isFullyHidden: true,

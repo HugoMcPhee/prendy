@@ -2,7 +2,7 @@ import { makeGlobalStoreUtils } from "./concepts/global/utils";
 import { makeSetStoryState } from "./storyRuleMakers";
 import { makeGetSceneOrEngineUtils } from "./utils/babylonjs/getSceneOrEngine";
 export { makeBackdopConcepts } from "./concepts";
-export { makeGetBackdopOptions } from "./getBackdopOptions";
+export { getBackdopOptions } from "./getBackdopOptions";
 export { makeBackdopApp } from "./components/BackdopApp";
 export { makeBackdopStoryHelpers } from "./utils/story/helpers";
 export { backdopFlowNames } from "./concepts";

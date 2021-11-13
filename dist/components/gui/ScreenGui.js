@@ -1,3 +1,4 @@
+// @refresh-reset
 import React from "react";
 import { makeAlarmText } from "./AlarmText";
 import { makeLoadingOverlay } from "./LoadingOverlay";
@@ -7,9 +8,10 @@ import { makeScreenSticker } from "./ScreenSticker";
 // import { makeShowStates } from "./ShowStates";
 import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
-import { makeVirtualStick } from "./VirtualStick";
 import { makeVirtualButtons } from "./VirtualButtons";
-export function makeScreenGui(concepFuncs, BACKDOP_OPTIONS, characterNames, pickupsInfo, speechVidFiles) {
+import { makeVirtualStick } from "./VirtualStick";
+export function makeScreenGui(concepFuncs, BACKDOP_OPTIONS, backdopArt) {
+    const { pickupsInfo, speechVidFiles, characterNames } = backdopArt;
     const AlarmText = makeAlarmText(concepFuncs);
     const LoadingOverlay = makeLoadingOverlay(concepFuncs);
     const MiniBubble = makeMiniBubble(concepFuncs);

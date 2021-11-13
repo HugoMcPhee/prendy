@@ -1,5 +1,5 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { ModelInfoByNamePlaceholder } from "../typedConcepFuncs";
+import { BackdopArt, DollName } from "../../declarations";
 export declare type InRangeForDoll = {
     touch: boolean;
     talk: boolean;
@@ -10,17 +10,18 @@ export declare function defaultInRangeForDoll(): {
     talk: boolean;
     see: boolean;
 };
-export declare function getDefaultInRangeFunction<DollName extends string>(dollNames: readonly DollName[]): () => Record<DollName, InRangeForDoll>;
-export default function makeDollIndexUtils<DollName extends string, ModelName extends string, AnimationNameByModel extends Record<any, string>, MeshNameByModel extends Record<ModelName, string>, ModelInfoByName extends ModelInfoByNamePlaceholder<ModelName>>(dollNames: readonly DollName[], modelInfoByName: ModelInfoByName): {
-    makeModelAnimWeightsMoverState: <T_ModelName extends ModelName>(modelName: T_ModelName) => <T_Name extends string, T_PhysicsNames extends string, T_InitialState extends {
-        value?: Record<AnimationNameByModel[T_ModelName], number> | undefined;
-        valueGoal?: Record<AnimationNameByModel[T_ModelName], number> | undefined;
+declare type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
+export declare function getDefaultInRangeFunction(dollNames: readonly DollName[]): () => InRangeForAllDolls;
+export default function makeDollIndexUtils(backdopArt: BackdopArt): {
+    makeModelAnimWeightsMoverState: <T_ModelName extends string>(modelName: T_ModelName) => <T_Name extends string, T_PhysicsNames extends string, T_InitialState extends {
+        value?: Record<any, number> | undefined;
+        valueGoal?: Record<any, number> | undefined;
         isMoving?: boolean | undefined;
         moveConfigName?: T_PhysicsNames | undefined;
         moveMode?: import("concep-movers/dist/types").MoveMode | undefined;
         moveConfigs?: Record<T_PhysicsNames, import("concep-movers/dist/types").PhysicsOptions> | undefined;
-    }>(newName: T_Name, initialState?: T_InitialState | undefined) => Record<T_Name, Record<AnimationNameByModel[T_ModelName], number>> & import("concep-movers/dist/utils").NewProps<T_Name, Record<AnimationNameByModel[T_ModelName], number>> & (T_InitialState["moveConfigName"] extends undefined ? {} : Record<`${T_Name}MoveConfigName`, T_PhysicsNames>) & (T_InitialState["moveConfigs"] extends undefined ? {} : Record<`${T_Name}MoveConfigs`, Record<T_PhysicsNames, import("concep-movers/dist/types").PhysicsOptions>>);
-    modelMoverRefs: <T_ModelName_1 extends ModelName, T_MoverName extends string>(modelName: T_ModelName_1, moverName: T_MoverName) => Record<`${T_MoverName}MoverRefs`, {
+    }>(newName: T_Name, initialState?: T_InitialState | undefined) => Record<T_Name, Record<any, number>> & import("concep-movers/dist/utils").NewProps<T_Name, Record<any, number>> & (T_InitialState["moveConfigName"] extends undefined ? {} : Record<`${T_Name}MoveConfigName`, T_PhysicsNames>) & (T_InitialState["moveConfigs"] extends undefined ? {} : Record<`${T_Name}MoveConfigs`, Record<T_PhysicsNames, import("concep-movers/dist/types").PhysicsOptions>>);
+    modelMoverRefs: <T_ModelName_1 extends string, T_MoverName extends string>(modelName: T_ModelName_1, moverName: T_MoverName) => Record<`${T_MoverName}MoverRefs`, {
         stateNames: {
             value: T_MoverName;
             valueGoal: `${T_MoverName}Goal`;
@@ -36,7 +37,8 @@ export default function makeDollIndexUtils<DollName extends string, ModelName ex
         }>;
         animNames: readonly string[];
     }>;
-    modelOtherMeshesRefs: <T_ModelName_2 extends ModelName>(modelName: T_ModelName_2) => Record<MeshNameByModel[T_ModelName_2], AbstractMesh | null>;
+    modelOtherMeshesRefs: <T_ModelName_2 extends string>(modelName: T_ModelName_2) => Record<any, AbstractMesh | null>;
     defaultInRangeForDoll: typeof defaultInRangeForDoll;
-    defaultInRange: () => Record<DollName, InRangeForDoll>;
+    defaultInRange: () => Record<string, InRangeForDoll>;
 };
+export {};

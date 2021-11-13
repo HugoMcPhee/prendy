@@ -13,9 +13,10 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
     // theVideo.preload = "auto";
     (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
 }
-export function makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames) {
+export function makeUsePlaceUtils(concepFuncs, backdopArt) {
     const { getRefs, getState, setState } = concepFuncs;
-    const { doWhenSectionVidPlayingAsync, getSectionForPlace, } = makeSectionVidStoreUtils(concepFuncs, placeInfoByName, dollNames);
+    const { placeInfoByName } = backdopArt;
+    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const placesRefs = getRefs().places;
@@ -52,7 +53,7 @@ export function makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames) {
         setState({ dolls: { [dollName]: { position: newSpotPoint } } });
     }
     async function loadNowVideosForPlace() {
-        const { nowPlaceName, nowSegmentName, wantedSegmentName, } = getState().global.main;
+        const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
         const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
         const wantedSection = getSectionForPlace(nowPlaceName, (wantedCamName !== null && wantedCamName !== void 0 ? wantedCamName : nowCamName), (wantedSegmentName !== null && wantedSegmentName !== void 0 ? wantedSegmentName : nowSegmentName));
         setState({

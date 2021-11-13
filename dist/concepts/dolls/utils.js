@@ -2,8 +2,8 @@ import { Vector3, } from "@babylonjs/core";
 import { keyBy } from "shutils/dist/arrays";
 import { breakableForEach, forEach } from "shutils/dist/loops";
 import { getPointDistanceQuick } from "shutils/dist/speedAngleDistance3d";
-import { getDefaultInRangeFunction } from "./indexUtils";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
+import { getDefaultInRangeFunction } from "./indexUtils";
 const rangeOptions = {
     touch: 2,
     talk: 3,
@@ -28,8 +28,9 @@ export function enableCollisions(theMesh) {
     theMesh.useOctreeForCollisions = true;
     theMesh.rotationQuaternion = null; // allow euler rotation again
 }
-export function makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConcepts, dollNames, modelInfoByName) {
+export function makeDollStoreUtils(concepFuncs, _backdopConcepts, backdopStartOptions, backdopArt) {
     const { getRefs, getState, setState } = concepFuncs;
+    const { dollNames, modelInfoByName } = backdopArt;
     const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
@@ -91,15 +92,13 @@ export function makeDollStoreUtils(concepFuncs, backdopStartOptions, backdopConc
         const namePrefix = `clone_${dollName}_${modelName}_`;
         let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, { doNotInstantiate: true });
         dollRefs.entriesRef = entries;
-        const { meshNames, boneNames, animationNames, materialNames, } = modelInfoByName[modelName];
+        const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];
         const rootNode = entries.rootNodes[0];
         const removePrefix = (name) => name.replace(namePrefix, "");
         const meshArray = rootNode.getChildMeshes();
         const meshes = keyBy(meshArray, "name", removePrefix);
         const skeleton = entries.skeletons[0];
-        const bones = ((skeleton === null || skeleton === void 0 ? void 0 : skeleton.bones)
-            ? keyBy(skeleton.bones, "name", removePrefix)
-            : {});
+        const bones = ((skeleton === null || skeleton === void 0 ? void 0 : skeleton.bones) ? keyBy(skeleton.bones, "name", removePrefix) : {});
         const aniGroups = keyBy(entries.animationGroups);
         // NOTE This references the original material, and not duplicated for each doll
         const materials = keyBy(modelRefs.container.materials);

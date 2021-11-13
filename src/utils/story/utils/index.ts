@@ -9,45 +9,20 @@ import { makeSpotStoryUtils } from "./spots";
 
 export function makeBackdopStoryUtils<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  DollName extends string,
-  PlaceName extends string,
-  CharacterName extends string,
-  AnyCameraName extends string,
-  AnySegmentName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SpotNameByPlace extends Record<PlaceName, string>
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
-  const {
-    get2DAngleBetweenCharacters,
-    get2DAngleFromCharacterToSpot,
-  } = makeCharacterStoryUtils<
-    ConcepFuncs,
-    PlaceName,
-    CharacterName,
-    SpotNameByPlace
-  >(concepFuncs);
-  const { getModelNameFromDoll } = makeDollStoryUtils<
-    ConcepFuncs,
-    BackdopConcepts,
-    DollName
-  >(concepFuncs, backdopConcepts);
+  const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot } =
+    makeCharacterStoryUtils(concepFuncs);
+  const { getModelNameFromDoll } = makeDollStoryUtils(
+    concepFuncs,
+    backdopConcepts
+  );
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
-  } = makeSceneStoryUtils<
-    ConcepFuncs,
-    AnyCameraName,
-    AnySegmentName,
-    PlaceName,
-    CameraNameByPlace
-  >(concepFuncs);
-  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils<
-    ConcepFuncs,
-    PlaceName,
-    SpotNameByPlace
-  >(concepFuncs);
+  } = makeSceneStoryUtils(concepFuncs);
+  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
 
   return {
     // characters

@@ -1,22 +1,30 @@
-import { Camera, Color3, Color4, Vector3, } from "@babylonjs/core";
-import loadStyles from "../utils/loadStyles";
+import { Camera, Color3, Color4, Vector3 } from "@babylonjs/core";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
 import React, { useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import { toRadians } from "shutils/dist/speedAngleDistance";
+import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
 // import "./BackdopApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
 loadStyles();
-export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles, pickupsInfo, speechVidFiles) {
+export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt
+//
+// placeInfoByName: PlaceInfoByName,
+// characterNames: readonly CharacterName[],
+// dollNames: readonly DollName[],
+// soundFiles: SoundFiles,
+// pickupsInfo: PickupsInfo,
+// speechVidFiles: SpeechVidFiles
+) {
     const { getRefs, onNextTick, setState } = concepFuncs;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = makeScreenGui(concepFuncs, backdopStartOptions, characterNames, pickupsInfo, speechVidFiles);
-    const LoadingModels = makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, placeInfoByName, characterNames, dollNames, soundFiles);
+    const ScreenGuiDom = makeScreenGui(concepFuncs, backdopStartOptions, backdopArt);
+    const LoadingModels = makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
     const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
     // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
     //   "city",

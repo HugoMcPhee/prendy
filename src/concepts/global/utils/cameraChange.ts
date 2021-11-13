@@ -8,32 +8,29 @@ import {
   ShaderMaterial,
   Texture,
 } from "@babylonjs/core";
-import shaders from "../../..//utils/shaders";
 import { chooseClosestBeforeItemInArray } from "shutils/dist/arrays";
 import { forEach } from "shutils/dist/loops";
 import { DefaultCameraRefs } from "../../..//concepts/places";
+import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
-import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import {
-  BackdopConcepFuncs,
-  PlaceInfoByNamePlaceholder,
-} from "../../typedConcepFuncs";
+  AnyCameraName,
+  AnySegmentName,
+  BackdopArt,
+  CameraNameByPlace,
+  PlaceName,
+  SegmentNameByPlace,
+} from "../../../declarations";
+import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
+import { BackdopConcepFuncs } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "./";
 
-export function makeCameraChangeUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  AnyCameraName extends string,
-  PlaceName extends string,
-  DollName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
->(
+export function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[]
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
+  const { placeInfoByName, dollNames } = backdopArt;
 
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
@@ -72,8 +69,8 @@ export function makeCameraChangeUtils<
 
   function getSafeSegmentName<
     T_PlaceName extends PlaceName,
-    T_CameraName extends CameraNameByPlace[T_PlaceName] & AnyCameraName,
-    T_SegmentName extends SegmentNameByPlace[T_PlaceName]
+    T_CameraName extends AnyCameraName,
+    T_SegmentName extends AnySegmentName
   >({
     cam,
     place,

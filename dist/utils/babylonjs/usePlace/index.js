@@ -1,18 +1,19 @@
 // import React, { useEffect } from "react";
 import { Sound, Vector3 } from "@babylonjs/core";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { forEach } from "shutils/dist/loops";
 import { useEffect } from "react";
+import { forEach } from "shutils/dist/loops";
+import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
-import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
-export function makeUsePlace(concepFuncs, backdopStartOptions, placeInfoByName, dollNames, soundFiles) {
+export function makeUsePlace(concepFuncs, backdopStartOptions, backdopArt) {
     const { getRefs, getState, setState } = concepFuncs;
+    const { placeInfoByName, soundFiles } = backdopArt;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const useModelFile = makeUseModelFile(concepFuncs);
-    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(concepFuncs, placeInfoByName, dollNames);
+    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(concepFuncs, backdopArt);
     const placesRefs = getRefs().places;
     const addToHelpFixRotationVector = new Vector3(0, Math.PI, Math.PI); // Math.PI same as toRadians(180)?
     const multiplyToHelpFixRotationVector = new Vector3(-1, 1, -1);

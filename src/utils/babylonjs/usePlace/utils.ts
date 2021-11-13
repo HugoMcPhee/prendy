@@ -9,6 +9,16 @@ import {
 import { forEach } from "shutils/dist/loops";
 import { vector3ToPoint3d } from "..";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
+import {
+  BackdopArt,
+  PlaceInfoByName,
+  PlaceName,
+  DollName,
+  CharacterName,
+  AnyCameraName,
+  CameraNameByPlace,
+  SegmentNameByPlace,
+} from "../../../declarations";
 
 export function testAppendVideo(
   theVideo: HTMLVideoElement,
@@ -22,38 +32,17 @@ export function testAppendVideo(
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function makeUsePlaceUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  PlaceName extends string,
-  DollName extends string,
-  CharacterName extends string,
-  AnyCameraName extends string,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
->(
+export function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  placeInfoByName: PlaceInfoByName,
-  dollNames: readonly DollName[]
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
+  const { placeInfoByName } = backdopArt;
 
-  const {
-    doWhenSectionVidPlayingAsync,
-    getSectionForPlace,
-  } = makeSectionVidStoreUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    PlaceName,
-    DollName,
-    AnyCameraName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  const { doWhenSectionVidPlayingAsync, getSectionForPlace } =
+    makeSectionVidStoreUtils(concepFuncs, backdopArt);
 
-  const getCharDollStuff = makeGetCharDollStuff<ConcepFuncs, CharacterName>(
-    concepFuncs
-  );
+  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 
   const placesRefs = getRefs().places;
@@ -102,11 +91,8 @@ export function makeUsePlaceUtils<
   }
 
   async function loadNowVideosForPlace() {
-    const {
-      nowPlaceName,
-      nowSegmentName,
-      wantedSegmentName,
-    } = getState().global.main;
+    const { nowPlaceName, nowSegmentName, wantedSegmentName } =
+      getState().global.main;
     const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
 
     const wantedSection = getSectionForPlace(

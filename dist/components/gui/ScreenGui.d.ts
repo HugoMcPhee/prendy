@@ -1,3 +1,4 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs, BackdopOptionsUntyped, PickupsInfoPlaceholder } from "../../concepts/typedConcepFuncs";
-export declare function makeScreenGui<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped, CharacterName extends string, PickupName extends string, PickupsInfo extends PickupsInfoPlaceholder<PickupName>, SpeechVidFiles extends Record<string, string>>(concepFuncs: ConcepFuncs, BACKDOP_OPTIONS: BackdopOptions, characterNames: readonly CharacterName[], pickupsInfo: PickupsInfo, speechVidFiles: SpeechVidFiles): (_: {}) => JSX.Element;
+import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { BackdopArt, BackdopOptions } from "../../declarations";
+export declare function makeScreenGui<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, BACKDOP_OPTIONS: BackdopOptions, backdopArt: BackdopArt): (_: {}) => JSX.Element;

@@ -1,6 +1,6 @@
+import { AnyAnimationName, BackdopOptions } from "../../declarations";
 import { Point2D } from "shutils/dist/points2d";
-import { BackdopOptionsUntyped } from "../typedConcepFuncs";
-export default function players<BackdopOptions extends BackdopOptionsUntyped, AnyAnimationName extends string>(backdopStartOptions: BackdopOptions): {
+export default function players(backdopStartOptions: BackdopOptions): {
     startStates: {
         main: {
             lastSafeInputAngle: number | null;

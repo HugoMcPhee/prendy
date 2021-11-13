@@ -1,14 +1,15 @@
 import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
+import { AnySegmentName, BackdopArt, BackdopOptions } from "../../declarations";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-import { BackdopOptionsUntyped, PlaceInfoByNamePlaceholder } from "../typedConcepFuncs";
-export default function global<BackdopOptions extends BackdopOptionsUntyped, AnySegmentName extends string, PlaceName extends string, ModelName extends string, DollName extends string, PickupName extends string, CharacterName extends string, MusicName extends string, SoundName extends string, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>>(backdopStartOptions: BackdopOptions, musicNames: readonly MusicName[], soundNames: readonly SoundName[]): {
+declare type MaybeSegment = null | AnySegmentName;
+export default function global(backdopStartOptions: BackdopOptions, backdopArt: BackdopArt): {
     startStates: {
         main: {
             planePosMoveConfigName: string;
             timeScreenResized: number;
             interactButtonPressTime: number;
-            heldPickups: PickupName[];
+            heldPickups: string[];
             storyOverlayToggled: boolean;
             alarmTextIsVisible: boolean;
             alarmText: string;
@@ -27,31 +28,31 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
             planePosIsMoving: boolean;
             planePosMoveMode: import("concep-movers/dist/types").MoveMode;
             planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            wantedSegmentWhenNextPlaceLoads: AnySegmentName | null;
-            nextSegmentNameWhenVidPlays: AnySegmentName | null;
-            wantedSegmentNameAtLoop: AnySegmentName | null;
-            wantedSegmentName: AnySegmentName | null;
-            nowSegmentName: AnySegmentName;
+            wantedSegmentWhenNextPlaceLoads: MaybeSegment;
+            nextSegmentNameWhenVidPlays: MaybeSegment;
+            wantedSegmentNameAtLoop: MaybeSegment;
+            wantedSegmentName: MaybeSegment;
+            nowSegmentName: string;
             wantToLoop: boolean;
-            modelNamesLoaded: ModelName[];
+            modelNamesLoaded: string[];
             newPlaceLoaded: boolean;
             isLoadingBetweenPlaces: boolean;
-            nowPlaceName: PlaceName;
+            nowPlaceName: string;
             readyToSwapPlace: boolean;
-            nextPlaceName: PlaceName | null;
+            nextPlaceName: string | null;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
-            playerCharacter: CharacterName;
+            playerCharacter: string;
             gravityValue: number;
             playerMovingPaused: boolean;
-            focusedDoll: DollName;
+            focusedDoll: string;
         };
     };
     state: () => {
         planePosMoveConfigName: string;
         timeScreenResized: number;
         interactButtonPressTime: number;
-        heldPickups: PickupName[];
+        heldPickups: string[];
         storyOverlayToggled: boolean;
         alarmTextIsVisible: boolean;
         alarmText: string;
@@ -70,28 +71,32 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
         planePosIsMoving: boolean;
         planePosMoveMode: import("concep-movers/dist/types").MoveMode;
         planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-        wantedSegmentWhenNextPlaceLoads: AnySegmentName | null;
-        nextSegmentNameWhenVidPlays: AnySegmentName | null;
-        wantedSegmentNameAtLoop: AnySegmentName | null;
-        wantedSegmentName: AnySegmentName | null;
-        nowSegmentName: AnySegmentName;
+        wantedSegmentWhenNextPlaceLoads: MaybeSegment;
+        nextSegmentNameWhenVidPlays: MaybeSegment;
+        wantedSegmentNameAtLoop: MaybeSegment;
+        wantedSegmentName: MaybeSegment;
+        nowSegmentName: string;
         wantToLoop: boolean;
-        modelNamesLoaded: ModelName[];
+        modelNamesLoaded: string[];
         newPlaceLoaded: boolean;
         isLoadingBetweenPlaces: boolean;
-        nowPlaceName: PlaceName;
+        nowPlaceName: string;
         readyToSwapPlace: boolean;
-        nextPlaceName: PlaceName | null;
+        nextPlaceName: string | null;
         loadingOverlayToggled: boolean;
         loadingOverlayFullyShowing: boolean;
-        playerCharacter: CharacterName;
+        playerCharacter: string;
         gravityValue: number;
         playerMovingPaused: boolean;
-        focusedDoll: DollName;
+        focusedDoll: string;
     };
     refs: () => {
-        sounds: { [K_SoundName in SoundName]: import("@babylonjs/core").Sound | null; };
-        music: { [K_MusicName in MusicName]: import("@babylonjs/core").Sound | null; };
+        sounds: {
+            [x: string]: import("@babylonjs/core").Sound | null;
+        };
+        music: {
+            [x: string]: import("@babylonjs/core").Sound | null;
+        };
         musicEffects: {
             lowPass: BiquadFilterNode | null;
             compress: DynamicsCompressorNode | null;
@@ -101,7 +106,11 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
         aConvoIsHappening_timeout: number | null;
-        camSegmentRulesOptions: Partial<{ [P_PlaceName in PlaceName]: Partial<{ [P_CamName in keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+        camSegmentRulesOptions: Partial<{
+            [x: string]: Partial<{
+                [x: string]: (usefulStuff: Record<any, any>) => string;
+            }>;
+        }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
         planeZoomMoverRefs: {
@@ -157,3 +166,4 @@ export default function global<BackdopOptions extends BackdopOptionsUntyped, Any
         };
     };
 };
+export {};

@@ -1,6 +1,6 @@
 import { BackdopConcepFuncs } from "./concepts/typedConcepFuncs";
 export { makeBackdopConcepts } from "./concepts";
-export { makeGetBackdopOptions } from "./getBackdopOptions";
+export { getBackdopOptions } from "./getBackdopOptions";
 export { makeBackdopApp } from "./components/BackdopApp";
 export { makeBackdopStoryHelpers } from "./utils/story/helpers";
 export { backdopFlowNames } from "./concepts";

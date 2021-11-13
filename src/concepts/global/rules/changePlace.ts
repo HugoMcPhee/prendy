@@ -1,72 +1,45 @@
 import { Texture } from "@babylonjs/core";
+import { forEach } from "shutils/dist/loops";
+import {
+  AnyCameraName,
+  BackdopArt,
+  BackdopOptions,
+  PlaceName,
+} from "../../../declarations";
 import { CustomVideoTexture } from "../../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
-import { forEach } from "shutils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
-//
-// import { placeInfoByName } from "art/places";
-// import { setGlobalState } from "../utils";
-// import { getRefs, getState, makeRules, onNextTick, setState } from "concepts";
-// import { GAMEY_START_OPTIONS } from "art/options";
 // import { getSectionVidVideo } from "../../sectionVids/utils";
 // import { focusScenePlaneOnFocusedDoll } from "../../../utils/babylonjs/scenePlane/focusScenePlane";
 // import { updateTexturesForNowCamera } from "./whenCameraChanges";
 import {
   BackdopConcepFuncs,
-  BackdopOptionsUntyped,
-  ModelInfoByNamePlaceholder,
   PlaceholderBackdopConcepts,
-  PlaceInfoByNamePlaceholder,
 } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalChangePlaceRules<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  BackdopOptions extends BackdopOptionsUntyped,
-  DollName extends keyof ReturnType<ConcepFuncs["getState"]>["dolls"] & string, // DollNameParameter extends string
-  PlaceName extends string,
-  AnyCameraName extends string,
-  PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  CameraNameByPlace extends Record<PlaceName, string>,
-  SegmentNameByPlace extends Record<PlaceName, string>
-  // AnimationNameByModel extends Record<string, string>,
-  // StartState_Dolls extends BackdopConcepts["dolls"]["startStates"],
-  // StartState_Dolls extends ReturnType<ConcepFuncs["getState"]>["dolls"],
+  BackdopConcepts extends PlaceholderBackdopConcepts
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
+  _backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
-  dollNames: readonly DollName[],
-  placeInfoByName: PlaceInfoByName
+  backdopArt: BackdopArt
 ) {
   const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
+  const { placeInfoByName } = backdopArt;
 
   const globalRefs = getRefs().global.main;
 
-  const { getSectionVidVideo } = makeSectionVidStoreUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    PlaceName,
-    DollName,
-    AnyCameraName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  const { getSectionVidVideo } = makeSectionVidStoreUtils(
+    concepFuncs,
+    backdopArt
+  );
 
-  const {
-    updateTexturesForNowCamera,
-    updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils<
-    ConcepFuncs,
-    PlaceInfoByName,
-    AnyCameraName,
-    PlaceName,
-    DollName,
-    CameraNameByPlace,
-    SegmentNameByPlace
-  >(concepFuncs, placeInfoByName, dollNames);
+  const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } =
+    makeCameraChangeUtils(concepFuncs, backdopArt);
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils<
     ConcepFuncs,
@@ -148,7 +121,8 @@ export function makeGlobalChangePlaceRules<
         // run on the start of the next concepto frame, so all the flows can run again
         setState({}, () => {
           const { nowPlaceName, nextPlaceName } = globalState;
-          const { cameraNames } = placeInfoByName[nowPlaceName];
+          const cameraNames = placeInfoByName[nowPlaceName]
+            .cameraNames as AnyCameraName[];
           const placeRefs = getRefs().places[nowPlaceName];
 
           setState({ sectionVids: { [nowPlaceName]: { wantToUnload: true } } });
@@ -184,9 +158,8 @@ export function makeGlobalChangePlaceRules<
         } = globalState;
         const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
 
-        const wantedModelsForPlace = backdopStartOptions.modelNamesByPlace[
-          nowPlaceName
-        ].sort();
+        const wantedModelsForPlace =
+          backdopStartOptions.modelNamesByPlace[nowPlaceName].sort();
         const loadedModelNames = modelNamesLoaded.sort();
         let allModelsAreLoaded = true;
 

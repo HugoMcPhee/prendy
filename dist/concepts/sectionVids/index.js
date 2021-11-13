@@ -1,5 +1,6 @@
 import { forEach } from "shutils/dist/loops";
-export default function sectionVids(placeNames) {
+export default function sectionVids(backdopArt) {
+    const { placeNames } = backdopArt;
     const state = (itemName) => ({
         safeVidId_playing: `${itemName}_a`,
         safeVidId_waiting: `${itemName}_b`,

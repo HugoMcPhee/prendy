@@ -1,10 +1,9 @@
 import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PlaceName, SpotNameByPlace } from "../../../declarations";
 
 export function makeSpotStoryUtils<
+  ConcepFuncs extends BackdopConcepFuncs
   // SpotName extends string,
-  ConcepFuncs extends BackdopConcepFuncs,
-  PlaceName extends string,
-  SpotNameByPlace extends Record<PlaceName, string>
 >(concepFuncs: ConcepFuncs) {
   const { getRefs } = concepFuncs;
 

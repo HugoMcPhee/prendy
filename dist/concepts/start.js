@@ -9,20 +9,21 @@ import { makePointersConnectRules } from "./pointers";
 import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
-export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, placeInfoByName, dollNames, characterNames, modelInfoByName) {
+export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, backdopArt) {
+    const { dollNames, characterNames } = backdopArt;
     // making rules
     const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
     const pointerConnectRules = makePointersConnectRules(concepFuncs);
-    const startAllGlobalRules = makeStartAllGlobalRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, placeInfoByName, dollNames);
-    const modelRules = makeModelRules(concepFuncs, modelInfoByName);
-    const playerRules = makePlayerRules(concepFuncs, BACKDOP_OPTIONS, placeInfoByName);
-    const dollDynamicRules = makeDollDynamicRules(concepFuncs, BACKDOP_OPTIONS, backdopConcepts, modelInfoByName, dollNames);
-    const dollRules = makeDollRules(BACKDOP_OPTIONS, dollDynamicRules, concepFuncs, backdopConcepts, modelInfoByName, dollNames);
+    const startAllGlobalRules = makeStartAllGlobalRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, backdopArt);
+    const modelRules = makeModelRules(concepFuncs, backdopArt);
+    const playerRules = makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt);
+    const dollDynamicRules = makeDollDynamicRules(concepFuncs, BACKDOP_OPTIONS, backdopConcepts, backdopArt);
+    const dollRules = makeDollRules(BACKDOP_OPTIONS, dollDynamicRules, concepFuncs, backdopConcepts, backdopArt);
     const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, backdopConcepts);
     const safeVidRules = makeSafeVidRules(concepFuncs);
-    const safeSectionVidRules = makeSectionVidRules(concepFuncs, placeInfoByName, dollNames);
-    const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, BACKDOP_OPTIONS, characterNames, placeInfoByName);
-    const characterRules = makeCharacterRules(concepFuncs, placeInfoByName);
+    const safeSectionVidRules = makeSectionVidRules(concepFuncs, backdopArt);
+    const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, BACKDOP_OPTIONS, backdopArt);
+    const characterRules = makeCharacterRules(concepFuncs, backdopArt);
     const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs);
     // ----------------------------------------------
     // starting and stopping rules

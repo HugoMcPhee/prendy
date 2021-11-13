@@ -1,3 +1,4 @@
+import { BackdopArt, PlaceName } from "../../declarations";
 import { forEach } from "shutils/dist/loops";
 
 // making PlaceName generic didn't seem to work with autocomplete?
@@ -24,9 +25,9 @@ export type VidLetter = "a" | "b";
 
 export type VidSection = { time: number; duration: number };
 
-export default function sectionVids<PlaceName extends string>(
-  placeNames: readonly PlaceName[]
-) {
+export default function sectionVids(backdopArt: BackdopArt) {
+  const { placeNames } = backdopArt;
+
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
     safeVidId_playing: `${itemName}_a` as string | null,
     safeVidId_waiting: `${itemName}_b` as string | null,

@@ -1,7 +1,8 @@
 import { Camera, Scene, TargetCamera } from "@babylonjs/core";
-import { BackdopConcepFuncs, PlaceInfoByNamePlaceholder } from "../../../concepts/typedConcepFuncs";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { BackdopArt, PlaceName, CharacterName } from "../../../declarations";
 export declare function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag?: string): void;
-export declare function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs, PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>, PlaceName extends string, DollName extends string, CharacterName extends string, AnyCameraName extends string, CameraNameByPlace extends Record<PlaceName, string>, SegmentNameByPlace extends Record<PlaceName, string>>(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName, dollNames: readonly DollName[]): {
+export declare function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, backdopArt: BackdopArt): {
     loadVideoBlob: (filepath: string) => Promise<Blob>;
     setFirstCharacterPosition: ({ characterName, placeName, }: {
         characterName: CharacterName;

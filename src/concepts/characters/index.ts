@@ -1,23 +1,16 @@
+import {
+  CharacterName,
+  DollName,
+  AnyTriggerName,
+  AnyCameraName,
+  CharacterOptions,
+  BackdopArt,
+} from "../../declarations";
 import { forEach } from "shutils/dist/loops";
-import { CharacterOptionsPlaceholder } from "../typedConcepFuncs";
 
-export default function characters<
-  CharacterName extends string,
-  DollName extends string,
-  FontName extends string,
-  AnyTriggerName extends string,
-  AnyCameraName extends string,
-  CharacterOptions extends CharacterOptionsPlaceholder<
-    CharacterName,
-    DollName,
-    FontName
-  >
-  // characterOptions
->(
-  characterNames: readonly CharacterName[],
-  dollNames: readonly DollName[],
-  characterOptions: CharacterOptions
-) {
+export default function characters(backdopArt: BackdopArt) {
+  const { characterNames, dollNames, characterOptions } = backdopArt;
+
   const state = <T_CharacterName extends string, T_DollName extends DollName>(
     _characterName: T_CharacterName,
     dollName?: T_DollName

@@ -1,7 +1,5 @@
 import { breakableForEach, forEach } from "shutils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
-export default "default";
-// export each of the rule makers stuff from here :)
 export function makeGetUsefulStoryStuff(concepFuncs) {
     const { getRefs, getState } = concepFuncs;
     return function getUsefulStoryStuff() {
@@ -27,7 +25,6 @@ export function makeGetUsefulStoryStuff(concepFuncs) {
             nowPlaceName: nowPlaceName,
             placeState: placeState,
             nowCamName: nowCamName,
-            placesRefs,
             placeRefs: placeRefs,
             camsRefs: camsRefs,
             camRefs: camRefs,
@@ -77,7 +74,8 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
     //  This sets an options object in global refs that gets checked when changing segment
     function makeCamSegmentRules(callBacksObject) {
         setTimeout(() => {
-            getRefs().global.main.camSegmentRulesOptions = callBacksObject;
+            getRefs().global.main.camSegmentRulesOptions =
+                callBacksObject;
         }, 0);
         return true;
     }
@@ -85,11 +83,12 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
     function makeOnInteractAtTrigger(callBacksObject, characterName = characterNames[0]) {
         const onClickInteractButton = () => {
             const usefulStoryStuff = getUsefulStoryStuff();
-            const { aConvoIsHappening, nowPlaceName, playerMovingPaused, } = usefulStoryStuff.globalState;
+            const { aConvoIsHappening, nowPlaceName, playerMovingPaused } = usefulStoryStuff.globalState;
             if (aConvoIsHappening || playerMovingPaused)
                 return;
             const { atTriggers } = getState().characters[characterName];
-            const { triggerNames } = placeInfoByName[nowPlaceName];
+            const triggerNames = placeInfoByName[nowPlaceName]
+                .triggerNames;
             // NOTE Could b breakable if only checking one trigger
             forEach(triggerNames, (triggerName) => {
                 var _a, _b;
@@ -106,7 +105,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
         const onClickInteractButton = () => {
             var _a;
             const usefulStoryStuff = getUsefulStoryStuff();
-            const { aConvoIsHappening, playerMovingPaused, } = usefulStoryStuff.globalState;
+            const { aConvoIsHappening, playerMovingPaused } = usefulStoryStuff.globalState;
             if (aConvoIsHappening || playerMovingPaused)
                 return;
             const { dollState, dollName: charDollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};
@@ -133,7 +132,8 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
             const { atTriggers } = getState().characters[characterName];
             if (aConvoIsHappening)
                 return;
-            const { triggerNames } = placeInfoByName[nowPlaceName];
+            const triggerNames = placeInfoByName[nowPlaceName]
+                .triggerNames;
             // NOTE Could b breakable if only checking one trigger
             forEach(triggerNames, (triggerName) => {
                 var _a, _b, _c;
@@ -299,7 +299,8 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
                 onItemEffect({ newValue: atTriggers, previousValue: prevAtTriggers }) {
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { nowPlaceName } = usefulStoryStuff;
-                    const { triggerNames } = placeInfoByName[nowPlaceName];
+                    const triggerNames = placeInfoByName[nowPlaceName]
+                        .triggerNames;
                     forEach(triggerNames, (triggerName) => {
                         var _a, _b;
                         const justEntered = atTriggers[triggerName] && !prevAtTriggers[triggerName];

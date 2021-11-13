@@ -1,5 +1,6 @@
 import { forEach } from "shutils/dist/loops";
-export default function characters(characterNames, dollNames, characterOptions) {
+export default function characters(backdopArt) {
+    const { characterNames, dollNames, characterOptions } = backdopArt;
     const state = (_characterName, dollName) => {
         return {
             dollName: dollName !== null && dollName !== void 0 ? dollName : dollNames[0],

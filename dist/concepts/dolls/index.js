@@ -1,10 +1,11 @@
-import { moverRefs, moverState, mover3dRefs, mover3dState, } from "concep-movers";
+import { mover3dRefs, mover3dState, moverRefs, moverState, } from "concep-movers";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
 import makeDollIndexUtils from "./indexUtils";
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
-export default function dolls(modelNames, dollNames, modelInfoByName, dollOptions) {
-    const { defaultInRange, makeModelAnimWeightsMoverState, modelMoverRefs, modelOtherMeshesRefs, } = makeDollIndexUtils(dollNames, modelInfoByName);
+export default function dolls(backdopArt) {
+    const { modelNames, dollNames, modelInfoByName, dollOptions } = backdopArt;
+    const { defaultInRange, makeModelAnimWeightsMoverState, modelMoverRefs, modelOtherMeshesRefs, } = makeDollIndexUtils(backdopArt);
     const defaultModelName = modelNames[0];
     const state = (_dollName, modelName) => {
         const safeModelName = modelName !== null && modelName !== void 0 ? modelName : defaultModelName;

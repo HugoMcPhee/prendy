@@ -8,8 +8,10 @@ const defaultCamRefs = () => ({
     //
     isTriggerable: true,
 });
+// export
 export default function places(backdopArt) {
-    const { placeNames, placeInfoByName } = backdopArt;
+    const { placeInfoByName } = backdopArt;
+    const placeNames = backdopArt.placeNames;
     // State
     const state = (placeName) => {
         var _a, _b, _c, _d;
@@ -23,7 +25,7 @@ export default function places(backdopArt) {
     };
     // Refs
     function refs(placeName) {
-        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
+        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames, } = placeInfoByName[placeName];
         const spotPositions = {};
         const spotRotations = {};
         const soundspotSounds = {};
@@ -70,14 +72,14 @@ export default function places(backdopArt) {
     });
     /*
   
-    as <T_PlaceName extends PlaceName>(
-    itemName: T_PlaceName | string
-  ) => PlaceRefs<T_PlaceName>
+    as <A_PlaceName extends A_PlaceName>(
+    itemName: A_PlaceName | string
+  ) => PlaceRefs<A_PlaceName>
   
   */
     return {
         startStates: startStates,
         state: state,
-        refs: refs, // TODO change to PlaceRefs<T_PlaceName> when ReturnType is generic
+        refs: refs, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
     };
 }

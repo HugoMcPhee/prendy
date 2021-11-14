@@ -74,6 +74,7 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
       placeState: placeState as AllPlacesState[keyof AllPlacesState],
       nowCamName:
         nowCamName as AllPlacesState[keyof AllPlacesState]["nowCamName"],
+      placesRefs: placesRefs as AllPlacesRefs,
       placeRefs: placeRefs as APlaceRefs,
       camsRefs: camsRefs as APlaceRefsCamsRefs,
       camRefs: camRefs as APlaceRefsCamsRefs[keyof APlaceRefsCamsRefs],

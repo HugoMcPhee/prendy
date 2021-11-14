@@ -6,7 +6,7 @@ declare type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_Doll
 declare type ModelNameFromCharacter<T_CharacterName extends CharacterName> = ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
 declare type AnimationNameFromCharacter<T_CharacterName extends CharacterName> = AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 export declare function makeCharacterStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, modelInfoByName: ModelInfoByName, characterNames: readonly CharacterName[]): {
-    setCharAnimation: <T_Character extends string>(character: T_Character, animation: any) => void;
+    setCharAnimation: <T_Character extends string>(character: T_Character, animation: string) => void;
     setCharPosition: (charName: CharacterName, newPosition: Vector3) => void;
     setCharRotationY: (charName: CharacterName, newRotationY: number) => void;
     springCharRotation: (charName: CharacterName, newRotationY: number) => void;

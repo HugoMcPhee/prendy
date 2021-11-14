@@ -1,10 +1,13 @@
 import { AnyAnimationName, BackdopOptions } from "../../declarations";
 import { Point2D } from "shutils/dist/points2d";
 
-export default function players(backdopStartOptions: BackdopOptions) {
+export default function players<
+  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
+  A_BackdopOptions extends BackdopOptions = BackdopOptions
+>(backdopStartOptions: A_BackdopOptions) {
   type PlayerAnimationNames = {
-    walking: AnyAnimationName;
-    idle: AnyAnimationName;
+    walking: A_AnyAnimationName;
+    idle: A_AnyAnimationName;
   };
 
   const state = () => ({

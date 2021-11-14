@@ -6,6 +6,10 @@ TODO
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
 
+v0.7.1
+
+- fixes concept types being lost :)
+
 v0.7.0
 
 - simpler setup with more automatic types, and passing BACKDOP_ART

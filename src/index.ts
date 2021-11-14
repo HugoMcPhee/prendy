@@ -21,3 +21,8 @@ export function makeOtherUsefulBackdopUtils<
 
   return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
 }
+
+export * from "./declarations";
+export { CharacterName } from "./declarations";
+
+// moving dist to eggventure and trying

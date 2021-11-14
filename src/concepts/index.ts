@@ -1,4 +1,29 @@
-import { BackdopArt, BackdopOptions } from "../declarations";
+import {
+  AnimationNameByModel,
+  AnyAnimationName,
+  AnyCameraName,
+  AnySegmentName,
+  AnySpotName,
+  AnyTriggerName,
+  BackdopArt,
+  BackdopOptions,
+  BoneNameByModel,
+  CameraNameByPlace,
+  CharacterName,
+  CharacterOptions,
+  DollName,
+  DollOptions,
+  MaterialNameByModel,
+  MeshNameByModel,
+  ModelName,
+  PickupName,
+  PlaceInfoByName,
+  PlaceName,
+  SoundspotNameByPlace,
+  SpotNameByPlace,
+  TriggerNameByPlace,
+  WallNameByPlace,
+} from "../declarations";
 import characters from "./characters";
 import dolls from "./dolls";
 import global from "./global";
@@ -47,22 +72,87 @@ export const backdopFlowNames = [
 
 export type FlowName = typeof backdopFlowNames[number];
 
-export function makeBackdopConcepts(
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
-) {
+// NOTE the generic types are used to prevent the typescript compiler widneing
+// [K_CharacterName in CharacterName] to [x: string]
+// or
+// Record<PlaceName, Something> to Record<string, Something>
+// it keeps the types generic , which is good since the types are updated from each project (declaration merging)
+
+export function makeBackdopConcepts<
+  A_CharacterName extends CharacterName = CharacterName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
+  A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
+  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace,
+  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
+  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_DollName extends DollName = DollName,
+  A_ModelName extends ModelName = ModelName,
+  A_PickupName extends PickupName = PickupName,
+  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
+  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
+  A_AnySpotName extends AnySpotName = AnySpotName,
+  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
+  A_DollOptions extends DollOptions = DollOptions,
+  A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel,
+  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
+  A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
+  A_CharacterOptions extends CharacterOptions = CharacterOptions
+>(backdopStartOptions: A_BackdopOptions, backdopArt: A_BackdopArt) {
   return {
     keyboards: keyboards(),
-    miniBubbles: miniBubbles(),
+    miniBubbles: miniBubbles<A_CharacterName>(),
     pointers: pointers(),
-    global: global(backdopStartOptions, backdopArt),
-    models: models(backdopArt),
-    dolls: dolls(backdopArt),
-    characters: characters(backdopArt),
-    players: players(backdopStartOptions),
-    speechBubbles: speechBubbles(backdopArt),
-    places: places(backdopArt),
-    safeVids: safeVids(backdopArt),
-    sectionVids: sectionVids(backdopArt),
+    global: global<
+      A_AnySegmentName,
+      A_BackdopArt,
+      A_BackdopOptions,
+      A_CharacterName,
+      A_DollName,
+      A_ModelName,
+      A_PickupName,
+      A_PlaceInfoByName,
+      A_PlaceName
+    >(backdopStartOptions, backdopArt),
+    models: models<A_BackdopArt, A_ModelName>(backdopArt),
+    dolls: dolls<
+      A_AnimationNameByModel,
+      A_AnyAnimationName,
+      A_AnySpotName,
+      A_BackdopArt,
+      A_BoneNameByModel,
+      A_DollName,
+      A_DollOptions,
+      A_MaterialNameByModel,
+      A_MeshNameByModel,
+      A_ModelName
+    >(backdopArt),
+    characters: characters<
+      A_CharacterName,
+      A_DollName,
+      A_AnyTriggerName,
+      A_AnyCameraName,
+      A_CharacterOptions,
+      A_BackdopArt
+    >(backdopArt),
+    players: players<A_AnyAnimationName, A_BackdopOptions>(backdopStartOptions),
+    speechBubbles: speechBubbles<A_BackdopArt, A_CharacterName>(backdopArt),
+    places: places<
+      A_PlaceName,
+      A_AnyCameraName,
+      A_BackdopArt,
+      A_CameraNameByPlace,
+      A_SoundspotNameByPlace,
+      A_SpotNameByPlace,
+      A_TriggerNameByPlace,
+      A_WallNameByPlace
+    >(backdopArt),
+    safeVids: safeVids<A_BackdopArt, A_PlaceName>(backdopArt),
+    sectionVids: sectionVids<A_BackdopArt, A_PlaceName>(backdopArt),
   };
 }

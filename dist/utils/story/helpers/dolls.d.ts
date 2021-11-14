@@ -9,21 +9,21 @@ export declare function makeDollStoryHelpers<ConcepFuncs extends BackdopConcepFu
     setDollRotationY: (dollName: DollName, newRotationY: number) => void;
     springDollRotationY: (dollName: DollName, newRotation: number) => void;
     springAddToDollRotationY: (dollName: DollName, addedRotation: number) => void;
-    setDollAnimation: <T_Doll extends string>(doll: T_Doll, animation: any) => void;
+    setDollAnimation: <T_Doll extends string>(doll: T_Doll, animation: string) => void;
     focusOnDoll: <T_Doll_1 extends string>(dollName: T_Doll_1, zoom?: number | undefined) => void;
     setDollToSpot: <T_PlaceName extends string>({ place, spot, doll: dollName, dontSetRotationState, }: {
         place: T_PlaceName;
-        spot: any;
+        spot: string;
         doll: DollName;
         dontSetRotationState?: boolean | undefined;
     }) => void;
     springDollToSpot: <T_PlaceName_1 extends string>({ place, spot, doll: dollName, }: {
         place: T_PlaceName_1;
-        spot: any;
+        spot: string;
         doll: DollName;
     }) => void;
     moveDollAt2DAngle: (dollName: DollName, angle: number) => void;
     hideDoll: (dollName: DollName, shouldHide?: boolean) => void;
-    toggleDollMeshes: <T_DollName extends string>(dollName: T_DollName, toggledMeshes: Partial<Record<any, boolean>>) => void;
+    toggleDollMeshes: <T_DollName extends string>(dollName: T_DollName, toggledMeshes: Partial<Record<string, boolean>>) => void;
 };
 export {};

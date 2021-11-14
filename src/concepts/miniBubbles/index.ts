@@ -2,12 +2,14 @@ import { CharacterName } from "../../declarations";
 import { defaultPosition, Point2D } from "shutils/dist/points2d";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
 
-export default function miniBubbles() {
+export default function miniBubbles<
+  A_CharacterName extends CharacterName = CharacterName
+>() {
   const state = <T_ItemName extends string>(_itemName: T_ItemName) => ({
     isVisible: false,
     isFullyHidden: true,
     text: "❕",
-    forCharacter: "walker" as CharacterName | null,
+    forCharacter: "walker" as A_CharacterName | null,
     position: defaultPosition(),
   });
 
@@ -31,12 +33,12 @@ export default function miniBubbles() {
   return { state, refs, startStates };
 }
 
-export type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
+export type Store_MiniBubbles<T_ItemName extends string, A_CharacterName> = {
   state: () => {
     isVisible: boolean;
     isFullyHidden: boolean;
     text: string;
-    forCharacter: CharacterName;
+    forCharacter: A_CharacterName;
     position: Point2D;
   };
   refs: () => {
@@ -50,7 +52,7 @@ export type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
       isVisible: boolean;
       isFullyHidden: boolean;
       text: string;
-      forCharacter: CharacterName;
+      forCharacter: A_CharacterName;
       position: Point2D;
     }
   >;

@@ -5,7 +5,7 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     lookAtEachother: (characterA: string, characterB?: string) => void;
     lookAtOtherCharacter: (charA: string, charB?: string | undefined) => void;
     moveCharacterAt2DAngle: (charName: string, angle: number) => void;
-    setCharAnimation: <T_Character extends string>(character: T_Character, animation: any) => void;
+    setCharAnimation: <T_Character extends string>(character: T_Character, animation: string) => void;
     setCharPosition: (charName: string, newPosition: import("@babylonjs/core").Vector3) => void;
     setCharRotationY: (charName: string, newRotationY: number) => void;
     springAddToCharRotationY: (charName: string, addedRotation: number) => void;
@@ -13,13 +13,13 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     focusOnDoll: <T_Doll extends string>(dollName: T_Doll, zoom?: number | undefined) => void;
     hideDoll: (dollName: string, shouldHide?: boolean) => void;
     moveDollAt2DAngle: (dollName: string, angle: number) => void;
-    setDollAnimation: <T_Doll_1 extends string>(doll: T_Doll_1, animation: any) => void;
+    setDollAnimation: <T_Doll_1 extends string>(doll: T_Doll_1, animation: string) => void;
     setDollPosition: (dollName: string, newPositon: import("@babylonjs/core").Vector3) => void;
     setDollRotation: (dollName: string, newRotation: import("@babylonjs/core").Vector3) => void;
     setDollRotationY: (dollName: string, newRotationY: number) => void;
     setDollToSpot: <T_PlaceName extends string>({ place, spot, doll: dollName, dontSetRotationState, }: {
         place: T_PlaceName;
-        spot: any;
+        spot: string;
         doll: string;
         dontSetRotationState?: boolean | undefined;
     }) => void;
@@ -27,10 +27,10 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     springDollRotationY: (dollName: string, newRotation: number) => void;
     springDollToSpot: <T_PlaceName_1 extends string>({ place, spot, doll: dollName, }: {
         place: T_PlaceName_1;
-        spot: any;
+        spot: string;
         doll: string;
     }) => void;
-    toggleDollMeshes: <T_DollName extends string>(dollName: T_DollName, toggledMeshes: Partial<Record<any, boolean>>) => void;
+    toggleDollMeshes: <T_DollName extends string>(dollName: T_DollName, toggledMeshes: Partial<Record<string, boolean>>) => void;
     enableMovement: (canMove?: boolean, revertDelay?: number | undefined) => Promise<void>;
     isHolding: (pickupName: string) => any;
     setPlayerAnimations: (newAnimationNames: {
@@ -41,15 +41,15 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
     takePickup: (pickup: string, toHolding?: boolean) => void;
     goToNewPlace: <T_PlaceName_2 extends string>(toOption: {
         toPlace: T_PlaceName_2;
-        toSpot: any;
-        toCam?: any;
-        toSegment?: any;
+        toSpot: string;
+        toCam?: string | undefined;
+        toSegment?: string | undefined;
     }, charName?: string) => void;
-    hideWallIf: <T_Place extends string, T_Wall extends unknown>(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) => void;
-    lookAtSpot: <T_Place_1 extends string>(place: T_Place_1, spot: any, character?: string | undefined) => void;
+    hideWallIf: <T_Place extends string, T_Wall extends string>(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) => void;
+    lookAtSpot: <T_Place_1 extends string>(place: T_Place_1, spot: string, character?: string | undefined) => void;
     showStoryView: (isVisible?: boolean) => Promise<void>;
     setCamera: <T_Place_2 extends string, T_Cam extends string>(_placeName: T_Place_2, cameraName: T_Cam, whenToRun?: "now" | "at loop") => Promise<void>;
-    setSegment: <T_Place_3 extends string, T_Segment extends unknown>(_placeName: T_Place_3, segmentName: T_Segment, whenToRun?: "now" | "at loop") => Promise<void>;
+    setSegment: <T_Place_3 extends string, T_Segment extends string>(_placeName: T_Place_3, segmentName: T_Segment, whenToRun?: "now" | "at loop") => Promise<void>;
     playNewMusic: (newMusicName: string) => void;
     stopAllMusic: () => void;
     hideMiniBubble: () => void;

@@ -1,6 +1,6 @@
 {
   "name": "backdop",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "prerendered backdrop games with babylonjs and concep",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,5 +33,6 @@
     "shutils": "git+https://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@github.com/HugoMcPhee/shutils.git#v0.3.2",
     "stringz": "^2.1.0",
     "typescript": "^4.4.3"
-  }
+  },
+  "dependencies": {}
 }

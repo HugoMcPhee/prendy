@@ -9,7 +9,7 @@ export declare const rangeOptionsQuick: {
 };
 export declare function enableCollisions(theMesh: AbstractMesh): void;
 export declare function makeDollStoreUtils<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts>(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, backdopArt: BackdopArt): {
-    setDollAnimWeight: <T_DollName extends string, T_NewWeights extends Record<any, number>>(dollName: T_DollName, newWeights: Partial<T_NewWeights>) => void;
+    setDollAnimWeight: <T_DollName extends string, T_NewWeights extends Record<string, number>>(dollName: T_DollName, newWeights: Partial<T_NewWeights>) => void;
     getQuickDistanceBetweenDolls: (dollA: DollName, dollB: DollName) => number;
     inRangesAreTheSame: (inRangePropA: {
         [x: string]: InRangeForDoll;

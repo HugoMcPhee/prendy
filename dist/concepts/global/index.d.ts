@@ -1,15 +1,14 @@
 import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
-import { AnySegmentName, BackdopArt, BackdopOptions } from "../../declarations";
+import { AnySegmentName, BackdopArt, BackdopOptions, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName } from "../../declarations";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-declare type MaybeSegment = null | AnySegmentName;
-export default function global(backdopStartOptions: BackdopOptions, backdopArt: BackdopArt): {
+export default function global<A_AnySegmentName extends AnySegmentName = AnySegmentName, A_BackdopArt extends BackdopArt = BackdopArt, A_BackdopOptions extends BackdopOptions = BackdopOptions, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName>(backdopStartOptions: A_BackdopOptions, backdopArt: A_BackdopArt): {
     startStates: {
         main: {
             planePosMoveConfigName: string;
             timeScreenResized: number;
             interactButtonPressTime: number;
-            heldPickups: string[];
+            heldPickups: A_PickupName[];
             storyOverlayToggled: boolean;
             alarmTextIsVisible: boolean;
             alarmText: string;
@@ -28,31 +27,31 @@ export default function global(backdopStartOptions: BackdopOptions, backdopArt: 
             planePosIsMoving: boolean;
             planePosMoveMode: import("concep-movers/dist/types").MoveMode;
             planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            wantedSegmentWhenNextPlaceLoads: MaybeSegment;
-            nextSegmentNameWhenVidPlays: MaybeSegment;
-            wantedSegmentNameAtLoop: MaybeSegment;
-            wantedSegmentName: MaybeSegment;
-            nowSegmentName: string;
+            wantedSegmentWhenNextPlaceLoads: A_AnySegmentName | null;
+            nextSegmentNameWhenVidPlays: A_AnySegmentName | null;
+            wantedSegmentNameAtLoop: A_AnySegmentName | null;
+            wantedSegmentName: A_AnySegmentName | null;
+            nowSegmentName: A_AnySegmentName;
             wantToLoop: boolean;
-            modelNamesLoaded: string[];
+            modelNamesLoaded: A_ModelName[];
             newPlaceLoaded: boolean;
             isLoadingBetweenPlaces: boolean;
-            nowPlaceName: string;
+            nowPlaceName: A_PlaceName;
             readyToSwapPlace: boolean;
-            nextPlaceName: string | null;
+            nextPlaceName: A_PlaceName | null;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
-            playerCharacter: string;
+            playerCharacter: A_CharacterName;
             gravityValue: number;
             playerMovingPaused: boolean;
-            focusedDoll: string;
+            focusedDoll: A_DollName;
         };
     };
     state: () => {
         planePosMoveConfigName: string;
         timeScreenResized: number;
         interactButtonPressTime: number;
-        heldPickups: string[];
+        heldPickups: A_PickupName[];
         storyOverlayToggled: boolean;
         alarmTextIsVisible: boolean;
         alarmText: string;
@@ -71,24 +70,24 @@ export default function global(backdopStartOptions: BackdopOptions, backdopArt: 
         planePosIsMoving: boolean;
         planePosMoveMode: import("concep-movers/dist/types").MoveMode;
         planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-        wantedSegmentWhenNextPlaceLoads: MaybeSegment;
-        nextSegmentNameWhenVidPlays: MaybeSegment;
-        wantedSegmentNameAtLoop: MaybeSegment;
-        wantedSegmentName: MaybeSegment;
-        nowSegmentName: string;
+        wantedSegmentWhenNextPlaceLoads: A_AnySegmentName | null;
+        nextSegmentNameWhenVidPlays: A_AnySegmentName | null;
+        wantedSegmentNameAtLoop: A_AnySegmentName | null;
+        wantedSegmentName: A_AnySegmentName | null;
+        nowSegmentName: A_AnySegmentName;
         wantToLoop: boolean;
-        modelNamesLoaded: string[];
+        modelNamesLoaded: A_ModelName[];
         newPlaceLoaded: boolean;
         isLoadingBetweenPlaces: boolean;
-        nowPlaceName: string;
+        nowPlaceName: A_PlaceName;
         readyToSwapPlace: boolean;
-        nextPlaceName: string | null;
+        nextPlaceName: A_PlaceName | null;
         loadingOverlayToggled: boolean;
         loadingOverlayFullyShowing: boolean;
-        playerCharacter: string;
+        playerCharacter: A_CharacterName;
         gravityValue: number;
         playerMovingPaused: boolean;
-        focusedDoll: string;
+        focusedDoll: A_DollName;
     };
     refs: () => {
         sounds: {
@@ -106,11 +105,7 @@ export default function global(backdopStartOptions: BackdopOptions, backdopArt: 
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
         aConvoIsHappening_timeout: number | null;
-        camSegmentRulesOptions: Partial<{
-            [x: string]: Partial<{
-                [x: string]: (usefulStuff: Record<any, any>) => string;
-            }>;
-        }> | null;
+        camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
         planeZoomMoverRefs: {
@@ -166,4 +161,3 @@ export default function global(backdopStartOptions: BackdopOptions, backdopArt: 
         };
     };
 };
-export {};

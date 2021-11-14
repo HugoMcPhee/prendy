@@ -1,10 +1,11 @@
+import { CharacterName } from "../../declarations";
 import { Point2D } from "shutils/dist/points2d";
-export default function miniBubbles(): {
+export default function miniBubbles<A_CharacterName extends CharacterName = CharacterName>(): {
     state: <T_ItemName extends string>(_itemName: T_ItemName) => {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: string | null;
+        forCharacter: A_CharacterName | null;
         position: Point2D;
     };
     refs: () => {
@@ -17,17 +18,17 @@ export default function miniBubbles(): {
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: string | null;
+            forCharacter: A_CharacterName | null;
             position: Point2D;
         };
     };
 };
-export declare type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
+export declare type Store_MiniBubbles<T_ItemName extends string, A_CharacterName> = {
     state: () => {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: CharacterName;
+        forCharacter: A_CharacterName;
         position: Point2D;
     };
     refs: () => {
@@ -39,7 +40,7 @@ export declare type Store_MiniBubbles<T_ItemName extends string, CharacterName> 
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: CharacterName;
+        forCharacter: A_CharacterName;
         position: Point2D;
     }>;
 };

@@ -14,3 +14,5 @@ export declare function makeOtherUsefulBackdopUtils<ConcepFuncs extends BackdopC
     getScene: (sceneType?: "main" | "backdrop" | undefined) => import("@babylonjs/core").Scene | null;
     getEngine: () => import("@babylonjs/core").Engine | null;
 };
+export * from "./declarations";
+export { CharacterName } from "./declarations";

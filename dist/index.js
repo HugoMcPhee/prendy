@@ -15,3 +15,5 @@ export function makeOtherUsefulBackdopUtils(concepFuncs) {
     const { getScene, getEngine } = makeGetSceneOrEngineUtils(concepFuncs);
     return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
 }
+export * from "./declarations";
+// moving dist to eggventure and trying

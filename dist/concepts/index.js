@@ -42,6 +42,11 @@ export const backdopFlowNames = [
     "default",
     "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ];
+// NOTE the generic types are used to prevent the typescript compiler widneing
+// [K_CharacterName in CharacterName] to [x: string]
+// or
+// Record<PlaceName, Something> to Record<string, Something>
+// it keeps the types generic , which is good since the types are updated from each project (declaration merging)
 export function makeBackdopConcepts(backdopStartOptions, backdopArt) {
     return {
         keyboards: keyboards(),

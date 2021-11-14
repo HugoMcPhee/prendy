@@ -27,32 +27,46 @@ import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/Cus
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 
-type MaybeSegment = null | AnySegmentName;
-
-type SegmentNameFromCameraAndPlace<
-  T_Place extends keyof PlaceInfoByName,
-  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
-
-type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
-
-type CamSegmentRulesOptionsUntyped = Partial<{
-  [P_PlaceName in PlaceName]: Partial<{
-    [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
-      usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
-    ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
-  }>;
-}>;
-
-export default function global(
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
-) {
+export default function global<
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_DollName extends DollName = DollName,
+  A_ModelName extends ModelName = ModelName,
+  A_PickupName extends PickupName = PickupName,
+  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
+  A_PlaceName extends PlaceName = PlaceName
+>(backdopStartOptions: A_BackdopOptions, backdopArt: A_BackdopArt) {
   const { musicNames, soundNames } = backdopArt;
 
-  const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } =
-    makerGlobalStoreIndexUtils(musicNames, soundNames);
+  type MaybeSegment = null | A_AnySegmentName;
+
+  type SegmentNameFromCameraAndPlace<
+    T_Place extends keyof A_PlaceInfoByName,
+    T_Cam extends keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"]
+  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+
+  type CameraNameFromPlace<
+    T_Place extends keyof A_PlaceInfoByName
+  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+
+  type CamSegmentRulesOptionsUntyped = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
+            usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
+          ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+        }
+      >;
+    }
+  >;
+
+  const {
+    makeAutomaticMusicStartRefs,
+    makeAutomaticSoundStartRefs,
+  } = makerGlobalStoreIndexUtils(musicNames, soundNames);
 
   // State
   const state = () => ({
@@ -61,25 +75,25 @@ export default function global(
     nextSegmentNameWhenVidPlays: null as MaybeSegment, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
     wantedSegmentNameAtLoop: null as MaybeSegment,
     wantedSegmentName: null as MaybeSegment,
-    nowSegmentName: backdopStartOptions.segment as AnySegmentName,
+    nowSegmentName: backdopStartOptions.segment as A_AnySegmentName,
     wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sectionVids
     // TODO? move nowCamName etc to here, since never change cam for non-now place
     //
     // changing places
-    modelNamesLoaded: [] as ModelName[],
+    modelNamesLoaded: [] as A_ModelName[],
     newPlaceLoaded: false,
     isLoadingBetweenPlaces: true,
-    nowPlaceName: backdopStartOptions.place as PlaceName,
+    nowPlaceName: backdopStartOptions.place as A_PlaceName,
     readyToSwapPlace: false,
-    nextPlaceName: null as null | PlaceName,
+    nextPlaceName: null as null | A_PlaceName,
     loadingOverlayToggled: true,
     loadingOverlayFullyShowing: true,
     //
     // player
-    playerCharacter: backdopStartOptions.playerCharacter as CharacterName, // TODO Move to players ?
+    playerCharacter: backdopStartOptions.playerCharacter as A_CharacterName, // TODO Move to players ?
     gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
-    focusedDoll: "walker" as DollName,
+    focusedDoll: "walker" as A_DollName,
     //
     // scene plane
     ...mover2dState("planePos"),
@@ -93,7 +107,7 @@ export default function global(
     timeScreenResized: Date.now(),
     interactButtonPressTime: 0,
     // story
-    heldPickups: backdopStartOptions.heldPickups as PickupName[],
+    heldPickups: backdopStartOptions.heldPickups as A_PickupName[],
     storyOverlayToggled: false, // so the screen can fade out without affecting loading a new place
     alarmTextIsVisible: false,
     alarmText: "⚠ wobble detected ⚠",

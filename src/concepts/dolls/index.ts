@@ -7,6 +7,14 @@ import {
   Skeleton,
 } from "@babylonjs/core";
 import {
+  mover3dRefs,
+  mover3dState,
+  moverRefs,
+  moverState,
+} from "concep-movers";
+import { forEach } from "shutils/dist/loops";
+import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
+import {
   AnimationNameByModel,
   AnyAnimationName,
   AnySpotName,
@@ -18,19 +26,22 @@ import {
   MeshNameByModel,
   ModelName,
 } from "../../declarations";
-import {
-  mover3dRefs,
-  mover3dState,
-  moverRefs,
-  moverState,
-} from "concep-movers";
-import { forEach } from "shutils/dist/loops";
-import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
 import makeDollIndexUtils from "./indexUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 
-export default function dolls(backdopArt: BackdopArt) {
+export default function dolls<
+  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
+  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
+  A_AnySpotName extends AnySpotName = AnySpotName,
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
+  A_DollName extends DollName = DollName,
+  A_DollOptions extends DollOptions = DollOptions,
+  A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel,
+  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
+  A_ModelName extends ModelName = ModelName
+>(backdopArt: A_BackdopArt) {
   const { modelNames, dollNames, modelInfoByName, dollOptions } = backdopArt;
 
   const {
@@ -42,7 +53,7 @@ export default function dolls(backdopArt: BackdopArt) {
 
   const defaultModelName = modelNames[0];
 
-  const state = <T_DollName extends string, T_ModelName extends ModelName>(
+  const state = <T_DollName extends string, T_ModelName extends A_ModelName>(
     _dollName: T_DollName,
     modelName?: T_ModelName
   ) => {
@@ -54,7 +65,7 @@ export default function dolls(backdopArt: BackdopArt) {
       modelName: safeModelName as NonNullable<T_ModelName>, // to reference in refs aswell
       //  New room
       // nextSpotName: null as null | AnySpotName, // when going to new place, start at this spot
-      nextSpotName: null as null | AnySpotName, // when going to new place, start at this spot
+      nextSpotName: null as null | A_AnySpotName, // when going to new place, start at this spot
       //  Movers
       ...mover3dState("position", {
         value: HIDDEN_POSITION,
@@ -66,7 +77,7 @@ export default function dolls(backdopArt: BackdopArt) {
       // nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName],
       // animation Weights mover
       ...makeModelAnimWeightsMoverState(safeModelName)("animWeights"),
-      nowAnimation: animationNames[0] as AnyAnimationName, // NOTE AnimationNameFromDoll might work here?
+      nowAnimation: animationNames[0] as A_AnyAnimationName, // NOTE AnimationNameFromDoll might work here?
       animationLoops: true,
       //
       inRange: defaultInRange(),
@@ -76,8 +87,8 @@ export default function dolls(backdopArt: BackdopArt) {
   // hacky way to get return type from generic function
   // from Colin at https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
   class StateReturnType_Generic_Helper<
-    T_A extends DollName,
-    T_B extends ModelName
+    T_A extends A_DollName,
+    T_B extends A_ModelName
   > {
     // wrapped has no explicit return type so we can infer it
     wrapped(a: T_A, b: T_B) {
@@ -85,19 +96,19 @@ export default function dolls(backdopArt: BackdopArt) {
     }
   }
   type StateReturnType<
-    T_A extends DollName,
-    T_B extends ModelName
+    T_A extends A_DollName,
+    T_B extends A_ModelName
   > = ReturnType<StateReturnType_Generic_Helper<T_A, T_B>["wrapped"]>;
 
-  type DollAssetRefs<T_ModelName extends ModelName> = {
-    meshes: Record<MeshNameByModel[T_ModelName] | "__root__", AbstractMesh>;
+  type DollAssetRefs<T_ModelName extends A_ModelName> = {
+    meshes: Record<A_MeshNameByModel[T_ModelName] | "__root__", AbstractMesh>;
     skeleton: Skeleton;
-    bones: Record<BoneNameByModel[T_ModelName], Bone>;
-    aniGroups: Record<AnimationNameByModel[T_ModelName], AnimationGroup>;
-    materials: Record<MaterialNameByModel[T_ModelName], Material>;
+    bones: Record<A_BoneNameByModel[T_ModelName], Bone>;
+    aniGroups: Record<A_AnimationNameByModel[T_ModelName], AnimationGroup>;
+    materials: Record<A_MaterialNameByModel[T_ModelName], Material>;
   };
 
-  const refs = <T_DollName extends DollName, T_ModelName extends ModelName>(
+  const refs = <T_DollName extends A_DollName, T_ModelName extends A_ModelName>(
     dollName: T_DollName,
     itemState: StateReturnType<T_DollName, T_ModelName>
   ) => {
@@ -109,7 +120,7 @@ export default function dolls(backdopArt: BackdopArt) {
       otherMeshes: modelOtherMeshesRefs(modelName),
       entriesRef: null as null | InstantiatedEntries,
       aniGroupsRef: null as null | Record<
-        AnimationNameByModel[T_ModelName],
+        A_AnimationNameByModel[T_ModelName],
         AnimationGroup
       >,
       assetRefs: null as null | DollAssetRefs<T_ModelName>,
@@ -144,9 +155,9 @@ export default function dolls(backdopArt: BackdopArt) {
   // };
 
   type DollStartStates = {
-    [K_DollName in DollName]: StateReturnType<
+    [K_DollName in A_DollName]: StateReturnType<
       K_DollName,
-      DollOptions[K_DollName]["model"]
+      A_DollOptions[K_DollName]["model"]
     >;
   };
 

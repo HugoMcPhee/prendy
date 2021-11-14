@@ -9,7 +9,7 @@ export declare function makeSectionVidStoreUtils<ConcepFuncs extends BackdopConc
     doWhenSectionVidStateChanges: (sectionVidId: PlaceName, checkShouldRun: (newVidState: SectionVidState) => boolean, callback: () => void) => string | null;
     doWhenSectionVidPlaying: (sectionVidId: PlaceName, callback: () => void) => string | null;
     getSectionEndTime: (section: VidSection) => number;
-    getSectionForPlace: <T_PlaceName extends string>(place: T_PlaceName, camName: any, segment: any) => {
+    getSectionForPlace: <T_PlaceName extends string>(place: T_PlaceName, camName: string, segment: string) => {
         time: any;
         duration: number;
     };

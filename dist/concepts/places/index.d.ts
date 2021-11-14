@@ -1,5 +1,5 @@
 import { AbstractMesh, CubeTexture, Sound, TargetCamera, Vector3 } from "@babylonjs/core";
-import { BackdopArt, CameraNameByPlace, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../../declarations";
+import { AnyCameraName, BackdopArt, CameraNameByPlace, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../../declarations";
 declare const defaultCamRefs: () => {
     camera: TargetCamera | null;
     camCubeMeshes: AbstractMesh[];
@@ -7,50 +7,32 @@ declare const defaultCamRefs: () => {
     isTriggerable: boolean;
 };
 export declare type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
-declare type MaybeCam<T_PlaceName extends PlaceName> = null | CameraNameByPlace[T_PlaceName];
-declare type SpotPositions<T_PlaceName extends PlaceName> = {
-    [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
-};
-declare type SpotRotations<T_PlaceName extends PlaceName> = {
-    [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
-};
-declare type SoundspotSounds<T_PlaceName extends PlaceName> = {
-    [P_SoundName in SoundspotNameByPlace[T_PlaceName]]: Sound | null;
-};
-declare type TriggerMeshes<T_PlaceName extends PlaceName> = {
-    [P_TriggerName in TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
-};
-declare type WallMeshes<T_PlaceName extends PlaceName> = {
-    [P_TriggerName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
-};
-declare type CameraRefs<T_PlaceName extends PlaceName> = {
-    [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
-};
-declare type PlaceRefs<T_PlaceName extends PlaceName> = {
-    rootMesh: null | AbstractMesh;
-    spotPositions: SpotPositions<T_PlaceName>;
-    spotRotations: SpotRotations<T_PlaceName>;
-    soundspotSounds: SoundspotSounds<T_PlaceName>;
-    triggerMeshes: TriggerMeshes<T_PlaceName>;
-    wallMeshes: WallMeshes<T_PlaceName>;
-    camsRefs: CameraRefs<T_PlaceName>;
-};
-declare type PlaceState<T_PlaceName extends PlaceName> = {
-    wantedCamNameAtLoop: MaybeCam<T_PlaceName>;
-    wantedCamName: MaybeCam<T_PlaceName>;
-    nowCamName: CameraNameByPlace[T_PlaceName];
-};
-export default function places(backdopArt: BackdopArt): {
-    startStates: {
-        [x: string]: PlaceState<string>;
+export default function places<A_PlaceName extends PlaceName = PlaceName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_BackdopArt extends BackdopArt = BackdopArt, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(backdopArt: A_BackdopArt): {
+    startStates: { [P_PlaceName in A_PlaceName]: {
+        wantedCamNameAtLoop: A_CameraNameByPlace[P_PlaceName] | null;
+        wantedCamName: A_CameraNameByPlace[P_PlaceName] | null;
+        nowCamName: A_CameraNameByPlace[P_PlaceName];
+    }; };
+    state: <K_PlaceName extends A_PlaceName>(itemName: string | K_PlaceName) => {
+        wantedCamWhenNextPlaceLoads: A_CameraNameByPlace[A_PlaceName] | null;
+        nextCamNameWhenVidPlays: A_CameraNameByPlace[A_PlaceName] | null;
+        wantedCamNameAtLoop: A_CameraNameByPlace[A_PlaceName] | null;
+        wantedCamName: A_CameraNameByPlace[A_PlaceName] | null;
+        nowCamName: A_AnyCameraName;
     };
-    state: <T_PlaceName extends string>(itemName: string | T_PlaceName) => {
-        wantedCamWhenNextPlaceLoads: any;
-        nextCamNameWhenVidPlays: any;
-        wantedCamNameAtLoop: any;
-        wantedCamName: any;
-        nowCamName: string;
+    refs: <K_PlaceName_1 extends A_PlaceName>(itemName: K_PlaceName_1 & string) => {
+        rootMesh: null | AbstractMesh;
+        spotPositions: { [P_SpotName in A_SpotNameByPlace[A_PlaceName]]: Vector3; };
+        spotRotations: { [P_SpotName_1 in A_SpotNameByPlace[A_PlaceName]]: Vector3; };
+        soundspotSounds: { [P_SoundName in A_SoundspotNameByPlace[A_PlaceName]]: Sound | null; };
+        triggerMeshes: { [P_TriggerName in A_TriggerNameByPlace[A_PlaceName]]: AbstractMesh | null; };
+        wallMeshes: { [P_TriggerName_1 in A_WallNameByPlace[A_PlaceName]]: AbstractMesh | null; };
+        camsRefs: { [P_CameraName in A_CameraNameByPlace[A_PlaceName]]: {
+            camera: TargetCamera | null;
+            camCubeMeshes: AbstractMesh[];
+            probeTexture: CubeTexture | null;
+            isTriggerable: boolean;
+        }; };
     };
-    refs: <T_PlaceName_1 extends string>(itemName: T_PlaceName_1 & string) => PlaceRefs<PlaceName>;
 };
 export {};

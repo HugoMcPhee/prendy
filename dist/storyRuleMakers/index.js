@@ -25,6 +25,7 @@ export function makeGetUsefulStoryStuff(concepFuncs) {
             nowPlaceName: nowPlaceName,
             placeState: placeState,
             nowCamName: nowCamName,
+            placesRefs: placesRefs,
             placeRefs: placeRefs,
             camsRefs: camsRefs,
             camRefs: camRefs,

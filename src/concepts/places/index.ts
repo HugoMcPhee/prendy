@@ -28,78 +28,94 @@ const defaultCamRefs = () => ({
 
 export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 
-type MaybeCam<T_PlaceName extends PlaceName> =
-  | null
-  | CameraNameByPlace[T_PlaceName];
-
-type SpotPositions<T_PlaceName extends PlaceName> = {
-  [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
-};
-type SpotRotations<T_PlaceName extends PlaceName> = {
-  [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
-};
-type SoundspotSounds<T_PlaceName extends PlaceName> = {
-  [P_SoundName in SoundspotNameByPlace[T_PlaceName]]: Sound | null;
-};
-type TriggerMeshes<T_PlaceName extends PlaceName> = {
-  [P_TriggerName in TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
-};
-type WallMeshes<T_PlaceName extends PlaceName> = {
-  [P_TriggerName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
-};
-type CameraRefs<T_PlaceName extends PlaceName> = {
-  [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<
-    typeof defaultCamRefs
-  >;
-};
-
-type PlaceRefs<T_PlaceName extends PlaceName> = {
-  rootMesh: null | AbstractMesh;
-  spotPositions: SpotPositions<T_PlaceName>;
-  spotRotations: SpotRotations<T_PlaceName>;
-  soundspotSounds: SoundspotSounds<T_PlaceName>;
-  triggerMeshes: TriggerMeshes<T_PlaceName>;
-  wallMeshes: WallMeshes<T_PlaceName>;
-  camsRefs: CameraRefs<T_PlaceName>;
-};
-
 // export
-type PlaceState<T_PlaceName extends PlaceName> = {
-  wantedCamNameAtLoop: MaybeCam<T_PlaceName>;
-  wantedCamName: MaybeCam<T_PlaceName>;
-  nowCamName: CameraNameByPlace[T_PlaceName];
-};
 
-export default function places(backdopArt: BackdopArt) {
-  const { placeNames, placeInfoByName } = backdopArt;
+export default function places<
+  A_PlaceName extends PlaceName = PlaceName,
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
+  A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
+  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
+>(backdopArt: A_BackdopArt) {
+  const { placeInfoByName } = backdopArt;
+  const placeNames = backdopArt.placeNames as A_PlaceName[];
+
+  type MaybeCam<T_PlaceName extends A_PlaceName> =
+    | null
+    | A_CameraNameByPlace[T_PlaceName];
+
+  type SpotPositions<T_PlaceName extends A_PlaceName> = {
+    [P_SpotName in A_SpotNameByPlace[T_PlaceName]]: Vector3;
+  };
+  type SpotRotations<T_PlaceName extends A_PlaceName> = {
+    [P_SpotName in A_SpotNameByPlace[T_PlaceName]]: Vector3;
+  };
+  type SoundspotSounds<T_PlaceName extends A_PlaceName> = {
+    [P_SoundName in A_SoundspotNameByPlace[T_PlaceName]]: Sound | null;
+  };
+  type TriggerMeshes<T_PlaceName extends A_PlaceName> = {
+    [P_TriggerName in A_TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
+  };
+  type WallMeshes<T_PlaceName extends A_PlaceName> = {
+    [P_TriggerName in A_WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
+  };
+  type CameraRefs<T_PlaceName extends A_PlaceName> = {
+    [P_CameraName in A_CameraNameByPlace[T_PlaceName]]: ReturnType<
+      typeof defaultCamRefs
+    >;
+  };
+
+  type PlaceState<K_PlaceName extends A_PlaceName> = {
+    wantedCamNameAtLoop: MaybeCam<K_PlaceName>;
+    wantedCamName: MaybeCam<K_PlaceName>;
+    nowCamName: A_CameraNameByPlace[K_PlaceName];
+  };
 
   // State
-  const state = <T_PlaceName extends PlaceName>(placeName: T_PlaceName) => {
+  const state = <K_PlaceName extends A_PlaceName>(placeName: K_PlaceName) => {
     return {
-      wantedCamWhenNextPlaceLoads: null as MaybeCam<T_PlaceName>,
-      nextCamNameWhenVidPlays: null as MaybeCam<T_PlaceName>, // near the start of a frame, when the section vid has finished changing, this is used as the new nowCamName
-      wantedCamNameAtLoop: null as MaybeCam<T_PlaceName>,
-      wantedCamName: null as MaybeCam<T_PlaceName>,
+      wantedCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
+      nextCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the section vid has finished changing, this is used as the new nowCamName
+      wantedCamNameAtLoop: null as MaybeCam<K_PlaceName>,
+      wantedCamName: null as MaybeCam<K_PlaceName>,
       nowCamName:
-        ((placeInfoByName as any)?.[placeName as any]
-          ?.cameraNames?.[0] as unknown as AnyCameraName) ??
-        ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
+        (((placeInfoByName as any)?.[placeName as any]
+          ?.cameraNames?.[0] as unknown) as A_AnyCameraName) ??
+        ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
     };
   };
 
-  // Refs
-  function refs<T_PlaceName extends PlaceName>(
-    placeName: T_PlaceName
-  ): PlaceRefs<T_PlaceName> {
-    const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } =
-      placeInfoByName[placeName];
+  type PlaceRefs<K_PlaceName extends A_PlaceName> = {
+    rootMesh: null | AbstractMesh;
+    spotPositions: SpotPositions<K_PlaceName>;
+    spotRotations: SpotRotations<K_PlaceName>;
+    soundspotSounds: SoundspotSounds<K_PlaceName>;
+    triggerMeshes: TriggerMeshes<K_PlaceName>;
+    wallMeshes: WallMeshes<K_PlaceName>;
+    camsRefs: CameraRefs<K_PlaceName>;
+  };
 
-    const spotPositions: Partial<SpotPositions<T_PlaceName>> = {};
-    const spotRotations: Partial<SpotRotations<T_PlaceName>> = {};
-    const soundspotSounds: Partial<SoundspotSounds<T_PlaceName>> = {};
-    const triggerMeshes: Partial<TriggerMeshes<T_PlaceName>> = {};
-    const wallMeshes: Partial<WallMeshes<T_PlaceName>> = {};
-    const camsRefs: Partial<CameraRefs<T_PlaceName>> = {};
+  // Refs
+  function refs<K_PlaceName extends A_PlaceName>(
+    placeName: K_PlaceName
+  ): PlaceRefs<K_PlaceName> {
+    const {
+      spotNames,
+      soundspotNames,
+      triggerNames,
+      wallNames,
+      cameraNames,
+    } = placeInfoByName[placeName];
+
+    const spotPositions: Partial<SpotPositions<K_PlaceName>> = {};
+    const spotRotations: Partial<SpotRotations<K_PlaceName>> = {};
+    const soundspotSounds: Partial<SoundspotSounds<K_PlaceName>> = {};
+    const triggerMeshes: Partial<TriggerMeshes<K_PlaceName>> = {};
+    const wallMeshes: Partial<WallMeshes<K_PlaceName>> = {};
+    const camsRefs: Partial<CameraRefs<K_PlaceName>> = {};
 
     forEach(spotNames, (spotName) => {
       // https://stackoverflow.com/questions/42273853/in-typescript-what-is-the-exclamation-mark-bang-operator-when-dereferenci
@@ -129,15 +145,15 @@ export default function places(backdopArt: BackdopArt) {
       wallMeshes,
       camsRefs,
       backdropVid: null as null | HTMLVideoElement,
-    } as PlaceRefs<T_PlaceName>;
+    } as PlaceRefs<K_PlaceName>;
   }
 
   type StartRefs = {
-    [P_PlaceName in PlaceName]: PlaceRefs<P_PlaceName>;
+    [P_PlaceName in A_PlaceName]: PlaceRefs<P_PlaceName>;
   };
 
   type StartStates = {
-    [P_PlaceName in PlaceName]: PlaceState<P_PlaceName>;
+    [P_PlaceName in A_PlaceName]: PlaceState<P_PlaceName>;
   };
 
   // const startStates: InitialItemsState<typeof state> = {
@@ -153,19 +169,19 @@ export default function places(backdopArt: BackdopArt) {
 
   /*
 
-  as <T_PlaceName extends PlaceName>(
-  itemName: T_PlaceName | string
-) => PlaceRefs<T_PlaceName>
+  as <A_PlaceName extends A_PlaceName>(
+  itemName: A_PlaceName | string
+) => PlaceRefs<A_PlaceName>
 
 */
 
   return {
     startStates: startStates as StartStates,
-    state: state as <T_PlaceName extends PlaceName>(
-      itemName: T_PlaceName | string
+    state: state as <K_PlaceName extends A_PlaceName>(
+      itemName: K_PlaceName | string
     ) => ReturnType<typeof state>,
-    refs: refs as <T_PlaceName extends PlaceName>(
-      itemName: T_PlaceName & string
-    ) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<T_PlaceName> when ReturnType is generic
+    refs: refs as <K_PlaceName extends A_PlaceName>(
+      itemName: K_PlaceName & string
+    ) => PlaceRefs<A_PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
   };
 }

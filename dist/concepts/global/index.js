@@ -2,7 +2,7 @@ import { mover2dRefs, mover2dState, moverRefs, moverState, } from "concep-movers
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 export default function global(backdopStartOptions, backdopArt) {
     const { musicNames, soundNames } = backdopArt;
-    const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = makerGlobalStoreIndexUtils(musicNames, soundNames);
+    const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs, } = makerGlobalStoreIndexUtils(musicNames, soundNames);
     // State
     const state = () => ({
         // segments and section video

@@ -1,6 +1,6 @@
 import { AnyAnimationName, BackdopOptions } from "../../declarations";
 import { Point2D } from "shutils/dist/points2d";
-export default function players(backdopStartOptions: BackdopOptions): {
+export default function players<A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_BackdopOptions extends BackdopOptions = BackdopOptions>(backdopStartOptions: A_BackdopOptions): {
     startStates: {
         main: {
             lastSafeInputAngle: number | null;
@@ -16,8 +16,8 @@ export default function players(backdopStartOptions: BackdopOptions): {
             virtualControlsReleaseTime: number;
             canShowVirtualButtons: boolean;
             animationNames: {
-                walking: AnyAnimationName;
-                idle: AnyAnimationName;
+                walking: A_AnyAnimationName;
+                idle: A_AnyAnimationName;
             };
         };
     };
@@ -35,8 +35,8 @@ export default function players(backdopStartOptions: BackdopOptions): {
         virtualControlsReleaseTime: number;
         canShowVirtualButtons: boolean;
         animationNames: {
-            walking: AnyAnimationName;
-            idle: AnyAnimationName;
+            walking: A_AnyAnimationName;
+            idle: A_AnyAnimationName;
         };
     };
     refs: () => {

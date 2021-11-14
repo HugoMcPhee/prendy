@@ -1,6 +1,6 @@
-import { BackdopArt } from "../../declarations";
 import { CSSProperties } from "react";
-export default function speechBubbles(backdopArt: BackdopArt): {
+import { BackdopArt, CharacterName } from "../../declarations";
+export default function speechBubbles<A_BackdopArt extends BackdopArt = BackdopArt, A_CharacterName extends CharacterName = CharacterName>(backdopArt: A_BackdopArt): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
         font?: string | undefined;
         character?: string | undefined;
@@ -26,22 +26,20 @@ export default function speechBubbles(backdopArt: BackdopArt): {
         currentTimeout: number | null;
         videoRef: HTMLVideoElement | null;
     };
-    startStates: {
-        [x: string]: {
-            isVisible: boolean;
-            isFullyHidden: boolean;
-            goalText: string;
-            visibleLetterAmount: number;
-            typingSpeed: number;
-            stylesBySpecialText: Record<string, CSSProperties>;
-            _specialTextByLetterIndex: Record<number, string>;
-            _goalTextWordLetterArrays: string[][];
-            forCharacter: string | null;
-            position: import("shutils/dist/points2d").Point2D;
-            typingFinished: boolean;
-            nowVideoName: string | null;
-            font: string;
-            zIndex: number;
-        };
-    };
+    startStates: { [K_CharacterName in A_CharacterName]: {
+        isVisible: boolean;
+        isFullyHidden: boolean;
+        goalText: string;
+        visibleLetterAmount: number;
+        typingSpeed: number;
+        stylesBySpecialText: Record<string, CSSProperties>;
+        _specialTextByLetterIndex: Record<number, string>;
+        _goalTextWordLetterArrays: string[][];
+        forCharacter: string | null;
+        position: import("shutils/dist/points2d").Point2D;
+        typingFinished: boolean;
+        nowVideoName: string | null;
+        font: string;
+        zIndex: number;
+    }; };
 };

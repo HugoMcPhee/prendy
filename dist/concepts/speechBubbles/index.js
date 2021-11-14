@@ -11,9 +11,6 @@ export default function speechBubbles(backdopArt) {
             goalText: "",
             visibleLetterAmount: 0,
             typingSpeed: 60,
-            // typingSpeed: 16, // milliseconds between characters
-            // typingSpeed: 12, // milliseconds between characters
-            // typingSpeed: 1, // milliseconds between characters
             stylesBySpecialText: {},
             _specialTextByLetterIndex: {},
             _goalTextWordLetterArrays: [[]],
@@ -21,7 +18,6 @@ export default function speechBubbles(backdopArt) {
             position: defaultPosition(),
             typingFinished: true,
             nowVideoName: null,
-            // font: options?.font ?? ("Schoolbell" as FontName),
             font: (_b = options === null || options === void 0 ? void 0 : options.font) !== null && _b !== void 0 ? _b : fontNames[0],
             // shouldStartRemovoing: false, // (so it can fade out)
             // shouldRemove: false, // (after it’s faded out)
@@ -52,5 +48,5 @@ export default function speechBubbles(backdopArt) {
     };
     // export
     // const speechBubbleNames = Object.keys(startStates) as SpeechBubbleName[];
-    return { state, refs, startStates };
+    return { state, refs, startStates: startStates };
 }

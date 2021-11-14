@@ -53,8 +53,6 @@ export declare function getBackdopOptions<T_Place extends PlaceName, T_Cam exten
     doorsInfo?: Partial<{
         [x: string]: Partial<{
             [x: string]: never;
-            [x: number]: never;
-            [x: symbol]: never;
         }>;
     }> | undefined;
     modelNamesByPlace: ModelNamesByPlaceLoose;

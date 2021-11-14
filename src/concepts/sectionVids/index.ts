@@ -25,7 +25,10 @@ export type VidLetter = "a" | "b";
 
 export type VidSection = { time: number; duration: number };
 
-export default function sectionVids(backdopArt: BackdopArt) {
+export default function sectionVids<
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PlaceName extends PlaceName = PlaceName
+>(backdopArt: A_BackdopArt) {
   const { placeNames } = backdopArt;
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
@@ -58,7 +61,7 @@ export default function sectionVids(backdopArt: BackdopArt) {
 
   function makeStartStatesForPlaces() {
     // enable autocompleted names and properties , (when using name directly)
-    const newStartStates = {} as Record<PlaceName, ReturnType<typeof state>>;
+    const newStartStates = {} as Record<A_PlaceName, ReturnType<typeof state>>;
     // enable autocompleted properties when using a variable for name
     // const newStartStates = {} as InitialItemsState<typeof state>;
 

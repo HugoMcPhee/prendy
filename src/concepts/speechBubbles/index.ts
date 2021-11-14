@@ -1,17 +1,19 @@
 // import { VideoGui } from "backdopdev/utils/babylonjs/VideoGui";
 //
-import {
-  CharacterOptions,
-  CharacterName,
-  FontName,
-  SpeechVidName,
-  BackdopArt,
-} from "../../declarations";
 import { CSSProperties } from "react";
 import { forEach } from "shutils/dist/loops";
 import { defaultPosition } from "shutils/dist/points2d";
+import {
+  BackdopArt,
+  CharacterName,
+  FontName,
+  SpeechVidName,
+} from "../../declarations";
 
-export default function speechBubbles(backdopArt: BackdopArt) {
+export default function speechBubbles<
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_CharacterName extends CharacterName = CharacterName
+>(backdopArt: A_BackdopArt) {
   const { characterNames, characterOptions, fontNames } = backdopArt;
 
   const state = <T_ItemName extends string>(
@@ -23,9 +25,6 @@ export default function speechBubbles(backdopArt: BackdopArt) {
     goalText: "",
     visibleLetterAmount: 0,
     typingSpeed: 60, // milliseconds between characters
-    // typingSpeed: 16, // milliseconds between characters
-    // typingSpeed: 12, // milliseconds between characters
-    // typingSpeed: 1, // milliseconds between characters
     stylesBySpecialText: {} as Record<string, CSSProperties>, // { "golden banana": { color: "yellow" } } // style snippets of text
     _specialTextByLetterIndex: {} as Record<number, string>, // { 0: "golden banana", 1:"golden banana" , 2:"golden banana"}
     _goalTextWordLetterArrays: [[]] as string[][],
@@ -33,8 +32,7 @@ export default function speechBubbles(backdopArt: BackdopArt) {
     position: defaultPosition(),
     typingFinished: true,
     nowVideoName: null as null | SpeechVidName,
-    // font: options?.font ?? ("Schoolbell" as FontName),
-    font: options?.font ?? fontNames[0],
+    font: options?.font ?? (fontNames[0] as FontName),
     // shouldStartRemovoing: false, // (so it can fade out)
     // shouldRemove: false, // (after it’s faded out)
     zIndex: 0,
@@ -50,9 +48,13 @@ export default function speechBubbles(backdopArt: BackdopArt) {
 
   // automatically make atleast a speechBubble for each character
   // NOTE could have more exact types if using more generic types like in 'dolls'
+  // type SpeechBubbleStartStates = {
+  //   [K_CharacterName in CharacterName]: ReturnType<typeof state>;
+  // };
   type SpeechBubbleStartStates = {
-    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
   };
+
   function makeAutmaticCharacterSpeechbubbleStartStates() {
     const partialStates = {} as Partial<SpeechBubbleStartStates>;
     forEach(characterNames, (characterName) => {
@@ -68,7 +70,7 @@ export default function speechBubbles(backdopArt: BackdopArt) {
   const startStates = {
     ...makeAutmaticCharacterSpeechbubbleStartStates(),
     // cat: state("cat", { character: "cat", font: "Monoton" }),
-  };
+  } as SpeechBubbleStartStates;
 
   // export
   type SpeechBubbleName = keyof typeof startStates;
@@ -76,5 +78,5 @@ export default function speechBubbles(backdopArt: BackdopArt) {
   // export
   // const speechBubbleNames = Object.keys(startStates) as SpeechBubbleName[];
 
-  return { state, refs, startStates };
+  return { state, refs, startStates: startStates as SpeechBubbleStartStates };
 }

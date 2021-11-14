@@ -23,12 +23,15 @@ export type VidState =
   | "waitingForUnload"
   | "unloaded";
 
-export default function safeVids(backdopArt: BackdopArt) {
+export default function safeVids<
+  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PlaceName extends PlaceName = PlaceName
+>(backdopArt: A_BackdopArt) {
   const { placeNames, placeInfoByName } = backdopArt;
 
   function vidNameToPlaceName(vidName: string) {
     // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
-    return vidName.match(/.*?(?=_|$)/i)![0] as PlaceName;
+    return vidName.match(/.*?(?=_|$)/i)![0] as A_PlaceName;
   }
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
@@ -64,8 +67,7 @@ export default function safeVids(backdopArt: BackdopArt) {
   }
 
   // const startStates: InitialItemsState<typeof state> = {
-  const startStates: InitialItemsState<typeof state> =
-    makeStartStatesForPlaces();
+  const startStates: InitialItemsState<typeof state> = makeStartStatesForPlaces();
 
   return { state, refs, startStates };
 }

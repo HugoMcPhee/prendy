@@ -20,7 +20,9 @@
     "rootDir": "src",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "strict": true,
+    "noImplicitAny": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

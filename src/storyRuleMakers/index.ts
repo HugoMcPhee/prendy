@@ -15,22 +15,6 @@ import {
 
 // export each of the rule makers stuff from here :)
 
-type SegmentNameFromCameraAndPlace<
-  T_Place extends keyof PlaceInfoByName,
-  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
-
-type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
-
-type CamSegmentRulesOptionsUntyped = Partial<{
-  [P_PlaceName in PlaceName]: Partial<{
-    [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
-      usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
-    ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
-  }>;
-}>;
-
 export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
@@ -72,8 +56,7 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
       nowSegmentName: nowSegmentName as GlobalState["nowSegmentName"],
       nowPlaceName: nowPlaceName as GlobalState["nowPlaceName"],
       placeState: placeState as AllPlacesState[keyof AllPlacesState],
-      nowCamName:
-        nowCamName as AllPlacesState[keyof AllPlacesState]["nowCamName"],
+      nowCamName: nowCamName as AllPlacesState[keyof AllPlacesState]["nowCamName"],
       placesRefs: placesRefs as AllPlacesRefs,
       placeRefs: placeRefs as APlaceRefs,
       camsRefs: camsRefs as APlaceRefsCamsRefs,
@@ -106,11 +89,22 @@ export function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(
   };
 }
 
-export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeAllStoryRuleMakers<
+  ConcepFuncs extends BackdopConcepFuncs,
+  A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_DollName extends DollName = DollName,
+  A_PickupName extends PickupName = PickupName,
+  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_StoryPartName extends StoryPartName = StoryPartName,
+  A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace
+>(
   concepFuncs: ConcepFuncs,
-  placeInfoByName: PlaceInfoByName,
-  characterNames: readonly CharacterName[],
-  dollNames: readonly DollName[]
+  placeInfoByName: A_PlaceInfoByName,
+  characterNames: readonly A_CharacterName[],
+  dollNames: readonly A_DollName[]
 ) {
   const {
     getRefs,
@@ -129,14 +123,39 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
     usefulStuff: ReturnType<typeof getUsefulStoryStuff>
   ) => void;
 
+  type SegmentNameFromCameraAndPlace<
+    T_Place extends keyof A_PlaceInfoByName,
+    T_Cam extends keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"]
+  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+
+  type CameraNameFromPlace<
+    T_Place extends keyof A_PlaceInfoByName
+  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+
+  type CamSegmentRulesOptionsUntyped = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
+            usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
+          ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+        }
+      >;
+    }
+  >;
+
   // --------------------------------------------------
   //
   // makeCamChangeRules
-  type CamChangeRulesOptions = Partial<{
-    [P_PlaceName in PlaceName]: Partial<{
-      [P_TriggerName in CameraNameByPlace[P_PlaceName]]: StoryCallback;
-    }>;
-  }>;
+  type CamChangeRulesOptions = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: StoryCallback;
+        }
+      >;
+    }
+  >;
   function makeCamChangeRules(callBacksObject: CamChangeRulesOptions) {
     return makeRules((addItemEffect) => ({
       whenCameraChanges: addItemEffect({
@@ -173,19 +192,22 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // --------------------------------------------------
   //
   // makeCamSegmentRules
-  type CamSegmentRulesOptions = Partial<{
-    [P_PlaceName in PlaceName]: Partial<{
-      [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
-        usefulStuff: ReturnType<typeof getUsefulStoryStuff>
-      ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
-    }>;
-  }>;
+  type CamSegmentRulesOptions = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
+            usefulStuff: ReturnType<typeof getUsefulStoryStuff>
+          ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+        }
+      >;
+    }
+  >;
 
   //  This sets an options object in global refs that gets checked when changing segment
   function makeCamSegmentRules(callBacksObject: CamSegmentRulesOptions) {
     setTimeout(() => {
-      getRefs().global.main.camSegmentRulesOptions =
-        callBacksObject as CamSegmentRulesOptionsUntyped;
+      getRefs().global.main.camSegmentRulesOptions = callBacksObject as CamSegmentRulesOptionsUntyped;
     }, 0);
     return true;
   }
@@ -195,27 +217,34 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // makeOnInteractAtTrigger
   // when pressing interact button at trigger
 
-  type OnInteractAtTriggerOptions = Partial<{
-    [P_PlaceName in PlaceName]: Partial<{
-      [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
-    }>;
-  }>;
+  type OnInteractAtTriggerOptions = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_TriggerName in A_TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+        }
+      >;
+    }
+  >;
   // the returned function when the interact buttons clicked
   function makeOnInteractAtTrigger(
     callBacksObject: OnInteractAtTriggerOptions,
-    characterName: CharacterName = characterNames[0]
+    characterName: A_CharacterName = characterNames[0]
   ) {
     const onClickInteractButton = () => {
       const usefulStoryStuff = getUsefulStoryStuff();
 
-      const { aConvoIsHappening, nowPlaceName, playerMovingPaused } =
-        usefulStoryStuff.globalState;
+      const {
+        aConvoIsHappening,
+        nowPlaceName,
+        playerMovingPaused,
+      } = usefulStoryStuff.globalState;
       if (aConvoIsHappening || playerMovingPaused) return;
 
       const { atTriggers } = getState().characters[characterName];
 
       const triggerNames = placeInfoByName[nowPlaceName]
-        .triggerNames as AnyTriggerName[];
+        .triggerNames as A_AnyTriggerName[];
       // NOTE Could b breakable if only checking one trigger
       forEach(triggerNames, (triggerName) => {
         if (atTriggers[triggerName]) {
@@ -235,19 +264,23 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // makeOnInteractToTalk
   // when 'talking' to a doll
 
-  type OnInteractToTalkOptions = Partial<{
-    [P_DollName in DollName]: StoryCallback;
-  }>;
+  type OnInteractToTalkOptions = Partial<
+    {
+      [P_DollName in A_DollName]: StoryCallback;
+    }
+  >;
   // the returned function gets run when interact button's clicked
   function makeOnInteractToTalk(
     callBacksObject: OnInteractToTalkOptions,
-    characterName: CharacterName = characterNames[0]
+    characterName: A_CharacterName = characterNames[0]
   ) {
     const onClickInteractButton = () => {
       const usefulStoryStuff = getUsefulStoryStuff();
 
-      const { aConvoIsHappening, playerMovingPaused } =
-        usefulStoryStuff.globalState;
+      const {
+        aConvoIsHappening,
+        playerMovingPaused,
+      } = usefulStoryStuff.globalState;
 
       if (aConvoIsHappening || playerMovingPaused) return;
 
@@ -274,19 +307,25 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // makeOnUsePickupAtTrigger
   // use pickup button at trigger reactions
 
-  type OnUsePickupAtTriggerOptions = Partial<{
-    [P_PlaceName in PlaceName]: Partial<{
-      [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: Partial<{
-        [P_PickupName in PickupName]: StoryCallback;
-      }>;
-    }>;
-  }>;
+  type OnUsePickupAtTriggerOptions = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_TriggerName in A_TriggerNameByPlace[P_PlaceName]]: Partial<
+            {
+              [P_PickupName in A_PickupName]: StoryCallback;
+            }
+          >;
+        }
+      >;
+    }
+  >;
   // the returned function gets run onClick in the pickup picture button gui
   function makeOnUsePickupAtTrigger(
     callBacksObject: OnUsePickupAtTriggerOptions,
-    characterName: CharacterName = characterNames[0]
+    characterName: A_CharacterName = characterNames[0]
   ) {
-    const onClickPickupButton = <T_PickupName extends PickupName>(
+    const onClickPickupButton = <T_PickupName extends A_PickupName>(
       pickupName: T_PickupName
     ) => {
       let didInteractWithSomething = false;
@@ -299,7 +338,7 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
       if (aConvoIsHappening) return;
 
       const triggerNames = placeInfoByName[nowPlaceName]
-        .triggerNames as AnyTriggerName[];
+        .triggerNames as A_AnyTriggerName[];
 
       // NOTE Could b breakable if only checking one trigger
       forEach(triggerNames, (triggerName) => {
@@ -323,14 +362,16 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   //
   // makeOnUsePickupGenerally
   // use pickup button in general reactions
-  type OnUsePickupGenerallyOptions = Partial<{
-    [P_PickupName in PickupName]: StoryCallback;
-  }>;
+  type OnUsePickupGenerallyOptions = Partial<
+    {
+      [P_PickupName in A_PickupName]: StoryCallback;
+    }
+  >;
   // the returned function gets run onClick in the pickup picture button gui
   function makeOnUsePickupGenerally(
     callBacksObject: OnUsePickupGenerallyOptions
   ) {
-    const onClickPickupButton = <T_PickupName extends PickupName>(
+    const onClickPickupButton = <T_PickupName extends A_PickupName>(
       pickupName: T_PickupName
     ) => {
       const usefulStoryStuff = getUsefulStoryStuff();
@@ -350,17 +391,21 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // makeOnUsePickupToTalk
   // use pickup button at trigger reactions
 
-  type OnUsePickupToTalkOptions = Partial<{
-    [P_DollName in DollName]: Partial<{
-      [P_PickupName in PickupName]: StoryCallback;
-    }>;
-  }>;
+  type OnUsePickupToTalkOptions = Partial<
+    {
+      [P_DollName in A_DollName]: Partial<
+        {
+          [P_PickupName in A_PickupName]: StoryCallback;
+        }
+      >;
+    }
+  >;
   // the returned function gets run onClick in the pickup picture button gui
   function makeOnUsePickupToTalk(
     callBacksObject: OnUsePickupToTalkOptions,
-    characterName: CharacterName = characterNames[0]
+    characterName: A_CharacterName = characterNames[0]
   ) {
-    const onClickPickupButton = <T_PickupName extends PickupName>(
+    const onClickPickupButton = <T_PickupName extends A_PickupName>(
       pickupName: T_PickupName
     ) => {
       let didInteractWithSomething = false;
@@ -398,9 +443,11 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   //
   // makePlaceLoadRules
 
-  type PlaceLoadRulesOptions = Partial<{
-    [P_PlaceName in PlaceName]: StoryCallback;
-  }>;
+  type PlaceLoadRulesOptions = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: StoryCallback;
+    }
+  >;
   function makePlaceLoadRules(
     atStartOfEachPlace: StoryCallback,
     callBacksObject: PlaceLoadRulesOptions
@@ -465,7 +512,7 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // could have this as chapterName > storyPart too
   type StoryPartRulesOptions = Partial<
     Record<
-      StoryPartName,
+      A_StoryPartName,
       (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void
     >
   >;
@@ -475,7 +522,7 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
         onEffect(_diffInfo) {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { storyPart } = usefulStoryStuff;
-          callBacksObject[storyPart as StoryPartName]?.(usefulStoryStuff);
+          callBacksObject[storyPart as A_StoryPartName]?.(usefulStoryStuff);
         },
         check: {
           prop: ["storyPart"],
@@ -491,15 +538,17 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   // makeTouchRules
   // doll touch rules
 
-  type TouchRulesOptions = Partial<{
-    [P_DollName in DollName]: (
-      usefulStuff: ReturnType<typeof getUsefulStoryStuff>
-    ) => void;
-  }>;
+  type TouchRulesOptions = Partial<
+    {
+      [P_DollName in A_DollName]: (
+        usefulStuff: ReturnType<typeof getUsefulStoryStuff>
+      ) => void;
+    }
+  >;
   function makeTouchRules(
     callBacksObject: TouchRulesOptions,
     options?: {
-      characterName?: CharacterName;
+      characterName?: A_CharacterName;
       distanceType?: "touch" | "talk";
       whenLeave?: boolean;
     }
@@ -518,7 +567,7 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
           itemName: changedDollName,
         }) {
           const { dollName: charDollName } =
-            getCharDollStuff(characterName as CharacterName) ?? {};
+            getCharDollStuff(characterName as A_CharacterName) ?? {};
           // at the moment runs for every doll instead of just the main character,
           // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
           if (!charDollName || changedDollName !== charDollName) return;
@@ -555,15 +604,19 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
   //
   // makeTriggerRules
 
-  type TriggerRulesOptions = Partial<{
-    [P_PlaceName in PlaceName]: Partial<{
-      [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
-    }>;
-  }>;
+  type TriggerRulesOptions = Partial<
+    {
+      [P_PlaceName in A_PlaceName]: Partial<
+        {
+          [P_TriggerName in A_TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+        }
+      >;
+    }
+  >;
   function makeTriggerRules(
     callBacksObject: TriggerRulesOptions,
     options?: {
-      characterName?: CharacterName;
+      characterName?: A_CharacterName;
       whenLeave?: boolean;
     }
   ) {
@@ -575,7 +628,7 @@ export function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(
           const { nowPlaceName } = usefulStoryStuff;
 
           const triggerNames = placeInfoByName[nowPlaceName]
-            .triggerNames as AnyTriggerName[];
+            .triggerNames as A_AnyTriggerName[];
 
           forEach(triggerNames, (triggerName) => {
             const justEntered =

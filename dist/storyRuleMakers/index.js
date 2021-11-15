@@ -1,5 +1,6 @@
 import { breakableForEach, forEach } from "shutils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
+// export each of the rule makers stuff from here :)
 export function makeGetUsefulStoryStuff(concepFuncs) {
     const { getRefs, getState } = concepFuncs;
     return function getUsefulStoryStuff() {
@@ -75,8 +76,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
     //  This sets an options object in global refs that gets checked when changing segment
     function makeCamSegmentRules(callBacksObject) {
         setTimeout(() => {
-            getRefs().global.main.camSegmentRulesOptions =
-                callBacksObject;
+            getRefs().global.main.camSegmentRulesOptions = callBacksObject;
         }, 0);
         return true;
     }
@@ -84,7 +84,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
     function makeOnInteractAtTrigger(callBacksObject, characterName = characterNames[0]) {
         const onClickInteractButton = () => {
             const usefulStoryStuff = getUsefulStoryStuff();
-            const { aConvoIsHappening, nowPlaceName, playerMovingPaused } = usefulStoryStuff.globalState;
+            const { aConvoIsHappening, nowPlaceName, playerMovingPaused, } = usefulStoryStuff.globalState;
             if (aConvoIsHappening || playerMovingPaused)
                 return;
             const { atTriggers } = getState().characters[characterName];
@@ -106,7 +106,7 @@ export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNa
         const onClickInteractButton = () => {
             var _a;
             const usefulStoryStuff = getUsefulStoryStuff();
-            const { aConvoIsHappening, playerMovingPaused } = usefulStoryStuff.globalState;
+            const { aConvoIsHappening, playerMovingPaused, } = usefulStoryStuff.globalState;
             if (aConvoIsHappening || playerMovingPaused)
                 return;
             const { dollState, dollName: charDollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};

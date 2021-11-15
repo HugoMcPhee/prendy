@@ -4,10 +4,14 @@ import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import { MusicFiles, MusicName } from "../../../declarations";
 import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
 
-export function makeSoundStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSoundStoryHelpers<
+  ConcepFuncs extends BackdopConcepFuncs,
+  A_MusicFiles extends MusicFiles = MusicFiles,
+  A_MusicName extends MusicName = MusicName
+>(
   concepFuncs: ConcepFuncs,
-  musicNames: readonly MusicName[],
-  musicFiles: MusicFiles
+  musicNames: readonly A_MusicName[],
+  musicFiles: A_MusicFiles
 ) {
   const { getRefs } = concepFuncs;
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
@@ -15,7 +19,7 @@ export function makeSoundStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   const globalRefs = getRefs().global.main;
 
   // Auto load music and play it, and stop other music if it's already playing
-  function playNewMusic(newMusicName: MusicName) {
+  function playNewMusic(newMusicName: A_MusicName) {
     const scene = getScene();
     if (!scene) return;
 

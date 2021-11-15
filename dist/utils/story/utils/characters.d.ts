@@ -1,6 +1,6 @@
 import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
-import { CharacterName, SpotNameByPlace } from "../../../declarations";
-export declare function makeCharacterStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): {
-    get2DAngleFromCharacterToSpot: <T_Place extends string>(character: CharacterName, place: T_Place, spot: string) => number;
-    get2DAngleBetweenCharacters: (charA: CharacterName, charB: CharacterName) => number;
+import { CharacterName, PlaceName, SpotNameByPlace } from "../../../declarations";
+export declare function makeCharacterStoryUtils<ConcepFuncs extends BackdopConcepFuncs, A_CharacterName extends CharacterName = CharacterName, A_PlaceName extends PlaceName = PlaceName, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace>(concepFuncs: ConcepFuncs): {
+    get2DAngleFromCharacterToSpot: <T_Place extends A_PlaceName>(character: A_CharacterName, place: T_Place, spot: A_SpotNameByPlace[T_Place]) => number;
+    get2DAngleBetweenCharacters: (charA: A_CharacterName, charB: A_CharacterName) => number;
 };

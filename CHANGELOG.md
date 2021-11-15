@@ -6,9 +6,10 @@ TODO
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
 
-v0.7.1
+v0.7.2
 
 - fixes concept types being lost :)
+- fixes types lost for helpers and rule makers (and makeBackdopStoryUtils)
 
 v0.7.0
 

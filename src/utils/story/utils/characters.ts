@@ -9,17 +9,20 @@ import {
 //
 import { makeSpotStoryUtils } from "../utils/spots";
 
-export function makeCharacterStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(
-  concepFuncs: ConcepFuncs
-) {
+export function makeCharacterStoryUtils<
+  ConcepFuncs extends BackdopConcepFuncs,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
+>(concepFuncs: ConcepFuncs) {
   const { getState } = concepFuncs;
 
   const { getSpotPosition } = makeSpotStoryUtils(concepFuncs);
 
-  function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
-    character: CharacterName,
+  function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
+    character: A_CharacterName,
     place: T_Place,
-    spot: SpotNameByPlace[T_Place]
+    spot: A_SpotNameByPlace[T_Place]
   ) {
     const charactersState = getState().characters;
     const dollA = charactersState[character].dollName;
@@ -36,8 +39,8 @@ export function makeCharacterStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(
   }
 
   function get2DAngleBetweenCharacters(
-    charA: CharacterName,
-    charB: CharacterName
+    charA: A_CharacterName,
+    charB: A_CharacterName
   ) {
     const charactersState = getState().characters;
     const dollA = charactersState[charA].dollName;

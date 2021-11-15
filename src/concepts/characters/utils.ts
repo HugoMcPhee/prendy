@@ -9,9 +9,10 @@ import {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
 
-export function makeGetCharDollStuff<ConcepFuncs extends BackdopConcepFuncs>(
-  concepFuncs: ConcepFuncs
-) {
+export function makeGetCharDollStuff<
+  ConcepFuncs extends BackdopConcepFuncs,
+  A_CharacterName extends CharacterName = CharacterName
+>(concepFuncs: ConcepFuncs) {
   const { getRefs, getState } = concepFuncs;
 
   // NOTE could have character start options as a type to get accurate return types
@@ -39,7 +40,7 @@ export function makeGetCharDollStuff<ConcepFuncs extends BackdopConcepFuncs>(
   // type MeshNamesFromDoll<T_DollName extends DollName> =
   //   MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-  return function getCharDollStuff<T_CharacterName extends CharacterName>(
+  return function getCharDollStuff<T_CharacterName extends A_CharacterName>(
     charName: T_CharacterName
   ) {
     const { dollName } = getState().characters[charName];

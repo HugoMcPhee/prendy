@@ -6,7 +6,8 @@ import {
 
 export function makeDollStoryUtils<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  A_DollName extends DollName = DollName
 >(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts) {
   const { getState } = concepFuncs;
   // const { getState, startItemEffect } = concepFuncs;
@@ -14,14 +15,16 @@ export function makeDollStoryUtils<
 
   type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
 
-  type ModelNameFromDoll<T_DollName extends DollName> =
-    StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<
+    T_DollName extends A_DollName
+  > = StartState_Dolls[T_DollName]["modelName"];
 
-  function getModelNameFromDoll<T_DollName extends DollName>(
+  function getModelNameFromDoll<T_DollName extends A_DollName>(
     dollName: T_DollName
   ): ModelNameFromDoll<T_DollName> {
-    return getState().dolls[dollName]
-      .modelName as ModelNameFromDoll<T_DollName>;
+    return getState().dolls[dollName].modelName as ModelNameFromDoll<
+      T_DollName
+    >;
   }
 
   // function stickDollToFloor() {

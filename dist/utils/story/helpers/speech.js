@@ -5,7 +5,7 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
 import { clearTimeoutSafe } from "../../../utils";
 export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, characterNames) {
-    const { getState, onNextTick, setState, startItemEffect, stopEffect } = concepFuncs;
+    const { getState, onNextTick, setState, startItemEffect, stopEffect, } = concepFuncs;
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(concepFuncs, backdopConcepts);
@@ -26,7 +26,7 @@ export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStar
             // time = 2600,
             time, showOnce = false, character = characterNames[0], zoomAmount = SPEECH_ZOOM_AMOUNT, returnToZoomBeforeConversation = false, stylesBySpecialText, } = options !== null && options !== void 0 ? options : {};
             const { dollName } = getCharDollStuff(character);
-            const { playerCharacter, planeZoom: prevPlaneZoom } = getState().global.main;
+            const { playerCharacter, planeZoom: prevPlaneZoom, } = getState().global.main;
             const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
             getTypingDelayForText(text, character); // NOTE at the moment CharacterName and SpeechBubbleName are the same
             const timeBasedOnText = MIN_AUTO_SPEECH_TIME +

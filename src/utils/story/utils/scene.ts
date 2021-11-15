@@ -7,17 +7,21 @@ import {
 } from "../../../declarations";
 import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
 
-export function makeSceneStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(
-  concepFuncs: ConcepFuncs
-) {
+export function makeSceneStoryUtils<
+  ConcepFuncs extends BackdopConcepFuncs,
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_PlaceName extends PlaceName = PlaceName
+>(concepFuncs: ConcepFuncs) {
   const { getRefs, getState, startItemEffect, stopEffect } = concepFuncs;
 
   const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
   const globalRefs = getRefs().global.main;
 
   function getSegmentFromStoryRules<
-    T_Place extends PlaceName,
-    T_Cam extends CameraNameByPlace[T_Place]
+    T_Place extends A_PlaceName,
+    T_Cam extends A_CameraNameByPlace[T_Place]
   >(place: T_Place, cam: T_Cam) {
     const foundRuleSegmentName = (globalRefs.camSegmentRulesOptions as any)?.[
       place
@@ -27,7 +31,7 @@ export function makeSceneStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(
   }
 
   function doWhenNowSegmentChanges(
-    checkingSegmentName: AnySegmentName,
+    checkingSegmentName: A_AnySegmentName,
     callback: () => void
   ) {
     const initialNowSegmentName = getState().global.main.nowSegmentName;
@@ -54,7 +58,7 @@ export function makeSceneStoryUtils<ConcepFuncs extends BackdopConcepFuncs>(
 
   function doWhenNowCamChanges(
     // WARNING This might mess up if the place changes while the cam change was waiting
-    checkingCamName: AnyCameraName,
+    checkingCamName: A_AnyCameraName,
     callback: () => void
   ) {
     const { nowPlaceName } = getState().global.main;

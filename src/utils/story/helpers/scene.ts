@@ -16,23 +16,34 @@ import {
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 
-export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSceneStoryHelpers<
+  ConcepFuncs extends BackdopConcepFuncs,
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
+  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
+>(
   concepFuncs: ConcepFuncs,
-  placeInfoByName: PlaceInfoByName,
-  characterNames: readonly CharacterName[]
+  placeInfoByName: A_PlaceInfoByName,
+  characterNames: readonly A_CharacterName[]
 ) {
   const { getRefs, getState, onNextTick, setState } = concepFuncs;
 
   type CameraNameFromPlace<
-    T_Place extends keyof PlaceInfoByName
-  > = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+    T_Place extends keyof A_PlaceInfoByName
+  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
 
-  type ToPlaceOption<T_PlaceName extends PlaceName> = {
+  type ToPlaceOption<T_PlaceName extends A_PlaceName> = {
     toPlace: T_PlaceName;
-    toSpot: SpotNameByPlace[T_PlaceName];
+    toSpot: A_SpotNameByPlace[T_PlaceName];
     // NOTE might be able to make this auto if the first spot is inside a cam collider?
-    toCam?: CameraNameByPlace[T_PlaceName];
-    toSegment?: SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
+    toCam?: A_CameraNameByPlace[T_PlaceName];
+    toSegment?: A_SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
@@ -47,8 +58,8 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   } = makeSceneStoryUtils(concepFuncs);
 
   async function changeSegmentAtLoop<
-    T_Place extends PlaceName,
-    T_Segment extends AnySegmentName // NOTE & might mes with the tye here
+    T_Place extends A_PlaceName,
+    T_Segment extends A_AnySegmentName // NOTE & might mes with the tye here
   >(_place: T_Place, newSegmentName: T_Segment) {
     // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
     // to fix: could listen to changes to wantedSegmentNameAtLoop
@@ -77,8 +88,8 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
 
   async function changeCameraAtLoop<
     // WARNING This might mess up if the place changes while the cam change was waiting
-    T_Place extends PlaceName,
-    T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName // NOTE new & type
+    T_Place extends A_PlaceName,
+    T_Cam extends CameraNameFromPlace<T_Place> & A_AnyCameraName // NOTE new & type
   >(_place: T_Place, newCamName: T_Cam) {
     return new Promise<void>((resolve, _reject) => {
       setState((state) => {
@@ -106,13 +117,13 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
     });
   }
 
-  function lookAtSpot<T_Place extends PlaceName>(
+  function lookAtSpot<T_Place extends A_PlaceName>(
     place: T_Place,
-    spot: SpotNameByPlace[T_Place],
-    character?: CharacterName
+    spot: A_SpotNameByPlace[T_Place],
+    character?: A_CharacterName
   ) {
     const { playerCharacter } = getState().global.main;
-    const editedCharacter = character ?? (playerCharacter as CharacterName);
+    const editedCharacter = character ?? (playerCharacter as A_CharacterName);
     const charDollStuff = getCharDollStuff(editedCharacter);
     const { dollName } = charDollStuff;
 
@@ -121,8 +132,8 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   }
 
   function hideWallIf<
-    T_Place extends PlaceName,
-    T_Wall extends WallNameByPlace[T_Place]
+    T_Place extends A_PlaceName,
+    T_Wall extends A_WallNameByPlace[T_Place]
   >(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) {
     const placeRefs = getRefs().places[placeName];
     const wallMesh = placeRefs.wallMeshes[wallName];
@@ -137,8 +148,8 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   }
 
   function setSegment<
-    T_Place extends PlaceName,
-    T_Segment extends SegmentNameByPlace[T_Place]
+    T_Place extends A_PlaceName,
+    T_Segment extends A_SegmentNameByPlace[T_Place]
   >(
     _placeName: T_Place,
     segmentName: T_Segment,
@@ -156,8 +167,8 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
   }
 
   function setCamera<
-    T_Place extends PlaceName,
-    T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName // NOTE & Type
+    T_Place extends A_PlaceName,
+    T_Cam extends CameraNameFromPlace<T_Place> & A_AnyCameraName // NOTE & Type
   >(
     _placeName: T_Place,
     cameraName: T_Cam,
@@ -182,9 +193,9 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
     });
   }
 
-  function goToNewPlace<T_PlaceName extends PlaceName>(
+  function goToNewPlace<T_PlaceName extends A_PlaceName>(
     toOption: ToPlaceOption<T_PlaceName>,
-    charName: CharacterName = characterNames[0]
+    charName: A_CharacterName = characterNames[0]
   ) {
     let { toSpot, toPlace, toCam, toSegment } = toOption;
     const { dollName } = getCharDollStuff(charName) ?? {};
@@ -197,12 +208,12 @@ export function makeSceneStoryHelpers<ConcepFuncs extends BackdopConcepFuncs>(
 
         const placeInfo = placeInfoByName[toPlace];
         toSpot =
-          toSpot ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
+          toSpot ?? (placeInfo.spotNames[0] as A_SpotNameByPlace[T_PlaceName]);
         toCam =
           toCam ?? (placeInfo.cameraNames[0] as NonNullable<typeof toCam>); // types as a cam for the chosen place
         toSegment =
           toSegment ??
-          (placeInfo.segmentNames[0] as SegmentNameByPlace[T_PlaceName]);
+          (placeInfo.segmentNames[0] as A_SegmentNameByPlace[T_PlaceName]);
 
         const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
 

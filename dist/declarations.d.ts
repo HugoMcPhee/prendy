@@ -31,9 +31,9 @@ export interface ArtTypesUntyped {
     MeshNameByModel: Record<string, string>;
     ModelNamesByPlaceLoose: any;
     SegmentNameByPlace: Record<string, string>;
-    MusicFiles: any;
-    SpeechVidFiles: any;
-    SoundFiles: any;
+    MusicFiles: Record<string, string>;
+    SpeechVidFiles: Record<string, string>;
+    SoundFiles: Record<string, string>;
     PickupsInfo: any;
 }
 export interface CustomArtTypes {

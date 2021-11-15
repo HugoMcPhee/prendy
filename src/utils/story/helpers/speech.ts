@@ -13,15 +13,22 @@ import { clearTimeoutSafe } from "../../../utils";
 
 export function makeSpeechStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_CharacterName extends CharacterName = CharacterName
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  characterNames: readonly CharacterName[]
+  backdopStartOptions: A_BackdopOptions,
+  characterNames: readonly A_CharacterName[]
 ) {
-  const { getState, onNextTick, setState, startItemEffect, stopEffect } =
-    concepFuncs;
+  const {
+    getState,
+    onNextTick,
+    setState,
+    startItemEffect,
+    stopEffect,
+  } = concepFuncs;
 
   const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
@@ -36,8 +43,8 @@ export function makeSpeechStoryHelpers<
   type ATimeout = ReturnType<typeof setTimeout> | undefined;
 
   const showSpeechRefs = {
-    closeTimeouts: {} as Partial<Record<CharacterName, ATimeout>>,
-    waitTimeouts: {} as Partial<Record<CharacterName, ATimeout>>,
+    closeTimeouts: {} as Partial<Record<A_CharacterName, ATimeout>>,
+    waitTimeouts: {} as Partial<Record<A_CharacterName, ATimeout>>,
     zoomTimeout: undefined as ATimeout,
     shownTextBools: {} as Record<string, boolean>, // { ["hello"] : true }
     aSpeechIsShowing: false, // NOTE probably better as global state or refs
@@ -53,7 +60,7 @@ export function makeSpeechStoryHelpers<
     options?: {
       time?: number;
       showOnce?: boolean;
-      character?: SpeechBubbleName & CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
+      character?: SpeechBubbleName & A_CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
       zoomAmount?: number;
       lookAtPlayer?: boolean;
       returnToZoomBeforeConversation?: boolean; // remembers the previous zoom instead of going to the default when the convo ends
@@ -72,10 +79,12 @@ export function makeSpeechStoryHelpers<
       } = options ?? {};
 
       const { dollName } = getCharDollStuff(character);
-      const { playerCharacter, planeZoom: prevPlaneZoom } =
-        getState().global.main;
+      const {
+        playerCharacter,
+        planeZoom: prevPlaneZoom,
+      } = getState().global.main;
       const { dollName: playerDollName } = getCharDollStuff(
-        playerCharacter as CharacterName
+        playerCharacter as A_CharacterName
       );
       getTypingDelayForText(text, character as any); // NOTE at the moment CharacterName and SpeechBubbleName are the same
       const timeBasedOnText =
@@ -90,13 +99,14 @@ export function makeSpeechStoryHelpers<
       if (showOnce && showSpeechRefs.shownTextBools[text]) return;
 
       function handlePressButton() {
-        const { typingFinished, goalText } =
-          getState().speechBubbles[character];
+        const { typingFinished, goalText } = getState().speechBubbles[
+          character
+        ];
 
         if (typingFinished) {
           // reading done!
           clearTimeoutSafe(
-            showSpeechRefs.waitTimeouts[character as CharacterName]
+            showSpeechRefs.waitTimeouts[character as A_CharacterName]
           );
           whenWaitingDone();
         } else {
@@ -121,7 +131,7 @@ export function makeSpeechStoryHelpers<
       });
 
       clearTimeoutSafe(
-        showSpeechRefs.closeTimeouts[character as CharacterName]
+        showSpeechRefs.closeTimeouts[character as A_CharacterName]
       );
       clearTimeoutSafe(showSpeechRefs.zoomTimeout);
 
@@ -165,7 +175,7 @@ export function makeSpeechStoryHelpers<
 
       function whenWaitingDone() {
         stopEffect(ruleName);
-        showSpeechRefs.closeTimeouts[character as CharacterName] = setTimeout(
+        showSpeechRefs.closeTimeouts[character as A_CharacterName] = setTimeout(
           whenClosingBubble,
           SPEECH_CLOSE_DELAY
         );
@@ -176,8 +186,10 @@ export function makeSpeechStoryHelpers<
         resolve();
       }
 
-      clearTimeoutSafe(showSpeechRefs.waitTimeouts[character as CharacterName]);
-      showSpeechRefs.waitTimeouts[character as CharacterName] = setTimeout(
+      clearTimeoutSafe(
+        showSpeechRefs.waitTimeouts[character as A_CharacterName]
+      );
+      showSpeechRefs.waitTimeouts[character as A_CharacterName] = setTimeout(
         whenWaitingDone,
         editedTime
       );

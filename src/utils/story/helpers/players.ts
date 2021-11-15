@@ -16,13 +16,18 @@ import { makeCharacterStoryHelpers } from "./characters";
 
 export function makerPlayerStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
+  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
+  A_PickupName extends PickupName = PickupName
 >(
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  modelInfoByName: ModelInfoByName,
-  characterNames: readonly CharacterName[]
+  backdopStartOptions: A_BackdopOptions,
+  modelInfoByName: A_ModelInfoByName,
+  characterNames: readonly A_CharacterName[]
 ) {
   const { getRefs, getState, setState } = concepFuncs;
 
@@ -37,8 +42,8 @@ export function makerPlayerStoryHelpers<
   );
 
   type PlayerAnimationNames = {
-    walking: AnyAnimationName;
-    idle: AnyAnimationName;
+    walking: A_AnyAnimationName;
+    idle: A_AnyAnimationName;
   };
 
   async function enableMovement(canMove: boolean = true, revertDelay?: number) {
@@ -60,19 +65,20 @@ export function makerPlayerStoryHelpers<
     // TODO Hack to start at different start spot at place, could use nextSpotName or something if it's set
     let startSpotName = "spot_start" as const;
 
-    const startPosition =
-      placesRefs[nowPlaceName].spotPositions[startSpotName].clone();
+    const startPosition = placesRefs[nowPlaceName].spotPositions[
+      startSpotName
+    ].clone();
 
-    setCharPosition(playerCharacter as CharacterName, startPosition);
-    setCharRotationY(playerCharacter as CharacterName, rotationY);
+    setCharPosition(playerCharacter as A_CharacterName, startPosition);
+    setCharRotationY(playerCharacter as A_CharacterName, rotationY);
   }
 
-  function isHolding(pickupName: PickupName) {
+  function isHolding(pickupName: A_PickupName) {
     const { heldPickups } = getState().global.main;
     return heldPickups.includes(pickupName);
   }
 
-  function takePickup(pickup: PickupName, toHolding: boolean = true) {
+  function takePickup(pickup: A_PickupName, toHolding: boolean = true) {
     setGlobalState((state) => ({
       heldPickups: toHolding
         ? addItemToUniqueArray(state.heldPickups, pickup)

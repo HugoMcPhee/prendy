@@ -1,6 +1,5 @@
 import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
-import { CharacterName, DollName, PlaceInfoByName } from "../declarations";
-declare type SegmentNameFromCameraAndPlace<T_Place extends keyof PlaceInfoByName, T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+import { AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PickupName, PlaceInfoByName, PlaceName, StoryPartName, TriggerNameByPlace } from "../declarations";
 export declare function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): () => {
     storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
     storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
@@ -17,169 +16,139 @@ export declare function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConce
     camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
 };
 export declare function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): (newState: Partial<ReturnType<ConcepFuncs["getState"]>["story"]["main"]>) => void;
-export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, placeInfoByName: PlaceInfoByName, characterNames: readonly CharacterName[], dollNames: readonly DollName[]): {
-    makeCamChangeRules: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: {
-                storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-            }) => void;
-        }>;
-    }>) => {
+export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_StoryPartName extends StoryPartName = StoryPartName, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace>(concepFuncs: ConcepFuncs, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[], dollNames: readonly A_DollName[]): {
+    makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeCamLeaveRules: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: {
-                storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-            }) => void;
-        }>;
-    }>) => {
+    makeCamLeaveRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeCamSegmentRules: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: {
-                storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-            }) => string;
-        }>;
-    }>) => boolean;
-    makeOnInteractAtTrigger: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: {
-                storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-            }) => void;
-        }>;
-    }>, characterName?: CharacterName) => () => void;
-    makeOnInteractToTalk: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: {
-            storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-            storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-            globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-            chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-            storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-            nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-            nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-            placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-            nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-            placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-            placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-            camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-            camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-        }) => void;
-    }>, characterName?: CharacterName) => () => void;
-    makeOnUsePickupAtTrigger: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: Partial<{
-                [x: string]: (usefulStuff: {
-                    storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                    storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                    globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                    chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                    storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                    nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                    nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                    placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                    nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                    placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                    placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                    camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                    camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-                }) => void;
-            }>;
-        }>;
-    }>, characterName?: CharacterName) => <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
-    makeOnUsePickupGenerally: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: {
-            storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-            storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-            globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-            chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-            storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-            nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-            nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-            placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-            nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-            placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-            placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-            camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-            camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-        }) => void;
-    }>) => <T_PickupName_1 extends string>(pickupName: T_PickupName_1) => void;
-    makeOnUsePickupToTalk: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: {
-                storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-            }) => void;
-        }>;
-    }>, characterName?: CharacterName) => <T_PickupName_2 extends string>(pickupName: T_PickupName_2) => false | undefined;
+    makeCamSegmentRules: (callBacksObject: Partial<{ [P_PlaceName_1 in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"]]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => keyof A_PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"][P_CamName]; }>; }>) => boolean;
+    makeOnInteractAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_2 in A_PlaceName]: Partial<{ [P_TriggerName_1 in A_TriggerNameByPlace[P_PlaceName_2]]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>, characterName?: A_CharacterName) => () => void;
+    makeOnInteractToTalk: (callBacksObject: Partial<{ [P_DollName in A_DollName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>, characterName?: A_CharacterName) => () => void;
+    makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_3 in A_PlaceName]: Partial<{ [P_TriggerName_2 in A_TriggerNameByPlace[P_PlaceName_3]]: Partial<{ [P_PickupName in A_PickupName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>; }>, characterName?: A_CharacterName) => <T_PickupName extends A_PickupName>(pickupName: T_PickupName) => false | undefined;
+    makeOnUsePickupGenerally: (callBacksObject: Partial<{ [P_PickupName_1 in A_PickupName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>) => <T_PickupName_1 extends A_PickupName>(pickupName: T_PickupName_1) => void;
+    makeOnUsePickupToTalk: (callBacksObject: Partial<{ [P_DollName_1 in A_DollName]: Partial<{ [P_PickupName_2 in A_PickupName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>, characterName?: A_CharacterName) => <T_PickupName_2 extends A_PickupName>(pickupName: T_PickupName_2) => false | undefined;
     makePlaceLoadRules: (atStartOfEachPlace: (usefulStuff: {
         storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
         storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
@@ -194,53 +163,49 @@ export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcep
         placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
         camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
         camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-    }) => void, callBacksObject: Partial<{
-        [x: string]: (usefulStuff: {
-            storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-            storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-            globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-            chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-            storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-            nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-            nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-            placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-            nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-            placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-            placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-            camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-            camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-        }) => void;
-    }>) => {
+    }) => void, callBacksObject: Partial<{ [P_PlaceName_4 in A_PlaceName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makePlaceNotLoadedRules: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: {
-            storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-            storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-            globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-            chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-            storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-            nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-            nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-            placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-            nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-            placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-            placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-            camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-            camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-        }) => void;
-    }>) => {
+    makePlaceNotLoadedRules: (callBacksObject: Partial<{ [P_PlaceName_4 in A_PlaceName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeStoryPartRules: (callBacksObject: Partial<Record<string, (usefulStuff: {
+    makeStoryPartRules: (callBacksObject: Partial<Record<A_StoryPartName, (usefulStuff: {
         storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
         storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
         globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
@@ -261,24 +226,22 @@ export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcep
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeTouchRules: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: {
-            storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-            storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-            globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-            chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-            storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-            nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-            nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-            placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-            nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-            placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-            placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-            camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-            camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-        }) => void;
-    }>, options?: {
-        characterName?: string | undefined;
+    makeTouchRules: (callBacksObject: Partial<{ [P_DollName_2 in A_DollName]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>, options?: {
+        characterName?: A_CharacterName | undefined;
         distanceType?: "touch" | "talk" | undefined;
         whenLeave?: boolean | undefined;
     } | undefined) => {
@@ -288,26 +251,22 @@ export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcep
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeTriggerRules: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: {
-                storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
-                storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
-                globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
-                chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
-                storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
-                nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
-                nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
-                placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
-                nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
-                placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
-                placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
-                camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
-                camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
-            }) => void;
-        }>;
-    }>, options?: {
-        characterName?: string | undefined;
+    makeTriggerRules: (callBacksObject: Partial<{ [P_PlaceName_5 in A_PlaceName]: Partial<{ [P_TriggerName_3 in A_TriggerNameByPlace[P_PlaceName_5]]: (usefulStuff: {
+        storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
+        storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
+        globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
+        chapterName: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["chapterName"];
+        storyPart: ReturnType<ConcepFuncs["getState"]>["story"]["main"]["storyPart"];
+        nowSegmentName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowSegmentName"];
+        nowPlaceName: ReturnType<ConcepFuncs["getState"]>["global"]["main"]["nowPlaceName"];
+        placeState: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]];
+        nowCamName: ReturnType<ConcepFuncs["getState"]>["places"][keyof ReturnType<ConcepFuncs["getState"]>["places"]]["nowCamName"];
+        placesRefs: ReturnType<ConcepFuncs["getRefs"]>["places"];
+        placeRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]];
+        camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
+        camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
+    }) => void; }>; }>, options?: {
+        characterName?: A_CharacterName | undefined;
         whenLeave?: boolean | undefined;
     } | undefined) => {
         stopAll: (...args: any) => any;
@@ -317,4 +276,3 @@ export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcep
         ruleNames: any[];
     };
 };
-export {};

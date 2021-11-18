@@ -5,6 +5,15 @@ TODO
 - fix jump button not handling holding on andorid and ios
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
+- maybe remove setFirstCharacterPosition (theres also setDollToSpot)
+- makeAllStoryRuleMakers with BACKDOP_ART ?
+- setCamera type not limited to place
+
+v0.7.3
+
+- fixes changing camera depth
+- fixes player moving while movement's paused
+- fixes alarm text not working
 
 v0.7.2
 

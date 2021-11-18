@@ -172,6 +172,8 @@ export function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepFuncs>(
       );
     }
 
+    (globalRefs.depthRenderer as any)._camera = newCamRef.camera;
+
     // const depthRenderer = globalRefs.depthRenderer as DepthRendererWithSize;
     // depthRenderer.useOnlyInActiveCamera = true;
     // globalRefs.depthRenderTarget?.dispose();

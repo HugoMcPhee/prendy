@@ -175,8 +175,13 @@ export function makeDollRules<
     backdopStartOptions
   );
 
-  const { makeRules, getPreviousState, getState, setState, getRefs } =
-    concepFuncs;
+  const {
+    makeRules,
+    getPreviousState,
+    getState,
+    setState,
+    getRefs,
+  } = concepFuncs;
 
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
 
@@ -407,8 +412,13 @@ export function makeDollRules<
 
         if (itemRefs.checkCollisions) {
           const newMeshPosition = point3dToVector3(newPosition);
-          const { editedPosition, positionWasEdited } =
-            setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
+          const {
+            editedPosition,
+            positionWasEdited,
+          } = setGlobalPositionWithCollisions(
+            itemRefs.meshRef,
+            newMeshPosition
+          );
 
           // if a collision cauhed the mesh to not reach the position, update the position state
           if (positionWasEdited) {
@@ -494,8 +504,9 @@ export function makeDollRules<
             }
 
             // FIXME type?
-            (newQuickDistancesMap as any)[dollName]![otherDollName] =
-              quickDistance;
+            (newQuickDistancesMap as any)[dollName]![
+              otherDollName
+            ] = quickDistance;
 
             tempNewDollsState[dollName]!.inRange![otherDollName].touch =
               quickDistance < rangeOptionsQuick.touch;

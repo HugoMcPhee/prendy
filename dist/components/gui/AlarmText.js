@@ -3,8 +3,8 @@ import React from "react";
 export function makeAlarmText(concepFuncs) {
     const { useStore } = concepFuncs;
     return function AlarmText(_props) {
-        const { alarmText, alarmTextIsVisible } = useStore(({ story: { main } }) => main, {
-            type: "story",
+        const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
+            type: "global",
             name: "main",
             prop: ["alarmText", "alarmTextIsVisible"],
         });

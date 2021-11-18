@@ -81,6 +81,7 @@ export function makeCameraChangeUtils(concepFuncs, backdopArt) {
         if (!globalRefs.depthRenderer) {
             globalRefs.depthRenderer = enableCustomDepthRenderer(scenes.main, getRefs().global.main.depthRenderSize, newCamRef.camera, false);
         }
+        globalRefs.depthRenderer._camera = newCamRef.camera;
         // const depthRenderer = globalRefs.depthRenderer as DepthRendererWithSize;
         // depthRenderer.useOnlyInActiveCamera = true;
         // globalRefs.depthRenderTarget?.dispose();

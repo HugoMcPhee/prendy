@@ -261,6 +261,16 @@ export function makePlayerRules<
         if (playerMovingPaused) {
           dollRefs.positionMoverRefs.velocity.x = 0;
           dollRefs.positionMoverRefs.velocity.z = 0;
+
+          setState({
+            dolls: {
+              [dollName]: {
+                nowAnimation: newAnimationName,
+              },
+            },
+            players: { main: { lastSafeInputAngle: null } },
+          });
+
           return;
         }
 

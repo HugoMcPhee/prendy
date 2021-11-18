@@ -193,6 +193,14 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt) {
                 if (playerMovingPaused) {
                     dollRefs.positionMoverRefs.velocity.x = 0;
                     dollRefs.positionMoverRefs.velocity.z = 0;
+                    setState({
+                        dolls: {
+                            [dollName]: {
+                                nowAnimation: newAnimationName,
+                            },
+                        },
+                        players: { main: { lastSafeInputAngle: null } },
+                    });
                     return;
                 }
                 setState({

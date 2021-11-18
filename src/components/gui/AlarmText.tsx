@@ -11,9 +11,9 @@ export function makeAlarmText<ConcepFuncs extends BackdopConcepFuncs>(
 
   return function AlarmText(_props: Props) {
     const { alarmText, alarmTextIsVisible } = useStore(
-      ({ story: { main } }) => main,
+      ({ global: { main } }) => main,
       {
-        type: "story",
+        type: "global",
         name: "main",
         prop: ["alarmText", "alarmTextIsVisible"],
       }

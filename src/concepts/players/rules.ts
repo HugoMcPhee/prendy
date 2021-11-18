@@ -115,14 +115,12 @@ export function makePlayerRules<
 
     //
     whenJumpPressed: addItemEffect({
-      onItemEffect({
-        newValue: inputVelocity,
-        itemState: playerState,
-        itemRefs: playerRefs,
-        frameDuration,
-      }) {
-        const { playerCharacter, playerMovingPaused, gravityValue } =
-          getState().global.main;
+      onItemEffect({ itemState: playerState, frameDuration }) {
+        const {
+          playerCharacter,
+          playerMovingPaused,
+          gravityValue,
+        } = getState().global.main;
         const { timerSpeed } = globalRefs;
         const { dollRefs, dollState, dollName } =
           getCharDollStuff(playerCharacter as CharacterName) ?? {};
@@ -167,8 +165,11 @@ export function makePlayerRules<
         itemState: playerState,
         itemRefs: playerRefs,
       }) {
-        const { playerCharacter, playerMovingPaused, gravityValue } =
-          getState().global.main;
+        const {
+          playerCharacter,
+          playerMovingPaused,
+          gravityValue,
+        } = getState().global.main;
         const { timerSpeed } = globalRefs;
         const { dollRefs, dollState, dollName } =
           getCharDollStuff(playerCharacter as CharacterName) ?? {};
@@ -257,6 +258,12 @@ export function makePlayerRules<
 
         if (!playerMovingPaused) newPositionMoveMode = "push";
 
+        if (playerMovingPaused) {
+          dollRefs.positionMoverRefs.velocity.x = 0;
+          dollRefs.positionMoverRefs.velocity.z = 0;
+          return;
+        }
+
         setState({
           dolls: {
             [dollName]: {
@@ -283,8 +290,10 @@ export function makePlayerRules<
       onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
         playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
-          const { virtualControlsPressTime, virtualControlsReleaseTime } =
-            getState().players[playerName];
+          const {
+            virtualControlsPressTime,
+            virtualControlsReleaseTime,
+          } = getState().players[playerName];
           if (virtualControlsReleaseTime > virtualControlsPressTime) return;
           setState({
             players: { [playerName]: { canShowVirtualButtons: true } },
@@ -299,8 +308,10 @@ export function makePlayerRules<
       onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
         playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
-          const { virtualControlsPressTime, virtualControlsReleaseTime } =
-            getState().players[playerName];
+          const {
+            virtualControlsPressTime,
+            virtualControlsReleaseTime,
+          } = getState().players[playerName];
           if (virtualControlsPressTime > virtualControlsReleaseTime) return;
           setState({
             players: { [playerName]: { canShowVirtualButtons: false } },

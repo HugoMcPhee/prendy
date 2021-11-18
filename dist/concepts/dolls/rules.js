@@ -88,7 +88,7 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
     const { modelInfoByName, dollNames } = backdopArt;
     const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs } = concepFuncs;
+    const { makeRules, getPreviousState, getState, setState, getRefs, } = concepFuncs;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
     return makeRules((addItemEffect, addEffect) => ({
         // --------------------------------
@@ -289,7 +289,7 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
                 // }
                 if (itemRefs.checkCollisions) {
                     const newMeshPosition = point3dToVector3(newPosition);
-                    const { editedPosition, positionWasEdited } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
+                    const { editedPosition, positionWasEdited, } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
                     // if a collision cauhed the mesh to not reach the position, update the position state
                     if (positionWasEdited) {
                         setState(() => ({
@@ -358,8 +358,7 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
                             quickDistance = getQuickDistanceBetweenDolls(dollName, otherDollName);
                         }
                         // FIXME type?
-                        newQuickDistancesMap[dollName][otherDollName] =
-                            quickDistance;
+                        newQuickDistancesMap[dollName][otherDollName] = quickDistance;
                         tempNewDollsState[dollName].inRange[otherDollName].touch =
                             quickDistance < rangeOptionsQuick.touch;
                         tempNewDollsState[dollName].inRange[otherDollName].talk =

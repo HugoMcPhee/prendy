@@ -11,6 +11,22 @@ import {
 import { BackdopOptions, CharacterName } from "../../../declarations";
 import { clearTimeoutSafe } from "../../../utils";
 
+type ATimeout = ReturnType<typeof setTimeout> | undefined;
+
+type CharacterNameUntyped = string;
+
+const showSpeechRefs = {
+  closeTimeouts: {} as Partial<Record<CharacterNameUntyped, ATimeout>>,
+  waitTimeouts: {} as Partial<Record<CharacterNameUntyped, ATimeout>>,
+  zoomTimeout: undefined as ATimeout,
+  shownTextBools: {} as Record<string, boolean>, // { ["hello"] : true }
+  aSpeechIsShowing: false, // NOTE probably better as global state or refs
+  originalZoomAmount: 1,
+};
+const showMiniBubbleRefs = {
+  closeTimeout: null as ReturnType<typeof setTimeout> | null, // TODO might need to have it per character if other characts have mini bubbles
+};
+
 export function makeSpeechStoryHelpers<
   ConcepFuncs extends BackdopConcepFuncs,
   BackdopConcepts extends PlaceholderBackdopConcepts,
@@ -20,7 +36,7 @@ export function makeSpeechStoryHelpers<
   concepFuncs: ConcepFuncs,
   backdopConcepts: BackdopConcepts,
   backdopStartOptions: A_BackdopOptions,
-  characterNames: readonly A_CharacterName[]
+  _characterNames: readonly A_CharacterName[]
 ) {
   const {
     getState,
@@ -32,7 +48,7 @@ export function makeSpeechStoryHelpers<
 
   const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(concepFuncs);
   const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(
     concepFuncs,
     backdopConcepts
@@ -40,19 +56,8 @@ export function makeSpeechStoryHelpers<
 
   type SpeechBubbleName = keyof BackdopConcepts["speechBubbles"]["startStates"];
 
-  type ATimeout = ReturnType<typeof setTimeout> | undefined;
-
-  const showSpeechRefs = {
-    closeTimeouts: {} as Partial<Record<A_CharacterName, ATimeout>>,
-    waitTimeouts: {} as Partial<Record<A_CharacterName, ATimeout>>,
-    zoomTimeout: undefined as ATimeout,
-    shownTextBools: {} as Record<string, boolean>, // { ["hello"] : true }
-    aSpeechIsShowing: false, // NOTE probably better as global state or refs
-    originalZoomAmount: 1,
-  };
-
   const SPEECH_ZOOM_AMOUNT = 1.2;
-  const SPEECH_CLOSE_DELAY = 400; // close if no more messages from the character after 1this time
+  const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
   const MIN_AUTO_SPEECH_TIME = 1500;
 
   async function showSpeech(
@@ -68,71 +73,57 @@ export function makeSpeechStoryHelpers<
     }
   ) {
     return new Promise<void>((resolve, _reject) => {
+      const { planeZoom: prevPlaneZoom } = getGlobalState();
+      const playerCharacter = getGlobalState()
+        .playerCharacter as A_CharacterName;
       const {
-        // time = 2600,
-        time,
+        time, // time = 2600,
         showOnce = false,
-        character = characterNames[0],
+        character = playerCharacter,
         zoomAmount = SPEECH_ZOOM_AMOUNT,
         returnToZoomBeforeConversation = false,
         stylesBySpecialText,
       } = options ?? {};
+      console.log("-----------------------------");
+      console.log("zoomAmount", zoomAmount);
+      console.log("-----------------------------");
 
       const { dollName } = getCharDollStuff(character);
-      const {
-        playerCharacter,
-        planeZoom: prevPlaneZoom,
-      } = getState().global.main;
-      const { dollName: playerDollName } = getCharDollStuff(
-        playerCharacter as A_CharacterName
-      );
-      getTypingDelayForText(text, character as any); // NOTE at the moment CharacterName and SpeechBubbleName are the same
+      const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
+
+      // NOTE at the moment CharacterName and SpeechBubbleName are the same
       const timeBasedOnText =
         MIN_AUTO_SPEECH_TIME +
-        getTypingDelayForText(
-          text,
-          character as any // NOTE at the moment CharacterName and SpeechBubbleName are the same
-        ) *
-          2;
-      const editedTime = time ?? timeBasedOnText;
+        getTypingDelayForText(text, character as any) * 2;
+      const waitTime = time ?? timeBasedOnText;
 
       if (showOnce && showSpeechRefs.shownTextBools[text]) return;
 
       function handlePressButton() {
-        const { typingFinished, goalText } = getState().speechBubbles[
-          character
-        ];
+        const speechBubbleState = getState().speechBubbles[character];
+        const { typingFinished, goalText } = speechBubbleState;
 
-        if (typingFinished) {
-          // reading done!
-          clearTimeoutSafe(
-            showSpeechRefs.waitTimeouts[character as A_CharacterName]
-          );
-          whenWaitingDone();
-        } else {
-          // finish writing!
+        if (!typingFinished) {
+          // typeing done!
           setState({
             speechBubbles: {
               [character]: { visibleLetterAmount: length(goalText) },
             },
           });
-        }
+          // reading done!
+        } else whenWaitingDone();
       }
       const ruleName = "showSpeech_handlePressButton" + Math.random();
+      // on next tick so it doesnt react to the first press that shows the speech bubble
       onNextTick(() => {
-        // on next tick so it doesnt react to the first press that shows the speech bubble
         startItemEffect({
           name: ruleName,
-          onItemEffect() {
-            handlePressButton();
-          },
+          onItemEffect: handlePressButton,
           check: { type: "players", prop: "interactButtonPressTime" },
         });
       });
 
-      clearTimeoutSafe(
-        showSpeechRefs.closeTimeouts[character as A_CharacterName]
-      );
+      clearTimeoutSafe(showSpeechRefs.closeTimeouts[character]);
       clearTimeoutSafe(showSpeechRefs.zoomTimeout);
 
       if (!showSpeechRefs.aSpeechIsShowing) {
@@ -144,18 +135,22 @@ export function makeSpeechStoryHelpers<
         showSpeechRefs.originalZoomAmount * zoomAmount,
         backdopStartOptions.zoomLevels.max
       );
-
-      setState({
-        speechBubbles: {
-          [character]: {
-            isVisible: true,
-            goalText: text,
-            stylesBySpecialText,
+      onNextTick(() => {
+        setState({
+          speechBubbles: {
+            [character]: {
+              isVisible: true,
+              goalText: text,
+              stylesBySpecialText,
+            },
           },
-        },
-        global: {
-          main: { focusedDoll: dollName, planeZoomGoal: newPlaneZoom },
-        },
+          global: {
+            main: {
+              focusedDoll: dollName,
+              planeZoomGoal: newPlaneZoom + Math.random() * 0.001,
+            },
+          },
+        });
       });
       showSpeechRefs.shownTextBools[text] = true;
 
@@ -163,10 +158,20 @@ export function makeSpeechStoryHelpers<
         setState({ speechBubbles: { [character]: { isVisible: false } } });
       }
 
-      function whenRessettingBubble() {
+      function whenResettingBubbleFocus() {
+        console.log("---------------------------");
+        console.log("whenResettingBubbleFocus");
+
         showSpeechRefs.aSpeechIsShowing = false;
+
+        const currentFocusedDoll = getGlobalState().focusedDoll;
+        const isFocusedOnTalkingCharacter = currentFocusedDoll === dollName;
+
+        // NOTE safer to use the setState((state)=> {}) callback to check the current focused doll
         setGlobalState({
-          focusedDoll: playerDollName,
+          focusedDoll: isFocusedOnTalkingCharacter
+            ? playerDollName
+            : currentFocusedDoll,
           planeZoomGoal: returnToZoomBeforeConversation
             ? showSpeechRefs.originalZoomAmount
             : backdopStartOptions.zoomLevels.default,
@@ -175,30 +180,28 @@ export function makeSpeechStoryHelpers<
 
       function whenWaitingDone() {
         stopEffect(ruleName);
-        showSpeechRefs.closeTimeouts[character as A_CharacterName] = setTimeout(
+        clearTimeoutSafe(showSpeechRefs.waitTimeouts[character]);
+        clearTimeoutSafe(showSpeechRefs.closeTimeouts[character]);
+        clearTimeoutSafe(showSpeechRefs.zoomTimeout);
+        showSpeechRefs.closeTimeouts[character] = setTimeout(
           whenClosingBubble,
           SPEECH_CLOSE_DELAY
         );
         showSpeechRefs.zoomTimeout = setTimeout(
-          whenRessettingBubble,
+          whenResettingBubbleFocus,
           SPEECH_CLOSE_DELAY
         );
         resolve();
       }
 
-      clearTimeoutSafe(
-        showSpeechRefs.waitTimeouts[character as A_CharacterName]
-      );
-      showSpeechRefs.waitTimeouts[character as A_CharacterName] = setTimeout(
+      clearTimeoutSafe(showSpeechRefs.waitTimeouts[character]);
+      showSpeechRefs.waitTimeouts[character] = setTimeout(
         whenWaitingDone,
-        editedTime
+        waitTime
       );
     });
   }
 
-  const showMiniBubbleRefs = {
-    closeTimeout: null as ReturnType<typeof setTimeout> | null, // TODO might need to have it per character if other characts have mini bubbles
-  };
   function showMiniBubble(text: string, time: number = 100000) {
     setState({ miniBubbles: { walkerMiniBubble: { isVisible: true, text } } });
     // 10 second timeout incase the hideMiniBubble() didn't run from leaving a trigger

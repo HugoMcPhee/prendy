@@ -9,7 +9,14 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
-v0.7.3
+v0.7.5
+
+- fixes setting player start position for new place (doesn't collide with walls)
+- and removes setPlayerToStartSpot and setFirstPlayerPosition heleprs/utils and
+- fixes speech bubble text fading out then hidden, and not always zoomign and more
+- allows walking up slightly steeper slopes /
+
+v0.7.4
 
 - fixes changing camera depth
 - fixes player moving while movement's paused

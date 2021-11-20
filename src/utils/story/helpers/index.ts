@@ -128,13 +128,12 @@ export function makeBackdopStoryHelpers<
     A_ModelName,
     A_PlaceName,
     A_SpotNameByPlace
-  >(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
+  >(concepFuncs, backdopStartOptions, modelInfoByName);
 
   const {
     enableMovement,
     isHolding,
     setPlayerAnimations,
-    setPlayerToStartSpot,
     takePickup,
   } = makerPlayerStoryHelpers<
     ConcepFuncs,
@@ -222,7 +221,6 @@ export function makeBackdopStoryHelpers<
     enableMovement,
     isHolding,
     setPlayerAnimations,
-    setPlayerToStartSpot,
     takePickup,
     // scene
     goToNewPlace,

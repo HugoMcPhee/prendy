@@ -47,9 +47,8 @@ export function makeBackdopApp<
     backdopArt
   );
 
-  const LoadingModels = makeLoadingModels<ConcepFuncs, BackdopConcepts>(
+  const LoadingModels = makeLoadingModels(
     concepFuncs,
-    backdopConcepts,
     backdopStartOptions,
     backdopArt
   );

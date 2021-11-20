@@ -12,6 +12,7 @@ import {
   StoryPartName,
   TriggerNameByPlace,
 } from "../declarations";
+import { makeDollStoryHelpers } from "../utils/story/helpers/dolls";
 
 // export each of the rule makers stuff from here :)
 

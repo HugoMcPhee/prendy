@@ -37,7 +37,6 @@ export declare function makeBackdopStoryHelpers<ConcepFuncs extends BackdopConce
         walking: A_AnyAnimationName;
         idle: A_AnyAnimationName;
     }) => void;
-    setPlayerToStartSpot: () => void;
     takePickup: (pickup: A_PickupName, toHolding?: boolean) => void;
     goToNewPlace: <T_PlaceName_2 extends A_PlaceName>(toOption: {
         toPlace: T_PlaceName_2;

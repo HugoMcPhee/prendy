@@ -409,7 +409,7 @@ export function makePlayerRules<
             /*mesh*/ meshRef,
             /*direction*/ new Vector3(0, -0.995, 0),
             /*relativeOrigin*/ new Vector3(0, -1, 0),
-            /*length*/ 0.3 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan
+            /*length*/ 0.33 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
           );
 
           const pick = scene.pickWithRay(

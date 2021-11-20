@@ -14,7 +14,7 @@ export const speechBubbleStyles = `
 .SpeechBubble-hiddenLetter {
   opacity: 0;
   transform: scale(0.5);
-  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: opacity 0s ease-in-out, transform 0s ease-in-out;
   will-change: opacity, transform;
   margin-top: -8px;
   margin-bottom: -8px;

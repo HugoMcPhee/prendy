@@ -26,7 +26,7 @@ export function makeBackdopStoryUtils<
   A_CharacterName extends CharacterName = CharacterName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_DollName extends DollName = DollName
->(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
+>(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts) {
   const {
     get2DAngleBetweenCharacters,
     get2DAngleFromCharacterToSpot,
@@ -40,7 +40,7 @@ export function makeBackdopStoryUtils<
     ConcepFuncs,
     BackdopConcepts,
     A_DollName
-  >(concepFuncs, backdopConcepts);
+  >(concepFuncs);
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,

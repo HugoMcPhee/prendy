@@ -15,4 +15,3 @@ export declare function makeOtherUsefulBackdopUtils<ConcepFuncs extends BackdopC
     getEngine: () => import("@babylonjs/core").Engine | null;
 };
 export * from "./declarations";
-export { CharacterName } from "./declarations";

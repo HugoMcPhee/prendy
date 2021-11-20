@@ -2,6 +2,8 @@ import { Texture } from "@babylonjs/core";
 import { forEach } from "shutils/dist/loops";
 import { CustomVideoTexture } from "../../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeDollStoryHelpers } from "../../../utils/story/helpers/dolls";
+import { makeGetCharDollStuff } from "../../characters/utils";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
@@ -10,9 +12,24 @@ export function makeGlobalChangePlaceRules(concepFuncs, _backdopConcepts, backdo
     const { placeInfoByName } = backdopArt;
     const globalRefs = getRefs().global.main;
     const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeCameraChangeUtils(concepFuncs, backdopArt);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, backdopArt);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+    const { setDollToSpot } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, backdopArt.modelInfoByName);
+    function setPlayerPositionForNewPlace() {
+        const { nowPlaceName, playerCharacter } = getState().global.main;
+        const { dollName } = getCharDollStuff(playerCharacter);
+        const placeInfo = placeInfoByName[nowPlaceName];
+        const { spotNames } = placeInfo;
+        const { nextSpotName } = getState().dolls[dollName];
+        const newSpotName = nextSpotName || spotNames[0];
+        setDollToSpot({
+            doll: dollName,
+            place: nowPlaceName,
+            spot: newSpotName,
+        });
+    }
     function whenAllVideosLoadedForPlace() {
         var _a;
         const { nowPlaceName } = getState().global.main;
@@ -115,16 +132,6 @@ export function makeGlobalChangePlaceRules(concepFuncs, _backdopConcepts, backdo
                 });
                 if (newPlaceLoaded && allModelsAreLoaded) {
                     onNextTick(() => {
-                        // onNextTick because sometimes the character position was starting incorrect
-                        // (maybe because the place-load story-rules werent reacting because it was the wrong flow)
-                        setGlobalState({ isLoadingBetweenPlaces: false });
-                        onNextTick(() => {
-                            updateNowStuffWhenSectionChanged();
-                            // when a new place loads it handles checking and clearing nextSegmentNameWhenVidPlays  nextCamNameWhenVidPlays
-                            // otheriwse the video wont loop because it thinks its waiting for a section to change
-                            // its set to run when a vid starts playing, but its missing it , maybe because the new vid playing property is updating before theres a wanted next cam etc,
-                            //or maybe to do with the flow order
-                        });
                         if (wantedSegmentWhenNextPlaceLoads) {
                             setGlobalState({
                                 wantedSegmentWhenNextPlaceLoads: null,
@@ -141,7 +148,16 @@ export function makeGlobalChangePlaceRules(concepFuncs, _backdopConcepts, backdo
                                 },
                             });
                         }
+                        setPlayerPositionForNewPlace();
+                        // onNextTick because sometimes the character position was starting incorrect
+                        // (maybe because the place-load story-rules werent reacting because it was the wrong flow)
+                        setGlobalState({ isLoadingBetweenPlaces: false });
                         onNextTick(() => {
+                            // when a new place loads it handles checking and clearing nextSegmentNameWhenVidPlays  nextCamNameWhenVidPlays
+                            // otheriwse the video wont loop because it thinks its waiting for a section to change
+                            // its set to run when a vid starts playing, but its missing it , maybe because the new vid playing property is updating before theres a wanted next cam etc,
+                            //or maybe to do with the flow order
+                            updateNowStuffWhenSectionChanged();
                             whenAllVideosLoadedForPlace();
                         });
                     });

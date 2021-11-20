@@ -24,7 +24,7 @@ export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions
     const { getRefs, onNextTick, setState } = concepFuncs;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
     const ScreenGuiDom = makeScreenGui(concepFuncs, backdopStartOptions, backdopArt);
-    const LoadingModels = makeLoadingModels(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
+    const LoadingModels = makeLoadingModels(concepFuncs, backdopStartOptions, backdopArt);
     const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
     // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
     //   "city",

@@ -1,9 +1,7 @@
 // import React from "react";
 import { AssetsManager, TargetCamera } from "@babylonjs/core";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { forEach } from "shutils/dist/loops";
-import { vector3ToPoint3d } from "..";
+import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 export function testAppendVideo(theVideo, id, elementTag = "app") {
     var _a;
@@ -16,8 +14,7 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
 export function makeUsePlaceUtils(concepFuncs, backdopArt) {
     const { getRefs, getState, setState } = concepFuncs;
     const { placeInfoByName } = backdopArt;
-    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+    const { doWhenSectionVidPlayingAsync, getSectionForPlace, } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const placesRefs = getRefs().places;
     async function loadVideoBlob(filepath) {
@@ -36,24 +33,8 @@ export function makeUsePlaceUtils(concepFuncs, backdopArt) {
     //   videoElement.preload = "auto"; // prevent first frame blank when playing
     //   return videoElement;
     // }
-    function setFirstCharacterPosition({ characterName, placeName, }) {
-        var _a;
-        const { nowPlaceName } = getState().global.main;
-        const { dollRefs, dollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};
-        if (!(dollRefs === null || dollRefs === void 0 ? void 0 : dollRefs.meshRef) || !dollName)
-            return;
-        const placeInfo = placeInfoByName[placeName];
-        const { spotNames } = placeInfo;
-        const { nextSpotName } = getState().dolls[dollName];
-        const nowPlaceRef = placesRefs[nowPlaceName];
-        const newSpotName = nextSpotName || spotNames[0];
-        const newSpotPosition = nowPlaceRef.spotPositions[newSpotName].clone();
-        const newSpotPoint = vector3ToPoint3d(newSpotPosition);
-        dollRefs.meshRef.position = newSpotPosition;
-        setState({ dolls: { [dollName]: { position: newSpotPoint } } });
-    }
     async function loadNowVideosForPlace() {
-        const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
+        const { nowPlaceName, nowSegmentName, wantedSegmentName, } = getState().global.main;
         const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
         const wantedSection = getSectionForPlace(nowPlaceName, (wantedCamName !== null && wantedCamName !== void 0 ? wantedCamName : nowCamName), (wantedSegmentName !== null && wantedSegmentName !== void 0 ? wantedSegmentName : nowSegmentName));
         setState({
@@ -96,7 +77,6 @@ export function makeUsePlaceUtils(concepFuncs, backdopArt) {
     }
     return {
         loadVideoBlob,
-        setFirstCharacterPosition,
         testAppendVideo,
         loadNowVideosForPlace,
         loadProbeImagesForPlace,

@@ -8,7 +8,7 @@ export function makeDollStoryUtils<
   ConcepFuncs extends BackdopConcepFuncs,
   BackdopConcepts extends PlaceholderBackdopConcepts,
   A_DollName extends DollName = DollName
->(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts) {
+>(concepFuncs: ConcepFuncs) {
   const { getState } = concepFuncs;
   // const { getState, startItemEffect } = concepFuncs;
   // const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);

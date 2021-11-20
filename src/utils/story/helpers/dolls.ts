@@ -39,7 +39,7 @@ export function makeDollStoryHelpers<
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
+  // backdopConcepts: BackdopConcepts,
   backdopStartOptions: A_BackdopOptions,
   modelInfoByName: A_ModelInfoByName
 ) {
@@ -67,10 +67,11 @@ export function makeDollStoryHelpers<
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  const { getModelNameFromDoll } = makeDollStoryUtils(
-    concepFuncs,
-    backdopConcepts
-  );
+  const { getModelNameFromDoll } = makeDollStoryUtils<
+    ConcepFuncs,
+    BackdopConcepts,
+    A_DollName
+  >(concepFuncs);
 
   const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
 

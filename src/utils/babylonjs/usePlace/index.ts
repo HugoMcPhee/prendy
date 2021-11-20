@@ -6,18 +6,25 @@ import {
   AnyCameraName,
   BackdopArt,
   BackdopOptions,
+  ModelInfoByName,
   PlaceName,
   SoundName,
 } from "../../..//declarations";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import {
+  BackdopConcepFuncs,
+  PlaceholderBackdopConcepts,
+} from "../../../concepts/typedConcepFuncs";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
 
 export function makeUsePlace<
-  ConcepFuncs extends BackdopConcepFuncs
+  ConcepFuncs extends BackdopConcepFuncs,
+  BackdopConcepts extends PlaceholderBackdopConcepts,
+  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
   // BackdopOptions extends BackdopOptionsUntyped,
   // PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   // PlaceName extends string,
@@ -30,7 +37,7 @@ export function makeUsePlace<
   // SegmentNameByPlace extends Record<PlaceName, string>
 >(
   concepFuncs: ConcepFuncs,
-  backdopStartOptions: BackdopOptions,
+  backdopStartOptions: A_BackdopOptions,
   backdopArt: BackdopArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
@@ -68,8 +75,9 @@ export function makeUsePlace<
       wallNames,
     } = placeInfo;
 
-    const { container, meshes, cameras, transformNodes } =
-      useModelFile<any>(modelFile);
+    const { container, meshes, cameras, transformNodes } = useModelFile<any>(
+      modelFile
+    );
 
     useEffect(() => {
       // this runs after useModelFile finished
@@ -186,7 +194,7 @@ export function makeUsePlace<
 
       // const { characterNamesLoaded } = getState().global.main;
       // forEach(characterNamesLoaded, (charName) => {
-      //   setFirstCharacterPosition({ characterName: charName, placeName });
+      //   setFirstPlayerPosition({ characterName: charName, placeName });
       // });
 
       return () => {

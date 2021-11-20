@@ -1,4 +1,5 @@
 import { Scene } from "@babylonjs/core";
+import { clearTimeoutSafe } from "../../../utils";
 import { breakableForEach, forEach } from "shutils/dist/loops";
 import { BackdopConcepFuncs } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
@@ -66,14 +67,10 @@ export function makeGlobalGeneralRules<ConcepFuncs extends BackdopConcepFuncs>(
           global: { main: { aSpeechBubbleIsShowing: aBubbleIsShowing } },
         });
         if (aBubbleIsShowing) {
-          if (globalRefs.aConvoIsHappening_timeout !== null) {
-            clearTimeout(globalRefs.aConvoIsHappening_timeout);
-          }
+          clearTimeoutSafe(globalRefs.aConvoIsHappening_timeout);
           setGlobalState({ aConvoIsHappening: true });
         } else {
-          if (globalRefs.aConvoIsHappening_timeout !== null) {
-            clearTimeout(globalRefs.aConvoIsHappening_timeout);
-          }
+          clearTimeoutSafe(globalRefs.aConvoIsHappening_timeout);
           globalRefs.aConvoIsHappening_timeout = setTimeout(() => {
             setGlobalState({ aConvoIsHappening: false });
             globalRefs.aConvoIsHappening_timeout = null;

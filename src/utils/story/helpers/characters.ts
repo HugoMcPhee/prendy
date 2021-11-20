@@ -63,12 +63,7 @@ export function makeCharacterStoryHelpers<
     setDollRotationY,
     springAddToDollRotationY,
     springDollRotationY,
-  } = makeDollStoryHelpers(
-    concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    modelInfoByName
-  );
+  } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, modelInfoByName);
 
   function setCharAnimation<T_Character extends A_CharacterName>(
     character: T_Character,

@@ -1,4 +1,6 @@
 import { BackdopOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./concepts/typedConcepFuncs";
+declare const _default: "default";
+export default _default;
 export interface ArtTypesUntyped {
     BackdopOptions: BackdopOptionsUntyped;
     PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;

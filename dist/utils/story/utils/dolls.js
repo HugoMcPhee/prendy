@@ -1,4 +1,4 @@
-export function makeDollStoryUtils(concepFuncs, _backdopConcepts) {
+export function makeDollStoryUtils(concepFuncs) {
     const { getState } = concepFuncs;
     function getModelNameFromDoll(dollName) {
         return getState().dolls[dollName].modelName;

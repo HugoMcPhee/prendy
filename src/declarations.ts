@@ -5,6 +5,8 @@ import {
   PlaceInfoByNamePlaceholder,
 } from "./concepts/typedConcepFuncs";
 
+export default "default";
+
 export interface ArtTypesUntyped {
   BackdopOptions: BackdopOptionsUntyped;
   PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;

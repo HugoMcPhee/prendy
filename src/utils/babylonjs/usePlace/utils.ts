@@ -1,24 +1,15 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
-import {
-  BackdopConcepFuncs,
-  PlaceInfoByNamePlaceholder,
-} from "../../../concepts/typedConcepFuncs";
 import { forEach } from "shutils/dist/loops";
-import { vector3ToPoint3d } from "..";
-import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
+import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
+import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
   BackdopArt,
-  PlaceInfoByName,
-  PlaceName,
-  DollName,
-  CharacterName,
-  AnyCameraName,
   CameraNameByPlace,
+  PlaceName,
   SegmentNameByPlace,
 } from "../../../declarations";
+import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 
 export function testAppendVideo(
   theVideo: HTMLVideoElement,
@@ -39,10 +30,11 @@ export function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(
   const { getRefs, getState, setState } = concepFuncs;
   const { placeInfoByName } = backdopArt;
 
-  const { doWhenSectionVidPlayingAsync, getSectionForPlace } =
-    makeSectionVidStoreUtils(concepFuncs, backdopArt);
+  const {
+    doWhenSectionVidPlayingAsync,
+    getSectionForPlace,
+  } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 
   const placesRefs = getRefs().places;
@@ -66,33 +58,12 @@ export function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(
   //   return videoElement;
   // }
 
-  function setFirstCharacterPosition({
-    characterName,
-    placeName,
-  }: {
-    characterName: CharacterName;
-    placeName: PlaceName;
-  }) {
-    const { nowPlaceName } = getState().global.main;
-    const { dollRefs, dollName } = getCharDollStuff(characterName) ?? {};
-    if (!dollRefs?.meshRef || !dollName) return;
-    const placeInfo = placeInfoByName[placeName];
-    const { spotNames } = placeInfo;
-    const { nextSpotName } = getState().dolls[dollName];
-    const nowPlaceRef = placesRefs[nowPlaceName];
-
-    const newSpotName = nextSpotName || spotNames[0];
-
-    const newSpotPosition = nowPlaceRef.spotPositions[newSpotName].clone();
-    const newSpotPoint = vector3ToPoint3d(newSpotPosition);
-
-    dollRefs.meshRef.position = newSpotPosition;
-    setState({ dolls: { [dollName]: { position: newSpotPoint } } });
-  }
-
   async function loadNowVideosForPlace() {
-    const { nowPlaceName, nowSegmentName, wantedSegmentName } =
-      getState().global.main;
+    const {
+      nowPlaceName,
+      nowSegmentName,
+      wantedSegmentName,
+    } = getState().global.main;
     const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
 
     const wantedSection = getSectionForPlace(
@@ -157,7 +128,6 @@ export function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(
 
   return {
     loadVideoBlob,
-    setFirstCharacterPosition,
     testAppendVideo,
     loadNowVideosForPlace,
     loadProbeImagesForPlace,

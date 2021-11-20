@@ -1,31 +1,15 @@
 import delay from "delay";
 import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { makeCharacterStoryHelpers } from "./characters";
 export function makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames) {
-    const { getRefs, getState, setState } = concepFuncs;
+    const { getState, setState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
     async function enableMovement(canMove = true, revertDelay) {
         setGlobalState({ playerMovingPaused: !canMove });
         if (revertDelay) {
             await delay(revertDelay);
             setGlobalState({ playerMovingPaused: canMove });
         }
-    }
-    function setPlayerToStartSpot() {
-        // note always goes to "start_spot"
-        const placesRefs = getRefs().places;
-        const { nowPlaceName, playerCharacter } = getState().global.main;
-        const { dollName } = getState().characters[playerCharacter];
-        if (!dollName)
-            return;
-        const { rotationY } = getState().dolls[dollName];
-        // TODO Hack to start at different start spot at place, could use nextSpotName or something if it's set
-        let startSpotName = "spot_start";
-        const startPosition = placesRefs[nowPlaceName].spotPositions[startSpotName].clone();
-        setCharPosition(playerCharacter, startPosition);
-        setCharRotationY(playerCharacter, rotationY);
     }
     function isHolding(pickupName) {
         const { heldPickups } = getState().global.main;
@@ -43,7 +27,6 @@ export function makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopSta
     }
     return {
         enableMovement,
-        setPlayerToStartSpot,
         isHolding,
         takePickup,
         setPlayerAnimations,

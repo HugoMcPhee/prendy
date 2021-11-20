@@ -10,12 +10,8 @@ import { makePlayer } from "./Player";
 
 type Props = { children?: ReactNode };
 
-export function makeLoadingModels<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
->(
+export function makeLoadingModels<ConcepFuncs extends BackdopConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  _backdopConcepts: BackdopConcepts,
   backdopStartOptions: BackdopOptions,
   backdopArt: BackdopArt
 ) {

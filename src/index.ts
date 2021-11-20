@@ -23,6 +23,5 @@ export function makeOtherUsefulBackdopUtils<
 }
 
 export * from "./declarations";
-export { CharacterName } from "./declarations";
 
 // moving dist to eggventure and trying

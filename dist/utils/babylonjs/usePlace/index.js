@@ -112,7 +112,7 @@ export function makeUsePlace(concepFuncs, backdopStartOptions, backdopArt) {
             });
             // const { characterNamesLoaded } = getState().global.main;
             // forEach(characterNamesLoaded, (charName) => {
-            //   setFirstCharacterPosition({ characterName: charName, placeName });
+            //   setFirstPlayerPosition({ characterName: charName, placeName });
             // });
             return () => {
                 forEach(soundspotNames, (loopedName) => {

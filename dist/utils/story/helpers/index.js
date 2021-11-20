@@ -14,8 +14,8 @@ export function makeBackdopStoryHelpers(concepFuncs, backdopConcepts, backdopSta
     const musicNames = backdopArt.musicNames;
     const musicFiles = backdopArt.musicFiles;
     const { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } = makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
-    const { focusOnDoll, hideDoll, moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, springDollToSpot, toggleDollMeshes, } = makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
-    const { enableMovement, isHolding, setPlayerAnimations, setPlayerToStartSpot, takePickup, } = makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
+    const { focusOnDoll, hideDoll, moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, springDollToSpot, toggleDollMeshes, } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, modelInfoByName);
+    const { enableMovement, isHolding, setPlayerAnimations, takePickup, } = makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames);
     // NOTE maybe return in categores like players.enableMovement()
     const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView, } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
     const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers(concepFuncs, musicNames, musicFiles);
@@ -48,7 +48,6 @@ export function makeBackdopStoryHelpers(concepFuncs, backdopConcepts, backdopSta
         enableMovement,
         isHolding,
         setPlayerAnimations,
-        setPlayerToStartSpot,
         takePickup,
         // scene
         goToNewPlace,

@@ -29,17 +29,9 @@ export function makerPlayerStoryHelpers<
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getState, setState } = concepFuncs;
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-
-  const { setCharPosition, setCharRotationY } = makeCharacterStoryHelpers(
-    concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    modelInfoByName,
-    characterNames
-  );
 
   type PlayerAnimationNames = {
     walking: A_AnyAnimationName;
@@ -52,25 +44,6 @@ export function makerPlayerStoryHelpers<
       await delay(revertDelay);
       setGlobalState({ playerMovingPaused: canMove });
     }
-  }
-
-  function setPlayerToStartSpot() {
-    // note always goes to "start_spot"
-    const placesRefs = getRefs().places;
-    const { nowPlaceName, playerCharacter } = getState().global.main;
-    const { dollName } = getState().characters[playerCharacter];
-    if (!dollName) return;
-    const { rotationY } = getState().dolls[dollName];
-
-    // TODO Hack to start at different start spot at place, could use nextSpotName or something if it's set
-    let startSpotName = "spot_start" as const;
-
-    const startPosition = placesRefs[nowPlaceName].spotPositions[
-      startSpotName
-    ].clone();
-
-    setCharPosition(playerCharacter as A_CharacterName, startPosition);
-    setCharRotationY(playerCharacter as A_CharacterName, rotationY);
   }
 
   function isHolding(pickupName: A_PickupName) {
@@ -92,7 +65,6 @@ export function makerPlayerStoryHelpers<
 
   return {
     enableMovement,
-    setPlayerToStartSpot,
     isHolding,
     takePickup,
     setPlayerAnimations,

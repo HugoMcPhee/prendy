@@ -2,7 +2,7 @@ import { Vector3 } from "@babylonjs/core";
 import React, { Suspense } from "react";
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";
-export function makeLoadingModels(concepFuncs, _backdopConcepts, backdopStartOptions, backdopArt) {
+export function makeLoadingModels(concepFuncs, backdopStartOptions, backdopArt) {
     const { useStore } = concepFuncs;
     const Player = makePlayer(concepFuncs, backdopStartOptions, backdopArt);
     const usePlace = makeUsePlace(concepFuncs, backdopStartOptions, backdopArt);

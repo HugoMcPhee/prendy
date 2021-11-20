@@ -4,10 +4,12 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
-export function makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName) {
+export function makeDollStoryHelpers(concepFuncs, 
+// backdopConcepts: BackdopConcepts,
+backdopStartOptions, modelInfoByName) {
     const { getRefs, getState, setState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs, backdopConcepts);
+    const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs);
     const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
     // --------------------------------------------------------------
     function setDollPosition(dollName, newPositon) {

@@ -6,7 +6,7 @@ export function makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopS
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(concepFuncs);
-    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName);
+    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, modelInfoByName);
     function setCharAnimation(character, animation // AnimationNameFromModel might keep the type better
     ) {
         const { dollName } = getCharDollStuff(character);

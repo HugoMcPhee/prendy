@@ -1,5 +1,5 @@
 import { InitialItemsState } from "concep";
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 import { BackdopArt, PlaceName } from "../../declarations";
 import { abLetters } from "../../utils/consts";
 

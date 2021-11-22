@@ -1,4 +1,4 @@
-import { breakableForEach, forEach } from "shutils/dist/loops";
+import { breakableForEach, forEach } from "chootils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
 // export each of the rule makers stuff from here :)
 export function makeGetUsefulStoryStuff(concepFuncs) {

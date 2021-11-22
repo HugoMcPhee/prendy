@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 export default function sectionVids(backdopArt) {
     const { placeNames } = backdopArt;
     const state = (itemName) => ({

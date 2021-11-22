@@ -1,5 +1,5 @@
-import { subtractPoints } from "shutils/dist/points2d";
-import { getSpeedAndAngleFromVector } from "shutils/dist/speedAngleDistance2d";
+import { subtractPoints } from "chootils/dist/points2d";
+import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
   CharacterName,

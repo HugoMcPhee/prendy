@@ -22,8 +22,8 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
             planeZoomMoveConfigName: string;
             planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            planePos: import("shutils/dist/points2d").Point2D;
-            planePosGoal: import("shutils/dist/points2d").Point2D;
+            planePos: import("chootils/dist/points2d").Point2D;
+            planePosGoal: import("chootils/dist/points2d").Point2D;
             planePosIsMoving: boolean;
             planePosMoveMode: import("concep-movers/dist/types").MoveMode;
             planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
@@ -65,8 +65,8 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
         planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
         planeZoomMoveConfigName: string;
         planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-        planePos: import("shutils/dist/points2d").Point2D;
-        planePosGoal: import("shutils/dist/points2d").Point2D;
+        planePos: import("chootils/dist/points2d").Point2D;
+        planePosGoal: import("chootils/dist/points2d").Point2D;
         planePosIsMoving: boolean;
         planePosMoveMode: import("concep-movers/dist/types").MoveMode;
         planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
@@ -122,7 +122,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
         };
         planePosMoverRefs: {
-            velocity: import("shutils/dist/points2d").Point2D;
+            velocity: import("chootils/dist/points2d").Point2D;
             recentSpeeds: number[];
             averageSpeed: number;
             canRunOnSlow: boolean;

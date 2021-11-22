@@ -1,4 +1,4 @@
-import { breakableForEach } from "shutils/dist/loops";
+import { breakableForEach } from "chootils/dist/loops";
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
 export function makePlayer(concepFuncs, backdopStartOptions, backdopArt) {
     const { placeInfoByName, characterNames } = backdopArt;

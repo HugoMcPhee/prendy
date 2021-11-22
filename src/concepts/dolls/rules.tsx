@@ -1,9 +1,9 @@
 import { PBRMaterial } from "@babylonjs/core";
 import { makeRunMovers } from "concep-movers";
-import { forEach } from "shutils/dist/loops";
-import { samePoints as samePoints3d } from "shutils/dist/points3d";
-import { toRadians } from "shutils/dist/speedAngleDistance";
-import { getShortestAngle } from "shutils/dist/speedAngleDistance2d";
+import { forEach } from "chootils/dist/loops";
+import { samePoints as samePoints3d } from "chootils/dist/points3d";
+import { toRadians } from "chootils/dist/speedAngleDistance";
+import { getShortestAngle } from "chootils/dist/speedAngleDistance2d";
 import {
   AnyAnimationName,
   BackdopArt,

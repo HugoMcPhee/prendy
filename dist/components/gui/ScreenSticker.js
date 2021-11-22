@@ -1,7 +1,7 @@
 // @refresh-reset
 import React from "react";
 import { animated, useSpring } from "react-spring";
-import { getRandomInt } from "shutils/dist/numbers";
+import { getRandomInt } from "chootils/dist/numbers";
 export function makeScreenSticker(concepFuncs) {
     const { useStore } = concepFuncs;
     const EDGE_PADDING = 65;

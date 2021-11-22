@@ -1,5 +1,5 @@
 import { substring, length, toArray, indexOf } from "stringz";
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 import { makeSpeechBubblesStoreUtils } from "./utils";
 import { CSSProperties } from "react";
 import {

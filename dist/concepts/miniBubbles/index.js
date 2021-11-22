@@ -1,4 +1,4 @@
-import { defaultPosition } from "shutils/dist/points2d";
+import { defaultPosition } from "chootils/dist/points2d";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
 export default function miniBubbles() {
     const state = (_itemName) => ({

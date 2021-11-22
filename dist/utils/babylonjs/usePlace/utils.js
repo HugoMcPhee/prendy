@@ -1,6 +1,6 @@
 // import React from "react";
 import { AssetsManager, TargetCamera } from "@babylonjs/core";
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 export function testAppendVideo(theVideo, id, elementTag = "app") {

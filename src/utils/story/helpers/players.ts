@@ -1,5 +1,5 @@
 import delay from "delay";
-import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
+import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
   BackdopConcepFuncs,

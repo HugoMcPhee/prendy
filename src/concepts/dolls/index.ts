@@ -12,8 +12,8 @@ import {
   moverRefs,
   moverState,
 } from "concep-movers";
-import { forEach } from "shutils/dist/loops";
-import { defaultPosition as defaultPosition2d } from "shutils/dist/points2d";
+import { forEach } from "chootils/dist/loops";
+import { defaultPosition as defaultPosition2d } from "chootils/dist/points2d";
 import {
   AnimationNameByModel,
   AnyAnimationName,

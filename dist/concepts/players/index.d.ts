@@ -1,5 +1,5 @@
 import { AnyAnimationName, BackdopOptions } from "../../declarations";
-import { Point2D } from "shutils/dist/points2d";
+import { Point2D } from "chootils/dist/points2d";
 export default function players<A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_BackdopOptions extends BackdopOptions = BackdopOptions>(backdopStartOptions: A_BackdopOptions): {
     startStates: {
         main: {

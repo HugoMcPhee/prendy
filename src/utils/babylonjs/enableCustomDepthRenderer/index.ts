@@ -1,6 +1,6 @@
 import { Nullable, Camera, Scene, Constants } from "@babylonjs/core";
 import { DepthRendererWithSize } from "./DepthRendererWithSize";
-import { Size } from "shutils/dist/sizes";
+import { Size } from "chootils/dist/sizes";
 
 export function enableCustomDepthRenderer(
   scene: Scene,

@@ -8,8 +8,8 @@ import {
   ShaderMaterial,
   Texture,
 } from "@babylonjs/core";
-import { chooseClosestBeforeItemInArray } from "shutils/dist/arrays";
-import { forEach } from "shutils/dist/loops";
+import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
+import { forEach } from "chootils/dist/loops";
 import { DefaultCameraRefs } from "../../..//concepts/places";
 import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";

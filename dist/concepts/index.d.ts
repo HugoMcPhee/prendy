@@ -50,7 +50,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             isFullyHidden: boolean;
             text: string;
             forCharacter: A_CharacterName | null;
-            position: import("shutils/dist/points2d").Point2D;
+            position: import("chootils/dist/points2d").Point2D;
         };
         refs: () => {
             bubbleRef: any;
@@ -63,19 +63,19 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
                 isFullyHidden: boolean;
                 text: string;
                 forCharacter: A_CharacterName | null;
-                position: import("shutils/dist/points2d").Point2D;
+                position: import("chootils/dist/points2d").Point2D;
             };
         };
     };
     pointers: {
         state: () => {
-            pointerPosition: import("shutils/dist/points2d").Point2D;
+            pointerPosition: import("chootils/dist/points2d").Point2D;
         };
         refs: () => {
             pointerId: string;
-            firstInputPosition: import("shutils/dist/points2d").Point2D;
+            firstInputPosition: import("chootils/dist/points2d").Point2D;
             isFirstMovement: boolean;
-            offset: import("shutils/dist/points2d").Point2D;
+            offset: import("chootils/dist/points2d").Point2D;
         };
     };
     global: {
@@ -98,8 +98,8 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
                 planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
                 planeZoomMoveConfigName: string;
                 planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-                planePos: import("shutils/dist/points2d").Point2D;
-                planePosGoal: import("shutils/dist/points2d").Point2D;
+                planePos: import("chootils/dist/points2d").Point2D;
+                planePosGoal: import("chootils/dist/points2d").Point2D;
                 planePosIsMoving: boolean;
                 planePosMoveMode: import("concep-movers/dist/types").MoveMode;
                 planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
@@ -141,8 +141,8 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
             planeZoomMoveConfigName: string;
             planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            planePos: import("shutils/dist/points2d").Point2D;
-            planePosGoal: import("shutils/dist/points2d").Point2D;
+            planePos: import("chootils/dist/points2d").Point2D;
+            planePosGoal: import("chootils/dist/points2d").Point2D;
             planePosIsMoving: boolean;
             planePosMoveMode: import("concep-movers/dist/types").MoveMode;
             planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
@@ -198,7 +198,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
                 physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
             };
             planePosMoverRefs: {
-                velocity: import("shutils/dist/points2d").Point2D;
+                velocity: import("chootils/dist/points2d").Point2D;
                 recentSpeeds: number[];
                 averageSpeed: number;
                 canRunOnSlow: boolean;
@@ -265,15 +265,15 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            positionOnPlaneScene: import("shutils/dist/points2d").Point2D;
+            positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
             rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
             rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            position: import("shutils/dist/points3d").Point3D;
-            positionGoal: import("shutils/dist/points3d").Point3D;
+            position: import("chootils/dist/points3d").Point3D;
+            positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
             positionMoveMode: import("concep-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
@@ -291,15 +291,15 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            positionOnPlaneScene: import("shutils/dist/points2d").Point2D;
+            positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
             rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
             rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            position: import("shutils/dist/points3d").Point3D;
-            positionGoal: import("shutils/dist/points3d").Point3D;
+            position: import("chootils/dist/points3d").Point3D;
+            positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
             positionMoveMode: import("concep-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
@@ -317,15 +317,15 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            positionOnPlaneScene: import("shutils/dist/points2d").Point2D;
+            positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
             rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
             rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
-            position: import("shutils/dist/points3d").Point3D;
-            positionGoal: import("shutils/dist/points3d").Point3D;
+            position: import("chootils/dist/points3d").Point3D;
+            positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
             positionMoveMode: import("concep-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
@@ -363,7 +363,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
                 physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
             };
             positionMoverRefs: {
-                velocity: import("shutils/dist/points3d").Point3D;
+                velocity: import("chootils/dist/points3d").Point3D;
                 recentSpeeds: number[];
                 averageSpeed: number;
                 canRunOnSlow: boolean;
@@ -413,7 +413,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
         startStates: {
             main: {
                 lastSafeInputAngle: number | null;
-                inputVelocity: import("shutils/dist/points2d").Point2D;
+                inputVelocity: import("chootils/dist/points2d").Point2D;
                 isJumping: boolean;
                 isOnGround: boolean;
                 canJump: boolean;
@@ -432,7 +432,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
         };
         state: () => {
             lastSafeInputAngle: number | null;
-            inputVelocity: import("shutils/dist/points2d").Point2D;
+            inputVelocity: import("chootils/dist/points2d").Point2D;
             isJumping: boolean;
             isOnGround: boolean;
             canJump: boolean;
@@ -469,7 +469,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             _specialTextByLetterIndex: Record<number, string>;
             _goalTextWordLetterArrays: string[][];
             forCharacter: string | null;
-            position: import("shutils/dist/points2d").Point2D;
+            position: import("chootils/dist/points2d").Point2D;
             typingFinished: boolean;
             nowVideoName: string | null;
             font: string;
@@ -491,7 +491,7 @@ export declare function makeBackdopConcepts<A_CharacterName extends CharacterNam
             _specialTextByLetterIndex: Record<number, string>;
             _goalTextWordLetterArrays: string[][];
             forCharacter: string | null;
-            position: import("shutils/dist/points2d").Point2D;
+            position: import("chootils/dist/points2d").Point2D;
             typingFinished: boolean;
             nowVideoName: string | null;
             font: string;

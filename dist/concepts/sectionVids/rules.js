@@ -1,4 +1,4 @@
-import { minMaxRange } from "shutils/dist/numbers";
+import { minMaxRange } from "chootils/dist/numbers";
 import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
 export function makeSectionVidRules(concepFuncs, backdopArt) {

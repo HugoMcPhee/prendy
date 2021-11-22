@@ -1,4 +1,4 @@
-import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "shutils/dist/speedAngleDistance2d";
+import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "chootils/dist/speedAngleDistance2d";
 import React, { useCallback, useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 export function makeVirtualStick(concepFuncs) {

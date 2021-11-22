@@ -9,6 +9,13 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
+v0.7.6
+
+- renamed prendy
+- published to npm!
+- uses other packages from npm
+- renamed shutils to chootils
+
 v0.7.5
 
 - fixes setting player start position for new place (doesn't collide with walls)

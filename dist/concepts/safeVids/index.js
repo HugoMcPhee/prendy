@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 import { abLetters } from "../../utils/consts";
 export default function safeVids(backdopArt) {
     const { placeNames, placeInfoByName } = backdopArt;

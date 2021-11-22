@@ -1,5 +1,5 @@
 import delay from "delay";
-import { addItemToUniqueArray, removeItemFromArray } from "shutils/dist/arrays";
+import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 export function makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames) {
     const { getState, setState } = concepFuncs;

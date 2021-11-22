@@ -1,8 +1,8 @@
 // import { VideoGui } from "backdopdev/utils/babylonjs/VideoGui";
 //
 import { CSSProperties } from "react";
-import { forEach } from "shutils/dist/loops";
-import { defaultPosition } from "shutils/dist/points2d";
+import { forEach } from "chootils/dist/loops";
+import { defaultPosition } from "chootils/dist/points2d";
 import {
   BackdopArt,
   CharacterName,

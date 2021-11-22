@@ -1,6 +1,6 @@
 import { SceneLoader, } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { keyBy } from "shutils/dist/arrays";
+import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
 import { makeGetSceneOrEngineUtils } from "./getSceneOrEngine";

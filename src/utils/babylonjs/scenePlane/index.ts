@@ -4,10 +4,10 @@ import {
   BackdopConcepFuncs,
   BackdopOptionsUntyped,
 } from "../../../concepts/typedConcepFuncs";
-import { shortenDecimals } from "shutils/dist/numbers";
-import { defaultPosition, Point2D } from "shutils/dist/points2d";
-import { measurementToRect, pointInsideRect } from "shutils/dist/rects";
-import { defaultSize } from "shutils/dist/sizes";
+import { shortenDecimals } from "chootils/dist/numbers";
+import { defaultPosition, Point2D } from "chootils/dist/points2d";
+import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
+import { defaultSize } from "chootils/dist/sizes";
 
 export function makeScenePlaneUtils<
   ConcepFuncs extends BackdopConcepFuncs,

@@ -1,6 +1,6 @@
-import { Point3D } from "shutils/dist/points3d";
+import { Point3D } from "chootils/dist/points3d";
 import { Vector3 } from "@babylonjs/core";
-import { shortenDecimals } from "shutils/dist/numbers";
+import { shortenDecimals } from "chootils/dist/numbers";
 
 export function point3dToVector3(thePoint: Point3D) {
   return new Vector3(thePoint.x, thePoint.y, thePoint.z);

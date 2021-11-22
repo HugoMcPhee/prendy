@@ -1,10 +1,10 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
-import { defaultPosition, pointIsZero } from "shutils/dist/points2d";
+import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import {
   getShortestAngle,
   getSpeedAndAngleFromVector,
   getVectorAngle,
-} from "shutils/dist/speedAngleDistance2d";
+} from "chootils/dist/speedAngleDistance2d";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 import { BackdopArt, CharacterName } from "../../declarations";
 import { clearTimeoutSafe } from "../../utils";

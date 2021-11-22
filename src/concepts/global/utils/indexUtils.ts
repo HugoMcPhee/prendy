@@ -1,5 +1,5 @@
 import { Sound } from "@babylonjs/core";
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 
 export function makerGlobalStoreIndexUtils<
   MusicName extends string,

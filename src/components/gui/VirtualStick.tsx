@@ -3,7 +3,7 @@ import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,
   getVectorSpeed,
-} from "shutils/dist/speedAngleDistance2d";
+} from "chootils/dist/speedAngleDistance2d";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 

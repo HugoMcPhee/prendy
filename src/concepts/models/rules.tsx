@@ -1,5 +1,5 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
-import { addItemToUniqueArray } from "shutils/dist/arrays";
+import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { BackdopArt, ModelName } from "../../declarations";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { BackdopConcepFuncs } from "../typedConcepFuncs";

@@ -1,6 +1,6 @@
 import { AssetContainer, PBRMaterial } from "@babylonjs/core";
 import { BackdopArt, ModelName } from "../../declarations";
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 
 export default function models<
   A_BackdopArt extends BackdopArt = BackdopArt,

@@ -1,6 +1,6 @@
 import { AbstractMesh, Vector3 } from "@babylonjs/core";
 // import { useSpring } from "@react-spring/core";
-import { pointIsZero, subtractPointsSafer } from "shutils/dist/points3d";
+import { pointIsZero, subtractPointsSafer } from "chootils/dist/points3d";
 
 export function setGlobalPositionWithCollisions(
   theMesh: AbstractMesh,

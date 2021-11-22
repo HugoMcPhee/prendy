@@ -14,7 +14,7 @@ export default function speechBubbles<A_BackdopArt extends BackdopArt = BackdopA
         _specialTextByLetterIndex: Record<number, string>;
         _goalTextWordLetterArrays: string[][];
         forCharacter: string | null;
-        position: import("shutils/dist/points2d").Point2D;
+        position: import("chootils/dist/points2d").Point2D;
         typingFinished: boolean;
         nowVideoName: string | null;
         font: string;
@@ -36,7 +36,7 @@ export default function speechBubbles<A_BackdopArt extends BackdopArt = BackdopA
         _specialTextByLetterIndex: Record<number, string>;
         _goalTextWordLetterArrays: string[][];
         forCharacter: string | null;
-        position: import("shutils/dist/points2d").Point2D;
+        position: import("chootils/dist/points2d").Point2D;
         typingFinished: boolean;
         nowVideoName: string | null;
         font: string;

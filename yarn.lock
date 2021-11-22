@@ -9,10 +9,10 @@
   dependencies:
     tslib "^2.1.0"
 
-"@babylonjs/core@5.0.0-alpha.60":
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.0.0-alpha.60.tgz#1bf5d78c316455b386c829bd59ba14da63ad0d94"
-  integrity sha512-2DM4BFWcRTdgdVZqUzc8IUf9EdcfZN+aeYvWU4bzmutX6l8wowjjlQnqwCFfv+GHouV6XkM3QqoQV2rqc9T1Kw==
+"@babylonjs/core@5.0.0-alpha.61":
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.0.0-alpha.61.tgz#e2d8f2a2ebd68d71611216ca9681a3ecb26dd787"
+  integrity sha512-iBVcpWxPajVWScrPKukewYre6OhXEF/DrqeKRGnY9DgoKtAe6z0DY+BjWuOHGdaipYJvxux34RvldSeyXIxkqg==
   dependencies:
     tslib "^2.3.1"
 
@@ -24,51 +24,51 @@
     "@babylonjs/core" "5.0.0-alpha.12"
     tslib "^2.1.0"
 
-"@babylonjs/gui@5.0.0-alpha.60":
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-5.0.0-alpha.60.tgz#508a09e63b7aeaffd770df3faa15b825f92db586"
-  integrity sha512-bMQsu8jDfmDYfigv4/VRuW49MaEyHDWM6HOvj9UYVq7NuAPGFgLUzLC7pQXMe1bsWVSCd8e9PWmdt+jX0sBxxg==
+"@babylonjs/gui@5.0.0-alpha.61":
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-5.0.0-alpha.61.tgz#d985ab9e590d11afaa1a072333333e6311c396c3"
+  integrity sha512-CW+1mp/1QXuerqOzEtPXqrOtAJ4llp2MvSdpfPCk+qUkUVoc+fzXLNb9XlKxQ1YVJPGdrcnKOoSmyKs4eRix1g==
   dependencies:
-    "@babylonjs/core" "5.0.0-alpha.60"
+    "@babylonjs/core" "5.0.0-alpha.61"
     tslib "^2.3.1"
 
-"@babylonjs/inspector@5.0.0-alpha.60":
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-5.0.0-alpha.60.tgz#10d4dfc04f8ea38891480f9e2abceba3012a939d"
-  integrity sha512-Z0DRSuHz5LAFNWgLV1BTVNHP7DMZtc1SIxvJjoEY6xkoHXjTEEB3I3gV+1EyOsxEnWpAILvIGtvMAopnDP7jGQ==
+"@babylonjs/inspector@5.0.0-alpha.61":
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-5.0.0-alpha.61.tgz#f9d89fbf8c13e2480107d55ccf1bcddbdcf7bfc3"
+  integrity sha512-O8DP6SgV5FS6I2ap1q5XxdVL88zDyBhevLomHTIud1kROuHp39crTT8Yno6D7oKkhekDIgdqkMDNSHhrRgqtrg==
   dependencies:
-    "@babylonjs/core" "5.0.0-alpha.60"
-    "@babylonjs/gui" "5.0.0-alpha.60"
-    "@babylonjs/loaders" "5.0.0-alpha.60"
-    "@babylonjs/materials" "5.0.0-alpha.60"
-    "@babylonjs/serializers" "5.0.0-alpha.60"
-    babylonjs-gltf2interface "5.0.0-alpha.60"
+    "@babylonjs/core" "5.0.0-alpha.61"
+    "@babylonjs/gui" "5.0.0-alpha.61"
+    "@babylonjs/loaders" "5.0.0-alpha.61"
+    "@babylonjs/materials" "5.0.0-alpha.61"
+    "@babylonjs/serializers" "5.0.0-alpha.61"
+    babylonjs-gltf2interface "5.0.0-alpha.61"
     tslib "^2.3.1"
 
-"@babylonjs/loaders@5.0.0-alpha.60":
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-5.0.0-alpha.60.tgz#defe9a7fb8f0c21efa94adc5b9f56f0714289822"
-  integrity sha512-uJ+ORjGTIPxrvFWms2blDYNI49xgkg73CebPNztfxXWidPktQ+e9TkpuaFKxBIuk1nLPbxWa3I862tP/1rPimA==
+"@babylonjs/loaders@5.0.0-alpha.61":
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-5.0.0-alpha.61.tgz#cd1acfd2438de21ad982633662a1dd2fa65c7793"
+  integrity sha512-2rGn7H4cJqDhYckLCEdn1TLvdkTtFD+UnsDHfUF4SvdzHhtrWY2hkiDJpCEZmCALhAYQP+SE97mOv+dpRYnnJw==
   dependencies:
-    "@babylonjs/core" "5.0.0-alpha.60"
-    babylonjs-gltf2interface "5.0.0-alpha.60"
+    "@babylonjs/core" "5.0.0-alpha.61"
+    babylonjs-gltf2interface "5.0.0-alpha.61"
     tslib "^2.3.1"
 
-"@babylonjs/materials@5.0.0-alpha.60":
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-5.0.0-alpha.60.tgz#a4bd68ac0cdc059f325a995a7ce55f59e9c2d53e"
-  integrity sha512-fbMK0j+eWbp+mFxUHqpebMlEzdigUNbydwEYuokPN+jmFfGKC/GrNYmOD0ShZm2V3eRIdwVxhJsPhSVQkH56pA==
+"@babylonjs/materials@5.0.0-alpha.61":
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-5.0.0-alpha.61.tgz#618b6b35f0fa24751934d350437286ebf750f953"
+  integrity sha512-FiJKv4vGqkJ6hcN8F6Sgj0WJH73Afp2uMfO9WZxL3yoYwmpsFlPeyaWDYpwEcyolUtRw21phtYSjBclsn8ntUw==
   dependencies:
-    "@babylonjs/core" "5.0.0-alpha.60"
+    "@babylonjs/core" "5.0.0-alpha.61"
     tslib "^2.3.1"
 
-"@babylonjs/serializers@5.0.0-alpha.60":
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-5.0.0-alpha.60.tgz#fb5f0da0d3c3193861462696e5a4513bc602705e"
-  integrity sha512-me04riRT9pFVwAQ6zp7e5JAUX7Q0FLmwPZf8VYMECMymQZuazqTYqXpeRyTUnSyoP4wIvAcKkcib73C8tTGevQ==
+"@babylonjs/serializers@5.0.0-alpha.61":
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-5.0.0-alpha.61.tgz#e0e4183d13819dbe69832a334c4da6ca6f62fe86"
+  integrity sha512-8il061x+ub4BJs6bCYswZmpYcqCSlr2u5+8l27oVOyTEnBYrOt/cmu1dvtnACl7OOSRWSZKhVmCXlNEteH7qYg==
   dependencies:
-    "@babylonjs/core" "5.0.0-alpha.60"
-    babylonjs-gltf2interface "5.0.0-alpha.60"
+    "@babylonjs/core" "5.0.0-alpha.61"
+    babylonjs-gltf2interface "5.0.0-alpha.61"
     tslib "^2.3.1"
 
 "@react-spring/animated@~9.3.0":
@@ -175,23 +175,30 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-babylonjs-gltf2interface@5.0.0-alpha.60:
-  version "5.0.0-alpha.60"
-  resolved "https://registry.yarnpkg.com/babylonjs-gltf2interface/-/babylonjs-gltf2interface-5.0.0-alpha.60.tgz#7c6155c0f2a23cdcdc83c72aaee72fa2bb8a68bf"
-  integrity sha512-J1+dZarDEi+Gd+k8atJd69HbYZsAfLpmEm28w+SBhFmO6T5h7tCwEjFqDjGomzNXGGtpXACuJzAm23uavsXPgw==
+babylonjs-gltf2interface@5.0.0-alpha.61:
+  version "5.0.0-alpha.61"
+  resolved "https://registry.yarnpkg.com/babylonjs-gltf2interface/-/babylonjs-gltf2interface-5.0.0-alpha.61.tgz#650a9a5e232e0f74f95f6e8c6e5eb296ea88a090"
+  integrity sha512-5uN2/ORzhEyXovliWUTs+Fjx85MBD2w150KLEVbJFL8q6Yc8/inPomTrG3N+j+/msZ3Z92qjid3EFT3qLILoIg==
 
 char-regex@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-"concep-movers@git+https://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@github.com/HugoMcPhee/concep-movers.git#v0.5.4":
-  version "0.5.4"
-  resolved "git+https://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@github.com/HugoMcPhee/concep-movers.git#8ca4d008e7fd8dd053b33cc7e717e7fe3ca4e33e"
+chootils@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/chootils/-/chootils-0.3.3.tgz#0090e8dc64abb5741d98fdaa46b9f72903920fc5"
+  integrity sha512-9Y8KW3XYCsLDMfKoNwVeQmqDu2wOBGK8U+mvFQaQFbSp5vLk4Rwe3uZkqNLjvwln0llqxVF2oaevsTArKyOJVQ==
 
-"concep@git+https://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@github.com/HugoMcPhee/concep.git#v0.6.0":
-  version "0.6.0"
-  resolved "git+https://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@github.com/HugoMcPhee/concep.git#e61aee2d72b3d50bb84c97ae045fbc2139b735f9"
+concep-movers@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/concep-movers/-/concep-movers-0.5.5.tgz#de99a87fb51750612d2807e8a272bc34d61c6e14"
+  integrity sha512-uODYV+C9/o5zM+Un+c7t9CgjJCV+TgR00zR48nnDctZcCStt8CcmDyqmcRV1Mqx7KcRh8uokYdxB/rsCqf8ngQ==
+
+concep@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/concep/-/concep-0.6.1.tgz#6264db1fbb050216a5bada35aa921b94e09f351b"
+  integrity sha512-bXVzkGNyjREOVG2wBQiqCJVHSpoMeg8G1jn22MCFbHwKYt9fksVBnz4UbrF6SPNZgJ6DOfQ3wG1to04idjC0XQ==
 
 csstype@^3.0.2:
   version "3.0.9"
@@ -275,10 +282,6 @@ scheduler@^0.20.2:
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-
-"shutils@git+https://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@github.com/HugoMcPhee/shutils.git#v0.3.2":
-  version "0.3.2"
-  resolved "git+https://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@github.com/HugoMcPhee/shutils.git#cd660841f25c21579cccbc6a03c8a74c2536f3ae"
 
 stringz@^2.1.0:
   version "2.1.0"

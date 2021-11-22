@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { sizeFromRef } from "shutils/dist/elements";
+import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 export function makeMiniBubble(concepFuncs) {
     const { useStoreEffect, useStore, getState } = concepFuncs;

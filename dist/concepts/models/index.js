@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 export default function models(backdopArt) {
     const modelNames = backdopArt.modelNames;
     const state = (_modelName) => {

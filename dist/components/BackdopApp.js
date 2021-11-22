@@ -4,7 +4,7 @@ import { Camera, Color3, Color4, Vector3 } from "@babylonjs/core";
 import React, { useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
-import { toRadians } from "shutils/dist/speedAngleDistance";
+import { toRadians } from "chootils/dist/speedAngleDistance";
 import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
 // import "./BackdopApp.css";

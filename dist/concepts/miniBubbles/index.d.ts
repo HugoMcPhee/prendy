@@ -1,5 +1,5 @@
 import { CharacterName } from "../../declarations";
-import { Point2D } from "shutils/dist/points2d";
+import { Point2D } from "chootils/dist/points2d";
 export default function miniBubbles<A_CharacterName extends CharacterName = CharacterName>(): {
     state: <T_ItemName extends string>(_itemName: T_ItemName) => {
         isVisible: boolean;

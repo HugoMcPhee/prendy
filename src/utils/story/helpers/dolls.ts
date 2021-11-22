@@ -1,6 +1,6 @@
 import { Vector3 } from "@babylonjs/core";
-import { forEach } from "shutils/dist/loops";
-import { getVectorFromSpeedAndAngle } from "shutils/dist/speedAngleDistance2d";
+import { forEach } from "chootils/dist/loops";
+import { getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
   BackdopConcepFuncs,

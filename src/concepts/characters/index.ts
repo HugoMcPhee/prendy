@@ -6,7 +6,7 @@ import {
   CharacterOptions,
   BackdopArt,
 } from "../../declarations";
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 
 export default function characters<
   A_CharacterName extends CharacterName = CharacterName,

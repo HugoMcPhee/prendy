@@ -1,5 +1,5 @@
 import { SceneLoader } from "@babylonjs/core";
-import { addItemToUniqueArray } from "shutils/dist/arrays";
+import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 // handle laoding here ??
 export function makeModelRules(concepFuncs, backdopArt) {

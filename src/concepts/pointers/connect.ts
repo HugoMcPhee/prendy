@@ -1,4 +1,4 @@
-import { Point2D } from "shutils/dist/points2d";
+import { Point2D } from "chootils/dist/points2d";
 import { BackdopConcepFuncs } from "../typedConcepFuncs";
 
 export function makePointersConnectRules<

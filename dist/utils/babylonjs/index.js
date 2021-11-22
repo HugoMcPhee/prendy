@@ -1,5 +1,5 @@
 import { Vector3 } from "@babylonjs/core";
-import { shortenDecimals } from "shutils/dist/numbers";
+import { shortenDecimals } from "chootils/dist/numbers";
 export function point3dToVector3(thePoint) {
     return new Vector3(thePoint.x, thePoint.y, thePoint.z);
 }

@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 export function makerGlobalStoreIndexUtils(musicNames, soundNames) {
     function makeAutomaticMusicStartRefs() {
         const partialMusicRefs = {};

@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 export default function loadGoogleFonts(fontNames) {
     let styleStrng = "@import url('https://fonts.googleapis.com/css2?";
     forEach(fontNames, (fontName, index) => {

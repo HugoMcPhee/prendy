@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 export function makeCharacterDynamicRules(concepFuncs, backdopStartOptions, backdopArt) {

@@ -7,9 +7,9 @@ import {
   PBRMaterial,
   Vector3,
 } from "@babylonjs/core";
-import { keyBy } from "shutils/dist/arrays";
-import { breakableForEach, forEach } from "shutils/dist/loops";
-import { getPointDistanceQuick } from "shutils/dist/speedAngleDistance3d";
+import { keyBy } from "chootils/dist/arrays";
+import { breakableForEach, forEach } from "chootils/dist/loops";
+import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
   AnimationNameByModel,
   BackdopArt,

@@ -1,4 +1,4 @@
-import { forEach } from "shutils/dist/loops";
+import { forEach } from "chootils/dist/loops";
 
 export default function loadGoogleFonts<T_FontNames extends readonly string[]>(
   fontNames: T_FontNames

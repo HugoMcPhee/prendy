@@ -1,5 +1,5 @@
 import { CharacterName } from "../../declarations";
-import { defaultPosition, Point2D } from "shutils/dist/points2d";
+import { defaultPosition, Point2D } from "chootils/dist/points2d";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
 
 export default function miniBubbles<

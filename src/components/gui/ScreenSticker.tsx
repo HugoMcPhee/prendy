@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { CSSProperties } from "react";
 import { animated, useSpring } from "react-spring";
-import { getRandomInt } from "shutils/dist/numbers";
+import { getRandomInt } from "chootils/dist/numbers";
 import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
 
 export function makeScreenSticker<ConcepFuncs extends BackdopConcepFuncs>(

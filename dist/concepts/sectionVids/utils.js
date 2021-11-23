@@ -13,12 +13,12 @@ export function makeGetSectionVidVideo(concepFuncs) {
         return backdropVidRefs.videoElement;
     };
 }
-export function makeSectionVidStoreUtils(concepFuncs, backdopArt) {
+export function makeSectionVidStoreUtils(concepFuncs, prendyArt) {
     const { getState, startItemEffect, stopEffect } = concepFuncs;
-    const { placeInfoByName } = backdopArt;
+    const { placeInfoByName } = prendyArt;
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getSectionVidVideo = makeGetSectionVidVideo(concepFuncs);
-    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(concepFuncs, backdopArt);
+    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(concepFuncs, prendyArt);
     // __________________________
     // temporary rules
     async function doWhenSectionVidPlayingAsync(sectionVidId) {

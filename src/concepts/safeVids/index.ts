@@ -1,6 +1,6 @@
 import { InitialItemsState } from "concep";
 import { forEach } from "chootils/dist/loops";
-import { BackdopArt, PlaceName } from "../../declarations";
+import { PrendyArt, PlaceName } from "../../declarations";
 import { abLetters } from "../../utils/consts";
 
 export type VidState =
@@ -24,10 +24,10 @@ export type VidState =
   | "unloaded";
 
 export default function safeVids<
-  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_PlaceName extends PlaceName = PlaceName
->(backdopArt: A_BackdopArt) {
-  const { placeNames, placeInfoByName } = backdopArt;
+>(prendyArt: A_PrendyArt) {
+  const { placeNames, placeInfoByName } = prendyArt;
 
   function vidNameToPlaceName(vidName: string) {
     // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;

@@ -1,6 +1,6 @@
 import { forEach } from "chootils/dist/loops";
-export default function sectionVids(backdopArt) {
-    const { placeNames } = backdopArt;
+export default function sectionVids(prendyArt) {
+    const { placeNames } = prendyArt;
     const state = (itemName) => ({
         safeVidId_playing: `${itemName}_a`,
         safeVidId_waiting: `${itemName}_b`,

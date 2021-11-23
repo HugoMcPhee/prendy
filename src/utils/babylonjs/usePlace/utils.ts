@@ -2,9 +2,9 @@
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
-  BackdopArt,
+  PrendyArt,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
@@ -23,17 +23,17 @@ export function testAppendVideo(
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeUsePlaceUtils<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  backdopArt: BackdopArt
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
-  const { placeInfoByName } = backdopArt;
+  const { placeInfoByName } = prendyArt;
 
   const {
     doWhenSectionVidPlayingAsync,
     getSectionForPlace,
-  } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
+  } = makeSectionVidStoreUtils(concepFuncs, prendyArt);
 
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 

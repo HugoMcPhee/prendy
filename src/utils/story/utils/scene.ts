@@ -1,4 +1,4 @@
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -8,7 +8,7 @@ import {
 import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
 
 export function makeSceneStoryUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,

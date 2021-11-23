@@ -1,7 +1,7 @@
 import delay from "delay";
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-export function makerPlayerStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames) {
+export function makerPlayerStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames) {
     const { getState, setState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     async function enableMovement(canMove = true, revertDelay) {

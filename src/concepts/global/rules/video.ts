@@ -4,36 +4,36 @@ import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
 } from "../../../declarations";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../typedConcepFuncs";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalVideoRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   concepFuncs: ConcepFuncs,
-  _backdopConcepts: BackdopConcepts,
-  _backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
+  _prendyConcepts: PrendyConcepts,
+  _prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, makeRules, setState } = concepFuncs;
 
   const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } =
-    makeSectionVidStoreUtils(concepFuncs, backdopArt);
+    makeSectionVidStoreUtils(concepFuncs, prendyArt);
   const {
     getSafeSegmentName,
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils(concepFuncs, backdopArt);
+  } = makeCameraChangeUtils(concepFuncs, prendyArt);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenWantToChooseVideoSection: addEffect({

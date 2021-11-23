@@ -5,8 +5,8 @@ import {
   AnySegmentName,
   AnySpotName,
   AnyTriggerName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   BoneNameByModel,
   CameraNameByPlace,
   CharacterName,
@@ -37,7 +37,7 @@ import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 
-export const backdopFlowNames = [
+export const prendyFlowNames = [
   // updating internal video states
   "safeVidStateUpdates",
   "sectionVidStateUpdates",
@@ -70,7 +70,7 @@ export const backdopFlowNames = [
   "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ] as const;
 
-export type FlowName = typeof backdopFlowNames[number];
+export type FlowName = typeof prendyFlowNames[number];
 
 // NOTE the generic types are used to prevent the typescript compiler widneing
 // [K_CharacterName in CharacterName] to [x: string]
@@ -78,18 +78,18 @@ export type FlowName = typeof backdopFlowNames[number];
 // Record<PlaceName, Something> to Record<string, Something>
 // it keeps the types generic , which is good since the types are updated from each project (declaration merging)
 
-export function makeBackdopConcepts<
+export function makePrendyConcepts<
   A_CharacterName extends CharacterName = CharacterName,
   A_PlaceName extends PlaceName = PlaceName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace,
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_DollName extends DollName = DollName,
   A_ModelName extends ModelName = ModelName,
@@ -103,56 +103,56 @@ export function makeBackdopConcepts<
   A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
   A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
   A_CharacterOptions extends CharacterOptions = CharacterOptions
->(backdopStartOptions: A_BackdopOptions, backdopArt: A_BackdopArt) {
+>(prendyStartOptions: A_PrendyOptions, prendyArt: A_PrendyArt) {
   return {
     keyboards: keyboards(),
     miniBubbles: miniBubbles<A_CharacterName>(),
     pointers: pointers(),
     global: global<
       A_AnySegmentName,
-      A_BackdopArt,
-      A_BackdopOptions,
+      A_PrendyArt,
+      A_PrendyOptions,
       A_CharacterName,
       A_DollName,
       A_ModelName,
       A_PickupName,
       A_PlaceInfoByName,
       A_PlaceName
-    >(backdopStartOptions, backdopArt),
-    models: models<A_BackdopArt, A_ModelName>(backdopArt),
+    >(prendyStartOptions, prendyArt),
+    models: models<A_PrendyArt, A_ModelName>(prendyArt),
     dolls: dolls<
       A_AnimationNameByModel,
       A_AnyAnimationName,
       A_AnySpotName,
-      A_BackdopArt,
+      A_PrendyArt,
       A_BoneNameByModel,
       A_DollName,
       A_DollOptions,
       A_MaterialNameByModel,
       A_MeshNameByModel,
       A_ModelName
-    >(backdopArt),
+    >(prendyArt),
     characters: characters<
       A_CharacterName,
       A_DollName,
       A_AnyTriggerName,
       A_AnyCameraName,
       A_CharacterOptions,
-      A_BackdopArt
-    >(backdopArt),
-    players: players<A_AnyAnimationName, A_BackdopOptions>(backdopStartOptions),
-    speechBubbles: speechBubbles<A_BackdopArt, A_CharacterName>(backdopArt),
+      A_PrendyArt
+    >(prendyArt),
+    players: players<A_AnyAnimationName, A_PrendyOptions>(prendyStartOptions),
+    speechBubbles: speechBubbles<A_PrendyArt, A_CharacterName>(prendyArt),
     places: places<
       A_PlaceName,
       A_AnyCameraName,
-      A_BackdopArt,
+      A_PrendyArt,
       A_CameraNameByPlace,
       A_SoundspotNameByPlace,
       A_SpotNameByPlace,
       A_TriggerNameByPlace,
       A_WallNameByPlace
-    >(backdopArt),
-    safeVids: safeVids<A_BackdopArt, A_PlaceName>(backdopArt),
-    sectionVids: sectionVids<A_BackdopArt, A_PlaceName>(backdopArt),
+    >(prendyArt),
+    safeVids: safeVids<A_PrendyArt, A_PlaceName>(prendyArt),
+    sectionVids: sectionVids<A_PrendyArt, A_PlaceName>(prendyArt),
   };
 }

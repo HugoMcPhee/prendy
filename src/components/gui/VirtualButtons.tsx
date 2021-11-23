@@ -1,6 +1,6 @@
 import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
+  PrendyConcepFuncs,
+  PrendyOptionsUntyped,
 } from "../../concepts/typedConcepFuncs";
 import {
   getSpeedAndAngleFromVector,
@@ -26,11 +26,11 @@ type VirtualButtonProps = {
 };
 
 export function makeVirtualButtons<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped
->(concepFuncs: ConcepFuncs, BACKDOP_OPTIONS: BackdopOptions) {
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyOptions extends PrendyOptionsUntyped
+>(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions) {
   const { getRefs, getState, setState, useStore } = concepFuncs;
-  const { hasInteracting, hasJumping } = BACKDOP_OPTIONS;
+  const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
 
   const globalRefs = getRefs().global.main;
 

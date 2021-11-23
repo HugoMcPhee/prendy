@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
-export declare function makeAlarmText<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): (_props: {}) => JSX.Element | null;
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+export declare function makeAlarmText<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): (_props: {}) => JSX.Element | null;

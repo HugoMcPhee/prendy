@@ -1,4 +1,4 @@
-import { BackdopArt, PlaceName } from "../../declarations";
+import { PrendyArt, PlaceName } from "../../declarations";
 import { forEach } from "chootils/dist/loops";
 
 // making PlaceName generic didn't seem to work with autocomplete?
@@ -26,10 +26,10 @@ export type VidLetter = "a" | "b";
 export type VidSection = { time: number; duration: number };
 
 export default function sectionVids<
-  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_PlaceName extends PlaceName = PlaceName
->(backdopArt: A_BackdopArt) {
-  const { placeNames } = backdopArt;
+>(prendyArt: A_PrendyArt) {
+  const { placeNames } = prendyArt;
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
     safeVidId_playing: `${itemName}_a` as string | null,

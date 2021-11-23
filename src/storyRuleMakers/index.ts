@@ -1,6 +1,6 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
-import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
 import {
   AnyTriggerName,
   CameraNameByPlace,
@@ -16,7 +16,7 @@ import { makeDollStoryHelpers } from "../utils/story/helpers/dolls";
 
 // export each of the rule makers stuff from here :)
 
-export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeGetUsefulStoryStuff<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getRefs, getState } = concepFuncs;
@@ -66,7 +66,7 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(
   };
 }
 
-export function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSetStoryState<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { setState } = concepFuncs;
@@ -91,7 +91,7 @@ export function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(
 }
 
 export function makeAllStoryRuleMakers<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_CharacterName extends CharacterName = CharacterName,

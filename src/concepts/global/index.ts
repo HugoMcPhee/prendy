@@ -8,8 +8,8 @@ import {
 } from "@babylonjs/core";
 import {
   AnySegmentName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   CharacterName,
   DollName,
   ModelName,
@@ -29,16 +29,16 @@ import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 
 export default function global<
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_BackdopArt extends BackdopArt = BackdopArt,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
   A_DollName extends DollName = DollName,
   A_ModelName extends ModelName = ModelName,
   A_PickupName extends PickupName = PickupName,
   A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
   A_PlaceName extends PlaceName = PlaceName
->(backdopStartOptions: A_BackdopOptions, backdopArt: A_BackdopArt) {
-  const { musicNames, soundNames } = backdopArt;
+>(prendyStartOptions: A_PrendyOptions, prendyArt: A_PrendyArt) {
+  const { musicNames, soundNames } = prendyArt;
 
   type MaybeSegment = null | A_AnySegmentName;
 
@@ -75,7 +75,7 @@ export default function global<
     nextSegmentNameWhenVidPlays: null as MaybeSegment, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
     wantedSegmentNameAtLoop: null as MaybeSegment,
     wantedSegmentName: null as MaybeSegment,
-    nowSegmentName: backdopStartOptions.segment as A_AnySegmentName,
+    nowSegmentName: prendyStartOptions.segment as A_AnySegmentName,
     wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sectionVids
     // TODO? move nowCamName etc to here, since never change cam for non-now place
     //
@@ -83,14 +83,14 @@ export default function global<
     modelNamesLoaded: [] as A_ModelName[],
     newPlaceLoaded: false,
     isLoadingBetweenPlaces: true,
-    nowPlaceName: backdopStartOptions.place as A_PlaceName,
+    nowPlaceName: prendyStartOptions.place as A_PlaceName,
     readyToSwapPlace: false,
     nextPlaceName: null as null | A_PlaceName,
     loadingOverlayToggled: true,
     loadingOverlayFullyShowing: true,
     //
     // player
-    playerCharacter: backdopStartOptions.playerCharacter as A_CharacterName, // TODO Move to players ?
+    playerCharacter: prendyStartOptions.playerCharacter as A_CharacterName, // TODO Move to players ?
     gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
     focusedDoll: "walker" as A_DollName,
@@ -98,8 +98,8 @@ export default function global<
     // scene plane
     ...mover2dState("planePos"),
     ...moverState("planeZoom", {
-      value: backdopStartOptions.zoomLevels.default,
-      valueGoal: backdopStartOptions.zoomLevels.default,
+      value: prendyStartOptions.zoomLevels.default,
+      valueGoal: prendyStartOptions.zoomLevels.default,
     }), // (like scale)
     planePosMoveConfigName: "default", // todo move to mover2dState()
     //
@@ -107,7 +107,7 @@ export default function global<
     timeScreenResized: Date.now(),
     interactButtonPressTime: 0,
     // story
-    heldPickups: backdopStartOptions.heldPickups as A_PickupName[],
+    heldPickups: prendyStartOptions.heldPickups as A_PickupName[],
     storyOverlayToggled: false, // so the screen can fade out without affecting loading a new place
     alarmTextIsVisible: false,
     alarmText: "⚠ wobble detected ⚠",

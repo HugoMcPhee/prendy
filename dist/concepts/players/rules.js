@@ -5,9 +5,9 @@ import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 import { clearTimeoutSafe } from "../../utils";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt) {
+export function makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt) {
     const { getRefs, getState, makeRules, setState } = concepFuncs;
-    const { placeInfoByName } = backdopArt;
+    const { placeInfoByName } = prendyArt;
     const globalRefs = getRefs().global.main;
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
@@ -70,7 +70,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt) {
         }),
         whenJumpKeyPressed: addItemEffect({
             onItemEffect() {
-                if (!BACKDOP_OPTIONS.hasJumping)
+                if (!PRENDY_OPTIONS.hasJumping)
                     return;
                 setState({ players: { main: { jumpButtonPressTime: Date.now() } } });
             },
@@ -79,7 +79,7 @@ export function makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt) {
         }),
         whenJumpKeyReleased: addItemEffect({
             onItemEffect() {
-                if (!BACKDOP_OPTIONS.hasJumping)
+                if (!PRENDY_OPTIONS.hasJumping)
                     return;
                 setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
             },

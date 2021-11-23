@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
 import { andLayout } from "../utils/styles";
 
 export function makeAllTestVideoStuff<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   PlaceName extends string
 >(concepFuncs: ConcepFuncs, placeNames: readonly PlaceName[]) {
   const { useStore, useStoreItemPropsEffect } = concepFuncs;

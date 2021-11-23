@@ -17,8 +17,8 @@ export function getDefaultInRangeFunction(dollNames) {
     }
     return defaultInRange;
 }
-export default function makeDollIndexUtils(backdopArt) {
-    const { dollNames, modelInfoByName } = backdopArt;
+export default function makeDollIndexUtils(prendyArt) {
+    const { dollNames, modelInfoByName } = prendyArt;
     function makeModelAnimWeightsMoverState(modelName) {
         const modelInfo = modelInfoByName[modelName];
         const { animationNames } = modelInfo;

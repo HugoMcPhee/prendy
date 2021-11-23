@@ -6,8 +6,8 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle } from "chootils/dist/speedAngleDistance2d";
 import {
   AnyAnimationName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   DollName,
   ModelName,
 } from "../../declarations";
@@ -16,8 +16,8 @@ import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 //
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../typedConcepFuncs";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
@@ -29,19 +29,19 @@ import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 // when the models isLoading becomes true
 
 export function makeDollDynamicRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   concepFuncs: ConcepFuncs,
-  backdopStartOptions: BackdopOptions,
-  backdopConcepts: BackdopConcepts,
-  backdopArt: BackdopArt
+  prendyStartOptions: PrendyOptions,
+  prendyConcepts: PrendyConcepts,
+  prendyArt: PrendyArt
 ) {
   const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(
     concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    backdopArt
+    prendyConcepts,
+    prendyStartOptions,
+    prendyArt
   );
   const { getRefs, makeDynamicRules } = concepFuncs;
 
@@ -121,7 +121,7 @@ export function makeDollDynamicRules<
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
 
 export function startDynamicDollRulesForInitialState<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>
 >(
   concepFuncs: ConcepFuncs,
@@ -147,16 +147,16 @@ export function startDynamicDollRulesForInitialState<
 
 export function makeDollRules<
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  backdopStartOptions: BackdopOptions,
+  prendyStartOptions: PrendyOptions,
   dollDynamicRules: DollDynamicRules,
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopArt: BackdopArt
+  prendyConcepts: PrendyConcepts,
+  prendyArt: PrendyArt
 ) {
-  const { modelInfoByName, dollNames } = backdopArt;
+  const { modelInfoByName, dollNames } = prendyArt;
 
   const {
     getQuickDistanceBetweenDolls,
@@ -165,14 +165,14 @@ export function makeDollRules<
     updateDollScreenPosition,
   } = makeDollStoreUtils(
     concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    backdopArt
+    prendyConcepts,
+    prendyStartOptions,
+    prendyArt
   );
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(
     concepFuncs,
-    backdopStartOptions
+    prendyStartOptions
   );
 
   const {
@@ -283,9 +283,9 @@ export function makeDollRules<
           }
           if (
             aniRef &&
-            aniRef?.speedRatio !== backdopStartOptions.animationSpeed
+            aniRef?.speedRatio !== prendyStartOptions.animationSpeed
           ) {
-            aniRef.speedRatio = backdopStartOptions.animationSpeed;
+            aniRef.speedRatio = prendyStartOptions.animationSpeed;
           }
 
           const animWeight = animWeights[aniName];

@@ -1,10 +1,10 @@
 import { Scene } from "@babylonjs/core";
 import { clearTimeoutSafe } from "../../../utils";
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { BackdopConcepFuncs } from "../../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 
-export function makeGlobalGeneralRules<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeGlobalGeneralRules<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getRefs, getState, makeRules, setState } = concepFuncs;

@@ -1,8 +1,8 @@
-import { AnyTriggerName, BackdopArt } from "../declarations";
+import { AnyTriggerName, PrendyArt } from "../declarations";
 import { breakableForEach } from "chootils/dist/loops";
-import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
 import {
-  BackdopOptions,
+  PrendyOptions,
   CameraNameByPlace,
   CharacterName,
   PlaceName,
@@ -12,8 +12,8 @@ import {
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
 
 export function makePlayer<
-  ConcepFuncs extends BackdopConcepFuncs
-  // BackdopOptions extends BackdopOptionsUntyped,
+  ConcepFuncs extends PrendyConcepFuncs
+  // PrendyOptions extends PrendyOptionsUntyped,
   // AnyCameraName extends string,
   // AnySegmentName extends string,
   // PlaceName extends string,
@@ -25,10 +25,10 @@ export function makePlayer<
   // CameraNameByPlace extends Record<PlaceName, string>
 >(
   concepFuncs: ConcepFuncs,
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
+  prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
-  const { placeInfoByName, characterNames } = backdopArt;
+  const { placeInfoByName, characterNames } = prendyArt;
 
   // type AnyToPlaceOption = {
   //   toPlace: PlaceName;
@@ -116,7 +116,7 @@ export function makePlayer<
               (triggerName) => {
                 if (atTriggers[triggerName]) {
                   const toOption = (
-                    backdopStartOptions.doorsInfo as DoorsInfoLoose
+                    prendyStartOptions.doorsInfo as DoorsInfoLoose
                   )[nowPlaceName as PlaceName]?.[triggerName];
                   if (toOption) {
                     goToNewPlace(toOption, charName as CharacterName);

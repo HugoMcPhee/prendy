@@ -1,21 +1,21 @@
 import { ConceptsHelperTypes } from "concep";
 import { VidState } from ".";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 import { makeVideoElementFromPath } from "./utils";
 import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
-export function makeSafeVidRules<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSafeVidRules<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getState, makeRules, onNextTick, setState } = concepFuncs;
 
-  type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]> &
-    keyof ReturnType<BackdopConcepFuncs["getRefs"]>;
+  type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]> &
+    keyof ReturnType<PrendyConcepFuncs["getRefs"]>;
   type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    BackdopConcepFuncs["getState"],
-    BackdopConcepFuncs["getRefs"],
+    PrendyConcepFuncs["getState"],
+    PrendyConcepFuncs["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];

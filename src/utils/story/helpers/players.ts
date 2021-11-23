@@ -2,12 +2,12 @@ import delay from "delay";
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 import {
   AnyAnimationName,
-  BackdopOptions,
+  PrendyOptions,
   CharacterName,
   ModelInfoByName,
   PickupName,
@@ -15,17 +15,17 @@ import {
 import { makeCharacterStoryHelpers } from "./characters";
 
 export function makerPlayerStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
   A_PickupName extends PickupName = PickupName
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: A_BackdopOptions,
+  prendyConcepts: PrendyConcepts,
+  prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {

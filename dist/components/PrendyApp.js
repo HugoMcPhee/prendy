@@ -7,31 +7,23 @@ import { Globals } from "react-spring";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
-// import "./BackdopApp.css";
+// import "./PrendyApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
 loadStyles();
-export function makeBackdopApp(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt
-//
-// placeInfoByName: PlaceInfoByName,
-// characterNames: readonly CharacterName[],
-// dollNames: readonly DollName[],
-// soundFiles: SoundFiles,
-// pickupsInfo: PickupsInfo,
-// speechVidFiles: SpeechVidFiles
-) {
+export function makePrendyApp(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt) {
     const { getRefs, onNextTick, setState } = concepFuncs;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = makeScreenGui(concepFuncs, backdopStartOptions, backdopArt);
-    const LoadingModels = makeLoadingModels(concepFuncs, backdopStartOptions, backdopArt);
-    const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
+    const ScreenGuiDom = makeScreenGui(concepFuncs, prendyStartOptions, prendyArt);
+    const LoadingModels = makeLoadingModels(concepFuncs, prendyStartOptions, prendyArt);
+    const ScenePlane = makeScenePlane(concepFuncs, prendyStartOptions);
     // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
     //   "city",
     //   "cityb",
     //   "beanshop",
     // ]);
-    return function BackdopApp({ children }) {
+    return function PrendyApp({ children }) {
         const globalRefs = getRefs().global.main;
         const scenePlaneCameraRef = useCallback((node) => {
             globalRefs.scenePlaneCamera = node;

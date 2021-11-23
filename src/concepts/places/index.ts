@@ -8,7 +8,7 @@ import {
 import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
-  BackdopArt,
+  PrendyArt,
   CameraNameByPlace,
   PlaceName,
   SoundspotNameByPlace,
@@ -33,15 +33,15 @@ export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 export default function places<
   A_PlaceName extends PlaceName = PlaceName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(backdopArt: A_BackdopArt) {
-  const { placeInfoByName } = backdopArt;
-  const placeNames = backdopArt.placeNames as A_PlaceName[];
+>(prendyArt: A_PrendyArt) {
+  const { placeInfoByName } = prendyArt;
+  const placeNames = prendyArt.placeNames as A_PlaceName[];
 
   type MaybeCam<T_PlaceName extends A_PlaceName> =
     | null

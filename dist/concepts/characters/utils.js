@@ -5,8 +5,8 @@ export function makeGetCharDollStuff(concepFuncs) {
     const { getRefs, getState } = concepFuncs;
     // NOTE TODO all these types need to be made inside the places using them (like story helpers)
     // And getCharDollStuff there too
-    // type StartState_Characters = typeof backdopConcepts.characters.startStates;
-    // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+    // type StartState_Characters = typeof prendyConcepts.characters.startStates;
+    // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
     // type DollNameFromCharacter<T_CharacterName extends CharacterName> =
     //   StartState_Characters[T_CharacterName]["dollName"];
     // type ModelNameFromDoll<T_DollName extends DollName> =

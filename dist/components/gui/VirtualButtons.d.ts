@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../../concepts/typedConcepFuncs";
-export declare function makeVirtualButtons<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, BACKDOP_OPTIONS: BackdopOptions): (_: {}) => JSX.Element;
+import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../../concepts/typedConcepFuncs";
+export declare function makeVirtualButtons<ConcepFuncs extends PrendyConcepFuncs, PrendyOptions extends PrendyOptionsUntyped>(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions): (_: {}) => JSX.Element;

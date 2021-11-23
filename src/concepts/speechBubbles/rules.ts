@@ -3,8 +3,8 @@ import { forEach } from "chootils/dist/loops";
 import { makeSpeechBubblesStoreUtils } from "./utils";
 import { CSSProperties } from "react";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../typedConcepFuncs";
 import { ConceptsHelperTypes } from "concep";
 
@@ -17,19 +17,19 @@ When characters position changes
 */
 
 export function makeSpeechBubbleRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
->(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
+>(concepFuncs: ConcepFuncs, prendyConcepts: PrendyConcepts) {
   const { makeRules, setState, getRefs } = concepFuncs;
 
   // AllItemsState,
   // ItemRefs,
   // ItemState,
 
-  type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]>;
+  type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]>;
   type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    BackdopConcepFuncs["getState"],
-    BackdopConcepFuncs["getRefs"],
+    PrendyConcepFuncs["getState"],
+    PrendyConcepFuncs["getRefs"],
     T
   >;
   type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
@@ -38,7 +38,7 @@ export function makeSpeechBubbleRules<
 
   const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(
     concepFuncs,
-    backdopConcepts
+    prendyConcepts
   );
 
   return makeRules((addItemEffect, addEffect) => ({

@@ -1,4 +1,4 @@
-export default function players(backdopStartOptions) {
+export default function players(prendyStartOptions) {
     const state = () => ({
         // player input stuff
         lastSafeInputAngle: 0,
@@ -16,12 +16,12 @@ export default function players(backdopStartOptions) {
         canShowVirtualButtons: false,
         //
         animationNames: {
-            walking: backdopStartOptions.playerAnimations.walking,
-            idle: backdopStartOptions.playerAnimations.idle,
+            walking: prendyStartOptions.playerAnimations.walking,
+            idle: prendyStartOptions.playerAnimations.idle,
         }, // maybe typed somehow, from player character?
     });
     const refs = () => ({
-        walkSpeed: backdopStartOptions.walkSpeed,
+        walkSpeed: prendyStartOptions.walkSpeed,
         canJumpTimeout: null,
         canShowVirtualButtonsTimeout: null,
         canHideVirtualButtonsTimeout: null,

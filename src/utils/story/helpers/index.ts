@@ -3,8 +3,8 @@ import {
   AnyAnimationName,
   AnyCameraName,
   AnySegmentName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   CameraNameByPlace,
   CharacterName,
   CharacterOptions,
@@ -23,8 +23,8 @@ import {
   WallNameByPlace,
 } from "../../../declarations";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 import { makeCharacterStoryHelpers } from "./characters";
 import { makeDollStoryHelpers } from "./dolls";
@@ -38,11 +38,11 @@ import { makeStickerStoryHelpers } from "./stickers";
 
 // function doThis
 
-export function makeBackdopStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
+export function makePrendyStoryHelpers<
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
   A_CharacterOptions extends CharacterOptions = CharacterOptions,
   A_DollName extends DollName = DollName,
@@ -64,15 +64,15 @@ export function makeBackdopStoryHelpers<
   A_MusicName extends MusicName = MusicName
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: A_BackdopOptions,
-  backdopArt: BackdopArt
+  prendyConcepts: PrendyConcepts,
+  prendyStartOptions: A_PrendyOptions,
+  prendyArt: PrendyArt
 ) {
-  const modelInfoByName = backdopArt.modelInfoByName as A_ModelInfoByName;
-  const characterNames = backdopArt.characterNames as A_CharacterName[];
-  const placeInfoByName = backdopArt.placeInfoByName as A_PlaceInfoByName;
-  const musicNames = backdopArt.musicNames as A_MusicName[];
-  const musicFiles = backdopArt.musicFiles as A_MusicFiles;
+  const modelInfoByName = prendyArt.modelInfoByName as A_ModelInfoByName;
+  const characterNames = prendyArt.characterNames as A_CharacterName[];
+  const placeInfoByName = prendyArt.placeInfoByName as A_PlaceInfoByName;
+  const musicNames = prendyArt.musicNames as A_MusicName[];
+  const musicFiles = prendyArt.musicFiles as A_MusicFiles;
 
   const {
     lookAtEachother,
@@ -85,9 +85,9 @@ export function makeBackdopStoryHelpers<
     springCharRotation,
   } = makeCharacterStoryHelpers<
     ConcepFuncs,
-    BackdopConcepts,
+    PrendyConcepts,
     A_AnimationNameByModel,
-    A_BackdopOptions,
+    A_PrendyOptions,
     A_CharacterName,
     A_CharacterOptions,
     A_DollName,
@@ -95,8 +95,8 @@ export function makeBackdopStoryHelpers<
     A_ModelInfoByName
   >(
     concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
+    prendyConcepts,
+    prendyStartOptions,
     modelInfoByName,
     characterNames
   );
@@ -116,9 +116,9 @@ export function makeBackdopStoryHelpers<
     toggleDollMeshes,
   } = makeDollStoryHelpers<
     ConcepFuncs,
-    BackdopConcepts,
+    PrendyConcepts,
     A_AnimationNameByModel,
-    A_BackdopOptions,
+    A_PrendyOptions,
     A_CharacterName,
     A_CharacterOptions,
     A_DollName,
@@ -128,7 +128,7 @@ export function makeBackdopStoryHelpers<
     A_ModelName,
     A_PlaceName,
     A_SpotNameByPlace
-  >(concepFuncs, backdopStartOptions, modelInfoByName);
+  >(concepFuncs, prendyStartOptions, modelInfoByName);
 
   const {
     enableMovement,
@@ -137,16 +137,16 @@ export function makeBackdopStoryHelpers<
     takePickup,
   } = makerPlayerStoryHelpers<
     ConcepFuncs,
-    BackdopConcepts,
+    PrendyConcepts,
     A_AnyAnimationName,
-    A_BackdopOptions,
+    A_PrendyOptions,
     A_CharacterName,
     A_ModelInfoByName,
     A_PickupName
   >(
     concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
+    prendyConcepts,
+    prendyStartOptions,
     modelInfoByName,
     characterNames
   );
@@ -185,10 +185,10 @@ export function makeBackdopStoryHelpers<
     showSpeech,
   } = makeSpeechStoryHelpers<
     ConcepFuncs,
-    BackdopConcepts,
-    A_BackdopOptions,
+    PrendyConcepts,
+    A_PrendyOptions,
     A_CharacterName
-  >(concepFuncs, backdopConcepts, backdopStartOptions, characterNames);
+  >(concepFuncs, prendyConcepts, prendyStartOptions, characterNames);
 
   const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(
     concepFuncs

@@ -28,10 +28,10 @@ export function enableCollisions(theMesh) {
     theMesh.useOctreeForCollisions = true;
     theMesh.rotationQuaternion = null; // allow euler rotation again
 }
-export function makeDollStoreUtils(concepFuncs, _backdopConcepts, backdopStartOptions, backdopArt) {
+export function makeDollStoreUtils(concepFuncs, _prendyConcepts, prendyStartOptions, prendyArt) {
     const { getRefs, getState, setState } = concepFuncs;
-    const { dollNames, modelInfoByName } = backdopArt;
-    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+    const { dollNames, modelInfoByName } = prendyArt;
+    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
             dolls: {

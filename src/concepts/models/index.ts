@@ -1,12 +1,12 @@
 import { AssetContainer, PBRMaterial } from "@babylonjs/core";
-import { BackdopArt, ModelName } from "../../declarations";
+import { PrendyArt, ModelName } from "../../declarations";
 import { forEach } from "chootils/dist/loops";
 
 export default function models<
-  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_ModelName extends ModelName = ModelName
->(backdopArt: A_BackdopArt) {
-  const modelNames = backdopArt.modelNames as A_ModelName[];
+>(prendyArt: A_PrendyArt) {
+  const modelNames = prendyArt.modelNames as A_ModelName[];
 
   const state = <T_ModelName extends A_ModelName>(_modelName: T_ModelName) => {
     return {

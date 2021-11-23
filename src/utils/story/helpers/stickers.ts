@@ -1,7 +1,7 @@
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
 
 export function makeStickerStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs
+  ConcepFuncs extends PrendyConcepFuncs
 >(concepFuncs: ConcepFuncs) {
   const { setState } = concepFuncs;
 

@@ -1,3 +1,3 @@
-import { BackdopArt, BackdopOptions } from "../declarations";
-import { BackdopConcepFuncs, PlaceholderBackdopConcepts } from "./typedConcepFuncs";
-export declare function makeStartBackdopRules<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, BACKDOP_OPTIONS: BackdopOptions, backdopArt: BackdopArt): (fontNames: readonly string[]) => () => void;
+import { PrendyArt, PrendyOptions } from "../declarations";
+import { PrendyConcepFuncs, PlaceholderPrendyConcepts } from "./typedConcepFuncs";
+export declare function makeStartPrendyRules<ConcepFuncs extends PrendyConcepFuncs, PrendyConcepts extends PlaceholderPrendyConcepts>(concepFuncs: ConcepFuncs, prendyConcepts: PrendyConcepts, PRENDY_OPTIONS: PrendyOptions, prendyArt: PrendyArt): (fontNames: readonly string[]) => () => void;

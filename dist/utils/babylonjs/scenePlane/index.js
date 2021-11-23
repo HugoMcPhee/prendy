@@ -4,7 +4,7 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-export function makeScenePlaneUtils(concepFuncs, backdopStartOptions) {
+export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
     const { getRefs, getState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const globalRefs = getRefs().global.main;
@@ -36,7 +36,7 @@ export function makeScenePlaneUtils(concepFuncs, backdopStartOptions) {
         if (!currentCamera)
             return new Vector3();
         // FIXME Temporary value to use the characters head position instead of center position
-        const Y_OFFSET = backdopStartOptions.headHeightOffset;
+        const Y_OFFSET = prendyStartOptions.headHeightOffset;
         return Vector3.Project(new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z), Matrix.Identity(), currentCamera
             .getViewMatrix()
             // .multiply(currentCamera.getProjectionMatrix()),

@@ -1,5 +1,5 @@
-import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../../typedConcepFuncs";
-export declare function makeGlobalScenePlaneRules<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions): {
+import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../../typedConcepFuncs";
+export declare function makeGlobalScenePlaneRules<ConcepFuncs extends PrendyConcepFuncs, PrendyOptions extends PrendyOptionsUntyped>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

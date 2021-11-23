@@ -10,7 +10,7 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-export const backdopFlowNames = [
+export const prendyFlowNames = [
     // updating internal video states
     "safeVidStateUpdates",
     "sectionVidStateUpdates",
@@ -47,19 +47,19 @@ export const backdopFlowNames = [
 // or
 // Record<PlaceName, Something> to Record<string, Something>
 // it keeps the types generic , which is good since the types are updated from each project (declaration merging)
-export function makeBackdopConcepts(backdopStartOptions, backdopArt) {
+export function makePrendyConcepts(prendyStartOptions, prendyArt) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(),
         pointers: pointers(),
-        global: global(backdopStartOptions, backdopArt),
-        models: models(backdopArt),
-        dolls: dolls(backdopArt),
-        characters: characters(backdopArt),
-        players: players(backdopStartOptions),
-        speechBubbles: speechBubbles(backdopArt),
-        places: places(backdopArt),
-        safeVids: safeVids(backdopArt),
-        sectionVids: sectionVids(backdopArt),
+        global: global(prendyStartOptions, prendyArt),
+        models: models(prendyArt),
+        dolls: dolls(prendyArt),
+        characters: characters(prendyArt),
+        players: players(prendyStartOptions),
+        speechBubbles: speechBubbles(prendyArt),
+        places: places(prendyArt),
+        safeVids: safeVids(prendyArt),
+        sectionVids: sectionVids(prendyArt),
     };
 }

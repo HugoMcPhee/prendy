@@ -2,8 +2,8 @@ import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   DollName,
   PlaceName,
 } from "../../../declarations";
@@ -16,47 +16,47 @@ import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 // import { focusScenePlaneOnFocusedDoll } from "../../../utils/babylonjs/scenePlane/focusScenePlane";
 // import { updateTexturesForNowCamera } from "./whenCameraChanges";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalChangePlaceRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   concepFuncs: ConcepFuncs,
-  _backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
+  _prendyConcepts: PrendyConcepts,
+  prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
-  const { placeInfoByName } = backdopArt;
+  const { placeInfoByName } = prendyArt;
 
   const globalRefs = getRefs().global.main;
 
   const { getSectionVidVideo } = makeSectionVidStoreUtils(
     concepFuncs,
-    backdopArt
+    prendyArt
   );
 
   const {
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils(concepFuncs, backdopArt);
+  } = makeCameraChangeUtils(concepFuncs, prendyArt);
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils<
     ConcepFuncs,
-    BackdopOptions
-  >(concepFuncs, backdopStartOptions);
+    PrendyOptions
+  >(concepFuncs, prendyStartOptions);
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
   const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
   const { setDollToSpot } = makeDollStoryHelpers(
     concepFuncs,
-    backdopStartOptions,
-    backdopArt.modelInfoByName
+    prendyStartOptions,
+    prendyArt.modelInfoByName
   );
 
   function setPlayerPositionForNewPlace() {
@@ -186,7 +186,7 @@ export function makeGlobalChangePlaceRules<
         } = globalState;
         const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
 
-        const wantedModelsForPlace = backdopStartOptions.modelNamesByPlace[
+        const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[
           nowPlaceName
         ].sort();
         const loadedModelNames = modelNamesLoaded.sort();

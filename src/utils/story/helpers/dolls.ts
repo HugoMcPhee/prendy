@@ -3,12 +3,12 @@ import { forEach } from "chootils/dist/loops";
 import { getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 import {
   AnimationNameByModel,
-  BackdopOptions,
+  PrendyOptions,
   CharacterName,
   CharacterOptions,
   DollName,
@@ -24,10 +24,10 @@ import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeDollStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
   A_CharacterOptions extends CharacterOptions = CharacterOptions,
   A_DollName extends DollName = DollName,
@@ -39,8 +39,8 @@ export function makeDollStoryHelpers<
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
 >(
   concepFuncs: ConcepFuncs,
-  // backdopConcepts: BackdopConcepts,
-  backdopStartOptions: A_BackdopOptions,
+  // prendyConcepts: PrendyConcepts,
+  prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName
 ) {
   const { getRefs, getState, setState } = concepFuncs;
@@ -69,7 +69,7 @@ export function makeDollStoryHelpers<
 
   const { getModelNameFromDoll } = makeDollStoryUtils<
     ConcepFuncs,
-    BackdopConcepts,
+    PrendyConcepts,
     A_DollName
   >(concepFuncs);
 
@@ -149,8 +149,8 @@ export function makeDollStoryHelpers<
       focusedDoll: dollName,
       planeZoomGoal:
         zoom !== undefined
-          ? Math.min(zoom, backdopStartOptions.zoomLevels.max)
-          : backdopStartOptions.zoomLevels.default,
+          ? Math.min(zoom, prendyStartOptions.zoomLevels.max)
+          : prendyStartOptions.zoomLevels.default,
     });
   }
 

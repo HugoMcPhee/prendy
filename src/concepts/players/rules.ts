@@ -6,23 +6,23 @@ import {
   getVectorAngle,
 } from "chootils/dist/speedAngleDistance2d";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
-import { BackdopArt, CharacterName } from "../../declarations";
+import { PrendyArt, CharacterName } from "../../declarations";
 import { clearTimeoutSafe } from "../../utils";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
-import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../typedConcepFuncs";
+import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../typedConcepFuncs";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
 export function makePlayerRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyOptions extends PrendyOptionsUntyped
 >(
   concepFuncs: ConcepFuncs,
-  BACKDOP_OPTIONS: BackdopOptions,
-  backdopArt: BackdopArt
+  PRENDY_OPTIONS: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, makeRules, setState } = concepFuncs;
-  const { placeInfoByName } = backdopArt;
+  const { placeInfoByName } = prendyArt;
 
   const globalRefs = getRefs().global.main;
 
@@ -98,7 +98,7 @@ export function makePlayerRules<
     }),
     whenJumpKeyPressed: addItemEffect({
       onItemEffect() {
-        if (!BACKDOP_OPTIONS.hasJumping) return;
+        if (!PRENDY_OPTIONS.hasJumping) return;
         setState({ players: { main: { jumpButtonPressTime: Date.now() } } });
       },
       flow: "input",
@@ -106,7 +106,7 @@ export function makePlayerRules<
     }),
     whenJumpKeyReleased: addItemEffect({
       onItemEffect() {
-        if (!BACKDOP_OPTIONS.hasJumping) return;
+        if (!PRENDY_OPTIONS.hasJumping) return;
         setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
       },
       flow: "input",

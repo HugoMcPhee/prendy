@@ -2,19 +2,19 @@ import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 import { makeRunMovers } from "concep-movers";
 import { copyPoint } from "chootils/dist/points2d";
 import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
+  PrendyConcepFuncs,
+  PrendyOptionsUntyped,
 } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "../utils";
 
 export function makeGlobalScenePlaneRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped
->(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions) {
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyOptions extends PrendyOptionsUntyped
+>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions) {
   const {
     getScenePlaneOverScreenEdgesAmount,
     focusScenePlaneOnFocusedDoll,
-  } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+  } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
   const { makeRules } = concepFuncs;

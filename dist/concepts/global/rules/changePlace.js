@@ -7,16 +7,16 @@ import { makeGetCharDollStuff } from "../../characters/utils";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalChangePlaceRules(concepFuncs, _backdopConcepts, backdopStartOptions, backdopArt) {
+export function makeGlobalChangePlaceRules(concepFuncs, _prendyConcepts, prendyStartOptions, prendyArt) {
     const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
-    const { placeInfoByName } = backdopArt;
+    const { placeInfoByName } = prendyArt;
     const globalRefs = getRefs().global.main;
-    const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, backdopArt);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+    const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, prendyArt);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, prendyArt);
+    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
-    const { setDollToSpot } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, backdopArt.modelInfoByName);
+    const { setDollToSpot } = makeDollStoryHelpers(concepFuncs, prendyStartOptions, prendyArt.modelInfoByName);
     function setPlayerPositionForNewPlace() {
         const { nowPlaceName, playerCharacter } = getState().global.main;
         const { dollName } = getCharDollStuff(playerCharacter);
@@ -122,7 +122,7 @@ export function makeGlobalChangePlaceRules(concepFuncs, _backdopConcepts, backdo
             onItemEffect({ itemState: globalState }) {
                 const { nowPlaceName, newPlaceLoaded, modelNamesLoaded, wantedSegmentWhenNextPlaceLoads, } = globalState;
                 const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
-                const wantedModelsForPlace = backdopStartOptions.modelNamesByPlace[nowPlaceName].sort();
+                const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
                 const loadedModelNames = modelNamesLoaded.sort();
                 let allModelsAreLoaded = true;
                 forEach(wantedModelsForPlace, (loopedCharacterName) => {

@@ -1,7 +1,7 @@
 import { VidState } from "../../concepts/safeVids";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
-export function makeSafeVidStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSafeVidStoreUtils<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getState, startItemEffect, stopEffect } = concepFuncs;

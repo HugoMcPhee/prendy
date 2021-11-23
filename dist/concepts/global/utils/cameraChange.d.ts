@@ -1,6 +1,6 @@
-import { AnyCameraName, BackdopArt } from "../../../declarations";
-import { BackdopConcepFuncs } from "../../typedConcepFuncs";
-export declare function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, backdopArt: BackdopArt): {
+import { AnyCameraName, PrendyArt } from "../../../declarations";
+import { PrendyConcepFuncs } from "../../typedConcepFuncs";
+export declare function makeCameraChangeUtils<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt): {
     getSafeCamName: {
         (cam: AnyCameraName): AnyCameraName;
         (cam: null): null;

@@ -1,6 +1,6 @@
 import { forEach } from "chootils/dist/loops";
-export default function characters(backdopArt) {
-    const { characterNames, dollNames, characterOptions } = backdopArt;
+export default function characters(prendyArt) {
+    const { characterNames, dollNames, characterOptions } = prendyArt;
     const state = (_characterName, dollName) => {
         return {
             dollName: dollName !== null && dollName !== void 0 ? dollName : dollNames[0],

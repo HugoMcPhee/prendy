@@ -1,4 +1,4 @@
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,
@@ -7,7 +7,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 
-export function makeVirtualStick<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeVirtualStick<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getRefs, getState, setState } = concepFuncs;

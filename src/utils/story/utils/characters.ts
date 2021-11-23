@@ -1,6 +1,6 @@
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
   CharacterName,
   PlaceName,
@@ -10,7 +10,7 @@ import {
 import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeCharacterStoryUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   A_CharacterName extends CharacterName = CharacterName,
   A_PlaceName extends PlaceName = PlaceName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace

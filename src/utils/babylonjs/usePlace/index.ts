@@ -4,16 +4,16 @@ import { useEffect } from "react";
 import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   ModelInfoByName,
   PlaceName,
   SoundName,
 } from "../../..//declarations";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
@@ -21,11 +21,11 @@ import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
 
 export function makeUsePlace<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
-  // BackdopOptions extends BackdopOptionsUntyped,
+  // PrendyOptions extends PrendyOptionsUntyped,
   // PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
   // PlaceName extends string,
   // DollName extends string,
@@ -37,11 +37,11 @@ export function makeUsePlace<
   // SegmentNameByPlace extends Record<PlaceName, string>
 >(
   concepFuncs: ConcepFuncs,
-  backdopStartOptions: A_BackdopOptions,
-  backdopArt: BackdopArt
+  prendyStartOptions: A_PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
-  const { placeInfoByName, soundFiles } = backdopArt;
+  const { placeInfoByName, soundFiles } = prendyArt;
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
@@ -51,7 +51,7 @@ export function makeUsePlace<
     loadNowVideosForPlace,
     loadProbeImagesForPlace,
     makeCameraFromModel,
-  } = makeUsePlaceUtils(concepFuncs, backdopArt);
+  } = makeUsePlaceUtils(concepFuncs, prendyArt);
 
   const placesRefs = getRefs().places;
 
@@ -89,7 +89,7 @@ export function makeUsePlace<
       });
 
       const { modelNamesLoaded } = getState().global.main;
-      forEach(backdopStartOptions.modelNamesByPlace[placeName], (modelName) => {
+      forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
         if (!modelNamesLoaded.includes(modelName)) {
           setState({ models: { [modelName]: { wantToLoad: true } } });
         }

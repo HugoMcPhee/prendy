@@ -2,11 +2,11 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeDollStoryHelpers } from "./dolls";
-export function makeCharacterStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, modelInfoByName, characterNames) {
+export function makeCharacterStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames) {
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(concepFuncs);
-    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, modelInfoByName);
+    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(concepFuncs, prendyStartOptions, modelInfoByName);
     function setCharAnimation(character, animation // AnimationNameFromModel might keep the type better
     ) {
         const { dollName } = getCharDollStuff(character);

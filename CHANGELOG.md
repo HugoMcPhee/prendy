@@ -9,6 +9,10 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
+v0.7.7
+
+- renamed variables from backdop to prendy
+
 v0.7.6
 
 - renamed prendy

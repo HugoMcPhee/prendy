@@ -1,10 +1,10 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-export function makeCharacterDynamicRules(concepFuncs, backdopStartOptions, backdopArt) {
+export function makeCharacterDynamicRules(concepFuncs, prendyStartOptions, prendyArt) {
     const { getState, setState, getRefs, makeDynamicRules } = concepFuncs;
-    const { placeInfoByName } = backdopArt;
-    const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+    const { placeInfoByName } = prendyArt;
+    const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
     // makeDynamicRules((addItemEffect)=> ({
@@ -129,9 +129,9 @@ export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRu
         };
     };
 }
-export function makeCharacterRules(concepFuncs, backdopArt) {
+export function makeCharacterRules(concepFuncs, prendyArt) {
     const { makeRules, getState, setState } = concepFuncs;
-    const { placeInfoByName } = backdopArt;
+    const { placeInfoByName } = prendyArt;
     return makeRules((addItemEffect, addEffect) => ({
         // should be a  dynamic rule ?
         whenCameraChangesForPlanePosition: addEffect({

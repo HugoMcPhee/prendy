@@ -1,8 +1,8 @@
 import { AbstractMesh, Camera, Matrix, Mesh, Vector3 } from "@babylonjs/core";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
+  PrendyConcepFuncs,
+  PrendyOptionsUntyped,
 } from "../../../concepts/typedConcepFuncs";
 import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
@@ -10,9 +10,9 @@ import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
 
 export function makeScenePlaneUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped
->(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions) {
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyOptions extends PrendyOptionsUntyped
+>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions) {
   const { getRefs, getState } = concepFuncs;
 
   const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
@@ -70,7 +70,7 @@ export function makeScenePlaneUtils<
     if (!currentCamera) return new Vector3();
 
     // FIXME Temporary value to use the characters head position instead of center position
-    const Y_OFFSET = backdopStartOptions.headHeightOffset;
+    const Y_OFFSET = prendyStartOptions.headHeightOffset;
 
     return Vector3.Project(
       new Vector3(

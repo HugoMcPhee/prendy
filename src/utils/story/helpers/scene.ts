@@ -1,7 +1,7 @@
 import delay from "delay";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -17,7 +17,7 @@ import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 
 export function makeSceneStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,

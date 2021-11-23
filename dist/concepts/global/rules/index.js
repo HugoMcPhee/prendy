@@ -2,12 +2,12 @@ import { makeGlobalChangePlaceRules } from "./changePlace";
 import { makeGlobalGeneralRules } from "./general";
 import { makeGlobalScenePlaneRules } from "./scenePlane";
 import { makeGlobalVideoRules } from "./video";
-export function makeStartAllGlobalRules(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt) {
+export function makeStartAllGlobalRules(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt) {
     // making rules
-    const globalVideoRules = makeGlobalVideoRules(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
-    const globalChangePlaceRules = makeGlobalChangePlaceRules(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
+    const globalVideoRules = makeGlobalVideoRules(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt);
+    const globalChangePlaceRules = makeGlobalChangePlaceRules(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt);
     const globalGeneralRules = makeGlobalGeneralRules(concepFuncs);
-    const globalScenePlaneRules = makeGlobalScenePlaneRules(concepFuncs, backdopStartOptions);
+    const globalScenePlaneRules = makeGlobalScenePlaneRules(concepFuncs, prendyStartOptions);
     return function startAllGlobalRules() {
         globalVideoRules.startAll();
         globalChangePlaceRules.startAll();

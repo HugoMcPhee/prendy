@@ -1,20 +1,20 @@
-// import { VideoGui } from "backdopdev/utils/babylonjs/VideoGui";
+// import { VideoGui } from "prendydev/utils/babylonjs/VideoGui";
 //
 import { CSSProperties } from "react";
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition } from "chootils/dist/points2d";
 import {
-  BackdopArt,
+  PrendyArt,
   CharacterName,
   FontName,
   SpeechVidName,
 } from "../../declarations";
 
 export default function speechBubbles<
-  A_BackdopArt extends BackdopArt = BackdopArt,
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_CharacterName extends CharacterName = CharacterName
->(backdopArt: A_BackdopArt) {
-  const { characterNames, characterOptions, fontNames } = backdopArt;
+>(prendyArt: A_PrendyArt) {
+  const { characterNames, characterOptions, fontNames } = prendyArt;
 
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,

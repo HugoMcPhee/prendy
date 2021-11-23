@@ -5,9 +5,9 @@ import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import { makeGlobalStoreUtils } from "./";
-export function makeCameraChangeUtils(concepFuncs, backdopArt) {
+export function makeCameraChangeUtils(concepFuncs, prendyArt) {
     const { getRefs, getState, setState } = concepFuncs;
-    const { placeInfoByName, dollNames } = backdopArt;
+    const { placeInfoByName, dollNames } = prendyArt;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);

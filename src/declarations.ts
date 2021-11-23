@@ -1,5 +1,5 @@
 import {
-  BackdopOptionsUntyped,
+  PrendyOptionsUntyped,
   DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
@@ -8,7 +8,7 @@ import {
 export default "default";
 
 export interface ArtTypesUntyped {
-  BackdopOptions: BackdopOptionsUntyped;
+  PrendyOptions: PrendyOptionsUntyped;
   PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
   ModelInfoByName: ModelInfoByNamePlaceholder<string>;
   DollOptions: DollOptionsPlaceholder<string, string>;
@@ -52,7 +52,7 @@ export interface FinalArtTypes
   extends Omit<ArtTypesUntyped, keyof CustomArtTypes>,
     CustomArtTypes {}
 
-export type BackdopOptions = FinalArtTypes["BackdopOptions"];
+export type PrendyOptions = FinalArtTypes["PrendyOptions"];
 export type PlaceInfoByName = FinalArtTypes["PlaceInfoByName"];
 export type ModelInfoByName = FinalArtTypes["ModelInfoByName"];
 export type DollOptions = FinalArtTypes["DollOptions"];
@@ -88,7 +88,7 @@ export type SoundFiles = FinalArtTypes["SoundFiles"];
 export type SpeechVidFiles = FinalArtTypes["SpeechVidFiles"];
 export type PickupsInfo = FinalArtTypes["PickupsInfo"];
 
-export type BackdopArt = {
+export type PrendyArt = {
   placeInfoByName: PlaceInfoByName;
   modelInfoByName: ModelInfoByName;
   dollOptions: DollOptions;

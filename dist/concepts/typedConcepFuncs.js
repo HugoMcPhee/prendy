@@ -1,6 +1,6 @@
 import { createConcepts } from "concep";
-import { backdopFlowNames } from ".";
-import { getBackdopOptions } from "../getBackdopOptions";
+import { prendyFlowNames } from ".";
+import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
 import dolls from "./dolls";
@@ -14,7 +14,7 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-const TEST_START_OPTIONS = getBackdopOptions({
+const TEST_START_OPTIONS = getPrendyOptions({
     // place: "cave",
     // segment: "start",
     // camera: "View_Camera",
@@ -88,7 +88,7 @@ const testArtStuff = {
         characterB: { doll: "dollB", font: "fontA" },
     },
 };
-const placeholderBackdopConcepts = {
+const placeholderPrendyConcepts = {
     keyboards: keyboards(),
     miniBubbles: miniBubbles(),
     pointers: pointers(),
@@ -104,8 +104,8 @@ const placeholderBackdopConcepts = {
     //
     story: story_fake(),
 };
-// const concepFuncs = _createConcepts_ForTypes(placeholderBackdopConcepts, {
-const concepFuncs = createConcepts(placeholderBackdopConcepts, {
-    flowNames: backdopFlowNames,
+// const concepFuncs = _createConcepts_ForTypes(placeholderPrendyConcepts, {
+const concepFuncs = createConcepts(placeholderPrendyConcepts, {
+    flowNames: prendyFlowNames,
     dontSetMeta: true,
 });

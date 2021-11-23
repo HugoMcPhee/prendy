@@ -1,8 +1,8 @@
 import { Point2D } from "chootils/dist/points2d";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
 export function makePointersConnectRules<
-  ConcepFuncs extends BackdopConcepFuncs
+  ConcepFuncs extends PrendyConcepFuncs
 >(concepFuncs: ConcepFuncs) {
   const { getRefs, setState, addItem, removeItem } = concepFuncs;
 

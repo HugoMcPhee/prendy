@@ -1,8 +1,8 @@
 import { Engine, Scene } from "@babylonjs/core";
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 
 export function makeGetSceneOrEngineUtils<
-  ConcepFuncs extends BackdopConcepFuncs
+  ConcepFuncs extends PrendyConcepFuncs
 >(concepFuncs: ConcepFuncs) {
   const { getRefs } = concepFuncs;
 

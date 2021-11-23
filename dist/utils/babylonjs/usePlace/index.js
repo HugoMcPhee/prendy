@@ -7,13 +7,13 @@ import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
-export function makeUsePlace(concepFuncs, backdopStartOptions, backdopArt) {
+export function makeUsePlace(concepFuncs, prendyStartOptions, prendyArt) {
     const { getRefs, getState, setState } = concepFuncs;
-    const { placeInfoByName, soundFiles } = backdopArt;
+    const { placeInfoByName, soundFiles } = prendyArt;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
     const useModelFile = makeUseModelFile(concepFuncs);
-    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(concepFuncs, backdopArt);
+    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(concepFuncs, prendyArt);
     const placesRefs = getRefs().places;
     const addToHelpFixRotationVector = new Vector3(0, Math.PI, Math.PI); // Math.PI same as toRadians(180)?
     const multiplyToHelpFixRotationVector = new Vector3(-1, 1, -1);
@@ -32,7 +32,7 @@ export function makeUsePlace(concepFuncs, backdopStartOptions, backdopArt) {
                 camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
             });
             const { modelNamesLoaded } = getState().global.main;
-            forEach(backdopStartOptions.modelNamesByPlace[placeName], (modelName) => {
+            forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
                 if (!modelNamesLoaded.includes(modelName)) {
                     setState({ models: { [modelName]: { wantToLoad: true } } });
                 }

@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
-import { BackdopArt, CharacterName } from "../../declarations";
-export default function speechBubbles<A_BackdopArt extends BackdopArt = BackdopArt, A_CharacterName extends CharacterName = CharacterName>(backdopArt: A_BackdopArt): {
+import { PrendyArt, CharacterName } from "../../declarations";
+export default function speechBubbles<A_PrendyArt extends PrendyArt = PrendyArt, A_CharacterName extends CharacterName = CharacterName>(prendyArt: A_PrendyArt): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
         font?: string | undefined;
         character?: string | undefined;

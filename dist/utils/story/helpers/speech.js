@@ -15,11 +15,11 @@ const showSpeechRefs = {
 const showMiniBubbleRefs = {
     closeTimeout: null, // TODO might need to have it per character if other characts have mini bubbles
 };
-export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStartOptions, _characterNames) {
+export function makeSpeechStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, _characterNames) {
     const { getState, onNextTick, setState, startItemEffect, stopEffect, } = concepFuncs;
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(concepFuncs, backdopConcepts);
+    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(concepFuncs, prendyConcepts);
     const SPEECH_ZOOM_AMOUNT = 1.2;
     const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
     const MIN_AUTO_SPEECH_TIME = 1500;
@@ -71,7 +71,7 @@ export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStar
                 showSpeechRefs.originalZoomAmount = prevPlaneZoom;
                 showSpeechRefs.aSpeechIsShowing = true;
             }
-            const newPlaneZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, backdopStartOptions.zoomLevels.max);
+            const newPlaneZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyStartOptions.zoomLevels.max);
             onNextTick(() => {
                 setState({
                     speechBubbles: {
@@ -106,7 +106,7 @@ export function makeSpeechStoryHelpers(concepFuncs, backdopConcepts, backdopStar
                         : currentFocusedDoll,
                     planeZoomGoal: returnToZoomBeforeConversation
                         ? showSpeechRefs.originalZoomAmount
-                        : backdopStartOptions.zoomLevels.default,
+                        : prendyStartOptions.zoomLevels.default,
                 });
             }
             function whenWaitingDone() {

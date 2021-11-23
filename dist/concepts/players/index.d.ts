@@ -1,6 +1,6 @@
-import { AnyAnimationName, BackdopOptions } from "../../declarations";
+import { AnyAnimationName, PrendyOptions } from "../../declarations";
 import { Point2D } from "chootils/dist/points2d";
-export default function players<A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_BackdopOptions extends BackdopOptions = BackdopOptions>(backdopStartOptions: A_BackdopOptions): {
+export default function players<A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_PrendyOptions extends PrendyOptions = PrendyOptions>(prendyStartOptions: A_PrendyOptions): {
     startStates: {
         main: {
             lastSafeInputAngle: number | null;

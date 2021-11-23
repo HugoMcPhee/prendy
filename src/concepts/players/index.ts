@@ -1,10 +1,10 @@
-import { AnyAnimationName, BackdopOptions } from "../../declarations";
+import { AnyAnimationName, PrendyOptions } from "../../declarations";
 import { Point2D } from "chootils/dist/points2d";
 
 export default function players<
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions
->(backdopStartOptions: A_BackdopOptions) {
+  A_PrendyOptions extends PrendyOptions = PrendyOptions
+>(prendyStartOptions: A_PrendyOptions) {
   type PlayerAnimationNames = {
     walking: A_AnyAnimationName;
     idle: A_AnyAnimationName;
@@ -29,13 +29,13 @@ export default function players<
     //
 
     animationNames: {
-      walking: backdopStartOptions.playerAnimations.walking,
-      idle: backdopStartOptions.playerAnimations.idle,
+      walking: prendyStartOptions.playerAnimations.walking,
+      idle: prendyStartOptions.playerAnimations.idle,
     } as PlayerAnimationNames, // maybe typed somehow, from player character?
   });
 
   const refs = () => ({
-    walkSpeed: backdopStartOptions.walkSpeed,
+    walkSpeed: prendyStartOptions.walkSpeed,
     canJumpTimeout: null as null | ReturnType<typeof setTimeout>,
     canShowVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
     canHideVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,

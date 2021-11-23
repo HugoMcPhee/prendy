@@ -1,8 +1,8 @@
-import { BackdopArt } from "../declarations";
+import { PrendyArt } from "../declarations";
 import { ConceptsHelperTypes } from "concep";
 import { createConcepts } from "concep";
-import { backdopFlowNames } from ".";
-import { getBackdopOptions } from "../getBackdopOptions";
+import { prendyFlowNames } from ".";
+import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
 import dolls from "./dolls";
@@ -17,7 +17,7 @@ import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 
-const TEST_START_OPTIONS = getBackdopOptions({
+const TEST_START_OPTIONS = getPrendyOptions({
   // place: "cave",
   // segment: "start",
   // camera: "View_Camera",
@@ -96,9 +96,9 @@ const testArtStuff = {
     characterA: { doll: "dollA", font: "fontA" },
     characterB: { doll: "dollB", font: "fontA" },
   } as const,
-} as unknown as BackdopArt;
+} as unknown as PrendyArt;
 
-// NOTE to get types working, might need to hard-type backdopArt, while working on the libray
+// NOTE to get types working, might need to hard-type prendyArt, while working on the libray
 
 export type CharacterOptionsPlaceholder<
   CharacterName extends string,
@@ -122,7 +122,7 @@ export type DollOptionsPlaceholder<
   }
 >;
 
-const placeholderBackdopConcepts = {
+const placeholderPrendyConcepts = {
   keyboards: keyboards(),
   miniBubbles: miniBubbles(),
   pointers: pointers(),
@@ -139,17 +139,17 @@ const placeholderBackdopConcepts = {
   story: story_fake<any, any>(),
 };
 
-// const concepFuncs = _createConcepts_ForTypes(placeholderBackdopConcepts, {
-const concepFuncs = createConcepts(placeholderBackdopConcepts, {
-  flowNames: backdopFlowNames,
+// const concepFuncs = _createConcepts_ForTypes(placeholderPrendyConcepts, {
+const concepFuncs = createConcepts(placeholderPrendyConcepts, {
+  flowNames: prendyFlowNames,
   dontSetMeta: true,
 });
 
-// NOTE Change these to typeof  to have known types while making backdops library
-// export type PlaceholderBackdopConcepts = typeof placeholderBackdopConcepts;
-// export type BackdopConcepFuncs = typeof concepFuncs;
+// NOTE Change these to typeof  to have known types while making prendys library
+// export type PlaceholderPrendyConcepts = typeof placeholderPrendyConcepts;
+// export type PrendyConcepFuncs = typeof concepFuncs;
 
-export type PlaceholderBackdopConcepts = Record<
+export type PlaceholderPrendyConcepts = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -157,7 +157,7 @@ export type PlaceholderBackdopConcepts = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type BackdopConcepFuncs = {
+export type PrendyConcepFuncs = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -196,10 +196,10 @@ export type BackdopConcepFuncs = {
   useStoreItemPropsEffect: (...args: any) => any;
 };
 
-type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]>;
+type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]>;
 type HelperType<T extends ItemType> = ConceptsHelperTypes<
-  BackdopConcepFuncs["getState"],
-  BackdopConcepFuncs["getRefs"],
+  PrendyConcepFuncs["getState"],
+  PrendyConcepFuncs["getRefs"],
   T
 >;
 export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
@@ -262,7 +262,7 @@ type ToNewOptionUntyped = {
   toSegment?: string;
 };
 
-export type BackdopOptionsUntyped = {
+export type PrendyOptionsUntyped = {
   place: string;
   segment: string;
   camera: string;
@@ -297,7 +297,7 @@ type ToPlaceOption<
   toSegment?: AnySegmentName;
 };
 
-export type BackdopOptionsGeneric<
+export type PrendyOptionsGeneric<
   AnyCameraName extends string,
   AnySegmentName extends string,
   PlaceName extends string,

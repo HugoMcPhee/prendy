@@ -3,27 +3,27 @@ import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
   AnyTriggerName,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   CharacterName,
 } from "../../declarations";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
 export function makeCharacterDynamicRules<
-  ConcepFuncs extends BackdopConcepFuncs
+  ConcepFuncs extends PrendyConcepFuncs
 >(
   concepFuncs: ConcepFuncs,
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
+  prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getState, setState, getRefs, makeDynamicRules } = concepFuncs;
-  const { placeInfoByName } = backdopArt;
+  const { placeInfoByName } = prendyArt;
 
   const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(
     concepFuncs,
-    backdopStartOptions
+    prendyStartOptions
   );
 
   const refs = getRefs();
@@ -175,7 +175,7 @@ export function makeCharacterDynamicRules<
 // TODO add addOrRemovd rules for characters
 
 export function makeStartDynamicCharacterRulesForInitialState<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>
 >(
   characterDynamicRules: CharacterDynamicRules,
@@ -199,12 +199,12 @@ export function makeStartDynamicCharacterRulesForInitialState<
   };
 }
 
-export function makeCharacterRules<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeCharacterRules<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  backdopArt: BackdopArt
+  prendyArt: PrendyArt
 ) {
   const { makeRules, getState, setState } = concepFuncs;
-  const { placeInfoByName } = backdopArt;
+  const { placeInfoByName } = prendyArt;
 
   return makeRules((addItemEffect, addEffect) => ({
     // should be a  dynamic rule ?

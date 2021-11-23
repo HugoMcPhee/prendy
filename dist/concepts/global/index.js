@@ -1,7 +1,7 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState, } from "concep-movers";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
-export default function global(backdopStartOptions, backdopArt) {
-    const { musicNames, soundNames } = backdopArt;
+export default function global(prendyStartOptions, prendyArt) {
+    const { musicNames, soundNames } = prendyArt;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs, } = makerGlobalStoreIndexUtils(musicNames, soundNames);
     // State
     const state = () => ({
@@ -10,7 +10,7 @@ export default function global(backdopStartOptions, backdopArt) {
         nextSegmentNameWhenVidPlays: null,
         wantedSegmentNameAtLoop: null,
         wantedSegmentName: null,
-        nowSegmentName: backdopStartOptions.segment,
+        nowSegmentName: prendyStartOptions.segment,
         wantToLoop: false,
         // TODO? move nowCamName etc to here, since never change cam for non-now place
         //
@@ -18,14 +18,14 @@ export default function global(backdopStartOptions, backdopArt) {
         modelNamesLoaded: [],
         newPlaceLoaded: false,
         isLoadingBetweenPlaces: true,
-        nowPlaceName: backdopStartOptions.place,
+        nowPlaceName: prendyStartOptions.place,
         readyToSwapPlace: false,
         nextPlaceName: null,
         loadingOverlayToggled: true,
         loadingOverlayFullyShowing: true,
         //
         // player
-        playerCharacter: backdopStartOptions.playerCharacter,
+        playerCharacter: prendyStartOptions.playerCharacter,
         gravityValue: 5,
         playerMovingPaused: false,
         focusedDoll: "walker",
@@ -33,8 +33,8 @@ export default function global(backdopStartOptions, backdopArt) {
         // scene plane
         ...mover2dState("planePos"),
         ...moverState("planeZoom", {
-            value: backdopStartOptions.zoomLevels.default,
-            valueGoal: backdopStartOptions.zoomLevels.default,
+            value: prendyStartOptions.zoomLevels.default,
+            valueGoal: prendyStartOptions.zoomLevels.default,
         }),
         planePosMoveConfigName: "default",
         //
@@ -42,7 +42,7 @@ export default function global(backdopStartOptions, backdopArt) {
         timeScreenResized: Date.now(),
         interactButtonPressTime: 0,
         // story
-        heldPickups: backdopStartOptions.heldPickups,
+        heldPickups: prendyStartOptions.heldPickups,
         storyOverlayToggled: false,
         alarmTextIsVisible: false,
         alarmText: "⚠ wobble detected ⚠",

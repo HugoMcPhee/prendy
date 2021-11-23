@@ -1,5 +1,5 @@
 import { forEach } from "chootils/dist/loops";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
 /*
 Dynamic rules
@@ -8,7 +8,7 @@ When characters position changes
   bubble position to character
 */
 
-export function makeMiniBubbleRules<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeMiniBubbleRules<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { makeRules, setState } = concepFuncs;

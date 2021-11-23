@@ -1,7 +1,7 @@
-import { BackdopArt, BackdopOptions } from "../../../declarations";
+import { PrendyArt, PrendyOptions } from "../../../declarations";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../typedConcepFuncs";
 import { makeGlobalChangePlaceRules } from "./changePlace";
 import { makeGlobalGeneralRules } from "./general";
@@ -9,31 +9,31 @@ import { makeGlobalScenePlaneRules } from "./scenePlane";
 import { makeGlobalVideoRules } from "./video";
 
 export function makeStartAllGlobalRules<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
+  prendyConcepts: PrendyConcepts,
+  prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   // making rules
   const globalVideoRules = makeGlobalVideoRules(
     concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    backdopArt
+    prendyConcepts,
+    prendyStartOptions,
+    prendyArt
   );
   const globalChangePlaceRules = makeGlobalChangePlaceRules(
     concepFuncs,
-    backdopConcepts,
-    backdopStartOptions,
-    backdopArt
+    prendyConcepts,
+    prendyStartOptions,
+    prendyArt
   );
   const globalGeneralRules = makeGlobalGeneralRules(concepFuncs);
   const globalScenePlaneRules = makeGlobalScenePlaneRules(
     concepFuncs,
-    backdopStartOptions
+    prendyStartOptions
   );
 
   return function startAllGlobalRules() {

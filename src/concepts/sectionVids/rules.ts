@@ -2,29 +2,29 @@ import { ConceptsHelperTypes } from "concep";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from ".";
 import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";
-import { BackdopArt, PlaceName } from "../../declarations";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyArt, PlaceName } from "../../declarations";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
 
-export function makeSectionVidRules<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSectionVidRules<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  backdopArt: BackdopArt
+  prendyArt: PrendyArt
 ) {
   // safe Section Stack Vid Rules
 
   const { getState, makeRules, setState } = concepFuncs;
 
-  type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]> &
-    keyof ReturnType<BackdopConcepFuncs["getRefs"]>;
+  type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]> &
+    keyof ReturnType<PrendyConcepFuncs["getRefs"]>;
   type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    BackdopConcepFuncs["getState"],
-    BackdopConcepFuncs["getRefs"],
+    PrendyConcepFuncs["getState"],
+    PrendyConcepFuncs["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
   const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } =
-    makeSectionVidStoreUtils(concepFuncs, backdopArt);
+    makeSectionVidStoreUtils(concepFuncs, prendyArt);
 
   const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } =
     makeSafeVidStoreUtils(concepFuncs);

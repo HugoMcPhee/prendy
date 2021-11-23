@@ -6,12 +6,12 @@ export declare type CharacterOptionsPlaceholder<CharacterName extends string, Do
 export declare type DollOptionsPlaceholder<DollName extends string, ModelName extends string> = Record<DollName, {
     model: any;
 }>;
-export declare type PlaceholderBackdopConcepts = Record<any, {
+export declare type PlaceholderPrendyConcepts = Record<any, {
     state: (itemName: any) => any;
     refs: (itemName: any, type: any) => any;
     startStates?: Record<any, any>;
 }>;
-export declare type BackdopConcepFuncs = {
+export declare type PrendyConcepFuncs = {
     getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -43,8 +43,8 @@ export declare type BackdopConcepFuncs = {
     useStoreItemEffect: (...args: any) => any;
     useStoreItemPropsEffect: (...args: any) => any;
 };
-declare type ItemType = keyof ReturnType<BackdopConcepFuncs["getState"]>;
-declare type HelperType<T extends ItemType> = ConceptsHelperTypes<BackdopConcepFuncs["getState"], BackdopConcepFuncs["getRefs"], T>;
+declare type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]>;
+declare type HelperType<T extends ItemType> = ConceptsHelperTypes<PrendyConcepFuncs["getState"], PrendyConcepFuncs["getRefs"], T>;
 export declare type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
 export declare type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 export declare type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
@@ -86,7 +86,7 @@ declare type ToNewOptionUntyped = {
     toCam?: string;
     toSegment?: string;
 };
-export declare type BackdopOptionsUntyped = {
+export declare type PrendyOptionsUntyped = {
     place: string;
     segment: string;
     camera: string;
@@ -114,7 +114,7 @@ declare type ToPlaceOption<AnyCameraName extends string, AnySegmentName extends 
     toCam?: AnyCameraName;
     toSegment?: AnySegmentName;
 };
-export declare type BackdopOptionsGeneric<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, CharacterName extends string, PickupName extends string, ModelName extends string, AnySpotName extends string> = {
+export declare type PrendyOptionsGeneric<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, CharacterName extends string, PickupName extends string, ModelName extends string, AnySpotName extends string> = {
     place: PlaceName;
     segment: AnySegmentName;
     camera: AnyCameraName;

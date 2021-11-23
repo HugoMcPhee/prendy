@@ -1,6 +1,6 @@
-import { BackdopArt } from "../../declarations";
-import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../typedConcepFuncs";
-export declare function makePlayerRules<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, BACKDOP_OPTIONS: BackdopOptions, backdopArt: BackdopArt): {
+import { PrendyArt } from "../../declarations";
+import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../typedConcepFuncs";
+export declare function makePlayerRules<ConcepFuncs extends PrendyConcepFuncs, PrendyOptions extends PrendyOptionsUntyped>(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions, prendyArt: PrendyArt): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

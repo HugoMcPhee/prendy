@@ -1,4 +1,4 @@
-export const backdopAppStyles = `
+export const prendyAppStyles = `
 .App {
   width: 100vw;
   height: 100vh;

@@ -1,9 +1,9 @@
-import { backdopAppStyles } from "../components/backdopAppStyles";
+import { prendyAppStyles } from "../components/prendyAppStyles";
 import { speechBubbleStyles } from "../components/gui/SpeechBubbles/speechBubbleStyles";
 
 export default function loadStyles() {
   const stylesToUse = `
-${backdopAppStyles}
+${prendyAppStyles}
 ${speechBubbleStyles}
 `;
   const loadStylesStyleSheet = document.createElement("style");

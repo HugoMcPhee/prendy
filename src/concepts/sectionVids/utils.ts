@@ -2,19 +2,19 @@ import { SectionVidState, VidSection } from ".";
 import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
 import {
   AnyCameraName,
-  BackdopArt,
+  PrendyArt,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
 } from "../../declarations";
 import { makeGlobalStoreUtils } from "../global/utils";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
 export function makeGetSectionVidVideo<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   PlaceName extends string
 >(concepFuncs: ConcepFuncs) {
   const { getRefs, getState } = concepFuncs;
@@ -30,10 +30,10 @@ export function makeGetSectionVidVideo<
 }
 
 export function makeSectionVidStoreUtils<
-  ConcepFuncs extends BackdopConcepFuncs
->(concepFuncs: ConcepFuncs, backdopArt: BackdopArt) {
+  ConcepFuncs extends PrendyConcepFuncs
+>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt) {
   const { getState, startItemEffect, stopEffect } = concepFuncs;
-  const { placeInfoByName } = backdopArt;
+  const { placeInfoByName } = prendyArt;
 
   const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
@@ -43,7 +43,7 @@ export function makeSectionVidStoreUtils<
 
   const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(
     concepFuncs,
-    backdopArt
+    prendyArt
   );
 
   // __________________________

@@ -1,9 +1,9 @@
 // @refresh-reset
 import React from "react";
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 import {
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   PickupName,
   PickupsInfo,
 } from "../../declarations";
@@ -18,12 +18,12 @@ import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualButtons } from "./VirtualButtons";
 import { makeVirtualStick } from "./VirtualStick";
 
-export function makeScreenGui<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeScreenGui<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  BACKDOP_OPTIONS: BackdopOptions,
-  backdopArt: BackdopArt
+  PRENDY_OPTIONS: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
-  const { pickupsInfo, speechVidFiles, characterNames } = backdopArt;
+  const { pickupsInfo, speechVidFiles, characterNames } = prendyArt;
 
   const AlarmText = makeAlarmText(concepFuncs);
   const LoadingOverlay = makeLoadingOverlay(concepFuncs);
@@ -36,7 +36,7 @@ export function makeScreenGui<ConcepFuncs extends BackdopConcepFuncs>(
   const SpeechBubble = makeSpeechBubble(concepFuncs, speechVidFiles);
   const StoryOverlay = makeStoryOverlay(concepFuncs);
   const VirtualStick = makeVirtualStick(concepFuncs);
-  const VirtualButtons = makeVirtualButtons(concepFuncs, BACKDOP_OPTIONS);
+  const VirtualButtons = makeVirtualButtons(concepFuncs, PRENDY_OPTIONS);
   // const ShowStates = makeShowStates(concepFuncs);
 
   type Props = {};

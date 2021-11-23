@@ -1,11 +1,11 @@
 import { CSSProperties } from "react";
-import { BackdopConcepFuncs, PlaceholderBackdopConcepts } from "../../../concepts/typedConcepFuncs";
-import { BackdopOptions, CharacterName } from "../../../declarations";
-export declare function makeSpeechStoryHelpers<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts, A_BackdopOptions extends BackdopOptions = BackdopOptions, A_CharacterName extends CharacterName = CharacterName>(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts, backdopStartOptions: A_BackdopOptions, _characterNames: readonly A_CharacterName[]): {
+import { PrendyConcepFuncs, PlaceholderPrendyConcepts } from "../../../concepts/typedConcepFuncs";
+import { PrendyOptions, CharacterName } from "../../../declarations";
+export declare function makeSpeechStoryHelpers<ConcepFuncs extends PrendyConcepFuncs, PrendyConcepts extends PlaceholderPrendyConcepts, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName>(concepFuncs: ConcepFuncs, prendyConcepts: PrendyConcepts, prendyStartOptions: A_PrendyOptions, _characterNames: readonly A_CharacterName[]): {
     showSpeech: (text: string, options?: {
         time?: number | undefined;
         showOnce?: boolean | undefined;
-        character?: (keyof BackdopConcepts["speechBubbles"]["startStates"] & A_CharacterName) | undefined;
+        character?: (keyof PrendyConcepts["speechBubbles"]["startStates"] & A_CharacterName) | undefined;
         zoomAmount?: number | undefined;
         lookAtPlayer?: boolean | undefined;
         returnToZoomBeforeConversation?: boolean | undefined;

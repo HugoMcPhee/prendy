@@ -1,12 +1,12 @@
 // import { getState, ItemState, setState } from "concepts";
 
 import { ConceptsHelperTypes } from "concep";
-import { BackdopConcepFuncs } from "../../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../typedConcepFuncs";
 
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
 
-export function makeGlobalStoreUtils<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeGlobalStoreUtils<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getState, setState } = concepFuncs;

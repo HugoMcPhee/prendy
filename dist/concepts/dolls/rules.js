@@ -13,8 +13,8 @@ import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
-export function makeDollDynamicRules(concepFuncs, backdopStartOptions, backdopConcepts, backdopArt) {
-    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
+export function makeDollDynamicRules(concepFuncs, prendyStartOptions, prendyConcepts, prendyArt) {
+    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt);
     const { getRefs, makeDynamicRules } = concepFuncs;
     return makeDynamicRules((addItemEffect, _addEffect) => ({
         waitForModelToLoad: addItemEffect(({ dollName, modelName, }) => ({
@@ -84,10 +84,10 @@ export function startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRul
         });
     };
 }
-export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs, backdopConcepts, backdopArt) {
-    const { modelInfoByName, dollNames } = backdopArt;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, backdopConcepts, backdopStartOptions, backdopArt);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+export function makeDollRules(prendyStartOptions, dollDynamicRules, concepFuncs, prendyConcepts, prendyArt) {
+    const { modelInfoByName, dollNames } = prendyArt;
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt);
+    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
     const { makeRules, getPreviousState, getState, setState, getRefs, } = concepFuncs;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
     return makeRules((addItemEffect, addEffect) => ({
@@ -181,8 +181,8 @@ export function makeDollRules(backdopStartOptions, dollDynamicRules, concepFuncs
                         console.warn("tried to use undefined animation", aniName);
                     }
                     if (aniRef &&
-                        (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== backdopStartOptions.animationSpeed) {
-                        aniRef.speedRatio = backdopStartOptions.animationSpeed;
+                        (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyStartOptions.animationSpeed) {
+                        aniRef.speedRatio = prendyStartOptions.animationSpeed;
                     }
                     const animWeight = animWeights[aniName];
                     const animIsStopped = animWeight < 0.003;

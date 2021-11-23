@@ -5,10 +5,10 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
-import { BackdopOptions, CharacterName } from "../../../declarations";
+import { PrendyOptions, CharacterName } from "../../../declarations";
 import { clearTimeoutSafe } from "../../../utils";
 
 type ATimeout = ReturnType<typeof setTimeout> | undefined;
@@ -28,14 +28,14 @@ const showMiniBubbleRefs = {
 };
 
 export function makeSpeechStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: A_BackdopOptions,
+  prendyConcepts: PrendyConcepts,
+  prendyStartOptions: A_PrendyOptions,
   _characterNames: readonly A_CharacterName[]
 ) {
   const {
@@ -51,10 +51,10 @@ export function makeSpeechStoryHelpers<
   const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(concepFuncs);
   const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(
     concepFuncs,
-    backdopConcepts
+    prendyConcepts
   );
 
-  type SpeechBubbleName = keyof BackdopConcepts["speechBubbles"]["startStates"];
+  type SpeechBubbleName = keyof PrendyConcepts["speechBubbles"]["startStates"];
 
   const SPEECH_ZOOM_AMOUNT = 1.2;
   const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
@@ -133,7 +133,7 @@ export function makeSpeechStoryHelpers<
 
       const newPlaneZoom = Math.min(
         showSpeechRefs.originalZoomAmount * zoomAmount,
-        backdopStartOptions.zoomLevels.max
+        prendyStartOptions.zoomLevels.max
       );
       onNextTick(() => {
         setState({
@@ -174,7 +174,7 @@ export function makeSpeechStoryHelpers<
             : currentFocusedDoll,
           planeZoomGoal: returnToZoomBeforeConversation
             ? showSpeechRefs.originalZoomAmount
-            : backdopStartOptions.zoomLevels.default,
+            : prendyStartOptions.zoomLevels.default,
         });
       }
 

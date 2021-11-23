@@ -1,9 +1,9 @@
 export default "default";
 // import { CharacterName } from "art/characters";
-// import { backdopConcepts } from "backdopdev/concepts";
+// import { prendyConcepts } from "prendydev/concepts";
 //
-// const dollStartStates = backdopConcepts.dolls.startStates;
-// const characterStartStates = backdopConcepts.characters.startStates;
+// const dollStartStates = prendyConcepts.dolls.startStates;
+// const characterStartStates = prendyConcepts.characters.startStates;
 //
 // export type DollStartStates = typeof dollStartStates;
 // export type CharacterStartStates = typeof characterStartStates;

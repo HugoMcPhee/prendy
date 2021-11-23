@@ -2,9 +2,9 @@
 import React, { CSSProperties } from "react";
 import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeScreenSticker<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeScreenSticker<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { useStore } = concepFuncs;

@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs, BackdopOptionsUntyped } from "../concepts/typedConcepFuncs";
-export declare function makeScenePlane<ConcepFuncs extends BackdopConcepFuncs, BackdopOptions extends BackdopOptionsUntyped>(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions): (_: {}) => JSX.Element;
+import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../concepts/typedConcepFuncs";
+export declare function makeScenePlane<ConcepFuncs extends PrendyConcepFuncs, PrendyOptions extends PrendyOptionsUntyped>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions): (_: {}) => JSX.Element;

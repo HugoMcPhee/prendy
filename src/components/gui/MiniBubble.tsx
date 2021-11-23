@@ -9,9 +9,9 @@ import React, {
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeMiniBubble<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeMiniBubble<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { useStoreEffect, useStore, getState } = concepFuncs;

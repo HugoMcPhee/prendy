@@ -1,13 +1,13 @@
 // @refresh-reset
 import React, { useEffect } from "react";
 import {
-  BackdopConcepFuncs,
+  PrendyConcepFuncs,
   PickupsInfoPlaceholder,
 } from "../../../concepts/typedConcepFuncs";
 import { makePickupButton } from "./PickupButton";
 
 export function makePickups<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>
 >(concepFuncs: ConcepFuncs, pickupsInfo: PickupsInfo) {

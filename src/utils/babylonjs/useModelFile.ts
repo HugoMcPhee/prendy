@@ -10,13 +10,13 @@ import {
   TransformNode,
 } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
 import { makeGetSceneOrEngineUtils } from "./getSceneOrEngine";
 
-export function makeUseModelFile<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeUseModelFile<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);

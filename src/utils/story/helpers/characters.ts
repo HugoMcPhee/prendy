@@ -2,12 +2,12 @@ import { Vector3 } from "@babylonjs/core";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 import {
   AnimationNameByModel,
-  BackdopOptions,
+  PrendyOptions,
   CharacterName,
   CharacterOptions,
   DollName,
@@ -18,10 +18,10 @@ import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeDollStoryHelpers } from "./dolls";
 
 export function makeCharacterStoryHelpers<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_BackdopOptions extends BackdopOptions = BackdopOptions,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
   A_CharacterOptions extends CharacterOptions = CharacterOptions,
   A_DollName extends DollName = DollName,
@@ -29,8 +29,8 @@ export function makeCharacterStoryHelpers<
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: A_BackdopOptions,
+  prendyConcepts: PrendyConcepts,
+  prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {
@@ -63,7 +63,7 @@ export function makeCharacterStoryHelpers<
     setDollRotationY,
     springAddToDollRotationY,
     springDollRotationY,
-  } = makeDollStoryHelpers(concepFuncs, backdopStartOptions, modelInfoByName);
+  } = makeDollStoryHelpers(concepFuncs, prendyStartOptions, modelInfoByName);
 
   function setCharAnimation<T_Character extends A_CharacterName>(
     character: T_Character,

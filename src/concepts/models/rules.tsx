@@ -1,17 +1,17 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { BackdopArt, ModelName } from "../../declarations";
+import { PrendyArt, ModelName } from "../../declarations";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
 // handle laoding here ??
 
-export function makeModelRules<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeModelRules<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  backdopArt: BackdopArt
+  prendyArt: PrendyArt
 ) {
   const { makeRules, setState, getRefs } = concepFuncs;
-  const { modelInfoByName } = backdopArt;
+  const { modelInfoByName } = prendyArt;
 
   const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
 

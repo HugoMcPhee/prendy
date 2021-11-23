@@ -1,7 +1,7 @@
-import { BackdopConcepFuncs } from "../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../typedConcepFuncs";
 
 export function makeKeyboardConnectRules<
-  ConcepFuncs extends BackdopConcepFuncs
+  ConcepFuncs extends PrendyConcepFuncs
 >(concepFuncs: ConcepFuncs) {
   const { setState, getState } = concepFuncs;
 

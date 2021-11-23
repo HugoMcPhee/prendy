@@ -1,8 +1,8 @@
-import { BackdopOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./concepts/typedConcepFuncs";
+import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./concepts/typedConcepFuncs";
 declare const _default: "default";
 export default _default;
 export interface ArtTypesUntyped {
-    BackdopOptions: BackdopOptionsUntyped;
+    PrendyOptions: PrendyOptionsUntyped;
     PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
     ModelInfoByName: ModelInfoByNamePlaceholder<string>;
     DollOptions: DollOptionsPlaceholder<string, string>;
@@ -42,7 +42,7 @@ export interface CustomArtTypes {
 }
 export interface FinalArtTypes extends Omit<ArtTypesUntyped, keyof CustomArtTypes>, CustomArtTypes {
 }
-export declare type BackdopOptions = FinalArtTypes["BackdopOptions"];
+export declare type PrendyOptions = FinalArtTypes["PrendyOptions"];
 export declare type PlaceInfoByName = FinalArtTypes["PlaceInfoByName"];
 export declare type ModelInfoByName = FinalArtTypes["ModelInfoByName"];
 export declare type DollOptions = FinalArtTypes["DollOptions"];
@@ -77,7 +77,7 @@ export declare type MusicFiles = FinalArtTypes["MusicFiles"];
 export declare type SoundFiles = FinalArtTypes["SoundFiles"];
 export declare type SpeechVidFiles = FinalArtTypes["SpeechVidFiles"];
 export declare type PickupsInfo = FinalArtTypes["PickupsInfo"];
-export declare type BackdopArt = {
+export declare type PrendyArt = {
     placeInfoByName: PlaceInfoByName;
     modelInfoByName: ModelInfoByName;
     dollOptions: DollOptions;

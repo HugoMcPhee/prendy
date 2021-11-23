@@ -1,8 +1,8 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { CharacterName } from "../../declarations";
 import {
-  BackdopConcepFuncs,
-  // PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  // PlaceholderPrendyConcepts,
 } from "../typedConcepFuncs";
 
 // async function testAnimWeights() {
@@ -10,7 +10,7 @@ import {
 // }
 
 export function makeGetCharDollStuff<
-  ConcepFuncs extends BackdopConcepFuncs,
+  ConcepFuncs extends PrendyConcepFuncs,
   A_CharacterName extends CharacterName = CharacterName
 >(concepFuncs: ConcepFuncs) {
   const { getRefs, getState } = concepFuncs;
@@ -22,8 +22,8 @@ export function makeGetCharDollStuff<
   // NOTE TODO all these types need to be made inside the places using them (like story helpers)
   // And getCharDollStuff there too
 
-  // type StartState_Characters = typeof backdopConcepts.characters.startStates;
-  // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+  // type StartState_Characters = typeof prendyConcepts.characters.startStates;
+  // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
 
   // type DollNameFromCharacter<T_CharacterName extends CharacterName> =
   //   StartState_Characters[T_CharacterName]["dollName"];

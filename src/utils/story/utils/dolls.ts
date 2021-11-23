@@ -1,19 +1,19 @@
 import { DollName } from "../../../declarations";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 
 export function makeDollStoryUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
   A_DollName extends DollName = DollName
 >(concepFuncs: ConcepFuncs) {
   const { getState } = concepFuncs;
   // const { getState, startItemEffect } = concepFuncs;
   // const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
 
-  type StartState_Dolls = NonNullable<BackdopConcepts["dolls"]["startStates"]>;
+  type StartState_Dolls = NonNullable<PrendyConcepts["dolls"]["startStates"]>;
 
   type ModelNameFromDoll<
     T_DollName extends A_DollName

@@ -1,11 +1,11 @@
-import { BackdopArt, PlaceName } from "../../declarations";
+import { PrendyArt, PlaceName } from "../../declarations";
 export declare type SectionVidState = "beforeDoLoop" | "waitingForDoLoop" | "beforeChangeSection" | "waitingForChangeSection" | "play" | "pause" | "beforeUnload" | "waitingForUnload" | "unloaded" | "beforeLoad" | "waitingForLoad";
 export declare type VidLetter = "a" | "b";
 export declare type VidSection = {
     time: number;
     duration: number;
 };
-export default function sectionVids<A_BackdopArt extends BackdopArt = BackdopArt, A_PlaceName extends PlaceName = PlaceName>(backdopArt: A_BackdopArt): {
+export default function sectionVids<A_PrendyArt extends PrendyArt = PrendyArt, A_PlaceName extends PlaceName = PlaceName>(prendyArt: A_PrendyArt): {
     state: <T_ItemName extends string>(itemName: T_ItemName) => {
         safeVidId_playing: string | null;
         safeVidId_waiting: string | null;

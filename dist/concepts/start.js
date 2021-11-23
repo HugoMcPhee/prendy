@@ -9,25 +9,25 @@ import { makePointersConnectRules } from "./pointers";
 import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
-export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, backdopArt) {
-    const { dollNames, characterNames } = backdopArt;
+export function makeStartPrendyRules(concepFuncs, prendyConcepts, PRENDY_OPTIONS, prendyArt) {
+    const { dollNames, characterNames } = prendyArt;
     // making rules
     const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
     const pointerConnectRules = makePointersConnectRules(concepFuncs);
-    const startAllGlobalRules = makeStartAllGlobalRules(concepFuncs, backdopConcepts, BACKDOP_OPTIONS, backdopArt);
-    const modelRules = makeModelRules(concepFuncs, backdopArt);
-    const playerRules = makePlayerRules(concepFuncs, BACKDOP_OPTIONS, backdopArt);
-    const dollDynamicRules = makeDollDynamicRules(concepFuncs, BACKDOP_OPTIONS, backdopConcepts, backdopArt);
-    const dollRules = makeDollRules(BACKDOP_OPTIONS, dollDynamicRules, concepFuncs, backdopConcepts, backdopArt);
-    const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, backdopConcepts);
+    const startAllGlobalRules = makeStartAllGlobalRules(concepFuncs, prendyConcepts, PRENDY_OPTIONS, prendyArt);
+    const modelRules = makeModelRules(concepFuncs, prendyArt);
+    const playerRules = makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt);
+    const dollDynamicRules = makeDollDynamicRules(concepFuncs, PRENDY_OPTIONS, prendyConcepts, prendyArt);
+    const dollRules = makeDollRules(PRENDY_OPTIONS, dollDynamicRules, concepFuncs, prendyConcepts, prendyArt);
+    const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, prendyConcepts);
     const safeVidRules = makeSafeVidRules(concepFuncs);
-    const safeSectionVidRules = makeSectionVidRules(concepFuncs, backdopArt);
-    const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, BACKDOP_OPTIONS, backdopArt);
-    const characterRules = makeCharacterRules(concepFuncs, backdopArt);
+    const safeSectionVidRules = makeSectionVidRules(concepFuncs, prendyArt);
+    const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, PRENDY_OPTIONS, prendyArt);
+    const characterRules = makeCharacterRules(concepFuncs, prendyArt);
     const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs);
     // ----------------------------------------------
     // starting and stopping rules
-    function startBackdopMainRules() {
+    function startPrendyMainRules() {
         keyboardConnectRules.startAll();
         pointerConnectRules.startAll();
         // keyboardRules.startAll(); // NOTE does nothing
@@ -44,7 +44,7 @@ export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTI
         speechBubbleRules.startAll();
         safeVidRules.startAll();
         safeSectionVidRules.startAll();
-        return function stopBackdopMainRules() {
+        return function stopPrendyMainRules() {
             keyboardConnectRules.stopAll();
             pointerConnectRules.stopAll();
             // keyboardRules.stopAll();
@@ -68,15 +68,15 @@ export function makeStartBackdopRules(concepFuncs, backdopConcepts, BACKDOP_OPTI
         // connectPointerInputsToState();
     }
     let didDoOneTimeStartStuff = false;
-    return function startBackdopRules(fontNames) {
-        const stopBackdopMainRules = startBackdopMainRules();
+    return function startPrendyRules(fontNames) {
+        const stopPrendyMainRules = startPrendyMainRules();
         if (!didDoOneTimeStartStuff) {
             loadGoogleFonts(fontNames); // Auto-import fonts from google fonts :)
             // connectInputsToState();
             didDoOneTimeStartStuff = true;
         }
-        return function stopBackdopRules() {
-            stopBackdopMainRules();
+        return function stopPrendyRules() {
+            stopPrendyMainRules();
         };
     };
 }

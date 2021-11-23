@@ -9,7 +9,7 @@ import React, {
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
 import { CharacterName, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
 
@@ -17,7 +17,7 @@ const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 
-export function makeSpeechBubble<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
   speechVidFiles: SpeechVidFiles
 ) {

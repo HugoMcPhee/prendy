@@ -1,5 +1,5 @@
-import { CharacterName, DollName, AnyTriggerName, AnyCameraName, CharacterOptions, BackdopArt } from "../../declarations";
-export default function characters<A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_CharacterOptions extends CharacterOptions = CharacterOptions, A_BackdopArt extends BackdopArt = BackdopArt>(backdopArt: A_BackdopArt): {
+import { CharacterName, DollName, AnyTriggerName, AnyCameraName, CharacterOptions, PrendyArt } from "../../declarations";
+export default function characters<A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_CharacterOptions extends CharacterOptions = CharacterOptions, A_PrendyArt extends PrendyArt = PrendyArt>(prendyArt: A_PrendyArt): {
     startStates: { [K_CharacterName in A_CharacterName]: {
         dollName: string;
         atTriggers: Partial<Record<A_AnyTriggerName, boolean>>;

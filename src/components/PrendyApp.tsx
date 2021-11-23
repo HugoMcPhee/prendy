@@ -6,13 +6,13 @@ import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../concepts/typedConcepFuncs";
-import { BackdopArt, BackdopOptions } from "../declarations";
+import { PrendyArt, PrendyOptions } from "../declarations";
 import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
-// import "./BackdopApp.css";
+// import "./PrendyApp.css";
 import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
@@ -21,21 +21,14 @@ loadStyles();
 
 type Props = { children?: ReactNode };
 
-export function makeBackdopApp<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+export function makePrendyApp<
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   concepFuncs: ConcepFuncs,
-  backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
-  //
-  // placeInfoByName: PlaceInfoByName,
-  // characterNames: readonly CharacterName[],
-  // dollNames: readonly DollName[],
-  // soundFiles: SoundFiles,
-  // pickupsInfo: PickupsInfo,
-  // speechVidFiles: SpeechVidFiles
+  prendyConcepts: PrendyConcepts,
+  prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getRefs, onNextTick, setState } = concepFuncs;
 
@@ -43,17 +36,17 @@ export function makeBackdopApp<
 
   const ScreenGuiDom = makeScreenGui(
     concepFuncs,
-    backdopStartOptions,
-    backdopArt
+    prendyStartOptions,
+    prendyArt
   );
 
   const LoadingModels = makeLoadingModels(
     concepFuncs,
-    backdopStartOptions,
-    backdopArt
+    prendyStartOptions,
+    prendyArt
   );
 
-  const ScenePlane = makeScenePlane(concepFuncs, backdopStartOptions);
+  const ScenePlane = makeScenePlane(concepFuncs, prendyStartOptions);
 
   // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
   //   "city",
@@ -61,7 +54,7 @@ export function makeBackdopApp<
   //   "beanshop",
   // ]);
 
-  return function BackdopApp({ children }: Props) {
+  return function PrendyApp({ children }: Props) {
     const globalRefs = getRefs().global.main;
 
     const scenePlaneCameraRef = useCallback(

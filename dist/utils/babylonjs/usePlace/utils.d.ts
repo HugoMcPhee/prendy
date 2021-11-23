@@ -1,8 +1,8 @@
 import { Camera, Scene, TargetCamera } from "@babylonjs/core";
-import { BackdopConcepFuncs } from "../../../concepts/typedConcepFuncs";
-import { BackdopArt, PlaceName } from "../../../declarations";
+import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyArt, PlaceName } from "../../../declarations";
 export declare function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag?: string): void;
-export declare function makeUsePlaceUtils<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, backdopArt: BackdopArt): {
+export declare function makeUsePlaceUtils<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt): {
     loadVideoBlob: (filepath: string) => Promise<Blob>;
     testAppendVideo: typeof testAppendVideo;
     loadNowVideosForPlace: () => Promise<boolean>;

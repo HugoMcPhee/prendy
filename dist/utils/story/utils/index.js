@@ -2,7 +2,7 @@ import { makeCharacterStoryUtils } from "./characters";
 import { makeDollStoryUtils } from "./dolls";
 import { makeSceneStoryUtils } from "./scene";
 import { makeSpotStoryUtils } from "./spots";
-export function makeBackdopStoryUtils(concepFuncs, _backdopConcepts) {
+export function makePrendyStoryUtils(concepFuncs, _prendyConcepts) {
     const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot, } = makeCharacterStoryUtils(concepFuncs);
     const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs);
     const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules, } = makeSceneStoryUtils(concepFuncs);

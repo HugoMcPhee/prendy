@@ -1,15 +1,15 @@
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../typedConcepFuncs";
 
 export function makeSpeechBubblesStoreUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
->(concepFuncs: ConcepFuncs, backdopConcepts: BackdopConcepts) {
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
+>(concepFuncs: ConcepFuncs, prendyConcepts: PrendyConcepts) {
   const { getState } = concepFuncs;
 
-  type SpeechBubbleName = keyof BackdopConcepts["speechBubbles"]["startStates"];
+  type SpeechBubbleName = keyof PrendyConcepts["speechBubbles"]["startStates"];
 
   function getTypingDelayForLetter(
     letter: string,

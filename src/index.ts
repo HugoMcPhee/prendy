@@ -1,19 +1,19 @@
 import { makeGlobalStoreUtils } from "./concepts/global/utils";
-import { BackdopConcepFuncs } from "./concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "./concepts/typedConcepFuncs";
 import { makeSetStoryState } from "./storyRuleMakers";
 import { makeGetSceneOrEngineUtils } from "./utils/babylonjs/getSceneOrEngine";
 
-export { makeBackdopConcepts } from "./concepts";
-export { getBackdopOptions } from "./getBackdopOptions";
-export { makeBackdopApp } from "./components/BackdopApp";
-export { makeBackdopStoryHelpers } from "./utils/story/helpers";
-export { backdopFlowNames } from "./concepts";
-export { makeStartBackdopRules } from "./concepts/start";
+export { makePrendyConcepts } from "./concepts";
+export { getPrendyOptions } from "./getPrendyOptions";
+export { makePrendyApp } from "./components/PrendyApp";
+export { makePrendyStoryHelpers } from "./utils/story/helpers";
+export { prendyFlowNames } from "./concepts";
+export { makeStartPrendyRules } from "./concepts/start";
 export { makeUsePlaceUtils } from "./utils/babylonjs/usePlace/utils";
 export { makeAllStoryRuleMakers } from "./storyRuleMakers";
 
-export function makeOtherUsefulBackdopUtils<
-  ConcepFuncs extends BackdopConcepFuncs
+export function makeOtherUsefulPrendyUtils<
+  ConcepFuncs extends PrendyConcepFuncs
 >(concepFuncs: ConcepFuncs) {
   const setStoryState = makeSetStoryState(concepFuncs);
   const { getGlobalState, setGlobalState } = makeGlobalStoreUtils(concepFuncs);

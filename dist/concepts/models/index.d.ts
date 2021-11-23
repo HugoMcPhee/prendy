@@ -1,6 +1,6 @@
 import { AssetContainer, PBRMaterial } from "@babylonjs/core";
-import { BackdopArt, ModelName } from "../../declarations";
-export default function models<A_BackdopArt extends BackdopArt = BackdopArt, A_ModelName extends ModelName = ModelName>(backdopArt: A_BackdopArt): {
+import { PrendyArt, ModelName } from "../../declarations";
+export default function models<A_PrendyArt extends PrendyArt = PrendyArt, A_ModelName extends ModelName = ModelName>(prendyArt: A_PrendyArt): {
     startStates: { [K_ModelName in A_ModelName]: {
         wantToLoad: boolean;
         isLoading: boolean;

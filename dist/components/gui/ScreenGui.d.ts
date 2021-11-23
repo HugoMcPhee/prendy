@@ -1,4 +1,4 @@
 /// <reference types="react" />
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
-import { BackdopArt, BackdopOptions } from "../../declarations";
-export declare function makeScreenGui<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs, BACKDOP_OPTIONS: BackdopOptions, backdopArt: BackdopArt): (_: {}) => JSX.Element;
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyArt, PrendyOptions } from "../../declarations";
+export declare function makeScreenGui<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions, prendyArt: PrendyArt): (_: {}) => JSX.Element;

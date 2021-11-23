@@ -1,6 +1,6 @@
-import { BackdopConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
 import { AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PickupName, PlaceInfoByName, PlaceName, StoryPartName, TriggerNameByPlace } from "../declarations";
-export declare function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): () => {
+export declare function makeGetUsefulStoryStuff<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): () => {
     storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
     storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];
     globalState: ReturnType<ConcepFuncs["getState"]>["global"]["main"];
@@ -15,8 +15,8 @@ export declare function makeGetUsefulStoryStuff<ConcepFuncs extends BackdopConce
     camsRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"];
     camRefs: ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"][keyof ReturnType<ConcepFuncs["getRefs"]>["places"]]["camsRefs"]];
 };
-export declare function makeSetStoryState<ConcepFuncs extends BackdopConcepFuncs>(concepFuncs: ConcepFuncs): (newState: Partial<ReturnType<ConcepFuncs["getState"]>["story"]["main"]>) => void;
-export declare function makeAllStoryRuleMakers<ConcepFuncs extends BackdopConcepFuncs, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_StoryPartName extends StoryPartName = StoryPartName, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace>(concepFuncs: ConcepFuncs, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[], dollNames: readonly A_DollName[]): {
+export declare function makeSetStoryState<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): (newState: Partial<ReturnType<ConcepFuncs["getState"]>["story"]["main"]>) => void;
+export declare function makeAllStoryRuleMakers<ConcepFuncs extends PrendyConcepFuncs, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_StoryPartName extends StoryPartName = StoryPartName, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace>(concepFuncs: ConcepFuncs, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[], dollNames: readonly A_DollName[]): {
     makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
         storyState: ReturnType<ConcepFuncs["getState"]>["story"]["main"];
         storyRefs: ReturnType<ConcepFuncs["getRefs"]>["story"]["main"];

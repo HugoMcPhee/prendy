@@ -12,16 +12,16 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
   AnimationNameByModel,
-  BackdopArt,
-  BackdopOptions,
+  PrendyArt,
+  PrendyOptions,
   DollName,
   ModelInfoByName,
   ModelName,
 } from "../../declarations";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../typedConcepFuncs";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 
@@ -59,30 +59,30 @@ export function enableCollisions(theMesh: AbstractMesh) {
 }
 
 export function makeDollStoreUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   concepFuncs: ConcepFuncs,
-  _backdopConcepts: BackdopConcepts,
-  backdopStartOptions: BackdopOptions,
-  backdopArt: BackdopArt
+  _prendyConcepts: PrendyConcepts,
+  prendyStartOptions: PrendyOptions,
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
-  const { dollNames, modelInfoByName } = backdopArt;
+  const { dollNames, modelInfoByName } = prendyArt;
 
   const {
     convertScreenPointToPlaneScenePoint,
     convertPointOnPlaneToPointOnScreen,
     getPositionOnPlane,
-  } = makeScenePlaneUtils(concepFuncs, backdopStartOptions);
+  } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
 
   // type ConceptoState = ReturnType<ConcepFuncs["getState"]>;
   // type DollName = keyof ConceptoState["dolls"];
-  // type DollName = keyof typeof backdopConcepts.dolls.startStates;
-  // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
-  // type StartState_Dolls = typeof backdopConcepts.dolls.startStates;
+  // type DollName = keyof typeof prendyConcepts.dolls.startStates;
+  // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
+  // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
 
-  type StartState_Dolls = BackdopConcepts["dolls"]["startStates"] &
+  type StartState_Dolls = PrendyConcepts["dolls"]["startStates"] &
     ReturnType<ConcepFuncs["getState"]>["dolls"];
 
   type ModelNameFromDoll<T_DollName extends DollName> =

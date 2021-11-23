@@ -2,15 +2,15 @@ import { AbstractMesh, Scene, TargetCamera } from "@babylonjs/core";
 import React, { useCallback } from "react";
 import { forEach } from "chootils/dist/loops";
 import {
-  BackdopConcepFuncs,
-  BackdopOptionsUntyped,
+  PrendyConcepFuncs,
+  PrendyOptionsUntyped,
 } from "../concepts/typedConcepFuncs";
 import { makeScenePlaneUtils } from "../utils/babylonjs/scenePlane";
 
 export function makeScenePlane<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopOptions extends BackdopOptionsUntyped
->(concepFuncs: ConcepFuncs, backdopStartOptions: BackdopOptions) {
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyOptions extends PrendyOptionsUntyped
+>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions) {
   const {
     getRefs,
     getState,
@@ -22,7 +22,7 @@ export function makeScenePlane<
 
   const { fitScenePlaneToScreen, applyPlanePosition } = makeScenePlaneUtils(
     concepFuncs,
-    backdopStartOptions
+    prendyStartOptions
   );
 
   type Props = {};

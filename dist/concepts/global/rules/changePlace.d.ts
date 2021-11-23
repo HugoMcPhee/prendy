@@ -1,6 +1,6 @@
-import { BackdopArt, BackdopOptions } from "../../../declarations";
-import { BackdopConcepFuncs, PlaceholderBackdopConcepts } from "../../typedConcepFuncs";
-export declare function makeGlobalChangePlaceRules<ConcepFuncs extends BackdopConcepFuncs, BackdopConcepts extends PlaceholderBackdopConcepts>(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts, backdopStartOptions: BackdopOptions, backdopArt: BackdopArt): {
+import { PrendyArt, PrendyOptions } from "../../../declarations";
+import { PrendyConcepFuncs, PlaceholderPrendyConcepts } from "../../typedConcepFuncs";
+export declare function makeGlobalChangePlaceRules<ConcepFuncs extends PrendyConcepFuncs, PrendyConcepts extends PlaceholderPrendyConcepts>(concepFuncs: ConcepFuncs, _prendyConcepts: PrendyConcepts, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

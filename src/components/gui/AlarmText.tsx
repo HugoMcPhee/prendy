@@ -1,8 +1,8 @@
 // @refresh-reset
 import React from "react";
-import { BackdopConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
 
-export function makeAlarmText<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeAlarmText<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs
 ) {
   const { useStore } = concepFuncs;

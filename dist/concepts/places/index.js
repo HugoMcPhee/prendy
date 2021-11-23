@@ -9,9 +9,9 @@ const defaultCamRefs = () => ({
     isTriggerable: true,
 });
 // export
-export default function places(backdopArt) {
-    const { placeInfoByName } = backdopArt;
-    const placeNames = backdopArt.placeNames;
+export default function places(prendyArt) {
+    const { placeInfoByName } = prendyArt;
+    const placeNames = prendyArt.placeNames;
     // State
     const state = (placeName) => {
         var _a, _b, _c, _d;

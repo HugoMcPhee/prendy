@@ -1,8 +1,8 @@
 import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
-import { AnySegmentName, BackdopArt, BackdopOptions, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName } from "../../declarations";
+import { AnySegmentName, PrendyArt, PrendyOptions, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName } from "../../declarations";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-export default function global<A_AnySegmentName extends AnySegmentName = AnySegmentName, A_BackdopArt extends BackdopArt = BackdopArt, A_BackdopOptions extends BackdopOptions = BackdopOptions, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName>(backdopStartOptions: A_BackdopOptions, backdopArt: A_BackdopArt): {
+export default function global<A_AnySegmentName extends AnySegmentName = AnySegmentName, A_PrendyArt extends PrendyArt = PrendyArt, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName>(prendyStartOptions: A_PrendyOptions, prendyArt: A_PrendyArt): {
     startStates: {
         main: {
             planePosMoveConfigName: string;

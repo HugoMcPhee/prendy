@@ -16,21 +16,21 @@ import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,
-  BackdopArt,
+  PrendyArt,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
 } from "../../../declarations";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
-import { BackdopConcepFuncs } from "../../typedConcepFuncs";
+import { PrendyConcepFuncs } from "../../typedConcepFuncs";
 import { makeGlobalStoreUtils } from "./";
 
-export function makeCameraChangeUtils<ConcepFuncs extends BackdopConcepFuncs>(
+export function makeCameraChangeUtils<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
-  backdopArt: BackdopArt
+  prendyArt: PrendyArt
 ) {
   const { getRefs, getState, setState } = concepFuncs;
-  const { placeInfoByName, dollNames } = backdopArt;
+  const { placeInfoByName, dollNames } = prendyArt;
 
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;

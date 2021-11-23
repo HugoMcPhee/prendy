@@ -1,5 +1,5 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { BackdopArt, DollName } from "../../declarations";
+import { PrendyArt, DollName } from "../../declarations";
 export declare type InRangeForDoll = {
     touch: boolean;
     talk: boolean;
@@ -12,7 +12,7 @@ export declare function defaultInRangeForDoll(): {
 };
 declare type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
 export declare function getDefaultInRangeFunction(dollNames: readonly DollName[]): () => InRangeForAllDolls;
-export default function makeDollIndexUtils(backdopArt: BackdopArt): {
+export default function makeDollIndexUtils(prendyArt: PrendyArt): {
     makeModelAnimWeightsMoverState: <T_ModelName extends string>(modelName: T_ModelName) => <T_Name extends string, T_PhysicsNames extends string, T_InitialState extends {
         value?: Record<string, number> | undefined;
         valueGoal?: Record<string, number> | undefined;

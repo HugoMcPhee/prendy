@@ -1,9 +1,9 @@
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalVideoRules(concepFuncs, _backdopConcepts, _backdopStartOptions, backdopArt) {
+export function makeGlobalVideoRules(concepFuncs, _prendyConcepts, _prendyStartOptions, prendyArt) {
     const { getRefs, getState, makeRules, setState } = concepFuncs;
-    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeSectionVidStoreUtils(concepFuncs, backdopArt);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, backdopArt);
+    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeSectionVidStoreUtils(concepFuncs, prendyArt);
+    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, prendyArt);
     return makeRules((addItemEffect, addEffect) => ({
         whenWantToChooseVideoSection: addEffect({
             onEffect() {

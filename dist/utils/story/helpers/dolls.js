@@ -5,8 +5,8 @@ import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
 export function makeDollStoryHelpers(concepFuncs, 
-// backdopConcepts: BackdopConcepts,
-backdopStartOptions, modelInfoByName) {
+// prendyConcepts: PrendyConcepts,
+prendyStartOptions, modelInfoByName) {
     const { getRefs, getState, setState } = concepFuncs;
     const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs);
@@ -62,8 +62,8 @@ backdopStartOptions, modelInfoByName) {
         setGlobalState({
             focusedDoll: dollName,
             planeZoomGoal: zoom !== undefined
-                ? Math.min(zoom, backdopStartOptions.zoomLevels.max)
-                : backdopStartOptions.zoomLevels.default,
+                ? Math.min(zoom, prendyStartOptions.zoomLevels.max)
+                : prendyStartOptions.zoomLevels.default,
         });
     }
     function setDollToSpot({ place, spot, doll: dollName, dontSetRotationState, }) {

@@ -1,6 +1,6 @@
 import {
-  BackdopConcepFuncs,
-  PlaceholderBackdopConcepts,
+  PrendyConcepFuncs,
+  PlaceholderPrendyConcepts,
 } from "../../../concepts/typedConcepFuncs";
 import {
   AnyCameraName,
@@ -16,9 +16,9 @@ import { makeDollStoryUtils } from "./dolls";
 import { makeSceneStoryUtils } from "./scene";
 import { makeSpotStoryUtils } from "./spots";
 
-export function makeBackdopStoryUtils<
-  ConcepFuncs extends BackdopConcepFuncs,
-  BackdopConcepts extends PlaceholderBackdopConcepts,
+export function makePrendyStoryUtils<
+  ConcepFuncs extends PrendyConcepFuncs,
+  PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
@@ -26,7 +26,7 @@ export function makeBackdopStoryUtils<
   A_CharacterName extends CharacterName = CharacterName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_DollName extends DollName = DollName
->(concepFuncs: ConcepFuncs, _backdopConcepts: BackdopConcepts) {
+>(concepFuncs: ConcepFuncs, _prendyConcepts: PrendyConcepts) {
   const {
     get2DAngleBetweenCharacters,
     get2DAngleFromCharacterToSpot,
@@ -38,7 +38,7 @@ export function makeBackdopStoryUtils<
   >(concepFuncs);
   const { getModelNameFromDoll } = makeDollStoryUtils<
     ConcepFuncs,
-    BackdopConcepts,
+    PrendyConcepts,
     A_DollName
   >(concepFuncs);
   const {

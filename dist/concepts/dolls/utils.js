@@ -112,12 +112,6 @@ export function makeDollStoreUtils(concepFuncs, _prendyConcepts, prendyStartOpti
         // clone_walker_walker___root__
         const rootMesh = rootNode;
         dollRefs.meshRef = rootMesh;
-        forEach(meshNames, (meshName) => {
-            dollRefs.otherMeshes[meshName] = meshes[meshName];
-        });
-        dollRefs.assetRefs = assetRefs;
-        dollRefs.aniGroupsRef = aniGroups;
-        (_b = (_a = dollRefs.aniGroupsRef) === null || _a === void 0 ? void 0 : _a[dollState.nowAnimation]) === null || _b === void 0 ? void 0 : _b.start(true); // start looping the current animation
         const loadedMeshNames = Object.keys(meshes);
         loadedMeshNames.forEach((loopedMeshName) => {
             // TODO
@@ -125,6 +119,15 @@ export function makeDollStoreUtils(concepFuncs, _prendyConcepts, prendyStartOpti
             // could change so it works for the scene rendered to texture, but for now it's okay cause there's not many meshes
             // meshes[loopedMeshName].alwaysSelectAsActiveMesh = true;
         });
+        // NOTE Maybe temporary fix to make sure all child meshes are rendered ( but otherMeshes might still be typed to only first level sub meshes)
+        // could also possibly loop through children when adding meshes to renderTargetTexture, but this seems faster
+        // forEach(meshNames, (meshName) => { // used to use the typed meshNames
+        forEach(loadedMeshNames, (meshName) => {
+            dollRefs.otherMeshes[meshName] = meshes[meshName];
+        });
+        dollRefs.assetRefs = assetRefs;
+        dollRefs.aniGroupsRef = aniGroups;
+        (_b = (_a = dollRefs.aniGroupsRef) === null || _a === void 0 ? void 0 : _a[dollState.nowAnimation]) === null || _b === void 0 ? void 0 : _b.start(true); // start looping the current animation
         enableCollisions(dollRefs.meshRef);
     }
     function updateDollScreenPosition({ dollName, instant, }) {

@@ -9,9 +9,10 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
-v0.7.7
+v0.7.8
 
 - renamed variables from backdop to prendy
+- fixes issue with dolls nested child meshes not showing
 
 v0.7.6
 

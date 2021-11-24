@@ -48,7 +48,7 @@ export declare function makePrendyStoryHelpers<ConcepFuncs extends PrendyConcepF
     lookAtSpot: <T_Place_1 extends A_PlaceName>(place: T_Place_1, spot: A_SpotNameByPlace[T_Place_1], character?: A_CharacterName | undefined) => void;
     showStoryView: (isVisible?: boolean) => Promise<void>;
     setCamera: <T_Place_2 extends A_PlaceName, T_Cam extends keyof A_PlaceInfoByName[T_Place_2]["segmentTimesByCamera"] & A_AnyCameraName>(_placeName: T_Place_2, cameraName: T_Cam, whenToRun?: "now" | "at loop") => Promise<void>;
-    setSegment: <T_Place_3 extends A_PlaceName, T_Segment extends A_SegmentNameByPlace[T_Place_3]>(_placeName: T_Place_3, segmentName: T_Segment, whenToRun?: "now" | "at loop") => Promise<void>;
+    setSegment: <T_Place_3 extends A_PlaceName, T_Segment extends A_SegmentNameByPlace[T_Place_3]>(_placeName: T_Place_3, segmentName: T_Segment) => Promise<void>;
     playNewMusic: (newMusicName: A_MusicName) => void;
     stopAllMusic: () => void;
     hideMiniBubble: () => void;

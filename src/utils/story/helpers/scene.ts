@@ -152,17 +152,25 @@ export function makeSceneStoryHelpers<
     T_Segment extends A_SegmentNameByPlace[T_Place]
   >(
     _placeName: T_Place,
-    segmentName: T_Segment,
-    whenToRun: "now" | "at loop" = "now"
+    segmentName: T_Segment
+    // whenToRun: "now" | "at loop" = "at loop"
   ) {
     return new Promise<void>((resolve, _reject) => {
-      if (whenToRun === "now") {
-        setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
-      } else if (whenToRun === "at loop") {
-        changeSegmentAtLoop(_placeName, segmentName as any).finally(() =>
-          resolve()
-        );
-      }
+      // always sets segment at loop sicne it probably shouldn't change halfway through
+
+      // if (whenToRun === "now") {
+      //   const { nowSegmentName } = getState().global.main;
+      //   if (nowSegmentName === segmentName) {
+      //     console.warn("already on that segment");
+      //     resolve();
+      //     return;
+      //   }
+      //   setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
+      // } else if (whenToRun === "at loop") {
+      changeSegmentAtLoop(_placeName, segmentName as any).finally(() =>
+        resolve()
+      );
+      // }
     });
   }
 
@@ -177,6 +185,13 @@ export function makeSceneStoryHelpers<
     return new Promise<void>((resolve, _reject) => {
       if (whenToRun === "now") {
         const { nowPlaceName } = getState().global.main;
+        const { nowCamName } = getState().places[nowPlaceName];
+
+        // already on that camera
+        if (nowCamName === cameraName) {
+          resolve();
+          return;
+        }
         setState(
           {
             places: {

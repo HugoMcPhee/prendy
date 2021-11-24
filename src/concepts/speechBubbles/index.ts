@@ -1,4 +1,4 @@
-// import { VideoGui } from "prendydev/utils/babylonjs/VideoGui";
+// import { VideoGui } from "prendy/utils/babylonjs/VideoGui";
 //
 import { CSSProperties } from "react";
 import { forEach } from "chootils/dist/loops";

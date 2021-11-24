@@ -9,6 +9,12 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
+v0.7.9
+
+- fixes setCamera not working if setting to the same camera
+- changes setSegment to always default to setting at loop
+- maybe fixed segment not changing rom segment rule when the camera changes
+
 v0.7.8
 
 - renamed variables from backdop to prendy

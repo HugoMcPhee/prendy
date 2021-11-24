@@ -10,7 +10,8 @@ import {
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import { DefaultCameraRefs } from "../../..//concepts/places";
+import { makeSceneStoryUtils } from "../../../utils/story/utils/scene";
+import { DefaultCameraRefs } from "../../../concepts/places";
 import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import {
@@ -39,6 +40,7 @@ export function makeCameraChangeUtils<ConcepFuncs extends PrendyConcepFuncs>(
   const getSectionVidVideo = makeGetSectionVidVideo<ConcepFuncs, PlaceName>(
     concepFuncs
   );
+  const { getSegmentFromStoryRules } = makeSceneStoryUtils(concepFuncs);
 
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -104,10 +106,10 @@ export function makeCameraChangeUtils<ConcepFuncs extends PrendyConcepFuncs>(
     // const camSegmentNames = [] as any;
 
     // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
-    // const foundRuleSegmentName = useStorySegmentRules
-    //   ? getSegmentFromStoryRules(safePlace, safeCam)
-    //   : undefined;
-    const foundRuleSegmentName = undefined;
+    const foundRuleSegmentName = useStorySegmentRules
+      ? getSegmentFromStoryRules(safePlace, safeCam)
+      : undefined;
+    // const foundRuleSegmentName = undefined;
 
     return chooseClosestBeforeItemInArray({
       fullArray: segmentNames,

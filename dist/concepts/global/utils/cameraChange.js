@@ -1,6 +1,7 @@
 import { Constants, Engine, PBRMaterial, RenderTargetTexture, ShaderMaterial, Texture, } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
+import { makeSceneStoryUtils } from "../../../utils/story/utils/scene";
 import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
@@ -12,6 +13,7 @@ export function makeCameraChangeUtils(concepFuncs, prendyArt) {
     const placesRefs = getRefs().places;
     const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
     const getSectionVidVideo = makeGetSectionVidVideo(concepFuncs);
+    const { getSegmentFromStoryRules } = makeSceneStoryUtils(concepFuncs);
     function getSafeCamName(cam) {
         if (cam === null) {
             return null;
@@ -41,10 +43,10 @@ export function makeCameraChangeUtils(concepFuncs, prendyArt) {
         const camSegmentNames = Object.keys((_a = segmentTimesByCamera === null || segmentTimesByCamera === void 0 ? void 0 : segmentTimesByCamera[safeCam]) !== null && _a !== void 0 ? _a : {});
         // const camSegmentNames = [] as any;
         // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
-        // const foundRuleSegmentName = useStorySegmentRules
-        //   ? getSegmentFromStoryRules(safePlace, safeCam)
-        //   : undefined;
-        const foundRuleSegmentName = undefined;
+        const foundRuleSegmentName = useStorySegmentRules
+            ? getSegmentFromStoryRules(safePlace, safeCam)
+            : undefined;
+        // const foundRuleSegmentName = undefined;
         return chooseClosestBeforeItemInArray({
             fullArray: segmentNames,
             goalItem: foundRuleSegmentName !== null && foundRuleSegmentName !== void 0 ? foundRuleSegmentName : segment,

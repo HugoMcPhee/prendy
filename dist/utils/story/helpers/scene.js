@@ -71,20 +71,34 @@ export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNam
         setGlobalState({ storyOverlayToggled: !isVisible });
         await delay(GUESSED_FADE_TIME);
     }
-    function setSegment(_placeName, segmentName, whenToRun = "now") {
+    function setSegment(_placeName, segmentName
+    // whenToRun: "now" | "at loop" = "at loop"
+    ) {
         return new Promise((resolve, _reject) => {
-            if (whenToRun === "now") {
-                setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
-            }
-            else if (whenToRun === "at loop") {
-                changeSegmentAtLoop(_placeName, segmentName).finally(() => resolve());
-            }
+            // always sets segment at loop sicne it probably shouldn't change halfway through
+            // if (whenToRun === "now") {
+            //   const { nowSegmentName } = getState().global.main;
+            //   if (nowSegmentName === segmentName) {
+            //     console.warn("already on that segment");
+            //     resolve();
+            //     return;
+            //   }
+            //   setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
+            // } else if (whenToRun === "at loop") {
+            changeSegmentAtLoop(_placeName, segmentName).finally(() => resolve());
+            // }
         });
     }
     function setCamera(_placeName, cameraName, whenToRun = "now") {
         return new Promise((resolve, _reject) => {
             if (whenToRun === "now") {
                 const { nowPlaceName } = getState().global.main;
+                const { nowCamName } = getState().places[nowPlaceName];
+                // already on that camera
+                if (nowCamName === cameraName) {
+                    resolve();
+                    return;
+                }
                 setState({
                     places: {
                         [nowPlaceName]: { wantedCamName: cameraName }, // AnyCameraName needed if there's only 1 place

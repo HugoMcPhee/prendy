@@ -36,8 +36,9 @@ export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
 
   type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
-  type AllItemsState<T_ItemType extends ItemType> =
-    ReturnType<GetState>[T_ItemType];
+  type AllItemsState<T_ItemType extends ItemType> = ReturnType<
+    GetState
+  >[T_ItemType];
 
   const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
 
@@ -328,7 +329,10 @@ export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
                     : 0;
 
                 return (
-                  <span className="SpeechBubble-wordLettersHolder">
+                  <span
+                    className="SpeechBubble-wordLettersHolder"
+                    key={"" + wordLetters + wordIndex}
+                  >
                     {wordLetters.map((letter, wordLetterIndex) => {
                       const textLetterIndex =
                         (letterAmountFromPreviousWords || -1) + wordLetterIndex;
@@ -342,6 +346,7 @@ export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
 
                       return (
                         <div
+                          key={"" + letter + wordLetterIndex}
                           className={
                             isVisible
                               ? "SpeechBubble-visibleLetter"

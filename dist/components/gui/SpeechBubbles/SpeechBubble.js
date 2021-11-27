@@ -225,12 +225,12 @@ export function makeSpeechBubble(concepFuncs, prendyStartOptions, speechVidFiles
                                 ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat()
                                     .length
                                 : 0;
-                            return (React.createElement("span", { className: "SpeechBubble-wordLettersHolder" }, wordLetters.map((letter, wordLetterIndex) => {
+                            return (React.createElement("span", { className: "SpeechBubble-wordLettersHolder", key: "" + wordLetters + wordIndex }, wordLetters.map((letter, wordLetterIndex) => {
                                 const textLetterIndex = (letterAmountFromPreviousWords || -1) + wordLetterIndex;
                                 const isVisible = textLetterIndex < visibleLetterAmount;
                                 // NOTE this is maybe undefiend, but typescript rules dont treat it like that atm
                                 const customStyle = stylesBySpecialText[_specialTextByLetterIndex[textLetterIndex + 1]];
-                                return (React.createElement("div", { className: isVisible
+                                return (React.createElement("div", { key: "" + letter + wordLetterIndex, className: isVisible
                                         ? "SpeechBubble-visibleLetter"
                                         : "SpeechBubble-hiddenLetter", style: customStyle }, `${letter}`));
                             })));

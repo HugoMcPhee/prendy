@@ -3,12 +3,15 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
+import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 // import "./SpeechBubble.css";
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
-export function makeSpeechBubble(concepFuncs, speechVidFiles) {
+const TRIANGLE_SIZE = 25;
+export function makeSpeechBubble(concepFuncs, prendyStartOptions, speechVidFiles) {
     const { getState, useStore, useStoreEffect } = concepFuncs;
+    const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
     const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
     return function SpeechBubble({ name }) {
         var _a, _b;
@@ -84,10 +87,41 @@ export function makeSpeechBubble(concepFuncs, speechVidFiles) {
             const { dollState, dollName } = (_a = getCharDollStuff(forCharacter)) !== null && _a !== void 0 ? _a : {};
             if (!dollState || !dollName)
                 return;
-            const { positionOnPlaneScene } = dollState;
-            const newPositionX = positionOnPlaneScene.x;
-            let yOffset = ((_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190) / 2;
-            const newPositionY = positionOnPlaneScene.y - yOffset;
+            const { focusedDoll, focusedDollIsInView } = getState().global.main;
+            const positionOnPlaneScene = dollState.positionOnPlaneScene;
+            // console.log(positionOnPlaneScene);
+            // BUBBLE_WIDTH
+            // if (dollName === focusedDoll && !focusedDollIsInView) {
+            //   positionOnPlaneScene = { x: 0, y: 0 };
+            // }
+            const viewSize = getViewSize();
+            const farLeft = -viewSize.width / 2;
+            const farRight = viewSize.width / 2;
+            const farTop = -viewSize.height / 2;
+            const farBottom = viewSize.height / 2;
+            const bubbleHeight = (_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190;
+            const halfBubbleHeight = bubbleHeight / 2;
+            const halfBubbleWidth = BUBBLE_WIDTH / 2;
+            const halfTriangleSize = TRIANGLE_SIZE / 2;
+            // console.log(positionOnPlaneScene.x * 2);
+            let newPositionX = positionOnPlaneScene.x;
+            let yOffset = bubbleHeight / 2;
+            let newPositionY = positionOnPlaneScene.y - yOffset;
+            // Keep the focused dolls speech bubble inside the view
+            if (dollName === focusedDoll) {
+                if (newPositionX - halfBubbleWidth < farLeft) {
+                    newPositionX = farLeft + halfBubbleWidth;
+                }
+                if (newPositionX + halfBubbleWidth > farRight) {
+                    newPositionX = farRight - halfBubbleWidth;
+                }
+                if (newPositionY - halfBubbleHeight - halfTriangleSize < farTop) {
+                    newPositionY = farTop + halfBubbleHeight + halfTriangleSize;
+                }
+                if (newPositionY + halfBubbleHeight + halfTriangleSize > farBottom) {
+                    newPositionY = farBottom - halfBubbleHeight - halfTriangleSize;
+                }
+            }
             theSpringApi.start({
                 position: [newPositionX, newPositionY],
                 immediate: true,
@@ -128,8 +162,8 @@ export function makeSpeechBubble(concepFuncs, speechVidFiles) {
                 flexWrap: "wrap",
             },
             triangle: {
-                width: "25px",
-                height: "25px",
+                width: TRIANGLE_SIZE + "px",
+                height: TRIANGLE_SIZE + "px",
                 opacity: 1,
                 borderRadius: 5,
                 borderWidth: 1,

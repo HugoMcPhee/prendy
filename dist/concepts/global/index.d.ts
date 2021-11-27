@@ -45,6 +45,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             gravityValue: number;
             playerMovingPaused: boolean;
             focusedDoll: A_DollName;
+            focusedDollIsInView: boolean;
         };
     };
     state: () => {
@@ -88,6 +89,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
         gravityValue: number;
         playerMovingPaused: boolean;
         focusedDoll: A_DollName;
+        focusedDollIsInView: boolean;
     };
     refs: () => {
         sounds: {

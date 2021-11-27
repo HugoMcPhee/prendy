@@ -74,6 +74,7 @@ export function makeDollStoreUtils<
     convertScreenPointToPlaneScenePoint,
     convertPointOnPlaneToPointOnScreen,
     getPositionOnPlane,
+    checkPointIsInsidePlane,
   } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
 
   // type ConceptoState = ReturnType<ConcepFuncs["getState"]>;
@@ -245,8 +246,6 @@ export function makeDollStoreUtils<
     dollRefs.aniGroupsRef = aniGroups;
     dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
 
-
-
     enableCollisions(dollRefs.meshRef);
   }
 
@@ -261,7 +260,8 @@ export function makeDollStoreUtils<
 
     const { meshRef } = getRefs().dolls[dollName];
     if (!meshRef) return;
-    const { planePos, planePosGoal } = getState().global.main;
+    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } =
+      getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
 
     // need to get the doll screen position based on the current or safe plane position
@@ -274,7 +274,15 @@ export function makeDollStoreUtils<
       characterPointOnScreen
     );
 
-    setState({ dolls: { [dollName]: { positionOnPlaneScene } } });
+    const newFocusedDollIsInView =
+      dollName === focusedDoll
+        ? checkPointIsInsidePlane(characterPointOnPlane)
+        : focusedDollIsInView;
+
+    setState({
+      dolls: { [dollName]: { positionOnPlaneScene } },
+      global: { main: { focusedDollIsInView: newFocusedDollIsInView } },
+    });
   }
 
   return {

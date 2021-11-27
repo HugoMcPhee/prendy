@@ -94,6 +94,7 @@ export default function global<
     gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
     focusedDoll: "walker" as A_DollName,
+    focusedDollIsInView: false,
     //
     // scene plane
     ...mover2dState("planePos"),

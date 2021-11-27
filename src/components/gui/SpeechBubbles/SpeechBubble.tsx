@@ -9,19 +9,30 @@ import React, {
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
+import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
-import { CharacterName, SpeechVidFiles } from "../../../declarations";
+import {
+  CharacterName,
+  PrendyOptions,
+  SpeechVidFiles,
+} from "../../../declarations";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
+const TRIANGLE_SIZE = 25;
 
 export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
   concepFuncs: ConcepFuncs,
+  prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
   const { getState, useStore, useStoreEffect } = concepFuncs;
+  const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(
+    concepFuncs,
+    prendyStartOptions
+  );
 
   type GetState = ConcepFuncs["getState"];
   type ItemType = keyof ReturnType<GetState>;
@@ -124,12 +135,50 @@ export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
         getCharDollStuff(forCharacter as CharacterName) ?? {};
 
       if (!dollState || !dollName) return;
-      const { positionOnPlaneScene } = dollState;
+      const { focusedDoll, focusedDollIsInView } = getState().global.main;
+      const positionOnPlaneScene = dollState.positionOnPlaneScene;
+      // console.log(positionOnPlaneScene);
 
-      const newPositionX = positionOnPlaneScene.x;
-      let yOffset = (refs.theTextRectangle.current?.offsetHeight ?? 190) / 2;
+      // BUBBLE_WIDTH
+      // if (dollName === focusedDoll && !focusedDollIsInView) {
+      //   positionOnPlaneScene = { x: 0, y: 0 };
+      // }
 
-      const newPositionY = positionOnPlaneScene.y - yOffset;
+      const viewSize = getViewSize();
+
+      const farLeft = -viewSize.width / 2;
+      const farRight = viewSize.width / 2;
+      const farTop = -viewSize.height / 2;
+      const farBottom = viewSize.height / 2;
+
+      const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
+      const halfBubbleHeight = bubbleHeight / 2;
+      const halfBubbleWidth = BUBBLE_WIDTH / 2;
+      const halfTriangleSize = TRIANGLE_SIZE / 2;
+      // console.log(positionOnPlaneScene.x * 2);
+
+      let newPositionX = positionOnPlaneScene.x;
+
+      let yOffset = bubbleHeight / 2;
+
+      let newPositionY = positionOnPlaneScene.y - yOffset;
+
+      // Keep the focused dolls speech bubble inside the view
+      if (dollName === focusedDoll) {
+        if (newPositionX - halfBubbleWidth < farLeft) {
+          newPositionX = farLeft + halfBubbleWidth;
+        }
+        if (newPositionX + halfBubbleWidth > farRight) {
+          newPositionX = farRight - halfBubbleWidth;
+        }
+
+        if (newPositionY - halfBubbleHeight - halfTriangleSize < farTop) {
+          newPositionY = farTop + halfBubbleHeight + halfTriangleSize;
+        }
+        if (newPositionY + halfBubbleHeight + halfTriangleSize > farBottom) {
+          newPositionY = farBottom - halfBubbleHeight - halfTriangleSize;
+        }
+      }
 
       theSpringApi.start({
         position: [newPositionX, newPositionY],
@@ -179,8 +228,8 @@ export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
             flexWrap: "wrap",
           },
           triangle: {
-            width: "25px",
-            height: "25px",
+            width: TRIANGLE_SIZE + "px",
+            height: TRIANGLE_SIZE + "px",
             opacity: 1,
             borderRadius: 5,
             borderWidth: 1,

@@ -17,7 +17,7 @@ export function makeScreenGui(concepFuncs, PRENDY_OPTIONS, prendyArt) {
     const MiniBubble = makeMiniBubble(concepFuncs);
     const Pickups = makePickups(concepFuncs, pickupsInfo);
     const ScreenSticker = makeScreenSticker(concepFuncs);
-    const SpeechBubble = makeSpeechBubble(concepFuncs, speechVidFiles);
+    const SpeechBubble = makeSpeechBubble(concepFuncs, PRENDY_OPTIONS, speechVidFiles);
     const StoryOverlay = makeStoryOverlay(concepFuncs);
     const VirtualStick = makeVirtualStick(concepFuncs);
     const VirtualButtons = makeVirtualButtons(concepFuncs, PRENDY_OPTIONS);

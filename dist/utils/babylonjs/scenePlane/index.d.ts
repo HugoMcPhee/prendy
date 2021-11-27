@@ -20,6 +20,10 @@ export declare function makeScenePlaneUtils<ConcepFuncs extends PrendyConcepFunc
         x: number;
         y: number;
     };
+    viewCenterPoint: () => {
+        x: number;
+        y: number;
+    };
     fitScenePlaneToScreen: (thePlane: Mesh) => void;
     convertPointOnPlaneToUnmovedPointOnScreen: (thePoint: {
         x: number;
@@ -64,4 +68,5 @@ export declare function makeScenePlaneUtils<ConcepFuncs extends PrendyConcepFunc
         x: number;
         y: number;
     };
+    checkPointIsInsidePlane: (pointOnPlane: Point2D) => boolean;
 };

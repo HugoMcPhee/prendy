@@ -29,6 +29,7 @@ export default function global(prendyStartOptions, prendyArt) {
         gravityValue: 5,
         playerMovingPaused: false,
         focusedDoll: "walker",
+        focusedDollIsInView: false,
         //
         // scene plane
         ...mover2dState("planePos"),

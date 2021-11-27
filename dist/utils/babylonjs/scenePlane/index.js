@@ -46,8 +46,8 @@ export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
         // position = setting where a mesh is,
         // point = a point
         const meshPointOnPlane = getPositionOnPlane(meshRef);
-        const meshSafePointOnPlane = convertToSafePointOnPlane(meshPointOnPlane);
-        const safePlanePosition = getSafePlanePositionFocusedOnPointOnPlain(meshSafePointOnPlane);
+        // const meshSafePointOnPlane = convertToSafePointOnPlane(meshPointOnPlane);
+        const safePlanePosition = getSafePlanePositionFocusedOnPointOnPlain(meshPointOnPlane);
         const safeNumbersSafePlanePosition = {
             x: shortenDecimals(safePlanePosition.x),
             y: shortenDecimals(safePlanePosition.y),
@@ -114,6 +114,14 @@ export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
         };
         return planeCenterPoint;
     }
+    function viewCenterPoint() {
+        const viewSize = getViewSize();
+        const viewCenterPoint = {
+            x: viewSize.width / 2,
+            y: viewSize.height / 2,
+        };
+        return viewCenterPoint;
+    }
     function fitScenePlaneToScreen(thePlane) {
         const planeSize = getPlaneSize();
         thePlane.scaling.y = planeSize.height;
@@ -136,8 +144,10 @@ export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
     }
     //
     // todo could maybe cleanup some of this plane stuff
+    // TODO change it so pointOnPlane is normalized, and try to not invole 1280x720, maybe only 16x9
     function convertToSafePointOnPlane(pointOnPlane) {
-        const planeSize = getPlaneSize();
+        // const planeSize = getPlaneSize();
+        const sceneSize = backdropImageSize; // 1280x720 (the point is in here)
         // const pointOnPlaneIsInsidePlane = pointInsideRect(
         //   pointOnPlane,
         //   measurementToRect({
@@ -147,26 +157,61 @@ export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
         //     y: 0,
         //   })
         // );
-        const OUT_OF_FRAME_PADDING = 100;
+        const OUT_OF_FRAME_PADDING = 200;
+        // const OUT_OF_FRAME_PADDING = 0;
         const pointSortOfIsInsidePlane = pointInsideRect(pointOnPlane, measurementToRect({
-            width: planeSize.width + OUT_OF_FRAME_PADDING * 2,
-            height: planeSize.height + OUT_OF_FRAME_PADDING * 2,
+            width: sceneSize.width + OUT_OF_FRAME_PADDING,
+            height: sceneSize.height + OUT_OF_FRAME_PADDING * 3,
             x: 0 - OUT_OF_FRAME_PADDING,
-            y: 0 - OUT_OF_FRAME_PADDING,
+            y: 0 - OUT_OF_FRAME_PADDING * 3,
         }));
-        if (!pointSortOfIsInsidePlane) {
-            return planeCenterPoint();
-        }
+        // if (!pointSortOfIsInsidePlane) {
+        //   return planeCenterPoint();
+        // }
         return pointOnPlane;
     }
+    function checkPointIsInsidePlane(pointOnPlane) {
+        // const planeSize = getPlaneSize();
+        const sceneSize = backdropImageSize; // 1280x720 (the point is in here)
+        // const pointOnPlaneIsInsidePlane = pointInsideRect(
+        //   pointOnPlane,
+        //   measurementToRect({
+        //     width: planeSize.width,
+        //     height: planeSize.height,
+        //     x: 0,
+        //     y: 0,
+        //   })
+        // );
+        const OUT_OF_FRAME_PADDING = 200;
+        // const OUT_OF_FRAME_PADDING = 0;
+        const pointSortOfIsInsidePlane = pointInsideRect(pointOnPlane, measurementToRect({
+            width: sceneSize.width + OUT_OF_FRAME_PADDING,
+            height: sceneSize.height + OUT_OF_FRAME_PADDING * 3,
+            x: 0 - OUT_OF_FRAME_PADDING,
+            y: 0 - OUT_OF_FRAME_PADDING * 3,
+        }));
+        // if (!pointSortOfIsInsidePlane) {
+        //   return planeCenterPoint();
+        // }
+        return pointSortOfIsInsidePlane;
+    }
     // This includes after the scenePlane moved
-    function convertPointOnPlaneToPointOnScreen({ pointOnPlane, planePosition, }) {
+    function convertPointOnPlaneToPointOnScreen({ pointOnPlane, // point on plane goes from 0 - 1280, 0 - 720, when the point is from the top left to bottom right
+    planePosition, // plane position is 0 when centered, then its the amount of offset in pixels
+     }) {
         if (!planePosition)
             return defaultPosition();
         const viewSize = getViewSize();
         const planeSize = getPlaneSize();
-        const safePointOnPlane = convertToSafePointOnPlane(pointOnPlane);
-        const unmovedPointOnScreen = convertPointOnPlaneToUnmovedPointOnScreen(safePointOnPlane);
+        const { planePos, planePosGoal, planeZoom } = getState().global.main;
+        // console.log("viewSize", viewSize);
+        // console.log("planeSize", planeSize);
+        // console.log("planePos", planePos);
+        // console.log("planeZoom", planeZoom);
+        // const safePointOnPlane = convertToSafePointOnPlane(pointOnPlane);
+        // console.log("pointOnPlane", pointOnPlane.x, pointOnPlane.y);
+        // console.log("safePointOnPlane", safePointOnPlane.x, safePointOnPlane.y);
+        const unmovedPointOnScreen = convertPointOnPlaneToUnmovedPointOnScreen(pointOnPlane);
         const amountClippedView = {
             x: planeSize.width - viewSize.width,
             y: planeSize.height - viewSize.height,
@@ -305,6 +350,7 @@ export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
         getViewSize,
         getPlaneSize,
         planeCenterPoint,
+        viewCenterPoint,
         fitScenePlaneToScreen,
         convertPointOnPlaneToUnmovedPointOnScreen,
         convertToSafePointOnPlane,
@@ -314,5 +360,6 @@ export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
         applyPlanePosition,
         convertScreenPointToPlaneScenePoint,
         convertPlaneScenePointToScreenPoint,
+        checkPointIsInsidePlane,
     };
 }

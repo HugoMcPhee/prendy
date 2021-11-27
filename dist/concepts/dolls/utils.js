@@ -31,7 +31,7 @@ export function enableCollisions(theMesh) {
 export function makeDollStoreUtils(concepFuncs, _prendyConcepts, prendyStartOptions, prendyArt) {
     const { getRefs, getState, setState } = concepFuncs;
     const { dollNames, modelInfoByName } = prendyArt;
-    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
+    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane, } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
             dolls: {
@@ -135,7 +135,7 @@ export function makeDollStoreUtils(concepFuncs, _prendyConcepts, prendyStartOpti
         const { meshRef } = getRefs().dolls[dollName];
         if (!meshRef)
             return;
-        const { planePos, planePosGoal } = getState().global.main;
+        const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } = getState().global.main;
         const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
         // need to get the doll screen position based on the current or safe plane position
         const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
@@ -143,7 +143,13 @@ export function makeDollStoreUtils(concepFuncs, _prendyConcepts, prendyStartOpti
             planePosition: instant ? planePosGoal : planePos,
         });
         const positionOnPlaneScene = convertScreenPointToPlaneScenePoint(characterPointOnScreen);
-        setState({ dolls: { [dollName]: { positionOnPlaneScene } } });
+        const newFocusedDollIsInView = dollName === focusedDoll
+            ? checkPointIsInsidePlane(characterPointOnPlane)
+            : focusedDollIsInView;
+        setState({
+            dolls: { [dollName]: { positionOnPlaneScene } },
+            global: { main: { focusedDollIsInView: newFocusedDollIsInView } },
+        });
     }
     return {
         setDollAnimWeight,

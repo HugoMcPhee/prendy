@@ -33,7 +33,11 @@ export function makeScreenGui<ConcepFuncs extends PrendyConcepFuncs>(
     pickupsInfo
   );
   const ScreenSticker = makeScreenSticker(concepFuncs);
-  const SpeechBubble = makeSpeechBubble(concepFuncs, speechVidFiles);
+  const SpeechBubble = makeSpeechBubble(
+    concepFuncs,
+    PRENDY_OPTIONS,
+    speechVidFiles
+  );
   const StoryOverlay = makeStoryOverlay(concepFuncs);
   const VirtualStick = makeVirtualStick(concepFuncs);
   const VirtualButtons = makeVirtualButtons(concepFuncs, PRENDY_OPTIONS);

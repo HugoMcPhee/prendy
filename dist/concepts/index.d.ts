@@ -121,6 +121,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                 gravityValue: number;
                 playerMovingPaused: boolean;
                 focusedDoll: A_DollName;
+                focusedDollIsInView: boolean;
             };
         };
         state: () => {
@@ -164,6 +165,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
             gravityValue: number;
             playerMovingPaused: boolean;
             focusedDoll: A_DollName;
+            focusedDollIsInView: boolean;
         };
         refs: () => {
             sounds: {

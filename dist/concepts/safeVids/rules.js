@@ -107,7 +107,7 @@ export function makeSafeVidRules(concepFuncs) {
         // wants
         whenWantToLoad: addItemEffect({
             onItemEffect({ itemName, itemState: { vidState } }) {
-                console.log("want to load");
+                // console.log("want to load");
                 if (vidState === "unloaded") {
                     setState({
                         safeVids: {

@@ -84,9 +84,6 @@ export function makeSpeechStoryHelpers<
         returnToZoomBeforeConversation = false,
         stylesBySpecialText,
       } = options ?? {};
-      console.log("-----------------------------");
-      console.log("zoomAmount", zoomAmount);
-      console.log("-----------------------------");
 
       const { dollName } = getCharDollStuff(character);
       const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
@@ -159,8 +156,6 @@ export function makeSpeechStoryHelpers<
       }
 
       function whenResettingBubbleFocus() {
-        console.log("---------------------------");
-        console.log("whenResettingBubbleFocus");
 
         showSpeechRefs.aSpeechIsShowing = false;
 

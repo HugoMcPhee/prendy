@@ -57,7 +57,7 @@ export function makeModelRules<ConcepFuncs extends PrendyConcepFuncs>(
     }),
     whenIsLoaded: addItemEffect({
       onItemEffect({ itemName: modelName }) {
-        console.log(modelName, " loaded");
+        // console.log(modelName, " loaded");
 
         setState((state) => {
           // if (state.global.main.modelNamesLoaded.includes(modelName)) return {};

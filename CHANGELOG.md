@@ -9,11 +9,12 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
-v0.7.11
+v0.7.12
 
 - speech bubbles for focused characters stay in view
 - and fixes camera panning to center when player goes out of view
 - fixes error about no keys for SpeechBubbles
+- removed some console.logs
 
 v0.7.9
 

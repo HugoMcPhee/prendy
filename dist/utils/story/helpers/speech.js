@@ -30,9 +30,6 @@ export function makeSpeechStoryHelpers(concepFuncs, prendyConcepts, prendyStartO
                 .playerCharacter;
             const { time, // time = 2600,
             showOnce = false, character = playerCharacter, zoomAmount = SPEECH_ZOOM_AMOUNT, returnToZoomBeforeConversation = false, stylesBySpecialText, } = options !== null && options !== void 0 ? options : {};
-            console.log("-----------------------------");
-            console.log("zoomAmount", zoomAmount);
-            console.log("-----------------------------");
             const { dollName } = getCharDollStuff(character);
             const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
             // NOTE at the moment CharacterName and SpeechBubbleName are the same
@@ -94,8 +91,6 @@ export function makeSpeechStoryHelpers(concepFuncs, prendyConcepts, prendyStartO
                 setState({ speechBubbles: { [character]: { isVisible: false } } });
             }
             function whenResettingBubbleFocus() {
-                console.log("---------------------------");
-                console.log("whenResettingBubbleFocus");
                 showSpeechRefs.aSpeechIsShowing = false;
                 const currentFocusedDoll = getGlobalState().focusedDoll;
                 const isFocusedOnTalkingCharacter = currentFocusedDoll === dollName;

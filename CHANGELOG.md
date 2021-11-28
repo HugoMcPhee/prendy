@@ -16,7 +16,10 @@ v0.7.12
 - fixes error about no keys for SpeechBubbles
 - removed some console.logs
 
-v0.7.9
+v0.7.13
+- shrunk AlarmText to fit smaller screens
+
+v0.7.12
 
 - fixes setCamera not working if setting to the same camera
 - changes setSegment to always default to setting at loop

@@ -30,7 +30,7 @@ const styles = {
     text: {
         color: "rgb(233, 233, 233)",
         fontFamily: "Jua",
-        fontSize: 120,
+        fontSize: 90,
         zIndex: 1000,
         textAlign: "center",
         maxWidth: 800,

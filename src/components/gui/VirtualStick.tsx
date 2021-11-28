@@ -98,35 +98,6 @@ export function makeVirtualStick<ConcepFuncs extends PrendyConcepFuncs>(
       []
     );
 
-    const pointerUpEvent = useCallback(
-      (_event: React.PointerEvent<HTMLDivElement>) => {
-        local.isDown = false;
-        const { inputVelocity } = getState().players.main;
-        opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
-        springApi.start({ position: [0, 0], immediate: false });
-
-        // check if its been a short time since pressing down,
-        // and if the stick hasnt moved much?
-        const timeSincePointerDown = Date.now() - local.pointerDownTime;
-        const wasAShortTime = timeSincePointerDown < 250;
-        const didntMoveJoystickFar = getVectorSpeed(inputVelocity) < 0.1;
-        if (wasAShortTime && didntMoveJoystickFar) {
-          if (!globalRefs.isHoveringPickupButton) {
-            setState({
-              players: { main: { interactButtonPressTime: Date.now() } },
-            });
-          }
-        } else {
-          // set the input velocity to 0 if the virtual stick wasn't pressed
-          setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
-        }
-        setState({
-          players: { main: { virtualControlsReleaseTime: Date.now() } },
-        });
-      },
-      []
-    );
-
     useEffect(() => {
       // leftThumbContainer.onPointerUpObservable.add((coordinates) => {});
 
@@ -196,13 +167,39 @@ export function makeVirtualStick<ConcepFuncs extends PrendyConcepFuncs>(
         });
       };
 
-      // window.addEventListener("pointerup", pointerUpEvent);
-      // window.addEventListener("pointercancel", pointerUpEvent);
+      const pointerUpEvent = (_event: PointerEvent) => {
+        local.isDown = false;
+        const { inputVelocity } = getState().players.main;
+        opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
+        springApi.start({ position: [0, 0], immediate: false });
+
+        // check if its been a short time since pressing down,
+        // and if the stick hasnt moved much?
+        const timeSincePointerDown = Date.now() - local.pointerDownTime;
+        const wasAShortTime = timeSincePointerDown < 250;
+        const didntMoveJoystickFar = getVectorSpeed(inputVelocity) < 0.1;
+        if (wasAShortTime && didntMoveJoystickFar) {
+          if (!globalRefs.isHoveringPickupButton) {
+            setState({
+              players: { main: { interactButtonPressTime: Date.now() } },
+            });
+          }
+        } else {
+          // set the input velocity to 0 if the virtual stick wasn't pressed
+          setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
+        }
+        setState({
+          players: { main: { virtualControlsReleaseTime: Date.now() } },
+        });
+      };
+
+      window.addEventListener("pointerup", pointerUpEvent);
+      window.addEventListener("pointercancel", pointerUpEvent);
       // window.addEventListener("pointerdown", pointerDownEvent);
       window.addEventListener("pointermove", pointerMoveEvent);
       return () => {
-        // window.removeEventListener("pointerup", pointerUpEvent);
-        // window.removeEventListener("pointercancel", pointerUpEvent);
+        window.removeEventListener("pointerup", pointerUpEvent);
+        window.removeEventListener("pointercancel", pointerUpEvent);
         // window.removeEventListener("pointerdown", pointerDownEvent);
         window.removeEventListener("pointermove", pointerMoveEvent);
       };
@@ -213,7 +210,7 @@ export function makeVirtualStick<ConcepFuncs extends PrendyConcepFuncs>(
       <div
         id="virtual-stick"
         onPointerDown={pointerDownEvent}
-        onPointerUp={pointerUpEvent}
+        // onPointerUp={pointerUpEvent}
         style={{
           pointerEvents: "auto" as const,
           position: "absolute" as const,

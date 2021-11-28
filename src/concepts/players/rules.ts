@@ -235,7 +235,9 @@ export function makePlayerRules<
             y: -desiredMoveDirection.x,
           });
         } else {
-          newAnimationName = playerState.animationNames.idle;
+          if (newAnimationName === playerState.animationNames.walking) {
+            newAnimationName = playerState.animationNames.idle;
+          }
           newIsMoving = false;
         }
 
@@ -282,8 +284,8 @@ export function makePlayerRules<
               // nowAnimation: playerMovingPaused ? undefined : newAnimationName,
               nowAnimation: newAnimationName,
               positionMoveMode: newPositionMoveMode,
-              // positionIsMoving: newIsMoving,
-              positionIsMoving: true,
+              positionIsMoving: newIsMoving,
+              // positionIsMoving: true,
             },
           },
           players: { main: { lastSafeInputAngle: null } },
@@ -521,12 +523,17 @@ export function makePlayerRules<
     whenPlayerMovementPausedChanges: addItemEffect({
       onItemEffect({ newValue: playerMovingPaused }) {
         const { playerCharacter } = getState().global.main;
-        const { dollRefs, dollName } = getCharDollStuff(
+        const playerState = getState().players.main;
+        const { dollRefs, dollName, dollState } = getCharDollStuff(
           playerCharacter as CharacterName
         );
-        const newAnimationName = "human_idle"; // TODO , use characters current idle animation?
+
+        let newAnimationName = dollState.nowAnimation;
 
         if (playerMovingPaused) {
+          if (newAnimationName === playerState.animationNames.walking) {
+            newAnimationName = playerState.animationNames.idle;
+          }
           dollRefs.positionMoverRefs.velocity.x = 0;
           dollRefs.positionMoverRefs.velocity.y = 0;
           dollRefs.positionMoverRefs.velocity.z = 0;

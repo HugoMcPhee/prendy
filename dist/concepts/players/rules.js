@@ -173,7 +173,9 @@ export function makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt) {
                     });
                 }
                 else {
-                    newAnimationName = playerState.animationNames.idle;
+                    if (newAnimationName === playerState.animationNames.walking) {
+                        newAnimationName = playerState.animationNames.idle;
+                    }
                     newIsMoving = false;
                 }
                 if (playerMovingPaused) {
@@ -211,8 +213,8 @@ export function makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt) {
                             // nowAnimation: playerMovingPaused ? undefined : newAnimationName,
                             nowAnimation: newAnimationName,
                             positionMoveMode: newPositionMoveMode,
-                            // positionIsMoving: newIsMoving,
-                            positionIsMoving: true,
+                            positionIsMoving: newIsMoving,
+                            // positionIsMoving: true,
                         },
                     },
                     players: { main: { lastSafeInputAngle: null } },
@@ -392,9 +394,13 @@ export function makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt) {
         whenPlayerMovementPausedChanges: addItemEffect({
             onItemEffect({ newValue: playerMovingPaused }) {
                 const { playerCharacter } = getState().global.main;
-                const { dollRefs, dollName } = getCharDollStuff(playerCharacter);
-                const newAnimationName = "human_idle"; // TODO , use characters current idle animation?
+                const playerState = getState().players.main;
+                const { dollRefs, dollName, dollState } = getCharDollStuff(playerCharacter);
+                let newAnimationName = dollState.nowAnimation;
                 if (playerMovingPaused) {
+                    if (newAnimationName === playerState.animationNames.walking) {
+                        newAnimationName = playerState.animationNames.idle;
+                    }
                     dollRefs.positionMoverRefs.velocity.x = 0;
                     dollRefs.positionMoverRefs.velocity.y = 0;
                     dollRefs.positionMoverRefs.velocity.z = 0;

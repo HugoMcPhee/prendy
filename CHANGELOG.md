@@ -9,6 +9,15 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 
+v0.7.14
+
+- fixes animation stopping when player movement's disabled
+- fixes releasing virtual stick not working
+
+v0.7.13
+
+- shrunk AlarmText to fit smaller screens
+
 v0.7.12
 
 - speech bubbles for focused characters stay in view
@@ -16,10 +25,7 @@ v0.7.12
 - fixes error about no keys for SpeechBubbles
 - removed some console.logs
 
-v0.7.13
-- shrunk AlarmText to fit smaller screens
-
-v0.7.12
+v0.7.9
 
 - fixes setCamera not working if setting to the same camera
 - changes setSegment to always default to setting at loop

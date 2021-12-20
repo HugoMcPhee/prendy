@@ -19,14 +19,14 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             planeZoom: number;
             planeZoomGoal: number;
             planeZoomIsMoving: boolean;
-            planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
+            planeZoomMoveMode: import("pietem-movers/dist/types").MoveMode;
             planeZoomMoveConfigName: string;
-            planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            planeZoomMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             planePos: import("chootils/dist/points2d").Point2D;
             planePosGoal: import("chootils/dist/points2d").Point2D;
             planePosIsMoving: boolean;
-            planePosMoveMode: import("concep-movers/dist/types").MoveMode;
-            planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            planePosMoveMode: import("pietem-movers/dist/types").MoveMode;
+            planePosMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             wantedSegmentWhenNextPlaceLoads: A_AnySegmentName | null;
             nextSegmentNameWhenVidPlays: A_AnySegmentName | null;
             wantedSegmentNameAtLoop: A_AnySegmentName | null;
@@ -63,14 +63,14 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
         planeZoom: number;
         planeZoomGoal: number;
         planeZoomIsMoving: boolean;
-        planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
+        planeZoomMoveMode: import("pietem-movers/dist/types").MoveMode;
         planeZoomMoveConfigName: string;
-        planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        planeZoomMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
         planePos: import("chootils/dist/points2d").Point2D;
         planePosGoal: import("chootils/dist/points2d").Point2D;
         planePosIsMoving: boolean;
-        planePosMoveMode: import("concep-movers/dist/types").MoveMode;
-        planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+        planePosMoveMode: import("pietem-movers/dist/types").MoveMode;
+        planePosMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
         wantedSegmentWhenNextPlaceLoads: A_AnySegmentName | null;
         nextSegmentNameWhenVidPlays: A_AnySegmentName | null;
         wantedSegmentNameAtLoop: A_AnySegmentName | null;
@@ -121,7 +121,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
                 physicsConfigName: "planeZoomMoveConfigName";
                 physicsConfigs: "planeZoomMoveConfigs";
             };
-            physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+            physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
         };
         planePosMoverRefs: {
             velocity: import("chootils/dist/points2d").Point2D;
@@ -136,7 +136,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
                 physicsConfigName: "planePosMoveConfigName";
                 physicsConfigs: "planePosMoveConfigs";
             };
-            physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+            physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
         };
         backdropVideoTex: CustomVideoTexture | null;
         scenes: {

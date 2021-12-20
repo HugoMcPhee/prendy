@@ -5,9 +5,13 @@ TODO
 - fix jump button not handling holding on andorid and ios
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
-- maybe remove setFirstCharacterPosition (theres also setDollToSpot)
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
+- doorsInfo type doesn't autocomplete place name
+
+v0.7.15
+
+- uses renamed pietem packages
 
 v0.7.14
 

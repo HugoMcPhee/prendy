@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "concep";
+import { ConceptsHelperTypes } from "pietem";
 import { VidState } from ".";
 import { PrendyConcepFuncs } from "../typedConcepFuncs";
 import { makeVideoElementFromPath } from "./utils";

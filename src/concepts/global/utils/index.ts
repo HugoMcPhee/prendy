@@ -1,6 +1,6 @@
 // import { getState, ItemState, setState } from "concepts";
 
-import { ConceptsHelperTypes } from "concep";
+import { ConceptsHelperTypes } from "pietem";
 import { PrendyConcepFuncs } from "../../typedConcepFuncs";
 
 // type GlobalItemState = ItemState<"global">;

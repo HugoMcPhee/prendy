@@ -18,9 +18,9 @@ export default function makeDollIndexUtils(prendyArt: PrendyArt): {
         valueGoal?: Record<string, number> | undefined;
         isMoving?: boolean | undefined;
         moveConfigName?: T_PhysicsNames | undefined;
-        moveMode?: import("concep-movers/dist/types").MoveMode | undefined;
-        moveConfigs?: Record<T_PhysicsNames, import("concep-movers/dist/types").PhysicsOptions> | undefined;
-    }>(newName: T_Name, initialState?: T_InitialState | undefined) => Record<T_Name, Record<string, number>> & import("concep-movers/dist/utils").NewProps<T_Name, Record<string, number>> & (T_InitialState["moveConfigName"] extends undefined ? {} : Record<`${T_Name}MoveConfigName`, T_PhysicsNames>) & (T_InitialState["moveConfigs"] extends undefined ? {} : Record<`${T_Name}MoveConfigs`, Record<T_PhysicsNames, import("concep-movers/dist/types").PhysicsOptions>>);
+        moveMode?: import("pietem-movers/dist/types").MoveMode | undefined;
+        moveConfigs?: Record<T_PhysicsNames, import("pietem-movers/dist/types").PhysicsOptions> | undefined;
+    }>(newName: T_Name, initialState?: T_InitialState | undefined) => Record<T_Name, Record<string, number>> & import("pietem-movers/dist/utils").NewProps<T_Name, Record<string, number>> & (T_InitialState["moveConfigName"] extends undefined ? {} : Record<`${T_Name}MoveConfigName`, T_PhysicsNames>) & (T_InitialState["moveConfigs"] extends undefined ? {} : Record<`${T_Name}MoveConfigs`, Record<T_PhysicsNames, import("pietem-movers/dist/types").PhysicsOptions>>);
     modelMoverRefs: <T_ModelName_1 extends string, T_MoverName extends string>(modelName: T_ModelName_1, moverName: T_MoverName) => Record<`${T_MoverName}MoverRefs`, {
         stateNames: {
             value: T_MoverName;
@@ -30,7 +30,7 @@ export default function makeDollIndexUtils(prendyArt: PrendyArt): {
             physicsConfigName: `${T_MoverName}MoveConfigName`;
             physicsConfigs: `${T_MoverName}MoveConfigs`;
         };
-        physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+        physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
         animRefs: Record<string, {
             velocity: number;
             recentSpeeds: number[];

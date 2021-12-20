@@ -22,7 +22,7 @@ import {
   mover2dState,
   moverRefs,
   moverState,
-} from "concep-movers";
+} from "pietem-movers";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";

@@ -95,14 +95,14 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                 planeZoom: number;
                 planeZoomGoal: number;
                 planeZoomIsMoving: boolean;
-                planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
+                planeZoomMoveMode: import("pietem-movers/dist/types").MoveMode;
                 planeZoomMoveConfigName: string;
-                planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+                planeZoomMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
                 planePos: import("chootils/dist/points2d").Point2D;
                 planePosGoal: import("chootils/dist/points2d").Point2D;
                 planePosIsMoving: boolean;
-                planePosMoveMode: import("concep-movers/dist/types").MoveMode;
-                planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+                planePosMoveMode: import("pietem-movers/dist/types").MoveMode;
+                planePosMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
                 wantedSegmentWhenNextPlaceLoads: A_AnySegmentName | null;
                 nextSegmentNameWhenVidPlays: A_AnySegmentName | null;
                 wantedSegmentNameAtLoop: A_AnySegmentName | null;
@@ -139,14 +139,14 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
             planeZoom: number;
             planeZoomGoal: number;
             planeZoomIsMoving: boolean;
-            planeZoomMoveMode: import("concep-movers/dist/types").MoveMode;
+            planeZoomMoveMode: import("pietem-movers/dist/types").MoveMode;
             planeZoomMoveConfigName: string;
-            planeZoomMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            planeZoomMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             planePos: import("chootils/dist/points2d").Point2D;
             planePosGoal: import("chootils/dist/points2d").Point2D;
             planePosIsMoving: boolean;
-            planePosMoveMode: import("concep-movers/dist/types").MoveMode;
-            planePosMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            planePosMoveMode: import("pietem-movers/dist/types").MoveMode;
+            planePosMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             wantedSegmentWhenNextPlaceLoads: A_AnySegmentName | null;
             nextSegmentNameWhenVidPlays: A_AnySegmentName | null;
             wantedSegmentNameAtLoop: A_AnySegmentName | null;
@@ -197,7 +197,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                     physicsConfigName: "planeZoomMoveConfigName";
                     physicsConfigs: "planeZoomMoveConfigs";
                 };
-                physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+                physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
             };
             planePosMoverRefs: {
                 velocity: import("chootils/dist/points2d").Point2D;
@@ -212,7 +212,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                     physicsConfigName: "planePosMoveConfigName";
                     physicsConfigs: "planePosMoveConfigs";
                 };
-                physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+                physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
             };
             backdropVideoTex: import("../utils/babylonjs/CustomVideoTexture/CustomVideoTexture").CustomVideoTexture | null;
             scenes: {
@@ -264,22 +264,22 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
             animWeights: Record<string, number>;
             animWeightsGoal: Record<string, number>;
             animWeightsIsMoving: boolean;
-            animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
+            animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
-            animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
-            rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
+            rotationYMoveMode: import("pietem-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
-            rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            rotationYMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             position: import("chootils/dist/points3d").Point3D;
             positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
-            positionMoveMode: import("concep-movers/dist/types").MoveMode;
+            positionMoveMode: import("pietem-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
-            positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            positionMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<A_DollOptions[K_DollName]["model"]>;
             nextSpotName: A_AnySpotName | null;
         }; };
@@ -290,22 +290,22 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
             animWeights: Record<string, number>;
             animWeightsGoal: Record<string, number>;
             animWeightsIsMoving: boolean;
-            animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
+            animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
-            animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
-            rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
+            rotationYMoveMode: import("pietem-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
-            rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            rotationYMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             position: import("chootils/dist/points3d").Point3D;
             positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
-            positionMoveMode: import("concep-movers/dist/types").MoveMode;
+            positionMoveMode: import("pietem-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
-            positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            positionMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_ModelName_2>;
             nextSpotName: A_AnySpotName | null;
         };
@@ -316,22 +316,22 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
             animWeights: Record<string, number>;
             animWeightsGoal: Record<string, number>;
             animWeightsIsMoving: boolean;
-            animWeightsMoveMode: import("concep-movers/dist/types").MoveMode;
+            animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
-            animWeightsMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
-            rotationYMoveMode: import("concep-movers/dist/types").MoveMode;
+            rotationYMoveMode: import("pietem-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
-            rotationYMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            rotationYMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             position: import("chootils/dist/points3d").Point3D;
             positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
-            positionMoveMode: import("concep-movers/dist/types").MoveMode;
+            positionMoveMode: import("pietem-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
-            positionMoveConfigs: Record<string, import("concep-movers/dist/types").PhysicsOptions>;
+            positionMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_ModelName_3>;
             nextSpotName: A_AnySpotName | null;
         }) => {
@@ -344,7 +344,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                     physicsConfigName: "animWeightsMoveConfigName";
                     physicsConfigs: "animWeightsMoveConfigs";
                 };
-                physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+                physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
                 animRefs: Record<string, {
                     velocity: number;
                     recentSpeeds: number[];
@@ -362,7 +362,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                     physicsConfigName: "rotationYMoveConfigName";
                     physicsConfigs: "rotationYMoveConfigs";
                 };
-                physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+                physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
             };
             positionMoverRefs: {
                 velocity: import("chootils/dist/points3d").Point3D;
@@ -377,7 +377,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
                     physicsConfigName: "positionMoveConfigName";
                     physicsConfigs: "positionMoveConfigs";
                 };
-                physicsConfigs: import("concep-movers/dist/types").DefinedPhysicsConfig;
+                physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
             };
             meshRef: import("@babylonjs/core").AbstractMesh | null;
             otherMeshes: Record<string, import("@babylonjs/core").AbstractMesh | null>;
@@ -543,7 +543,7 @@ export declare function makePrendyConcepts<A_CharacterName extends CharacterName
         refs: () => {
             videoElement: HTMLVideoElement | null;
         };
-        startStates: import("concep").InitialItemsState<(<T_ItemName_2 extends string>(itemName: T_ItemName_2) => {
+        startStates: import("pietem").InitialItemsState<(<T_ItemName_2 extends string>(itemName: T_ItemName_2) => {
             vidState: import("./safeVids").VidState;
             playType: "pause" | "play";
             wantedSeekTime: number | null;

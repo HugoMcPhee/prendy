@@ -1,6 +1,6 @@
 import { PrendyArt } from "../declarations";
-import { ConceptsHelperTypes } from "concep";
-import { createConcepts } from "concep";
+import { ConceptsHelperTypes } from "pietem";
+import { createConcepts } from "pietem";
 import { prendyFlowNames } from ".";
 import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";

@@ -6,7 +6,7 @@ import {
   PrendyConcepFuncs,
   PlaceholderPrendyConcepts,
 } from "../typedConcepFuncs";
-import { ConceptsHelperTypes } from "concep";
+import { ConceptsHelperTypes } from "pietem";
 
 let zIndexCounter = 100;
 /*

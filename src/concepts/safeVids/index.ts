@@ -1,4 +1,4 @@
-import { InitialItemsState } from "concep";
+import { InitialItemsState } from "pietem";
 import { forEach } from "chootils/dist/loops";
 import { PrendyArt, PlaceName } from "../../declarations";
 import { abLetters } from "../../utils/consts";

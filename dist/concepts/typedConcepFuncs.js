@@ -1,4 +1,4 @@
-import { createConcepts } from "concep";
+import { createConcepts } from "pietem";
 import { prendyFlowNames } from ".";
 import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";

@@ -1,5 +1,5 @@
 import { PBRMaterial } from "@babylonjs/core";
-import { makeRunMovers } from "concep-movers";
+import { makeRunMovers } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
 import { samePoints as samePoints3d } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";

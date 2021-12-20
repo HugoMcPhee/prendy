@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "concep";
+import { ConceptsHelperTypes } from "pietem";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from ".";
 import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";

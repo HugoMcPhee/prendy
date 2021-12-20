@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "concep";
+import { ConceptsHelperTypes } from "pietem";
 export declare type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
     doll: any;
     font: any;

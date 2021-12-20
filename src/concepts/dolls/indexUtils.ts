@@ -6,7 +6,7 @@ import {
   MeshNameByModel,
   ModelName,
 } from "../../declarations";
-import { makeMoverStateMaker, moverMultiRefs } from "concep-movers";
+import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
 //
 

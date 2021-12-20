@@ -75,30 +75,30 @@ export function makeScreenSticker<ConcepFuncs extends PrendyConcepFuncs>(
       </div>
     );
   };
-
-  const styles = {
-    container: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      pointerEvents: "none",
-      overflow: "hidden",
-    } as CSSProperties,
-    sticker: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      color: "rgb(233, 233, 233)",
-      fontFamily: "Jua",
-      fontSize: 120,
-      zIndex: 1000,
-      textAlign: "center",
-      transformOrigin: "center",
-    } as CSSProperties,
-  } as const;
 }
+
+const styles = {
+  container: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "none",
+    overflow: "hidden",
+  } as CSSProperties,
+  sticker: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    color: "rgb(233, 233, 233)",
+    fontFamily: "Jua",
+    fontSize: 120,
+    zIndex: 1000,
+    textAlign: "center",
+    transformOrigin: "center",
+  } as CSSProperties,
+} as const;

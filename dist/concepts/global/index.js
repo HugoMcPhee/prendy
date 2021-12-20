@@ -1,4 +1,4 @@
-import { mover2dRefs, mover2dState, moverRefs, moverState, } from "concep-movers";
+import { mover2dRefs, mover2dState, moverRefs, moverState, } from "pietem-movers";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 export default function global(prendyStartOptions, prendyArt) {
     const { musicNames, soundNames } = prendyArt;

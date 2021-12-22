@@ -1,6 +1,6 @@
 /// <reference types="react" />
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import { PrendyOptions, SpeechVidFiles } from "../../../declarations";
-export declare function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions, speechVidFiles: SpeechVidFiles): ({ name }: {
-    name: keyof ReturnType<ConcepFuncs["getState"]>["speechBubbles"] & string;
+export declare function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, speechVidFiles: SpeechVidFiles): ({ name }: {
+    name: keyof ReturnType<StoreHelpers["getState"]>["speechBubbles"] & string;
 }) => JSX.Element;

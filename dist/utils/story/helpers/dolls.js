@@ -4,13 +4,13 @@ import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
-export function makeDollStoryHelpers(concepFuncs, 
+export function makeDollStoryHelpers(storeHelpers, 
 // prendyConcepts: PrendyConcepts,
 prendyStartOptions, modelInfoByName) {
-    const { getRefs, getState, setState } = concepFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs);
-    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
+    const { getRefs, getState, setState } = storeHelpers;
+    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const { getModelNameFromDoll } = makeDollStoryUtils(storeHelpers);
+    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(storeHelpers);
     // --------------------------------------------------------------
     function setDollPosition(dollName, newPositon) {
         const dollRefs = getRefs().dolls[dollName];

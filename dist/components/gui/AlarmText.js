@@ -1,7 +1,7 @@
 // @refresh-reset
 import React from "react";
-export function makeAlarmText(concepFuncs) {
-    const { useStore } = concepFuncs;
+export function makeAlarmText(storeHelpers) {
+    const { useStore } = storeHelpers;
     return function AlarmText(_props) {
         const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
             type: "global",

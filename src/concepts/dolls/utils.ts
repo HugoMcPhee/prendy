@@ -20,9 +20,9 @@ import {
 } from "../../declarations";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../typedConcepFuncs";
+} from "../typedStoreHelpers";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 
 const rangeOptions = {
@@ -59,15 +59,15 @@ export function enableCollisions(theMesh: AbstractMesh) {
 }
 
 export function makeDollStoreUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   _prendyConcepts: PrendyConcepts,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getRefs, getState, setState } = storeHelpers;
   const { dollNames, modelInfoByName } = prendyArt;
 
   const {
@@ -75,16 +75,16 @@ export function makeDollStoreUtils<
     convertPointOnPlaneToPointOnScreen,
     getPositionOnPlane,
     checkPointIsInsidePlane,
-  } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
+  } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
 
-  // type ConceptoState = ReturnType<ConcepFuncs["getState"]>;
+  // type ConceptoState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof ConceptoState["dolls"];
   // type DollName = keyof typeof prendyConcepts.dolls.startStates;
   // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
   // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
 
   type StartState_Dolls = PrendyConcepts["dolls"]["startStates"] &
-    ReturnType<ConcepFuncs["getState"]>["dolls"];
+    ReturnType<StoreHelpers["getState"]>["dolls"];
 
   type ModelNameFromDoll<T_DollName extends DollName> =
     StartState_Dolls[T_DollName]["modelName"];

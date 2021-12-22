@@ -1,4 +1,4 @@
-import { ConceptsHelperTypes } from "pietem";
+import { StoreHelperTypes } from "pietem";
 export declare type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
     doll: any;
     font: any;
@@ -11,7 +11,7 @@ export declare type PlaceholderPrendyConcepts = Record<any, {
     refs: (itemName: any, type: any) => any;
     startStates?: Record<any, any>;
 }>;
-export declare type PrendyConcepFuncs = {
+export declare type PrendyStoreHelpers = {
     getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -43,8 +43,8 @@ export declare type PrendyConcepFuncs = {
     useStoreItemEffect: (...args: any) => any;
     useStoreItemPropsEffect: (...args: any) => any;
 };
-declare type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]>;
-declare type HelperType<T extends ItemType> = ConceptsHelperTypes<PrendyConcepFuncs["getState"], PrendyConcepFuncs["getRefs"], T>;
+declare type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
+declare type HelperType<T extends ItemType> = StoreHelperTypes<PrendyStoreHelpers["getState"], PrendyStoreHelpers["getRefs"], T>;
 export declare type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
 export declare type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 export declare type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];

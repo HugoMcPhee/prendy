@@ -1,7 +1,7 @@
 import { PrendyArt } from "../declarations";
-import { ConceptsHelperTypes } from "pietem";
-import { createConcepts } from "pietem";
-import { prendyFlowNames } from ".";
+import { StoreHelperTypes } from "pietem";
+import { createStoreHelpers } from "pietem";
+import { prendyStepNames } from ".";
 import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
@@ -57,7 +57,7 @@ const getModelInfoByName = () => ({
   skeletonName: "test",
 });
 
-const testArtStuff = {
+const testArtStuff = ({
   modelNames: ["modelA", "modelB"] as readonly any[],
   dollNames: ["dollA", "dollB"] as readonly any[],
   placeNames: ["placeA"] as readonly any[],
@@ -96,7 +96,7 @@ const testArtStuff = {
     characterA: { doll: "dollA", font: "fontA" },
     characterB: { doll: "dollB", font: "fontA" },
   } as const,
-} as unknown as PrendyArt;
+} as unknown) as PrendyArt;
 
 // NOTE to get types working, might need to hard-type prendyArt, while working on the libray
 
@@ -139,15 +139,15 @@ const placeholderPrendyConcepts = {
   story: story_fake<any, any>(),
 };
 
-// const concepFuncs = _createConcepts_ForTypes(placeholderPrendyConcepts, {
-const concepFuncs = createConcepts(placeholderPrendyConcepts, {
-  flowNames: prendyFlowNames,
+// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyConcepts, {
+const storeHelpers = createStoreHelpers(placeholderPrendyConcepts, {
+  stepNames: prendyStepNames,
   dontSetMeta: true,
 });
 
 // NOTE Change these to typeof  to have known types while making prendys library
 // export type PlaceholderPrendyConcepts = typeof placeholderPrendyConcepts;
-// export type PrendyConcepFuncs = typeof concepFuncs;
+// export type PrendyStoreHelpers = typeof storeHelpers;
 
 export type PlaceholderPrendyConcepts = Record<
   any,
@@ -157,7 +157,7 @@ export type PlaceholderPrendyConcepts = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type PrendyConcepFuncs = {
+export type PrendyStoreHelpers = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -170,14 +170,18 @@ export type PrendyConcepFuncs = {
   startItemEffect: (...args: any) => any;
   startEffect: (...args: any) => any;
   stopEffect: (...args: any) => any;
-  makeRules: (...args: any) => {
+  makeRules: (
+    ...args: any
+  ) => {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
   };
-  makeDynamicRules: (...args: any) => {
+  makeDynamicRules: (
+    ...args: any
+  ) => {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
@@ -196,10 +200,10 @@ export type PrendyConcepFuncs = {
   useStoreItemPropsEffect: (...args: any) => any;
 };
 
-type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]>;
-type HelperType<T extends ItemType> = ConceptsHelperTypes<
-  PrendyConcepFuncs["getState"],
-  PrendyConcepFuncs["getRefs"],
+type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
+type HelperType<T extends ItemType> = StoreHelperTypes<
+  PrendyStoreHelpers["getState"],
+  PrendyStoreHelpers["getRefs"],
   T
 >;
 export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];

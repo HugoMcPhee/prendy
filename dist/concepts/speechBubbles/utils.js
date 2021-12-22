@@ -1,5 +1,5 @@
-export function makeSpeechBubblesStoreUtils(concepFuncs, prendyConcepts) {
-    const { getState } = concepFuncs;
+export function makeSpeechBubblesStoreUtils(storeHelpers, prendyConcepts) {
+    const { getState } = storeHelpers;
     function getTypingDelayForLetter(letter, speechBubbleName) {
         const { typingSpeed } = getState().speechBubbles[speechBubbleName];
         let typingDelay = typingSpeed;

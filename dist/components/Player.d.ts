@@ -1,4 +1,4 @@
 import { PrendyArt } from "../declarations";
-import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
 import { PrendyOptions } from "../declarations";
-export declare function makePlayer<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): (_props: {}) => null;
+export declare function makePlayer<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): (_props: {}) => null;

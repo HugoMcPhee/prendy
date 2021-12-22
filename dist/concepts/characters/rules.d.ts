@@ -1,14 +1,14 @@
 import { PrendyArt, PrendyOptions, CharacterName } from "../../declarations";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
-export declare function makeCharacterDynamicRules<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): {
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
+export declare function makeCharacterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
 };
-export declare function makeStartDynamicCharacterRulesForInitialState<ConcepFuncs extends PrendyConcepFuncs, CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>>(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], concepFuncs: ConcepFuncs): () => () => void;
-export declare function makeCharacterRules<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt): {
+export declare function makeStartDynamicCharacterRulesForInitialState<StoreHelpers extends PrendyStoreHelpers, CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>>(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], storeHelpers: StoreHelpers): () => () => void;
+export declare function makeCharacterRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyArt: PrendyArt): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

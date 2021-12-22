@@ -3,10 +3,10 @@ import { forEach } from "chootils/dist/loops";
 import { makeSpeechBubblesStoreUtils } from "./utils";
 import { CSSProperties } from "react";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../typedConcepFuncs";
-import { ConceptsHelperTypes } from "pietem";
+} from "../typedStoreHelpers";
+import { StoreHelperTypes } from "pietem";
 
 let zIndexCounter = 100;
 /*
@@ -17,19 +17,19 @@ When characters position changes
 */
 
 export function makeSpeechBubbleRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
->(concepFuncs: ConcepFuncs, prendyConcepts: PrendyConcepts) {
-  const { makeRules, setState, getRefs } = concepFuncs;
+>(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts) {
+  const { makeRules, setState, getRefs } = storeHelpers;
 
   // AllItemsState,
   // ItemRefs,
   // ItemState,
 
-  type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]>;
-  type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    PrendyConcepFuncs["getState"],
-    PrendyConcepFuncs["getRefs"],
+  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
+  type HelperType<T extends ItemType> = StoreHelperTypes<
+    PrendyStoreHelpers["getState"],
+    PrendyStoreHelpers["getRefs"],
     T
   >;
   type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
@@ -37,7 +37,7 @@ export function makeSpeechBubbleRules<
   type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
   const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts
   );
 

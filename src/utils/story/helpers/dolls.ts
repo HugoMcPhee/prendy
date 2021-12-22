@@ -3,9 +3,9 @@ import { forEach } from "chootils/dist/loops";
 import { getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import {
   AnimationNameByModel,
   PrendyOptions,
@@ -24,7 +24,7 @@ import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeDollStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
@@ -38,12 +38,12 @@ export function makeDollStoryHelpers<
   A_PlaceName extends PlaceName = PlaceName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   // prendyConcepts: PrendyConcepts,
   prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getRefs, getState, setState } = storeHelpers;
 
   type DollNameFromCharacter<
     T_CharacterName extends A_CharacterName
@@ -65,15 +65,15 @@ export function makeDollStoryHelpers<
     T_DollName extends A_DollName
   > = A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
   const { getModelNameFromDoll } = makeDollStoryUtils<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyConcepts,
     A_DollName
-  >(concepFuncs);
+  >(storeHelpers);
 
-  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
+  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(storeHelpers);
 
   // --------------------------------------------------------------
 

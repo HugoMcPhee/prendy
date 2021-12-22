@@ -1,10 +1,10 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-export function makeCharacterDynamicRules(concepFuncs, prendyStartOptions, prendyArt) {
-    const { getState, setState, getRefs, makeDynamicRules } = concepFuncs;
+export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, prendyArt) {
+    const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
     const { placeInfoByName } = prendyArt;
-    const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
+    const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
     // makeDynamicRules((addItemEffect)=> ({
@@ -110,8 +110,8 @@ export function makeCharacterDynamicRules(concepFuncs, prendyStartOptions, prend
 // FIXME
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
-export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs) {
-    const { getState } = concepFuncs;
+export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers) {
+    const { getState } = storeHelpers;
     return function startDynamicCharacterRulesForInitialState() {
         forEach(characterNames, (characterName) => {
             const { dollName } = getState().characters[characterName];
@@ -129,8 +129,8 @@ export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRu
         };
     };
 }
-export function makeCharacterRules(concepFuncs, prendyArt) {
-    const { makeRules, getState, setState } = concepFuncs;
+export function makeCharacterRules(storeHelpers, prendyArt) {
+    const { makeRules, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyArt;
     return makeRules((addItemEffect, addEffect) => ({
         // should be a  dynamic rule ?

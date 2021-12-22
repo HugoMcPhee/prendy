@@ -1,8 +1,8 @@
 import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "chootils/dist/speedAngleDistance2d";
 import React, { useCallback, useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeVirtualStick(concepFuncs) {
-    const { getRefs, getState, setState } = concepFuncs;
+export function makeVirtualStick(storeHelpers) {
+    const { getRefs, getState, setState } = storeHelpers;
     const globalRefs = getRefs().global.main;
     const SIZES = {
         leftThumbContainer: 110,

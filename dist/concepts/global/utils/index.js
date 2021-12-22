@@ -1,8 +1,8 @@
 // import { getState, ItemState, setState } from "concepts";
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
-export function makeGlobalStoreUtils(concepFuncs) {
-    const { getState, setState } = concepFuncs;
+export function makeGlobalStoreUtils(storeHelpers) {
+    const { getState, setState } = storeHelpers;
     // type GlobalItemState = AllState["global"]["main"];
     // type PartialGlobalState = Partial<GlobalItemState>;
     function setGlobalState(newState, callback) {

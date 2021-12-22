@@ -1,6 +1,6 @@
 import { VidState } from "../../concepts/safeVids";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
-export declare function makeSafeVidStoreUtils<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): {
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
+export declare function makeSafeVidStoreUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     doWhenSafeVidPlayOrPause: (safeVidId: string, callback: () => void, checkInitial?: boolean) => string | null;
     doWhenSafeVidStateReady: (safeVidId: string, vidStateToCheck: VidState, callback: () => void, checkInitial?: boolean) => string | null;
 };

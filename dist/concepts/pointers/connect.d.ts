@@ -1,5 +1,5 @@
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
-export declare function makePointersConnectRules<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): {
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
+export declare function makePointersConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     startAll: () => void;
     stopAll: () => void;
 };

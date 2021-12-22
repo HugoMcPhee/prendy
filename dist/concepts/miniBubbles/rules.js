@@ -5,8 +5,8 @@ Dynamic rules
 When characters position changes
   bubble position to character
 */
-export function makeMiniBubbleRules(concepFuncs) {
-    const { makeRules, setState } = concepFuncs;
+export function makeMiniBubbleRules(storeHelpers) {
+    const { makeRules, setState } = storeHelpers;
     return makeRules((addItemEffect, addEffect) => ({
         // The position changing based on camera and character position are inside the MiniBubble component
         whenAddedOrRemoved: addEffect({

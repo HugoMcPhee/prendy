@@ -4,8 +4,8 @@ import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
 import { makeGetSceneOrEngineUtils } from "./getSceneOrEngine";
-export function makeUseModelFile(concepFuncs) {
-    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+export function makeUseModelFile(storeHelpers) {
+    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
     return function useModelFile(modelFile) {
         const scene = getScene();
         const container = usePromise(SceneLoader.LoadAssetContainerAsync, [modelFile, undefined, scene]);

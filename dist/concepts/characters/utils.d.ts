@@ -1,9 +1,9 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { CharacterName } from "../../declarations";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
-export declare function makeGetCharDollStuff<ConcepFuncs extends PrendyConcepFuncs, A_CharacterName extends CharacterName = CharacterName>(concepFuncs: ConcepFuncs): <T_CharacterName extends A_CharacterName>(charName: T_CharacterName) => {
-    dollName: keyof ReturnType<ConcepFuncs["getState"]>["dolls"];
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
+export declare function makeGetCharDollStuff<StoreHelpers extends PrendyStoreHelpers, A_CharacterName extends CharacterName = CharacterName>(storeHelpers: StoreHelpers): <T_CharacterName extends A_CharacterName>(charName: T_CharacterName) => {
+    dollName: keyof ReturnType<StoreHelpers["getState"]>["dolls"];
     meshRef: AbstractMesh | null;
-    dollRefs: ReturnType<ConcepFuncs["getRefs"]>["dolls"][keyof ReturnType<ConcepFuncs["getRefs"]>["dolls"]];
-    dollState: ReturnType<ConcepFuncs["getState"]>["dolls"][keyof ReturnType<ConcepFuncs["getState"]>["dolls"]];
+    dollRefs: ReturnType<StoreHelpers["getRefs"]>["dolls"][keyof ReturnType<StoreHelpers["getRefs"]>["dolls"]];
+    dollState: ReturnType<StoreHelpers["getState"]>["dolls"][keyof ReturnType<StoreHelpers["getState"]>["dolls"]];
 };

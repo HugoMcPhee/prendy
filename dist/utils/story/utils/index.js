@@ -2,11 +2,11 @@ import { makeCharacterStoryUtils } from "./characters";
 import { makeDollStoryUtils } from "./dolls";
 import { makeSceneStoryUtils } from "./scene";
 import { makeSpotStoryUtils } from "./spots";
-export function makePrendyStoryUtils(concepFuncs, _prendyConcepts) {
-    const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot, } = makeCharacterStoryUtils(concepFuncs);
-    const { getModelNameFromDoll } = makeDollStoryUtils(concepFuncs);
-    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules, } = makeSceneStoryUtils(concepFuncs);
-    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(concepFuncs);
+export function makePrendyStoryUtils(storeHelpers, _prendyConcepts) {
+    const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot, } = makeCharacterStoryUtils(storeHelpers);
+    const { getModelNameFromDoll } = makeDollStoryUtils(storeHelpers);
+    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules, } = makeSceneStoryUtils(storeHelpers);
+    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(storeHelpers);
     return {
         // characters
         get2DAngleBetweenCharacters,

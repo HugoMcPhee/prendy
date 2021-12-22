@@ -2,9 +2,9 @@ import { Vector3 } from "@babylonjs/core";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import {
   AnimationNameByModel,
   PrendyOptions,
@@ -18,7 +18,7 @@ import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeDollStoryHelpers } from "./dolls";
 
 export function makeCharacterStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
@@ -28,7 +28,7 @@ export function makeCharacterStoryHelpers<
   A_DollOptions extends DollOptions = DollOptions,
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName,
@@ -50,11 +50,11 @@ export function makeCharacterStoryHelpers<
     T_CharacterName extends A_CharacterName
   > = A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
-  const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
-  const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(concepFuncs);
+  const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(storeHelpers);
 
   const {
     moveDollAt2DAngle,
@@ -63,7 +63,7 @@ export function makeCharacterStoryHelpers<
     setDollRotationY,
     springAddToDollRotationY,
     springDollRotationY,
-  } = makeDollStoryHelpers(concepFuncs, prendyStartOptions, modelInfoByName);
+  } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
 
   function setCharAnimation<T_Character extends A_CharacterName>(
     character: T_Character,

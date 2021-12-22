@@ -1,5 +1,5 @@
-import { createConcepts } from "pietem";
-import { prendyFlowNames } from ".";
+import { createStoreHelpers } from "pietem";
+import { prendyStepNames } from ".";
 import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
 import characters from "./characters";
@@ -104,8 +104,8 @@ const placeholderPrendyConcepts = {
     //
     story: story_fake(),
 };
-// const concepFuncs = _createConcepts_ForTypes(placeholderPrendyConcepts, {
-const concepFuncs = createConcepts(placeholderPrendyConcepts, {
-    flowNames: prendyFlowNames,
+// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyConcepts, {
+const storeHelpers = createStoreHelpers(placeholderPrendyConcepts, {
+    stepNames: prendyStepNames,
     dontSetMeta: true,
 });

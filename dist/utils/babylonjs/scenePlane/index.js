@@ -4,9 +4,9 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-export function makeScenePlaneUtils(concepFuncs, prendyStartOptions) {
-    const { getRefs, getState } = concepFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+export function makeScenePlaneUtils(storeHelpers, prendyStartOptions) {
+    const { getRefs, getState } = storeHelpers;
+    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
     const globalRefs = getRefs().global.main;
     function getProjectionMatrixCustomSize(theCamera, theSize) {
         // Only for perspective camera here :)

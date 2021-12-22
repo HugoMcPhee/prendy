@@ -1,33 +1,33 @@
-import { ConceptsHelperTypes } from "pietem";
+import { StoreHelperTypes } from "pietem";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from ".";
 import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";
 import { PrendyArt, PlaceName } from "../../declarations";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
 
-export function makeSectionVidRules<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs,
+export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
   prendyArt: PrendyArt
 ) {
   // safe Section Stack Vid Rules
 
-  const { getState, makeRules, setState } = concepFuncs;
+  const { getState, makeRules, setState } = storeHelpers;
 
-  type ItemType = keyof ReturnType<PrendyConcepFuncs["getState"]> &
-    keyof ReturnType<PrendyConcepFuncs["getRefs"]>;
-  type HelperType<T extends ItemType> = ConceptsHelperTypes<
-    PrendyConcepFuncs["getState"],
-    PrendyConcepFuncs["getRefs"],
+  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> &
+    keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
+  type HelperType<T extends ItemType> = StoreHelperTypes<
+    PrendyStoreHelpers["getState"],
+    PrendyStoreHelpers["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
   const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } =
-    makeSectionVidStoreUtils(concepFuncs, prendyArt);
+    makeSectionVidStoreUtils(storeHelpers, prendyArt);
 
   const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } =
-    makeSafeVidStoreUtils(concepFuncs);
+    makeSafeVidStoreUtils(storeHelpers);
 
   return makeRules((addItemEffect) => ({
     rulesForSettingNewVideoStates: addItemEffect({

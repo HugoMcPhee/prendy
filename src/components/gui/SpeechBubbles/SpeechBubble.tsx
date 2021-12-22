@@ -10,7 +10,7 @@ import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import {
   CharacterName,
   PrendyOptions,
@@ -23,24 +23,24 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function makeSpeechBubble<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs,
+export function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
-  const { getState, useStore, useStoreEffect } = concepFuncs;
+  const { getState, useStore, useStoreEffect } = storeHelpers;
   const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions
   );
 
-  type GetState = ConcepFuncs["getState"];
+  type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<
     GetState
   >[T_ItemType];
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 

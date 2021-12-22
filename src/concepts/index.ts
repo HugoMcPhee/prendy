@@ -37,7 +37,7 @@ import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
 
-export const prendyFlowNames = [
+export const prendyStepNames = [
   // updating internal video states
   "safeVidStateUpdates",
   "sectionVidStateUpdates",
@@ -70,7 +70,7 @@ export const prendyFlowNames = [
   "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ] as const;
 
-export type FlowName = typeof prendyFlowNames[number];
+export type FlowName = typeof prendyStepNames[number];
 
 // NOTE the generic types are used to prevent the typescript compiler widneing
 // [K_CharacterName in CharacterName] to [x: string]

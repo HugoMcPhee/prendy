@@ -1,5 +1,5 @@
-export function makeKeyboardConnectRules(concepFuncs) {
-    const { setState, getState } = concepFuncs;
+export function makeKeyboardConnectRules(storeHelpers) {
+    const { setState, getState } = storeHelpers;
     function handleKeyDown(event) {
         const keyboardState = getState().keyboards.main;
         const keyName = event.code;

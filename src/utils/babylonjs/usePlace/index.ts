@@ -12,16 +12,16 @@ import {
 } from "../../..//declarations";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
 
 export function makeUsePlace<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
@@ -36,22 +36,22 @@ export function makeUsePlace<
   // CameraNameByPlace extends Record<PlaceName, string>,
   // SegmentNameByPlace extends Record<PlaceName, string>
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyStartOptions: A_PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, soundFiles } = prendyArt;
 
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
-  const useModelFile = makeUseModelFile(concepFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+  const useModelFile = makeUseModelFile(storeHelpers);
 
   const {
     loadNowVideosForPlace,
     loadProbeImagesForPlace,
     makeCameraFromModel,
-  } = makeUsePlaceUtils(concepFuncs, prendyArt);
+  } = makeUsePlaceUtils(storeHelpers, prendyArt);
 
   const placesRefs = getRefs().places;
 

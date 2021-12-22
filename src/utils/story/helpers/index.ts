@@ -23,9 +23,9 @@ import {
   WallNameByPlace,
 } from "../../../declarations";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import { makeCharacterStoryHelpers } from "./characters";
 import { makeDollStoryHelpers } from "./dolls";
 import { makerPlayerStoryHelpers } from "./players";
@@ -39,7 +39,7 @@ import { makeStickerStoryHelpers } from "./stickers";
 // function doThis
 
 export function makePrendyStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
@@ -63,7 +63,7 @@ export function makePrendyStoryHelpers<
   A_MusicFiles extends MusicFiles = MusicFiles,
   A_MusicName extends MusicName = MusicName
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyStartOptions: A_PrendyOptions,
   prendyArt: PrendyArt
@@ -84,7 +84,7 @@ export function makePrendyStoryHelpers<
     springAddToCharRotationY,
     springCharRotation,
   } = makeCharacterStoryHelpers<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyConcepts,
     A_AnimationNameByModel,
     A_PrendyOptions,
@@ -94,7 +94,7 @@ export function makePrendyStoryHelpers<
     A_DollOptions,
     A_ModelInfoByName
   >(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyStartOptions,
     modelInfoByName,
@@ -115,7 +115,7 @@ export function makePrendyStoryHelpers<
     springDollToSpot,
     toggleDollMeshes,
   } = makeDollStoryHelpers<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyConcepts,
     A_AnimationNameByModel,
     A_PrendyOptions,
@@ -128,7 +128,7 @@ export function makePrendyStoryHelpers<
     A_ModelName,
     A_PlaceName,
     A_SpotNameByPlace
-  >(concepFuncs, prendyStartOptions, modelInfoByName);
+  >(storeHelpers, prendyStartOptions, modelInfoByName);
 
   const {
     enableMovement,
@@ -136,7 +136,7 @@ export function makePrendyStoryHelpers<
     setPlayerAnimations,
     takePickup,
   } = makerPlayerStoryHelpers<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyConcepts,
     A_AnyAnimationName,
     A_PrendyOptions,
@@ -144,7 +144,7 @@ export function makePrendyStoryHelpers<
     A_ModelInfoByName,
     A_PickupName
   >(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyStartOptions,
     modelInfoByName,
@@ -160,7 +160,7 @@ export function makePrendyStoryHelpers<
     setSegment,
     showStoryView,
   } = makeSceneStoryHelpers<
-    ConcepFuncs,
+    StoreHelpers,
     A_AnyCameraName,
     A_AnySegmentName,
     A_CameraNameByPlace,
@@ -170,13 +170,13 @@ export function makePrendyStoryHelpers<
     A_SegmentNameByPlace,
     A_SpotNameByPlace,
     A_WallNameByPlace
-  >(concepFuncs, placeInfoByName, characterNames);
+  >(storeHelpers, placeInfoByName, characterNames);
 
   const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers<
-    ConcepFuncs,
+    StoreHelpers,
     A_MusicFiles,
     A_MusicName
-  >(concepFuncs, musicNames, musicFiles);
+  >(storeHelpers, musicNames, musicFiles);
 
   const {
     hideMiniBubble,
@@ -184,14 +184,14 @@ export function makePrendyStoryHelpers<
     showMiniBubble,
     showSpeech,
   } = makeSpeechStoryHelpers<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyConcepts,
     A_PrendyOptions,
     A_CharacterName
-  >(concepFuncs, prendyConcepts, prendyStartOptions, characterNames);
+  >(storeHelpers, prendyConcepts, prendyStartOptions, characterNames);
 
   const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(
-    concepFuncs
+    storeHelpers
   );
 
   return {

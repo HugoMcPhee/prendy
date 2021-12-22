@@ -2,10 +2,10 @@ import { SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 // handle laoding here ??
-export function makeModelRules(concepFuncs, prendyArt) {
-    const { makeRules, setState, getRefs } = concepFuncs;
+export function makeModelRules(storeHelpers, prendyArt) {
+    const { makeRules, setState, getRefs } = storeHelpers;
     const { modelInfoByName } = prendyArt;
-    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
     async function startLoadingModel(modelName) {
         setState({ models: { [modelName]: { wantToLoad: false } } });
         const { modelFile } = modelInfoByName[modelName];

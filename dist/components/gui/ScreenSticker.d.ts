@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
-export declare function makeScreenSticker<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): (_props: {}) => JSX.Element | null;
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+export declare function makeScreenSticker<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): (_props: {}) => JSX.Element | null;

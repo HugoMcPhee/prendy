@@ -15,11 +15,11 @@ const showSpeechRefs = {
 const showMiniBubbleRefs = {
     closeTimeout: null, // TODO might need to have it per character if other characts have mini bubbles
 };
-export function makeSpeechStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, _characterNames) {
-    const { getState, onNextTick, setState, startItemEffect, stopEffect, } = concepFuncs;
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
-    const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(concepFuncs, prendyConcepts);
+export function makeSpeechStoryHelpers(storeHelpers, prendyConcepts, prendyStartOptions, _characterNames) {
+    const { getState, onNextTick, setState, startItemEffect, stopEffect, } = storeHelpers;
+    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(storeHelpers, prendyConcepts);
     const SPEECH_ZOOM_AMOUNT = 1.2;
     const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
     const MIN_AUTO_SPEECH_TIME = 1500;

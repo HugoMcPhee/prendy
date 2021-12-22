@@ -1,10 +1,10 @@
 // @refresh-reset
 import React, { useEffect } from "react";
 import { makePickupButton } from "./PickupButton";
-export function makePickups(concepFuncs, pickupsInfo) {
-    const { getRefs, useStore } = concepFuncs;
+export function makePickups(storeHelpers, pickupsInfo) {
+    const { getRefs, useStore } = storeHelpers;
     const globalRefs = getRefs().global.main;
-    const PickupButton = makePickupButton(concepFuncs, pickupsInfo);
+    const PickupButton = makePickupButton(storeHelpers, pickupsInfo);
     return function Pickups(_props) {
         // const buttonsHolderRef = useRef<StackPanel>(null);
         // On hover could disablejoystick event from working>

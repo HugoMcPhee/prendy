@@ -1,7 +1,7 @@
 import delay from "delay";
 import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -17,7 +17,7 @@ import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 
 export function makeSceneStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
@@ -28,11 +28,11 @@ export function makeSceneStoryHelpers<
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   placeInfoByName: A_PlaceInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {
-  const { getRefs, getState, onNextTick, setState } = concepFuncs;
+  const { getRefs, getState, onNextTick, setState } = storeHelpers;
 
   type CameraNameFromPlace<
     T_Place extends keyof A_PlaceInfoByName
@@ -46,16 +46,16 @@ export function makeSceneStoryHelpers<
     toSegment?: A_SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
   const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(
-    concepFuncs
+    storeHelpers
   );
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
-  } = makeSceneStoryUtils(concepFuncs);
+  } = makeSceneStoryUtils(storeHelpers);
 
   async function changeSegmentAtLoop<
     T_Place extends A_PlaceName,

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
 import { andLayout } from "../utils/styles";
 
 export function makeAllTestVideoStuff<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PlaceName extends string
->(concepFuncs: ConcepFuncs, placeNames: readonly PlaceName[]) {
-  const { useStore, useStoreItemPropsEffect } = concepFuncs;
+>(storeHelpers: StoreHelpers, placeNames: readonly PlaceName[]) {
+  const { useStore, useStoreItemPropsEffect } = storeHelpers;
 
   function TestVideos({ placeName }: { placeName: PlaceName }) {
     const mainRef = useRef<HTMLDivElement>(null);

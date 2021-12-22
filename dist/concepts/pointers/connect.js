@@ -1,5 +1,5 @@
-export function makePointersConnectRules(concepFuncs) {
-    const { getRefs, setState, addItem, removeItem } = concepFuncs;
+export function makePointersConnectRules(storeHelpers) {
+    const { getRefs, setState, addItem, removeItem } = storeHelpers;
     const onPointerDown = (event) => {
         const pointerId = event.pointerId.toString();
         // NOTE addItem might not have correct types atm

@@ -1,38 +1,38 @@
 import { PrendyArt, PrendyOptions } from "../../../declarations";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../typedConcepFuncs";
+} from "../../typedStoreHelpers";
 import { makeGlobalChangePlaceRules } from "./changePlace";
 import { makeGlobalGeneralRules } from "./general";
 import { makeGlobalScenePlaneRules } from "./scenePlane";
 import { makeGlobalVideoRules } from "./video";
 
 export function makeStartAllGlobalRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
   // making rules
   const globalVideoRules = makeGlobalVideoRules(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyStartOptions,
     prendyArt
   );
   const globalChangePlaceRules = makeGlobalChangePlaceRules(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyStartOptions,
     prendyArt
   );
-  const globalGeneralRules = makeGlobalGeneralRules(concepFuncs);
+  const globalGeneralRules = makeGlobalGeneralRules(storeHelpers);
   const globalScenePlaneRules = makeGlobalScenePlaneRules(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions
   );
 

@@ -1,23 +1,23 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { CharacterName } from "../../declarations";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   // PlaceholderPrendyConcepts,
-} from "../typedConcepFuncs";
+} from "../typedStoreHelpers";
 
 // async function testAnimWeights() {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
 
 export function makeGetCharDollStuff<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   A_CharacterName extends CharacterName = CharacterName
->(concepFuncs: ConcepFuncs) {
-  const { getRefs, getState } = concepFuncs;
+>(storeHelpers: StoreHelpers) {
+  const { getRefs, getState } = storeHelpers;
 
   // NOTE could have character start options as a type to get accurate return types
-  type DollStates = ReturnType<ConcepFuncs["getState"]>["dolls"];
-  type DollRefs = ReturnType<ConcepFuncs["getRefs"]>["dolls"];
+  type DollStates = ReturnType<StoreHelpers["getState"]>["dolls"];
+  type DollRefs = ReturnType<StoreHelpers["getRefs"]>["dolls"];
 
   // NOTE TODO all these types need to be made inside the places using them (like story helpers)
   // And getCharDollStuff there too

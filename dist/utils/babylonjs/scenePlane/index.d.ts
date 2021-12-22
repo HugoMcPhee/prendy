@@ -1,7 +1,7 @@
 import { AbstractMesh, Mesh, Vector3 } from "@babylonjs/core";
-import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../../concepts/typedStoreHelpers";
 import { Point2D } from "chootils/dist/points2d";
-export declare function makeScenePlaneUtils<ConcepFuncs extends PrendyConcepFuncs, PrendyOptions extends PrendyOptionsUntyped>(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions): {
+export declare function makeScenePlaneUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions): {
     getPositionOnPlane: (theMesh: AbstractMesh) => Vector3;
     updatePlanePositionToFocusOnMesh: ({ meshRef, instant, }: {
         meshRef: AbstractMesh;

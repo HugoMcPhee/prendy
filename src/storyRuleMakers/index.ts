@@ -1,6 +1,6 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
-import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
 import {
   AnyTriggerName,
   CameraNameByPlace,
@@ -16,13 +16,13 @@ import { makeDollStoryHelpers } from "../utils/story/helpers/dolls";
 
 // export each of the rule makers stuff from here :)
 
-export function makeGetUsefulStoryStuff<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeGetUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { getRefs, getState } = concepFuncs;
+  const { getRefs, getState } = storeHelpers;
 
-  type AllState = ReturnType<ConcepFuncs["getState"]>;
-  type AllRefs = ReturnType<ConcepFuncs["getRefs"]>;
+  type AllState = ReturnType<StoreHelpers["getState"]>;
+  type AllRefs = ReturnType<StoreHelpers["getRefs"]>;
 
   type StoryState = AllState["story"]["main"];
   type StoryRefs = AllRefs["story"]["main"];
@@ -66,10 +66,10 @@ export function makeGetUsefulStoryStuff<ConcepFuncs extends PrendyConcepFuncs>(
   };
 }
 
-export function makeSetStoryState<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeSetStoryState<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { setState } = concepFuncs;
+  const { setState } = storeHelpers;
 
   // ItemState
 
@@ -82,7 +82,7 @@ export function makeSetStoryState<ConcepFuncs extends PrendyConcepFuncs>(
   //   GetState
   // >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 
-  type AllState = ReturnType<ConcepFuncs["getState"]>;
+  type AllState = ReturnType<StoreHelpers["getState"]>;
   type StoryState = AllState["story"]["main"];
 
   return function setStoryState(newState: Partial<StoryState>) {
@@ -91,7 +91,7 @@ export function makeSetStoryState<ConcepFuncs extends PrendyConcepFuncs>(
 }
 
 export function makeAllStoryRuleMakers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_CharacterName extends CharacterName = CharacterName,
@@ -102,7 +102,7 @@ export function makeAllStoryRuleMakers<
   A_StoryPartName extends StoryPartName = StoryPartName,
   A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   placeInfoByName: A_PlaceInfoByName,
   characterNames: readonly A_CharacterName[],
   dollNames: readonly A_DollName[]
@@ -114,11 +114,11 @@ export function makeAllStoryRuleMakers<
     startItemEffect,
     stopEffect,
     onNextTick,
-  } = concepFuncs;
+  } = storeHelpers;
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
-  const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
+  const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
 
   type StoryCallback = (
     usefulStuff: ReturnType<typeof getUsefulStoryStuff>

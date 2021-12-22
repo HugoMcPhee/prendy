@@ -1,9 +1,9 @@
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 export function makeKeyboardConnectRules<
-  ConcepFuncs extends PrendyConcepFuncs
->(concepFuncs: ConcepFuncs) {
-  const { setState, getState } = concepFuncs;
+  StoreHelpers extends PrendyStoreHelpers
+>(storeHelpers: StoreHelpers) {
+  const { setState, getState } = storeHelpers;
 
   function handleKeyDown(event: KeyboardEvent) {
     const keyboardState = getState().keyboards.main;

@@ -1,14 +1,14 @@
 import { Scene } from "@babylonjs/core";
 import { clearTimeoutSafe } from "../../../utils";
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { PrendyConcepFuncs } from "../../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../typedStoreHelpers";
 import { makeGlobalStoreUtils } from "../utils";
 
-export function makeGlobalGeneralRules<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeGlobalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { getRefs, getState, makeRules, setState } = concepFuncs;
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { getRefs, getState, makeRules, setState } = storeHelpers;
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenAnythingChangesForRendering: addEffect({

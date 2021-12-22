@@ -1,16 +1,16 @@
 // @refresh-reset
 import React, { useState } from "react";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PickupsInfoPlaceholder,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 
 export function makePickupButton<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>
->(concepFuncs: ConcepFuncs, pickupsInfo: PickupsInfo) {
-  const { getRefs } = concepFuncs;
+>(storeHelpers: StoreHelpers, pickupsInfo: PickupsInfo) {
+  const { getRefs } = storeHelpers;
 
   type Props = { name: PickupName };
 

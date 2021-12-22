@@ -6,14 +6,14 @@ import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import { makeGlobalStoreUtils } from "./";
-export function makeCameraChangeUtils(concepFuncs, prendyArt) {
-    const { getRefs, getState, setState } = concepFuncs;
+export function makeCameraChangeUtils(storeHelpers, prendyArt) {
+    const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName, dollNames } = prendyArt;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
-    const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const getSectionVidVideo = makeGetSectionVidVideo(concepFuncs);
-    const { getSegmentFromStoryRules } = makeSceneStoryUtils(concepFuncs);
+    const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const getSectionVidVideo = makeGetSectionVidVideo(storeHelpers);
+    const { getSegmentFromStoryRules } = makeSceneStoryUtils(storeHelpers);
     function getSafeCamName(cam) {
         if (cam === null) {
             return null;

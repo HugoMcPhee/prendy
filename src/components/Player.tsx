@@ -1,6 +1,6 @@
 import { AnyTriggerName, PrendyArt } from "../declarations";
 import { breakableForEach } from "chootils/dist/loops";
-import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
 import {
   PrendyOptions,
   CameraNameByPlace,
@@ -12,7 +12,7 @@ import {
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
 
 export function makePlayer<
-  ConcepFuncs extends PrendyConcepFuncs
+  StoreHelpers extends PrendyStoreHelpers
   // PrendyOptions extends PrendyOptionsUntyped,
   // AnyCameraName extends string,
   // AnySegmentName extends string,
@@ -24,7 +24,7 @@ export function makePlayer<
   // SegmentNameByPlace extends Record<PlaceName, string>,
   // CameraNameByPlace extends Record<PlaceName, string>
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
@@ -58,10 +58,10 @@ export function makePlayer<
     Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>
   >;
 
-  const { useStoreItemPropsEffect, getState, setState, useStore } = concepFuncs;
+  const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
 
-  const { goToNewPlace } = makeSceneStoryHelpers<ConcepFuncs>(
-    concepFuncs,
+  const { goToNewPlace } = makeSceneStoryHelpers<StoreHelpers>(
+    storeHelpers,
     placeInfoByName,
     characterNames
   );

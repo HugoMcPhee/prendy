@@ -2,9 +2,9 @@ import delay from "delay";
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import {
   AnyAnimationName,
   PrendyOptions,
@@ -15,7 +15,7 @@ import {
 import { makeCharacterStoryHelpers } from "./characters";
 
 export function makerPlayerStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
@@ -23,15 +23,15 @@ export function makerPlayerStoryHelpers<
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
   A_PickupName extends PickupName = PickupName
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {
-  const { getState, setState } = concepFuncs;
+  const { getState, setState } = storeHelpers;
 
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
   type PlayerAnimationNames = {
     walking: A_AnyAnimationName;

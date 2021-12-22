@@ -1,5 +1,5 @@
-export function makeGetSceneOrEngineUtils(concepFuncs) {
-    const { getRefs } = concepFuncs;
+export function makeGetSceneOrEngineUtils(storeHelpers) {
+    const { getRefs } = storeHelpers;
     function getScene(sceneType) {
         const globalRefs = getRefs().global.main;
         if (sceneType === "backdrop")

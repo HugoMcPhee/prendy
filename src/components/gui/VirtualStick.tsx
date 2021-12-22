@@ -1,4 +1,4 @@
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,
@@ -7,10 +7,10 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 
-export function makeVirtualStick<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getRefs, getState, setState } = storeHelpers;
 
   const globalRefs = getRefs().global.main;
 

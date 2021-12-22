@@ -5,9 +5,9 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import { PrendyOptions, CharacterName } from "../../../declarations";
 import { clearTimeoutSafe } from "../../../utils";
 
@@ -28,12 +28,12 @@ const showMiniBubbleRefs = {
 };
 
 export function makeSpeechStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyStartOptions: A_PrendyOptions,
   _characterNames: readonly A_CharacterName[]
@@ -44,13 +44,13 @@ export function makeSpeechStoryHelpers<
     setState,
     startItemEffect,
     stopEffect,
-  } = concepFuncs;
+  } = storeHelpers;
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
-  const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(storeHelpers);
   const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts
   );
 

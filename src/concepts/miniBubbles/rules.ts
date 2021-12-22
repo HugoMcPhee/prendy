@@ -1,5 +1,5 @@
 import { forEach } from "chootils/dist/loops";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 /*
 Dynamic rules
@@ -8,10 +8,10 @@ When characters position changes
   bubble position to character
 */
 
-export function makeMiniBubbleRules<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeMiniBubbleRules<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { makeRules, setState } = concepFuncs;
+  const { makeRules, setState } = storeHelpers;
 
   return makeRules((addItemEffect, addEffect) => ({
     // The position changing based on camera and character position are inside the MiniBubble component

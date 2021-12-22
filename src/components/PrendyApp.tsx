@@ -6,9 +6,9 @@ import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../concepts/typedConcepFuncs";
+} from "../concepts/typedStoreHelpers";
 import { PrendyArt, PrendyOptions } from "../declarations";
 import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
@@ -22,33 +22,33 @@ loadStyles();
 type Props = { children?: ReactNode };
 
 export function makePrendyApp<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, onNextTick, setState } = concepFuncs;
+  const { getRefs, onNextTick, setState } = storeHelpers;
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
   const ScreenGuiDom = makeScreenGui(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions,
     prendyArt
   );
 
   const LoadingModels = makeLoadingModels(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions,
     prendyArt
   );
 
-  const ScenePlane = makeScenePlane(concepFuncs, prendyStartOptions);
+  const ScenePlane = makeScenePlane(storeHelpers, prendyStartOptions);
 
-  // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
+  // const AllTestVideoStuff = makeAllTestVideoStuff(storeHelpers, [
   //   "city",
   //   "cityb",
   //   "beanshop",

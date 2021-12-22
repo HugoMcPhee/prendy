@@ -9,25 +9,25 @@ import { makeGetCharDollStuff } from "../../concepts/characters/utils";
 import { PrendyArt, CharacterName } from "../../declarations";
 import { clearTimeoutSafe } from "../../utils";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
-import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../typedConcepFuncs";
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../typedStoreHelpers";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
 export function makePlayerRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   PRENDY_OPTIONS: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, makeRules, setState } = concepFuncs;
+  const { getRefs, getState, makeRules, setState } = storeHelpers;
   const { placeInfoByName } = prendyArt;
 
   const globalRefs = getRefs().global.main;
 
-  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenDirectionKeysPressed: addEffect({

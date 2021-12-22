@@ -8,16 +8,16 @@ import {
   SegmentNameByPlace,
 } from "../../declarations";
 import { makeGlobalStoreUtils } from "../global/utils";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
 export function makeGetSectionVidVideo<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PlaceName extends string
->(concepFuncs: ConcepFuncs) {
-  const { getRefs, getState } = concepFuncs;
+>(storeHelpers: StoreHelpers) {
+  const { getRefs, getState } = storeHelpers;
 
   return function getSectionVidVideo(itemName: PlaceName) {
     const sectionVidState = getState().sectionVids[itemName];
@@ -30,19 +30,19 @@ export function makeGetSectionVidVideo<
 }
 
 export function makeSectionVidStoreUtils<
-  ConcepFuncs extends PrendyConcepFuncs
->(concepFuncs: ConcepFuncs, prendyArt: PrendyArt) {
-  const { getState, startItemEffect, stopEffect } = concepFuncs;
+  StoreHelpers extends PrendyStoreHelpers
+>(storeHelpers: StoreHelpers, prendyArt: PrendyArt) {
+  const { getState, startItemEffect, stopEffect } = storeHelpers;
   const { placeInfoByName } = prendyArt;
 
-  const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
-  const getSectionVidVideo = makeGetSectionVidVideo<ConcepFuncs, PlaceName>(
-    concepFuncs
+  const getSectionVidVideo = makeGetSectionVidVideo<StoreHelpers, PlaceName>(
+    storeHelpers
   );
 
   const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(
-    concepFuncs,
+    storeHelpers,
     prendyArt
   );
 

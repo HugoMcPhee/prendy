@@ -1,4 +1,4 @@
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -8,15 +8,15 @@ import {
 import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
 
 export function makeSceneStoryUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_PlaceName extends PlaceName = PlaceName
->(concepFuncs: ConcepFuncs) {
-  const { getRefs, getState, startItemEffect, stopEffect } = concepFuncs;
+>(storeHelpers: StoreHelpers) {
+  const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
 
-  const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
+  const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
   const globalRefs = getRefs().global.main;
 
   function getSegmentFromStoryRules<

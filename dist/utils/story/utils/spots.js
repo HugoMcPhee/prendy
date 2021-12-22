@@ -1,5 +1,5 @@
-export function makeSpotStoryUtils(concepFuncs) {
-    const { getRefs } = concepFuncs;
+export function makeSpotStoryUtils(storeHelpers) {
+    const { getRefs } = storeHelpers;
     function getSpotPosition(place, spot) {
         const placesRefs = getRefs().places;
         const newPositon = placesRefs[place].spotPositions[spot].clone();

@@ -5,14 +5,14 @@ export { makePrendyConcepts } from "./concepts";
 export { getPrendyOptions } from "./getPrendyOptions";
 export { makePrendyApp } from "./components/PrendyApp";
 export { makePrendyStoryHelpers } from "./utils/story/helpers";
-export { prendyFlowNames } from "./concepts";
+export { prendyStepNames } from "./concepts";
 export { makeStartPrendyRules } from "./concepts/start";
 export { makeUsePlaceUtils } from "./utils/babylonjs/usePlace/utils";
 export { makeAllStoryRuleMakers } from "./storyRuleMakers";
-export function makeOtherUsefulPrendyUtils(concepFuncs) {
-    const setStoryState = makeSetStoryState(concepFuncs);
-    const { getGlobalState, setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { getScene, getEngine } = makeGetSceneOrEngineUtils(concepFuncs);
+export function makeOtherUsefulPrendyUtils(storeHelpers) {
+    const setStoryState = makeSetStoryState(storeHelpers);
+    const { getGlobalState, setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const { getScene, getEngine } = makeGetSceneOrEngineUtils(storeHelpers);
     return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
 }
 export * from "./declarations";

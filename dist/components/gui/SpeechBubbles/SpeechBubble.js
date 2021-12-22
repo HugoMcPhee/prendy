@@ -9,10 +9,10 @@ const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
-export function makeSpeechBubble(concepFuncs, prendyStartOptions, speechVidFiles) {
-    const { getState, useStore, useStoreEffect } = concepFuncs;
-    const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+export function makeSpeechBubble(storeHelpers, prendyStartOptions, speechVidFiles) {
+    const { getState, useStore, useStoreEffect } = storeHelpers;
+    const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
+    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
     return function SpeechBubble({ name }) {
         var _a, _b;
         const theRectangle = useRef(null);

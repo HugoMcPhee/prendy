@@ -2,8 +2,8 @@
 import React from "react";
 import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
-export function makeScreenSticker(concepFuncs) {
-    const { useStore } = concepFuncs;
+export function makeScreenSticker(storeHelpers) {
+    const { useStore } = storeHelpers;
     const EDGE_PADDING = 65;
     return function ScreenSticker(_props) {
         const { screenStickerText, screenStickerIsVisible, screenStickerPosition, } = useStore(({ story: { main } }) => main, {

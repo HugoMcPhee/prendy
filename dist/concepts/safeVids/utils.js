@@ -1,5 +1,5 @@
-export function makeSafeVidStoreUtils(concepFuncs) {
-    const { getState, startItemEffect, stopEffect } = concepFuncs;
+export function makeSafeVidStoreUtils(storeHelpers) {
+    const { getState, startItemEffect, stopEffect } = storeHelpers;
     function doWhenSafeVidStateChanges(safeVidId, checkShouldRun, callback, checkInitial = true) {
         const initialVidState = getState().safeVids[safeVidId].vidState;
         if (checkInitial && checkShouldRun(initialVidState)) {

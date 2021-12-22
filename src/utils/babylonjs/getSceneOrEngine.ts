@@ -1,10 +1,10 @@
 import { Engine, Scene } from "@babylonjs/core";
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 
 export function makeGetSceneOrEngineUtils<
-  ConcepFuncs extends PrendyConcepFuncs
->(concepFuncs: ConcepFuncs) {
-  const { getRefs } = concepFuncs;
+  StoreHelpers extends PrendyStoreHelpers
+>(storeHelpers: StoreHelpers) {
+  const { getRefs } = storeHelpers;
 
   function getScene(sceneType?: "backdrop" | "main") {
     const globalRefs = getRefs().global.main;

@@ -2,9 +2,9 @@ import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 //
 import { makeSpotStoryUtils } from "../utils/spots";
-export function makeCharacterStoryUtils(concepFuncs) {
-    const { getState } = concepFuncs;
-    const { getSpotPosition } = makeSpotStoryUtils(concepFuncs);
+export function makeCharacterStoryUtils(storeHelpers) {
+    const { getState } = storeHelpers;
+    const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
     function get2DAngleFromCharacterToSpot(character, place, spot) {
         const charactersState = getState().characters;
         const dollA = charactersState[character].dollName;

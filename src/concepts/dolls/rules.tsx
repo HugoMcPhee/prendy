@@ -16,9 +16,9 @@ import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 //
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../typedConcepFuncs";
+} from "../typedStoreHelpers";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 
@@ -29,21 +29,21 @@ import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 // when the models isLoading becomes true
 
 export function makeDollDynamicRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyConcepts: PrendyConcepts,
   prendyArt: PrendyArt
 ) {
   const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyStartOptions,
     prendyArt
   );
-  const { getRefs, makeDynamicRules } = concepFuncs;
+  const { getRefs, makeDynamicRules } = storeHelpers;
 
   return makeDynamicRules((addItemEffect, _addEffect) => ({
     waitForModelToLoad: addItemEffect(
@@ -121,14 +121,14 @@ export function makeDollDynamicRules<
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
 
 export function startDynamicDollRulesForInitialState<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   dollDynamicRules: DollDynamicRules,
   dollNames: readonly DollName[]
 ) {
-  const { getState } = concepFuncs;
+  const { getState } = storeHelpers;
 
   forEach(dollNames, (dollName) => {
     const { modelName } = getState().dolls[dollName];
@@ -147,12 +147,12 @@ export function startDynamicDollRulesForInitialState<
 
 export function makeDollRules<
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
   prendyStartOptions: PrendyOptions,
   dollDynamicRules: DollDynamicRules,
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   prendyArt: PrendyArt
 ) {
@@ -164,14 +164,14 @@ export function makeDollRules<
     setDollAnimWeight,
     updateDollScreenPosition,
   } = makeDollStoreUtils(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyStartOptions,
     prendyArt
   );
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions
   );
 
@@ -181,9 +181,9 @@ export function makeDollRules<
     getState,
     setState,
     getRefs,
-  } = concepFuncs;
+  } = storeHelpers;
 
-  const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
+  const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
 
   return makeRules((addItemEffect, addEffect) => ({
     // --------------------------------

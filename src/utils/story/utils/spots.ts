@@ -1,13 +1,13 @@
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import { PlaceName, SpotNameByPlace } from "../../../declarations";
 
 export function makeSpotStoryUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   A_PlaceName extends PlaceName = PlaceName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
   // SpotName extends string,
->(concepFuncs: ConcepFuncs) {
-  const { getRefs } = concepFuncs;
+>(storeHelpers: StoreHelpers) {
+  const { getRefs } = storeHelpers;
 
   function getSpotPosition<T_Place extends A_PlaceName>(
     place: T_Place,

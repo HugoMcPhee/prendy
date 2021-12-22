@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
-export declare function makeMiniBubble<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): ({ name }: {
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+export declare function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): ({ name }: {
     name: any;
 }) => JSX.Element;

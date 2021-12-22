@@ -1,11 +1,11 @@
 // @refresh-reset
 import React from "react";
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 
-export function makeShowStates<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeShowStates<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { useStore } = concepFuncs;
+  const { useStore } = storeHelpers;
 
   type Props = {};
 

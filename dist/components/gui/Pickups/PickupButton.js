@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { useState } from "react";
-export function makePickupButton(concepFuncs, pickupsInfo) {
-    const { getRefs } = concepFuncs;
+export function makePickupButton(storeHelpers, pickupsInfo) {
+    const { getRefs } = storeHelpers;
     const globalRefs = getRefs().global.main;
     return function PickupButton({ name }) {
         const pickupInfo = pickupsInfo[name];

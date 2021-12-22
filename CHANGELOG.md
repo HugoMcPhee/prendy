@@ -9,6 +9,10 @@ TODO
 - setCamera type not limited to place
 - doorsInfo type doesn't autocomplete place name
 
+v0.7.16
+
+- uses updated pietem names
+
 v0.7.15
 
 - uses renamed pietem packages

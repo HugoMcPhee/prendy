@@ -1,17 +1,17 @@
 // import { getState, ItemState, setState } from "concepts";
 
-import { ConceptsHelperTypes } from "pietem";
-import { PrendyConcepFuncs } from "../../typedConcepFuncs";
+import { StoreHelperTypes } from "pietem";
+import { PrendyStoreHelpers } from "../../typedStoreHelpers";
 
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
 
-export function makeGlobalStoreUtils<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeGlobalStoreUtils<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { getState, setState } = concepFuncs;
+  const { getState, setState } = storeHelpers;
 
-  type AllState = ReturnType<ConcepFuncs["getState"]>;
+  type AllState = ReturnType<StoreHelpers["getState"]>;
 
   // type GlobalItemState = AllState["global"]["main"];
 

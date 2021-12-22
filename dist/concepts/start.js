@@ -9,22 +9,22 @@ import { makePointersConnectRules } from "./pointers";
 import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
-export function makeStartPrendyRules(concepFuncs, prendyConcepts, PRENDY_OPTIONS, prendyArt) {
+export function makeStartPrendyRules(storeHelpers, prendyConcepts, PRENDY_OPTIONS, prendyArt) {
     const { dollNames, characterNames } = prendyArt;
     // making rules
-    const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
-    const pointerConnectRules = makePointersConnectRules(concepFuncs);
-    const startAllGlobalRules = makeStartAllGlobalRules(concepFuncs, prendyConcepts, PRENDY_OPTIONS, prendyArt);
-    const modelRules = makeModelRules(concepFuncs, prendyArt);
-    const playerRules = makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt);
-    const dollDynamicRules = makeDollDynamicRules(concepFuncs, PRENDY_OPTIONS, prendyConcepts, prendyArt);
-    const dollRules = makeDollRules(PRENDY_OPTIONS, dollDynamicRules, concepFuncs, prendyConcepts, prendyArt);
-    const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, prendyConcepts);
-    const safeVidRules = makeSafeVidRules(concepFuncs);
-    const safeSectionVidRules = makeSectionVidRules(concepFuncs, prendyArt);
-    const characterDynamicRules = makeCharacterDynamicRules(concepFuncs, PRENDY_OPTIONS, prendyArt);
-    const characterRules = makeCharacterRules(concepFuncs, prendyArt);
-    const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, concepFuncs);
+    const keyboardConnectRules = makeKeyboardConnectRules(storeHelpers);
+    const pointerConnectRules = makePointersConnectRules(storeHelpers);
+    const startAllGlobalRules = makeStartAllGlobalRules(storeHelpers, prendyConcepts, PRENDY_OPTIONS, prendyArt);
+    const modelRules = makeModelRules(storeHelpers, prendyArt);
+    const playerRules = makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt);
+    const dollDynamicRules = makeDollDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyConcepts, prendyArt);
+    const dollRules = makeDollRules(PRENDY_OPTIONS, dollDynamicRules, storeHelpers, prendyConcepts, prendyArt);
+    const speechBubbleRules = makeSpeechBubbleRules(storeHelpers, prendyConcepts);
+    const safeVidRules = makeSafeVidRules(storeHelpers);
+    const safeSectionVidRules = makeSectionVidRules(storeHelpers, prendyArt);
+    const characterDynamicRules = makeCharacterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyArt);
+    const characterRules = makeCharacterRules(storeHelpers, prendyArt);
+    const startDynamicCharacterRulesForInitialState = makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers);
     // ----------------------------------------------
     // starting and stopping rules
     function startPrendyMainRules() {
@@ -38,7 +38,7 @@ export function makeStartPrendyRules(concepFuncs, prendyConcepts, PRENDY_OPTIONS
         const stopDynamicCharacterRulesForInitialState = startDynamicCharacterRulesForInitialState();
         /*dolls*/
         dollRules.startAll();
-        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRules, dollNames);
+        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRules, dollNames);
         /**/
         playerRules.startAll();
         speechBubbleRules.startAll();

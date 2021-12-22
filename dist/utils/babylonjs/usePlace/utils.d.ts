@@ -1,8 +1,8 @@
 import { Camera, Scene, TargetCamera } from "@babylonjs/core";
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import { PrendyArt, PlaceName } from "../../../declarations";
 export declare function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag?: string): void;
-export declare function makeUsePlaceUtils<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt): {
+export declare function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyArt: PrendyArt): {
     loadVideoBlob: (filepath: string) => Promise<Blob>;
     testAppendVideo: typeof testAppendVideo;
     loadNowVideosForPlace: () => Promise<boolean>;

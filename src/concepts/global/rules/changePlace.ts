@@ -16,45 +16,45 @@ import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 // import { focusScenePlaneOnFocusedDoll } from "../../../utils/babylonjs/scenePlane/focusScenePlane";
 // import { updateTexturesForNowCamera } from "./whenCameraChanges";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../typedConcepFuncs";
+} from "../../typedStoreHelpers";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalChangePlaceRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   _prendyConcepts: PrendyConcepts,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
+  const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { placeInfoByName } = prendyArt;
 
   const globalRefs = getRefs().global.main;
 
   const { getSectionVidVideo } = makeSectionVidStoreUtils(
-    concepFuncs,
+    storeHelpers,
     prendyArt
   );
 
   const {
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils(concepFuncs, prendyArt);
+  } = makeCameraChangeUtils(storeHelpers, prendyArt);
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyOptions
-  >(concepFuncs, prendyStartOptions);
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  >(storeHelpers, prendyStartOptions);
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
   const { setDollToSpot } = makeDollStoryHelpers(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions,
     prendyArt.modelInfoByName
   );

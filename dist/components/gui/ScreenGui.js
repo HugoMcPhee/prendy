@@ -10,17 +10,17 @@ import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualButtons } from "./VirtualButtons";
 import { makeVirtualStick } from "./VirtualStick";
-export function makeScreenGui(concepFuncs, PRENDY_OPTIONS, prendyArt) {
+export function makeScreenGui(storeHelpers, PRENDY_OPTIONS, prendyArt) {
     const { pickupsInfo, speechVidFiles, characterNames } = prendyArt;
-    const AlarmText = makeAlarmText(concepFuncs);
-    const LoadingOverlay = makeLoadingOverlay(concepFuncs);
-    const MiniBubble = makeMiniBubble(concepFuncs);
-    const Pickups = makePickups(concepFuncs, pickupsInfo);
-    const ScreenSticker = makeScreenSticker(concepFuncs);
-    const SpeechBubble = makeSpeechBubble(concepFuncs, PRENDY_OPTIONS, speechVidFiles);
-    const StoryOverlay = makeStoryOverlay(concepFuncs);
-    const VirtualStick = makeVirtualStick(concepFuncs);
-    const VirtualButtons = makeVirtualButtons(concepFuncs, PRENDY_OPTIONS);
+    const AlarmText = makeAlarmText(storeHelpers);
+    const LoadingOverlay = makeLoadingOverlay(storeHelpers);
+    const MiniBubble = makeMiniBubble(storeHelpers);
+    const Pickups = makePickups(storeHelpers, pickupsInfo);
+    const ScreenSticker = makeScreenSticker(storeHelpers);
+    const SpeechBubble = makeSpeechBubble(storeHelpers, PRENDY_OPTIONS, speechVidFiles);
+    const StoryOverlay = makeStoryOverlay(storeHelpers);
+    const VirtualStick = makeVirtualStick(storeHelpers);
+    const VirtualButtons = makeVirtualButtons(storeHelpers, PRENDY_OPTIONS);
     return function ScreenGui(_) {
         return (React.createElement("div", { style: {
                 pointerEvents: "none",

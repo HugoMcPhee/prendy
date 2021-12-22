@@ -1,10 +1,10 @@
 import { VidState } from "../../concepts/safeVids";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
-export function makeSafeVidStoreUtils<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeSafeVidStoreUtils<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { getState, startItemEffect, stopEffect } = concepFuncs;
+  const { getState, startItemEffect, stopEffect } = storeHelpers;
 
   function doWhenSafeVidStateChanges(
     safeVidId: string,

@@ -1,7 +1,7 @@
 import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
-export function makeSceneStoryUtils(concepFuncs) {
-    const { getRefs, getState, startItemEffect, stopEffect } = concepFuncs;
-    const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
+export function makeSceneStoryUtils(storeHelpers) {
+    const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
+    const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
     const globalRefs = getRefs().global.main;
     function getSegmentFromStoryRules(place, cam) {
         var _a, _b, _c;

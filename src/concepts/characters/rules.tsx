@@ -9,20 +9,20 @@ import {
 } from "../../declarations";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 export function makeCharacterDynamicRules<
-  ConcepFuncs extends PrendyConcepFuncs
+  StoreHelpers extends PrendyStoreHelpers
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getState, setState, getRefs, makeDynamicRules } = concepFuncs;
+  const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyArt;
 
   const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(
-    concepFuncs,
+    storeHelpers,
     prendyStartOptions
   );
 
@@ -175,14 +175,14 @@ export function makeCharacterDynamicRules<
 // TODO add addOrRemovd rules for characters
 
 export function makeStartDynamicCharacterRulesForInitialState<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>
 >(
   characterDynamicRules: CharacterDynamicRules,
   characterNames: readonly CharacterName[],
-  concepFuncs: ConcepFuncs
+  storeHelpers: StoreHelpers
 ) {
-  const { getState } = concepFuncs;
+  const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
     forEach(characterNames, (characterName) => {
       const { dollName } = getState().characters[characterName];
@@ -199,11 +199,11 @@ export function makeStartDynamicCharacterRulesForInitialState<
   };
 }
 
-export function makeCharacterRules<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs,
+export function makeCharacterRules<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
   prendyArt: PrendyArt
 ) {
-  const { makeRules, getState, setState } = concepFuncs;
+  const { makeRules, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyArt;
 
   return makeRules((addItemEffect, addEffect) => ({

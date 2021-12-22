@@ -1,21 +1,21 @@
 import { AbstractMesh, Camera, Matrix, Mesh, Vector3 } from "@babylonjs/core";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PrendyOptionsUntyped,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
 
 export function makeScenePlaneUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
->(concepFuncs: ConcepFuncs, prendyStartOptions: PrendyOptions) {
-  const { getRefs, getState } = concepFuncs;
+>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions) {
+  const { getRefs, getState } = storeHelpers;
 
-  const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
   const globalRefs = getRefs().global.main;
 
   function getProjectionMatrixCustomSize(

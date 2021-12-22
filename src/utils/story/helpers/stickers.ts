@@ -1,9 +1,9 @@
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 
 export function makeStickerStoryHelpers<
-  ConcepFuncs extends PrendyConcepFuncs
->(concepFuncs: ConcepFuncs) {
-  const { setState } = concepFuncs;
+  StoreHelpers extends PrendyStoreHelpers
+>(storeHelpers: StoreHelpers) {
+  const { setState } = storeHelpers;
 
   function moveSticker(x: number, y: number) {
     setState({ story: { main: { screenStickerPosition: { x, y } } } });

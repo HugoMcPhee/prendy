@@ -9,16 +9,16 @@ import React, {
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 
-export function makeMiniBubble<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { useStoreEffect, useStore, getState } = concepFuncs;
+  const { useStoreEffect, useStore, getState } = storeHelpers;
 
-  const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
-  type GetState = ConcepFuncs["getState"];
+  type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<
     GetState

@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyConcepFuncs } from "../concepts/typedConcepFuncs";
-export declare function makeAllTestVideoStuff<ConcepFuncs extends PrendyConcepFuncs, PlaceName extends string>(concepFuncs: ConcepFuncs, placeNames: readonly PlaceName[]): () => JSX.Element;
+import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
+export declare function makeAllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(storeHelpers: StoreHelpers, placeNames: readonly PlaceName[]): () => JSX.Element;

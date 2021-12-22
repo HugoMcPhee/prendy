@@ -1,6 +1,6 @@
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import {
   CharacterName,
   PlaceName,
@@ -10,14 +10,14 @@ import {
 import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeCharacterStoryUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   A_CharacterName extends CharacterName = CharacterName,
   A_PlaceName extends PlaceName = PlaceName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(concepFuncs: ConcepFuncs) {
-  const { getState } = concepFuncs;
+>(storeHelpers: StoreHelpers) {
+  const { getState } = storeHelpers;
 
-  const { getSpotPosition } = makeSpotStoryUtils(concepFuncs);
+  const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
 
   function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
     character: A_CharacterName,

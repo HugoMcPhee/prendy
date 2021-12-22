@@ -1,9 +1,9 @@
 import { breakableForEach } from "chootils/dist/loops";
 import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
-export function makePlayer(concepFuncs, prendyStartOptions, prendyArt) {
+export function makePlayer(storeHelpers, prendyStartOptions, prendyArt) {
     const { placeInfoByName, characterNames } = prendyArt;
-    const { useStoreItemPropsEffect, getState, setState, useStore } = concepFuncs;
-    const { goToNewPlace } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
+    const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
+    const { goToNewPlace } = makeSceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
     return function Player(_props) {
         const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
             type: "global",

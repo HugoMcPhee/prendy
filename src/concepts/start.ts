@@ -24,15 +24,15 @@ import { makeSafeVidRules } from "./safeVids/rules";
 import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "./typedConcepFuncs";
+} from "./typedStoreHelpers";
 
 export function makeStartPrendyRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
   PRENDY_OPTIONS: PrendyOptions,
   prendyArt: PrendyArt
@@ -41,19 +41,19 @@ export function makeStartPrendyRules<
 
   // making rules
 
-  const keyboardConnectRules = makeKeyboardConnectRules(concepFuncs);
-  const pointerConnectRules = makePointersConnectRules(concepFuncs);
+  const keyboardConnectRules = makeKeyboardConnectRules(storeHelpers);
+  const pointerConnectRules = makePointersConnectRules(storeHelpers);
   const startAllGlobalRules = makeStartAllGlobalRules(
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     PRENDY_OPTIONS,
     prendyArt
   );
 
-  const modelRules = makeModelRules(concepFuncs, prendyArt);
-  const playerRules = makePlayerRules(concepFuncs, PRENDY_OPTIONS, prendyArt);
+  const modelRules = makeModelRules(storeHelpers, prendyArt);
+  const playerRules = makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt);
   const dollDynamicRules = makeDollDynamicRules(
-    concepFuncs,
+    storeHelpers,
     PRENDY_OPTIONS,
     prendyConcepts,
     prendyArt
@@ -61,26 +61,26 @@ export function makeStartPrendyRules<
   const dollRules = makeDollRules(
     PRENDY_OPTIONS,
     dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
-    concepFuncs,
+    storeHelpers,
     prendyConcepts,
     prendyArt
   );
-  const speechBubbleRules = makeSpeechBubbleRules(concepFuncs, prendyConcepts);
-  const safeVidRules = makeSafeVidRules(concepFuncs);
-  const safeSectionVidRules = makeSectionVidRules(concepFuncs, prendyArt);
+  const speechBubbleRules = makeSpeechBubbleRules(storeHelpers, prendyConcepts);
+  const safeVidRules = makeSafeVidRules(storeHelpers);
+  const safeSectionVidRules = makeSectionVidRules(storeHelpers, prendyArt);
 
   const characterDynamicRules = makeCharacterDynamicRules(
-    concepFuncs,
+    storeHelpers,
     PRENDY_OPTIONS,
     prendyArt
   );
-  const characterRules = makeCharacterRules(concepFuncs, prendyArt);
+  const characterRules = makeCharacterRules(storeHelpers, prendyArt);
 
   const startDynamicCharacterRulesForInitialState =
     makeStartDynamicCharacterRulesForInitialState<
-      ConcepFuncs,
+      StoreHelpers,
       ReturnType<typeof makeCharacterDynamicRules>
-    >(characterDynamicRules, characterNames, concepFuncs);
+    >(characterDynamicRules, characterNames, storeHelpers);
 
   // ----------------------------------------------
   // starting and stopping rules
@@ -99,10 +99,10 @@ export function makeStartPrendyRules<
     dollRules.startAll();
     const stopDynamicDollRulesForInitialState =
       startDynamicDollRulesForInitialState<
-        ConcepFuncs,
+        StoreHelpers,
         ReturnType<typeof makeDollDynamicRules>
       >(
-        concepFuncs,
+        storeHelpers,
         dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
         dollNames
       );

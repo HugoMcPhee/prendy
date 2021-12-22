@@ -1,17 +1,17 @@
 import { DollName } from "../../../declarations";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 
 export function makeDollStoryUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_DollName extends DollName = DollName
->(concepFuncs: ConcepFuncs) {
-  const { getState } = concepFuncs;
-  // const { getState, startItemEffect } = concepFuncs;
-  // const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
+>(storeHelpers: StoreHelpers) {
+  const { getState } = storeHelpers;
+  // const { getState, startItemEffect } = storeHelpers;
+  // const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
   type StartState_Dolls = NonNullable<PrendyConcepts["dolls"]["startStates"]>;
 

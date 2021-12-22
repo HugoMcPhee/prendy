@@ -1,12 +1,12 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 
-export function makeLoadingOverlay<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeLoadingOverlay<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { useStoreItemPropsEffect, setState } = concepFuncs;
+  const { useStoreItemPropsEffect, setState } = storeHelpers;
 
   type Props = {};
 

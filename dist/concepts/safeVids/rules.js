@@ -1,8 +1,8 @@
 import { makeVideoElementFromPath } from "./utils";
 import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
-export function makeSafeVidRules(concepFuncs) {
-    const { getState, makeRules, onNextTick, setState } = concepFuncs;
+export function makeSafeVidRules(storeHelpers) {
+    const { getState, makeRules, onNextTick, setState } = storeHelpers;
     return makeRules((addItemEffect) => ({
         rulesForSettingNewVideoStates: addItemEffect({
             onItemEffect({ newValue: vidState, itemState, itemRefs, itemName }) {

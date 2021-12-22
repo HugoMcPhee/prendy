@@ -3,9 +3,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { makeGetCharDollStuff } from "../../concepts/characters/utils";
-export function makeMiniBubble(concepFuncs) {
-    const { useStoreEffect, useStore, getState } = concepFuncs;
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
+export function makeMiniBubble(storeHelpers) {
+    const { useStoreEffect, useStore, getState } = storeHelpers;
+    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
     return function MiniBubble({ name }) {
         const theRectangle = useRef(null);
         const theTextRectangle = useRef(null);

@@ -7,16 +7,16 @@ import { makeGetCharDollStuff } from "../../characters/utils";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalChangePlaceRules(concepFuncs, _prendyConcepts, prendyStartOptions, prendyArt) {
-    const { getRefs, getState, makeRules, setState, onNextTick } = concepFuncs;
+export function makeGlobalChangePlaceRules(storeHelpers, _prendyConcepts, prendyStartOptions, prendyArt) {
+    const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
     const { placeInfoByName } = prendyArt;
     const globalRefs = getRefs().global.main;
-    const { getSectionVidVideo } = makeSectionVidStoreUtils(concepFuncs, prendyArt);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(concepFuncs, prendyArt);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
-    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
-    const { setDollToSpot } = makeDollStoryHelpers(concepFuncs, prendyStartOptions, prendyArt.modelInfoByName);
+    const { getSectionVidVideo } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(storeHelpers, prendyArt);
+    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const { setDollToSpot } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, prendyArt.modelInfoByName);
     function setPlayerPositionForNewPlace() {
         const { nowPlaceName, playerCharacter } = getState().global.main;
         const { dollName } = getCharDollStuff(playerCharacter);

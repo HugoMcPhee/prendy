@@ -1,9 +1,9 @@
 import { clearTimeoutSafe } from "../../../utils";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { makeGlobalStoreUtils } from "../utils";
-export function makeGlobalGeneralRules(concepFuncs) {
-    const { getRefs, getState, makeRules, setState } = concepFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
+export function makeGlobalGeneralRules(storeHelpers) {
+    const { getRefs, getState, makeRules, setState } = storeHelpers;
+    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
     return makeRules((addItemEffect, addEffect) => ({
         whenAnythingChangesForRendering: addEffect({
             onEffect() {

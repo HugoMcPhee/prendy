@@ -1,6 +1,6 @@
 import { PrendyArt } from "../../declarations";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
-export declare function makeSectionVidRules<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt): {
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
+export declare function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyArt: PrendyArt): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

@@ -2,7 +2,7 @@
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
 import {
   PrendyArt,
   CameraNameByPlace,
@@ -23,19 +23,19 @@ export function testAppendVideo(
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function makeUsePlaceUtils<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs,
+export function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyArt;
 
   const {
     doWhenSectionVidPlayingAsync,
     getSectionForPlace,
-  } = makeSectionVidStoreUtils(concepFuncs, prendyArt);
+  } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
 
-  const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
+  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
 
   const placesRefs = getRefs().places;
 

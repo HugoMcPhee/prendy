@@ -1,10 +1,10 @@
 import { Point2D } from "chootils/dist/points2d";
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 export function makePointersConnectRules<
-  ConcepFuncs extends PrendyConcepFuncs
->(concepFuncs: ConcepFuncs) {
-  const { getRefs, setState, addItem, removeItem } = concepFuncs;
+  StoreHelpers extends PrendyStoreHelpers
+>(storeHelpers: StoreHelpers) {
+  const { getRefs, setState, addItem, removeItem } = storeHelpers;
 
   const onPointerDown = (event: PointerEvent) => {
     const pointerId = event.pointerId.toString();

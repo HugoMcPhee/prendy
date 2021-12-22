@@ -1,7 +1,7 @@
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedConcepFuncs";
+} from "../../../concepts/typedStoreHelpers";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -17,7 +17,7 @@ import { makeSceneStoryUtils } from "./scene";
 import { makeSpotStoryUtils } from "./spots";
 
 export function makePrendyStoryUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -26,37 +26,37 @@ export function makePrendyStoryUtils<
   A_CharacterName extends CharacterName = CharacterName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_DollName extends DollName = DollName
->(concepFuncs: ConcepFuncs, _prendyConcepts: PrendyConcepts) {
+>(storeHelpers: StoreHelpers, _prendyConcepts: PrendyConcepts) {
   const {
     get2DAngleBetweenCharacters,
     get2DAngleFromCharacterToSpot,
   } = makeCharacterStoryUtils<
-    ConcepFuncs,
+    StoreHelpers,
     A_CharacterName,
     A_PlaceName,
     A_SpotNameByPlace
-  >(concepFuncs);
+  >(storeHelpers);
   const { getModelNameFromDoll } = makeDollStoryUtils<
-    ConcepFuncs,
+    StoreHelpers,
     PrendyConcepts,
     A_DollName
-  >(concepFuncs);
+  >(storeHelpers);
   const {
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
   } = makeSceneStoryUtils<
-    ConcepFuncs,
+    StoreHelpers,
     A_AnyCameraName,
     A_AnySegmentName,
     A_CameraNameByPlace,
     A_PlaceName
-  >(concepFuncs);
+  >(storeHelpers);
   const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils<
-    ConcepFuncs,
+    StoreHelpers,
     A_PlaceName,
     A_SpotNameByPlace
-  >(concepFuncs);
+  >(storeHelpers);
 
   return {
     // characters

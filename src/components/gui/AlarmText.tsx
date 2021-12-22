@@ -1,11 +1,11 @@
 // @refresh-reset
 import React from "react";
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 
-export function makeAlarmText<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs
+export function makeAlarmText<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers
 ) {
-  const { useStore } = concepFuncs;
+  const { useStore } = storeHelpers;
 
   type Props = {};
 

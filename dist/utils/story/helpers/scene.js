@@ -3,12 +3,12 @@ import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
 import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
-export function makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames) {
-    const { getRefs, getState, onNextTick, setState } = concepFuncs;
-    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
-    const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(concepFuncs);
-    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules, } = makeSceneStoryUtils(concepFuncs);
+export function makeSceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
+    const { getRefs, getState, onNextTick, setState } = storeHelpers;
+    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(storeHelpers);
+    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules, } = makeSceneStoryUtils(storeHelpers);
     async function changeSegmentAtLoop(_place, newSegmentName) {
         // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
         // to fix: could listen to changes to wantedSegmentNameAtLoop

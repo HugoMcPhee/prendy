@@ -1,13 +1,13 @@
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../typedConcepFuncs";
+} from "../typedStoreHelpers";
 
 export function makeSpeechBubblesStoreUtils<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
->(concepFuncs: ConcepFuncs, prendyConcepts: PrendyConcepts) {
-  const { getState } = concepFuncs;
+>(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts) {
+  const { getState } = storeHelpers;
 
   type SpeechBubbleName = keyof PrendyConcepts["speechBubbles"]["startStates"];
 

@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyConcepFuncs, PrendyOptionsUntyped } from "../../concepts/typedConcepFuncs";
-export declare function makeVirtualButtons<ConcepFuncs extends PrendyConcepFuncs, PrendyOptions extends PrendyOptionsUntyped>(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions): (_: {}) => JSX.Element;
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../concepts/typedStoreHelpers";
+export declare function makeVirtualButtons<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions): (_: {}) => JSX.Element;

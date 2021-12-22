@@ -11,29 +11,29 @@ import {
   SegmentNameByPlace,
 } from "../../../declarations";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../typedConcepFuncs";
+} from "../../typedStoreHelpers";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalVideoRules<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts
 >(
-  concepFuncs: ConcepFuncs,
+  storeHelpers: StoreHelpers,
   _prendyConcepts: PrendyConcepts,
   _prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, makeRules, setState } = concepFuncs;
+  const { getRefs, getState, makeRules, setState } = storeHelpers;
 
   const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } =
-    makeSectionVidStoreUtils(concepFuncs, prendyArt);
+    makeSectionVidStoreUtils(storeHelpers, prendyArt);
   const {
     getSafeSegmentName,
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils(concepFuncs, prendyArt);
+  } = makeCameraChangeUtils(storeHelpers, prendyArt);
 
   return makeRules((addItemEffect, addEffect) => ({
     whenWantToChooseVideoSection: addEffect({

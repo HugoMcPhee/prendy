@@ -13,9 +13,9 @@ import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
-export function makeDollDynamicRules(concepFuncs, prendyStartOptions, prendyConcepts, prendyArt) {
-    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt);
-    const { getRefs, makeDynamicRules } = concepFuncs;
+export function makeDollDynamicRules(storeHelpers, prendyStartOptions, prendyConcepts, prendyArt) {
+    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt);
+    const { getRefs, makeDynamicRules } = storeHelpers;
     return makeDynamicRules((addItemEffect, _addEffect) => ({
         waitForModelToLoad: addItemEffect(({ dollName, modelName, }) => ({
             onItemEffect() {
@@ -67,8 +67,8 @@ export function makeDollDynamicRules(concepFuncs, prendyStartOptions, prendyConc
 }
 // FIXME
 // maybe allow concepto to run 'addedOrRemoved' rules for initialState?
-export function startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRules, dollNames) {
-    const { getState } = concepFuncs;
+export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRules, dollNames) {
+    const { getState } = storeHelpers;
     forEach(dollNames, (dollName) => {
         const { modelName } = getState().dolls[dollName];
         if (!modelName)
@@ -84,12 +84,12 @@ export function startDynamicDollRulesForInitialState(concepFuncs, dollDynamicRul
         });
     };
 }
-export function makeDollRules(prendyStartOptions, dollDynamicRules, concepFuncs, prendyConcepts, prendyArt) {
+export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyConcepts, prendyArt) {
     const { modelInfoByName, dollNames } = prendyArt;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(concepFuncs, prendyStartOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs, } = concepFuncs;
-    const { runMover, runMover3d, runMoverMulti } = makeRunMovers(concepFuncs);
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt);
+    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { makeRules, getPreviousState, getState, setState, getRefs, } = storeHelpers;
+    const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
     return makeRules((addItemEffect, addEffect) => ({
         // --------------------------------
         // loading model stuff

@@ -7,13 +7,13 @@ import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
 import { makeUsePlaceUtils } from "./utils";
-export function makeUsePlace(concepFuncs, prendyStartOptions, prendyArt) {
-    const { getRefs, getState, setState } = concepFuncs;
+export function makeUsePlace(storeHelpers, prendyStartOptions, prendyArt) {
+    const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName, soundFiles } = prendyArt;
-    const { setGlobalState } = makeGlobalStoreUtils(concepFuncs);
-    const { getScene } = makeGetSceneOrEngineUtils(concepFuncs);
-    const useModelFile = makeUseModelFile(concepFuncs);
-    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(concepFuncs, prendyArt);
+    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+    const useModelFile = makeUseModelFile(storeHelpers);
+    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(storeHelpers, prendyArt);
     const placesRefs = getRefs().places;
     const addToHelpFixRotationVector = new Vector3(0, Math.PI, Math.PI); // Math.PI same as toRadians(180)?
     const multiplyToHelpFixRotationVector = new Vector3(-1, 1, -1);

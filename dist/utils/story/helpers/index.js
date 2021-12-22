@@ -7,20 +7,20 @@ import { makeSpeechStoryHelpers } from "./speech";
 import { makeStickerStoryHelpers } from "./stickers";
 // importing each of the helpers
 // function doThis
-export function makePrendyStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt) {
+export function makePrendyStoryHelpers(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt) {
     const modelInfoByName = prendyArt.modelInfoByName;
     const characterNames = prendyArt.characterNames;
     const placeInfoByName = prendyArt.placeInfoByName;
     const musicNames = prendyArt.musicNames;
     const musicFiles = prendyArt.musicFiles;
-    const { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } = makeCharacterStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames);
-    const { focusOnDoll, hideDoll, moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, springDollToSpot, toggleDollMeshes, } = makeDollStoryHelpers(concepFuncs, prendyStartOptions, modelInfoByName);
-    const { enableMovement, isHolding, setPlayerAnimations, takePickup, } = makerPlayerStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames);
+    const { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } = makeCharacterStoryHelpers(storeHelpers, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames);
+    const { focusOnDoll, hideDoll, moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, springDollToSpot, toggleDollMeshes, } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
+    const { enableMovement, isHolding, setPlayerAnimations, takePickup, } = makerPlayerStoryHelpers(storeHelpers, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames);
     // NOTE maybe return in categores like players.enableMovement()
-    const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView, } = makeSceneStoryHelpers(concepFuncs, placeInfoByName, characterNames);
-    const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers(concepFuncs, musicNames, musicFiles);
-    const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech, } = makeSpeechStoryHelpers(concepFuncs, prendyConcepts, prendyStartOptions, characterNames);
-    const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(concepFuncs);
+    const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView, } = makeSceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
+    const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers(storeHelpers, musicNames, musicFiles);
+    const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech, } = makeSpeechStoryHelpers(storeHelpers, prendyConcepts, prendyStartOptions, characterNames);
+    const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(storeHelpers);
     return {
         // characters
         lookAtEachother,

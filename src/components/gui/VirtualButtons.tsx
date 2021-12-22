@@ -1,7 +1,7 @@
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PrendyOptionsUntyped,
-} from "../../concepts/typedConcepFuncs";
+} from "../../concepts/typedStoreHelpers";
 import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,
@@ -26,10 +26,10 @@ type VirtualButtonProps = {
 };
 
 export function makeVirtualButtons<
-  ConcepFuncs extends PrendyConcepFuncs,
+  StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
->(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions) {
-  const { getRefs, getState, setState, useStore } = concepFuncs;
+>(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions) {
+  const { getRefs, getState, setState, useStore } = storeHelpers;
   const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
 
   const globalRefs = getRefs().global.main;

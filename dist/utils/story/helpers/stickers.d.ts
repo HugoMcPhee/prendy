@@ -1,5 +1,5 @@
-import { PrendyConcepFuncs } from "../../../concepts/typedConcepFuncs";
-export declare function makeStickerStoryHelpers<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): {
+import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+export declare function makeStickerStoryHelpers<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     moveSticker: (x: number, y: number) => void;
     showSticker: () => void;
     hideSticker: () => void;

@@ -1,5 +1,5 @@
-export function makeDollStoryUtils(concepFuncs) {
-    const { getState } = concepFuncs;
+export function makeDollStoryUtils(storeHelpers) {
+    const { getState } = storeHelpers;
     function getModelNameFromDoll(dollName) {
         return getState().dolls[dollName].modelName;
     }

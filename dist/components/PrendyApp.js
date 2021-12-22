@@ -12,13 +12,13 @@ import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
 loadStyles();
-export function makePrendyApp(concepFuncs, prendyConcepts, prendyStartOptions, prendyArt) {
-    const { getRefs, onNextTick, setState } = concepFuncs;
+export function makePrendyApp(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt) {
+    const { getRefs, onNextTick, setState } = storeHelpers;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = makeScreenGui(concepFuncs, prendyStartOptions, prendyArt);
-    const LoadingModels = makeLoadingModels(concepFuncs, prendyStartOptions, prendyArt);
-    const ScenePlane = makeScenePlane(concepFuncs, prendyStartOptions);
-    // const AllTestVideoStuff = makeAllTestVideoStuff(concepFuncs, [
+    const ScreenGuiDom = makeScreenGui(storeHelpers, prendyStartOptions, prendyArt);
+    const LoadingModels = makeLoadingModels(storeHelpers, prendyStartOptions, prendyArt);
+    const ScenePlane = makeScenePlane(storeHelpers, prendyStartOptions);
+    // const AllTestVideoStuff = makeAllTestVideoStuff(storeHelpers, [
     //   "city",
     //   "cityb",
     //   "beanshop",

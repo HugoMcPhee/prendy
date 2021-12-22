@@ -234,10 +234,10 @@
   "resolved" "https://registry.npmjs.org/pietem-movers/-/pietem-movers-0.5.6.tgz"
   "version" "0.5.6"
 
-"pietem@^0.6.1":
-  "integrity" "sha512-wFN55APOct356jzQKs2R90N4H50TfD1vuskKhoYQEVRcd1usfWNoqB1T4SA7GzE3agU2Vjr4k/25MJ0lk20anQ=="
-  "resolved" "https://registry.npmjs.org/pietem/-/pietem-0.6.3.tgz"
-  "version" "0.6.3"
+"pietem@^0.7.0":
+  "integrity" "sha512-VGwcXu+N+WQRqhodwbu04hbPe9GcV9u7wkhp0N7z0YRdkSyrokVbrIVtQln4M4MtkhON8oG59Ok3/G3LfKgGsQ=="
+  "resolved" "https://registry.npmjs.org/pietem/-/pietem-0.7.0.tgz"
+  "version" "0.7.0"
 
 "react-babylonjs@^3.0.22":
   "integrity" "sha512-DIfDK4XiXVlvaWIGJ5AQYBKMbkQA6sgNbqvDSIYNHct9xsAYmShyFx8ZsducAohm7plyxG5kba0ayFs2VAm60w=="

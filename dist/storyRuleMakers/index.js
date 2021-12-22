@@ -1,8 +1,8 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { makeGetCharDollStuff } from "../concepts/characters/utils";
 // export each of the rule makers stuff from here :)
-export function makeGetUsefulStoryStuff(concepFuncs) {
-    const { getRefs, getState } = concepFuncs;
+export function makeGetUsefulStoryStuff(storeHelpers) {
+    const { getRefs, getState } = storeHelpers;
     return function getUsefulStoryStuff() {
         const storyState = getState().story.main;
         const storyRefs = getRefs().story.main;
@@ -33,16 +33,16 @@ export function makeGetUsefulStoryStuff(concepFuncs) {
         };
     };
 }
-export function makeSetStoryState(concepFuncs) {
-    const { setState } = concepFuncs;
+export function makeSetStoryState(storeHelpers) {
+    const { setState } = storeHelpers;
     return function setStoryState(newState) {
         setState({ story: { main: newState } });
     };
 }
-export function makeAllStoryRuleMakers(concepFuncs, placeInfoByName, characterNames, dollNames) {
-    const { getRefs, getState, makeRules, startItemEffect, stopEffect, onNextTick, } = concepFuncs;
-    const getCharDollStuff = makeGetCharDollStuff(concepFuncs);
-    const getUsefulStoryStuff = makeGetUsefulStoryStuff(concepFuncs);
+export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterNames, dollNames) {
+    const { getRefs, getState, makeRules, startItemEffect, stopEffect, onNextTick, } = storeHelpers;
+    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
     function makeCamChangeRules(callBacksObject) {
         return makeRules((addItemEffect) => ({
             whenCameraChanges: addItemEffect({

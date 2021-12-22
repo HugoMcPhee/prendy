@@ -1,8 +1,8 @@
 // async function testAnimWeights() {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
-export function makeGetCharDollStuff(concepFuncs) {
-    const { getRefs, getState } = concepFuncs;
+export function makeGetCharDollStuff(storeHelpers) {
+    const { getRefs, getState } = storeHelpers;
     // NOTE TODO all these types need to be made inside the places using them (like story helpers)
     // And getCharDollStuff there too
     // type StartState_Characters = typeof prendyConcepts.characters.startStates;

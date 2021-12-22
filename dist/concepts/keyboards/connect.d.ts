@@ -1,5 +1,5 @@
-import { PrendyConcepFuncs } from "../typedConcepFuncs";
-export declare function makeKeyboardConnectRules<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): {
+import { PrendyStoreHelpers } from "../typedStoreHelpers";
+export declare function makeKeyboardConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     startAll: () => void;
     stopAll: () => void;
 };

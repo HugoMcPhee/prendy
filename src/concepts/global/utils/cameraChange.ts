@@ -23,24 +23,24 @@ import {
   SegmentNameByPlace,
 } from "../../../declarations";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
-import { PrendyConcepFuncs } from "../../typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../typedStoreHelpers";
 import { makeGlobalStoreUtils } from "./";
 
-export function makeCameraChangeUtils<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs,
+export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
   prendyArt: PrendyArt
 ) {
-  const { getRefs, getState, setState } = concepFuncs;
+  const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, dollNames } = prendyArt;
 
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
-  const { getGlobalState } = makeGlobalStoreUtils(concepFuncs);
-  const getSectionVidVideo = makeGetSectionVidVideo<ConcepFuncs, PlaceName>(
-    concepFuncs
+  const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const getSectionVidVideo = makeGetSectionVidVideo<StoreHelpers, PlaceName>(
+    storeHelpers
   );
-  const { getSegmentFromStoryRules } = makeSceneStoryUtils(concepFuncs);
+  const { getSegmentFromStoryRules } = makeSceneStoryUtils(storeHelpers);
 
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,

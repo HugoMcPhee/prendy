@@ -10,7 +10,7 @@ import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
-export const prendyFlowNames = [
+export const prendyStepNames = [
     // updating internal video states
     "safeVidStateUpdates",
     "sectionVidStateUpdates",

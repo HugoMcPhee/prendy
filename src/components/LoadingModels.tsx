@@ -1,23 +1,23 @@
 import { Vector3 } from "@babylonjs/core";
 import React, { ReactNode, Suspense } from "react";
 import {
-  PrendyConcepFuncs,
+  PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../concepts/typedConcepFuncs";
+} from "../concepts/typedStoreHelpers";
 import { PrendyArt, PrendyOptions, PlaceName } from "../declarations";
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";
 
 type Props = { children?: ReactNode };
 
-export function makeLoadingModels<ConcepFuncs extends PrendyConcepFuncs>(
-  concepFuncs: ConcepFuncs,
+export function makeLoadingModels<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyArt: PrendyArt
 ) {
-  const { useStore } = concepFuncs;
-  const Player = makePlayer(concepFuncs, prendyStartOptions, prendyArt);
-  const usePlace = makeUsePlace(concepFuncs, prendyStartOptions, prendyArt);
+  const { useStore } = storeHelpers;
+  const Player = makePlayer(storeHelpers, prendyStartOptions, prendyArt);
+  const usePlace = makeUsePlace(storeHelpers, prendyStartOptions, prendyArt);
 
   function Place({ name }: { name: PlaceName }) {
     usePlace(name);

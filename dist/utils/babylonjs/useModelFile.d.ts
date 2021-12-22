@@ -1,7 +1,7 @@
 import { AnimationGroup, AssetContainer, Camera, Mesh, PBRMaterial, Skeleton, Texture, TransformNode } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
-export declare function makeUseModelFile<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs): <T_Names extends {
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+export declare function makeUseModelFile<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): <T_Names extends {
     meshes: any;
     materials: any;
     animationGroups: any;

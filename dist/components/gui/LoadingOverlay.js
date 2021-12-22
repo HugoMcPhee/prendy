@@ -1,8 +1,8 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeLoadingOverlay(concepFuncs) {
-    const { useStoreItemPropsEffect, setState } = concepFuncs;
+export function makeLoadingOverlay(storeHelpers) {
+    const { useStoreItemPropsEffect, setState } = storeHelpers;
     return function LoadingOverlay(_props) {
         const theOverlay = useRef(null);
         const [overlaySpring, overlaySpringApi] = useSpring(() => ({

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeVirtualButtons(concepFuncs, PRENDY_OPTIONS) {
-    const { getRefs, getState, setState, useStore } = concepFuncs;
+export function makeVirtualButtons(storeHelpers, PRENDY_OPTIONS) {
+    const { getRefs, getState, setState, useStore } = storeHelpers;
     const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
     const globalRefs = getRefs().global.main;
     const SIZES = {

@@ -1,6 +1,6 @@
 import { AnyCameraName, PrendyArt } from "../../../declarations";
-import { PrendyConcepFuncs } from "../../typedConcepFuncs";
-export declare function makeCameraChangeUtils<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, prendyArt: PrendyArt): {
+import { PrendyStoreHelpers } from "../../typedStoreHelpers";
+export declare function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyArt: PrendyArt): {
     getSafeCamName: {
         (cam: AnyCameraName): AnyCameraName;
         (cam: null): null;

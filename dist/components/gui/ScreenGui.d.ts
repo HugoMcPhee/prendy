@@ -1,4 +1,4 @@
 /// <reference types="react" />
-import { PrendyConcepFuncs } from "../../concepts/typedConcepFuncs";
+import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
 import { PrendyArt, PrendyOptions } from "../../declarations";
-export declare function makeScreenGui<ConcepFuncs extends PrendyConcepFuncs>(concepFuncs: ConcepFuncs, PRENDY_OPTIONS: PrendyOptions, prendyArt: PrendyArt): (_: {}) => JSX.Element;
+export declare function makeScreenGui<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyArt: PrendyArt): (_: {}) => JSX.Element;

@@ -9,9 +9,9 @@ TODO
 - setCamera type not limited to place
 - doorsInfo type doesn't autocomplete place name
 
-v0.7.18
+v0.7.20
 
-- updated pietem to 8.2.0
+- updated pietem to 0.8.3
 - renamed makePrendyConcepts to makePrendyStores
 - renamed concepts folder to "stores"
 

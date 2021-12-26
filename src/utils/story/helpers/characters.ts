@@ -1,10 +1,10 @@
 import { Vector3 } from "@babylonjs/core";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGetCharDollStuff } from "../../../stores/characters/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
   PrendyOptions,

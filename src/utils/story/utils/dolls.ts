@@ -2,7 +2,7 @@ import { DollName } from "../../../declarations";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 
 export function makeDollStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,

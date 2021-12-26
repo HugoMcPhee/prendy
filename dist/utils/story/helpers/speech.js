@@ -1,8 +1,8 @@
 import delay from "delay";
 import { length } from "stringz";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
+import { makeGetCharDollStuff } from "../../../stores/characters/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
+import { makeSpeechBubblesStoreUtils } from "../../../stores/speechBubbles/utils";
 import { clearTimeoutSafe } from "../../../utils";
 const showSpeechRefs = {
     closeTimeouts: {},

@@ -1,6 +1,6 @@
 import delay from "delay";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGetCharDollStuff } from "../../../stores/characters/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeSceneStoryUtils } from "../utils/scene";
 export function makeSceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {

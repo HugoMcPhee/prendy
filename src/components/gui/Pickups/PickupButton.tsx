@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import {
   PrendyStoreHelpers,
   PickupsInfoPlaceholder,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 
 export function makePickupButton<
   StoreHelpers extends PrendyStoreHelpers,

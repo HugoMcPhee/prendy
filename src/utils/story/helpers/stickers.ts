@@ -1,4 +1,4 @@
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 
 export function makeStickerStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers

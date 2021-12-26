@@ -1,8 +1,8 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import {
   PrendyArt,
   CameraNameByPlace,

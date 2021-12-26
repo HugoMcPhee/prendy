@@ -3,7 +3,7 @@ import React, { ReactNode, Suspense } from "react";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../concepts/typedStoreHelpers";
+} from "../stores/typedStoreHelpers";
 import { PrendyArt, PrendyOptions, PlaceName } from "../declarations";
 import { makeUsePlace } from "../utils/babylonjs/usePlace";
 import { makePlayer } from "./Player";

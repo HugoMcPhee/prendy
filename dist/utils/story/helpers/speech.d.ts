@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../../../stores/typedStoreHelpers";
 import { PrendyOptions, CharacterName } from "../../../declarations";
 export declare function makeSpeechStoryHelpers<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName>(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts, prendyStartOptions: A_PrendyOptions, _characterNames: readonly A_CharacterName[]): {
     showSpeech: (text: string, options?: {

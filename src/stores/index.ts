@@ -78,7 +78,7 @@ export type StepName = typeof prendyStepNames[number];
 // Record<PlaceName, Something> to Record<string, Something>
 // it keeps the types generic , which is good since the types are updated from each project (declaration merging)
 
-export function makePrendyConcepts<
+export function makePrendyStores<
   A_CharacterName extends CharacterName = CharacterName,
   A_PlaceName extends PlaceName = PlaceName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,

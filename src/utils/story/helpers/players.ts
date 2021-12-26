@@ -1,10 +1,10 @@
 import delay from "delay";
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import {
   AnyAnimationName,
   PrendyOptions,

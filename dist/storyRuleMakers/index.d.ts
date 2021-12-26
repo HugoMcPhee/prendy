@@ -1,4 +1,4 @@
-import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PickupName, PlaceInfoByName, PlaceName, StoryPartName, TriggerNameByPlace } from "../declarations";
 export declare function makeGetUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): () => {
     storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];

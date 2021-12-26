@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function makeLoadingOverlay<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers

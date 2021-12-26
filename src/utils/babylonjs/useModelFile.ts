@@ -10,7 +10,7 @@ import {
   TransformNode,
 } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";

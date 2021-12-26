@@ -1,6 +1,6 @@
 export default "default";
 // import { CharacterName } from "art/characters";
-// import { prendyConcepts } from "prendy/concepts";
+// import { prendyConcepts } from "prendy/stores";
 //
 // const dollStartStates = prendyConcepts.dolls.startStates;
 // const characterStartStates = prendyConcepts.characters.startStates;

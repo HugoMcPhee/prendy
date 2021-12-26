@@ -1,7 +1,7 @@
 import { Ray, RayHelper, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle, } from "chootils/dist/speedAngleDistance2d";
-import { makeGetCharDollStuff } from "../../concepts/characters/utils";
+import { makeGetCharDollStuff } from "../../stores/characters/utils";
 import { clearTimeoutSafe } from "../../utils";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms

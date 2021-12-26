@@ -1,6 +1,6 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { MusicFiles, MusicName } from "../../../declarations";
 import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
 

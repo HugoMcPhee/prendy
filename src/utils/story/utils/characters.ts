@@ -1,6 +1,6 @@
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import {
   CharacterName,
   PlaceName,

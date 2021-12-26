@@ -1,6 +1,6 @@
 // import { getRefs, getState, makeRules, setState } from "concepts";
-import { VidSection } from "../../../concepts/sectionVids";
-import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
+import { VidSection } from "../../../stores/sectionVids";
+import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,

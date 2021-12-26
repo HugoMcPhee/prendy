@@ -1,6 +1,6 @@
 // @refresh-reset
 import React from "react";
-import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import {
   PrendyArt,
   PrendyOptions,

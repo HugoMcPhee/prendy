@@ -1,7 +1,7 @@
 import {
   PrendyStoreHelpers,
   PrendyOptionsUntyped,
-} from "../../concepts/typedStoreHelpers";
+} from "../../stores/typedStoreHelpers";
 import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,

@@ -1,6 +1,6 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { makeGetCharDollStuff } from "../concepts/characters/utils";
-import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
+import { makeGetCharDollStuff } from "../stores/characters/utils";
+import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import {
   AnyTriggerName,
   CameraNameByPlace,
@@ -16,9 +16,9 @@ import { makeDollStoryHelpers } from "../utils/story/helpers/dolls";
 
 // export each of the rule makers stuff from here :)
 
-export function makeGetUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeGetUsefulStoryStuff<
+  StoreHelpers extends PrendyStoreHelpers
+>(storeHelpers: StoreHelpers) {
   const { getRefs, getState } = storeHelpers;
 
   type AllState = ReturnType<StoreHelpers["getState"]>;
@@ -518,7 +518,7 @@ export function makeAllStoryRuleMakers<
     >
   >;
   function makeStoryPartRules(callBacksObject: StoryPartRulesOptions) {
-    return makeRules((_itemEffect, effect) => ({
+    return makeRules(({ effect }) => ({
       whenStoryPartChanges: effect({
         run(_diffInfo) {
           const usefulStoryStuff = getUsefulStoryStuff();

@@ -1,7 +1,7 @@
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import {
   AnyCameraName,
   AnySegmentName,

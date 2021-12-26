@@ -8,9 +8,9 @@ import React, {
 } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
+import { makeGetCharDollStuff } from "../../../stores/characters/utils";
 import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import {
   CharacterName,
   PrendyOptions,

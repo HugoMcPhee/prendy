@@ -1,6 +1,6 @@
 import { forEach } from "chootils/dist/loops";
 import { getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";

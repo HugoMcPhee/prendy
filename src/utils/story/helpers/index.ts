@@ -25,7 +25,7 @@ import {
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import { makeCharacterStoryHelpers } from "./characters";
 import { makeDollStoryHelpers } from "./dolls";
 import { makerPlayerStoryHelpers } from "./players";

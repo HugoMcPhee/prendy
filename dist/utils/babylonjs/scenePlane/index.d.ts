@@ -1,5 +1,5 @@
 import { AbstractMesh, Mesh, Vector3 } from "@babylonjs/core";
-import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../../stores/typedStoreHelpers";
 import { Point2D } from "chootils/dist/points2d";
 export declare function makeScenePlaneUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions): {
     getPositionOnPlane: (theMesh: AbstractMesh) => Vector3;

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../stores/typedStoreHelpers";
 import { PrendyArt, PrendyOptions } from "../declarations";
 declare type Props = {
     children?: ReactNode;

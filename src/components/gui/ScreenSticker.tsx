@@ -2,7 +2,7 @@
 import React, { CSSProperties } from "react";
 import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
-import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function makeScreenSticker<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers

@@ -1,4 +1,4 @@
-import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
+import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 export function makeGlobalVideoRules(storeHelpers, _prendyConcepts, _prendyStartOptions, prendyArt) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;

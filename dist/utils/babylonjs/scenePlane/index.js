@@ -1,5 +1,5 @@
 import { Camera, Matrix, Vector3 } from "@babylonjs/core";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";

@@ -1,5 +1,5 @@
 import { SectionVidState, VidSection } from ".";
-import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
+import { makeCameraChangeUtils } from "../../stores/global/utils/cameraChange";
 import {
   AnyCameraName,
   PrendyArt,

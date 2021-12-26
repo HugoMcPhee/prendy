@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { andLayout } from "../utils/styles";
 
 export function makeAllTestVideoStuff<

@@ -8,7 +8,7 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../concepts/typedStoreHelpers";
+} from "../stores/typedStoreHelpers";
 import { PrendyArt, PrendyOptions } from "../declarations";
 import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";

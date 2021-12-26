@@ -8,8 +8,8 @@ import React, {
 } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../concepts/characters/utils";
-import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+import { makeGetCharDollStuff } from "../../stores/characters/utils";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers

@@ -1,5 +1,5 @@
 import { Engine, Scene } from "@babylonjs/core";
-import { PrendyStoreHelpers } from "../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function makeGetSceneOrEngineUtils<
   StoreHelpers extends PrendyStoreHelpers

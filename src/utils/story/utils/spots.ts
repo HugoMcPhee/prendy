@@ -1,4 +1,4 @@
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { PlaceName, SpotNameByPlace } from "../../../declarations";
 
 export function makeSpotStoryUtils<

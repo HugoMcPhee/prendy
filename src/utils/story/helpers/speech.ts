@@ -1,13 +1,13 @@
 import delay from "delay";
 import { CSSProperties } from "react";
 import { length } from "stringz";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { makeSpeechBubblesStoreUtils } from "../../../concepts/speechBubbles/utils";
+import { makeGetCharDollStuff } from "../../../stores/characters/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
+import { makeSpeechBubblesStoreUtils } from "../../../stores/speechBubbles/utils";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import { PrendyOptions, CharacterName } from "../../../declarations";
 import { clearTimeoutSafe } from "../../../utils";
 

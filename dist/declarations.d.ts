@@ -1,4 +1,4 @@
-import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./concepts/typedStoreHelpers";
+import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./stores/typedStoreHelpers";
 declare const _default: "default";
 export default _default;
 export interface ArtTypesUntyped {

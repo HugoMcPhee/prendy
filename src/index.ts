@@ -1,14 +1,14 @@
-import { makeGlobalStoreUtils } from "./concepts/global/utils";
-import { PrendyStoreHelpers } from "./concepts/typedStoreHelpers";
+import { makeGlobalStoreUtils } from "./stores/global/utils";
+import { PrendyStoreHelpers } from "./stores/typedStoreHelpers";
 import { makeSetStoryState } from "./storyRuleMakers";
 import { makeGetSceneOrEngineUtils } from "./utils/babylonjs/getSceneOrEngine";
 
-export { makePrendyConcepts } from "./concepts";
+export { makePrendyStores } from "./stores";
 export { getPrendyOptions } from "./getPrendyOptions";
 export { makePrendyApp } from "./components/PrendyApp";
 export { makePrendyStoryHelpers } from "./utils/story/helpers";
-export { prendyStepNames } from "./concepts";
-export { makeStartPrendyRules } from "./concepts/start";
+export { prendyStepNames } from "./stores";
+export { makeStartPrendyRules } from "./stores/start";
 export { makeUsePlaceUtils } from "./utils/babylonjs/usePlace/utils";
 export { makeAllStoryRuleMakers } from "./storyRuleMakers";
 

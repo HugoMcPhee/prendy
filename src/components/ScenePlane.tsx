@@ -4,7 +4,7 @@ import { forEach } from "chootils/dist/loops";
 import {
   PrendyStoreHelpers,
   PrendyOptionsUntyped,
-} from "../concepts/typedStoreHelpers";
+} from "../stores/typedStoreHelpers";
 import { makeScenePlaneUtils } from "../utils/babylonjs/scenePlane";
 
 export function makeScenePlane<

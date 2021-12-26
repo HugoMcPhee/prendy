@@ -1,11 +1,11 @@
 import { Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
   PrendyOptions,

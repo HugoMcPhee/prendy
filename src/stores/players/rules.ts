@@ -5,7 +5,7 @@ import {
   getSpeedAndAngleFromVector,
   getVectorAngle,
 } from "chootils/dist/speedAngleDistance2d";
-import { makeGetCharDollStuff } from "../../concepts/characters/utils";
+import { makeGetCharDollStuff } from "../../stores/characters/utils";
 import { PrendyArt, CharacterName } from "../../declarations";
 import { clearTimeoutSafe } from "../../utils";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";

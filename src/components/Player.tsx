@@ -1,6 +1,6 @@
 import { AnyTriggerName, PrendyArt } from "../declarations";
 import { breakableForEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import {
   PrendyOptions,
   CameraNameByPlace,

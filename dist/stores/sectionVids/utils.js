@@ -1,4 +1,4 @@
-import { makeCameraChangeUtils } from "../../concepts/global/utils/cameraChange";
+import { makeCameraChangeUtils } from "../../stores/global/utils/cameraChange";
 import { makeGlobalStoreUtils } from "../global/utils";
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)

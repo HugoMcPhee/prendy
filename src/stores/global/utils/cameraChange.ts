@@ -11,9 +11,9 @@ import {
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
 import { makeSceneStoryUtils } from "../../../utils/story/utils/scene";
-import { DefaultCameraRefs } from "../../../concepts/places";
+import { DefaultCameraRefs } from "../../../stores/places";
 import shaders from "../../..//utils/shaders";
-import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
+import { makeGetSectionVidVideo } from "../../../stores/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,

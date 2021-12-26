@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../concepts/characters/utils";
+import { makeGetCharDollStuff } from "../../stores/characters/utils";
 export function makeMiniBubble(storeHelpers) {
     const { useStoreEffect, useStore, getState } = storeHelpers;
     const getCharDollStuff = makeGetCharDollStuff(storeHelpers);

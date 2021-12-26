@@ -1,9 +1,9 @@
 import { AbstractMesh, Camera, Matrix, Mesh, Vector3 } from "@babylonjs/core";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
   PrendyOptionsUntyped,
-} from "../../../concepts/typedStoreHelpers";
+} from "../../../stores/typedStoreHelpers";
 import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";

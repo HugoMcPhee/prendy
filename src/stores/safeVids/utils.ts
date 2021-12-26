@@ -1,4 +1,4 @@
-import { VidState } from "../../concepts/safeVids";
+import { VidState } from "../../stores/safeVids";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 export function makeSafeVidStoreUtils<StoreHelpers extends PrendyStoreHelpers>(

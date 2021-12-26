@@ -3,7 +3,7 @@ import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
 import { makeSceneStoryUtils } from "../../../utils/story/utils/scene";
 import shaders from "../../..//utils/shaders";
-import { makeGetSectionVidVideo } from "../../../concepts/sectionVids/utils";
+import { makeGetSectionVidVideo } from "../../../stores/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import { makeGlobalStoreUtils } from "./";
 export function makeCameraChangeUtils(storeHelpers, prendyArt) {

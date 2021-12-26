@@ -1,5 +1,5 @@
 import { Vector3 } from "@babylonjs/core";
-import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../../../concepts/typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../../../stores/typedStoreHelpers";
 import { AnimationNameByModel, PrendyOptions, CharacterName, CharacterOptions, DollName, DollOptions, MeshNameByModel, ModelInfoByName, ModelName, PlaceName, SpotNameByPlace } from "../../../declarations";
 export declare function makeDollStoryHelpers<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts, A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName, A_CharacterOptions extends CharacterOptions = CharacterOptions, A_DollName extends DollName = DollName, A_DollOptions extends DollOptions = DollOptions, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_ModelInfoByName extends ModelInfoByName = ModelInfoByName, A_ModelName extends ModelName = ModelName, A_PlaceName extends PlaceName = PlaceName, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace>(storeHelpers: StoreHelpers, prendyStartOptions: A_PrendyOptions, modelInfoByName: A_ModelInfoByName): {
     setDollPosition: (dollName: A_DollName, newPositon: Vector3) => void;

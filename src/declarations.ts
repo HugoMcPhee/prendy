@@ -3,7 +3,7 @@ import {
   DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
-} from "./concepts/typedStoreHelpers";
+} from "./stores/typedStoreHelpers";
 
 export default "default";
 

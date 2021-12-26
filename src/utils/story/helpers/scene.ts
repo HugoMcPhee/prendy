@@ -1,7 +1,7 @@
 import delay from "delay";
-import { makeGetCharDollStuff } from "../../../concepts/characters/utils";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
-import { PrendyStoreHelpers } from "../../../concepts/typedStoreHelpers";
+import { makeGetCharDollStuff } from "../../../stores/characters/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
+import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import {
   AnyCameraName,
   AnySegmentName,

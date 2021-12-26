@@ -2,7 +2,7 @@
 import { Sound, Vector3 } from "@babylonjs/core";
 import { useEffect } from "react";
 import { forEach } from "chootils/dist/loops";
-import { makeGlobalStoreUtils } from "../../../concepts/global/utils";
+import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";

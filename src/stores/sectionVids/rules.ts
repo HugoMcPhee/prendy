@@ -1,7 +1,7 @@
 import { StoreHelperTypes } from "pietem";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from ".";
-import { makeSafeVidStoreUtils } from "../../concepts/safeVids/utils";
+import { makeSafeVidStoreUtils } from "../../stores/safeVids/utils";
 import { PrendyArt, PlaceName } from "../../declarations";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";

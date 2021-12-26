@@ -11,7 +11,7 @@ TODO
 
 v0.7.18
 
-- updated pietem to 8.1.0
+- updated pietem to 8.2.0
 - renamed makePrendyConcepts to makePrendyStores
 - renamed concepts folder to "stores"
 

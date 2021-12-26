@@ -42,7 +42,7 @@ export function makeSceneStoryUtils<
     const ruleName = "doWhenNowSegmentChanges" + Math.random();
     startItemEffect({
       name: ruleName,
-      onItemEffect: ({ newValue: newNowSegmentName }) => {
+      run: ({ newValue: newNowSegmentName }) => {
         // if (newNowSegmentName !== checkingSegmentName) return;
         // wait until the segment changed from the original (even if it doesn't change to the new one)
         if (newNowSegmentName === initialNowSegmentName) return;
@@ -50,8 +50,8 @@ export function makeSceneStoryUtils<
         callback();
       },
       check: { type: "global", prop: "nowSegmentName", name: "main" },
-      flow: "cameraChange",
-      whenToRun: "subscribe",
+      step: "cameraChange",
+      atStepEnd: true,
     });
     return ruleName;
   }
@@ -71,7 +71,7 @@ export function makeSceneStoryUtils<
     const ruleName = "doWhenNowSegmentChanges" + Math.random();
     startItemEffect({
       name: ruleName,
-      onItemEffect: ({ newValue: newNowCamName, itemName }) => {
+      run: ({ newValue: newNowCamName, itemName }) => {
         if (itemName !== nowPlaceName) return;
 
         // if (newNowCamName !== checkingCamName) return;
@@ -80,8 +80,8 @@ export function makeSceneStoryUtils<
         callback();
       },
       check: { type: "places", prop: "nowCamName" },
-      flow: "cameraChange",
-      whenToRun: "subscribe",
+      step: "cameraChange",
+      atStepEnd: true,
     });
     return ruleName;
   }

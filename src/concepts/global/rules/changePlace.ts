@@ -111,41 +111,41 @@ export function makeGlobalChangePlaceRules<
     });
   }
 
-  return makeRules((addItemEffect) => ({
-    whenPlaceNameChanges: addItemEffect({
-      onItemEffect({ newValue: nextPlaceName, itemState: globalState }) {
+  return makeRules(({ itemEffect }) => ({
+    whenPlaceNameChanges: itemEffect({
+      run({ newValue: nextPlaceName, itemState: globalState }) {
         if (nextPlaceName === null || globalState.loadingOverlayFullyShowing)
           return;
         setState({ global: { main: { loadingOverlayToggled: true } } });
       },
       check: { type: "global", prop: "nextPlaceName" },
-      flow: "loadNewPlace",
+      step: "loadNewPlace",
     }),
-    whenOverlayFadedOut: addItemEffect({
-      onItemEffect({ itemState }) {
+    whenOverlayFadedOut: itemEffect({
+      run({ itemState }) {
         if (!itemState.nextPlaceName) return;
         setState({ global: { main: { readyToSwapPlace: true } } });
       },
       check: {
         type: "global",
         prop: "loadingOverlayFullyShowing",
-        becomes: "true",
+        becomes: true,
       },
-      flow: "loadNewPlace",
+      step: "loadNewPlace",
     }),
-    whenOverlayToggledOff: addItemEffect({
-      onItemEffect() {
+    whenOverlayToggledOff: itemEffect({
+      run() {
         setGlobalState({ loadingOverlayFullyShowing: false });
       },
       check: {
         type: "global",
         prop: "loadingOverlayToggled",
-        becomes: "false",
+        becomes: false,
       },
-      flow: "loadNewPlace",
+      step: "loadNewPlace",
     }),
-    whenReadyToSwapPlace: addItemEffect({
-      onItemEffect({ itemState: globalState }) {
+    whenReadyToSwapPlace: itemEffect({
+      run({ itemState: globalState }) {
         // run on the start of the next concepto frame, so all the flows can run again
         setState({}, () => {
           const { nowPlaceName, nextPlaceName } = globalState;
@@ -172,12 +172,12 @@ export function makeGlobalChangePlaceRules<
           });
         });
       },
-      check: { type: "global", prop: "readyToSwapPlace", becomes: "true" },
-      whenToRun: "subscribe",
-      flow: "loadNewPlace",
+      check: { type: "global", prop: "readyToSwapPlace", becomes: true },
+      atStepEnd: true,
+      step: "loadNewPlace",
     }),
-    whenEverythingsLoaded: addItemEffect({
-      onItemEffect({ itemState: globalState }) {
+    whenEverythingsLoaded: itemEffect({
+      run({ itemState: globalState }) {
         const {
           nowPlaceName,
           newPlaceLoaded,
@@ -240,8 +240,8 @@ export function makeGlobalChangePlaceRules<
         type: "global",
         prop: ["newPlaceLoaded", "modelNamesLoaded"],
       },
-      whenToRun: "subscribe",
-      flow: "loadNewPlace",
+      atStepEnd: true,
+      step: "loadNewPlace",
     }),
   }));
 }

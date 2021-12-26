@@ -1,9 +1,9 @@
 // import { makeRules } from "concepts";
 // Not used at the moment
-// export const keyboardRules = makeRules((addItemEffect) => ({
-//   ifLeftControlKeyChanged: addItemEffect({
-//     // onItemEffect({ newValue: controlKeyPressed }) {
-//     onItemEffect() {
+// export const keyboardRules = makeRules(({ itemEffect }) => ({
+//   ifLeftControlKeyChanged: itemEffect({
+//     // run({ newValue: controlKeyPressed }) {
+//     run() {
 //       // console.log("controlKeyPressed");
 //       // console.log(controlKeyPressed);
 //       // setState({

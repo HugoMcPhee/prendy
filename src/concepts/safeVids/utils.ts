@@ -21,14 +21,14 @@ export function makeSafeVidStoreUtils<StoreHelpers extends PrendyStoreHelpers>(
     const ruleName = "doWhenSafeVidStateChanges" + Math.random();
     startItemEffect({
       name: ruleName,
-      onItemEffect: ({ newValue: newVidState }) => {
+      run: ({ newValue: newVidState }) => {
         if (!checkShouldRun(newVidState)) return;
         stopEffect(ruleName);
         callback();
       },
       check: { type: "safeVids", prop: "vidState", name: safeVidId },
-      whenToRun: "subscribe",
-      flow: "safeVidStateUpdates",
+      atStepEnd: true,
+      step: "safeVidStateUpdates",
     });
     return ruleName;
   }

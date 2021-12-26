@@ -19,7 +19,7 @@ export function makeLoadingOverlay<StoreHelpers extends PrendyStoreHelpers>(
     }));
 
     useStoreItemPropsEffect(
-      { type: "global", name: "main", flow: "default" },
+      { type: "global", name: "main", step: "default" },
       {
         loadingOverlayToggled({ newValue: isFadeToggled }) {
           overlaySpringApi.start({

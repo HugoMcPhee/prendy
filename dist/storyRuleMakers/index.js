@@ -44,32 +44,32 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
     const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
     const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
     function makeCamChangeRules(callBacksObject) {
-        return makeRules((addItemEffect) => ({
-            whenCameraChanges: addItemEffect({
-                onItemEffect({ newValue: nowCamName }) {
+        return makeRules(({ itemEffect }) => ({
+            whenCameraChanges: itemEffect({
+                run({ newValue: nowCamName }) {
                     var _a, _b;
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { nowPlaceName } = usefulStoryStuff;
                     (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[nowCamName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
                 },
                 check: { prop: "nowCamName", type: "places" },
-                flow: "cameraChange",
-                whenToRun: "subscribe",
+                step: "cameraChange",
+                atStepEnd: true,
             }),
         }));
     }
     function makeCamLeaveRules(callBacksObject) {
-        return makeRules((addItemEffect) => ({
-            whenCameraChanges: addItemEffect({
-                onItemEffect({ previousValue: prevCamName }) {
+        return makeRules(({ itemEffect }) => ({
+            whenCameraChanges: itemEffect({
+                run({ previousValue: prevCamName }) {
                     var _a, _b;
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { nowPlaceName } = usefulStoryStuff;
                     (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[prevCamName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
                 },
                 check: { prop: "nowCamName", type: "places" },
-                flow: "cameraChange",
-                whenToRun: "subscribe",
+                step: "cameraChange",
+                atStepEnd: true,
             }),
         }));
     }
@@ -193,9 +193,9 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
         return onClickPickupButton;
     }
     function makePlaceLoadRules(atStartOfEachPlace, callBacksObject) {
-        return makeRules((addItemEffect) => ({
-            whenPlaceFinishedLoading: addItemEffect({
-                onItemEffect() {
+        return makeRules(({ itemEffect }) => ({
+            whenPlaceFinishedLoading: itemEffect({
+                run() {
                     var _a, _b;
                     // onNextTick(() => {
                     const usefulStoryStuff = getUsefulStoryStuff();
@@ -207,19 +207,19 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                 check: {
                     type: "global",
                     prop: ["isLoadingBetweenPlaces"],
-                    becomes: "false",
+                    becomes: false,
                 },
-                flow: "respondToNewPlace",
-                whenToRun: "subscribe",
+                step: "respondToNewPlace",
+                atStepEnd: true,
             }),
         }));
     }
     function makePlaceNotLoadedRules(callBacksObject) {
-        return makeRules((addItemEffect) => ({
-            whenPlaceFinishedLoading: addItemEffect({
-                onItemEffect({ previousValue: prevPlace, newValue: newPlace }) {
+        return makeRules(({ itemEffect }) => ({
+            whenPlaceFinishedLoading: itemEffect({
+                run({ previousValue: prevPlace, newValue: newPlace }) {
                     let ruleName = startItemEffect({
-                        onItemEffect() {
+                        run() {
                             var _a, _b;
                             stopEffect(ruleName);
                             // console.log("unload rules for", prevPlace);
@@ -229,22 +229,22 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                         check: {
                             type: "global",
                             prop: ["isLoadingBetweenPlaces"],
-                            becomes: "false",
+                            becomes: false,
                         },
-                        whenToRun: "subscribe",
-                        flow: "input",
+                        atStepEnd: true,
+                        step: "input",
                     });
                 },
                 check: { type: "global", prop: ["nowPlaceName"] },
-                flow: "story",
-                whenToRun: "subscribe",
+                step: "story",
+                atStepEnd: true,
             }),
         }));
     }
     function makeStoryPartRules(callBacksObject) {
-        return makeRules((_addItemEffect, addEffect) => ({
-            whenStoryPartChanges: addEffect({
-                onEffect(_diffInfo) {
+        return makeRules((_itemEffect, effect) => ({
+            whenStoryPartChanges: effect({
+                run(_diffInfo) {
                     var _a;
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { storyPart } = usefulStoryStuff;
@@ -254,16 +254,16 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                     prop: ["storyPart"],
                     type: "story",
                 },
-                flow: "story",
-                whenToRun: "subscribe",
+                step: "story",
+                atStepEnd: true,
             }),
         }));
     }
     function makeTouchRules(callBacksObject, options) {
         const { characterName = "walker", distanceType = "touch", whenLeave = false, } = options !== null && options !== void 0 ? options : {};
-        return makeRules((addItemEffect) => ({
-            whenInRangeChangesToCheckTouch: addItemEffect({
-                onItemEffect({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, }) {
+        return makeRules(({ itemEffect }) => ({
+            whenInRangeChangesToCheckTouch: itemEffect({
+                run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, }) {
                     var _a;
                     const { dollName: charDollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};
                     // at the moment runs for every doll instead of just the main character,
@@ -289,15 +289,15 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                     type: "dolls",
                 },
                 name: `inRangeStoryRules_${characterName}_${distanceType}_${whenLeave}`,
-                flow: "collisionReaction",
+                step: "collisionReaction",
             }),
         }));
     }
     function makeTriggerRules(callBacksObject, options) {
         const { characterName = "walker", whenLeave = false } = options !== null && options !== void 0 ? options : {};
-        return makeRules((addItemEffect) => ({
-            whenAtTriggersChanges: addItemEffect({
-                onItemEffect({ newValue: atTriggers, previousValue: prevAtTriggers }) {
+        return makeRules(({ itemEffect }) => ({
+            whenAtTriggersChanges: itemEffect({
+                run({ newValue: atTriggers, previousValue: prevAtTriggers }) {
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { nowPlaceName } = usefulStoryStuff;
                     const triggerNames = placeInfoByName[nowPlaceName]
@@ -316,7 +316,7 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                     type: "characters",
                     name: characterName,
                 },
-                flow: "collisionReaction",
+                step: "collisionReaction",
             }),
         }));
     }

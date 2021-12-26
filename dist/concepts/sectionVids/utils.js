@@ -36,7 +36,7 @@ export function makeSectionVidStoreUtils(storeHelpers, prendyArt) {
         const ruleName = "doWhenSectionVidStateChanges" + Math.random() + Math.random();
         startItemEffect({
             name: ruleName,
-            onItemEffect: ({ newValue: newVidState }) => {
+            run: ({ newValue: newVidState }) => {
                 if (!checkShouldRun(newVidState))
                     return;
                 stopEffect(ruleName);
@@ -47,8 +47,8 @@ export function makeSectionVidStoreUtils(storeHelpers, prendyArt) {
                 prop: "sectionVidState",
                 name: sectionVidId,
             },
-            flow: "sectionVidStateUpdates",
-            whenToRun: "subscribe",
+            step: "sectionVidStateUpdates",
+            atStepEnd: true,
         });
         return ruleName;
     }

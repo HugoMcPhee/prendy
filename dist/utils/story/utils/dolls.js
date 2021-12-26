@@ -30,14 +30,14 @@ export function makeDollStoryUtils(storeHelpers) {
     //   const ruleName = "doWhenModelsLoaded" + Math.random();
     //   startItemEffect({
     //     name: ruleName,
-    //     onItemEffect: ({ newValue: newNowSegmentName }) => {
+    //     run: ({ newValue: newNowSegmentName }) => {
     //       if (newNowSegmentName !== checkingSegmentName) return;
     //       stopEffect(ruleName);
     //       callback();
     //     },
     //     check: { type: "global", prop: "nowSegmentName", name: "main" },
-    //     flow: "",
-    //     whenToRun: "subscribe",
+    //     step: "",
+    //     atStepEnd: true,
     //   });
     //   return ruleName;
     // }

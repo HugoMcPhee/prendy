@@ -73,7 +73,7 @@ export function makeSectionVidStoreUtils<
 
     startItemEffect({
       name: ruleName,
-      onItemEffect: ({ newValue: newVidState }) => {
+      run: ({ newValue: newVidState }) => {
         if (!checkShouldRun(newVidState)) return;
 
         stopEffect(ruleName);
@@ -84,8 +84,8 @@ export function makeSectionVidStoreUtils<
         prop: "sectionVidState",
         name: sectionVidId,
       },
-      flow: "sectionVidStateUpdates",
-      whenToRun: "subscribe",
+      step: "sectionVidStateUpdates",
+      atStepEnd: true,
     });
     return ruleName;
   }

@@ -158,9 +158,9 @@ export function makeAllStoryRuleMakers<
     }
   >;
   function makeCamChangeRules(callBacksObject: CamChangeRulesOptions) {
-    return makeRules((addItemEffect) => ({
-      whenCameraChanges: addItemEffect({
-        onItemEffect({ newValue: nowCamName }) {
+    return makeRules(({ itemEffect }) => ({
+      whenCameraChanges: itemEffect({
+        run({ newValue: nowCamName }) {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { nowPlaceName } = usefulStoryStuff;
           (callBacksObject as Record<any, any>)[nowPlaceName]?.[nowCamName]?.(
@@ -168,15 +168,15 @@ export function makeAllStoryRuleMakers<
           );
         },
         check: { prop: "nowCamName", type: "places" },
-        flow: "cameraChange",
-        whenToRun: "subscribe",
+        step: "cameraChange",
+        atStepEnd: true,
       }),
     }));
   }
   function makeCamLeaveRules(callBacksObject: CamChangeRulesOptions) {
-    return makeRules((addItemEffect) => ({
-      whenCameraChanges: addItemEffect({
-        onItemEffect({ previousValue: prevCamName }) {
+    return makeRules(({ itemEffect }) => ({
+      whenCameraChanges: itemEffect({
+        run({ previousValue: prevCamName }) {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { nowPlaceName } = usefulStoryStuff;
           (callBacksObject as Record<any, any>)[nowPlaceName]?.[prevCamName]?.(
@@ -184,8 +184,8 @@ export function makeAllStoryRuleMakers<
           );
         },
         check: { prop: "nowCamName", type: "places" },
-        flow: "cameraChange",
-        whenToRun: "subscribe",
+        step: "cameraChange",
+        atStepEnd: true,
       }),
     }));
   }
@@ -453,9 +453,9 @@ export function makeAllStoryRuleMakers<
     atStartOfEachPlace: StoryCallback,
     callBacksObject: PlaceLoadRulesOptions
   ) {
-    return makeRules((addItemEffect) => ({
-      whenPlaceFinishedLoading: addItemEffect({
-        onItemEffect() {
+    return makeRules(({ itemEffect }) => ({
+      whenPlaceFinishedLoading: itemEffect({
+        run() {
           // onNextTick(() => {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { nowPlaceName } = usefulStoryStuff;
@@ -470,19 +470,19 @@ export function makeAllStoryRuleMakers<
         check: {
           type: "global",
           prop: ["isLoadingBetweenPlaces"],
-          becomes: "false",
+          becomes: false,
         },
-        flow: "respondToNewPlace",
-        whenToRun: "subscribe",
+        step: "respondToNewPlace",
+        atStepEnd: true,
       }),
     }));
   }
   function makePlaceNotLoadedRules(callBacksObject: PlaceLoadRulesOptions) {
-    return makeRules((addItemEffect) => ({
-      whenPlaceFinishedLoading: addItemEffect({
-        onItemEffect({ previousValue: prevPlace, newValue: newPlace }) {
+    return makeRules(({ itemEffect }) => ({
+      whenPlaceFinishedLoading: itemEffect({
+        run({ previousValue: prevPlace, newValue: newPlace }) {
           let ruleName = startItemEffect({
-            onItemEffect() {
+            run() {
               stopEffect(ruleName);
               // console.log("unload rules for", prevPlace);
               const usefulStoryStuff = getUsefulStoryStuff();
@@ -493,15 +493,15 @@ export function makeAllStoryRuleMakers<
             check: {
               type: "global",
               prop: ["isLoadingBetweenPlaces"],
-              becomes: "false",
+              becomes: false,
             },
-            whenToRun: "subscribe",
-            flow: "input",
+            atStepEnd: true,
+            step: "input",
           });
         },
         check: { type: "global", prop: ["nowPlaceName"] },
-        flow: "story",
-        whenToRun: "subscribe",
+        step: "story",
+        atStepEnd: true,
       }),
     }));
   }
@@ -518,9 +518,9 @@ export function makeAllStoryRuleMakers<
     >
   >;
   function makeStoryPartRules(callBacksObject: StoryPartRulesOptions) {
-    return makeRules((_addItemEffect, addEffect) => ({
-      whenStoryPartChanges: addEffect({
-        onEffect(_diffInfo) {
+    return makeRules((_itemEffect, effect) => ({
+      whenStoryPartChanges: effect({
+        run(_diffInfo) {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { storyPart } = usefulStoryStuff;
           callBacksObject[storyPart as A_StoryPartName]?.(usefulStoryStuff);
@@ -529,8 +529,8 @@ export function makeAllStoryRuleMakers<
           prop: ["storyPart"],
           type: "story",
         },
-        flow: "story",
-        whenToRun: "subscribe",
+        step: "story",
+        atStepEnd: true,
       }),
     }));
   }
@@ -560,9 +560,9 @@ export function makeAllStoryRuleMakers<
       whenLeave = false,
     } = options ?? {};
 
-    return makeRules((addItemEffect) => ({
-      whenInRangeChangesToCheckTouch: addItemEffect({
-        onItemEffect({
+    return makeRules(({ itemEffect }) => ({
+      whenInRangeChangesToCheckTouch: itemEffect({
+        run({
           newValue: inRange,
           previousValue: prevInRange,
           itemName: changedDollName,
@@ -596,7 +596,7 @@ export function makeAllStoryRuleMakers<
           type: "dolls",
         },
         name: `inRangeStoryRules_${characterName}_${distanceType}_${whenLeave}`,
-        flow: "collisionReaction",
+        step: "collisionReaction",
       }),
     }));
   }
@@ -622,9 +622,9 @@ export function makeAllStoryRuleMakers<
     }
   ) {
     const { characterName = "walker", whenLeave = false } = options ?? {};
-    return makeRules((addItemEffect) => ({
-      whenAtTriggersChanges: addItemEffect({
-        onItemEffect({ newValue: atTriggers, previousValue: prevAtTriggers }) {
+    return makeRules(({ itemEffect }) => ({
+      whenAtTriggersChanges: itemEffect({
+        run({ newValue: atTriggers, previousValue: prevAtTriggers }) {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { nowPlaceName } = usefulStoryStuff;
 
@@ -649,7 +649,7 @@ export function makeAllStoryRuleMakers<
           type: "characters",
           name: characterName,
         },
-        flow: "collisionReaction",
+        step: "collisionReaction",
       }),
     }));
   }

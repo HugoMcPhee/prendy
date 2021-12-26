@@ -29,9 +29,9 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
   const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } =
     makeSafeVidStoreUtils(storeHelpers);
 
-  return makeRules((addItemEffect) => ({
-    rulesForSettingNewVideoStates: addItemEffect({
-      onItemEffect({ newValue: vidState, itemName, itemState }) {
+  return makeRules(({ itemEffect }) => ({
+    rulesForSettingNewVideoStates: itemEffect({
+      run({ newValue: vidState, itemName, itemState }) {
         const setItemState = (newState: Partial<ItemState<"sectionVids">>) =>
           setState({ sectionVids: { [itemName]: newState } });
         const setVidState = (sectionVidState: SectionVidState) =>
@@ -183,13 +183,13 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
         }
       },
       check: { type: "sectionVids", prop: "sectionVidState" },
-      flow: "sectionVidWantsToPlay",
-      whenToRun: "subscribe",
+      step: "sectionVidWantsToPlay",
+      atStepEnd: true,
     }),
 
     // wants
-    whenWantedSectionChanges: addItemEffect({
-      onItemEffect({ newValue: wantedSection, itemName, itemState }) {
+    whenWantedSectionChanges: itemEffect({
+      run({ newValue: wantedSection, itemName, itemState }) {
         if (wantedSection === null || itemState.sectionVidState === "unloaded")
           return; // don't react if wantedSection changed to null
 
@@ -202,11 +202,11 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
         });
       },
       check: { type: "sectionVids", prop: "wantedSection" },
-      flow: "sectionVidWantsToPlay",
+      step: "sectionVidWantsToPlay",
     }),
 
-    whenWantToLoad: addItemEffect({
-      onItemEffect({ itemName, itemState: { sectionVidState } }) {
+    whenWantToLoad: itemEffect({
+      run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState === "unloaded") {
           setState({
             sectionVids: {
@@ -227,11 +227,11 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
           });
         }
       },
-      check: { type: "sectionVids", prop: "wantToLoad", becomes: "true" },
-      flow: "sectionVidWantsToPlay",
+      check: { type: "sectionVids", prop: "wantToLoad", becomes: true },
+      step: "sectionVidWantsToPlay",
     }),
-    whenWantToUnload: addItemEffect({
-      onItemEffect({ itemName, itemState: { sectionVidState } }) {
+    whenWantToUnload: itemEffect({
+      run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState !== "unloaded") {
           doWhenSectionVidPlaying(itemName as PlaceName, () => {
             setState({
@@ -248,11 +248,11 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
           setState({ safeVids: { [itemName]: { wantToUnload: false } } });
         }
       },
-      check: { type: "sectionVids", prop: "wantToUnload", becomes: "true" },
-      flow: "sectionVidWantsToPlay",
+      check: { type: "sectionVids", prop: "wantToUnload", becomes: true },
+      step: "sectionVidWantsToPlay",
     }),
-    whenWantToLoop: addItemEffect({
-      onItemEffect({ itemName, itemState: { sectionVidState } }) {
+    whenWantToLoop: itemEffect({
+      run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState === "beforeLoad" || sectionVidState === "unloaded")
           return;
 
@@ -267,14 +267,14 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
           },
         });
       },
-      check: { type: "sectionVids", prop: "wantToLoop", becomes: "true" },
-      flow: "sectionVidWantsToPlay",
+      check: { type: "sectionVids", prop: "wantToLoop", becomes: true },
+      step: "sectionVidWantsToPlay",
     }),
     //
     // when the play and wait vids swap
 
-    whenPlayVidChanges: addItemEffect({
-      onItemEffect({ newValue: safeVidId_playing, itemName: sectionVidName }) {
+    whenPlayVidChanges: itemEffect({
+      run({ newValue: safeVidId_playing, itemName: sectionVidName }) {
         // const { nowPlaceName } = getGlobalState();
         // if (nowPlaceName !== sectionVidName) return;
 
@@ -314,12 +314,12 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
         );
       },
       check: { type: "sectionVids", prop: "safeVidId_playing" },
-      flow: "sectionVidWantsToPlay2",
-      whenToRun: "subscribe",
+      step: "sectionVidWantsToPlay2",
+      atStepEnd: true,
     }),
 
-    whenWaitVidChanges: addItemEffect({
-      onItemEffect({ newValue: safeVidId_waiting, itemState }) {
+    whenWaitVidChanges: itemEffect({
+      run({ newValue: safeVidId_waiting, itemState }) {
         // const { nowPlaceName } = getGlobalState();
         // if (nowPlaceName !== sectionVidName) return;
         if (!safeVidId_waiting) return;
@@ -347,8 +347,8 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
         );
       },
       check: { type: "sectionVids", prop: "safeVidId_waiting" },
-      flow: "sectionVidWantsToPlay2",
-      whenToRun: "subscribe",
+      step: "sectionVidWantsToPlay2",
+      atStepEnd: true,
     }),
   }));
 }

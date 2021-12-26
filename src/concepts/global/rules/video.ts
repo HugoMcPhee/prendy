@@ -27,17 +27,20 @@ export function makeGlobalVideoRules<
 ) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
 
-  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } =
-    makeSectionVidStoreUtils(storeHelpers, prendyArt);
+  const {
+    getSectionForPlace,
+    getSectionVidVideo,
+    checkForVideoLoop,
+  } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
   const {
     getSafeSegmentName,
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
   } = makeCameraChangeUtils(storeHelpers, prendyArt);
 
-  return makeRules((addItemEffect, addEffect) => ({
-    whenWantToChooseVideoSection: addEffect({
-      onEffect() {
+  return makeRules(({ itemEffect, effect }) => ({
+    whenWantToChooseVideoSection: effect({
+      run() {
         const {
           nowPlaceName,
           nowSegmentName,
@@ -180,9 +183,8 @@ export function makeGlobalVideoRules<
             cam: decided_wantedCamName as CameraNameByPlace[PlaceName] &
               AnyCameraName,
             place: nowPlaceName as PlaceName,
-            segment:
-              decided_wantedSegmentName as SegmentNameByPlace[PlaceName] &
-                AnySegmentName,
+            segment: decided_wantedSegmentName as SegmentNameByPlace[PlaceName] &
+              AnySegmentName,
             useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
           });
 
@@ -260,19 +262,19 @@ export function makeGlobalVideoRules<
       //     prop: ["wantedCamName", "wantedCamNameAtLoop"],
       //   },
       // ],
-      flow: "chooseVideoSection",
-      // whenToRun: "subscribe",
+      step: "chooseVideoSection",
+      // atStepEnd: true,
     }),
-    whenSectionVidChangedAndWantToUpdateNowCamAndSegment: addItemEffect({
-      onItemEffect() {
+    whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
+      run() {
         updateNowStuffWhenSectionChanged();
       },
       // check every frame for now, just incase, but this could work with listening to sectionVidState
       // check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
       // check: { type: ["sectionVids"],  prop: ["sectionVidState"] },
       check: { type: "sectionVids", prop: ["newplayingVidStartedTime"] },
-      flow: "sectionVidStateUpdates",
-      whenToRun: "subscribe",
+      step: "sectionVidStateUpdates",
+      atStepEnd: true,
     }),
 
     //
@@ -280,8 +282,8 @@ export function makeGlobalVideoRules<
     // previous stuff
 
     // note no setState's done in here so its running on subscribe
-    whenNowCameraChanges: addEffect({
-      onEffect(diffInfo) {
+    whenNowCameraChanges: effect({
+      run(diffInfo) {
         const globalState = getState().global.main;
         const { nowPlaceName, nextPlaceName } = globalState;
         if (nextPlaceName !== null) return;
@@ -299,8 +301,8 @@ export function makeGlobalVideoRules<
         updateTexturesForNowCamera(nowCamName as AnyCameraName);
       },
       check: { prop: ["nowCamName"], type: ["places"] },
-      flow: "cameraChange",
-      whenToRun: "subscribe",
+      step: "cameraChange",
+      atStepEnd: true,
     }),
 
     // __________________
@@ -308,8 +310,8 @@ export function makeGlobalVideoRules<
 
     // NOTE FIXME TODO WARNING - this might not be still okay to use
     // it might be okay to run when nowCamName changed (since it always swaps the video between a-b vid_wait to vid_play
-    whenPlayingVidElementsChanged: addItemEffect({
-      onItemEffect({ itemName: videoPlaceName }) {
+    whenPlayingVidElementsChanged: itemEffect({
+      run({ itemName: videoPlaceName }) {
         // so video texture updates for looping vids (and when section changes)
         const { nowPlaceName } = getState().global.main;
         const globalRefs = getRefs().global.main;
@@ -323,8 +325,8 @@ export function makeGlobalVideoRules<
         globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
       },
       check: { type: "sectionVids", prop: "newplayingVidStartedTime" },
-      flow: "cameraChange",
-      whenToRun: "subscribe",
+      step: "cameraChange",
+      atStepEnd: true,
     }),
   }));
 }

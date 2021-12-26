@@ -29,9 +29,9 @@ export function makePlayerRules<
   const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
   const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
-  return makeRules((addItemEffect, addEffect) => ({
-    whenDirectionKeysPressed: addEffect({
-      onEffect() {
+  return makeRules(({ itemEffect, effect }) => ({
+    whenDirectionKeysPressed: effect({
+      run() {
         const {
           ArrowDown,
           ArrowLeft,
@@ -64,7 +64,7 @@ export function makePlayerRules<
         // Temporarily disabled because of issue with key held down at next camera
         setState({ players: { main: { inputVelocity: newInputVelocity } } });
       },
-      flow: "input",
+      step: "input",
       check: {
         type: "keyboards",
         name: "main",
@@ -80,42 +80,42 @@ export function makePlayerRules<
         ],
       },
     }),
-    whenInteractKeyPressed: addItemEffect({
-      onItemEffect() {
+    whenInteractKeyPressed: itemEffect({
+      run() {
         setState({
           players: { main: { interactButtonPressTime: Date.now() } },
         });
       },
-      flow: "input",
+      step: "input",
       check: {
         type: "keyboards",
         name: "main",
         // prop: ["Space", "Enter", "KeyZ"],
         // prop: ["Space", "Enter"],
         prop: ["KeyE", "Enter"],
-        becomes: "true",
+        becomes: true,
       },
     }),
-    whenJumpKeyPressed: addItemEffect({
-      onItemEffect() {
+    whenJumpKeyPressed: itemEffect({
+      run() {
         if (!PRENDY_OPTIONS.hasJumping) return;
         setState({ players: { main: { jumpButtonPressTime: Date.now() } } });
       },
-      flow: "input",
-      check: { type: "keyboards", prop: ["Space"], becomes: "true" },
+      step: "input",
+      check: { type: "keyboards", prop: ["Space"], becomes: true },
     }),
-    whenJumpKeyReleased: addItemEffect({
-      onItemEffect() {
+    whenJumpKeyReleased: itemEffect({
+      run() {
         if (!PRENDY_OPTIONS.hasJumping) return;
         setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
       },
-      flow: "input",
-      check: { type: "keyboards", prop: ["KeyM"], becomes: "false" },
+      step: "input",
+      check: { type: "keyboards", prop: ["KeyM"], becomes: false },
     }),
 
     //
-    whenJumpPressed: addItemEffect({
-      onItemEffect({ itemState: playerState, frameDuration }) {
+    whenJumpPressed: itemEffect({
+      run({ itemState: playerState, frameDuration }) {
         const {
           playerCharacter,
           playerMovingPaused,
@@ -148,19 +148,19 @@ export function makePlayerRules<
           players: { main: { isJumping: true, isOnGround: false } },
         });
       },
-      flow: "input",
+      step: "input",
       check: { type: "players", name: "main", prop: ["jumpButtonPressTime"] },
     }),
-    whenJumpReleased: addItemEffect({
-      onItemEffect() {
+    whenJumpReleased: itemEffect({
+      run() {
         setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
       },
-      flow: "input",
+      step: "input",
       check: { type: "players", name: "main", prop: ["jumpButtonPressTime"] },
     }),
 
-    whenJoystickMoves: addItemEffect({
-      onItemEffect({
+    whenJoystickMoves: itemEffect({
+      run({
         newValue: inputVelocity,
         itemState: playerState,
         itemRefs: playerRefs,
@@ -294,12 +294,12 @@ export function makePlayerRules<
         // }
       },
       check: { type: "players", prop: "inputVelocity" },
-      flow: "input",
-      whenToRun: "subscribe",
+      step: "input",
+      atStepEnd: true,
     }),
 
-    whenVirtualControlsPressed: addItemEffect({
-      onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
+    whenVirtualControlsPressed: itemEffect({
+      run({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
         playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
           const {
@@ -313,11 +313,11 @@ export function makePlayerRules<
         }, 200); // wait 200 milliseconds, to prevent buttons showing from small mouse clicks
       },
       check: { type: "players", prop: "virtualControlsPressTime" },
-      flow: "input",
-      whenToRun: "subscribe",
+      step: "input",
+      atStepEnd: true,
     }),
-    whenVirtualControlsReleased: addItemEffect({
-      onItemEffect({ itemRefs: playerRefs, itemName: playerName }) {
+    whenVirtualControlsReleased: itemEffect({
+      run({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
         playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
           const {
@@ -330,14 +330,14 @@ export function makePlayerRules<
           });
         }, 5000); // wait 5 seconds
       },
-      check: { type: "players", prop: ["virtualControlsReleaseTime", ""] },
-      flow: "input",
-      whenToRun: "subscribe",
+      check: { type: "players", prop: ["virtualControlsReleaseTime"] },
+      step: "input",
+      atStepEnd: true,
     }),
 
     // Jumping
-    onEachFrame: addItemEffect({
-      onItemEffect({
+    onEachFrame: itemEffect({
+      run({
         newValue: inputVelocity,
         itemState: playerState,
         itemRefs: playerRefs,
@@ -447,12 +447,12 @@ export function makePlayerRules<
         setState({ players: { main: { isOnGround: newIsOnGround } } });
       },
       check: { type: "global", prop: "frameTick" },
-      flow: "input",
-      whenToRun: "subscribe",
+      step: "input",
+      atStepEnd: true,
     }),
 
-    whenIsOnGroundChanges: addItemEffect({
-      onItemEffect({
+    whenIsOnGroundChanges: itemEffect({
+      run({
         newValue: isOnGround,
         previousValue: prevIsOnGround,
         itemState: playerState,
@@ -480,11 +480,11 @@ export function makePlayerRules<
         }
       },
       check: { type: "players", prop: "isOnGround" },
-      flow: "positionReaction",
-      whenToRun: "derive",
+      step: "positionReaction",
+      atStepEnd: false,
     }),
-    whenAnimationNamesChange: addItemEffect({
-      onItemEffect({ newValue: newAnimationNames, itemState: playerState }) {
+    whenAnimationNamesChange: itemEffect({
+      run({ newValue: newAnimationNames, itemState: playerState }) {
         const { playerCharacter, playerMovingPaused } = getState().global.main;
         const { inputVelocity } = playerState;
         const { dollName } =
@@ -501,12 +501,12 @@ export function makePlayerRules<
           dolls: { [dollName]: { nowAnimation: newAnimationName } },
         });
       },
-      flow: "input",
+      step: "input",
       check: { type: "players", prop: "animationNames" },
-      whenToRun: "subscribe",
+      atStepEnd: true,
     }),
-    whenCameraChanges: addItemEffect({
-      onItemEffect() {
+    whenCameraChanges: itemEffect({
+      run() {
         setState((state) => ({
           players: {
             main: {
@@ -517,11 +517,11 @@ export function makePlayerRules<
           },
         }));
       },
-      flow: "cameraChange",
+      step: "cameraChange",
       check: { type: "places", prop: "nowCamName" },
     }),
-    whenPlayerMovementPausedChanges: addItemEffect({
-      onItemEffect({ newValue: playerMovingPaused }) {
+    whenPlayerMovementPausedChanges: itemEffect({
+      run({ newValue: playerMovingPaused }) {
         const { playerCharacter } = getState().global.main;
         const playerState = getState().players.main;
         const { dollRefs, dollName, dollState } = getCharDollStuff(
@@ -564,10 +564,10 @@ export function makePlayerRules<
         //   },
         // }));
       },
-      // flow: "default",
+      // step: "default",
       check: { type: "global", prop: "playerMovingPaused" },
-      flow: "storyReaction", // runs at storyReaction flow so it can react after story rules setting playerMovingPaused
-      // whenToRun: "subscribe",
+      step: "storyReaction", // runs at storyReaction flow so it can react after story rules setting playerMovingPaused
+      // atStepEnd: true,
     }),
   }));
 }

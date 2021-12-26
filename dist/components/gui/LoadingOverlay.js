@@ -9,7 +9,7 @@ export function makeLoadingOverlay(storeHelpers) {
             opacity: 1,
             config: { tension: 300 },
         }));
-        useStoreItemPropsEffect({ type: "global", name: "main", flow: "default" }, {
+        useStoreItemPropsEffect({ type: "global", name: "main", step: "default" }, {
             loadingOverlayToggled({ newValue: isFadeToggled }) {
                 overlaySpringApi.start({
                     opacity: isFadeToggled ? 1 : 0,

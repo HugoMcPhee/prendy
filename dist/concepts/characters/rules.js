@@ -7,19 +7,19 @@ export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, pren
     const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
-    // makeDynamicRules((addItemEffect)=> ({
-    //   sdsdf: addItemEffect()
+    // makeDynamicRules(({ itemEffect })=> ({
+    //   sdsdf: itemEffect()
     // }))
-    return makeDynamicRules((addItemEffect, addEffect) => ({
-        whenPositionChanges: addItemEffect(({ characterName, dollName, }) => ({
+    return makeDynamicRules(({ itemEffect, effect }) => ({
+        whenPositionChanges: effect(({ characterName, dollName, }) => ({
             // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-            onItemEffect({ itemRefs, itemState }) {
+            run({ itemRefs, itemState }) {
                 // TODO
                 // only update the collider stuff here
                 // Also listen to dolls positions, and return if not the same dollNAme (easier than dynamic rules for now)
                 if (!itemRefs.meshRef)
                     return;
-                const { nowPlaceName, loadingOverlayToggled, focusedDoll } = getState().global.main;
+                const { nowPlaceName, loadingOverlayToggled, focusedDoll, } = getState().global.main;
                 const nowPlaceInfo = placeInfoByName[nowPlaceName];
                 const triggerNames = nowPlaceInfo.triggerNames;
                 const cameraNames = nowPlaceInfo.cameraNames;
@@ -85,10 +85,10 @@ export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, pren
                 }
             },
             check: { type: "dolls", prop: "position", name: dollName },
-            whenToRun: "subscribe",
-            flow: "checkCollisions",
+            atStepEnd: true,
+            step: "checkCollisions",
         })),
-        // whenInRangeChanges: addItemEffect(
+        // whenInRangeChanges: itemEffect(
         //   ({
         //     characterName,
         //     dollName,
@@ -97,12 +97,12 @@ export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, pren
         //     dollName: DollName;
         //   }) => ({
         //     // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-        //     onItemEffect({ newValue: newInRange, itemName }) {
+        //     run({ newValue: newInRange, itemName }) {
         //       // console.log(itemName, " in range");
         //       // console.log(newInRange.cat);
         //     },
         //     check: { type: "dolls", prop: "inRange", name: dollName },
-        //     whenToRun: "subscribe",
+        //     atStepEnd: true,
         //   })
         // ),
     }));
@@ -132,17 +132,17 @@ export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRu
 export function makeCharacterRules(storeHelpers, prendyArt) {
     const { makeRules, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyArt;
-    return makeRules((addItemEffect, addEffect) => ({
+    return makeRules(({ itemEffect, effect }) => ({
         // should be a  dynamic rule ?
-        whenCameraChangesForPlanePosition: addEffect({
+        whenCameraChangesForPlanePosition: effect({
             // in a different flow to "cameraChange"
-            onEffect() {
+            run() {
                 // focusScenePlaneOnFocusedDoll();
             },
             check: { type: "places", prop: ["nowCamName"] },
         }),
-        whenAtCamCubes: addItemEffect({
-            onItemEffect({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName, }) {
+        whenAtCamCubes: itemEffect({
+            run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName, }) {
                 const { playerCharacter } = getState().global.main;
                 if (charName !== playerCharacter)
                     return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
@@ -164,12 +164,12 @@ export function makeCharacterRules(storeHelpers, prendyArt) {
                 });
             },
             check: { type: "characters", prop: "atCamCubes" },
-            flow: "collisionReaction",
-            whenToRun: "subscribe",
+            step: "collisionReaction",
+            atStepEnd: true,
         }),
         // NOTE Could be dynamic rule for all characters?
-        whenPlaceChanges: addItemEffect({
-            onItemEffect() {
+        whenPlaceChanges: itemEffect({
+            run() {
                 setState((state) => ({
                     characters: {
                         [state.global.main.playerCharacter]: {

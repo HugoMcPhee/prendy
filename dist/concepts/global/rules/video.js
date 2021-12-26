@@ -2,11 +2,11 @@ import { makeSectionVidStoreUtils } from "../../../concepts/sectionVids/utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 export function makeGlobalVideoRules(storeHelpers, _prendyConcepts, _prendyStartOptions, prendyArt) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
-    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
+    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop, } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
     const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(storeHelpers, prendyArt);
-    return makeRules((addItemEffect, addEffect) => ({
-        whenWantToChooseVideoSection: addEffect({
-            onEffect() {
+    return makeRules(({ itemEffect, effect }) => ({
+        whenWantToChooseVideoSection: effect({
+            run() {
                 const { nowPlaceName, nowSegmentName, wantedSegmentName, wantedSegmentNameAtLoop, nextSegmentNameWhenVidPlays, nextPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets wantedSegmentName and wantedCamName also sets nextPlaceName
                 isLoadingBetweenPlaces, } = getState().global.main;
                 const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName, } = getState().places[nowPlaceName];
@@ -169,25 +169,25 @@ export function makeGlobalVideoRules(storeHelpers, _prendyConcepts, _prendyStart
             //     prop: ["wantedCamName", "wantedCamNameAtLoop"],
             //   },
             // ],
-            flow: "chooseVideoSection",
-            // whenToRun: "subscribe",
+            step: "chooseVideoSection",
+            // atStepEnd: true,
         }),
-        whenSectionVidChangedAndWantToUpdateNowCamAndSegment: addItemEffect({
-            onItemEffect() {
+        whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
+            run() {
                 updateNowStuffWhenSectionChanged();
             },
             // check every frame for now, just incase, but this could work with listening to sectionVidState
             // check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
             // check: { type: ["sectionVids"],  prop: ["sectionVidState"] },
             check: { type: "sectionVids", prop: ["newplayingVidStartedTime"] },
-            flow: "sectionVidStateUpdates",
-            whenToRun: "subscribe",
+            step: "sectionVidStateUpdates",
+            atStepEnd: true,
         }),
         //
         // previous stuff
         // note no setState's done in here so its running on subscribe
-        whenNowCameraChanges: addEffect({
-            onEffect(diffInfo) {
+        whenNowCameraChanges: effect({
+            run(diffInfo) {
                 const globalState = getState().global.main;
                 const { nowPlaceName, nextPlaceName } = globalState;
                 if (nextPlaceName !== null)
@@ -203,15 +203,15 @@ export function makeGlobalVideoRules(storeHelpers, _prendyConcepts, _prendyStart
                 updateTexturesForNowCamera(nowCamName);
             },
             check: { prop: ["nowCamName"], type: ["places"] },
-            flow: "cameraChange",
-            whenToRun: "subscribe",
+            step: "cameraChange",
+            atStepEnd: true,
         }),
         // __________________
         // Changing segments
         // NOTE FIXME TODO WARNING - this might not be still okay to use
         // it might be okay to run when nowCamName changed (since it always swaps the video between a-b vid_wait to vid_play
-        whenPlayingVidElementsChanged: addItemEffect({
-            onItemEffect({ itemName: videoPlaceName }) {
+        whenPlayingVidElementsChanged: itemEffect({
+            run({ itemName: videoPlaceName }) {
                 var _a;
                 // so video texture updates for looping vids (and when section changes)
                 const { nowPlaceName } = getState().global.main;
@@ -224,8 +224,8 @@ export function makeGlobalVideoRules(storeHelpers, _prendyConcepts, _prendyStart
                 (_a = globalRefs.backdropVideoTex) === null || _a === void 0 ? void 0 : _a.updateVid(backdropVidElement);
             },
             check: { type: "sectionVids", prop: "newplayingVidStartedTime" },
-            flow: "cameraChange",
-            whenToRun: "subscribe",
+            step: "cameraChange",
+            atStepEnd: true,
         }),
     }));
 }

@@ -45,18 +45,18 @@ export function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(
     // maybe ideally type the AssetContainer based on modelInfoByName :) ?
   }
 
-  return makeRules((addItemEffect) => ({
-    whenWantsToLoad: addItemEffect({
-      onItemEffect({ itemName: modelName }) {
+  return makeRules(({ itemEffect }) => ({
+    whenWantsToLoad: itemEffect({
+      run({ itemName: modelName }) {
         // load the model async here, and store the result in refs,
         // and also hide  /disable the model mesh ?
         startLoadingModel(modelName as ModelName);
       },
-      check: { type: "models", prop: "wantToLoad", becomes: "true" },
-      whenToRun: "subscribe",
+      check: { type: "models", prop: "wantToLoad", becomes: true },
+      atStepEnd: true,
     }),
-    whenIsLoaded: addItemEffect({
-      onItemEffect({ itemName: modelName }) {
+    whenIsLoaded: itemEffect({
+      run({ itemName: modelName }) {
         // console.log(modelName, " loaded");
 
         setState((state) => {
@@ -74,9 +74,9 @@ export function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(
           };
         });
       },
-      check: { type: "models", prop: "isLoaded", becomes: "true" },
-      flow: "loadNewPlaceModels",
-      whenToRun: "subscribe",
+      check: { type: "models", prop: "isLoaded", becomes: true },
+      step: "loadNewPlaceModels",
+      atStepEnd: true,
     }),
   }));
 }

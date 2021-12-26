@@ -45,8 +45,8 @@ export function makeDollDynamicRules<
   );
   const { getRefs, makeDynamicRules } = storeHelpers;
 
-  return makeDynamicRules((addItemEffect, _addEffect) => ({
-    waitForModelToLoad: addItemEffect(
+  return makeDynamicRules(({ itemEffect, effect }) => ({
+    waitForModelToLoad: itemEffect(
       ({
         dollName,
         modelName,
@@ -54,7 +54,7 @@ export function makeDollDynamicRules<
         dollName: DollName;
         modelName: ModelName;
       }) => ({
-        onItemEffect() {
+        run() {
           saveModelStuffToDoll({ dollName, modelName });
         },
         name: `doll_waitForModelToLoad${dollName}_${modelName}`,
@@ -62,13 +62,13 @@ export function makeDollDynamicRules<
           type: "models",
           name: modelName,
           prop: "isLoaded",
-          becomes: "true",
+          becomes: true,
         },
-        whenToRun: "subscribe",
+        atStepEnd: true,
       })
     ),
     // When the plaec and all characters are loaded
-    whenWholePlaceFinishesLoading: addItemEffect(
+    whenWholePlaceFinishesLoading: itemEffect(
       ({
         dollName,
         modelName,
@@ -76,7 +76,7 @@ export function makeDollDynamicRules<
         dollName: DollName;
         modelName: ModelName;
       }) => ({
-        onItemEffect() {
+        run() {
           const dollRefs = getRefs().dolls[dollName];
           const modelRefs = getRefs().models[modelName];
 
@@ -109,9 +109,9 @@ export function makeDollDynamicRules<
         check: {
           type: "global",
           prop: ["isLoadingBetweenPlaces"],
-          becomes: "false",
+          becomes: false,
         },
-        whenToRun: "subscribe",
+        atStepEnd: true,
       })
     ),
   }));
@@ -185,12 +185,12 @@ export function makeDollRules<
 
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
 
-  return makeRules((addItemEffect, addEffect) => ({
+  return makeRules(({ itemEffect, effect }) => ({
     // --------------------------------
     // loading model stuff
     // --------------------------------
-    whenModelNameChanges: addItemEffect({
-      onItemEffect({
+    whenModelNameChanges: itemEffect({
+      run({
         itemName: dollName,
         newValue: newModelName,
         previousValue: prevModelName,
@@ -201,8 +201,8 @@ export function makeDollRules<
       },
       check: { type: "dolls", prop: "modelName" },
     }),
-    whenDollAddedOrRemoved: addEffect({
-      onEffect(diffInfo) {
+    whenDollAddedOrRemoved: effect({
+      run(diffInfo) {
         //TODO maybe make it easier to add itemAdded rule and itemRemoved rule
 
         // stop the previous dynamic rule, and start the new one
@@ -220,8 +220,8 @@ export function makeDollRules<
     // --------------------------------
     // animations
     // --------------------------------
-    whenNowAnimationChanged: addItemEffect({
-      onItemEffect({ newValue: nowAnimation, itemState, itemName: dollName }) {
+    whenNowAnimationChanged: itemEffect({
+      run({ newValue: nowAnimation, itemState, itemName: dollName }) {
         const { modelName } = itemState;
         const animationNames = modelInfoByName[modelName]
           .animationNames as AnyAnimationName[];
@@ -239,33 +239,33 @@ export function makeDollRules<
         setDollAnimWeight(dollName as DollName, newWeights);
       },
       check: { type: "dolls", prop: "nowAnimation" },
-      flow: "dollAnimation",
-      whenToRun: "subscribe",
+      step: "dollAnimation",
+      atStepEnd: true,
     }),
-    whenAnimWeightsGoalChanged: addItemEffect({
-      onItemEffect({ itemName: dollName }) {
+    whenAnimWeightsGoalChanged: itemEffect({
+      run({ itemName: dollName }) {
         setState({
           dolls: { [dollName]: { animWeightsIsMoving: true } },
         });
       },
       check: { type: "dolls", prop: "animWeightsGoal" },
-      flow: "dollAnimation2",
-      whenToRun: "subscribe",
+      step: "dollAnimation2",
+      atStepEnd: true,
     }),
-    whenAnimationWeightsStartedMoving: addItemEffect({
-      onItemEffect({ itemName: dollName }) {
+    whenAnimationWeightsStartedMoving: itemEffect({
+      run({ itemName: dollName }) {
         runMoverMulti({
           name: dollName,
           type: "dolls",
           mover: "animWeights",
         });
       },
-      check: { type: "dolls", prop: "animWeightsIsMoving", becomes: "true" },
-      flow: "dollAnimationStartMovers",
-      whenToRun: "subscribe",
+      check: { type: "dolls", prop: "animWeightsIsMoving", becomes: true },
+      step: "dollAnimationStartMovers",
+      atStepEnd: true,
     }),
-    whenAnimWeightsChanged: addItemEffect({
-      onItemEffect({ newValue: animWeights, itemState, itemRefs }) {
+    whenAnimWeightsChanged: itemEffect({
+      run({ newValue: animWeights, itemState, itemRefs }) {
         const { modelName } = itemState;
         const animationNames = modelInfoByName[modelName]
           .animationNames as AnyAnimationName[];
@@ -307,24 +307,24 @@ export function makeDollRules<
         });
       },
       check: { type: "dolls", prop: "animWeights" },
-      whenToRun: "subscribe",
-      flow: "dollAnimation2",
+      atStepEnd: true,
+      step: "dollAnimation2",
     }),
     // --------------------------------
     // other drawing stuff
     // --------------------------------
-    whenRotationYChanged: addItemEffect({
-      onItemEffect({ newValue: newRotationY, itemRefs }) {
+    whenRotationYChanged: itemEffect({
+      run({ newValue: newRotationY, itemRefs }) {
         if (!itemRefs.meshRef) return;
         itemRefs.meshRef.rotation.y = toRadians(newRotationY);
       },
-      whenToRun: "subscribe",
+      atStepEnd: true,
       check: { type: "dolls", prop: "rotationY" },
     }),
     //
 
-    whenRotationGoalChanged: addItemEffect({
-      onItemEffect({
+    whenRotationGoalChanged: itemEffect({
+      run({
         previousValue: oldYRotation,
         newValue: newYRotation,
         itemName: dollName,
@@ -352,46 +352,42 @@ export function makeDollRules<
       check: { type: "dolls", prop: "rotationYGoal" },
     }),
 
-    whenPositionGoalChanged: addItemEffect({
-      onItemEffect({
-        itemName: dollName,
-        itemRefs: dollRefs,
-        itemState: dollState,
-      }) {
+    whenPositionGoalChanged: itemEffect({
+      run({ itemName: dollName, itemRefs: dollRefs, itemState: dollState }) {
         setState({ dolls: { [dollName]: { positionIsMoving: true } } });
         const { positionMoveMode: moveMode } = dollState;
         // TEMPORARY : ideally this is automatic for movers?
         if (moveMode === "spring") dollRefs.positionMoverRefs.recentSpeeds = [];
       },
-      whenToRun: "subscribe",
-      flow: "dollAnimation2",
+      atStepEnd: true,
+      step: "dollAnimation2",
       check: { type: "dolls", prop: "positionGoal" },
     }),
 
-    whenStartedMoving: addItemEffect({
-      onItemEffect({ itemName: dollName }) {
+    whenStartedMoving: itemEffect({
+      run({ itemName: dollName }) {
         runMover3d({ name: dollName, type: "dolls", mover: "position" });
       },
-      check: { type: "dolls", prop: "positionIsMoving", becomes: "true" },
-      flow: "dollAnimationStartMovers",
-      whenToRun: "subscribe",
+      check: { type: "dolls", prop: "positionIsMoving", becomes: true },
+      step: "dollAnimationStartMovers",
+      atStepEnd: true,
     }),
-    whenStartedRotating: addItemEffect({
-      onItemEffect({ itemName: dollName }) {
+    whenStartedRotating: itemEffect({
+      run({ itemName: dollName }) {
         runMover({
           name: dollName,
           type: "dolls",
           mover: "rotationY",
         });
       },
-      check: { type: "dolls", prop: "rotationYIsMoving", becomes: "true" },
-      whenToRun: "subscribe",
+      check: { type: "dolls", prop: "rotationYIsMoving", becomes: true },
+      atStepEnd: true,
     }),
 
     // ___________________________________
     // position
-    whenPositionChangesToEdit: addItemEffect({
-      onItemEffect({
+    whenPositionChangesToEdit: itemEffect({
+      run({
         newValue: newPosition,
         previousValue: prevPosition,
         itemRefs,
@@ -447,11 +443,11 @@ export function makeDollRules<
         });
       },
       check: { type: "dolls", prop: "position" },
-      flow: "editPosition",
-      whenToRun: "subscribe",
+      step: "editPosition",
+      atStepEnd: true,
     }),
-    whenPositionChangesCheckInRange: addEffect({
-      onEffect(_diffInfo) {
+    whenPositionChangesCheckInRange: effect({
+      run(_diffInfo) {
         // forEach(diffInfo.itemsChanged.dolls)
 
         const defaultInRange = getDefaultInRangeFunction(dollNames);
@@ -534,20 +530,20 @@ export function makeDollRules<
         setState({ dolls: newDollsState as Record<any, any> });
       },
       check: { type: "dolls", prop: ["position"] },
-      whenToRun: "subscribe",
-      flow: "checkCollisions",
+      atStepEnd: true,
+      step: "checkCollisions",
     }),
     // should be a  dynamic rule ?
-    whenCameraChangesForPlanePosition: addEffect({
+    whenCameraChangesForPlanePosition: effect({
       // in a different flow to "cameraChange"
-      onEffect() {
+      run() {
         focusScenePlaneOnFocusedDoll("instant");
       },
       check: { type: "places", prop: ["nowCamName"] },
-      flow: "planePosition",
+      step: "planePosition",
     }),
-    updateDollScreenPositionWhenScenePlaneMoves: addEffect({
-      onEffect() {
+    updateDollScreenPositionWhenScenePlaneMoves: effect({
+      run() {
         const { playerCharacter } = getState().global.main;
         const { dollName } = getState().characters[playerCharacter];
         if (!dollName) return;
@@ -559,7 +555,7 @@ export function makeDollRules<
       },
       // this happens before rendering because its in "derive" instead of "subscribe"
       check: { type: "global", prop: ["planePos", "planeZoom"] },
-      flow: "planePosition",
+      step: "planePosition",
     }),
   }));
 }

@@ -24,18 +24,18 @@ export function makeModelRules(storeHelpers, prendyArt) {
         setState({ models: { [modelName]: { isLoaded: true } } });
         // maybe ideally type the AssetContainer based on modelInfoByName :) ?
     }
-    return makeRules((addItemEffect) => ({
-        whenWantsToLoad: addItemEffect({
-            onItemEffect({ itemName: modelName }) {
+    return makeRules(({ itemEffect }) => ({
+        whenWantsToLoad: itemEffect({
+            run({ itemName: modelName }) {
                 // load the model async here, and store the result in refs,
                 // and also hide  /disable the model mesh ?
                 startLoadingModel(modelName);
             },
-            check: { type: "models", prop: "wantToLoad", becomes: "true" },
-            whenToRun: "subscribe",
+            check: { type: "models", prop: "wantToLoad", becomes: true },
+            atStepEnd: true,
         }),
-        whenIsLoaded: addItemEffect({
-            onItemEffect({ itemName: modelName }) {
+        whenIsLoaded: itemEffect({
+            run({ itemName: modelName }) {
                 // console.log(modelName, " loaded");
                 setState((state) => {
                     // if (state.global.main.modelNamesLoaded.includes(modelName)) return {};
@@ -48,9 +48,9 @@ export function makeModelRules(storeHelpers, prendyArt) {
                     };
                 });
             },
-            check: { type: "models", prop: "isLoaded", becomes: "true" },
-            flow: "loadNewPlaceModels",
-            whenToRun: "subscribe",
+            check: { type: "models", prop: "isLoaded", becomes: true },
+            step: "loadNewPlaceModels",
+            atStepEnd: true,
         }),
     }));
 }

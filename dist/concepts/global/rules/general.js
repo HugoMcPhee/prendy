@@ -4,9 +4,9 @@ import { makeGlobalStoreUtils } from "../utils";
 export function makeGlobalGeneralRules(storeHelpers) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
     const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    return makeRules((addItemEffect, addEffect) => ({
-        whenAnythingChangesForRendering: addEffect({
-            onEffect() {
+    return makeRules(({ effect }) => ({
+        whenAnythingChangesForRendering: effect({
+            run() {
                 var _a, _b, _c;
                 const globalRefs = getRefs().global.main;
                 // Renders the scene manually
@@ -28,11 +28,11 @@ export function makeGlobalGeneralRules(storeHelpers) {
                 });
             },
             check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
-            flow: "rendering",
-            whenToRun: "subscribe",
+            step: "rendering",
+            atStepEnd: true,
         }),
-        whenASpeechBubbleShowsOrHides: addEffect({
-            onEffect(_diffInfo) {
+        whenASpeechBubbleShowsOrHides: effect({
+            run(_diffInfo) {
                 const speechBubblesState = getState().speechBubbles;
                 let aBubbleIsShowing = false;
                 // possibly ideally cached
@@ -61,8 +61,8 @@ export function makeGlobalGeneralRules(storeHelpers) {
                 }
             },
             check: { type: "speechBubbles", prop: ["isVisible"] },
-            whenToRun: "subscribe",
-            flow: "positionUi",
+            atStepEnd: true,
+            step: "positionUi",
         }),
     }));
 }

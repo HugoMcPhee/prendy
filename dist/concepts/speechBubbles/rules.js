@@ -11,9 +11,9 @@ When characters position changes
 export function makeSpeechBubbleRules(storeHelpers, prendyConcepts) {
     const { makeRules, setState, getRefs } = storeHelpers;
     const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(storeHelpers, prendyConcepts);
-    return makeRules((addItemEffect, addEffect) => ({
-        whenGoalTextChanges: addItemEffect({
-            onItemEffect({ itemName, itemRefs, itemState }) {
+    return makeRules(({ itemEffect, effect }) => ({
+        whenGoalTextChanges: itemEffect({
+            run({ itemName, itemRefs, itemState }) {
                 const { goalText, stylesBySpecialText } = itemState;
                 setState({
                     speechBubbles: {
@@ -29,25 +29,25 @@ export function makeSpeechBubbleRules(storeHelpers, prendyConcepts) {
             },
             check: { prop: "goalText", type: "speechBubbles" },
         }),
-        whenVisibleTextChanges: addItemEffect({
-            onItemEffect({ itemRefs, itemState, itemName }) {
+        whenVisibleTextChanges: itemEffect({
+            run({ itemRefs, itemState, itemName }) {
                 showNewLetter({ itemName, itemRefs, itemState });
             },
             check: { prop: "visibleLetterAmount", type: "speechBubbles" },
         }),
-        whenTypingFinishedBecomesFalse: addItemEffect({
-            onItemEffect({ itemRefs, itemState, itemName }) {
+        whenTypingFinishedBecomesFalse: itemEffect({
+            run({ itemRefs, itemState, itemName }) {
                 showNewLetter({ itemName, itemRefs, itemState });
             },
             check: {
                 prop: "typingFinished",
                 type: "speechBubbles",
-                becomes: "false",
+                becomes: false,
             },
         }),
         // The position changing based on camera and character position are inside the SpeechBubble component
-        whenAddedOrRemoved: addEffect({
-            onEffect(diffInfo) {
+        whenAddedOrRemoved: effect({
+            run(diffInfo) {
                 // forEach(diffInfo.itemsAdded.speechBubbles, (itemName) => {
                 //   // speechBubbleDynamicRules.startAll character position
                 // });
@@ -61,8 +61,8 @@ export function makeSpeechBubbleRules(storeHelpers, prendyConcepts) {
             },
             check: { addedOrRemoved: true, type: "speechBubbles" },
         }),
-        whenBecameVisible: addItemEffect({
-            onItemEffect({ itemName }) {
+        whenBecameVisible: itemEffect({
+            run({ itemName }) {
                 setState({
                     speechBubbles: {
                         [itemName]: { isFullyHidden: false, zIndex: zIndexCounter },
@@ -70,11 +70,11 @@ export function makeSpeechBubbleRules(storeHelpers, prendyConcepts) {
                 });
                 zIndexCounter += 1;
             },
-            check: { prop: "isVisible", type: "speechBubbles", becomes: "true" },
-            flow: "positionUi",
+            check: { prop: "isVisible", type: "speechBubbles", becomes: true },
+            step: "positionUi",
         }),
-        // whenShouldRemoveBecomesTrue: addItemEffect({
-        //   onItemEffect({ itemName }) {
+        // whenShouldRemoveBecomesTrue: itemEffect({
+        //   run({ itemName }) {
         //     // removeItem()
         //     removeItem({ name: itemName, type: "speechBubbles" });
         //   },

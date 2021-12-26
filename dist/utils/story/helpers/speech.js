@@ -58,7 +58,7 @@ export function makeSpeechStoryHelpers(storeHelpers, prendyConcepts, prendyStart
             onNextTick(() => {
                 startItemEffect({
                     name: ruleName,
-                    onItemEffect: handlePressButton,
+                    run: handlePressButton,
                     check: { type: "players", prop: "interactButtonPressTime" },
                 });
             });

@@ -6,9 +6,9 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
     const { getState, makeRules, setState } = storeHelpers;
     const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
     const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = makeSafeVidStoreUtils(storeHelpers);
-    return makeRules((addItemEffect) => ({
-        rulesForSettingNewVideoStates: addItemEffect({
-            onItemEffect({ newValue: vidState, itemName, itemState }) {
+    return makeRules(({ itemEffect }) => ({
+        rulesForSettingNewVideoStates: itemEffect({
+            run({ newValue: vidState, itemName, itemState }) {
                 const setItemState = (newState) => setState({ sectionVids: { [itemName]: newState } });
                 const setVidState = (sectionVidState) => setItemState({ sectionVidState });
                 const { safeVidId_playing, safeVidId_waiting } = itemState;
@@ -129,12 +129,12 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                 }
             },
             check: { type: "sectionVids", prop: "sectionVidState" },
-            flow: "sectionVidWantsToPlay",
-            whenToRun: "subscribe",
+            step: "sectionVidWantsToPlay",
+            atStepEnd: true,
         }),
         // wants
-        whenWantedSectionChanges: addItemEffect({
-            onItemEffect({ newValue: wantedSection, itemName, itemState }) {
+        whenWantedSectionChanges: itemEffect({
+            run({ newValue: wantedSection, itemName, itemState }) {
                 if (wantedSection === null || itemState.sectionVidState === "unloaded")
                     return; // don't react if wantedSection changed to null
                 setState({
@@ -146,10 +146,10 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                 });
             },
             check: { type: "sectionVids", prop: "wantedSection" },
-            flow: "sectionVidWantsToPlay",
+            step: "sectionVidWantsToPlay",
         }),
-        whenWantToLoad: addItemEffect({
-            onItemEffect({ itemName, itemState: { sectionVidState } }) {
+        whenWantToLoad: itemEffect({
+            run({ itemName, itemState: { sectionVidState } }) {
                 if (sectionVidState === "unloaded") {
                     setState({
                         sectionVids: {
@@ -167,11 +167,11 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                     });
                 }
             },
-            check: { type: "sectionVids", prop: "wantToLoad", becomes: "true" },
-            flow: "sectionVidWantsToPlay",
+            check: { type: "sectionVids", prop: "wantToLoad", becomes: true },
+            step: "sectionVidWantsToPlay",
         }),
-        whenWantToUnload: addItemEffect({
-            onItemEffect({ itemName, itemState: { sectionVidState } }) {
+        whenWantToUnload: itemEffect({
+            run({ itemName, itemState: { sectionVidState } }) {
                 if (sectionVidState !== "unloaded") {
                     doWhenSectionVidPlaying(itemName, () => {
                         setState({
@@ -189,11 +189,11 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                     setState({ safeVids: { [itemName]: { wantToUnload: false } } });
                 }
             },
-            check: { type: "sectionVids", prop: "wantToUnload", becomes: "true" },
-            flow: "sectionVidWantsToPlay",
+            check: { type: "sectionVids", prop: "wantToUnload", becomes: true },
+            step: "sectionVidWantsToPlay",
         }),
-        whenWantToLoop: addItemEffect({
-            onItemEffect({ itemName, itemState: { sectionVidState } }) {
+        whenWantToLoop: itemEffect({
+            run({ itemName, itemState: { sectionVidState } }) {
                 if (sectionVidState === "beforeLoad" || sectionVidState === "unloaded")
                     return;
                 // get latest state just incase it changed
@@ -206,13 +206,13 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                     },
                 });
             },
-            check: { type: "sectionVids", prop: "wantToLoop", becomes: "true" },
-            flow: "sectionVidWantsToPlay",
+            check: { type: "sectionVids", prop: "wantToLoop", becomes: true },
+            step: "sectionVidWantsToPlay",
         }),
         //
         // when the play and wait vids swap
-        whenPlayVidChanges: addItemEffect({
-            onItemEffect({ newValue: safeVidId_playing, itemName: sectionVidName }) {
+        whenPlayVidChanges: itemEffect({
+            run({ newValue: safeVidId_playing, itemName: sectionVidName }) {
                 // const { nowPlaceName } = getGlobalState();
                 // if (nowPlaceName !== sectionVidName) return;
                 if (!safeVidId_playing)
@@ -243,11 +243,11 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                 }, false /* check initital */);
             },
             check: { type: "sectionVids", prop: "safeVidId_playing" },
-            flow: "sectionVidWantsToPlay2",
-            whenToRun: "subscribe",
+            step: "sectionVidWantsToPlay2",
+            atStepEnd: true,
         }),
-        whenWaitVidChanges: addItemEffect({
-            onItemEffect({ newValue: safeVidId_waiting, itemState }) {
+        whenWaitVidChanges: itemEffect({
+            run({ newValue: safeVidId_waiting, itemState }) {
                 // const { nowPlaceName } = getGlobalState();
                 // if (nowPlaceName !== sectionVidName) return;
                 if (!safeVidId_waiting)
@@ -272,8 +272,8 @@ export function makeSectionVidRules(storeHelpers, prendyArt) {
                 );
             },
             check: { type: "sectionVids", prop: "safeVidId_waiting" },
-            flow: "sectionVidWantsToPlay2",
-            whenToRun: "subscribe",
+            step: "sectionVidWantsToPlay2",
+            atStepEnd: true,
         }),
     }));
 }

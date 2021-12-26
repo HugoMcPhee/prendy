@@ -70,7 +70,7 @@ export const prendyStepNames = [
   "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
 ] as const;
 
-export type FlowName = typeof prendyStepNames[number];
+export type StepName = typeof prendyStepNames[number];
 
 // NOTE the generic types are used to prevent the typescript compiler widneing
 // [K_CharacterName in CharacterName] to [x: string]

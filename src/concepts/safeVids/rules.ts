@@ -2,7 +2,7 @@ import { StoreHelperTypes } from "pietem";
 import { VidState } from ".";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 import { makeVideoElementFromPath } from "./utils";
-import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
+// import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
@@ -20,9 +20,9 @@ export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
-  return makeRules((addItemEffect) => ({
-    rulesForSettingNewVideoStates: addItemEffect({
-      onItemEffect({ newValue: vidState, itemState, itemRefs, itemName }) {
+  return makeRules(({ itemEffect }) => ({
+    rulesForSettingNewVideoStates: itemEffect({
+      run({ newValue: vidState, itemState, itemRefs, itemName }) {
         const { wantedSeekTime, autoplay } = itemState;
         function setItemState(newState: Partial<ItemState<"safeVids">>) {
           setState({ safeVids: { [itemName]: newState } });
@@ -45,7 +45,7 @@ export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
             );
             // uncomment to test videos
             // itemRefs.videoElement &&
-            testAppendVideo(itemRefs.videoElement, itemName, itemName);
+            // testAppendVideo(itemRefs.videoElement, itemName, itemName);
           }
           // NOTE canplay doesn't work on safari?
           itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);
@@ -123,12 +123,12 @@ export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
         }
       },
       check: { type: "safeVids", prop: "vidState" },
-      flow: "safeVidWantsToPlay",
-      whenToRun: "subscribe",
+      step: "safeVidWantsToPlay",
+      atStepEnd: true,
     }),
     // wants
-    whenWantToLoad: addItemEffect({
-      onItemEffect({ itemName, itemState: { vidState } }) {
+    whenWantToLoad: itemEffect({
+      run({ itemName, itemState: { vidState } }) {
         // console.log("want to load");
 
         if (vidState === "unloaded") {
@@ -142,11 +142,11 @@ export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
           setState({ safeVids: { [itemName]: { wantToLoad: false } } });
         }
       },
-      check: { type: "safeVids", prop: "wantToLoad", becomes: "true" },
-      flow: "safeVidWantsToPlay",
+      check: { type: "safeVids", prop: "wantToLoad", becomes: true },
+      step: "safeVidWantsToPlay",
     }),
-    whenWantToUnload: addItemEffect({
-      onItemEffect({ itemName, itemState: { vidState } }) {
+    whenWantToUnload: itemEffect({
+      run({ itemName, itemState: { vidState } }) {
         if (vidState !== "unloaded") {
           setState({
             safeVids: {
@@ -158,39 +158,39 @@ export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
           setState({ safeVids: { [itemName]: { wantToUnload: false } } });
         }
       },
-      check: { type: "safeVids", prop: "wantToUnload", becomes: "true" },
-      flow: "safeVidWantsToPlay",
+      check: { type: "safeVids", prop: "wantToUnload", becomes: true },
+      step: "safeVidWantsToPlay",
     }),
-    whenWantToSeek: addItemEffect({
-      onItemEffect({ newValue: wantedSeekTime, itemName }) {
+    whenWantToSeek: itemEffect({
+      run({ newValue: wantedSeekTime, itemName }) {
         if (wantedSeekTime !== null) {
           setState({ safeVids: { [itemName]: { vidState: "beforeSeek" } } });
         }
       },
       check: { type: "safeVids", prop: "wantedSeekTime" },
-      flow: "safeVidWantsToPlay",
+      step: "safeVidWantsToPlay",
     }),
-    whenWantToPlay: addItemEffect({
-      onItemEffect({ itemName }) {
+    whenWantToPlay: itemEffect({
+      run({ itemName }) {
         setState({
           safeVids: {
             [itemName]: { vidState: "beforePlay", wantToPlay: false },
           },
         });
       },
-      check: { type: "safeVids", prop: "wantToPlay", becomes: "true" },
-      flow: "safeVidWantsToPlay",
+      check: { type: "safeVids", prop: "wantToPlay", becomes: true },
+      step: "safeVidWantsToPlay",
     }),
-    whenWantToPause: addItemEffect({
-      onItemEffect({ itemName }) {
+    whenWantToPause: itemEffect({
+      run({ itemName }) {
         setState({
           safeVids: {
             [itemName]: { vidState: "beforePause", wantToPause: false },
           },
         });
       },
-      check: { type: "safeVids", prop: "wantToPause", becomes: "true" },
-      flow: "safeVidWantsToPlay",
+      check: { type: "safeVids", prop: "wantToPause", becomes: true },
+      step: "safeVidWantsToPlay",
     }),
   }));
 }

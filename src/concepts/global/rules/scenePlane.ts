@@ -21,9 +21,9 @@ export function makeGlobalScenePlaneRules<
 
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
 
-  return makeRules((addItemEffect) => ({
-    whenPlanePositionChanges: addItemEffect({
-      onItemEffect({ newValue: planePos }) {
+  return makeRules(({ itemEffect }) => ({
+    whenPlanePositionChanges: itemEffect({
+      run({ newValue: planePos }) {
         const amountOverEdges = getScenePlaneOverScreenEdgesAmount(planePos);
 
         // FIXME ?Might be better to set the target x an y position based on a safe level for the target zoom
@@ -50,65 +50,65 @@ export function makeGlobalScenePlaneRules<
         setGlobalState({ planePos: newPlanePos });
       },
       check: { prop: "planePos", type: "global" },
-      whenToRun: "derive",
-      flow: "planePosition",
+      atStepEnd: false,
+      step: "planePosition",
     }),
-    whenPlanePositionGoalChanges: addItemEffect({
-      onItemEffect: () => setGlobalState({ planePosIsMoving: true }),
+    whenPlanePositionGoalChanges: itemEffect({
+      run: () => setGlobalState({ planePosIsMoving: true }),
       check: { prop: "planePosGoal", type: "global" },
-      whenToRun: "subscribe",
-      flow: "planePosition",
+      atStepEnd: true,
+      step: "planePosition",
     }),
-    whenPlanePosIsMoving: addItemEffect({
-      onItemEffect({ itemName }) {
+    whenPlanePosIsMoving: itemEffect({
+      run({ itemName }) {
         runMover2d({ name: itemName, type: "global", mover: "planePos" });
       },
-      check: { prop: "planePosIsMoving", type: "global", becomes: "true" },
-      whenToRun: "subscribe",
-      flow: "planePositionStartMovers",
+      check: { prop: "planePosIsMoving", type: "global", becomes: true },
+      atStepEnd: true,
+      step: "planePositionStartMovers",
     }),
-    whenPlaneZoomGoalChanges: addItemEffect({
-      onItemEffect: () => setGlobalState({ planeZoomIsMoving: true }),
+    whenPlaneZoomGoalChanges: itemEffect({
+      run: () => setGlobalState({ planeZoomIsMoving: true }),
       check: { prop: "planeZoomGoal", type: "global" },
-      whenToRun: "subscribe",
-      flow: "planePosition",
+      atStepEnd: true,
+      step: "planePosition",
     }),
-    whenPlaneZoomIsMoving: addItemEffect({
-      onItemEffect({ itemName }) {
+    whenPlaneZoomIsMoving: itemEffect({
+      run({ itemName }) {
         runMover({ name: itemName, type: "global", mover: "planeZoom" });
       },
-      check: { prop: "planeZoomIsMoving", type: "global", becomes: "true" },
-      whenToRun: "subscribe",
-      flow: "planePositionStartMovers",
+      check: { prop: "planeZoomIsMoving", type: "global", becomes: true },
+      atStepEnd: true,
+      step: "planePositionStartMovers",
     }),
-    whenPlaneZoomGoalChangesToUpdatePlanePan: addItemEffect({
-      onItemEffect: () => focusScenePlaneOnFocusedDoll(),
+    whenPlaneZoomGoalChangesToUpdatePlanePan: itemEffect({
+      run: () => focusScenePlaneOnFocusedDoll(),
       check: { prop: "planeZoomGoal", type: "global" },
-      whenToRun: "subscribe",
-      flow: "planePosition",
+      atStepEnd: true,
+      step: "planePosition",
     }),
-    whenPlaneZoomChangesToUpdatePlanePan: addItemEffect({
-      onItemEffect: () => focusScenePlaneOnFocusedDoll(),
+    whenPlaneZoomChangesToUpdatePlanePan: itemEffect({
+      run: () => focusScenePlaneOnFocusedDoll(),
       check: { prop: "planeZoom", type: "global" },
-      // whenToRun: "subscribe",
-      flow: "planePosition",
+      // atStepEnd: true,
+      step: "planePosition",
     }),
-    whenFocusedDollChanges: addItemEffect({
-      onItemEffect: () => focusScenePlaneOnFocusedDoll(),
+    whenFocusedDollChanges: itemEffect({
+      run: () => focusScenePlaneOnFocusedDoll(),
       check: { prop: "focusedDoll", type: "global" },
-      flow: "planePosition",
+      step: "planePosition",
     }),
-    whenScreenResizes: addItemEffect({
-      onItemEffect: () => focusScenePlaneOnFocusedDoll("instant"),
+    whenScreenResizes: itemEffect({
+      run: () => focusScenePlaneOnFocusedDoll("instant"),
       check: { prop: "timeScreenResized", type: "global" },
-      // whenToRun: "subscribe",
-      flow: "planePosition",
+      // atStepEnd: true,
+      step: "planePosition",
     }),
-    whenNowCamChanges: addItemEffect({
-      onItemEffect: () => focusScenePlaneOnFocusedDoll("instant"),
+    whenNowCamChanges: itemEffect({
+      run: () => focusScenePlaneOnFocusedDoll("instant"),
       check: { prop: "nowCamName", type: "places" },
-      // whenToRun: "subscribe",
-      flow: "planePosition",
+      // atStepEnd: true,
+      step: "planePosition",
     }),
   }));
 }

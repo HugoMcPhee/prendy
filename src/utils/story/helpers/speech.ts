@@ -115,7 +115,7 @@ export function makeSpeechStoryHelpers<
       onNextTick(() => {
         startItemEffect({
           name: ruleName,
-          onItemEffect: handlePressButton,
+          run: handlePressButton,
           check: { type: "players", prop: "interactButtonPressTime" },
         });
       });

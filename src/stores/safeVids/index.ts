@@ -31,7 +31,12 @@ export default function safeVids<
 
   function vidNameToPlaceName(vidName: string) {
     // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
-    return vidName.match(/.*?(?=_|$)/i)![0] as A_PlaceName;
+    // return vidName.match(/.*?(?=_|$)/i)![0] as A_PlaceName; // only works with one/first underscore
+    var lastUnderscoreIndex = vidName.lastIndexOf("_");
+    if (lastUnderscoreIndex != -1) {
+      return vidName.substr(0, lastUnderscoreIndex);
+    }
+    return vidName;
   }
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({

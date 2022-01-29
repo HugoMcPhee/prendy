@@ -306,7 +306,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
                     rayHelper.attachToMesh(
                     /*mesh*/ meshRef, 
                     /*direction*/ new Vector3(0, -0.995, 0), 
-                    /*relativeOrigin*/ new Vector3(0, -1, 0), 
+                    /*relativeOrigin*/ new Vector3(0, 0, 0), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
                     /*length*/ 0.33 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
                     );
                     const pick = scene.pickWithRay(ray, (mesh) => {

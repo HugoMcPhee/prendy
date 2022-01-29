@@ -51,6 +51,7 @@ function inRangeForDollMatches(
 export function enableCollisions(theMesh: AbstractMesh) {
   // Enable collision detection on player
   theMesh.ellipsoid = new Vector3(0.6, 1.2, 0.6);
+  theMesh.ellipsoidOffset = new Vector3(0, 1.2, 0);
   theMesh.showBoundingBox = true;
   theMesh.checkCollisions = true;
   theMesh.collisionGroup = 11;
@@ -86,8 +87,9 @@ export function makeDollStoreUtils<
   type StartState_Dolls = PrendyConcepts["dolls"]["startStates"] &
     ReturnType<StoreHelpers["getState"]>["dolls"];
 
-  type ModelNameFromDoll<T_DollName extends DollName> =
-    StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<
+    T_DollName extends DollName
+  > = StartState_Dolls[T_DollName]["modelName"];
 
   function setDollAnimWeight<
     T_DollName extends DollName,
@@ -181,8 +183,12 @@ export function makeDollStoreUtils<
     );
     dollRefs.entriesRef = entries;
 
-    const { meshNames, boneNames, animationNames, materialNames } =
-      modelInfoByName[modelName];
+    const {
+      meshNames,
+      boneNames,
+      animationNames,
+      materialNames,
+    } = modelInfoByName[modelName];
 
     type T_Mesh = typeof meshNames[number];
     type T_BoneName = typeof boneNames[number];
@@ -201,9 +207,9 @@ export function makeDollStoreUtils<
     >;
 
     const skeleton = entries.skeletons[0];
-    const bones = (
-      skeleton?.bones ? keyBy(skeleton.bones, "name", removePrefix) : {}
-    ) as Record<T_BoneName, Bone>;
+    const bones = (skeleton?.bones
+      ? keyBy(skeleton.bones, "name", removePrefix)
+      : {}) as Record<T_BoneName, Bone>;
 
     const aniGroups = keyBy(entries.animationGroups) as Record<
       T_AnimationName,
@@ -260,8 +266,12 @@ export function makeDollStoreUtils<
 
     const { meshRef } = getRefs().dolls[dollName];
     if (!meshRef) return;
-    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } =
-      getState().global.main;
+    const {
+      planePos,
+      planePosGoal,
+      focusedDoll,
+      focusedDollIsInView,
+    } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
 
     // need to get the doll screen position based on the current or safe plane position

@@ -22,6 +22,7 @@ function inRangeForDollMatches(inRangeForDollA, inRangeForDollB) {
 export function enableCollisions(theMesh) {
     // Enable collision detection on player
     theMesh.ellipsoid = new Vector3(0.6, 1.2, 0.6);
+    theMesh.ellipsoidOffset = new Vector3(0, 1.2, 0);
     theMesh.showBoundingBox = true;
     theMesh.checkCollisions = true;
     theMesh.collisionGroup = 11;
@@ -92,13 +93,15 @@ export function makeDollStoreUtils(storeHelpers, _prendyConcepts, prendyStartOpt
         const namePrefix = `clone_${dollName}_${modelName}_`;
         let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, { doNotInstantiate: true });
         dollRefs.entriesRef = entries;
-        const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];
+        const { meshNames, boneNames, animationNames, materialNames, } = modelInfoByName[modelName];
         const rootNode = entries.rootNodes[0];
         const removePrefix = (name) => name.replace(namePrefix, "");
         const meshArray = rootNode.getChildMeshes();
         const meshes = keyBy(meshArray, "name", removePrefix);
         const skeleton = entries.skeletons[0];
-        const bones = ((skeleton === null || skeleton === void 0 ? void 0 : skeleton.bones) ? keyBy(skeleton.bones, "name", removePrefix) : {});
+        const bones = ((skeleton === null || skeleton === void 0 ? void 0 : skeleton.bones)
+            ? keyBy(skeleton.bones, "name", removePrefix)
+            : {});
         const aniGroups = keyBy(entries.animationGroups);
         // NOTE This references the original material, and not duplicated for each doll
         const materials = keyBy(modelRefs.container.materials);
@@ -135,7 +138,7 @@ export function makeDollStoreUtils(storeHelpers, _prendyConcepts, prendyStartOpt
         const { meshRef } = getRefs().dolls[dollName];
         if (!meshRef)
             return;
-        const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } = getState().global.main;
+        const { planePos, planePosGoal, focusedDoll, focusedDollIsInView, } = getState().global.main;
         const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
         // need to get the doll screen position based on the current or safe plane position
         const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({

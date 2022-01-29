@@ -5,7 +5,8 @@ export default function safeVids(prendyArt) {
     function vidNameToPlaceName(vidName) {
         // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
         // return vidName.match(/.*?(?=_|$)/i)![0] as A_PlaceName; // only works with one/first underscore
-        var lastUnderscoreIndex = vidName.lastIndexOf("_");
+        // Jon - https://stackoverflow.com/questions/11134004/regex-that-will-match-the-last-occurrence-of-dot-in-a-string
+        const lastUnderscoreIndex = vidName.lastIndexOf("_");
         if (lastUnderscoreIndex != -1) {
             return vidName.substr(0, lastUnderscoreIndex);
         }

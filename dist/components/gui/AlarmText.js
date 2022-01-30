@@ -29,7 +29,8 @@ const styles = {
     },
     text: {
         color: "rgb(233, 233, 233)",
-        fontFamily: "Jua",
+        // fontFamily: "Jua",
+        fontFamily: "Fleur De Leah",
         fontSize: 90,
         zIndex: 1000,
         textAlign: "center",

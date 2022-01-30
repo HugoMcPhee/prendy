@@ -36,10 +36,16 @@ export function makePrendyStoryUtils<
     A_PlaceName,
     A_SpotNameByPlace
   >(storeHelpers);
-  const { getModelNameFromDoll } = makeDollStoryUtils<
+  const {
+    getModelNameFromDoll,
+    get2DAngleBetweenDolls,
+    get2DAngleFromDollToSpot,
+  } = makeDollStoryUtils<
     StoreHelpers,
     PrendyConcepts,
-    A_DollName
+    A_DollName,
+    A_PlaceName,
+    A_SpotNameByPlace
   >(storeHelpers);
   const {
     doWhenNowCamChanges,
@@ -64,6 +70,8 @@ export function makePrendyStoryUtils<
     get2DAngleFromCharacterToSpot,
     // dolls
     getModelNameFromDoll,
+    get2DAngleBetweenDolls,
+    get2DAngleFromDollToSpot,
     // scene
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,

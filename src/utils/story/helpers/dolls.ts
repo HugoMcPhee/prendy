@@ -70,7 +70,9 @@ export function makeDollStoryHelpers<
   const { getModelNameFromDoll } = makeDollStoryUtils<
     StoreHelpers,
     PrendyConcepts,
-    A_DollName
+    A_DollName,
+    A_PlaceName,
+    A_SpotNameByPlace
   >(storeHelpers);
 
   const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(storeHelpers);

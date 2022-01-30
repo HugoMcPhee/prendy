@@ -26,9 +26,9 @@ import {
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 
 const rangeOptions = {
-  touch: 2,
-  talk: 3,
-  see: 20,
+  touch: 1, // prev 2
+  talk: 2, // prev 3
+  see: 3, // prev 20
 } as const;
 
 export const rangeOptionsQuick = {

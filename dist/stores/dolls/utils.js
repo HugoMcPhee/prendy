@@ -5,9 +5,9 @@ import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import { getDefaultInRangeFunction } from "./indexUtils";
 const rangeOptions = {
-    touch: 2,
-    talk: 3,
-    see: 20,
+    touch: 1,
+    talk: 2,
+    see: 3, // prev 20
 };
 export const rangeOptionsQuick = {
     touch: rangeOptions.touch * rangeOptions.touch,

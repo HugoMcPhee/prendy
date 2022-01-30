@@ -19,6 +19,7 @@ export function makeCharacterStoryUtils<
 
   const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
 
+  // TODO use get2DAngleFromDollToSpot from makeDollStoryUtils
   function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
     character: A_CharacterName,
     place: T_Place,
@@ -38,6 +39,7 @@ export function makeCharacterStoryUtils<
       .angle;
   }
 
+  // TODO use get2DAngleBetweenDolls from makeDollStoryUtils
   function get2DAngleBetweenCharacters(
     charA: A_CharacterName,
     charB: A_CharacterName

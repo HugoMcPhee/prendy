@@ -5,6 +5,7 @@ import { makeSpotStoryUtils } from "../utils/spots";
 export function makeCharacterStoryUtils(storeHelpers) {
     const { getState } = storeHelpers;
     const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
+    // TODO use get2DAngleFromDollToSpot from makeDollStoryUtils
     function get2DAngleFromCharacterToSpot(character, place, spot) {
         const charactersState = getState().characters;
         const dollA = charactersState[character].dollName;
@@ -17,6 +18,7 @@ export function makeCharacterStoryUtils(storeHelpers) {
         return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D))
             .angle;
     }
+    // TODO use get2DAngleBetweenDolls from makeDollStoryUtils
     function get2DAngleBetweenCharacters(charA, charB) {
         const charactersState = getState().characters;
         const dollA = charactersState[charA].dollName;

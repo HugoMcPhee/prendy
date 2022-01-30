@@ -1,15 +1,23 @@
-import { DollName } from "../../../declarations";
+import { subtractPoints } from "chootils/dist/points2d";
+import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
+import { DollName, PlaceName, SpotNameByPlace } from "../../../declarations";
 import {
   PrendyStoreHelpers,
   PlaceholderPrendyConcepts,
 } from "../../../stores/typedStoreHelpers";
+import { makeSpotStoryUtils } from "./spots";
 
 export function makeDollStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyConcepts extends PlaceholderPrendyConcepts,
-  A_DollName extends DollName = DollName
+  A_DollName extends DollName = DollName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
 >(storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
+
+  const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
+
   // const { getState, startItemEffect } = storeHelpers;
   // const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
@@ -25,6 +33,33 @@ export function makeDollStoryUtils<
     return getState().dolls[dollName].modelName as ModelNameFromDoll<
       T_DollName
     >;
+  }
+
+  function get2DAngleFromDollToSpot<T_Place extends A_PlaceName>(
+    dollA: A_DollName,
+    place: T_Place,
+    spot: A_SpotNameByPlace[T_Place]
+  ) {
+    const spotPosition = getSpotPosition(place, spot);
+
+    if (!dollA || !spotPosition) return 0;
+
+    const dollPos = getState().dolls[dollA].position;
+    const dollPos2D = { x: dollPos.z, y: dollPos.x };
+    const spotPos2D = { x: spotPosition.z, y: spotPosition.x };
+    return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D))
+      .angle;
+  }
+
+  function get2DAngleBetweenDolls(dollA: A_DollName, dollB: A_DollName) {
+    if (!dollA || !dollB) return 0;
+
+    const dollAPos = getState().dolls[dollA].position;
+    const dollBPos = getState().dolls[dollB].position;
+    const dollAPos2D = { x: dollAPos.z, y: dollAPos.x };
+    const dollBPos2D = { x: dollBPos.z, y: dollBPos.x };
+    return getSpeedAndAngleFromVector(subtractPoints(dollAPos2D, dollBPos2D))
+      .angle;
   }
 
   // function stickDollToFloor() {
@@ -67,5 +102,9 @@ export function makeDollStoryUtils<
   //   return ruleName;
   // }
 
-  return { getModelNameFromDoll };
+  return {
+    getModelNameFromDoll,
+    get2DAngleFromDollToSpot,
+    get2DAngleBetweenDolls,
+  };
 }

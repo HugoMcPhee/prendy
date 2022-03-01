@@ -69,6 +69,7 @@ export function makeSpeechStoryHelpers<
       zoomAmount?: number;
       lookAtPlayer?: boolean;
       returnToZoomBeforeConversation?: boolean; // remembers the previous zoom instead of going to the default when the convo ends
+      // TODO rename stylesByKeyword or keywordStyles
       stylesBySpecialText?: Record<string, CSSProperties>; // { "golden banana": { color: "yellow" } } // style snippets of text
     }
   ) {
@@ -156,7 +157,6 @@ export function makeSpeechStoryHelpers<
       }
 
       function whenResettingBubbleFocus() {
-
         showSpeechRefs.aSpeechIsShowing = false;
 
         const currentFocusedDoll = getGlobalState().focusedDoll;

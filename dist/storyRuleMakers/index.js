@@ -102,7 +102,7 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
         return onClickInteractButton;
     }
     // the returned function gets run when interact button's clicked
-    function makeOnInteractToTalk(callBacksObject, characterName = characterNames[0]) {
+    function makeOnInteractToTalk(callBacksObject, distanceType = "talk", characterName = characterNames[0]) {
         const onClickInteractButton = () => {
             var _a;
             const usefulStoryStuff = getUsefulStoryStuff();
@@ -115,7 +115,7 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
             const { inRange } = dollState;
             breakableForEach(dollNames, (dollName) => {
                 const callBackToRun = callBacksObject[dollName];
-                const isInTalkRange = inRange[dollName].talk;
+                const isInTalkRange = inRange[dollName][distanceType];
                 if (dollName !== charDollName && isInTalkRange) {
                     callBackToRun === null || callBackToRun === void 0 ? void 0 : callBackToRun(usefulStoryStuff);
                     return true; // break

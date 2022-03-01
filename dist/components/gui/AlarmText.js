@@ -29,8 +29,8 @@ const styles = {
     },
     text: {
         color: "rgb(233, 233, 233)",
-        // fontFamily: "Jua",
-        fontFamily: "Fleur De Leah",
+        fontFamily: "Jua",
+        // fontFamily: "Fleur De Leah", // TODO support alarm text font option, and state or refs, Temporary push for a project
         fontSize: 90,
         zIndex: 1000,
         textAlign: "center",

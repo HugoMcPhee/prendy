@@ -63,40 +63,40 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
       config: { tension: 300, bounce: 0 },
     }));
 
-    const pointerDownEvent = useCallback(
-      (event: React.PointerEvent<HTMLDivElement>) => {
-        local.pointerDownTime = Date.now();
-        const { leftPuck, leftThumbContainer } = refs;
-        if (!leftPuck || !leftThumbContainer) return;
-
-        const coordinates = {
-          x: event.clientX,
-          y: event.clientY,
-        };
-
-        // leftPuck.isVisible = true;
-        local.leftJoystickOffset =
-          coordinates.x - SIZES.leftThumbContainer * 0.5;
-        local.topJoystickOffset =
-          coordinates.y - SIZES.leftThumbContainer * 0.5;
-        local.isDown = true;
-
-        outerPositionSpringApi.start({
-          position: [local.leftJoystickOffset, local.topJoystickOffset],
-          immediate: true,
-        });
-
-        opacitySpringApi.start({
-          circleOpacity: 1.0,
-          outerOpacity: 0.9,
-        });
-
-        setState({
-          players: { main: { virtualControlsPressTime: Date.now() } },
-        });
-      },
-      []
-    );
+    // const pointerDownEvent = useCallback(
+    //   (event: React.PointerEvent<HTMLDivElement>) => {
+    //     local.pointerDownTime = Date.now();
+    //     const { leftPuck, leftThumbContainer } = refs;
+    //     if (!leftPuck || !leftThumbContainer) return;
+    //
+    //     const coordinates = {
+    //       x: event.clientX,
+    //       y: event.clientY,
+    //     };
+    //
+    //     // leftPuck.isVisible = true;
+    //     local.leftJoystickOffset =
+    //       coordinates.x - SIZES.leftThumbContainer * 0.5;
+    //     local.topJoystickOffset =
+    //       coordinates.y - SIZES.leftThumbContainer * 0.5;
+    //     local.isDown = true;
+    //
+    //     outerPositionSpringApi.start({
+    //       position: [local.leftJoystickOffset, local.topJoystickOffset],
+    //       immediate: true,
+    //     });
+    //
+    //     opacitySpringApi.start({
+    //       circleOpacity: 1.0,
+    //       outerOpacity: 0.9,
+    //     });
+    //
+    //     setState({
+    //       players: { main: { virtualControlsPressTime: Date.now() } },
+    //     });
+    //   },
+    //   []
+    // );
 
     useEffect(() => {
       // leftThumbContainer.onPointerUpObservable.add((coordinates) => {});
@@ -193,14 +193,50 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
         });
       };
 
+      const pointerDownEvent = (event: PointerEvent) => {
+        requestAnimationFrame(() => {
+          if (!globalRefs.isHoveringVirtualStickArea) return;
+
+          local.pointerDownTime = Date.now();
+          const { leftPuck, leftThumbContainer } = refs;
+          if (!leftPuck || !leftThumbContainer) return;
+
+          const coordinates = {
+            x: event.clientX,
+            y: event.clientY,
+          };
+
+          // leftPuck.isVisible = true;
+          local.leftJoystickOffset =
+            coordinates.x - SIZES.leftThumbContainer * 0.5;
+          local.topJoystickOffset =
+            coordinates.y - SIZES.leftThumbContainer * 0.5;
+          local.isDown = true;
+
+          outerPositionSpringApi.start({
+            position: [local.leftJoystickOffset, local.topJoystickOffset],
+            immediate: true,
+          });
+
+          opacitySpringApi.start({
+            circleOpacity: 1.0,
+            outerOpacity: 0.9,
+          });
+
+          setState({
+            players: { main: { virtualControlsPressTime: Date.now() } },
+          });
+        });
+      };
+
       window.addEventListener("pointerup", pointerUpEvent);
       window.addEventListener("pointercancel", pointerUpEvent);
-      // window.addEventListener("pointerdown", pointerDownEvent);
+      window.addEventListener("pointerdown", pointerDownEvent);
       window.addEventListener("pointermove", pointerMoveEvent);
       return () => {
         window.removeEventListener("pointerup", pointerUpEvent);
         window.removeEventListener("pointercancel", pointerUpEvent);
-        // window.removeEventListener("pointerdown", pointerDownEvent);
+        window.removeEventListener("pointerdown", pointerDownEvent);
         window.removeEventListener("pointermove", pointerMoveEvent);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -209,10 +245,11 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
     return (
       <div
         id="virtual-stick"
-        onPointerDown={pointerDownEvent}
+        // onPointerDown={pointerDownEvent}
         // onPointerUp={pointerUpEvent}
         style={{
-          pointerEvents: "auto" as const,
+          // pointerEvents: "auto" as const,
+          pointerEvents: "none" as const,
           position: "absolute" as const,
           top: 0,
           left: 0,

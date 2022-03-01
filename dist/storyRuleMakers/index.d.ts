@@ -103,7 +103,7 @@ export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreH
         placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
         camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
         camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>, characterName?: A_CharacterName) => () => void;
+    }) => void; }>, distanceType?: "touch" | "talk", characterName?: A_CharacterName) => () => void;
     makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_3 in A_PlaceName]: Partial<{ [P_TriggerName_2 in A_TriggerNameByPlace[P_PlaceName_3]]: Partial<{ [P_PickupName in A_PickupName]: (usefulStuff: {
         storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
         storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
@@ -242,7 +242,7 @@ export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreH
         camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
     }) => void; }>, options?: {
         characterName?: A_CharacterName | undefined;
-        distanceType?: "touch" | "talk" | undefined;
+        distanceType?: "touch" | "talk" | "see" | undefined;
         whenLeave?: boolean | undefined;
     } | undefined) => {
         stopAll: (...args: any) => any;

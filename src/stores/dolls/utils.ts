@@ -25,10 +25,11 @@ import {
 } from "../typedStoreHelpers";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 
+// TODO add to art options?
 const rangeOptions = {
   touch: 1, // prev 2
   talk: 2, // prev 3
-  see: 3, // prev 20
+  see: 6, // prev 20
 } as const;
 
 export const rangeOptionsQuick = {

@@ -1,4 +1,7 @@
+import "@babylonjs/loaders";
 import { PrendyStoreHelpers } from "./stores/typedStoreHelpers";
+export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d, } from "./utils/babylonjs";
+export { makePrendyStoryUtils } from "./utils/story/utils";
 export { makePrendyStores } from "./stores";
 export { getPrendyOptions } from "./getPrendyOptions";
 export { makePrendyApp } from "./components/PrendyApp";

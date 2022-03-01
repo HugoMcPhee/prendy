@@ -21,6 +21,9 @@ import {
   SegmentNameByPlace,
   SpotNameByPlace,
   WallNameByPlace,
+  SoundFiles,
+  SoundName,
+  BoneNameByModel,
 } from "../../../declarations";
 import {
   PrendyStoreHelpers,
@@ -61,7 +64,10 @@ export function makePrendyStoryHelpers<
   A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace,
   A_MusicFiles extends MusicFiles = MusicFiles,
-  A_MusicName extends MusicName = MusicName
+  A_MusicName extends MusicName = MusicName,
+  A_SoundFiles extends SoundFiles = SoundFiles,
+  A_SoundName extends SoundName = SoundName,
+  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel
 >(
   storeHelpers: StoreHelpers,
   prendyConcepts: PrendyConcepts,
@@ -73,6 +79,8 @@ export function makePrendyStoryHelpers<
   const placeInfoByName = prendyArt.placeInfoByName as A_PlaceInfoByName;
   const musicNames = prendyArt.musicNames as A_MusicName[];
   const musicFiles = prendyArt.musicFiles as A_MusicFiles;
+  const soundNames = prendyArt.soundNames as A_SoundName[];
+  const soundFiles = prendyArt.soundFiles as A_SoundFiles;
 
   const {
     lookAtEachother,
@@ -105,6 +113,7 @@ export function makePrendyStoryHelpers<
     focusOnDoll,
     hideDoll,
     moveDollAt2DAngle,
+    lookAtOtherDoll,
     setDollAnimation,
     setDollPosition,
     setDollRotation,
@@ -112,8 +121,11 @@ export function makePrendyStoryHelpers<
     setDollToSpot,
     springAddToDollRotationY,
     springDollRotationY,
+    pushDollRotationY,
     springDollToSpot,
+    dollLooksAtSpot,
     toggleDollMeshes,
+    getDollBonePosition,
   } = makeDollStoryHelpers<
     StoreHelpers,
     PrendyConcepts,
@@ -127,7 +139,8 @@ export function makePrendyStoryHelpers<
     A_ModelInfoByName,
     A_ModelName,
     A_PlaceName,
-    A_SpotNameByPlace
+    A_SpotNameByPlace,
+    A_BoneNameByModel
   >(storeHelpers, prendyStartOptions, modelInfoByName);
 
   const {
@@ -172,11 +185,19 @@ export function makePrendyStoryHelpers<
     A_WallNameByPlace
   >(storeHelpers, placeInfoByName, characterNames);
 
-  const { playNewMusic, stopAllMusic } = makeSoundStoryHelpers<
+  const {
+    playNewMusic,
+    stopAllMusic,
+    playSound,
+    stopSound,
+    stopAllSounds,
+  } = makeSoundStoryHelpers<
     StoreHelpers,
     A_MusicFiles,
-    A_MusicName
-  >(storeHelpers, musicNames, musicFiles);
+    A_MusicName,
+    A_SoundFiles,
+    A_SoundName
+  >(storeHelpers, musicNames, musicFiles, soundNames, soundFiles);
 
   const {
     hideMiniBubble,
@@ -208,6 +229,7 @@ export function makePrendyStoryHelpers<
     focusOnDoll,
     hideDoll,
     moveDollAt2DAngle,
+    lookAtOtherDoll,
     setDollAnimation,
     setDollPosition,
     setDollRotation,
@@ -215,8 +237,11 @@ export function makePrendyStoryHelpers<
     setDollToSpot,
     springAddToDollRotationY,
     springDollRotationY,
+    pushDollRotationY,
     springDollToSpot,
+    dollLooksAtSpot,
     toggleDollMeshes,
+    getDollBonePosition,
     //players
     enableMovement,
     isHolding,
@@ -232,6 +257,9 @@ export function makePrendyStoryHelpers<
     // sound
     playNewMusic,
     stopAllMusic,
+    playSound,
+    stopSound,
+    stopAllSounds,
     // speech
     hideMiniBubble,
     showAlarmText,

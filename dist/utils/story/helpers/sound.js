@@ -1,10 +1,37 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
-export function makeSoundStoryHelpers(storeHelpers, musicNames, musicFiles) {
+export function makeSoundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles) {
     const { getRefs } = storeHelpers;
     const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
     const globalRefs = getRefs().global.main;
+    // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
+    // Auto load music and play it, and stop other music if it's already playing
+    function playSound(soundName, options) {
+        var _a, _b;
+        const scene = getScene();
+        if (!scene)
+            return;
+        // note could have currentlyPlayingMusic state? and update that
+        const existingSound = globalRefs.sounds[soundName];
+        if (existingSound) {
+            existingSound.loop = (_a = options === null || options === void 0 ? void 0 : options.loop) !== null && _a !== void 0 ? _a : false;
+            existingSound.play();
+            return;
+        }
+        globalRefs.sounds[soundName] = new Sound(soundName, soundFiles[soundName], scene, null, {
+            loop: (_b = options === null || options === void 0 ? void 0 : options.loop) !== null && _b !== void 0 ? _b : false,
+            autoplay: true,
+            spatialSound: false,
+        });
+    }
+    function stopSound(soundName) {
+        const foundSound = globalRefs.sounds[soundName];
+        foundSound === null || foundSound === void 0 ? void 0 : foundSound.stop();
+    }
+    function stopAllSounds() {
+        forEach(soundNames, (soundName) => { var _a; return (_a = globalRefs.sounds[soundName]) === null || _a === void 0 ? void 0 : _a.stop(); });
+    }
     // Auto load music and play it, and stop other music if it's already playing
     function playNewMusic(newMusicName) {
         const scene = getScene();
@@ -31,5 +58,5 @@ export function makeSoundStoryHelpers(storeHelpers, musicNames, musicFiles) {
     function stopAllMusic() {
         forEach(musicNames, (musicName) => { var _a; return (_a = globalRefs.music[musicName]) === null || _a === void 0 ? void 0 : _a.stop(); });
     }
-    return { playNewMusic, stopAllMusic };
+    return { playNewMusic, stopAllMusic, playSound, stopSound, stopAllSounds };
 }

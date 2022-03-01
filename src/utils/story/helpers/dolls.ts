@@ -1,6 +1,9 @@
-import { Vector3 } from "@babylonjs/core";
+import { Space, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
+import {
+  getShortestAngle,
+  getVectorFromSpeedAndAngle,
+} from "chootils/dist/speedAngleDistance2d";
 import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
@@ -18,6 +21,7 @@ import {
   ModelName,
   PlaceName,
   SpotNameByPlace,
+  BoneNameByModel,
 } from "../../../declarations";
 import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
@@ -36,7 +40,8 @@ export function makeDollStoryHelpers<
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
   A_ModelName extends ModelName = ModelName,
   A_PlaceName extends PlaceName = PlaceName,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
+  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel
 >(
   storeHelpers: StoreHelpers,
   // prendyConcepts: PrendyConcepts,
@@ -67,7 +72,11 @@ export function makeDollStoryHelpers<
 
   const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
-  const { getModelNameFromDoll } = makeDollStoryUtils<
+  const {
+    getModelNameFromDoll,
+    get2DAngleBetweenDolls,
+    get2DAngleFromDollToSpot,
+  } = makeDollStoryUtils<
     StoreHelpers,
     PrendyConcepts,
     A_DollName,
@@ -108,6 +117,29 @@ export function makeDollStoryHelpers<
     // setDollRotationY(dollName, newRotation.y); // currently this will replace the meshes  xz rotations TODO have doll 3d rotation state
   }
 
+  function lookAtOtherDoll(
+    dollA: A_DollName,
+    dollB: A_DollName // defaults to playerChaarcter
+  ) {
+    // NOTE could be async
+
+    const angle = get2DAngleBetweenDolls(dollB, dollA);
+    springDollRotationY(dollB, angle);
+  }
+
+  function dollLooksAtSpot<T_PlaceName extends A_PlaceName>({
+    place,
+    spot,
+    doll,
+  }: {
+    place: T_PlaceName;
+    spot: A_SpotNameByPlace[T_PlaceName];
+    doll: A_DollName;
+  }) {
+    const angle = get2DAngleFromDollToSpot(doll, place, spot);
+    springDollRotationY(doll, angle);
+  }
+
   function setDollRotationY(dollName: A_DollName, newRotationY: number) {
     setState({
       dolls: {
@@ -125,15 +157,30 @@ export function makeDollStoryHelpers<
 
   function springAddToDollRotationY(
     dollName: A_DollName,
-    addedRotation: number
+    addedRotation: number,
+    useShortestAngle: boolean = false
   ) {
-    setState((state) => ({
-      dolls: {
-        [dollName]: {
-          rotationYGoal: state.dolls[dollName].rotationYGoal + addedRotation,
+    setState((state) => {
+      state.useShortestAngle;
+
+      const currentAngle = state.dolls[dollName].rotationYGoal;
+
+      let newAngle = currentAngle + addedRotation;
+
+      if (useShortestAngle) {
+        newAngle = currentAngle + getShortestAngle(currentAngle, newAngle);
+      }
+
+      return {
+        dolls: {
+          [dollName]: {
+            rotationYGoal: newAngle,
+            rotationYIsMoving: true,
+            rotationYMoveMode: "spring",
+          },
         },
-      },
-    }));
+      };
+    });
   }
 
   function setDollAnimation<T_Doll extends A_DollName>(
@@ -195,11 +242,10 @@ export function makeDollStoryHelpers<
 
     // FIXME , adding random so the same spot can be set as goal twice
     const newPositionPoint = vector3ToPoint3d(newPositon);
-    newPositionPoint.y += Math.random() * 0.001;
+    newPositionPoint.y += Math.random() * 0.0001;
     setState({
       dolls: {
         [dollName]: {
-          // monkey: {
           positionGoal: newPositionPoint,
           positionMoveMode: "spring",
           // rotationYGoal: useRotation ? newRotation.y : undefined,
@@ -208,7 +254,11 @@ export function makeDollStoryHelpers<
     });
   }
 
-  function moveDollAt2DAngle(dollName: A_DollName, angle: number) {
+  function moveDollAt2DAngle(
+    dollName: A_DollName,
+    angle: number,
+    speed: number = 3
+  ) {
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { positionIsMoving, positionMoveMode } = dollState;
@@ -221,11 +271,41 @@ export function makeDollStoryHelpers<
       });
     }
 
-    let newVelocity = getVectorFromSpeedAndAngle(3, angle);
+    let newVelocity = getVectorFromSpeedAndAngle(speed, angle);
     setState({ dolls: { [dollName]: { rotationYGoal: angle + 180 } } });
     dollRefs.positionMoverRefs.velocity.z = newVelocity.x;
     dollRefs.positionMoverRefs.velocity.x = newVelocity.y;
     dollRefs.positionMoverRefs.velocity.y = -1.5;
+  }
+
+  function pushDollRotationY(
+    dollName: A_DollName,
+    direction: "right" | "left",
+    speed: number = 3
+  ) {
+    const dollState = getState().dolls[dollName];
+    const dollRefs = getRefs().dolls[dollName];
+    const { rotationYIsMoving, rotationYMoveMode } = dollState;
+
+    if (speed === 0) {
+      setState({ dolls: { [dollName]: { rotationYIsMoving: false } } });
+      dollRefs.rotationYMoverRefs.velocity = 0;
+    }
+
+    if (!rotationYIsMoving || rotationYMoveMode !== "push") {
+      setState({
+        dolls: {
+          [dollName]: { rotationYIsMoving: true, rotationYMoveMode: "push" },
+        },
+      });
+    }
+
+    let newVelocity = direction === "right" ? speed : -speed;
+    // setState({ dolls: { [dollName]: { rotationYGoal: angle + 180 } } });
+    dollRefs.rotationYMoverRefs.velocity = newVelocity;
+    // dollRefs.rotationYMoverRefs.velocity.z = newVelocity.x;
+    // dollRefs.rotationYMoverRefs.velocity.x = newVelocity.y;
+    // dollRefs.rotationYMoverRefs.velocity.y = -1.5;
   }
 
   function hideDoll(dollName: A_DollName, shouldHide: boolean = true) {
@@ -266,6 +346,32 @@ export function makeDollStoryHelpers<
     });
   }
 
+  function getDollBonePosition<T_ModelName extends ModelName>({
+    doll,
+    model,
+    bone,
+  }: {
+    doll: DollName;
+    model: T_ModelName; // TODO update to support auto getting the model name from the doll (when typescript supports keeping generic types for functions (with getStte? or something))
+    bone: BoneNameByModel[T_ModelName];
+  }) {
+    // ModelNameFromDoll
+    const dollRefs = getRefs().dolls.dino;
+
+    const dollBone = dollRefs.assetRefs?.bones?.[bone];
+
+    if (dollRefs.meshRef) {
+      dollRefs.meshRef.scaling = new Vector3(1.95, 1.95, -1.95);
+      dollRefs.checkCollisions = false;
+    }
+
+    if (dollBone && dollRefs.meshRef) {
+      let position = dollBone.getPosition(Space.WORLD, dollRefs.meshRef);
+      return position || Vector3.Zero();
+    }
+    return Vector3.Zero();
+  }
+
   return {
     setDollPosition,
     // springDollPosition,
@@ -274,12 +380,16 @@ export function makeDollStoryHelpers<
     setDollRotationY,
     springDollRotationY,
     springAddToDollRotationY,
+    pushDollRotationY,
+    lookAtOtherDoll,
     setDollAnimation,
     focusOnDoll,
     setDollToSpot,
     springDollToSpot,
+    dollLooksAtSpot,
     moveDollAt2DAngle,
     hideDoll,
     toggleDollMeshes,
+    getDollBonePosition,
   };
 }

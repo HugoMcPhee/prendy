@@ -4,6 +4,7 @@ import {
   Camera,
   Mesh,
   PBRMaterial,
+  Scene,
   SceneLoader,
   Skeleton,
   Texture,
@@ -17,9 +18,10 @@ import usePromise from "react-promise-suspense";
 import { makeGetSceneOrEngineUtils } from "./getSceneOrEngine";
 
 export function makeUseModelFile<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
+  // storeHelpers: StoreHelpers
+  getScene: () => Scene | null
 ) {
-  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+  // const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
 
   return function useModelFile<
     T_Names extends {

@@ -1,4 +1,4 @@
-import { Camera, Color3, Color4, Vector3 } from "@babylonjs/core";
+import { Camera, Color3, Color4, FxaaPostProcess, Vector3, } from "@babylonjs/core";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
 import React, { useCallback, useEffect } from "react";
@@ -23,7 +23,7 @@ export function makePrendyApp(storeHelpers, prendyConcepts, prendyStartOptions, 
     //   "cityb",
     //   "beanshop",
     // ]);
-    return function PrendyApp({ children }) {
+    return function PrendyApp({ children, extraScenes }) {
         const globalRefs = getRefs().global.main;
         const scenePlaneCameraRef = useCallback((node) => {
             globalRefs.scenePlaneCamera = node;
@@ -71,20 +71,17 @@ export function makePrendyApp(storeHelpers, prendyConcepts, prendyStartOptions, 
                                 global: { main: { timeScreenResized: Date.now() } },
                             });
                         });
-                        // onNextTick(() => {
-                        //   if (globalRefs.scenes.backdrop) {
-                        //     // const postProcess =
-                        //     new FxaaPostProcess(
-                        //       "fxaa",
-                        //       1.0,
-                        //       globalRefs.scenes.backdrop.activeCamera
-                        //     );
-                        //   }
-                        // });
+                        onNextTick(() => {
+                            if (globalRefs.scenes.backdrop) {
+                                // const postProcess =
+                                new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
+                            }
+                        });
                     } },
                     React.createElement(LoadingModels, null, children),
                     React.createElement("targetCamera", { name: "camera1", position: new Vector3(0, 0, -2), rotation: new Vector3(toRadians(0), toRadians(0), 0), mode: Camera.ORTHOGRAPHIC_CAMERA, ref: scenePlaneCameraRef, layerMask: 23 }),
-                    React.createElement(ScenePlane, null))),
+                    React.createElement(ScenePlane, null)),
+                extraScenes),
             React.createElement(ScreenGuiDom, null)));
     };
 }

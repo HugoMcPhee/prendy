@@ -1,10 +1,15 @@
 {
   "name": "prendy",
-  "version": "0.7.24",
+  "version": "0.8.0",
   "description": "prerendered backdrop games with babylonjs and pietem",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
+    "src"
+  ],
+  "___main": "dist/index.js",
+  "___types": "dist/index.d.ts",
+  "___files": [
     "dist"
   ],
   "scripts": {
@@ -23,9 +28,9 @@
     "@babylonjs/inspector": "5.0.0-alpha.65",
     "@babylonjs/loaders": "5.0.0-alpha.65",
     "@types/react": "^17.0.29",
-    "chootils": "^0.3.3",
+    "chootils": "^0.3.4",
     "pietem": "^0.8.3",
-    "pietem-movers": "^0.5.6",
+    "pietem-movers": "^0.5.7",
     "delay": "^5.0.0",
     "react": "^17.0.2",
     "react-babylonjs": "^3.0.22",

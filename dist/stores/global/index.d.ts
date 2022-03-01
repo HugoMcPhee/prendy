@@ -104,6 +104,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             extraGain: GainNode | null;
         };
         isHoveringPickupButton: boolean;
+        isHoveringVirtualStickArea: boolean;
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
         aConvoIsHappening_timeout: number | null;

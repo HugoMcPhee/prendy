@@ -40,7 +40,8 @@ export const prendyStepNames = [
     "safeVidWantsToPlay",
     // drawing to the screen
     "default",
-    "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
+    "rendering",
+    "overlay", // = painting extra scenes to show ontop of everything
 ];
 // NOTE the generic types are used to prevent the typescript compiler widneing
 // [K_CharacterName in CharacterName] to [x: string]

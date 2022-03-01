@@ -12,7 +12,7 @@ export function makeUsePlace(storeHelpers, prendyStartOptions, prendyArt) {
     const { placeInfoByName, soundFiles } = prendyArt;
     const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
     const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
-    const useModelFile = makeUseModelFile(storeHelpers);
+    const useModelFile = makeUseModelFile(getScene);
     const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel, } = makeUsePlaceUtils(storeHelpers, prendyArt);
     const placesRefs = getRefs().places;
     const addToHelpFixRotationVector = new Vector3(0, Math.PI, Math.PI); // Math.PI same as toRadians(180)?

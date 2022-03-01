@@ -273,6 +273,7 @@ export function makeAllStoryRuleMakers<
   // the returned function gets run when interact button's clicked
   function makeOnInteractToTalk(
     callBacksObject: OnInteractToTalkOptions,
+    distanceType: "touch" | "talk" = "talk",
     characterName: A_CharacterName = characterNames[0]
   ) {
     const onClickInteractButton = () => {
@@ -292,7 +293,7 @@ export function makeAllStoryRuleMakers<
 
       breakableForEach(dollNames, (dollName) => {
         const callBackToRun = callBacksObject[dollName];
-        const isInTalkRange = inRange[dollName].talk;
+        const isInTalkRange = inRange[dollName][distanceType];
         if (dollName !== charDollName && isInTalkRange) {
           callBackToRun?.(usefulStoryStuff);
           return true; // break
@@ -550,7 +551,7 @@ export function makeAllStoryRuleMakers<
     callBacksObject: TouchRulesOptions,
     options?: {
       characterName?: A_CharacterName;
-      distanceType?: "touch" | "talk";
+      distanceType?: "touch" | "talk" | "see";
       whenLeave?: boolean;
     }
   ) {

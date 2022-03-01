@@ -45,7 +45,7 @@ export function makeUsePlace<
 
   const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
   const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
-  const useModelFile = makeUseModelFile(storeHelpers);
+  const useModelFile = makeUseModelFile(getScene);
 
   const {
     loadNowVideosForPlace,

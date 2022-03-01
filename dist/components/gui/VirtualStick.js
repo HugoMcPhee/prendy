@@ -1,5 +1,5 @@
 import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "chootils/dist/speedAngleDistance2d";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 export function makeVirtualStick(storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
@@ -44,33 +44,40 @@ export function makeVirtualStick(storeHelpers) {
             outerOpacity: 0,
             config: { tension: 300, bounce: 0 },
         }));
-        const pointerDownEvent = useCallback((event) => {
-            local.pointerDownTime = Date.now();
-            const { leftPuck, leftThumbContainer } = refs;
-            if (!leftPuck || !leftThumbContainer)
-                return;
-            const coordinates = {
-                x: event.clientX,
-                y: event.clientY,
-            };
-            // leftPuck.isVisible = true;
-            local.leftJoystickOffset =
-                coordinates.x - SIZES.leftThumbContainer * 0.5;
-            local.topJoystickOffset =
-                coordinates.y - SIZES.leftThumbContainer * 0.5;
-            local.isDown = true;
-            outerPositionSpringApi.start({
-                position: [local.leftJoystickOffset, local.topJoystickOffset],
-                immediate: true,
-            });
-            opacitySpringApi.start({
-                circleOpacity: 1.0,
-                outerOpacity: 0.9,
-            });
-            setState({
-                players: { main: { virtualControlsPressTime: Date.now() } },
-            });
-        }, []);
+        // const pointerDownEvent = useCallback(
+        //   (event: React.PointerEvent<HTMLDivElement>) => {
+        //     local.pointerDownTime = Date.now();
+        //     const { leftPuck, leftThumbContainer } = refs;
+        //     if (!leftPuck || !leftThumbContainer) return;
+        //
+        //     const coordinates = {
+        //       x: event.clientX,
+        //       y: event.clientY,
+        //     };
+        //
+        //     // leftPuck.isVisible = true;
+        //     local.leftJoystickOffset =
+        //       coordinates.x - SIZES.leftThumbContainer * 0.5;
+        //     local.topJoystickOffset =
+        //       coordinates.y - SIZES.leftThumbContainer * 0.5;
+        //     local.isDown = true;
+        //
+        //     outerPositionSpringApi.start({
+        //       position: [local.leftJoystickOffset, local.topJoystickOffset],
+        //       immediate: true,
+        //     });
+        //
+        //     opacitySpringApi.start({
+        //       circleOpacity: 1.0,
+        //       outerOpacity: 0.9,
+        //     });
+        //
+        //     setState({
+        //       players: { main: { virtualControlsPressTime: Date.now() } },
+        //     });
+        //   },
+        //   []
+        // );
         useEffect(() => {
             // leftThumbContainer.onPointerUpObservable.add((coordinates) => {});
             const pointerMoveEvent = (event) => {
@@ -151,22 +158,55 @@ export function makeVirtualStick(storeHelpers) {
                     players: { main: { virtualControlsReleaseTime: Date.now() } },
                 });
             };
+            const pointerDownEvent = (event) => {
+                requestAnimationFrame(() => {
+                    if (!globalRefs.isHoveringVirtualStickArea)
+                        return;
+                    local.pointerDownTime = Date.now();
+                    const { leftPuck, leftThumbContainer } = refs;
+                    if (!leftPuck || !leftThumbContainer)
+                        return;
+                    const coordinates = {
+                        x: event.clientX,
+                        y: event.clientY,
+                    };
+                    // leftPuck.isVisible = true;
+                    local.leftJoystickOffset =
+                        coordinates.x - SIZES.leftThumbContainer * 0.5;
+                    local.topJoystickOffset =
+                        coordinates.y - SIZES.leftThumbContainer * 0.5;
+                    local.isDown = true;
+                    outerPositionSpringApi.start({
+                        position: [local.leftJoystickOffset, local.topJoystickOffset],
+                        immediate: true,
+                    });
+                    opacitySpringApi.start({
+                        circleOpacity: 1.0,
+                        outerOpacity: 0.9,
+                    });
+                    setState({
+                        players: { main: { virtualControlsPressTime: Date.now() } },
+                    });
+                });
+            };
             window.addEventListener("pointerup", pointerUpEvent);
             window.addEventListener("pointercancel", pointerUpEvent);
-            // window.addEventListener("pointerdown", pointerDownEvent);
+            window.addEventListener("pointerdown", pointerDownEvent);
             window.addEventListener("pointermove", pointerMoveEvent);
             return () => {
                 window.removeEventListener("pointerup", pointerUpEvent);
                 window.removeEventListener("pointercancel", pointerUpEvent);
-                // window.removeEventListener("pointerdown", pointerDownEvent);
+                window.removeEventListener("pointerdown", pointerDownEvent);
                 window.removeEventListener("pointermove", pointerMoveEvent);
             };
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
-        return (React.createElement("div", { id: "virtual-stick", onPointerDown: pointerDownEvent, 
+        return (React.createElement("div", { id: "virtual-stick", 
+            // onPointerDown={pointerDownEvent}
             // onPointerUp={pointerUpEvent}
             style: {
-                pointerEvents: "auto",
+                // pointerEvents: "auto" as const,
+                pointerEvents: "none",
                 position: "absolute",
                 top: 0,
                 left: 0,

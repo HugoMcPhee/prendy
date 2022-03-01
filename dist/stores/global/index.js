@@ -98,6 +98,7 @@ export default function global(prendyStartOptions, prendyArt) {
         },
         //
         isHoveringPickupButton: false,
+        isHoveringVirtualStickArea: true,
         //
         solidParticleSystems: {},
         //

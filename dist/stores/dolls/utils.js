@@ -4,10 +4,11 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import { getDefaultInRangeFunction } from "./indexUtils";
+// TODO add to art options?
 const rangeOptions = {
     touch: 1,
     talk: 2,
-    see: 3, // prev 20
+    see: 6, // prev 20
 };
 export const rangeOptionsQuick = {
     touch: rangeOptions.touch * rangeOptions.touch,

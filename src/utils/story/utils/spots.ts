@@ -1,5 +1,6 @@
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { PlaceName, SpotNameByPlace } from "../../../declarations";
+import { Vector3 } from "@babylonjs/core";
 
 export function makeSpotStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
@@ -14,7 +15,7 @@ export function makeSpotStoryUtils<
     spot: A_SpotNameByPlace[T_Place]
   ) {
     const placesRefs = getRefs().places;
-    const newPositon = placesRefs[place].spotPositions[spot].clone();
+    const newPositon: Vector3 = placesRefs[place].spotPositions[spot].clone();
     return newPositon;
   }
 
@@ -23,7 +24,7 @@ export function makeSpotStoryUtils<
     spot: A_SpotNameByPlace[T_Place]
   ) {
     const placesRefs = getRefs().places;
-    const newRotation = placesRefs[place].spotRotations[spot].clone();
+    const newRotation: Vector3 = placesRefs[place].spotRotations[spot].clone();
     return newRotation;
   }
 

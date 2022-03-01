@@ -68,6 +68,7 @@ export const prendyStepNames = [
   // drawing to the screen
   "default", // draw components
   "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"
+  "overlay", // = painting extra scenes to show ontop of everything
 ] as const;
 
 export type StepName = typeof prendyStepNames[number];

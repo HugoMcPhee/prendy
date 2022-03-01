@@ -3,6 +3,7 @@ import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../stores/typedSt
 import { PrendyArt, PrendyOptions } from "../declarations";
 declare type Props = {
     children?: ReactNode;
+    extraScenes?: ReactNode;
 };
-export declare function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts>(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): ({ children }: Props) => JSX.Element;
+export declare function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts>(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): ({ children, extraScenes }: Props) => JSX.Element;
 export {};

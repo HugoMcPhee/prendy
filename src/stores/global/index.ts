@@ -165,6 +165,7 @@ export default function global<
     },
     //
     isHoveringPickupButton: false,
+    isHoveringVirtualStickArea: true,
     //
     solidParticleSystems: {} as Record<string, SolidParticleSystem>,
     //

@@ -8,6 +8,7 @@ import {
 } from "../../../declarations";
 //
 import { makeSpotStoryUtils } from "../utils/spots";
+import { makeDollStoryUtils } from "./dolls";
 
 export function makeCharacterStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
@@ -17,9 +18,12 @@ export function makeCharacterStoryUtils<
 >(storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
 
-  const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
+  // const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
+  const {
+    get2DAngleBetweenDolls,
+    get2DAngleFromDollToSpot,
+  } = makeDollStoryUtils(storeHelpers);
 
-  // TODO use get2DAngleFromDollToSpot from makeDollStoryUtils
   function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
     character: A_CharacterName,
     place: T_Place,
@@ -28,15 +32,7 @@ export function makeCharacterStoryUtils<
     const charactersState = getState().characters;
     const dollA = charactersState[character].dollName;
 
-    const spotPosition = getSpotPosition(place, spot);
-
-    if (!dollA || !spotPosition) return 0;
-
-    const dollPos = getState().dolls[dollA].position;
-    const dollPos2D = { x: dollPos.z, y: dollPos.x };
-    const spotPos2D = { x: spotPosition.z, y: spotPosition.x };
-    return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D))
-      .angle;
+    return get2DAngleFromDollToSpot(dollA, place, spot);
   }
 
   // TODO use get2DAngleBetweenDolls from makeDollStoryUtils
@@ -50,12 +46,7 @@ export function makeCharacterStoryUtils<
 
     if (!dollA || !dollB) return 0;
 
-    const dollAPos = getState().dolls[dollA].position;
-    const dollBPos = getState().dolls[dollB].position;
-    const dollAPos2D = { x: dollAPos.z, y: dollAPos.x };
-    const dollBPos2D = { x: dollBPos.z, y: dollBPos.x };
-    return getSpeedAndAngleFromVector(subtractPoints(dollAPos2D, dollBPos2D))
-      .angle;
+    return get2DAngleBetweenDolls(dollA, dollB);
   }
 
   return { get2DAngleFromCharacterToSpot, get2DAngleBetweenCharacters };

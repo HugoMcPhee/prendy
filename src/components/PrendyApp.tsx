@@ -1,4 +1,11 @@
-import { Camera, Color3, Color4, TargetCamera, Vector3 } from "@babylonjs/core";
+import {
+  Camera,
+  Color3,
+  Color4,
+  FxaaPostProcess,
+  TargetCamera,
+  Vector3,
+} from "@babylonjs/core";
 // import { AllTestVideoStuff } from "./AllTestVideoStuff";
 // ScreenGuiDom
 import React, { ReactNode, useCallback, useEffect } from "react";
@@ -19,7 +26,7 @@ import { makeScenePlane } from "./ScenePlane";
 
 loadStyles();
 
-type Props = { children?: ReactNode };
+type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
 export function makePrendyApp<
   StoreHelpers extends PrendyStoreHelpers,
@@ -54,7 +61,7 @@ export function makePrendyApp<
   //   "beanshop",
   // ]);
 
-  return function PrendyApp({ children }: Props) {
+  return function PrendyApp({ children, extraScenes }: Props) {
     const globalRefs = getRefs().global.main;
 
     const scenePlaneCameraRef = useCallback(
@@ -134,16 +141,16 @@ export function makePrendyApp<
                 });
               });
 
-              // onNextTick(() => {
-              //   if (globalRefs.scenes.backdrop) {
-              //     // const postProcess =
-              //     new FxaaPostProcess(
-              //       "fxaa",
-              //       1.0,
-              //       globalRefs.scenes.backdrop.activeCamera
-              //     );
-              //   }
-              // });
+              onNextTick(() => {
+                if (globalRefs.scenes.backdrop) {
+                  // const postProcess =
+                  new FxaaPostProcess(
+                    "fxaa",
+                    1.0,
+                    globalRefs.scenes.backdrop.activeCamera
+                  );
+                }
+              });
             }}
           >
             <LoadingModels>{children}</LoadingModels>
@@ -159,6 +166,7 @@ export function makePrendyApp<
             />
             <ScenePlane />
           </Scene>
+          {extraScenes}
         </Engine>
         <ScreenGuiDom />
       </div>

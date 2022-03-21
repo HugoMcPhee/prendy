@@ -90,7 +90,7 @@ const testArtStuff = {
 };
 const placeholderPrendyConcepts = {
     keyboards: keyboards(),
-    miniBubbles: miniBubbles(),
+    miniBubbles: miniBubbles(testArtStuff),
     pointers: pointers(),
     global: global(TEST_START_OPTIONS, testArtStuff),
     models: models(testArtStuff),

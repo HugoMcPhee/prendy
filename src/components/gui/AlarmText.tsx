@@ -57,5 +57,6 @@ const styles = {
     zIndex: 1000,
     textAlign: "center",
     maxWidth: 800,
+    textShadow: "1px 1px 2px rgb(115, 115, 115)",
   },
 } as const;

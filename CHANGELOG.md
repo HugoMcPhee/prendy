@@ -8,6 +8,16 @@ TODO
 - makeAllStoryRuleMakers with BACKDOP_ART ?
 - setCamera type not limited to place
 - doorsInfo type doesn't autocomplete place name
+- maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
+
+v0.8.1
+
+- trigger rules support different characters
+- changing playerCharacter works :)
+- alarm text has a shadow
+- mini bubbles work for all characters
+- player rotates in direction they're moving when sliding along a wall
+- better walking on slopes :)
 
 v0.8.0
 

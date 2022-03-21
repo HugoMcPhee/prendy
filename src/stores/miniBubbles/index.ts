@@ -1,15 +1,22 @@
-import { CharacterName } from "../../declarations";
+import { CharacterName, PrendyArt } from "../../declarations";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
+import { forEach } from "chootils/dist/loops";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
 
 export default function miniBubbles<
+  A_PrendyArt extends PrendyArt = PrendyArt,
   A_CharacterName extends CharacterName = CharacterName
->() {
-  const state = <T_ItemName extends string>(_itemName: T_ItemName) => ({
+>(prendyArt: A_PrendyArt) {
+  const { characterNames, characterOptions } = prendyArt;
+
+  const state = <T_ItemName extends string>(
+    _itemName: T_ItemName,
+    options?: { character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
+  ) => ({
     isVisible: false,
     isFullyHidden: true,
     text: "❕",
-    forCharacter: "walker" as A_CharacterName | null,
+    forCharacter: options?.character ?? ("walker" as A_CharacterName | null),
     position: defaultPosition(),
   });
 
@@ -19,9 +26,25 @@ export default function miniBubbles<
     videoRef: null as null | HTMLVideoElement, // note: only the source changes, the video element is the same?
   });
 
+  type MiniBubbleStartStates = {
+    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
+  };
+
+  function makeAutmaticCharacterMinibubbleStartStates() {
+    const partialStates = {} as Partial<MiniBubbleStartStates>;
+    forEach(characterNames, (characterName) => {
+      partialStates[characterName] = state(characterName, {
+        character: characterName,
+      });
+    });
+    return partialStates as MiniBubbleStartStates;
+  }
+
   // const startStates: InitialItemsState<typeof state> = {
   const startStates = {
-    walkerMiniBubble: state("walkerMiniBubble"), // NOTE This only works for "walker" at the moment
+    ...makeAutmaticCharacterMinibubbleStartStates(),
+
+    // walkerMiniBubble: state("walkerMiniBubble"), // NOTE This only works for "walker" at the moment
     // foxBubble: { ...state("foxBubble"), forCharacter: "fox" as CharacterName },
     // flyBubble: { ...state("flyBubble"), forCharacter: "fly" as CharacterName },
     // eggBubble: {

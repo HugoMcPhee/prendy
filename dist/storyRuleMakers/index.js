@@ -260,12 +260,14 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
         }));
     }
     function makeTouchRules(callBacksObject, options) {
-        const { characterName = "walker", distanceType = "touch", whenLeave = false, } = options !== null && options !== void 0 ? options : {};
+        const { characterName, distanceType = "touch", whenLeave = false } = options !== null && options !== void 0 ? options : {};
+        const { playerCharacter } = getState().global.main;
+        const charName = characterName || playerCharacter;
         return makeRules(({ itemEffect }) => ({
             whenInRangeChangesToCheckTouch: itemEffect({
                 run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, }) {
                     var _a;
-                    const { dollName: charDollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};
+                    const { dollName: charDollName } = (_a = getCharDollStuff(charName)) !== null && _a !== void 0 ? _a : {};
                     // at the moment runs for every doll instead of just the main character,
                     // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
                     if (!charDollName || changedDollName !== charDollName)
@@ -288,33 +290,39 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                     prop: ["inRange"],
                     type: "dolls",
                 },
-                name: `inRangeStoryRules_${characterName}_${distanceType}_${whenLeave}`,
+                name: `inRangeStoryRules_${charName}_${distanceType}_${whenLeave}`,
                 step: "collisionReaction",
             }),
         }));
     }
     function makeTriggerRules(callBacksObject, options) {
-        const { characterName = "walker", whenLeave = false } = options !== null && options !== void 0 ? options : {};
+        // TODO make dynamic rule?
+        // this won't update the playerCharacter at the moment
+        const { whenLeave = false } = options !== null && options !== void 0 ? options : {};
+        // const { playerCharacter } = getState().global.main;
+        // const charName = characterName || playerCharacter;
         return makeRules(({ itemEffect }) => ({
             whenAtTriggersChanges: itemEffect({
-                run({ newValue: atTriggers, previousValue: prevAtTriggers }) {
+                run({ newValue: atTriggers, previousValue: prevAtTriggers, itemName: characterName, }) {
                     const usefulStoryStuff = getUsefulStoryStuff();
                     const { nowPlaceName } = usefulStoryStuff;
+                    if (!callBacksObject[characterName]) {
+                        return;
+                    }
                     const triggerNames = placeInfoByName[nowPlaceName]
                         .triggerNames;
                     forEach(triggerNames, (triggerName) => {
-                        var _a, _b;
+                        var _a, _b, _c;
                         const justEntered = atTriggers[triggerName] && !prevAtTriggers[triggerName];
                         const justLeft = !atTriggers[triggerName] && prevAtTriggers[triggerName];
                         if ((whenLeave && justLeft) || (!whenLeave && justEntered)) {
-                            (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
+                            (_c = (_b = (_a = callBacksObject[characterName]) === null || _a === void 0 ? void 0 : _a[nowPlaceName]) === null || _b === void 0 ? void 0 : _b[triggerName]) === null || _c === void 0 ? void 0 : _c.call(_b, usefulStoryStuff);
                         }
                     });
                 },
                 check: {
                     prop: ["atTriggers"],
                     type: "characters",
-                    name: characterName,
                 },
                 step: "collisionReaction",
             }),

@@ -107,7 +107,7 @@ export function makePrendyStores<
 >(prendyStartOptions: A_PrendyOptions, prendyArt: A_PrendyArt) {
   return {
     keyboards: keyboards(),
-    miniBubbles: miniBubbles<A_CharacterName>(),
+    miniBubbles: miniBubbles<A_PrendyArt, A_CharacterName>(prendyArt),
     pointers: pointers(),
     global: global<
       A_AnySegmentName,

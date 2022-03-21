@@ -555,11 +555,11 @@ export function makeAllStoryRuleMakers<
       whenLeave?: boolean;
     }
   ) {
-    const {
-      characterName = "walker",
-      distanceType = "touch",
-      whenLeave = false,
-    } = options ?? {};
+    const { characterName, distanceType = "touch", whenLeave = false } =
+      options ?? {};
+
+    const { playerCharacter } = getState().global.main;
+    const charName = characterName || playerCharacter;
 
     return makeRules(({ itemEffect }) => ({
       whenInRangeChangesToCheckTouch: itemEffect({
@@ -569,7 +569,7 @@ export function makeAllStoryRuleMakers<
           itemName: changedDollName,
         }) {
           const { dollName: charDollName } =
-            getCharDollStuff(characterName as A_CharacterName) ?? {};
+            getCharDollStuff(charName as A_CharacterName) ?? {};
           // at the moment runs for every doll instead of just the main character,
           // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
           if (!charDollName || changedDollName !== charDollName) return;
@@ -596,7 +596,7 @@ export function makeAllStoryRuleMakers<
           prop: ["inRange"],
           type: "dolls",
         },
-        name: `inRangeStoryRules_${characterName}_${distanceType}_${whenLeave}`,
+        name: `inRangeStoryRules_${charName}_${distanceType}_${whenLeave}`,
         step: "collisionReaction",
       }),
     }));
@@ -608,9 +608,13 @@ export function makeAllStoryRuleMakers<
 
   type TriggerRulesOptions = Partial<
     {
-      [P_PlaceName in A_PlaceName]: Partial<
+      [P_CharacterName in A_CharacterName]: Partial<
         {
-          [P_TriggerName in A_TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+          [P_PlaceName in A_PlaceName]: Partial<
+            {
+              [P_TriggerName in A_TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+            }
+          >;
         }
       >;
     }
@@ -618,16 +622,30 @@ export function makeAllStoryRuleMakers<
   function makeTriggerRules(
     callBacksObject: TriggerRulesOptions,
     options?: {
-      characterName?: A_CharacterName;
+      // characterName?: A_CharacterName;
       whenLeave?: boolean;
     }
   ) {
-    const { characterName = "walker", whenLeave = false } = options ?? {};
+    // TODO make dynamic rule?
+    // this won't update the playerCharacter at the moment
+    const { whenLeave = false } = options ?? {};
+
+    // const { playerCharacter } = getState().global.main;
+    // const charName = characterName || playerCharacter;
+
     return makeRules(({ itemEffect }) => ({
       whenAtTriggersChanges: itemEffect({
-        run({ newValue: atTriggers, previousValue: prevAtTriggers }) {
+        run({
+          newValue: atTriggers,
+          previousValue: prevAtTriggers,
+          itemName: characterName,
+        }) {
           const usefulStoryStuff = getUsefulStoryStuff();
           const { nowPlaceName } = usefulStoryStuff;
+
+          if (!(callBacksObject as Record<any, any>)[characterName]) {
+            return;
+          }
 
           const triggerNames = placeInfoByName[nowPlaceName]
             .triggerNames as A_AnyTriggerName[];
@@ -639,16 +657,15 @@ export function makeAllStoryRuleMakers<
               !atTriggers[triggerName] && prevAtTriggers[triggerName];
 
             if ((whenLeave && justLeft) || (!whenLeave && justEntered)) {
-              (callBacksObject as Record<any, any>)[nowPlaceName]?.[
-                triggerName
-              ]?.(usefulStoryStuff);
+              (callBacksObject as Record<any, any>)[characterName]?.[
+                nowPlaceName
+              ]?.[triggerName]?.(usefulStoryStuff);
             }
           });
         },
         check: {
           prop: ["atTriggers"],
           type: "characters",
-          name: characterName,
         },
         step: "collisionReaction",
       }),

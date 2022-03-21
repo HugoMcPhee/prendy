@@ -34,6 +34,8 @@ export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
     const theText = useRef<HTMLDivElement>(null);
     const theGoalText = useRef<HTMLDivElement>(null);
 
+    const forCharacter = getState().miniBubbles[name].forCharacter ?? "walker";
+
     const [measuredHeight, setMeasuredHeight] = useState(0);
 
     const refs = {
@@ -87,6 +89,7 @@ export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
 
     const positionMiniBubbleToCharacter = useCallback(() => {
       const { forCharacter } = getState().miniBubbles[name];
+
       if (!forCharacter) return;
       const { dollState, dollName } = getCharDollStuff(forCharacter) ?? {};
       if (!dollState || !dollName) return;
@@ -114,7 +117,7 @@ export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
         positionMiniBubbleToCharacter();
       },
       [
-        { type: ["dolls"], name: "walker", prop: ["positionOnPlaneScene"] },
+        { type: ["dolls"], name: forCharacter, prop: ["positionOnPlaneScene"] },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },

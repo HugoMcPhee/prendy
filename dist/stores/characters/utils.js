@@ -18,6 +18,10 @@ export function makeGetCharDollStuff(storeHelpers) {
     // type MeshNamesFromDoll<T_DollName extends DollName> =
     //   MeshNameByModel[ModelNameFromDoll<T_DollName>];
     return function getCharDollStuff(charName) {
+        if (!getState().characters[charName]) {
+            console.log("charName", charName);
+            console.log(getState().characters);
+        }
         const { dollName } = getState().characters[charName];
         const dollState = getState().dolls[dollName];
         const dollRefs = getRefs().dolls[dollName];

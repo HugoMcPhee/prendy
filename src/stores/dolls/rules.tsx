@@ -1,9 +1,15 @@
 import { PBRMaterial } from "@babylonjs/core";
 import { makeRunMovers } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
-import { samePoints as samePoints3d } from "chootils/dist/points3d";
+import {
+  samePoints as samePoints3d,
+  subtractPointsSafer,
+} from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
-import { getShortestAngle } from "chootils/dist/speedAngleDistance2d";
+import {
+  getShortestAngle,
+  getVectorAngle,
+} from "chootils/dist/speedAngleDistance2d";
 import {
   AnyAnimationName,
   PrendyArt,
@@ -411,6 +417,7 @@ export function makeDollRules<
           const {
             editedPosition,
             positionWasEdited,
+            collidedPosOffset,
           } = setGlobalPositionWithCollisions(
             itemRefs.meshRef,
             newMeshPosition
@@ -418,10 +425,26 @@ export function makeDollRules<
 
           // if a collision cauhed the mesh to not reach the position, update the position state
           if (positionWasEdited) {
+            const shouldChangeAgnle =
+              Math.abs(collidedPosOffset.z) > 0.01 ||
+              Math.abs(collidedPosOffset.x) > 0.01;
+
+            let newYRotation = getState().dolls[dollName].rotationYGoal;
+
+            const positionOffset = subtractPointsSafer(
+              prevPosition,
+              editedPosition
+            );
+            newYRotation = getVectorAngle({
+              x: positionOffset.z,
+              y: positionOffset.x,
+            });
+
             setState(() => ({
               dolls: {
                 [dollName]: {
                   position: vector3ToSafePoint3d(editedPosition),
+                  rotationYGoal: shouldChangeAgnle ? newYRotation : undefined,
                 },
               },
             }));

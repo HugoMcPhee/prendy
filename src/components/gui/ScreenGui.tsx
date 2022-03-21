@@ -1,5 +1,5 @@
 // @refresh-reset
-import React from "react";
+import React, { Fragment } from "react";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import {
   PrendyArt,
@@ -62,9 +62,18 @@ export function makeScreenGui<StoreHelpers extends PrendyStoreHelpers>(
         <LoadingOverlay />
         <AlarmText />
         {characterNames.map((characterName) => (
-          <SpeechBubble name={characterName} key={characterName} />
+          <Fragment key={characterName}>
+            <SpeechBubble
+              name={characterName}
+              key={characterName + "_speechBubble"}
+            />
+            <MiniBubble
+              name={characterName}
+              key={characterName + "_miniBubble"}
+            />
+          </Fragment>
         ))}
-        <MiniBubble name="walkerMiniBubble" />
+        {/*<MiniBubble name="walkerMiniBubble" />*/}
         <ScreenSticker />
         <VirtualStick />
         <VirtualButtons />

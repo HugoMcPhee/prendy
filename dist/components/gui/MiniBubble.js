@@ -7,11 +7,13 @@ export function makeMiniBubble(storeHelpers) {
     const { useStoreEffect, useStore, getState } = storeHelpers;
     const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
     return function MiniBubble({ name }) {
+        var _a;
         const theRectangle = useRef(null);
         const theTextRectangle = useRef(null);
         const theTriangle = useRef(null);
         const theText = useRef(null);
         const theGoalText = useRef(null);
+        const forCharacter = (_a = getState().miniBubbles[name].forCharacter) !== null && _a !== void 0 ? _a : "walker";
         const [measuredHeight, setMeasuredHeight] = useState(0);
         const refs = {
             theRectangle,
@@ -74,7 +76,7 @@ export function makeMiniBubble(storeHelpers) {
         useStoreEffect(() => {
             positionMiniBubbleToCharacter();
         }, [
-            { type: ["dolls"], name: "walker", prop: ["positionOnPlaneScene"] },
+            { type: ["dolls"], name: forCharacter, prop: ["positionOnPlaneScene"] },
             { type: ["global"], name: "main", prop: ["planePos"] },
             { type: ["global"], name: "main", prop: ["planeZoom"] },
             { type: ["story"], name: "main", prop: ["storyPart"] },

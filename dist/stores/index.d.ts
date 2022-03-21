@@ -45,11 +45,13 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         refs: () => {};
     };
     miniBubbles: {
-        state: <T_ItemName extends string>(_itemName: T_ItemName) => {
+        state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
+            character?: string | undefined;
+        } | undefined) => {
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: A_CharacterName | null;
+            forCharacter: string | null;
             position: import("chootils/dist/points2d").Point2D;
         };
         refs: () => {
@@ -57,15 +59,13 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             textRef: any;
             videoRef: HTMLVideoElement | null;
         };
-        startStates: {
-            walkerMiniBubble: {
-                isVisible: boolean;
-                isFullyHidden: boolean;
-                text: string;
-                forCharacter: A_CharacterName | null;
-                position: import("chootils/dist/points2d").Point2D;
-            };
-        };
+        startStates: { [K_CharacterName in A_CharacterName]: {
+            isVisible: boolean;
+            isFullyHidden: boolean;
+            text: string;
+            forCharacter: string | null;
+            position: import("chootils/dist/points2d").Point2D;
+        }; };
     };
     pointers: {
         state: () => {
@@ -120,7 +120,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
                 playerCharacter: A_CharacterName;
                 gravityValue: number;
                 playerMovingPaused: boolean;
-                focusedDoll: A_DollName;
+                focusedDoll: any;
                 focusedDollIsInView: boolean;
             };
         };
@@ -164,7 +164,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             playerCharacter: A_CharacterName;
             gravityValue: number;
             playerMovingPaused: boolean;
-            focusedDoll: A_DollName;
+            focusedDoll: any;
             focusedDollIsInView: boolean;
         };
         refs: () => {
@@ -396,7 +396,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         };
     };
     characters: {
-        startStates: { [K_CharacterName in A_CharacterName]: {
+        startStates: { [K_CharacterName_1 in A_CharacterName]: {
             dollName: string;
             atTriggers: Partial<Record<A_AnyTriggerName, boolean>>;
             atCamCubes: Partial<Record<A_AnyCameraName, boolean>>;
@@ -484,7 +484,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             currentTimeout: number | null;
             videoRef: HTMLVideoElement | null;
         };
-        startStates: { [K_CharacterName_1 in A_CharacterName]: {
+        startStates: { [K_CharacterName_2 in A_CharacterName]: {
             isVisible: boolean;
             isFullyHidden: boolean;
             goalText: string;

@@ -124,7 +124,7 @@ export type DollOptionsPlaceholder<
 
 const placeholderPrendyConcepts = {
   keyboards: keyboards(),
-  miniBubbles: miniBubbles(),
+  miniBubbles: miniBubbles(testArtStuff),
   pointers: pointers(),
   global: global(TEST_START_OPTIONS as any, testArtStuff),
   models: models(testArtStuff),

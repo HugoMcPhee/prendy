@@ -118,18 +118,20 @@ export function makeSpeechStoryHelpers(storeHelpers, prendyConcepts, prendyStart
         });
     }
     function showMiniBubble(text, time = 100000) {
-        setState({ miniBubbles: { walkerMiniBubble: { isVisible: true, text } } });
+        const { playerCharacter } = getState().global.main;
+        setState({ miniBubbles: { [playerCharacter]: { isVisible: true, text } } });
         // 10 second timeout incase the hideMiniBubble() didn't run from leaving a trigger
         clearTimeoutSafe(showMiniBubbleRefs.closeTimeout);
         showMiniBubbleRefs.closeTimeout = setTimeout(() => {
-            setState({ miniBubbles: { walkerMiniBubble: { isVisible: false } } });
+            setState({ miniBubbles: { [playerCharacter]: { isVisible: false } } });
         }, time);
     }
     function hideMiniBubble() {
+        const { playerCharacter } = getState().global.main;
         if (showMiniBubbleRefs.closeTimeout !== null) {
             clearTimeout(showMiniBubbleRefs.closeTimeout);
         }
-        setState({ miniBubbles: { walkerMiniBubble: { isVisible: false } } });
+        setState({ miniBubbles: { [playerCharacter]: { isVisible: false } } });
     }
     async function showAlarmText(text, time) {
         // NOTE alarm text in 'global' instead of project-specific 'story' ?

@@ -1,8 +1,8 @@
 import { makeRunMovers } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
-import { samePoints as samePoints3d } from "chootils/dist/points3d";
+import { samePoints as samePoints3d, subtractPointsSafer, } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
-import { getShortestAngle } from "chootils/dist/speedAngleDistance2d";
+import { getShortestAngle, getVectorAngle, } from "chootils/dist/speedAngleDistance2d";
 import { point3dToVector3, vector3ToSafePoint3d } from "../../utils/babylonjs";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 //
@@ -289,13 +289,22 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                 // }
                 if (itemRefs.checkCollisions) {
                     const newMeshPosition = point3dToVector3(newPosition);
-                    const { editedPosition, positionWasEdited, } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
+                    const { editedPosition, positionWasEdited, collidedPosOffset, } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
                     // if a collision cauhed the mesh to not reach the position, update the position state
                     if (positionWasEdited) {
+                        const shouldChangeAgnle = Math.abs(collidedPosOffset.z) > 0.01 ||
+                            Math.abs(collidedPosOffset.x) > 0.01;
+                        let newYRotation = getState().dolls[dollName].rotationYGoal;
+                        const positionOffset = subtractPointsSafer(prevPosition, editedPosition);
+                        newYRotation = getVectorAngle({
+                            x: positionOffset.z,
+                            y: positionOffset.x,
+                        });
                         setState(() => ({
                             dolls: {
                                 [dollName]: {
                                     position: vector3ToSafePoint3d(editedPosition),
+                                    rotationYGoal: shouldChangeAgnle ? newYRotation : undefined,
                                 },
                             },
                         }));

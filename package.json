@@ -1,15 +1,15 @@
 {
   "name": "prendy",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "prerendered backdrop games with babylonjs and pietem",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "files": [
+  "___main": "src/index.ts",
+  "___types": "src/index.ts",
+  "___files": [
     "src"
   ],
-  "___main": "dist/index.js",
-  "___types": "dist/index.d.ts",
-  "___files": [
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
     "dist"
   ],
   "scripts": {

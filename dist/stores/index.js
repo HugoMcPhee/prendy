@@ -51,7 +51,7 @@ export const prendyStepNames = [
 export function makePrendyStores(prendyStartOptions, prendyArt) {
     return {
         keyboards: keyboards(),
-        miniBubbles: miniBubbles(),
+        miniBubbles: miniBubbles(prendyArt),
         pointers: pointers(),
         global: global(prendyStartOptions, prendyArt),
         models: models(prendyArt),

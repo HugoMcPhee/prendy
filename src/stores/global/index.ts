@@ -67,6 +67,10 @@ export default function global<
     makeAutomaticMusicStartRefs,
     makeAutomaticSoundStartRefs,
   } = makerGlobalStoreIndexUtils(musicNames, soundNames);
+  console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
+  console.log(
+    prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll
+  );
 
   // State
   const state = () => ({
@@ -93,7 +97,9 @@ export default function global<
     playerCharacter: prendyStartOptions.playerCharacter as A_CharacterName, // TODO Move to players ?
     gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
-    focusedDoll: "walker" as A_DollName,
+    focusedDoll:
+      prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll ??
+      ("walker" as A_DollName),
     focusedDollIsInView: false,
     //
     // scene plane

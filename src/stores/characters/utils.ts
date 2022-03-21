@@ -43,6 +43,11 @@ export function makeGetCharDollStuff<
   return function getCharDollStuff<T_CharacterName extends A_CharacterName>(
     charName: T_CharacterName
   ) {
+    if (!getState().characters[charName]) {
+      console.log("charName", charName);
+      console.log(getState().characters);
+    }
+
     const { dollName } = getState().characters[charName];
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];

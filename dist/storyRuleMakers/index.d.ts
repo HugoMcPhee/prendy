@@ -251,7 +251,7 @@ export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreH
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeTriggerRules: (callBacksObject: Partial<{ [P_PlaceName_5 in A_PlaceName]: Partial<{ [P_TriggerName_3 in A_TriggerNameByPlace[P_PlaceName_5]]: (usefulStuff: {
+    makeTriggerRules: (callBacksObject: Partial<{ [P_CharacterName in A_CharacterName]: Partial<{ [P_PlaceName_5 in A_PlaceName]: Partial<{ [P_TriggerName_3 in A_TriggerNameByPlace[P_PlaceName_5]]: (usefulStuff: {
         storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
         storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
         globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
@@ -265,8 +265,7 @@ export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreH
         placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
         camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
         camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>, options?: {
-        characterName?: A_CharacterName | undefined;
+    }) => void; }>; }>; }>, options?: {
         whenLeave?: boolean | undefined;
     } | undefined) => {
         stopAll: (...args: any) => any;

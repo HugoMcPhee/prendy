@@ -1,11 +1,13 @@
-import { CharacterName } from "../../declarations";
+import { CharacterName, PrendyArt } from "../../declarations";
 import { Point2D } from "chootils/dist/points2d";
-export default function miniBubbles<A_CharacterName extends CharacterName = CharacterName>(): {
-    state: <T_ItemName extends string>(_itemName: T_ItemName) => {
+export default function miniBubbles<A_PrendyArt extends PrendyArt = PrendyArt, A_CharacterName extends CharacterName = CharacterName>(prendyArt: A_PrendyArt): {
+    state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
+        character?: string | undefined;
+    } | undefined) => {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: A_CharacterName | null;
+        forCharacter: string | null;
         position: Point2D;
     };
     refs: () => {
@@ -13,15 +15,13 @@ export default function miniBubbles<A_CharacterName extends CharacterName = Char
         textRef: any;
         videoRef: HTMLVideoElement | null;
     };
-    startStates: {
-        walkerMiniBubble: {
-            isVisible: boolean;
-            isFullyHidden: boolean;
-            text: string;
-            forCharacter: A_CharacterName | null;
-            position: Point2D;
-        };
-    };
+    startStates: { [K_CharacterName in A_CharacterName]: {
+        isVisible: boolean;
+        isFullyHidden: boolean;
+        text: string;
+        forCharacter: string | null;
+        position: Point2D;
+    }; };
 };
 export declare type Store_MiniBubbles<T_ItemName extends string, A_CharacterName> = {
     state: () => {

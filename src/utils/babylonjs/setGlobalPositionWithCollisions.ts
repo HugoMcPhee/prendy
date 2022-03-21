@@ -1,6 +1,10 @@
 import { AbstractMesh, Vector3 } from "@babylonjs/core";
 // import { useSpring } from "@react-spring/core";
-import { pointIsZero, subtractPointsSafer } from "chootils/dist/points3d";
+import {
+  Point3D,
+  pointIsZero,
+  subtractPointsSafer,
+} from "chootils/dist/points3d";
 
 export function setGlobalPositionWithCollisions(
   theMesh: AbstractMesh,
@@ -14,13 +18,13 @@ export function setGlobalPositionWithCollisions(
   const movementAmount = newMeshPos.subtract(currentMeshPosition);
 
   const positionDidChange = !movementAmount.equals(Vector3.Zero());
-
+  let collidedPosOffset: Point3D = { x: 0, y: 0, z: 0 };
   if (positionDidChange) {
     theMesh.moveWithCollisions(movementAmount);
     // theMesh.computeWorldMatrix(true);
 
     collidedMeshPos = theMesh.getAbsolutePosition().clone();
-    const collidedPosOffset = subtractPointsSafer(newMeshPos, collidedMeshPos);
+    collidedPosOffset = subtractPointsSafer(newMeshPos, collidedMeshPos);
     positionWasEdited = !pointIsZero(collidedPosOffset);
   }
 
@@ -28,5 +32,6 @@ export function setGlobalPositionWithCollisions(
     editedPosition: collidedMeshPos,
     positionWasEdited,
     positionDidChange,
+    collidedPosOffset,
   };
 }

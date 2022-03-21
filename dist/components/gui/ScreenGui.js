@@ -1,5 +1,5 @@
 // @refresh-reset
-import React from "react";
+import React, { Fragment } from "react";
 import { makeAlarmText } from "./AlarmText";
 import { makeLoadingOverlay } from "./LoadingOverlay";
 import { makeMiniBubble } from "./MiniBubble";
@@ -34,8 +34,9 @@ export function makeScreenGui(storeHelpers, PRENDY_OPTIONS, prendyArt) {
             React.createElement(StoryOverlay, null),
             React.createElement(LoadingOverlay, null),
             React.createElement(AlarmText, null),
-            characterNames.map((characterName) => (React.createElement(SpeechBubble, { name: characterName, key: characterName }))),
-            React.createElement(MiniBubble, { name: "walkerMiniBubble" }),
+            characterNames.map((characterName) => (React.createElement(Fragment, { key: characterName },
+                React.createElement(SpeechBubble, { name: characterName, key: characterName + "_speechBubble" }),
+                React.createElement(MiniBubble, { name: characterName, key: characterName + "_miniBubble" })))),
             React.createElement(ScreenSticker, null),
             React.createElement(VirtualStick, null),
             React.createElement(VirtualButtons, null),

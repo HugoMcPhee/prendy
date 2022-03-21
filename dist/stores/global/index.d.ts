@@ -44,7 +44,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             playerCharacter: A_CharacterName;
             gravityValue: number;
             playerMovingPaused: boolean;
-            focusedDoll: A_DollName;
+            focusedDoll: any;
             focusedDollIsInView: boolean;
         };
     };
@@ -88,7 +88,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
         playerCharacter: A_CharacterName;
         gravityValue: number;
         playerMovingPaused: boolean;
-        focusedDoll: A_DollName;
+        focusedDoll: any;
         focusedDollIsInView: boolean;
     };
     refs: () => {

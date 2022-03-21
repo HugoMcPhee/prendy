@@ -3,59 +3,64 @@ import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 export default function global(prendyStartOptions, prendyArt) {
     const { musicNames, soundNames } = prendyArt;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs, } = makerGlobalStoreIndexUtils(musicNames, soundNames);
+    console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
+    console.log(prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll);
     // State
-    const state = () => ({
-        // segments and section video
-        wantedSegmentWhenNextPlaceLoads: null,
-        nextSegmentNameWhenVidPlays: null,
-        wantedSegmentNameAtLoop: null,
-        wantedSegmentName: null,
-        nowSegmentName: prendyStartOptions.segment,
-        wantToLoop: false,
-        // TODO? move nowCamName etc to here, since never change cam for non-now place
-        //
-        // changing places
-        modelNamesLoaded: [],
-        newPlaceLoaded: false,
-        isLoadingBetweenPlaces: true,
-        nowPlaceName: prendyStartOptions.place,
-        readyToSwapPlace: false,
-        nextPlaceName: null,
-        loadingOverlayToggled: true,
-        loadingOverlayFullyShowing: true,
-        //
-        // player
-        playerCharacter: prendyStartOptions.playerCharacter,
-        gravityValue: 5,
-        playerMovingPaused: false,
-        focusedDoll: "walker",
-        focusedDollIsInView: false,
-        //
-        // scene plane
-        ...mover2dState("planePos"),
-        ...moverState("planeZoom", {
-            value: prendyStartOptions.zoomLevels.default,
-            valueGoal: prendyStartOptions.zoomLevels.default,
-        }),
-        planePosMoveConfigName: "default",
-        //
-        // interacting
-        timeScreenResized: Date.now(),
-        interactButtonPressTime: 0,
-        // story
-        heldPickups: prendyStartOptions.heldPickups,
-        storyOverlayToggled: false,
-        alarmTextIsVisible: false,
-        alarmText: "⚠ wobble detected ⚠",
-        //
-        // meta
-        aSpeechBubbleIsShowing: false,
-        aConvoIsHappening: false,
-        //
-        frameTick: Date.now(),
-        //
-        debugMessage: "",
-    });
+    const state = () => {
+        var _a;
+        return ({
+            // segments and section video
+            wantedSegmentWhenNextPlaceLoads: null,
+            nextSegmentNameWhenVidPlays: null,
+            wantedSegmentNameAtLoop: null,
+            wantedSegmentName: null,
+            nowSegmentName: prendyStartOptions.segment,
+            wantToLoop: false,
+            // TODO? move nowCamName etc to here, since never change cam for non-now place
+            //
+            // changing places
+            modelNamesLoaded: [],
+            newPlaceLoaded: false,
+            isLoadingBetweenPlaces: true,
+            nowPlaceName: prendyStartOptions.place,
+            readyToSwapPlace: false,
+            nextPlaceName: null,
+            loadingOverlayToggled: true,
+            loadingOverlayFullyShowing: true,
+            //
+            // player
+            playerCharacter: prendyStartOptions.playerCharacter,
+            gravityValue: 5,
+            playerMovingPaused: false,
+            focusedDoll: (_a = prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll) !== null && _a !== void 0 ? _a : "walker",
+            focusedDollIsInView: false,
+            //
+            // scene plane
+            ...mover2dState("planePos"),
+            ...moverState("planeZoom", {
+                value: prendyStartOptions.zoomLevels.default,
+                valueGoal: prendyStartOptions.zoomLevels.default,
+            }),
+            planePosMoveConfigName: "default",
+            //
+            // interacting
+            timeScreenResized: Date.now(),
+            interactButtonPressTime: 0,
+            // story
+            heldPickups: prendyStartOptions.heldPickups,
+            storyOverlayToggled: false,
+            alarmTextIsVisible: false,
+            alarmText: "⚠ wobble detected ⚠",
+            //
+            // meta
+            aSpeechBubbleIsShowing: false,
+            aConvoIsHappening: false,
+            //
+            frameTick: Date.now(),
+            //
+            debugMessage: "",
+        });
+    };
     // Refs
     const refs = () => ({
         backdropVideoTex: null,

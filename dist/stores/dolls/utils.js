@@ -103,7 +103,7 @@ export function makeDollStoreUtils(storeHelpers, _prendyConcepts, prendyStartOpt
         const bones = ((skeleton === null || skeleton === void 0 ? void 0 : skeleton.bones)
             ? keyBy(skeleton.bones, "name", removePrefix)
             : {});
-        const aniGroups = keyBy(entries.animationGroups);
+        const aniGroups = keyBy(entries.animationGroups, "name", (name) => name.replace(namePrefix, ""));
         // NOTE This references the original material, and not duplicated for each doll
         const materials = keyBy(modelRefs.container.materials);
         const assetRefs = {

@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { CSSProperties } from "react";
 import { PrendyArt, CharacterName } from "../../declarations";
 export default function speechBubbles<A_PrendyArt extends PrendyArt = PrendyArt, A_CharacterName extends CharacterName = CharacterName>(prendyArt: A_PrendyArt): {
@@ -23,7 +24,7 @@ export default function speechBubbles<A_PrendyArt extends PrendyArt = PrendyArt,
     refs: () => {
         bubbleRef: any;
         textRef: any;
-        currentTimeout: number | null;
+        currentTimeout: NodeJS.Timeout | null;
         videoRef: HTMLVideoElement | null;
     };
     startStates: { [K_CharacterName in A_CharacterName]: {

@@ -137,9 +137,9 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                 .triggerNames;
             // NOTE Could b breakable if only checking one trigger
             forEach(triggerNames, (triggerName) => {
-                var _a, _b, _c;
+                var _a, _b;
                 if (atTriggers[triggerName]) {
-                    const whatToDo = (_c = (_b = (_a = callBacksObject) === null || _a === void 0 ? void 0 : _a[nowPlaceName]) === null || _b === void 0 ? void 0 : _b[triggerName]) === null || _c === void 0 ? void 0 : _c[pickupName];
+                    const whatToDo = (_b = (_a = callBacksObject === null || callBacksObject === void 0 ? void 0 : callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName]) === null || _b === void 0 ? void 0 : _b[pickupName];
                     if (whatToDo) {
                         whatToDo(usefulStoryStuff);
                         didInteractWithSomething = true;
@@ -153,13 +153,13 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
     // the returned function gets run onClick in the pickup picture button gui
     function makeOnUsePickupGenerally(callBacksObject) {
         const onClickPickupButton = (pickupName) => {
-            var _a, _b;
+            var _a;
             const usefulStoryStuff = getUsefulStoryStuff();
             const { aConvoIsHappening } = usefulStoryStuff.globalState;
             if (aConvoIsHappening)
                 return;
             // NOTE this should only run if an item wasn't just used with a trigger or a doll
-            (_b = (_a = callBacksObject) === null || _a === void 0 ? void 0 : _a[pickupName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
+            (_a = callBacksObject === null || callBacksObject === void 0 ? void 0 : callBacksObject[pickupName]) === null || _a === void 0 ? void 0 : _a.call(callBacksObject, usefulStoryStuff);
         };
         return onClickPickupButton;
     }

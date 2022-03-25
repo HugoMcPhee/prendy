@@ -212,10 +212,9 @@ export function makeDollStoreUtils<
       ? keyBy(skeleton.bones, "name", removePrefix)
       : {}) as Record<T_BoneName, Bone>;
 
-    const aniGroups = keyBy(entries.animationGroups) as Record<
-      T_AnimationName,
-      AnimationGroup
-    >;
+    const aniGroups = keyBy(entries.animationGroups, "name", (name) =>
+      name.replace(namePrefix, "")
+    ) as Record<T_AnimationName, AnimationGroup>;
 
     // NOTE This references the original material, and not duplicated for each doll
     const materials = keyBy(modelRefs.container.materials) as Record<

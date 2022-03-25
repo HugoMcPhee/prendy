@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference types="react" />
 import { AnimationNameByModel, AnyAnimationName, AnyCameraName, AnySegmentName, AnySpotName, AnyTriggerName, PrendyArt, PrendyOptions, BoneNameByModel, CameraNameByPlace, CharacterName, CharacterOptions, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PickupName, PlaceInfoByName, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../declarations";
 export declare const prendyStepNames: readonly ["safeVidStateUpdates", "sectionVidStateUpdates", "respondToNewPlace", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "planePosition", "planePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSection", "sectionVidWantsToPlay", "sectionVidWantsToPlay2", "safeVidWantsToPlay", "default", "rendering", "overlay"];
@@ -183,7 +184,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             isHoveringVirtualStickArea: boolean;
             solidParticleSystems: Record<string, import("@babylonjs/core").SolidParticleSystem>;
             timerSpeed: number;
-            aConvoIsHappening_timeout: number | null;
+            aConvoIsHappening_timeout: NodeJS.Timeout | null;
             camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
             onPickupButtonClick: ((pickupName: any) => void) | null;
             hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
@@ -453,9 +454,9 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         };
         refs: () => {
             walkSpeed: number;
-            canJumpTimeout: number | null;
-            canShowVirtualButtonsTimeout: number | null;
-            canHideVirtualButtonsTimeout: number | null;
+            canJumpTimeout: NodeJS.Timeout | null;
+            canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
+            canHideVirtualButtonsTimeout: NodeJS.Timeout | null;
         };
     };
     speechBubbles: {
@@ -481,7 +482,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         refs: () => {
             bubbleRef: any;
             textRef: any;
-            currentTimeout: number | null;
+            currentTimeout: NodeJS.Timeout | null;
             videoRef: HTMLVideoElement | null;
         };
         startStates: { [K_CharacterName_2 in A_CharacterName]: {

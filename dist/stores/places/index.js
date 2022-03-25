@@ -14,13 +14,13 @@ export default function places(prendyArt) {
     const placeNames = prendyArt.placeNames;
     // State
     const state = (placeName) => {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         return {
             wantedCamWhenNextPlaceLoads: null,
             nextCamNameWhenVidPlays: null,
             wantedCamNameAtLoop: null,
             wantedCamName: null,
-            nowCamName: (_d = (_c = (_b = (_a = placeInfoByName) === null || _a === void 0 ? void 0 : _a[placeName]) === null || _b === void 0 ? void 0 : _b.cameraNames) === null || _c === void 0 ? void 0 : _c[0]) !== null && _d !== void 0 ? _d : "testItemCamName", // if state() is called with a random itemName
+            nowCamName: (_c = (_b = (_a = placeInfoByName === null || placeInfoByName === void 0 ? void 0 : placeInfoByName[placeName]) === null || _a === void 0 ? void 0 : _a.cameraNames) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : "testItemCamName", // if state() is called with a random itemName
         };
     };
     // Refs

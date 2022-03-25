@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { AnyAnimationName, PrendyOptions } from "../../declarations";
 import { Point2D } from "chootils/dist/points2d";
 export default function players<A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_PrendyOptions extends PrendyOptions = PrendyOptions>(prendyStartOptions: A_PrendyOptions): {
@@ -41,8 +42,8 @@ export default function players<A_AnyAnimationName extends AnyAnimationName = An
     };
     refs: () => {
         walkSpeed: number;
-        canJumpTimeout: number | null;
-        canShowVirtualButtonsTimeout: number | null;
-        canHideVirtualButtonsTimeout: number | null;
+        canJumpTimeout: NodeJS.Timeout | null;
+        canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
+        canHideVirtualButtonsTimeout: NodeJS.Timeout | null;
     };
 };

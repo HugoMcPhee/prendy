@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
 import { AnySegmentName, PrendyArt, PrendyOptions, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName } from "../../declarations";
 import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
@@ -107,7 +108,7 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
         isHoveringVirtualStickArea: boolean;
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
-        aConvoIsHappening_timeout: number | null;
+        aConvoIsHappening_timeout: NodeJS.Timeout | null;
         camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;

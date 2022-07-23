@@ -2,7 +2,7 @@ import { AbstractMesh } from "@babylonjs/core";
 import { CharacterName } from "../../declarations";
 import {
   PrendyStoreHelpers,
-  // PlaceholderPrendyConcepts,
+  // PlaceholderPrendyStores,
 } from "../typedStoreHelpers";
 
 // async function testAnimWeights() {
@@ -22,8 +22,8 @@ export function makeGetCharDollStuff<
   // NOTE TODO all these types need to be made inside the places using them (like story helpers)
   // And getCharDollStuff there too
 
-  // type StartState_Characters = typeof prendyConcepts.characters.startStates;
-  // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
+  // type StartState_Characters = typeof prendyStores.characters.startStates;
+  // type StartState_Dolls = typeof prendyStores.dolls.startStates;
 
   // type DollNameFromCharacter<T_CharacterName extends CharacterName> =
   //   StartState_Characters[T_CharacterName]["dollName"];

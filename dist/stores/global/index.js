@@ -1,10 +1,10 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState, } from "pietem-movers";
 import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
-export default function global(prendyStartOptions, prendyArt) {
-    const { musicNames, soundNames } = prendyArt;
-    const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs, } = makerGlobalStoreIndexUtils(musicNames, soundNames);
+export default function global(prendyStartOptions, prendyAssets) {
+    const { musicNames, soundNames } = prendyAssets;
+    const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = makerGlobalStoreIndexUtils(musicNames, soundNames);
     console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
-    console.log(prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll);
+    console.log(prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll);
     // State
     const state = () => {
         var _a;
@@ -32,7 +32,7 @@ export default function global(prendyStartOptions, prendyArt) {
             playerCharacter: prendyStartOptions.playerCharacter,
             gravityValue: 5,
             playerMovingPaused: false,
-            focusedDoll: (_a = prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll) !== null && _a !== void 0 ? _a : "walker",
+            focusedDoll: (_a = prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll) !== null && _a !== void 0 ? _a : "walker",
             focusedDollIsInView: false,
             //
             // scene plane

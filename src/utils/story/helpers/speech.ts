@@ -6,7 +6,7 @@ import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import { makeSpeechBubblesStoreUtils } from "../../../stores/speechBubbles/utils";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import { PrendyOptions, CharacterName } from "../../../declarations";
 import { clearTimeoutSafe } from "../../../utils";
@@ -29,32 +29,27 @@ const showMiniBubbleRefs = {
 
 export function makeSpeechStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName
 >(
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
+  prendyStores: PrendyStores,
   prendyStartOptions: A_PrendyOptions,
   _characterNames: readonly A_CharacterName[]
 ) {
-  const {
-    getState,
-    onNextTick,
-    setState,
-    startItemEffect,
-    stopEffect,
-  } = storeHelpers;
+  const { getState, onNextTick, setState, startItemEffect, stopEffect } =
+    storeHelpers;
 
   const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
 
   const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(storeHelpers);
   const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(
     storeHelpers,
-    prendyConcepts
+    prendyStores
   );
 
-  type SpeechBubbleName = keyof PrendyConcepts["speechBubbles"]["startStates"];
+  type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
 
   const SPEECH_ZOOM_AMOUNT = 1.2;
   const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time

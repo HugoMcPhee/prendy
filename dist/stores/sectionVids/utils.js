@@ -13,12 +13,12 @@ export function makeGetSectionVidVideo(storeHelpers) {
         return backdropVidRefs.videoElement;
     };
 }
-export function makeSectionVidStoreUtils(storeHelpers, prendyArt) {
+export function makeSectionVidStoreUtils(storeHelpers, prendyAssets) {
     const { getState, startItemEffect, stopEffect } = storeHelpers;
-    const { placeInfoByName } = prendyArt;
+    const { placeInfoByName } = prendyAssets;
     const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
     const getSectionVidVideo = makeGetSectionVidVideo(storeHelpers);
-    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(storeHelpers, prendyArt);
+    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(storeHelpers, prendyAssets);
     // __________________________
     // temporary rules
     async function doWhenSectionVidPlayingAsync(sectionVidId) {

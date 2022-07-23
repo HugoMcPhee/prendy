@@ -1,9 +1,9 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, prendyArt) {
+export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, prendyAssets) {
     const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
-    const { placeInfoByName } = prendyArt;
+    const { placeInfoByName } = prendyAssets;
     const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
@@ -19,7 +19,7 @@ export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, pren
                 // Also listen to dolls positions, and return if not the same dollNAme (easier than dynamic rules for now)
                 if (!itemRefs.meshRef)
                     return;
-                const { nowPlaceName, loadingOverlayToggled, focusedDoll, } = getState().global.main;
+                const { nowPlaceName, loadingOverlayToggled, focusedDoll } = getState().global.main;
                 const nowPlaceInfo = placeInfoByName[nowPlaceName];
                 const triggerNames = nowPlaceInfo.triggerNames;
                 const cameraNames = nowPlaceInfo.cameraNames;
@@ -108,7 +108,7 @@ export function makeCharacterDynamicRules(storeHelpers, prendyStartOptions, pren
     }));
 }
 // FIXME
-// maybe allow concepto to run 'addedOrRemoved' rules for initialState?
+// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers) {
     const { getState } = storeHelpers;
@@ -129,9 +129,9 @@ export function makeStartDynamicCharacterRulesForInitialState(characterDynamicRu
         };
     };
 }
-export function makeCharacterRules(storeHelpers, prendyArt) {
+export function makeCharacterRules(storeHelpers, prendyAssets) {
     const { makeRules, getState, setState } = storeHelpers;
-    const { placeInfoByName } = prendyArt;
+    const { placeInfoByName } = prendyAssets;
     return makeRules(({ itemEffect, effect }) => ({
         // should be a  dynamic rule ?
         whenCameraChangesForPlanePosition: effect({

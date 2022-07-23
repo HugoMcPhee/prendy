@@ -1,9 +1,9 @@
 import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalVideoRules(storeHelpers, _prendyConcepts, _prendyStartOptions, prendyArt) {
+export function makeGlobalVideoRules(storeHelpers, _prendyStores, _prendyStartOptions, prendyAssets) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
-    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop, } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(storeHelpers, prendyArt);
+    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeSectionVidStoreUtils(storeHelpers, prendyAssets);
+    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(storeHelpers, prendyAssets);
     return makeRules(({ itemEffect, effect }) => ({
         whenWantToChooseVideoSection: effect({
             run() {

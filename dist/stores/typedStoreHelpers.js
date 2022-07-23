@@ -1,7 +1,7 @@
 import { createStoreHelpers } from "pietem";
 import { prendyStepNames } from ".";
 import { getPrendyOptions } from "../getPrendyOptions";
-import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
+import { story_fake } from "../storyRuleMakers/fakeStoryStore";
 import characters from "./characters";
 import dolls from "./dolls";
 import global from "./global";
@@ -88,7 +88,7 @@ const testArtStuff = {
         characterB: { doll: "dollB", font: "fontA" },
     },
 };
-const placeholderPrendyConcepts = {
+const placeholderPrendyStores = {
     keyboards: keyboards(),
     miniBubbles: miniBubbles(testArtStuff),
     pointers: pointers(),
@@ -104,8 +104,8 @@ const placeholderPrendyConcepts = {
     //
     story: story_fake(),
 };
-// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyConcepts, {
-const storeHelpers = createStoreHelpers(placeholderPrendyConcepts, {
+// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyStores, {
+const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
     stepNames: prendyStepNames,
     dontSetMeta: true,
 });

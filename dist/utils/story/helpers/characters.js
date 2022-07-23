@@ -2,7 +2,7 @@ import { makeGetCharDollStuff } from "../../../stores/characters/utils";
 import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import { makeCharacterStoryUtils } from "../utils/characters";
 import { makeDollStoryHelpers } from "./dolls";
-export function makeCharacterStoryHelpers(storeHelpers, prendyConcepts, prendyStartOptions, modelInfoByName, characterNames) {
+export function makeCharacterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames) {
     const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
     const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
     const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(storeHelpers);

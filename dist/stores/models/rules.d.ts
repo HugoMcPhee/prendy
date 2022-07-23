@@ -1,6 +1,6 @@
-import { PrendyArt } from "../../declarations";
+import { PrendyAssets } from "../../declarations";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
-export declare function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyArt: PrendyArt): {
+export declare function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

@@ -4,7 +4,7 @@ import { forEach } from "chootils/dist/loops";
 import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import {
-  PrendyArt,
+  PrendyAssets,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
@@ -25,15 +25,13 @@ export function testAppendVideo(
 
 export function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName } = prendyArt;
+  const { placeInfoByName } = prendyAssets;
 
-  const {
-    doWhenSectionVidPlayingAsync,
-    getSectionForPlace,
-  } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
+  const { doWhenSectionVidPlayingAsync, getSectionForPlace } =
+    makeSectionVidStoreUtils(storeHelpers, prendyAssets);
 
   const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
 
@@ -59,11 +57,8 @@ export function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
   // }
 
   async function loadNowVideosForPlace() {
-    const {
-      nowPlaceName,
-      nowSegmentName,
-      wantedSegmentName,
-    } = getState().global.main;
+    const { nowPlaceName, nowSegmentName, wantedSegmentName } =
+      getState().global.main;
     const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
 
     const wantedSection = getSectionForPlace(

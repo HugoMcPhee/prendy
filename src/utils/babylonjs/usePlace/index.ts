@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   ModelInfoByName,
   PlaceName,
@@ -13,7 +13,7 @@ import {
 import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import { makeUseModelFile } from "../../../utils/babylonjs/useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
@@ -22,7 +22,7 @@ import { makeUsePlaceUtils } from "./utils";
 
 export function makeUsePlace<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
   // PrendyOptions extends PrendyOptionsUntyped,
@@ -38,10 +38,10 @@ export function makeUsePlace<
 >(
   storeHelpers: StoreHelpers,
   prendyStartOptions: A_PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName, soundFiles } = prendyArt;
+  const { placeInfoByName, soundFiles } = prendyAssets;
 
   const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
   const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
@@ -51,7 +51,7 @@ export function makeUsePlace<
     loadNowVideosForPlace,
     loadProbeImagesForPlace,
     makeCameraFromModel,
-  } = makeUsePlaceUtils(storeHelpers, prendyArt);
+  } = makeUsePlaceUtils(storeHelpers, prendyAssets);
 
   const placesRefs = getRefs().places;
 
@@ -75,9 +75,8 @@ export function makeUsePlace<
       wallNames,
     } = placeInfo;
 
-    const { container, meshes, cameras, transformNodes } = useModelFile<any>(
-      modelFile
-    );
+    const { container, meshes, cameras, transformNodes } =
+      useModelFile<any>(modelFile);
 
     useEffect(() => {
       // this runs after useModelFile finished

@@ -5,7 +5,7 @@ import {
   AnySegmentName,
   AnySpotName,
   AnyTriggerName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   BoneNameByModel,
   CameraNameByPlace,
@@ -83,7 +83,7 @@ export function makePrendyStores<
   A_CharacterName extends CharacterName = CharacterName,
   A_PlaceName extends PlaceName = PlaceName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
@@ -104,14 +104,14 @@ export function makePrendyStores<
   A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
   A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
   A_CharacterOptions extends CharacterOptions = CharacterOptions
->(prendyStartOptions: A_PrendyOptions, prendyArt: A_PrendyArt) {
+>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
   return {
     keyboards: keyboards(),
-    miniBubbles: miniBubbles<A_PrendyArt, A_CharacterName>(prendyArt),
+    miniBubbles: miniBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
     pointers: pointers(),
     global: global<
       A_AnySegmentName,
-      A_PrendyArt,
+      A_PrendyAssets,
       A_PrendyOptions,
       A_CharacterName,
       A_DollName,
@@ -119,41 +119,41 @@ export function makePrendyStores<
       A_PickupName,
       A_PlaceInfoByName,
       A_PlaceName
-    >(prendyStartOptions, prendyArt),
-    models: models<A_PrendyArt, A_ModelName>(prendyArt),
+    >(prendyStartOptions, prendyAssets),
+    models: models<A_PrendyAssets, A_ModelName>(prendyAssets),
     dolls: dolls<
       A_AnimationNameByModel,
       A_AnyAnimationName,
       A_AnySpotName,
-      A_PrendyArt,
+      A_PrendyAssets,
       A_BoneNameByModel,
       A_DollName,
       A_DollOptions,
       A_MaterialNameByModel,
       A_MeshNameByModel,
       A_ModelName
-    >(prendyArt),
+    >(prendyAssets),
     characters: characters<
       A_CharacterName,
       A_DollName,
       A_AnyTriggerName,
       A_AnyCameraName,
       A_CharacterOptions,
-      A_PrendyArt
-    >(prendyArt),
+      A_PrendyAssets
+    >(prendyAssets),
     players: players<A_AnyAnimationName, A_PrendyOptions>(prendyStartOptions),
-    speechBubbles: speechBubbles<A_PrendyArt, A_CharacterName>(prendyArt),
+    speechBubbles: speechBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
     places: places<
       A_PlaceName,
       A_AnyCameraName,
-      A_PrendyArt,
+      A_PrendyAssets,
       A_CameraNameByPlace,
       A_SoundspotNameByPlace,
       A_SpotNameByPlace,
       A_TriggerNameByPlace,
       A_WallNameByPlace
-    >(prendyArt),
-    safeVids: safeVids<A_PrendyArt, A_PlaceName>(prendyArt),
-    sectionVids: sectionVids<A_PrendyArt, A_PlaceName>(prendyArt),
+    >(prendyAssets),
+    safeVids: safeVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
+    sectionVids: sectionVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
   };
 }

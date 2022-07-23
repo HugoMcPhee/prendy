@@ -1,6 +1,6 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { PrendyArt, ModelName } from "../../declarations";
+import { PrendyAssets, ModelName } from "../../declarations";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
@@ -8,10 +8,10 @@ import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 export function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { makeRules, setState, getRefs } = storeHelpers;
-  const { modelInfoByName } = prendyArt;
+  const { modelInfoByName } = prendyAssets;
 
   const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
 

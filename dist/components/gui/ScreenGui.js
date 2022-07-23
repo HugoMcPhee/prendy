@@ -10,8 +10,8 @@ import { makeSpeechBubble } from "./SpeechBubbles/SpeechBubble";
 import { makeStoryOverlay } from "./StoryOverlay";
 import { makeVirtualButtons } from "./VirtualButtons";
 import { makeVirtualStick } from "./VirtualStick";
-export function makeScreenGui(storeHelpers, PRENDY_OPTIONS, prendyArt) {
-    const { pickupsInfo, speechVidFiles, characterNames } = prendyArt;
+export function makeScreenGui(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
+    const { pickupsInfo, speechVidFiles, characterNames } = prendyAssets;
     const AlarmText = makeAlarmText(storeHelpers);
     const LoadingOverlay = makeLoadingOverlay(storeHelpers);
     const MiniBubble = makeMiniBubble(storeHelpers);

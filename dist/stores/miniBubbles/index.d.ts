@@ -1,6 +1,6 @@
-import { CharacterName, PrendyArt } from "../../declarations";
+import { CharacterName, PrendyAssets } from "../../declarations";
 import { Point2D } from "chootils/dist/points2d";
-export default function miniBubbles<A_PrendyArt extends PrendyArt = PrendyArt, A_CharacterName extends CharacterName = CharacterName>(prendyArt: A_PrendyArt): {
+export default function miniBubbles<A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CharacterName extends CharacterName = CharacterName>(prendyAssets: A_PrendyAssets): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
         character?: string | undefined;
     } | undefined) => {

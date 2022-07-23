@@ -3,7 +3,7 @@ import {
   AnyAnimationName,
   AnyCameraName,
   AnySegmentName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   CameraNameByPlace,
   CharacterName,
@@ -27,7 +27,7 @@ import {
 } from "../../../declarations";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import { makeCharacterStoryHelpers } from "./characters";
 import { makeDollStoryHelpers } from "./dolls";
@@ -43,7 +43,7 @@ import { makeStickerStoryHelpers } from "./stickers";
 
 export function makePrendyStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
@@ -70,17 +70,17 @@ export function makePrendyStoryHelpers<
   A_BoneNameByModel extends BoneNameByModel = BoneNameByModel
 >(
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
+  prendyStores: PrendyStores,
   prendyStartOptions: A_PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
-  const modelInfoByName = prendyArt.modelInfoByName as A_ModelInfoByName;
-  const characterNames = prendyArt.characterNames as A_CharacterName[];
-  const placeInfoByName = prendyArt.placeInfoByName as A_PlaceInfoByName;
-  const musicNames = prendyArt.musicNames as A_MusicName[];
-  const musicFiles = prendyArt.musicFiles as A_MusicFiles;
-  const soundNames = prendyArt.soundNames as A_SoundName[];
-  const soundFiles = prendyArt.soundFiles as A_SoundFiles;
+  const modelInfoByName = prendyAssets.modelInfoByName as A_ModelInfoByName;
+  const characterNames = prendyAssets.characterNames as A_CharacterName[];
+  const placeInfoByName = prendyAssets.placeInfoByName as A_PlaceInfoByName;
+  const musicNames = prendyAssets.musicNames as A_MusicName[];
+  const musicFiles = prendyAssets.musicFiles as A_MusicFiles;
+  const soundNames = prendyAssets.soundNames as A_SoundName[];
+  const soundFiles = prendyAssets.soundFiles as A_SoundFiles;
 
   const {
     lookAtEachother,
@@ -93,7 +93,7 @@ export function makePrendyStoryHelpers<
     springCharRotation,
   } = makeCharacterStoryHelpers<
     StoreHelpers,
-    PrendyConcepts,
+    PrendyStores,
     A_AnimationNameByModel,
     A_PrendyOptions,
     A_CharacterName,
@@ -103,7 +103,7 @@ export function makePrendyStoryHelpers<
     A_ModelInfoByName
   >(
     storeHelpers,
-    prendyConcepts,
+    prendyStores,
     prendyStartOptions,
     modelInfoByName,
     characterNames
@@ -128,7 +128,7 @@ export function makePrendyStoryHelpers<
     getDollBonePosition,
   } = makeDollStoryHelpers<
     StoreHelpers,
-    PrendyConcepts,
+    PrendyStores,
     A_AnimationNameByModel,
     A_PrendyOptions,
     A_CharacterName,
@@ -143,26 +143,22 @@ export function makePrendyStoryHelpers<
     A_BoneNameByModel
   >(storeHelpers, prendyStartOptions, modelInfoByName);
 
-  const {
-    enableMovement,
-    isHolding,
-    setPlayerAnimations,
-    takePickup,
-  } = makerPlayerStoryHelpers<
-    StoreHelpers,
-    PrendyConcepts,
-    A_AnyAnimationName,
-    A_PrendyOptions,
-    A_CharacterName,
-    A_ModelInfoByName,
-    A_PickupName
-  >(
-    storeHelpers,
-    prendyConcepts,
-    prendyStartOptions,
-    modelInfoByName,
-    characterNames
-  );
+  const { enableMovement, isHolding, setPlayerAnimations, takePickup } =
+    makerPlayerStoryHelpers<
+      StoreHelpers,
+      PrendyStores,
+      A_AnyAnimationName,
+      A_PrendyOptions,
+      A_CharacterName,
+      A_ModelInfoByName,
+      A_PickupName
+    >(
+      storeHelpers,
+      prendyStores,
+      prendyStartOptions,
+      modelInfoByName,
+      characterNames
+    );
 
   // NOTE maybe return in categores like players.enableMovement()
   const {
@@ -185,35 +181,25 @@ export function makePrendyStoryHelpers<
     A_WallNameByPlace
   >(storeHelpers, placeInfoByName, characterNames);
 
-  const {
-    playNewMusic,
-    stopAllMusic,
-    playSound,
-    stopSound,
-    stopAllSounds,
-  } = makeSoundStoryHelpers<
-    StoreHelpers,
-    A_MusicFiles,
-    A_MusicName,
-    A_SoundFiles,
-    A_SoundName
-  >(storeHelpers, musicNames, musicFiles, soundNames, soundFiles);
+  const { playNewMusic, stopAllMusic, playSound, stopSound, stopAllSounds } =
+    makeSoundStoryHelpers<
+      StoreHelpers,
+      A_MusicFiles,
+      A_MusicName,
+      A_SoundFiles,
+      A_SoundName
+    >(storeHelpers, musicNames, musicFiles, soundNames, soundFiles);
 
-  const {
-    hideMiniBubble,
-    showAlarmText,
-    showMiniBubble,
-    showSpeech,
-  } = makeSpeechStoryHelpers<
-    StoreHelpers,
-    PrendyConcepts,
-    A_PrendyOptions,
-    A_CharacterName
-  >(storeHelpers, prendyConcepts, prendyStartOptions, characterNames);
+  const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } =
+    makeSpeechStoryHelpers<
+      StoreHelpers,
+      PrendyStores,
+      A_PrendyOptions,
+      A_CharacterName
+    >(storeHelpers, prendyStores, prendyStartOptions, characterNames);
 
-  const { hideSticker, moveSticker, showSticker } = makeStickerStoryHelpers(
-    storeHelpers
-  );
+  const { hideSticker, moveSticker, showSticker } =
+    makeStickerStoryHelpers(storeHelpers);
 
   return {
     // characters

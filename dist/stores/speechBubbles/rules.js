@@ -8,9 +8,9 @@ Dynamic rules
 When characters position changes
   bubble position to character
 */
-export function makeSpeechBubbleRules(storeHelpers, prendyConcepts) {
+export function makeSpeechBubbleRules(storeHelpers, prendyStores) {
     const { makeRules, setState, getRefs } = storeHelpers;
-    const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(storeHelpers, prendyConcepts);
+    const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(storeHelpers, prendyStores);
     return makeRules(({ itemEffect, effect }) => ({
         whenGoalTextChanges: itemEffect({
             run({ itemName, itemRefs, itemState }) {

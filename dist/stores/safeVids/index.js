@@ -1,7 +1,7 @@
 import { forEach } from "chootils/dist/loops";
 import { abLetters } from "../../utils/consts";
-export default function safeVids(prendyArt) {
-    const { placeNames, placeInfoByName } = prendyArt;
+export default function safeVids(prendyAssets) {
+    const { placeNames, placeInfoByName } = prendyAssets;
     function vidNameToPlaceName(vidName) {
         // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
         // return vidName.match(/.*?(?=_|$)/i)![0] as A_PlaceName; // only works with one/first underscore

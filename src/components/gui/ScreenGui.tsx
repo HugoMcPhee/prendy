@@ -2,7 +2,7 @@
 import React, { Fragment } from "react";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import {
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   PickupName,
   PickupsInfo,
@@ -21,9 +21,9 @@ import { makeVirtualStick } from "./VirtualStick";
 export function makeScreenGui<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   PRENDY_OPTIONS: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
-  const { pickupsInfo, speechVidFiles, characterNames } = prendyArt;
+  const { pickupsInfo, speechVidFiles, characterNames } = prendyAssets;
 
   const AlarmText = makeAlarmText(storeHelpers);
   const LoadingOverlay = makeLoadingOverlay(storeHelpers);

@@ -1,9 +1,9 @@
 export default "default";
 // import { CharacterName } from "art/characters";
-// import { prendyConcepts } from "prendy/stores";
+// import { prendyStores } from "prendy/stores";
 //
-// const dollStartStates = prendyConcepts.dolls.startStates;
-// const characterStartStates = prendyConcepts.characters.startStates;
+// const dollStartStates = prendyStores.dolls.startStates;
+// const characterStartStates = prendyStores.characters.startStates;
 //
 // export type DollStartStates = typeof dollStartStates;
 // export type CharacterStartStates = typeof characterStartStates;

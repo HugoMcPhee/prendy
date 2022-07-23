@@ -1,4 +1,4 @@
-import { AnyTriggerName, PrendyArt } from "../declarations";
+import { AnyTriggerName, PrendyAssets } from "../declarations";
 import { breakableForEach } from "chootils/dist/loops";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import {
@@ -26,9 +26,9 @@ export function makePlayer<
 >(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
-  const { placeInfoByName, characterNames } = prendyArt;
+  const { placeInfoByName, characterNames } = prendyAssets;
 
   // type AnyToPlaceOption = {
   //   toPlace: PlaceName;
@@ -58,7 +58,8 @@ export function makePlayer<
     Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>
   >;
 
-  const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
+  const { useStoreItemPropsEffect, getState, setState, useStore } =
+    storeHelpers;
 
   const { goToNewPlace } = makeSceneStoryHelpers<StoreHelpers>(
     storeHelpers,

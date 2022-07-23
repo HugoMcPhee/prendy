@@ -4,7 +4,7 @@ import { makeSpeechBubblesStoreUtils } from "./utils";
 import { CSSProperties } from "react";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../typedStoreHelpers";
 import { StoreHelperTypes } from "pietem";
 
@@ -18,8 +18,8 @@ When characters position changes
 
 export function makeSpeechBubbleRules<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
->(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts) {
+  PrendyStores extends PlaceholderPrendyStores
+>(storeHelpers: StoreHelpers, prendyStores: PrendyStores) {
   const { makeRules, setState, getRefs } = storeHelpers;
 
   // AllItemsState,
@@ -38,7 +38,7 @@ export function makeSpeechBubbleRules<
 
   const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(
     storeHelpers,
-    prendyConcepts
+    prendyStores
   );
 
   return makeRules(({ itemEffect, effect }) => ({
@@ -89,9 +89,8 @@ export function makeSpeechBubbleRules<
         forEach(diffInfo.itemsRemoved.speechBubbles, (itemName) => {
           // speechBubbleDynamicRules.stopAll
           const speechBubblesRefs = getRefs().speechBubbles;
-          const { currentTimeout } = speechBubblesRefs[
-            itemName as keyof typeof speechBubblesRefs
-          ];
+          const { currentTimeout } =
+            speechBubblesRefs[itemName as keyof typeof speechBubblesRefs];
           if (currentTimeout !== null) clearTimeout(currentTimeout);
         });
       },

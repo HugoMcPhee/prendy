@@ -1,7 +1,7 @@
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition } from "chootils/dist/points2d";
-export default function speechBubbles(prendyArt) {
-    const { characterNames, characterOptions, fontNames } = prendyArt;
+export default function speechBubbles(prendyAssets) {
+    const { characterNames, characterOptions, fontNames } = prendyAssets;
     const state = (_itemName, options // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
     ) => {
         var _a, _b;

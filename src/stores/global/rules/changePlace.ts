@@ -2,7 +2,7 @@ import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   DollName,
   PlaceName,
@@ -17,34 +17,32 @@ import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 // import { updateTexturesForNowCamera } from "./whenCameraChanges";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../typedStoreHelpers";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalChangePlaceRules<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
-  _prendyConcepts: PrendyConcepts,
+  _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-  const { placeInfoByName } = prendyArt;
+  const { placeInfoByName } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
   const { getSectionVidVideo } = makeSectionVidStoreUtils(
     storeHelpers,
-    prendyArt
+    prendyAssets
   );
 
-  const {
-    updateTexturesForNowCamera,
-    updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils(storeHelpers, prendyArt);
+  const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } =
+    makeCameraChangeUtils(storeHelpers, prendyAssets);
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils<
     StoreHelpers,
@@ -56,7 +54,7 @@ export function makeGlobalChangePlaceRules<
   const { setDollToSpot } = makeDollStoryHelpers(
     storeHelpers,
     prendyStartOptions,
-    prendyArt.modelInfoByName
+    prendyAssets.modelInfoByName
   );
 
   function setPlayerPositionForNewPlace() {
@@ -146,7 +144,7 @@ export function makeGlobalChangePlaceRules<
     }),
     whenReadyToSwapPlace: itemEffect({
       run({ itemState: globalState }) {
-        // run on the start of the next concepto frame, so all the flows can run again
+        // run on the start of the next pietem frame, so all the flows can run again
         setState({}, () => {
           const { nowPlaceName, nextPlaceName } = globalState;
           const cameraNames = placeInfoByName[nowPlaceName]
@@ -186,9 +184,8 @@ export function makeGlobalChangePlaceRules<
         } = globalState;
         const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
 
-        const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[
-          nowPlaceName
-        ].sort();
+        const wantedModelsForPlace =
+          prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
         const loadedModelNames = modelNamesLoaded.sort();
         let allModelsAreLoaded = true;
 

@@ -17,7 +17,7 @@ import { makeGetSectionVidVideo } from "../../../stores/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,
-  PrendyArt,
+  PrendyAssets,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
@@ -28,10 +28,10 @@ import { makeGlobalStoreUtils } from "./";
 
 export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName, dollNames } = prendyArt;
+  const { placeInfoByName, dollNames } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
@@ -445,14 +445,10 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
   // note adding to section vids cause its easier to follow for now? even though its not seperated
   function updateNowStuffWhenSectionChanged() {
-    const {
-      nowPlaceName,
-      nextSegmentNameWhenVidPlays,
-      nowSegmentName,
-    } = getState().global.main;
-    const { nextCamNameWhenVidPlays, nowCamName } = getState().places[
-      nowPlaceName
-    ];
+    const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } =
+      getState().global.main;
+    const { nextCamNameWhenVidPlays, nowCamName } =
+      getState().places[nowPlaceName];
 
     const waitingForASectionToChange =
       nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;

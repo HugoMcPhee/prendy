@@ -3,7 +3,7 @@ import { makeGetCharDollStuff } from "../../../stores/characters/utils";
 import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
@@ -19,7 +19,7 @@ import { makeDollStoryHelpers } from "./dolls";
 
 export function makeCharacterStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
@@ -29,26 +29,22 @@ export function makeCharacterStoryHelpers<
   A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
 >(
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
+  prendyStores: PrendyStores,
   prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {
-  type DollNameFromCharacter<
-    T_CharacterName extends A_CharacterName
-  > = A_CharacterOptions[T_CharacterName]["doll"];
+  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> =
+    A_CharacterOptions[T_CharacterName]["doll"];
 
-  type ModelNameFromDoll<
-    T_DollName extends A_DollName
-  > = A_DollOptions[T_DollName]["model"];
+  type ModelNameFromDoll<T_DollName extends A_DollName> =
+    A_DollOptions[T_DollName]["model"];
 
-  type ModelNameFromCharacter<
-    T_CharacterName extends A_CharacterName
-  > = ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
+  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> =
+    ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
 
-  type AnimationNameFromCharacter<
-    T_CharacterName extends A_CharacterName
-  > = A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
+  type AnimationNameFromCharacter<T_CharacterName extends A_CharacterName> =
+    A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
   const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 

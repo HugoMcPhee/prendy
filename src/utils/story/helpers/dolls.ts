@@ -7,7 +7,7 @@ import {
 import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
@@ -29,7 +29,7 @@ import { makeSpotStoryUtils } from "../utils/spots";
 
 export function makeDollStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
@@ -44,31 +44,26 @@ export function makeDollStoryHelpers<
   A_BoneNameByModel extends BoneNameByModel = BoneNameByModel
 >(
   storeHelpers: StoreHelpers,
-  // prendyConcepts: PrendyConcepts,
+  // prendyStores: PrendyStores,
   prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName
 ) {
   const { getRefs, getState, setState } = storeHelpers;
 
-  type DollNameFromCharacter<
-    T_CharacterName extends A_CharacterName
-  > = A_CharacterOptions[T_CharacterName]["doll"];
+  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> =
+    A_CharacterOptions[T_CharacterName]["doll"];
 
-  type ModelNameFromDoll<
-    T_DollName extends A_DollName
-  > = A_DollOptions[T_DollName]["model"];
+  type ModelNameFromDoll<T_DollName extends A_DollName> =
+    A_DollOptions[T_DollName]["model"];
 
-  type ModelNameFromCharacter<
-    T_CharacterName extends A_CharacterName
-  > = ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
+  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> =
+    ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
 
-  type AnimationNameFromCharacter<
-    T_CharacterName extends A_CharacterName
-  > = A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
+  type AnimationNameFromCharacter<T_CharacterName extends A_CharacterName> =
+    A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
-  type MeshNamesFromDoll<
-    T_DollName extends A_DollName
-  > = A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
+  type MeshNamesFromDoll<T_DollName extends A_DollName> =
+    A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
   const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
@@ -78,7 +73,7 @@ export function makeDollStoryHelpers<
     get2DAngleFromDollToSpot,
   } = makeDollStoryUtils<
     StoreHelpers,
-    PrendyConcepts,
+    PrendyStores,
     A_DollName,
     A_PlaceName,
     A_SpotNameByPlace
@@ -333,10 +328,9 @@ export function makeDollStoryHelpers<
 
     const otherMeshes = getRefs().dolls[dollName].otherMeshes;
     const modelName = getModelNameFromDoll(dollName);
-    const modelInfo = modelInfoByName[(modelName as unknown) as A_ModelName];
-    const typedMeshNames = (modelInfo.meshNames as unknown) as MeshNamesFromDoll<
-      T_DollName
-    >[];
+    const modelInfo = modelInfoByName[modelName as unknown as A_ModelName];
+    const typedMeshNames =
+      modelInfo.meshNames as unknown as MeshNamesFromDoll<T_DollName>[];
 
     forEach(typedMeshNames, (meshName) => {
       const newToggle = toggledMeshes[meshName];

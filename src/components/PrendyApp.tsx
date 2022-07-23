@@ -14,9 +14,9 @@ import { Globals } from "react-spring";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../stores/typedStoreHelpers";
-import { PrendyArt, PrendyOptions } from "../declarations";
+import { PrendyAssets, PrendyOptions } from "../declarations";
 import loadStyles from "../utils/loadStyles";
 // import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
 // import "./PrendyApp.css";
@@ -30,12 +30,12 @@ type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
 export function makePrendyApp<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
+  prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, onNextTick, setState } = storeHelpers;
 
@@ -44,13 +44,13 @@ export function makePrendyApp<
   const ScreenGuiDom = makeScreenGui(
     storeHelpers,
     prendyStartOptions,
-    prendyArt
+    prendyAssets
   );
 
   const LoadingModels = makeLoadingModels(
     storeHelpers,
     prendyStartOptions,
-    prendyArt
+    prendyAssets
   );
 
   const ScenePlane = makeScenePlane(storeHelpers, prendyStartOptions);

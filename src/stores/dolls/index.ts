@@ -18,7 +18,7 @@ import {
   AnimationNameByModel,
   AnyAnimationName,
   AnySpotName,
-  PrendyArt,
+  PrendyAssets,
   BoneNameByModel,
   DollName,
   DollOptions,
@@ -34,22 +34,22 @@ export default function dolls<
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
   A_AnySpotName extends AnySpotName = AnySpotName,
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
   A_DollName extends DollName = DollName,
   A_DollOptions extends DollOptions = DollOptions,
   A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel,
   A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
   A_ModelName extends ModelName = ModelName
->(prendyArt: A_PrendyArt) {
-  const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyArt;
+>(prendyAssets: A_PrendyAssets) {
+  const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyAssets;
 
   const {
     defaultInRange,
     makeModelAnimWeightsMoverState,
     modelMoverRefs,
     modelOtherMeshesRefs,
-  } = makeDollIndexUtils(prendyArt);
+  } = makeDollIndexUtils(prendyAssets);
 
   const defaultModelName = modelNames[0];
 

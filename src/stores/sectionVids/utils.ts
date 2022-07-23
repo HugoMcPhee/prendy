@@ -2,7 +2,7 @@ import { SectionVidState, VidSection } from ".";
 import { makeCameraChangeUtils } from "../../stores/global/utils/cameraChange";
 import {
   AnyCameraName,
-  PrendyArt,
+  PrendyAssets,
   CameraNameByPlace,
   PlaceName,
   SegmentNameByPlace,
@@ -31,9 +31,9 @@ export function makeGetSectionVidVideo<
 
 export function makeSectionVidStoreUtils<
   StoreHelpers extends PrendyStoreHelpers
->(storeHelpers: StoreHelpers, prendyArt: PrendyArt) {
+>(storeHelpers: StoreHelpers, prendyAssets: PrendyAssets) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
-  const { placeInfoByName } = prendyArt;
+  const { placeInfoByName } = prendyAssets;
 
   const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
@@ -43,7 +43,7 @@ export function makeSectionVidStoreUtils<
 
   const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(
     storeHelpers,
-    prendyArt
+    prendyAssets
   );
 
   // __________________________

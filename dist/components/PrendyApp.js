@@ -12,11 +12,11 @@ import { makeScreenGui } from "./gui/ScreenGui";
 import { makeLoadingModels } from "./LoadingModels";
 import { makeScenePlane } from "./ScenePlane";
 loadStyles();
-export function makePrendyApp(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt) {
+export function makePrendyApp(storeHelpers, prendyStores, prendyStartOptions, prendyAssets) {
     const { getRefs, onNextTick, setState } = storeHelpers;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = makeScreenGui(storeHelpers, prendyStartOptions, prendyArt);
-    const LoadingModels = makeLoadingModels(storeHelpers, prendyStartOptions, prendyArt);
+    const ScreenGuiDom = makeScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
+    const LoadingModels = makeLoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
     const ScenePlane = makeScenePlane(storeHelpers, prendyStartOptions);
     // const AllTestVideoStuff = makeAllTestVideoStuff(storeHelpers, [
     //   "city",

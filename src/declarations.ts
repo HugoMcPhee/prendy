@@ -7,7 +7,7 @@ import {
 
 export default "default";
 
-export interface ArtTypesUntyped {
+export interface AssetsTypesUntyped {
   PrendyOptions: PrendyOptionsUntyped;
   PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
   ModelInfoByName: ModelInfoByNamePlaceholder<string>;
@@ -46,49 +46,49 @@ export interface ArtTypesUntyped {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CustomArtTypes {}
+export interface CustomAssetsTypes {}
 
-export interface FinalArtTypes
-  extends Omit<ArtTypesUntyped, keyof CustomArtTypes>,
-    CustomArtTypes {}
+export interface FinalAssetsTypes
+  extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>,
+    CustomAssetsTypes {}
 
-export type PrendyOptions = FinalArtTypes["PrendyOptions"];
-export type PlaceInfoByName = FinalArtTypes["PlaceInfoByName"];
-export type ModelInfoByName = FinalArtTypes["ModelInfoByName"];
-export type DollOptions = FinalArtTypes["DollOptions"];
-export type CharacterOptions = FinalArtTypes["CharacterOptions"];
-export type ModelName = FinalArtTypes["ModelName"];
-export type DollName = FinalArtTypes["DollName"];
-export type CharacterName = FinalArtTypes["CharacterName"];
-export type AnyCameraName = FinalArtTypes["AnyCameraName"];
-export type AnySegmentName = FinalArtTypes["AnySegmentName"];
-export type AnySpotName = FinalArtTypes["AnySpotName"];
-export type AnyTriggerName = FinalArtTypes["AnyTriggerName"];
-export type PlaceName = FinalArtTypes["PlaceName"];
-export type PickupName = FinalArtTypes["PickupName"];
-export type AnyAnimationName = FinalArtTypes["AnyAnimationName"];
-export type SoundName = FinalArtTypes["SoundName"];
-export type MusicName = FinalArtTypes["MusicName"];
-export type FontName = FinalArtTypes["FontName"];
-export type SpeechVidName = FinalArtTypes["SpeechVidName"];
-export type StoryPartName = FinalArtTypes["StoryPartName"];
-export type CameraNameByPlace = FinalArtTypes["CameraNameByPlace"];
-export type SoundspotNameByPlace = FinalArtTypes["SoundspotNameByPlace"];
-export type SpotNameByPlace = FinalArtTypes["SpotNameByPlace"];
-export type TriggerNameByPlace = FinalArtTypes["TriggerNameByPlace"];
-export type WallNameByPlace = FinalArtTypes["WallNameByPlace"];
-export type AnimationNameByModel = FinalArtTypes["AnimationNameByModel"];
-export type BoneNameByModel = FinalArtTypes["BoneNameByModel"];
-export type MaterialNameByModel = FinalArtTypes["MaterialNameByModel"];
-export type MeshNameByModel = FinalArtTypes["MeshNameByModel"];
-export type ModelNamesByPlaceLoose = FinalArtTypes["ModelNamesByPlaceLoose"];
-export type SegmentNameByPlace = FinalArtTypes["SegmentNameByPlace"];
-export type MusicFiles = FinalArtTypes["MusicFiles"];
-export type SoundFiles = FinalArtTypes["SoundFiles"];
-export type SpeechVidFiles = FinalArtTypes["SpeechVidFiles"];
-export type PickupsInfo = FinalArtTypes["PickupsInfo"];
+export type PrendyOptions = FinalAssetsTypes["PrendyOptions"];
+export type PlaceInfoByName = FinalAssetsTypes["PlaceInfoByName"];
+export type ModelInfoByName = FinalAssetsTypes["ModelInfoByName"];
+export type DollOptions = FinalAssetsTypes["DollOptions"];
+export type CharacterOptions = FinalAssetsTypes["CharacterOptions"];
+export type ModelName = FinalAssetsTypes["ModelName"];
+export type DollName = FinalAssetsTypes["DollName"];
+export type CharacterName = FinalAssetsTypes["CharacterName"];
+export type AnyCameraName = FinalAssetsTypes["AnyCameraName"];
+export type AnySegmentName = FinalAssetsTypes["AnySegmentName"];
+export type AnySpotName = FinalAssetsTypes["AnySpotName"];
+export type AnyTriggerName = FinalAssetsTypes["AnyTriggerName"];
+export type PlaceName = FinalAssetsTypes["PlaceName"];
+export type PickupName = FinalAssetsTypes["PickupName"];
+export type AnyAnimationName = FinalAssetsTypes["AnyAnimationName"];
+export type SoundName = FinalAssetsTypes["SoundName"];
+export type MusicName = FinalAssetsTypes["MusicName"];
+export type FontName = FinalAssetsTypes["FontName"];
+export type SpeechVidName = FinalAssetsTypes["SpeechVidName"];
+export type StoryPartName = FinalAssetsTypes["StoryPartName"];
+export type CameraNameByPlace = FinalAssetsTypes["CameraNameByPlace"];
+export type SoundspotNameByPlace = FinalAssetsTypes["SoundspotNameByPlace"];
+export type SpotNameByPlace = FinalAssetsTypes["SpotNameByPlace"];
+export type TriggerNameByPlace = FinalAssetsTypes["TriggerNameByPlace"];
+export type WallNameByPlace = FinalAssetsTypes["WallNameByPlace"];
+export type AnimationNameByModel = FinalAssetsTypes["AnimationNameByModel"];
+export type BoneNameByModel = FinalAssetsTypes["BoneNameByModel"];
+export type MaterialNameByModel = FinalAssetsTypes["MaterialNameByModel"];
+export type MeshNameByModel = FinalAssetsTypes["MeshNameByModel"];
+export type ModelNamesByPlaceLoose = FinalAssetsTypes["ModelNamesByPlaceLoose"];
+export type SegmentNameByPlace = FinalAssetsTypes["SegmentNameByPlace"];
+export type MusicFiles = FinalAssetsTypes["MusicFiles"];
+export type SoundFiles = FinalAssetsTypes["SoundFiles"];
+export type SpeechVidFiles = FinalAssetsTypes["SpeechVidFiles"];
+export type PickupsInfo = FinalAssetsTypes["PickupsInfo"];
 
-export type PrendyArt = {
+export type PrendyAssets = {
   placeInfoByName: PlaceInfoByName;
   modelInfoByName: ModelInfoByName;
   dollOptions: DollOptions;

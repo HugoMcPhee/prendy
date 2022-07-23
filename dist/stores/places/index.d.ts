@@ -1,5 +1,5 @@
 import { AbstractMesh, CubeTexture, Sound, TargetCamera, Vector3 } from "@babylonjs/core";
-import { AnyCameraName, PrendyArt, CameraNameByPlace, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../../declarations";
+import { AnyCameraName, PrendyAssets, CameraNameByPlace, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../../declarations";
 declare const defaultCamRefs: () => {
     camera: TargetCamera | null;
     camCubeMeshes: AbstractMesh[];
@@ -7,7 +7,7 @@ declare const defaultCamRefs: () => {
     isTriggerable: boolean;
 };
 export declare type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
-export default function places<A_PlaceName extends PlaceName = PlaceName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_PrendyArt extends PrendyArt = PrendyArt, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(prendyArt: A_PrendyArt): {
+export default function places<A_PlaceName extends PlaceName = PlaceName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(prendyAssets: A_PrendyAssets): {
     startStates: { [P_PlaceName in A_PlaceName]: {
         wantedCamNameAtLoop: A_CameraNameByPlace[P_PlaceName] | null;
         wantedCamName: A_CameraNameByPlace[P_PlaceName] | null;

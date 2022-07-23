@@ -1,6 +1,6 @@
 import { forEach } from "chootils/dist/loops";
-export default function models(prendyArt) {
-    const modelNames = prendyArt.modelNames;
+export default function models(prendyAssets) {
+    const modelNames = prendyAssets.modelNames;
     const state = (_modelName) => {
         return {
             wantToLoad: false,

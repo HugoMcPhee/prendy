@@ -1,9 +1,9 @@
-import { PrendyArt } from "../declarations";
+import { PrendyAssets } from "../declarations";
 import { StoreHelperTypes } from "pietem";
 import { createStoreHelpers } from "pietem";
 import { prendyStepNames } from ".";
 import { getPrendyOptions } from "../getPrendyOptions";
-import { story_fake } from "../storyRuleMakers/fakeStoryConcepts";
+import { story_fake } from "../storyRuleMakers/fakeStoryStore";
 import characters from "./characters";
 import dolls from "./dolls";
 import global from "./global";
@@ -57,7 +57,7 @@ const getModelInfoByName = () => ({
   skeletonName: "test",
 });
 
-const testArtStuff = ({
+const testArtStuff = {
   modelNames: ["modelA", "modelB"] as readonly any[],
   dollNames: ["dollA", "dollB"] as readonly any[],
   placeNames: ["placeA"] as readonly any[],
@@ -96,9 +96,9 @@ const testArtStuff = ({
     characterA: { doll: "dollA", font: "fontA" },
     characterB: { doll: "dollB", font: "fontA" },
   } as const,
-} as unknown) as PrendyArt;
+} as unknown as PrendyAssets;
 
-// NOTE to get types working, might need to hard-type prendyArt, while working on the libray
+// NOTE to get types working, might need to hard-type prendyAssets, while working on the libray
 
 export type CharacterOptionsPlaceholder<
   CharacterName extends string,
@@ -122,7 +122,7 @@ export type DollOptionsPlaceholder<
   }
 >;
 
-const placeholderPrendyConcepts = {
+const placeholderPrendyStores = {
   keyboards: keyboards(),
   miniBubbles: miniBubbles(testArtStuff),
   pointers: pointers(),
@@ -139,17 +139,17 @@ const placeholderPrendyConcepts = {
   story: story_fake<any, any>(),
 };
 
-// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyConcepts, {
-const storeHelpers = createStoreHelpers(placeholderPrendyConcepts, {
+// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyStores, {
+const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
   stepNames: prendyStepNames,
   dontSetMeta: true,
 });
 
 // NOTE Change these to typeof  to have known types while making prendys library
-// export type PlaceholderPrendyConcepts = typeof placeholderPrendyConcepts;
+// export type PlaceholderPrendyStores = typeof placeholderPrendyStores;
 // export type PrendyStoreHelpers = typeof storeHelpers;
 
-export type PlaceholderPrendyConcepts = Record<
+export type PlaceholderPrendyStores = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -170,18 +170,14 @@ export type PrendyStoreHelpers = {
   startItemEffect: (...args: any) => any;
   startEffect: (...args: any) => any;
   stopEffect: (...args: any) => any;
-  makeRules: (
-    ...args: any
-  ) => {
+  makeRules: (...args: any) => {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
   };
-  makeDynamicRules: (
-    ...args: any
-  ) => {
+  makeDynamicRules: (...args: any) => {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

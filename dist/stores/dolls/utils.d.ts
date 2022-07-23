@@ -1,6 +1,6 @@
 import { AbstractMesh, PBRMaterial } from "@babylonjs/core";
-import { PrendyArt, PrendyOptions, DollName } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../typedStoreHelpers";
+import { PrendyAssets, PrendyOptions, DollName } from "../../declarations";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../typedStoreHelpers";
 import { InRangeForDoll } from "./indexUtils";
 export declare const rangeOptionsQuick: {
     readonly touch: number;
@@ -8,7 +8,7 @@ export declare const rangeOptionsQuick: {
     readonly see: number;
 };
 export declare function enableCollisions(theMesh: AbstractMesh): void;
-export declare function makeDollStoreUtils<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts>(storeHelpers: StoreHelpers, _prendyConcepts: PrendyConcepts, prendyStartOptions: PrendyOptions, prendyArt: PrendyArt): {
+export declare function makeDollStoreUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(storeHelpers: StoreHelpers, _prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
     setDollAnimWeight: <T_DollName extends string, T_NewWeights extends Record<string, number>>(dollName: T_DollName, newWeights: Partial<T_NewWeights>) => void;
     getQuickDistanceBetweenDolls: (dollA: DollName, dollB: DollName) => number;
     inRangesAreTheSame: (inRangePropA: {

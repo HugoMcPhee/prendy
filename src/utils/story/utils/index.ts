@@ -1,6 +1,6 @@
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import {
   AnyCameraName,
@@ -18,7 +18,7 @@ import { makeSpotStoryUtils } from "./spots";
 
 export function makePrendyStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
@@ -26,23 +26,21 @@ export function makePrendyStoryUtils<
   A_CharacterName extends CharacterName = CharacterName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_DollName extends DollName = DollName
->(storeHelpers: StoreHelpers, _prendyConcepts: PrendyConcepts) {
-  const {
-    get2DAngleBetweenCharacters,
-    get2DAngleFromCharacterToSpot,
-  } = makeCharacterStoryUtils<
-    StoreHelpers,
-    A_CharacterName,
-    A_PlaceName,
-    A_SpotNameByPlace
-  >(storeHelpers);
+>(storeHelpers: StoreHelpers, _prendyStores: PrendyStores) {
+  const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot } =
+    makeCharacterStoryUtils<
+      StoreHelpers,
+      A_CharacterName,
+      A_PlaceName,
+      A_SpotNameByPlace
+    >(storeHelpers);
   const {
     getModelNameFromDoll,
     get2DAngleBetweenDolls,
     get2DAngleFromDollToSpot,
   } = makeDollStoryUtils<
     StoreHelpers,
-    PrendyConcepts,
+    PrendyStores,
     A_DollName,
     A_PlaceName,
     A_SpotNameByPlace

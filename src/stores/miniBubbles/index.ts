@@ -1,13 +1,13 @@
-import { CharacterName, PrendyArt } from "../../declarations";
+import { CharacterName, PrendyAssets } from "../../declarations";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
 
 export default function miniBubbles<
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_CharacterName extends CharacterName = CharacterName
->(prendyArt: A_PrendyArt) {
-  const { characterNames, characterOptions } = prendyArt;
+>(prendyAssets: A_PrendyAssets) {
+  const { characterNames, characterOptions } = prendyAssets;
 
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,

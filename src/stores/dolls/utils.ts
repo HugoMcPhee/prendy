@@ -12,7 +12,7 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
   AnimationNameByModel,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   DollName,
   ModelInfoByName,
@@ -21,7 +21,7 @@ import {
 import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../typedStoreHelpers";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 
@@ -62,15 +62,15 @@ export function enableCollisions(theMesh: AbstractMesh) {
 
 export function makeDollStoreUtils<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
-  _prendyConcepts: PrendyConcepts,
+  _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
-  const { dollNames, modelInfoByName } = prendyArt;
+  const { dollNames, modelInfoByName } = prendyAssets;
 
   const {
     convertScreenPointToPlaneScenePoint,
@@ -79,18 +79,17 @@ export function makeDollStoreUtils<
     checkPointIsInsidePlane,
   } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
 
-  // type ConceptoState = ReturnType<StoreHelpers["getState"]>;
-  // type DollName = keyof ConceptoState["dolls"];
-  // type DollName = keyof typeof prendyConcepts.dolls.startStates;
-  // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
-  // type StartState_Dolls = typeof prendyConcepts.dolls.startStates;
+  // type PietemState = ReturnType<StoreHelpers["getState"]>;
+  // type DollName = keyof PietemState["dolls"];
+  // type DollName = keyof typeof prendyStores.dolls.startStates;
+  // type StartState_Dolls = typeof prendyStores.dolls.startStates;
+  // type StartState_Dolls = typeof prendyStores.dolls.startStates;
 
-  type StartState_Dolls = PrendyConcepts["dolls"]["startStates"] &
+  type StartState_Dolls = PrendyStores["dolls"]["startStates"] &
     ReturnType<StoreHelpers["getState"]>["dolls"];
 
-  type ModelNameFromDoll<
-    T_DollName extends DollName
-  > = StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<T_DollName extends DollName> =
+    StartState_Dolls[T_DollName]["modelName"];
 
   function setDollAnimWeight<
     T_DollName extends DollName,
@@ -184,12 +183,8 @@ export function makeDollStoreUtils<
     );
     dollRefs.entriesRef = entries;
 
-    const {
-      meshNames,
-      boneNames,
-      animationNames,
-      materialNames,
-    } = modelInfoByName[modelName];
+    const { meshNames, boneNames, animationNames, materialNames } =
+      modelInfoByName[modelName];
 
     type T_Mesh = typeof meshNames[number];
     type T_BoneName = typeof boneNames[number];
@@ -208,9 +203,9 @@ export function makeDollStoreUtils<
     >;
 
     const skeleton = entries.skeletons[0];
-    const bones = (skeleton?.bones
-      ? keyBy(skeleton.bones, "name", removePrefix)
-      : {}) as Record<T_BoneName, Bone>;
+    const bones = (
+      skeleton?.bones ? keyBy(skeleton.bones, "name", removePrefix) : {}
+    ) as Record<T_BoneName, Bone>;
 
     const aniGroups = keyBy(entries.animationGroups, "name", (name) =>
       name.replace(namePrefix, "")
@@ -266,12 +261,8 @@ export function makeDollStoreUtils<
 
     const { meshRef } = getRefs().dolls[dollName];
     if (!meshRef) return;
-    const {
-      planePos,
-      planePosGoal,
-      focusedDoll,
-      focusedDollIsInView,
-    } = getState().global.main;
+    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } =
+      getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
 
     // need to get the doll screen position based on the current or safe plane position

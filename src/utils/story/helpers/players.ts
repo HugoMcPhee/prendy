@@ -1,9 +1,12 @@
 import delay from "delay";
-import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
+import {
+  addItemToUniqueArray,
+  removeItemFromArray,
+} from "chootils/dist/arrays";
 import { makeGlobalStoreUtils } from "../../../stores/global/utils";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import {
   AnyAnimationName,
@@ -16,7 +19,7 @@ import { makeCharacterStoryHelpers } from "./characters";
 
 export function makerPlayerStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
@@ -24,7 +27,7 @@ export function makerPlayerStoryHelpers<
   A_PickupName extends PickupName = PickupName
 >(
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
+  prendyStores: PrendyStores,
   prendyStartOptions: A_PrendyOptions,
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]

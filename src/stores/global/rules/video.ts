@@ -1,10 +1,10 @@
-// import { getRefs, getState, makeRules, setState } from "concepts";
+// import { getRefs, getState, makeRules, setState } from "stores";
 import { VidSection } from "../../../stores/sectionVids";
 import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   CameraNameByPlace,
   PlaceName,
@@ -12,31 +12,28 @@ import {
 } from "../../../declarations";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../typedStoreHelpers";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
 
 export function makeGlobalVideoRules<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
-  _prendyConcepts: PrendyConcepts,
+  _prendyStores: PrendyStores,
   _prendyStartOptions: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
 
-  const {
-    getSectionForPlace,
-    getSectionVidVideo,
-    checkForVideoLoop,
-  } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
+  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } =
+    makeSectionVidStoreUtils(storeHelpers, prendyAssets);
   const {
     getSafeSegmentName,
     updateTexturesForNowCamera,
     updateNowStuffWhenSectionChanged,
-  } = makeCameraChangeUtils(storeHelpers, prendyArt);
+  } = makeCameraChangeUtils(storeHelpers, prendyAssets);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenWantToChooseVideoSection: effect({
@@ -183,8 +180,9 @@ export function makeGlobalVideoRules<
             cam: decided_wantedCamName as CameraNameByPlace[PlaceName] &
               AnyCameraName,
             place: nowPlaceName as PlaceName,
-            segment: decided_wantedSegmentName as SegmentNameByPlace[PlaceName] &
-              AnySegmentName,
+            segment:
+              decided_wantedSegmentName as SegmentNameByPlace[PlaceName] &
+                AnySegmentName,
             useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
           });
 

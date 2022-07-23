@@ -1,8 +1,8 @@
 import { defaultPosition } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
 // import { VideoGui } from "../../../utils/babylonjs/VideoGui";
-export default function miniBubbles(prendyArt) {
-    const { characterNames, characterOptions } = prendyArt;
+export default function miniBubbles(prendyAssets) {
+    const { characterNames, characterOptions } = prendyAssets;
     const state = (_itemName, options // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
     ) => {
         var _a;

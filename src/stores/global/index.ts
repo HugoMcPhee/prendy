@@ -8,7 +8,7 @@ import {
 } from "@babylonjs/core";
 import {
   AnySegmentName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   CharacterName,
   DollName,
@@ -29,7 +29,7 @@ import { makerGlobalStoreIndexUtils } from "./utils/indexUtils";
 
 export default function global<
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_CharacterName extends CharacterName = CharacterName,
   A_DollName extends DollName = DollName,
@@ -37,8 +37,8 @@ export default function global<
   A_PickupName extends PickupName = PickupName,
   A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
   A_PlaceName extends PlaceName = PlaceName
->(prendyStartOptions: A_PrendyOptions, prendyArt: A_PrendyArt) {
-  const { musicNames, soundNames } = prendyArt;
+>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
+  const { musicNames, soundNames } = prendyAssets;
 
   type MaybeSegment = null | A_AnySegmentName;
 
@@ -47,29 +47,22 @@ export default function global<
     T_Cam extends keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"]
   > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
 
-  type CameraNameFromPlace<
-    T_Place extends keyof A_PlaceInfoByName
-  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+  type CameraNameFromPlace<T_Place extends keyof A_PlaceInfoByName> =
+    keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
 
-  type CamSegmentRulesOptionsUntyped = Partial<
-    {
-      [P_PlaceName in A_PlaceName]: Partial<
-        {
-          [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
-            usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
-          ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
-        }
-      >;
-    }
-  >;
+  type CamSegmentRulesOptionsUntyped = Partial<{
+    [P_PlaceName in A_PlaceName]: Partial<{
+      [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
+        usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
+      ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+    }>;
+  }>;
 
-  const {
-    makeAutomaticMusicStartRefs,
-    makeAutomaticSoundStartRefs,
-  } = makerGlobalStoreIndexUtils(musicNames, soundNames);
+  const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } =
+    makerGlobalStoreIndexUtils(musicNames, soundNames);
   console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
   console.log(
-    prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll
+    prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll
   );
 
   // State
@@ -98,7 +91,7 @@ export default function global<
     gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
     focusedDoll:
-      prendyArt.characterOptions[prendyStartOptions.playerCharacter].doll ??
+      prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll ??
       ("walker" as A_DollName),
     focusedDollIsInView: false,
     //

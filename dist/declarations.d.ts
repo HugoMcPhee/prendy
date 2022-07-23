@@ -1,7 +1,7 @@
 import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./stores/typedStoreHelpers";
 declare const _default: "default";
 export default _default;
-export interface ArtTypesUntyped {
+export interface AssetsTypesUntyped {
     PrendyOptions: PrendyOptionsUntyped;
     PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
     ModelInfoByName: ModelInfoByNamePlaceholder<string>;
@@ -38,46 +38,46 @@ export interface ArtTypesUntyped {
     SoundFiles: Record<string, string>;
     PickupsInfo: any;
 }
-export interface CustomArtTypes {
+export interface CustomAssetsTypes {
 }
-export interface FinalArtTypes extends Omit<ArtTypesUntyped, keyof CustomArtTypes>, CustomArtTypes {
+export interface FinalAssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {
 }
-export declare type PrendyOptions = FinalArtTypes["PrendyOptions"];
-export declare type PlaceInfoByName = FinalArtTypes["PlaceInfoByName"];
-export declare type ModelInfoByName = FinalArtTypes["ModelInfoByName"];
-export declare type DollOptions = FinalArtTypes["DollOptions"];
-export declare type CharacterOptions = FinalArtTypes["CharacterOptions"];
-export declare type ModelName = FinalArtTypes["ModelName"];
-export declare type DollName = FinalArtTypes["DollName"];
-export declare type CharacterName = FinalArtTypes["CharacterName"];
-export declare type AnyCameraName = FinalArtTypes["AnyCameraName"];
-export declare type AnySegmentName = FinalArtTypes["AnySegmentName"];
-export declare type AnySpotName = FinalArtTypes["AnySpotName"];
-export declare type AnyTriggerName = FinalArtTypes["AnyTriggerName"];
-export declare type PlaceName = FinalArtTypes["PlaceName"];
-export declare type PickupName = FinalArtTypes["PickupName"];
-export declare type AnyAnimationName = FinalArtTypes["AnyAnimationName"];
-export declare type SoundName = FinalArtTypes["SoundName"];
-export declare type MusicName = FinalArtTypes["MusicName"];
-export declare type FontName = FinalArtTypes["FontName"];
-export declare type SpeechVidName = FinalArtTypes["SpeechVidName"];
-export declare type StoryPartName = FinalArtTypes["StoryPartName"];
-export declare type CameraNameByPlace = FinalArtTypes["CameraNameByPlace"];
-export declare type SoundspotNameByPlace = FinalArtTypes["SoundspotNameByPlace"];
-export declare type SpotNameByPlace = FinalArtTypes["SpotNameByPlace"];
-export declare type TriggerNameByPlace = FinalArtTypes["TriggerNameByPlace"];
-export declare type WallNameByPlace = FinalArtTypes["WallNameByPlace"];
-export declare type AnimationNameByModel = FinalArtTypes["AnimationNameByModel"];
-export declare type BoneNameByModel = FinalArtTypes["BoneNameByModel"];
-export declare type MaterialNameByModel = FinalArtTypes["MaterialNameByModel"];
-export declare type MeshNameByModel = FinalArtTypes["MeshNameByModel"];
-export declare type ModelNamesByPlaceLoose = FinalArtTypes["ModelNamesByPlaceLoose"];
-export declare type SegmentNameByPlace = FinalArtTypes["SegmentNameByPlace"];
-export declare type MusicFiles = FinalArtTypes["MusicFiles"];
-export declare type SoundFiles = FinalArtTypes["SoundFiles"];
-export declare type SpeechVidFiles = FinalArtTypes["SpeechVidFiles"];
-export declare type PickupsInfo = FinalArtTypes["PickupsInfo"];
-export declare type PrendyArt = {
+export declare type PrendyOptions = FinalAssetsTypes["PrendyOptions"];
+export declare type PlaceInfoByName = FinalAssetsTypes["PlaceInfoByName"];
+export declare type ModelInfoByName = FinalAssetsTypes["ModelInfoByName"];
+export declare type DollOptions = FinalAssetsTypes["DollOptions"];
+export declare type CharacterOptions = FinalAssetsTypes["CharacterOptions"];
+export declare type ModelName = FinalAssetsTypes["ModelName"];
+export declare type DollName = FinalAssetsTypes["DollName"];
+export declare type CharacterName = FinalAssetsTypes["CharacterName"];
+export declare type AnyCameraName = FinalAssetsTypes["AnyCameraName"];
+export declare type AnySegmentName = FinalAssetsTypes["AnySegmentName"];
+export declare type AnySpotName = FinalAssetsTypes["AnySpotName"];
+export declare type AnyTriggerName = FinalAssetsTypes["AnyTriggerName"];
+export declare type PlaceName = FinalAssetsTypes["PlaceName"];
+export declare type PickupName = FinalAssetsTypes["PickupName"];
+export declare type AnyAnimationName = FinalAssetsTypes["AnyAnimationName"];
+export declare type SoundName = FinalAssetsTypes["SoundName"];
+export declare type MusicName = FinalAssetsTypes["MusicName"];
+export declare type FontName = FinalAssetsTypes["FontName"];
+export declare type SpeechVidName = FinalAssetsTypes["SpeechVidName"];
+export declare type StoryPartName = FinalAssetsTypes["StoryPartName"];
+export declare type CameraNameByPlace = FinalAssetsTypes["CameraNameByPlace"];
+export declare type SoundspotNameByPlace = FinalAssetsTypes["SoundspotNameByPlace"];
+export declare type SpotNameByPlace = FinalAssetsTypes["SpotNameByPlace"];
+export declare type TriggerNameByPlace = FinalAssetsTypes["TriggerNameByPlace"];
+export declare type WallNameByPlace = FinalAssetsTypes["WallNameByPlace"];
+export declare type AnimationNameByModel = FinalAssetsTypes["AnimationNameByModel"];
+export declare type BoneNameByModel = FinalAssetsTypes["BoneNameByModel"];
+export declare type MaterialNameByModel = FinalAssetsTypes["MaterialNameByModel"];
+export declare type MeshNameByModel = FinalAssetsTypes["MeshNameByModel"];
+export declare type ModelNamesByPlaceLoose = FinalAssetsTypes["ModelNamesByPlaceLoose"];
+export declare type SegmentNameByPlace = FinalAssetsTypes["SegmentNameByPlace"];
+export declare type MusicFiles = FinalAssetsTypes["MusicFiles"];
+export declare type SoundFiles = FinalAssetsTypes["SoundFiles"];
+export declare type SpeechVidFiles = FinalAssetsTypes["SpeechVidFiles"];
+export declare type PickupsInfo = FinalAssetsTypes["PickupsInfo"];
+export declare type PrendyAssets = {
     placeInfoByName: PlaceInfoByName;
     modelInfoByName: ModelInfoByName;
     dollOptions: DollOptions;

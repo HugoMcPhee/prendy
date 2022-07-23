@@ -5,9 +5,9 @@ import { makeGetCharDollStuff } from "../../stores/characters/utils";
 import { clearTimeoutSafe } from "../../utils";
 import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
+export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
-    const { placeInfoByName } = prendyArt;
+    const { placeInfoByName } = prendyAssets;
     const globalRefs = getRefs().global.main;
     const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
     const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
@@ -90,7 +90,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
         whenJumpPressed: itemEffect({
             run({ itemState: playerState, frameDuration }) {
                 var _a, _b;
-                const { playerCharacter, playerMovingPaused, gravityValue, } = getState().global.main;
+                const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { isOnGround, canJump } = playerState;
@@ -126,7 +126,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
         whenJoystickMoves: itemEffect({
             run({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs, }) {
                 var _a, _b;
-                const { playerCharacter, playerMovingPaused, gravityValue, } = getState().global.main;
+                const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { scenes } = globalRefs;
@@ -229,7 +229,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
             run({ itemRefs: playerRefs, itemName: playerName }) {
                 clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
                 playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
-                    const { virtualControlsPressTime, virtualControlsReleaseTime, } = getState().players[playerName];
+                    const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
                     if (virtualControlsReleaseTime > virtualControlsPressTime)
                         return;
                     setState({
@@ -245,7 +245,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
             run({ itemRefs: playerRefs, itemName: playerName }) {
                 clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
                 playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
-                    const { virtualControlsPressTime, virtualControlsReleaseTime, } = getState().players[playerName];
+                    const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
                     if (virtualControlsPressTime > virtualControlsReleaseTime)
                         return;
                     setState({
@@ -270,7 +270,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt) {
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const dollPosRefs = dollRefs.positionMoverRefs;
-                const { isJumping, isOnGround, inputVelocity, } = getState().players.main;
+                const { isJumping, isOnGround, inputVelocity } = getState().players.main;
                 // if (!dollRefs.checkCollisions) return;
                 const { scenes } = globalRefs;
                 const { meshRef } = dollRefs;

@@ -12,7 +12,7 @@ import {
 } from "chootils/dist/speedAngleDistance2d";
 import {
   AnyAnimationName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   DollName,
   ModelName,
@@ -23,7 +23,7 @@ import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../typedStoreHelpers";
 import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
 import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
@@ -36,18 +36,18 @@ import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 
 export function makeDollDynamicRules<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
-  prendyConcepts: PrendyConcepts,
-  prendyArt: PrendyArt
+  prendyStores: PrendyStores,
+  prendyAssets: PrendyAssets
 ) {
   const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(
     storeHelpers,
-    prendyConcepts,
+    prendyStores,
     prendyStartOptions,
-    prendyArt
+    prendyAssets
   );
   const { getRefs, makeDynamicRules } = storeHelpers;
 
@@ -124,7 +124,7 @@ export function makeDollDynamicRules<
 }
 
 // FIXME
-// maybe allow concepto to run 'addedOrRemoved' rules for initialState?
+// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 
 export function startDynamicDollRulesForInitialState<
   StoreHelpers extends PrendyStoreHelpers,
@@ -154,15 +154,15 @@ export function startDynamicDollRulesForInitialState<
 export function makeDollRules<
   DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>,
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   prendyStartOptions: PrendyOptions,
   dollDynamicRules: DollDynamicRules,
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
-  prendyArt: PrendyArt
+  prendyStores: PrendyStores,
+  prendyAssets: PrendyAssets
 ) {
-  const { modelInfoByName, dollNames } = prendyArt;
+  const { modelInfoByName, dollNames } = prendyAssets;
 
   const {
     getQuickDistanceBetweenDolls,
@@ -171,9 +171,9 @@ export function makeDollRules<
     updateDollScreenPosition,
   } = makeDollStoreUtils(
     storeHelpers,
-    prendyConcepts,
+    prendyStores,
     prendyStartOptions,
-    prendyArt
+    prendyAssets
   );
 
   const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(

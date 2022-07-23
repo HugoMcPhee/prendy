@@ -6,9 +6,9 @@ import shaders from "../../..//utils/shaders";
 import { makeGetSectionVidVideo } from "../../../stores/sectionVids/utils";
 import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
 import { makeGlobalStoreUtils } from "./";
-export function makeCameraChangeUtils(storeHelpers, prendyArt) {
+export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
-    const { placeInfoByName, dollNames } = prendyArt;
+    const { placeInfoByName, dollNames } = prendyAssets;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
     const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
@@ -301,7 +301,7 @@ export function makeCameraChangeUtils(storeHelpers, prendyArt) {
     }
     // note adding to section vids cause its easier to follow for now? even though its not seperated
     function updateNowStuffWhenSectionChanged() {
-        const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName, } = getState().global.main;
+        const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
         const { nextCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
         const waitingForASectionToChange = nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
         // if no segment or camera was waiting for the sectionVid to change, return early

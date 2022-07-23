@@ -1,5 +1,5 @@
 import {
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   ModelInfoByName,
   ModelName,
@@ -25,19 +25,19 @@ import { makeSectionVidRules } from "./sectionVids/rules";
 import { makeSpeechBubbleRules } from "./speechBubbles/rules";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "./typedStoreHelpers";
 
 export function makeStartPrendyRules<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
+  PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
-  prendyConcepts: PrendyConcepts,
+  prendyStores: PrendyStores,
   PRENDY_OPTIONS: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
-  const { dollNames, characterNames } = prendyArt;
+  const { dollNames, characterNames } = prendyAssets;
 
   // making rules
 
@@ -45,36 +45,40 @@ export function makeStartPrendyRules<
   const pointerConnectRules = makePointersConnectRules(storeHelpers);
   const startAllGlobalRules = makeStartAllGlobalRules(
     storeHelpers,
-    prendyConcepts,
+    prendyStores,
     PRENDY_OPTIONS,
-    prendyArt
+    prendyAssets
   );
 
-  const modelRules = makeModelRules(storeHelpers, prendyArt);
-  const playerRules = makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyArt);
+  const modelRules = makeModelRules(storeHelpers, prendyAssets);
+  const playerRules = makePlayerRules(
+    storeHelpers,
+    PRENDY_OPTIONS,
+    prendyAssets
+  );
   const dollDynamicRules = makeDollDynamicRules(
     storeHelpers,
     PRENDY_OPTIONS,
-    prendyConcepts,
-    prendyArt
+    prendyStores,
+    prendyAssets
   );
   const dollRules = makeDollRules(
     PRENDY_OPTIONS,
     dollDynamicRules as ReturnType<typeof makeDollDynamicRules>,
     storeHelpers,
-    prendyConcepts,
-    prendyArt
+    prendyStores,
+    prendyAssets
   );
-  const speechBubbleRules = makeSpeechBubbleRules(storeHelpers, prendyConcepts);
+  const speechBubbleRules = makeSpeechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = makeSafeVidRules(storeHelpers);
-  const safeSectionVidRules = makeSectionVidRules(storeHelpers, prendyArt);
+  const safeSectionVidRules = makeSectionVidRules(storeHelpers, prendyAssets);
 
   const characterDynamicRules = makeCharacterDynamicRules(
     storeHelpers,
     PRENDY_OPTIONS,
-    prendyArt
+    prendyAssets
   );
-  const characterRules = makeCharacterRules(storeHelpers, prendyArt);
+  const characterRules = makeCharacterRules(storeHelpers, prendyAssets);
 
   const startDynamicCharacterRulesForInitialState =
     makeStartDynamicCharacterRulesForInitialState<

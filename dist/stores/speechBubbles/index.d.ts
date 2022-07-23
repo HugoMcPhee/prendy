@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { CSSProperties } from "react";
-import { PrendyArt, CharacterName } from "../../declarations";
-export default function speechBubbles<A_PrendyArt extends PrendyArt = PrendyArt, A_CharacterName extends CharacterName = CharacterName>(prendyArt: A_PrendyArt): {
+import { PrendyAssets, CharacterName } from "../../declarations";
+export default function speechBubbles<A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CharacterName extends CharacterName = CharacterName>(prendyAssets: A_PrendyAssets): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
         font?: string | undefined;
         character?: string | undefined;

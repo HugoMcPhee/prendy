@@ -2,13 +2,13 @@ import { StoreHelperTypes } from "pietem";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from ".";
 import { makeSafeVidStoreUtils } from "../../stores/safeVids/utils";
-import { PrendyArt, PlaceName } from "../../declarations";
+import { PrendyAssets, PlaceName } from "../../declarations";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
 
 export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   // safe Section Stack Vid Rules
 
@@ -24,7 +24,7 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
   const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } =
-    makeSectionVidStoreUtils(storeHelpers, prendyArt);
+    makeSectionVidStoreUtils(storeHelpers, prendyAssets);
 
   const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } =
     makeSafeVidStoreUtils(storeHelpers);

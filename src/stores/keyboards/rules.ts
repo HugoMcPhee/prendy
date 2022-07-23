@@ -1,4 +1,4 @@
-// import { makeRules } from "concepts";
+// import { makeRules } from "stores";
 
 // Not used at the moment
 

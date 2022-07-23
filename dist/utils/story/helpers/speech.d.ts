@@ -1,11 +1,11 @@
 import { CSSProperties } from "react";
-import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
 import { PrendyOptions, CharacterName } from "../../../declarations";
-export declare function makeSpeechStoryHelpers<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName>(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts, prendyStartOptions: A_PrendyOptions, _characterNames: readonly A_CharacterName[]): {
+export declare function makeSpeechStoryHelpers<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName>(storeHelpers: StoreHelpers, prendyStores: PrendyStores, prendyStartOptions: A_PrendyOptions, _characterNames: readonly A_CharacterName[]): {
     showSpeech: (text: string, options?: {
         time?: number | undefined;
         showOnce?: boolean | undefined;
-        character?: (keyof PrendyConcepts["speechBubbles"]["startStates"] & A_CharacterName) | undefined;
+        character?: (keyof PrendyStores["speechBubbles"]["startStates"] & A_CharacterName) | undefined;
         zoomAmount?: number | undefined;
         lookAtPlayer?: boolean | undefined;
         returnToZoomBeforeConversation?: boolean | undefined;

@@ -10,6 +10,10 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
 
+v0.9.0
+
+- rename prendyArt to prendyAssets and concepts to stores
+
 v0.8.4
 
 - update libraries (babylonjs react +)

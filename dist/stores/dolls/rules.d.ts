@@ -1,6 +1,6 @@
-import { PrendyArt, PrendyOptions, DollName } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyConcepts } from "../typedStoreHelpers";
-export declare function makeDollDynamicRules<StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyConcepts: PrendyConcepts, prendyArt: PrendyArt): {
+import { PrendyAssets, PrendyOptions, DollName } from "../../declarations";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../typedStoreHelpers";
+export declare function makeDollDynamicRules<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyStores: PrendyStores, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
@@ -8,7 +8,7 @@ export declare function makeDollDynamicRules<StoreHelpers extends PrendyStoreHel
     ruleNames: any[];
 };
 export declare function startDynamicDollRulesForInitialState<StoreHelpers extends PrendyStoreHelpers, DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>>(storeHelpers: StoreHelpers, dollDynamicRules: DollDynamicRules, dollNames: readonly DollName[]): () => void;
-export declare function makeDollRules<DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>, StoreHelpers extends PrendyStoreHelpers, PrendyConcepts extends PlaceholderPrendyConcepts>(prendyStartOptions: PrendyOptions, dollDynamicRules: DollDynamicRules, storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts, prendyArt: PrendyArt): {
+export declare function makeDollRules<DollDynamicRules extends ReturnType<typeof makeDollDynamicRules>, StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(prendyStartOptions: PrendyOptions, dollDynamicRules: DollDynamicRules, storeHelpers: StoreHelpers, prendyStores: PrendyStores, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

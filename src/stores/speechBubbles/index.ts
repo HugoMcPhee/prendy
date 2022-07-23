@@ -4,17 +4,17 @@ import { CSSProperties } from "react";
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition } from "chootils/dist/points2d";
 import {
-  PrendyArt,
+  PrendyAssets,
   CharacterName,
   FontName,
   SpeechVidName,
 } from "../../declarations";
 
 export default function speechBubbles<
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_CharacterName extends CharacterName = CharacterName
->(prendyArt: A_PrendyArt) {
-  const { characterNames, characterOptions, fontNames } = prendyArt;
+>(prendyAssets: A_PrendyAssets) {
+  const { characterNames, characterOptions, fontNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,

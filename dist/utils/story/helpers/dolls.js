@@ -6,7 +6,7 @@ import { vector3ToPoint3d } from "../../babylonjs";
 import { makeDollStoryUtils } from "../utils/dolls";
 import { makeSpotStoryUtils } from "../utils/spots";
 export function makeDollStoryHelpers(storeHelpers, 
-// prendyConcepts: PrendyConcepts,
+// prendyStores: PrendyStores,
 prendyStartOptions, modelInfoByName) {
     const { getRefs, getState, setState } = storeHelpers;
     const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);

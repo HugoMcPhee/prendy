@@ -4,7 +4,7 @@ import {
   AnyTriggerName,
   AnyCameraName,
   CharacterOptions,
-  PrendyArt,
+  PrendyAssets,
 } from "../../declarations";
 import { forEach } from "chootils/dist/loops";
 
@@ -14,9 +14,9 @@ export default function characters<
   A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_CharacterOptions extends CharacterOptions = CharacterOptions,
-  A_PrendyArt extends PrendyArt = PrendyArt
->(prendyArt: A_PrendyArt) {
-  const { characterNames, dollNames, characterOptions } = prendyArt;
+  A_PrendyAssets extends PrendyAssets = PrendyAssets
+>(prendyAssets: A_PrendyAssets) {
+  const { characterNames, dollNames, characterOptions } = prendyAssets;
 
   const state = <T_CharacterName extends string, T_DollName extends A_DollName>(
     _characterName: T_CharacterName,

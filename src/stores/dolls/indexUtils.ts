@@ -1,7 +1,7 @@
 import { AbstractMesh } from "@babylonjs/core";
 import {
   AnimationNameByModel,
-  PrendyArt,
+  PrendyAssets,
   DollName,
   MeshNameByModel,
   ModelName,
@@ -39,8 +39,8 @@ export function getDefaultInRangeFunction(dollNames: readonly DollName[]) {
   return defaultInRange;
 }
 
-export default function makeDollIndexUtils(prendyArt: PrendyArt) {
-  const { dollNames, modelInfoByName } = prendyArt;
+export default function makeDollIndexUtils(prendyAssets: PrendyAssets) {
+  const { dollNames, modelInfoByName } = prendyAssets;
 
   function makeModelAnimWeightsMoverState<T_ModelName extends ModelName>(
     modelName: T_ModelName

@@ -9,9 +9,9 @@ const defaultCamRefs = () => ({
     isTriggerable: true,
 });
 // export
-export default function places(prendyArt) {
-    const { placeInfoByName } = prendyArt;
-    const placeNames = prendyArt.placeNames;
+export default function places(prendyAssets) {
+    const { placeInfoByName } = prendyAssets;
+    const placeNames = prendyAssets.placeNames;
     // State
     const state = (placeName) => {
         var _a, _b, _c;
@@ -25,7 +25,7 @@ export default function places(prendyArt) {
     };
     // Refs
     function refs(placeName) {
-        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames, } = placeInfoByName[placeName];
+        const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
         const spotPositions = {};
         const spotRotations = {};
         const soundspotSounds = {};

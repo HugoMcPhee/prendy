@@ -7,16 +7,16 @@ import { makeGetCharDollStuff } from "../../characters/utils";
 import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
 import { makeGlobalStoreUtils } from "../utils";
 import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalChangePlaceRules(storeHelpers, _prendyConcepts, prendyStartOptions, prendyArt) {
+export function makeGlobalChangePlaceRules(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-    const { placeInfoByName } = prendyArt;
+    const { placeInfoByName } = prendyAssets;
     const globalRefs = getRefs().global.main;
-    const { getSectionVidVideo } = makeSectionVidStoreUtils(storeHelpers, prendyArt);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(storeHelpers, prendyArt);
+    const { getSectionVidVideo } = makeSectionVidStoreUtils(storeHelpers, prendyAssets);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeCameraChangeUtils(storeHelpers, prendyAssets);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
     const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
     const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
-    const { setDollToSpot } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, prendyArt.modelInfoByName);
+    const { setDollToSpot } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
     function setPlayerPositionForNewPlace() {
         const { nowPlaceName, playerCharacter } = getState().global.main;
         const { dollName } = getCharDollStuff(playerCharacter);
@@ -90,7 +90,7 @@ export function makeGlobalChangePlaceRules(storeHelpers, _prendyConcepts, prendy
         }),
         whenReadyToSwapPlace: itemEffect({
             run({ itemState: globalState }) {
-                // run on the start of the next concepto frame, so all the flows can run again
+                // run on the start of the next pietem frame, so all the flows can run again
                 setState({}, () => {
                     const { nowPlaceName, nextPlaceName } = globalState;
                     const cameraNames = placeInfoByName[nowPlaceName]

@@ -3,13 +3,13 @@ import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { DollName, PlaceName, SpotNameByPlace } from "../../../declarations";
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../../../stores/typedStoreHelpers";
 import { makeSpotStoryUtils } from "./spots";
 
 export function makeDollStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts,
+  PrendyStores extends PlaceholderPrendyStores,
   A_DollName extends DollName = DollName,
   A_PlaceName extends PlaceName = PlaceName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
@@ -21,18 +21,16 @@ export function makeDollStoryUtils<
   // const { getState, startItemEffect } = storeHelpers;
   // const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
 
-  type StartState_Dolls = NonNullable<PrendyConcepts["dolls"]["startStates"]>;
+  type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
 
-  type ModelNameFromDoll<
-    T_DollName extends A_DollName
-  > = StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<T_DollName extends A_DollName> =
+    StartState_Dolls[T_DollName]["modelName"];
 
   function getModelNameFromDoll<T_DollName extends A_DollName>(
     dollName: T_DollName
   ): ModelNameFromDoll<T_DollName> {
-    return getState().dolls[dollName].modelName as ModelNameFromDoll<
-      T_DollName
-    >;
+    return getState().dolls[dollName]
+      .modelName as ModelNameFromDoll<T_DollName>;
   }
 
   function get2DAngleFromDollToSpot<T_Place extends A_PlaceName>(

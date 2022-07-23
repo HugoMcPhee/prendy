@@ -1,15 +1,15 @@
 import {
   PrendyStoreHelpers,
-  PlaceholderPrendyConcepts,
+  PlaceholderPrendyStores,
 } from "../typedStoreHelpers";
 
 export function makeSpeechBubblesStoreUtils<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyConcepts extends PlaceholderPrendyConcepts
->(storeHelpers: StoreHelpers, prendyConcepts: PrendyConcepts) {
+  PrendyStores extends PlaceholderPrendyStores
+>(storeHelpers: StoreHelpers, prendyStores: PrendyStores) {
   const { getState } = storeHelpers;
 
-  type SpeechBubbleName = keyof PrendyConcepts["speechBubbles"]["startStates"];
+  type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
 
   function getTypingDelayForLetter(
     letter: string,

@@ -6,7 +6,7 @@ export declare type CharacterOptionsPlaceholder<CharacterName extends string, Do
 export declare type DollOptionsPlaceholder<DollName extends string, ModelName extends string> = Record<DollName, {
     model: any;
 }>;
-export declare type PlaceholderPrendyConcepts = Record<any, {
+export declare type PlaceholderPrendyStores = Record<any, {
     state: (itemName: any) => any;
     refs: (itemName: any, type: any) => any;
     startStates?: Record<any, any>;

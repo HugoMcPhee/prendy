@@ -1,4 +1,4 @@
-// import { getState, ItemState, setState } from "concepts";
+// import { getState, ItemState, setState } from "stores";
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
 export function makeGlobalStoreUtils(storeHelpers) {

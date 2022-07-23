@@ -1,4 +1,4 @@
-// import { getState, ItemState, setState } from "concepts";
+// import { getState, ItemState, setState } from "stores";
 
 import { StoreHelperTypes } from "pietem";
 import { PrendyStoreHelpers } from "../../typedStoreHelpers";

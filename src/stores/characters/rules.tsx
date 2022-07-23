@@ -3,7 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
   AnyTriggerName,
-  PrendyArt,
+  PrendyAssets,
   PrendyOptions,
   CharacterName,
 } from "../../declarations";
@@ -16,10 +16,10 @@ export function makeCharacterDynamicRules<
 >(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
-  const { placeInfoByName } = prendyArt;
+  const { placeInfoByName } = prendyAssets;
 
   const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(
     storeHelpers,
@@ -51,11 +51,8 @@ export function makeCharacterDynamicRules<
 
           if (!itemRefs.meshRef) return;
 
-          const {
-            nowPlaceName,
-            loadingOverlayToggled,
-            focusedDoll,
-          } = getState().global.main;
+          const { nowPlaceName, loadingOverlayToggled, focusedDoll } =
+            getState().global.main;
           const nowPlaceInfo = placeInfoByName[nowPlaceName];
           const triggerNames = nowPlaceInfo.triggerNames as AnyTriggerName[];
           const cameraNames = nowPlaceInfo.cameraNames as AnyCameraName[];
@@ -172,7 +169,7 @@ export function makeCharacterDynamicRules<
 }
 
 // FIXME
-// maybe allow concepto to run 'addedOrRemoved' rules for initialState?
+// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 
 export function makeStartDynamicCharacterRulesForInitialState<
@@ -202,10 +199,10 @@ export function makeStartDynamicCharacterRulesForInitialState<
 
 export function makeCharacterRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
-  prendyArt: PrendyArt
+  prendyAssets: PrendyAssets
 ) {
   const { makeRules, getState, setState } = storeHelpers;
-  const { placeInfoByName } = prendyArt;
+  const { placeInfoByName } = prendyAssets;
 
   return makeRules(({ itemEffect, effect }) => ({
     // should be a  dynamic rule ?

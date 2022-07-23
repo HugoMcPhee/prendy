@@ -5,7 +5,8 @@ export function makeDollStoryUtils(storeHelpers) {
     const { getState } = storeHelpers;
     const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
     function getModelNameFromDoll(dollName) {
-        return getState().dolls[dollName].modelName;
+        return getState().dolls[dollName]
+            .modelName;
     }
     function get2DAngleFromDollToSpot(dollA, place, spot) {
         const spotPosition = getSpotPosition(place, spot);

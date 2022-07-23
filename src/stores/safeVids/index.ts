@@ -1,6 +1,6 @@
 import { InitialItemsState } from "pietem";
 import { forEach } from "chootils/dist/loops";
-import { PrendyArt, PlaceName } from "../../declarations";
+import { PrendyAssets, PlaceName } from "../../declarations";
 import { abLetters } from "../../utils/consts";
 
 export type VidState =
@@ -24,10 +24,10 @@ export type VidState =
   | "unloaded";
 
 export default function safeVids<
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PlaceName extends PlaceName = PlaceName
->(prendyArt: A_PrendyArt) {
-  const { placeNames, placeInfoByName } = prendyArt;
+>(prendyAssets: A_PrendyAssets) {
+  const { placeNames, placeInfoByName } = prendyAssets;
 
   function vidNameToPlaceName(vidName: string) {
     // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
@@ -74,7 +74,8 @@ export default function safeVids<
   }
 
   // const startStates: InitialItemsState<typeof state> = {
-  const startStates: InitialItemsState<typeof state> = makeStartStatesForPlaces();
+  const startStates: InitialItemsState<typeof state> =
+    makeStartStatesForPlaces();
 
   return { state, refs, startStates };
 }

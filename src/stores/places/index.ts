@@ -8,7 +8,7 @@ import {
 import { forEach } from "chootils/dist/loops";
 import {
   AnyCameraName,
-  PrendyArt,
+  PrendyAssets,
   CameraNameByPlace,
   PlaceName,
   SoundspotNameByPlace,
@@ -33,15 +33,15 @@ export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 export default function places<
   A_PlaceName extends PlaceName = PlaceName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_PrendyArt extends PrendyArt = PrendyArt,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
   A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(prendyArt: A_PrendyArt) {
-  const { placeInfoByName } = prendyArt;
-  const placeNames = prendyArt.placeNames as A_PlaceName[];
+>(prendyAssets: A_PrendyAssets) {
+  const { placeInfoByName } = prendyAssets;
+  const placeNames = prendyAssets.placeNames as A_PlaceName[];
 
   type MaybeCam<T_PlaceName extends A_PlaceName> =
     | null
@@ -82,8 +82,8 @@ export default function places<
       wantedCamNameAtLoop: null as MaybeCam<K_PlaceName>,
       wantedCamName: null as MaybeCam<K_PlaceName>,
       nowCamName:
-        (((placeInfoByName as any)?.[placeName as any]
-          ?.cameraNames?.[0] as unknown) as A_AnyCameraName) ??
+        ((placeInfoByName as any)?.[placeName as any]
+          ?.cameraNames?.[0] as unknown as A_AnyCameraName) ??
         ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
     };
   };
@@ -102,13 +102,8 @@ export default function places<
   function refs<K_PlaceName extends A_PlaceName>(
     placeName: K_PlaceName
   ): PlaceRefs<K_PlaceName> {
-    const {
-      spotNames,
-      soundspotNames,
-      triggerNames,
-      wallNames,
-      cameraNames,
-    } = placeInfoByName[placeName];
+    const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } =
+      placeInfoByName[placeName];
 
     const spotPositions: Partial<SpotPositions<K_PlaceName>> = {};
     const spotRotations: Partial<SpotRotations<K_PlaceName>> = {};

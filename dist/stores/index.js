@@ -48,19 +48,19 @@ export const prendyStepNames = [
 // or
 // Record<PlaceName, Something> to Record<string, Something>
 // it keeps the types generic , which is good since the types are updated from each project (declaration merging)
-export function makePrendyStores(prendyStartOptions, prendyArt) {
+export function makePrendyStores(prendyStartOptions, prendyAssets) {
     return {
         keyboards: keyboards(),
-        miniBubbles: miniBubbles(prendyArt),
+        miniBubbles: miniBubbles(prendyAssets),
         pointers: pointers(),
-        global: global(prendyStartOptions, prendyArt),
-        models: models(prendyArt),
-        dolls: dolls(prendyArt),
-        characters: characters(prendyArt),
+        global: global(prendyStartOptions, prendyAssets),
+        models: models(prendyAssets),
+        dolls: dolls(prendyAssets),
+        characters: characters(prendyAssets),
         players: players(prendyStartOptions),
-        speechBubbles: speechBubbles(prendyArt),
-        places: places(prendyArt),
-        safeVids: safeVids(prendyArt),
-        sectionVids: sectionVids(prendyArt),
+        speechBubbles: speechBubbles(prendyAssets),
+        places: places(prendyAssets),
+        safeVids: safeVids(prendyAssets),
+        sectionVids: sectionVids(prendyAssets),
     };
 }

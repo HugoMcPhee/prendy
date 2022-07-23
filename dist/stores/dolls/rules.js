@@ -13,8 +13,8 @@ import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
-export function makeDollDynamicRules(storeHelpers, prendyStartOptions, prendyConcepts, prendyArt) {
-    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt);
+export function makeDollDynamicRules(storeHelpers, prendyStartOptions, prendyStores, prendyAssets) {
+    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
     const { getRefs, makeDynamicRules } = storeHelpers;
     return makeDynamicRules(({ itemEffect, effect }) => ({
         waitForModelToLoad: itemEffect(({ dollName, modelName, }) => ({
@@ -66,7 +66,7 @@ export function makeDollDynamicRules(storeHelpers, prendyStartOptions, prendyCon
     }));
 }
 // FIXME
-// maybe allow concepto to run 'addedOrRemoved' rules for initialState?
+// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRules, dollNames) {
     const { getState } = storeHelpers;
     forEach(dollNames, (dollName) => {
@@ -84,9 +84,9 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
         });
     };
 }
-export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyConcepts, prendyArt) {
-    const { modelInfoByName, dollNames } = prendyArt;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt);
+export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
+    const { modelInfoByName, dollNames } = prendyAssets;
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
     const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);

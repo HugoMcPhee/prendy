@@ -181,13 +181,8 @@ export function makeDollRules<
     prendyStartOptions
   );
 
-  const {
-    makeRules,
-    getPreviousState,
-    getState,
-    setState,
-    getRefs,
-  } = storeHelpers;
+  const { makeRules, getPreviousState, getState, setState, getRefs } =
+    storeHelpers;
 
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
 
@@ -414,18 +409,12 @@ export function makeDollRules<
 
         if (itemRefs.checkCollisions) {
           const newMeshPosition = point3dToVector3(newPosition);
-          const {
-            editedPosition,
-            positionWasEdited,
-            collidedPosOffset,
-          } = setGlobalPositionWithCollisions(
-            itemRefs.meshRef,
-            newMeshPosition
-          );
+          const { editedPosition, positionWasEdited, collidedPosOffset } =
+            setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
 
           // if a collision cauhed the mesh to not reach the position, update the position state
           if (positionWasEdited) {
-            const shouldChangeAgnle =
+            const shouldChangeAngle =
               Math.abs(collidedPosOffset.z) > 0.01 ||
               Math.abs(collidedPosOffset.x) > 0.01;
 
@@ -444,7 +433,7 @@ export function makeDollRules<
               dolls: {
                 [dollName]: {
                   position: vector3ToSafePoint3d(editedPosition),
-                  rotationYGoal: shouldChangeAgnle ? newYRotation : undefined,
+                  rotationYGoal: shouldChangeAngle ? newYRotation : undefined,
                 },
               },
             }));
@@ -523,9 +512,8 @@ export function makeDollRules<
             }
 
             // FIXME type?
-            (newQuickDistancesMap as any)[dollName]![
-              otherDollName
-            ] = quickDistance;
+            (newQuickDistancesMap as any)[dollName]![otherDollName] =
+              quickDistance;
 
             tempNewDollsState[dollName]!.inRange![otherDollName].touch =
               quickDistance < rangeOptionsQuick.touch;

@@ -21,7 +21,7 @@ export function setGlobalPositionWithCollisions(
   let collidedPosOffset: Point3D = { x: 0, y: 0, z: 0 };
   if (positionDidChange) {
     theMesh.moveWithCollisions(movementAmount);
-    // theMesh.computeWorldMatrix(true);
+    theMesh.computeWorldMatrix(true);
 
     collidedMeshPos = theMesh.getAbsolutePosition().clone();
     collidedPosOffset = subtractPointsSafer(newMeshPos, collidedMeshPos);

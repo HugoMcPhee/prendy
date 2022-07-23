@@ -10,6 +10,11 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
 
+v0.8.4
+
+- update libraries (babylonjs react +)
+- fix dolls moving with collisions
+
 v0.8.1
 
 - trigger rules support different characters

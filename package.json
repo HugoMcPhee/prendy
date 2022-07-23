@@ -1,15 +1,15 @@
 {
   "name": "prendy",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "prerendered backdrop games with babylonjs and pietem",
-  "___main": "src/index.ts",
-  "___types": "src/index.ts",
-  "___files": [
+  "_main": "src/index.ts",
+  "_types": "src/index.ts",
+  "_files": [
     "src"
   ],
   "main": "dist/index.js",
-  "ypes": "dist/index.d.ts",
-  "iles": [
+  "types": "dist/index.d.ts",
+  "files": [
     "dist"
   ],
   "scripts": {
@@ -23,17 +23,18 @@
   "author": "Hugo McPhee",
   "license": "MIT",
   "devDependencies": {
-    "@babylonjs/core": "5.0.0-rc.11",
-    "@babylonjs/gui": "5.0.0-rc.11",
-    "@babylonjs/inspector": "5.0.0-rc.11",
-    "@babylonjs/loaders": "5.0.0-rc.11",
-    "@types/react": "^17.0.43",
+    "@babylonjs/core": "5.16.0",
+    "@babylonjs/gui": "5.16.0",
+    "@babylonjs/inspector": "5.16.0",
+    "@babylonjs/loaders": "5.16.0",
+    "@types/react": "^18.0.15",
     "chootils": "^0.3.4",
+    "delay": "^5.0.0",
     "pietem": "^0.8.5",
     "pietem-movers": "^0.5.7",
-    "delay": "^5.0.0",
-    "react": "^17.0.2",
-    "react-babylonjs": "^3.0.31",
+    "react": "^18.2.0",
+    "react-babylonjs": "^3.1.6",
+    "react-dom": "^18.2.0",
     "react-promise-suspense": "^0.3.3",
     "react-spring": "^9.4.4",
     "stringz": "^2.1.0",

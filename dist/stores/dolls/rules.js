@@ -88,7 +88,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
     const { modelInfoByName, dollNames } = prendyArt;
     const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(storeHelpers, prendyConcepts, prendyStartOptions, prendyArt);
     const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs, } = storeHelpers;
+    const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         // --------------------------------
@@ -289,10 +289,10 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                 // }
                 if (itemRefs.checkCollisions) {
                     const newMeshPosition = point3dToVector3(newPosition);
-                    const { editedPosition, positionWasEdited, collidedPosOffset, } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
+                    const { editedPosition, positionWasEdited, collidedPosOffset } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
                     // if a collision cauhed the mesh to not reach the position, update the position state
                     if (positionWasEdited) {
-                        const shouldChangeAgnle = Math.abs(collidedPosOffset.z) > 0.01 ||
+                        const shouldChangeAngle = Math.abs(collidedPosOffset.z) > 0.01 ||
                             Math.abs(collidedPosOffset.x) > 0.01;
                         let newYRotation = getState().dolls[dollName].rotationYGoal;
                         const positionOffset = subtractPointsSafer(prevPosition, editedPosition);
@@ -304,7 +304,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                             dolls: {
                                 [dollName]: {
                                     position: vector3ToSafePoint3d(editedPosition),
-                                    rotationYGoal: shouldChangeAgnle ? newYRotation : undefined,
+                                    rotationYGoal: shouldChangeAngle ? newYRotation : undefined,
                                 },
                             },
                         }));
@@ -367,7 +367,8 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                             quickDistance = getQuickDistanceBetweenDolls(dollName, otherDollName);
                         }
                         // FIXME type?
-                        newQuickDistancesMap[dollName][otherDollName] = quickDistance;
+                        newQuickDistancesMap[dollName][otherDollName] =
+                            quickDistance;
                         tempNewDollsState[dollName].inRange[otherDollName].touch =
                             quickDistance < rangeOptionsQuick.touch;
                         tempNewDollsState[dollName].inRange[otherDollName].talk =

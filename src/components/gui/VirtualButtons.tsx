@@ -1,20 +1,10 @@
-import {
-  PrendyStoreHelpers,
-  PrendyOptionsUntyped,
-} from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,
   getVectorSpeed,
 } from "chootils/dist/speedAngleDistance2d";
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  ReactNode,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState, useMemo, ReactNode } from "react";
 import { animated, useSpring } from "react-spring";
 
 type VirtualButtonProps = {
@@ -25,7 +15,7 @@ type VirtualButtonProps = {
   disabled: boolean;
 };
 
-export function makeVirtualButtons<
+export function makeTyped_VirtualButtons<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions) {
@@ -40,13 +30,7 @@ export function makeVirtualButtons<
     leftThumbContainer: 110,
   };
 
-  function VirtualButton({
-    children,
-    onPress,
-    onPointerDown,
-    onPointerUp,
-    disabled,
-  }: VirtualButtonProps) {
+  function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled }: VirtualButtonProps) {
     const [isPressed, setIsPressed] = useState(false);
     // console.log("disabled", disabled);
 
@@ -106,14 +90,11 @@ export function makeVirtualButtons<
   }
 
   return function VirtualButtons(_: Props) {
-    const { canShowVirtualButtons } = useStore(
-      ({ players: { main } }) => main,
-      {
-        type: "players",
-        name: "main",
-        prop: ["canShowVirtualButtons"],
-      }
-    );
+    const { canShowVirtualButtons } = useStore(({ players: { main } }) => main, {
+      type: "players",
+      name: "main",
+      prop: ["canShowVirtualButtons"],
+    });
 
     // 🔺➰🐸
     // ❔👋❓💭⏩🗣️💡
@@ -164,12 +145,7 @@ export function makeVirtualButtons<
           >
             {/* making rounded triangles - Knod -
             https://codepen.io/knod/pen/KzRYye */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              className="svg-triangle"
-              viewBox="0 0 100 100"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100">
               <path
                 d="M 50,35 70,70 30,70 z"
                 style={{

@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeStoryOverlay(storeHelpers) {
+export function makeTyped_StoryOverlay(storeHelpers) {
     const { useStoreItemPropsEffect } = storeHelpers;
     return function StoryOverlay(_props) {
         const theOverlay = useRef(null);

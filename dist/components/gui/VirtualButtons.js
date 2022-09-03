@@ -1,13 +1,13 @@
-import React, { useState, useMemo, } from "react";
+import React, { useState, useMemo } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeVirtualButtons(storeHelpers, PRENDY_OPTIONS) {
+export function makeTyped_VirtualButtons(storeHelpers, PRENDY_OPTIONS) {
     const { getRefs, getState, setState, useStore } = storeHelpers;
     const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
     const globalRefs = getRefs().global.main;
     const SIZES = {
         leftThumbContainer: 110,
     };
-    function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled, }) {
+    function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled }) {
         const [isPressed, setIsPressed] = useState(false);
         // console.log("disabled", disabled);
         const styles = useMemo(() => ({

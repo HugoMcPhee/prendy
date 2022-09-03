@@ -1,12 +1,11 @@
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
-import { makeSpotStoryUtils } from "./spots";
-export function makeDollStoryUtils(storeHelpers) {
+import { makeTyped_spotStoryUtils } from "./spots";
+export function makeTyped_dollStoryUtils(storeHelpers) {
     const { getState } = storeHelpers;
-    const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
+    const { getSpotPosition } = makeTyped_spotStoryUtils(storeHelpers);
     function getModelNameFromDoll(dollName) {
-        return getState().dolls[dollName]
-            .modelName;
+        return getState().dolls[dollName].modelName;
     }
     function get2DAngleFromDollToSpot(dollA, place, spot) {
         const spotPosition = getSpotPosition(place, spot);
@@ -15,8 +14,7 @@ export function makeDollStoryUtils(storeHelpers) {
         const dollPos = getState().dolls[dollA].position;
         const dollPos2D = { x: dollPos.z, y: dollPos.x };
         const spotPos2D = { x: spotPosition.z, y: spotPosition.x };
-        return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D))
-            .angle;
+        return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D)).angle;
     }
     function get2DAngleBetweenDolls(dollA, dollB) {
         if (!dollA || !dollB)
@@ -25,8 +23,7 @@ export function makeDollStoryUtils(storeHelpers) {
         const dollBPos = getState().dolls[dollB].position;
         const dollAPos2D = { x: dollAPos.z, y: dollAPos.x };
         const dollBPos2D = { x: dollBPos.z, y: dollBPos.x };
-        return getSpeedAndAngleFromVector(subtractPoints(dollAPos2D, dollBPos2D))
-            .angle;
+        return getSpeedAndAngleFromVector(subtractPoints(dollAPos2D, dollBPos2D)).angle;
     }
     // function stickDollToFloor() {
     //   // Sticking on ground

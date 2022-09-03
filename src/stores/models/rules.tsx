@@ -1,23 +1,21 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { PrendyAssets, ModelName } from "../../declarations";
-import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
+import { makeTyped_getSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngineUtils";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 // handle laoding here ??
 
-export function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(
+export function makeTyped_modelRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
 
-  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
 
-  async function startLoadingModel<T_ModelName extends ModelName>(
-    modelName: T_ModelName
-  ) {
+  async function startLoadingModel<T_ModelName extends ModelName>(modelName: T_ModelName) {
     setState({ models: { [modelName]: { wantToLoad: false } } });
 
     const { modelFile } = modelInfoByName[modelName];
@@ -28,17 +26,11 @@ export function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(
       return;
     }
 
-    const container = await SceneLoader.LoadAssetContainerAsync(
-      modelFile,
-      undefined,
-      scene
-    );
+    const container = await SceneLoader.LoadAssetContainerAsync(modelFile, undefined, scene);
 
     const modelRef = getRefs().models[modelName];
     modelRef.container = container;
-    modelRef.materialRef = container.materials[0]
-      ? (container.materials[0] as PBRMaterial)
-      : null;
+    modelRef.materialRef = container.materials[0] ? (container.materials[0] as PBRMaterial) : null;
     modelRef.materialRefs = container.materials as PBRMaterial[];
     setState({ models: { [modelName]: { isLoaded: true } } });
 
@@ -65,10 +57,7 @@ export function makeModelRules<StoreHelpers extends PrendyStoreHelpers>(
           return {
             global: {
               main: {
-                modelNamesLoaded: addItemToUniqueArray(
-                  state.global.main.modelNamesLoaded,
-                  modelName
-                ),
+                modelNamesLoaded: addItemToUniqueArray(state.global.main.modelNamesLoaded, modelName),
               },
             },
           };

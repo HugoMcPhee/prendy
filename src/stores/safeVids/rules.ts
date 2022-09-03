@@ -1,18 +1,15 @@
 import { StoreHelperTypes } from "pietem";
-import { VidState } from ".";
+import { VidState } from "./safeVids";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 import { makeVideoElementFromPath } from "./utils";
 // import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
-export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getState, makeRules, onNextTick, setState } = storeHelpers;
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> &
-    keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
+  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> & keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
   type HelperType<T extends ItemType> = StoreHelperTypes<
     PrendyStoreHelpers["getState"],
     PrendyStoreHelpers["getRefs"],
@@ -34,15 +31,10 @@ export function makeSafeVidRules<StoreHelpers extends PrendyStoreHelpers>(
         // beforeLoad
         if (vidState === "beforeLoad") {
           setVidState("waitingForLoad");
-          itemRefs.videoElement = makeVideoElementFromPath(
-            itemState.videoSource
-          );
+          itemRefs.videoElement = makeVideoElementFromPath(itemState.videoSource);
 
           function onLoad() {
-            itemRefs.videoElement?.removeEventListener(
-              "loadedmetadata",
-              onLoad
-            );
+            itemRefs.videoElement?.removeEventListener("loadedmetadata", onLoad);
             // uncomment to test videos
             // itemRefs.videoElement &&
             // testAppendVideo(itemRefs.videoElement, itemName, itemName);

@@ -1,11 +1,8 @@
 // @refresh-reset
 import React, { useState } from "react";
-import {
-  PrendyStoreHelpers,
-  PickupsInfoPlaceholder,
-} from "../../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers, PickupsInfoPlaceholder } from "../../../stores/typedStoreHelpers";
 
-export function makePickupButton<
+export function makeTyped_PickupButton<
   StoreHelpers extends PrendyStoreHelpers,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>

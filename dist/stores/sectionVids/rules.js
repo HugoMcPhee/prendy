@@ -1,11 +1,11 @@
 import { minMaxRange } from "chootils/dist/numbers";
-import { makeSafeVidStoreUtils } from "../../stores/safeVids/utils";
-import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
+import { makeTyped_safeVidUtils } from "../../stores/safeVids/utils";
+import { BEFORE_LOOP_PADDING, makeTyped_sectionVidUtils } from "./utils";
 export function makeSectionVidRules(storeHelpers, prendyAssets) {
     // safe Section Stack Vid Rules
     const { getState, makeRules, setState } = storeHelpers;
-    const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = makeSectionVidStoreUtils(storeHelpers, prendyAssets);
-    const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = makeSafeVidStoreUtils(storeHelpers);
+    const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
+    const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = makeTyped_safeVidUtils(storeHelpers);
     return makeRules(({ itemEffect }) => ({
         rulesForSettingNewVideoStates: itemEffect({
             run({ newValue: vidState, itemName, itemState }) {

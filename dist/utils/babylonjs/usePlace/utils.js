@@ -1,8 +1,8 @@
 // import React from "react";
 import { AssetsManager, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
-import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
+import { makeTyped_sectionVidUtils } from "../../../stores/sectionVids/utils";
+import { makeTyped_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 export function testAppendVideo(theVideo, id, elementTag = "app") {
     var _a;
     theVideo.width = 160;
@@ -11,11 +11,11 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
     // theVideo.preload = "auto";
     (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
 }
-export function makeUsePlaceUtils(storeHelpers, prendyAssets) {
+export function makeTyped_usePlaceUtils(storeHelpers, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeSectionVidStoreUtils(storeHelpers, prendyAssets);
-    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
+    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
     const placesRefs = getRefs().places;
     async function loadVideoBlob(filepath) {
         const result = await fetch(filepath);

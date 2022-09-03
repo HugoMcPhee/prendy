@@ -24,7 +24,7 @@ export function getAbsoluteRotation(child) {
     //   console.warn("no rootMesh for ", nowPlaceName);
     //   return new Vector3();
     // }
-    const originalParent = child.parent;
+    // const originalParent = child.parent;
     //
     // child.parent = null;
     // child.setParent(null);

@@ -1,21 +1,12 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
+import { makeTyped_sectionVidUtils } from "../../../stores/sectionVids/utils";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import {
-  PrendyAssets,
-  CameraNameByPlace,
-  PlaceName,
-  SegmentNameByPlace,
-} from "../../../declarations";
-import { makeGetSceneOrEngineUtils } from "../getSceneOrEngine";
+import { PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../../declarations";
+import { makeTyped_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 
-export function testAppendVideo(
-  theVideo: HTMLVideoElement,
-  id: string,
-  elementTag = "app"
-) {
+export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
   theVideo.width = 160;
   theVideo.height = 90;
   theVideo.id = id;
@@ -23,17 +14,16 @@ export function testAppendVideo(
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
+export function makeTyped_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { doWhenSectionVidPlayingAsync, getSectionForPlace } =
-    makeSectionVidStoreUtils(storeHelpers, prendyAssets);
+  const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
 
-  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
 
   const placesRefs = getRefs().places;
 
@@ -57,8 +47,7 @@ export function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
   // }
 
   async function loadNowVideosForPlace() {
-    const { nowPlaceName, nowSegmentName, wantedSegmentName } =
-      getState().global.main;
+    const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
     const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
 
     const wantedSection = getSectionForPlace(
@@ -108,11 +97,7 @@ export function makeUsePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
   }
 
   function makeCameraFromModel(theCamera: Camera, scene: Scene) {
-    const newCamera = new TargetCamera(
-      "camera1",
-      theCamera.globalPosition,
-      scene
-    );
+    const newCamera = new TargetCamera("camera1", theCamera.globalPosition, scene);
     newCamera.rotationQuaternion = theCamera.absoluteRotation;
     newCamera.fov = theCamera.fov;
     // should have a visual min maxZ and depth min max Z

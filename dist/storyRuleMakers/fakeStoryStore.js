@@ -8,16 +8,6 @@ export function story_fake() {
             // to know what to start with when a place loads
             chapterName: "hallways",
             storyPart: "010_before_start", // to know which part of the chapter is happening
-            //
-            //
-            // showSmellParticles: false,
-            //
-            // didWearGeo: false,
-            // didPickupKey: false,
-            // didOpenDoor: false,
-            // didShowEnding: false,
-            //
-            // gotMuddy: false,
         };
         // return initialState as typeof initialState & { [key: string]: any };
         return initialState;

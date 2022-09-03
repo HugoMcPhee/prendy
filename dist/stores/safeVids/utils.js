@@ -1,4 +1,4 @@
-export function makeSafeVidStoreUtils(storeHelpers) {
+export function makeTyped_safeVidUtils(storeHelpers) {
     const { getState, startItemEffect, stopEffect } = storeHelpers;
     function doWhenSafeVidStateChanges(safeVidId, checkShouldRun, callback, checkInitial = true) {
         const initialVidState = getState().safeVids[safeVidId].vidState;

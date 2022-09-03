@@ -1,9 +1,6 @@
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../typedStoreHelpers";
 
-export function makeSpeechBubblesStoreUtils<
+export function makeTyped_speechBubblesUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(storeHelpers: StoreHelpers, prendyStores: PrendyStores) {
@@ -11,10 +8,7 @@ export function makeSpeechBubblesStoreUtils<
 
   type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
 
-  function getTypingDelayForLetter(
-    letter: string,
-    speechBubbleName: SpeechBubbleName
-  ) {
+  function getTypingDelayForLetter(letter: string, speechBubbleName: SpeechBubbleName) {
     const { typingSpeed } = getState().speechBubbles[speechBubbleName];
 
     let typingDelay = typingSpeed;
@@ -32,10 +26,7 @@ export function makeSpeechBubblesStoreUtils<
     return typingDelay;
   }
 
-  function getTypingDelayForText(
-    text: string,
-    speechBubbleName: SpeechBubbleName
-  ) {
+  function getTypingDelayForText(text: string, speechBubbleName: SpeechBubbleName) {
     let totalTime = 0;
 
     for (let index = 0; index < text.length; index++) {

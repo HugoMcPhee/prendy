@@ -1,28 +1,22 @@
-import { Camera, Color3, Color4, FxaaPostProcess, Vector3, } from "@babylonjs/core";
-// import { AllTestVideoStuff } from "./AllTestVideoStuff";
+import { Camera, Color3, Color4, FxaaPostProcess, Vector3 } from "@babylonjs/core";
 // ScreenGuiDom
 import React, { useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import loadStyles from "../utils/loadStyles";
-// import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
-// import "./PrendyApp.css";
-import { makeScreenGui } from "./gui/ScreenGui";
-import { makeLoadingModels } from "./LoadingModels";
-import { makeScenePlane } from "./ScenePlane";
+import { makeTyped_ScreenGui } from "./gui/ScreenGui";
+import { makeTyped_LoadingModels } from "./LoadingModels";
+import { makeTyped_ScenePlane } from "./ScenePlane";
+// import { makeTyped_AllTestVideoStuff } from "./AllTestVideoStuff";
 loadStyles();
 export function makePrendyApp(storeHelpers, prendyStores, prendyStartOptions, prendyAssets) {
     const { getRefs, onNextTick, setState } = storeHelpers;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = makeScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
-    const LoadingModels = makeLoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
-    const ScenePlane = makeScenePlane(storeHelpers, prendyStartOptions);
-    // const AllTestVideoStuff = makeAllTestVideoStuff(storeHelpers, [
-    //   "city",
-    //   "cityb",
-    //   "beanshop",
-    // ]);
+    const ScreenGuiDom = makeTyped_ScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
+    const LoadingModels = makeTyped_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
+    const ScenePlane = makeTyped_ScenePlane(storeHelpers, prendyStartOptions);
+    // const AllTestVideoStuff = makeTyped_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
     return function PrendyApp({ children, extraScenes }) {
         const globalRefs = getRefs().global.main;
         const scenePlaneCameraRef = useCallback((node) => {
@@ -59,6 +53,10 @@ export function makePrendyApp(storeHelpers, prendyStores, prendyStartOptions, pr
                         // setTimeout(() => {
                         // info.scene.freezeActiveMeshes();
                         // }, 5000);
+                        console.log("info.scene");
+                        console.log(info.scene);
+                        console.log("engine");
+                        console.log(engine);
                         globalRefs.scenes.main = info.scene;
                         globalRefs.scenes.backdrop = info.scene;
                         // engine.setHardwareScalingLevel(8);
@@ -71,15 +69,23 @@ export function makePrendyApp(storeHelpers, prendyStores, prendyStartOptions, pr
                                 global: { main: { timeScreenResized: Date.now() } },
                             });
                         });
-                        onNextTick(() => {
-                            if (globalRefs.scenes.backdrop) {
-                                // const postProcess =
-                                new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
-                            }
-                        });
+                        // onNextTick(() => {
+                        //   if (globalRefs.scenes.backdrop) {
+                        //     // const postProcess =
+                        //     new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
+                        //   }
+                        // });
                     } },
                     React.createElement(LoadingModels, null, children),
-                    React.createElement("targetCamera", { name: "camera1", position: new Vector3(0, 0, -2), rotation: new Vector3(toRadians(0), toRadians(0), 0), mode: Camera.ORTHOGRAPHIC_CAMERA, ref: scenePlaneCameraRef, layerMask: 23 }),
+                    React.createElement("targetCamera", { onCreated: () => {
+                            console.log("camera created");
+                            onNextTick(() => {
+                                if (globalRefs.scenes.backdrop) {
+                                    // const postProcess =
+                                    new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
+                                }
+                            });
+                        }, name: "camera1", position: new Vector3(0, 0, -2), rotation: new Vector3(toRadians(0), toRadians(0), 0), mode: Camera.ORTHOGRAPHIC_CAMERA, ref: scenePlaneCameraRef, layerMask: 23 }),
                     React.createElement(ScenePlane, null)),
                 extraScenes),
             React.createElement(ScreenGuiDom, null)));

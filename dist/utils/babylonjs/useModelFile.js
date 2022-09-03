@@ -3,7 +3,7 @@ import "@babylonjs/loaders/glTF";
 import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
-export function makeUseModelFile(
+export function makeTyped_useModelFile(
 // storeHelpers: StoreHelpers
 getScene) {
     // const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);

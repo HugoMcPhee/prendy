@@ -9,9 +9,9 @@ import {
   SegmentNameByPlace,
   SpotNameByPlace,
 } from "../declarations";
-import { makeSceneStoryHelpers } from "../utils/story/helpers/scene";
+import { makeTyped_sceneStoryHelpers } from "../utils/story/helpers/scene";
 
-export function makePlayer<
+export function makeTyped_Player<
   StoreHelpers extends PrendyStoreHelpers
   // PrendyOptions extends PrendyOptionsUntyped,
   // AnyCameraName extends string,
@@ -23,11 +23,7 @@ export function makePlayer<
   // WallNameByPlace extends Record<PlaceName, string>,
   // SegmentNameByPlace extends Record<PlaceName, string>,
   // CameraNameByPlace extends Record<PlaceName, string>
->(
-  storeHelpers: StoreHelpers,
-  prendyStartOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
-) {
+>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   const { placeInfoByName, characterNames } = prendyAssets;
 
   // type AnyToPlaceOption = {
@@ -54,30 +50,20 @@ export function makePlayer<
     toSegment?: SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
-  type DoorsInfoLoose = Partial<
-    Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>
-  >;
+  type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
-  const { useStoreItemPropsEffect, getState, setState, useStore } =
-    storeHelpers;
+  const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
 
-  const { goToNewPlace } = makeSceneStoryHelpers<StoreHelpers>(
-    storeHelpers,
-    placeInfoByName,
-    characterNames
-  );
+  const { goToNewPlace } = makeTyped_sceneStoryHelpers<StoreHelpers>(storeHelpers, placeInfoByName, characterNames);
 
   type Props = {};
 
   return function Player(_props: Props) {
-    const { playerCharacter: charName } = useStore(
-      ({ global: { main } }) => main,
-      {
-        type: "global",
-        name: "main",
-        prop: ["playerCharacter"],
-      }
-    );
+    const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
+      type: "global",
+      name: "main",
+      prop: ["playerCharacter"],
+    });
 
     // TODO Move to story dynamic rules for the player character ?
     useStoreItemPropsEffect(
@@ -96,15 +82,12 @@ export function makePlayer<
           if (!hasLeftFirstTrigger) {
             // previousValue
             let hasAnyCollision = false;
-            breakableForEach(
-              placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[],
-              (triggerName) => {
-                if (atTriggers[triggerName]) {
-                  hasAnyCollision = true;
-                  return true;
-                }
+            breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
+              if (atTriggers[triggerName]) {
+                hasAnyCollision = true;
+                return true;
               }
-            );
+            });
             if (!hasAnyCollision) {
               setState({
                 characters: { [charName]: { hasLeftFirstTrigger: true } },
@@ -112,21 +95,18 @@ export function makePlayer<
             }
           } else {
             // going to new places at door triggers
-            breakableForEach(
-              placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[],
-              (triggerName) => {
-                if (atTriggers[triggerName]) {
-                  const toOption = (
-                    prendyStartOptions.doorsInfo as DoorsInfoLoose
-                  )[nowPlaceName as PlaceName]?.[triggerName];
-                  if (toOption) {
-                    goToNewPlace(toOption, charName as CharacterName);
+            breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
+              if (atTriggers[triggerName]) {
+                const toOption = (prendyStartOptions.doorsInfo as DoorsInfoLoose)[nowPlaceName as PlaceName]?.[
+                  triggerName
+                ];
+                if (toOption) {
+                  goToNewPlace(toOption, charName as CharacterName);
 
-                    return true; // break
-                  }
+                  return true; // break
                 }
               }
-            );
+            });
           }
         },
       }

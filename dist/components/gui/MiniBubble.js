@@ -1,11 +1,11 @@
 // @refresh-reset
-import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../stores/characters/utils";
-export function makeMiniBubble(storeHelpers) {
+import { makeTyped_getCharDollStuff } from "../../stores/characters/utils";
+export function makeTyped_MiniBubble(storeHelpers) {
     const { useStoreEffect, useStore, getState } = storeHelpers;
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
     return function MiniBubble({ name }) {
         var _a;
         const theRectangle = useRef(null);

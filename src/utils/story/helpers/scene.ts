@@ -1,6 +1,6 @@
 import delay from "delay";
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import {
   AnyCameraName,
@@ -13,10 +13,10 @@ import {
   SpotNameByPlace,
   WallNameByPlace,
 } from "../../../declarations";
-import { makeCharacterStoryUtils } from "../utils/characters";
-import { makeSceneStoryUtils } from "../utils/scene";
+import { makeTyped_characterStoryUtils } from "../utils/characters";
+import { makeTyped_sceneStoryUtils } from "../utils/scene";
 
-export function makeSceneStoryHelpers<
+export function makeTyped_sceneStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -27,16 +27,11 @@ export function makeSceneStoryHelpers<
   A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(
-  storeHelpers: StoreHelpers,
-  placeInfoByName: A_PlaceInfoByName,
-  characterNames: readonly A_CharacterName[]
-) {
+>(storeHelpers: StoreHelpers, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[]) {
   const { getRefs, getState, onNextTick, setState } = storeHelpers;
 
-  type CameraNameFromPlace<
-    T_Place extends keyof A_PlaceInfoByName
-  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+  type CameraNameFromPlace<T_Place extends keyof A_PlaceInfoByName> =
+    keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
 
   type ToPlaceOption<T_PlaceName extends A_PlaceName> = {
     toPlace: T_PlaceName;
@@ -46,16 +41,11 @@ export function makeSceneStoryHelpers<
     toSegment?: A_SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
-  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
-  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
-  const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(
-    storeHelpers
-  );
-  const {
-    doWhenNowCamChanges,
-    doWhenNowSegmentChanges,
-    getSegmentFromStoryRules,
-  } = makeSceneStoryUtils(storeHelpers);
+  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const { get2DAngleFromCharacterToSpot } = makeTyped_characterStoryUtils(storeHelpers);
+  const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } =
+    makeTyped_sceneStoryUtils(storeHelpers);
 
   async function changeSegmentAtLoop<
     T_Place extends A_PlaceName,
@@ -71,9 +61,7 @@ export function makeSceneStoryHelpers<
           const { wantedSegmentNameAtLoop } = state;
           if (wantedSegmentNameAtLoop) {
             // TEMP resolve straight away if there's already a wantedSegmentNameAtLoop
-            console.error(
-              "there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync"
-            );
+            console.error("there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync");
             resolve();
             return {};
           }
@@ -97,9 +85,7 @@ export function makeSceneStoryHelpers<
         const { wantedCamNameAtLoop } = state.places[nowPlaceName];
         if (wantedCamNameAtLoop) {
           // TEMP resolve straight away if there's already a wantedCamNameAtLoop
-          console.error(
-            "there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync"
-          );
+          console.error("there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync");
           resolve();
           return {};
         }
@@ -131,10 +117,11 @@ export function makeSceneStoryHelpers<
     setState({ dolls: { [dollName]: { rotationYGoal: angle } } });
   }
 
-  function hideWallIf<
-    T_Place extends A_PlaceName,
-    T_Wall extends A_WallNameByPlace[T_Place]
-  >(placeName: T_Place, wallName: T_Wall, isDisabled: boolean) {
+  function hideWallIf<T_Place extends A_PlaceName, T_Wall extends A_WallNameByPlace[T_Place]>(
+    placeName: T_Place,
+    wallName: T_Wall,
+    isDisabled: boolean
+  ) {
     const placeRefs = getRefs().places[placeName];
     const wallMesh = placeRefs.wallMeshes[wallName];
 
@@ -147,10 +134,7 @@ export function makeSceneStoryHelpers<
     await delay(GUESSED_FADE_TIME);
   }
 
-  function setSegment<
-    T_Place extends A_PlaceName,
-    T_Segment extends A_SegmentNameByPlace[T_Place]
-  >(
+  function setSegment<T_Place extends A_PlaceName, T_Segment extends A_SegmentNameByPlace[T_Place]>(
     _placeName: T_Place,
     segmentName: T_Segment
     // whenToRun: "now" | "at loop" = "at loop"
@@ -167,9 +151,7 @@ export function makeSceneStoryHelpers<
       //   }
       //   setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
       // } else if (whenToRun === "at loop") {
-      changeSegmentAtLoop(_placeName, segmentName as any).finally(() =>
-        resolve()
-      );
+      changeSegmentAtLoop(_placeName, segmentName as any).finally(() => resolve());
       // }
     });
   }
@@ -177,11 +159,7 @@ export function makeSceneStoryHelpers<
   function setCamera<
     T_Place extends A_PlaceName,
     T_Cam extends CameraNameFromPlace<T_Place> & A_AnyCameraName // NOTE & Type
-  >(
-    _placeName: T_Place,
-    cameraName: T_Cam,
-    whenToRun: "now" | "at loop" = "now"
-  ) {
+  >(_placeName: T_Place, cameraName: T_Cam, whenToRun: "now" | "at loop" = "now") {
     return new Promise<void>((resolve, _reject) => {
       if (whenToRun === "now") {
         const { nowPlaceName } = getState().global.main;
@@ -201,9 +179,7 @@ export function makeSceneStoryHelpers<
           () => resolve()
         );
       } else if (whenToRun === "at loop") {
-        changeCameraAtLoop(_placeName, cameraName as any).finally(() =>
-          resolve()
-        );
+        changeCameraAtLoop(_placeName, cameraName as any).finally(() => resolve());
       }
     });
   }
@@ -222,13 +198,9 @@ export function makeSceneStoryHelpers<
         const nowSegmentName = state.global.main.nowSegmentName;
 
         const placeInfo = placeInfoByName[toPlace];
-        toSpot =
-          toSpot ?? (placeInfo.spotNames[0] as A_SpotNameByPlace[T_PlaceName]);
-        toCam =
-          toCam ?? (placeInfo.cameraNames[0] as NonNullable<typeof toCam>); // types as a cam for the chosen place
-        toSegment =
-          toSegment ??
-          (placeInfo.segmentNames[0] as A_SegmentNameByPlace[T_PlaceName]);
+        toSpot = toSpot ?? (placeInfo.spotNames[0] as A_SpotNameByPlace[T_PlaceName]);
+        toCam = toCam ?? (placeInfo.cameraNames[0] as NonNullable<typeof toCam>); // types as a cam for the chosen place
+        toSegment = toSegment ?? (placeInfo.segmentNames[0] as A_SegmentNameByPlace[T_PlaceName]);
 
         const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
 

@@ -1,7 +1,7 @@
-import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
-export function makeSceneStoryUtils(storeHelpers) {
+import { makeTyped_getUsefulStoryStuff } from "../../../storyRuleMakers/storyRuleMakers";
+export function makeTyped_sceneStoryUtils(storeHelpers) {
     const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
-    const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
+    const getUsefulStoryStuff = makeTyped_getUsefulStoryStuff(storeHelpers);
     const globalRefs = getRefs().global.main;
     function getSegmentFromStoryRules(place, cam) {
         var _a, _b, _c;

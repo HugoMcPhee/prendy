@@ -1,10 +1,7 @@
 import { Vector3 } from "@babylonjs/core";
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../../../stores/typedStoreHelpers";
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
   PrendyOptions,
@@ -14,10 +11,10 @@ import {
   DollOptions,
   ModelInfoByName,
 } from "../../../declarations";
-import { makeCharacterStoryUtils } from "../utils/characters";
-import { makeDollStoryHelpers } from "./dolls";
+import { makeTyped_characterStoryUtils } from "../utils/characters";
+import { makeTyped_dollStoryHelpers } from "./dolls";
 
-export function makeCharacterStoryHelpers<
+export function makeTyped_characterStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
@@ -34,23 +31,22 @@ export function makeCharacterStoryHelpers<
   modelInfoByName: A_ModelInfoByName,
   characterNames: readonly A_CharacterName[]
 ) {
-  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> =
-    A_CharacterOptions[T_CharacterName]["doll"];
+  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> = A_CharacterOptions[T_CharacterName]["doll"];
 
-  type ModelNameFromDoll<T_DollName extends A_DollName> =
-    A_DollOptions[T_DollName]["model"];
+  type ModelNameFromDoll<T_DollName extends A_DollName> = A_DollOptions[T_DollName]["model"];
 
-  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> =
-    ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
+  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> = ModelNameFromDoll<
+    DollNameFromCharacter<T_CharacterName>
+  >;
 
   type AnimationNameFromCharacter<T_CharacterName extends A_CharacterName> =
     A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
-  const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
 
-  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
 
-  const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(storeHelpers);
+  const { get2DAngleBetweenCharacters } = makeTyped_characterStoryUtils(storeHelpers);
 
   const {
     moveDollAt2DAngle,
@@ -59,7 +55,7 @@ export function makeCharacterStoryHelpers<
     setDollRotationY,
     springAddToDollRotationY,
     springDollRotationY,
-  } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
+  } = makeTyped_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
 
   function setCharAnimation<T_Character extends A_CharacterName>(
     character: T_Character,
@@ -84,10 +80,7 @@ export function makeCharacterStoryHelpers<
     springDollRotationY(dollName as A_DollName, newRotationY);
   }
 
-  function springAddToCharRotationY(
-    charName: A_CharacterName,
-    addedRotation: number
-  ) {
+  function springAddToCharRotationY(charName: A_CharacterName, addedRotation: number) {
     const { dollName } = getCharDollStuff(charName);
     springAddToDollRotationY(dollName as A_DollName, addedRotation);
   }
@@ -105,10 +98,7 @@ export function makeCharacterStoryHelpers<
     springDollRotationY(dollName as A_DollName, angle);
   }
 
-  function lookAtEachother(
-    characterA: A_CharacterName,
-    characterB: A_CharacterName = characterNames[0]
-  ) {
+  function lookAtEachother(characterA: A_CharacterName, characterB: A_CharacterName = characterNames[0]) {
     lookAtOtherCharacter(characterA, characterB);
     lookAtOtherCharacter(characterB, characterA);
   }

@@ -1,6 +1,6 @@
 import { substring, length, toArray, indexOf } from "stringz";
 import { forEach } from "chootils/dist/loops";
-import { makeSpeechBubblesStoreUtils } from "./utils";
+import { makeTyped_speechBubblesUtils } from "./utils";
 let zIndexCounter = 100;
 /*
 Dynamic rules
@@ -10,7 +10,7 @@ When characters position changes
 */
 export function makeSpeechBubbleRules(storeHelpers, prendyStores) {
     const { makeRules, setState, getRefs } = storeHelpers;
-    const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(storeHelpers, prendyStores);
+    const { getTypingDelayForLetter } = makeTyped_speechBubblesUtils(storeHelpers, prendyStores);
     return makeRules(({ itemEffect, effect }) => ({
         whenGoalTextChanges: itemEffect({
             run({ itemName, itemRefs, itemState }) {
@@ -127,7 +127,7 @@ export function makeSpeechBubbleRules(storeHelpers, prendyStores) {
         if (itemRefs.currentTimeout !== null)
             clearTimeout(itemRefs.currentTimeout);
         // If visible/goal Text length not the same
-        const { goalText, typingFinished, stylesBySpecialText, visibleLetterAmount, } = itemState;
+        const { goalText, typingFinished, stylesBySpecialText, visibleLetterAmount } = itemState;
         const goalLength = length(goalText);
         let newVisibleLetterAmount = visibleLetterAmount;
         let latestLetter = substring(goalText, Math.max(visibleLetterAmount, 0) - 1, Math.max(visibleLetterAmount, 1));

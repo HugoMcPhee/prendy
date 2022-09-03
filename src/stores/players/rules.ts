@@ -1,47 +1,30 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
-import {
-  getShortestAngle,
-  getSpeedAndAngleFromVector,
-  getVectorAngle,
-} from "chootils/dist/speedAngleDistance2d";
-import { makeGetCharDollStuff } from "../../stores/characters/utils";
+import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
+import { makeTyped_getCharDollStuff } from "../../stores/characters/utils";
 import { PrendyAssets, CharacterName } from "../../declarations";
-import { clearTimeoutSafe } from "../../utils";
-import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
+import { clearTimeoutSafe } from "../../utils/utils";
+import { makeTyped_getSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngineUtils";
 import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../typedStoreHelpers";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
-export function makePlayerRules<
+export function makeTyped_playerRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
->(
-  storeHelpers: StoreHelpers,
-  PRENDY_OPTIONS: PrendyOptions,
-  prendyAssets: PrendyAssets
-) {
+>(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
-  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
-  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
+  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenDirectionKeysPressed: effect({
       run() {
-        const {
-          ArrowDown,
-          ArrowLeft,
-          ArrowUp,
-          ArrowRight,
-          KeyW,
-          KeyA,
-          KeyS,
-          KeyD,
-        } = getState().keyboards.main;
+        const { ArrowDown, ArrowLeft, ArrowUp, ArrowRight, KeyW, KeyA, KeyS, KeyD } = getState().keyboards.main;
 
         const rightPressed = ArrowRight || KeyD;
         const upPressed = ArrowUp || KeyW;
@@ -68,16 +51,7 @@ export function makePlayerRules<
       check: {
         type: "keyboards",
         name: "main",
-        prop: [
-          "ArrowDown",
-          "ArrowLeft",
-          "ArrowRight",
-          "ArrowUp",
-          "KeyW",
-          "KeyA",
-          "KeyS",
-          "KeyD",
-        ],
+        prop: ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "KeyW", "KeyA", "KeyS", "KeyD"],
       },
     }),
     whenInteractKeyPressed: itemEffect({
@@ -116,11 +90,9 @@ export function makePlayerRules<
     //
     whenJumpPressed: itemEffect({
       run({ itemState: playerState, frameDuration }) {
-        const { playerCharacter, playerMovingPaused, gravityValue } =
-          getState().global.main;
+        const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
         const { timerSpeed } = globalRefs;
-        const { dollRefs, dollState, dollName } =
-          getCharDollStuff(playerCharacter as CharacterName) ?? {};
+        const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
         const { isOnGround, canJump } = playerState;
         const { scenes } = globalRefs;
@@ -157,16 +129,10 @@ export function makePlayerRules<
     }),
 
     whenJoystickMoves: itemEffect({
-      run({
-        newValue: inputVelocity,
-        itemState: playerState,
-        itemRefs: playerRefs,
-      }) {
-        const { playerCharacter, playerMovingPaused, gravityValue } =
-          getState().global.main;
+      run({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs }) {
+        const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
         const { timerSpeed } = globalRefs;
-        const { dollRefs, dollState, dollName } =
-          getCharDollStuff(playerCharacter as CharacterName) ?? {};
+        const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
         const { scenes } = globalRefs;
 
@@ -182,9 +148,7 @@ export function makePlayerRules<
             angle: newInputAngle,
             // speed: newInputSpeed,
           } = getSpeedAndAngleFromVector(inputVelocity);
-          const rotationYDifference = Math.abs(
-            getShortestAngle(lastSafeInputAngle, newInputAngle)
-          );
+          const rotationYDifference = Math.abs(getShortestAngle(lastSafeInputAngle, newInputAngle));
           shouldChangeAngle = rotationYDifference > 25;
         }
 
@@ -212,13 +176,7 @@ export function makePlayerRules<
         //this is the direction in the world space we want to move:
         let desiredMoveDirection = forward
           .multiplyByFloats(inputVelocity.y, inputVelocity.y, inputVelocity.y)
-          .add(
-            right.multiplyByFloats(
-              -inputVelocity.x,
-              -inputVelocity.x,
-              -inputVelocity.x
-            )
-          );
+          .add(right.multiplyByFloats(-inputVelocity.x, -inputVelocity.x, -inputVelocity.x));
 
         if (!pointIsZero(inputVelocity) && !playerMovingPaused) {
           newAnimationName = playerState.animationNames.walking;
@@ -243,10 +201,8 @@ export function makePlayerRules<
         //now we can apply the movement:
         // * frameDuration * 0.1
 
-        dollRefs.positionMoverRefs.velocity.x =
-          desiredMoveDirection.x * playerRefs.walkSpeed * timerSpeed;
-        dollRefs.positionMoverRefs.velocity.z =
-          desiredMoveDirection.z * playerRefs.walkSpeed * timerSpeed;
+        dollRefs.positionMoverRefs.velocity.x = desiredMoveDirection.x * playerRefs.walkSpeed * timerSpeed;
+        dollRefs.positionMoverRefs.velocity.z = desiredMoveDirection.z * playerRefs.walkSpeed * timerSpeed;
 
         // dollRefs.positionMoverRefs.velocity.y = -gravityValue * timerSpeed;
 
@@ -296,8 +252,7 @@ export function makePlayerRules<
       run({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
         playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
-          const { virtualControlsPressTime, virtualControlsReleaseTime } =
-            getState().players[playerName];
+          const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
           if (virtualControlsReleaseTime > virtualControlsPressTime) return;
           setState({
             players: { [playerName]: { canShowVirtualButtons: true } },
@@ -312,8 +267,7 @@ export function makePlayerRules<
       run({ itemRefs: playerRefs, itemName: playerName }) {
         clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
         playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
-          const { virtualControlsPressTime, virtualControlsReleaseTime } =
-            getState().players[playerName];
+          const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
           if (virtualControlsPressTime > virtualControlsReleaseTime) return;
           setState({
             players: { [playerName]: { canShowVirtualButtons: false } },
@@ -334,19 +288,12 @@ export function makePlayerRules<
         frameDuration,
       }) {
         // NOTE should be a dynamic rule for each player listening to frame
-        const {
-          playerCharacter,
-          playerMovingPaused,
-          gravityValue,
-          nowPlaceName,
-        } = getState().global.main;
+        const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName } = getState().global.main;
         const { timerSpeed } = globalRefs;
-        const { dollRefs, dollState, dollName } =
-          getCharDollStuff(playerCharacter as CharacterName) ?? {};
+        const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
         const dollPosRefs = dollRefs.positionMoverRefs;
-        const { isJumping, isOnGround, inputVelocity } =
-          getState().players.main;
+        const { isJumping, isOnGround, inputVelocity } = getState().players.main;
 
         // if (!dollRefs.checkCollisions) return;
 
@@ -361,15 +308,7 @@ export function makePlayerRules<
         const floorNames = placeInfo.floorNames as readonly string[];
         const wallNames = placeInfo.wallNames as readonly string[];
 
-        if (
-          !dollRefs ||
-          !dollState ||
-          !dollName ||
-          !activeCamera ||
-          !meshRef ||
-          !scene
-        )
-          return;
+        if (!dollRefs || !dollState || !dollName || !activeCamera || !meshRef || !scene) return;
 
         // console.log("player move mode", dollState.positionMoveMode);
 
@@ -410,9 +349,7 @@ export function makePlayerRules<
           const centerPick = scene.pickWithRay(
             ray,
             (mesh) => {
-              return (
-                floorNames.includes(mesh.name) || wallNames.includes(mesh.name)
-              );
+              return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
             },
             true
           );
@@ -434,9 +371,7 @@ export function makePlayerRules<
 
             // console.log("hit ground", pick.hit);
 
-            const isWalkng =
-              Math.abs(dollPosRefs.velocity.x) > 0.1 ||
-              Math.abs(dollPosRefs.velocity.z) > 0.1;
+            const isWalkng = Math.abs(dollPosRefs.velocity.x) > 0.1 || Math.abs(dollPosRefs.velocity.z) > 0.1;
 
             if (isWalkng) {
               // console.log(
@@ -465,19 +400,14 @@ export function makePlayerRules<
               const forwardPick = scene.pickWithRay(
                 forwardRay,
                 (mesh) => {
-                  return (
-                    floorNames.includes(mesh.name) ||
-                    wallNames.includes(mesh.name)
-                  );
+                  return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
                 },
                 true
               );
 
               if (forwardPick) {
                 if (forwardPick.hit) {
-                  const heightDiff =
-                    (forwardPick?.pickedPoint?.y || 0) -
-                    (centerPick?.pickedPoint?.y || 0);
+                  const heightDiff = (forwardPick?.pickedPoint?.y || 0) - (centerPick?.pickedPoint?.y || 0);
 
                   // in degrees I think
                   // negative is down
@@ -577,12 +507,7 @@ export function makePlayerRules<
     }),
 
     whenIsOnGroundChanges: itemEffect({
-      run({
-        newValue: isOnGround,
-        previousValue: prevIsOnGround,
-        itemState: playerState,
-        itemRefs: playerRefs,
-      }) {
+      run({ newValue: isOnGround, previousValue: prevIsOnGround, itemState: playerState, itemRefs: playerRefs }) {
         clearTimeoutSafe(playerRefs.canJumpTimeout);
 
         const { isJumping } = playerState;
@@ -612,8 +537,7 @@ export function makePlayerRules<
       run({ newValue: newAnimationNames, itemState: playerState }) {
         const { playerCharacter, playerMovingPaused } = getState().global.main;
         const { inputVelocity } = playerState;
-        const { dollName } =
-          getCharDollStuff(playerCharacter as CharacterName) ?? {};
+        const { dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
         if (!dollName) return;
 
@@ -635,9 +559,7 @@ export function makePlayerRules<
         setState((state) => ({
           players: {
             main: {
-              lastSafeInputAngle: getSpeedAndAngleFromVector(
-                state.players.main.inputVelocity
-              ).angle,
+              lastSafeInputAngle: getSpeedAndAngleFromVector(state.players.main.inputVelocity).angle,
             },
           },
         }));
@@ -649,9 +571,7 @@ export function makePlayerRules<
       run({ newValue: playerMovingPaused }) {
         const { playerCharacter } = getState().global.main;
         const playerState = getState().players.main;
-        const { dollRefs, dollName, dollState } = getCharDollStuff(
-          playerCharacter as CharacterName
-        );
+        const { dollRefs, dollName, dollState } = getCharDollStuff(playerCharacter as CharacterName);
 
         let newAnimationName = dollState.nowAnimation;
 

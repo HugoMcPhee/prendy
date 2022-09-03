@@ -2,33 +2,24 @@
 import React from "react";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeAlarmText<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_AlarmText<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};
 
   return function AlarmText(_props: Props) {
-    const { alarmText, alarmTextIsVisible } = useStore(
-      ({ global: { main } }) => main,
-      {
-        type: "global",
-        name: "main",
-        prop: ["alarmText", "alarmTextIsVisible"],
-      }
-    );
+    const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
+      type: "global",
+      name: "main",
+      prop: ["alarmText", "alarmTextIsVisible"],
+    });
 
     if (!alarmTextIsVisible) {
       return null;
     }
 
     return (
-      <div
-        key={`alarm_text_box`}
-        id={`alarm_text_box`}
-        style={styles.container}
-      >
+      <div key={`alarm_text_box`} id={`alarm_text_box`} style={styles.container}>
         <div id={`alarm_text`} style={styles.text}>
           {alarmText}
         </div>

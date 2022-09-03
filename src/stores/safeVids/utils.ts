@@ -1,9 +1,7 @@
-import { VidState } from "../../stores/safeVids";
+import { VidState } from "./safeVids";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
-export function makeSafeVidStoreUtils<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
 
   function doWhenSafeVidStateChanges(
@@ -58,19 +56,10 @@ export function makeSafeVidStoreUtils<StoreHelpers extends PrendyStoreHelpers>(
     callback: () => void,
     checkInitial: boolean = true
   ) {
-    return doWhenSafeVidStateChanges(
-      safeVidId,
-      (newState) => newState === vidStateToCheck,
-      callback,
-      checkInitial
-    );
+    return doWhenSafeVidStateChanges(safeVidId, (newState) => newState === vidStateToCheck, callback, checkInitial);
   }
 
-  function doWhenSafeVidPlayOrPause(
-    safeVidId: string,
-    callback: () => void,
-    checkInitial: boolean = true
-  ) {
+  function doWhenSafeVidPlayOrPause(safeVidId: string, callback: () => void, checkInitial: boolean = true) {
     return doWhenSafeVidStateChanges(
       safeVidId,
       (newState) => newState === "play" || newState === "pause",

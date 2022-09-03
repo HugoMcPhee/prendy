@@ -2,32 +2,19 @@
 import React from "react";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeShowStates<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_ShowStates<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};
 
   return function ShowStates(_props: Props) {
-    const {
-      planeZoom,
-      planeZoomGoal,
-      planePos,
-      planePosGoal,
-      planeZoomIsMoving,
-      debugMessage,
-    } = useStore((state) => state.global.main, {
-      type: "global",
-      prop: [
-        "planeZoom",
-        "planeZoomGoal",
-        "planePos",
-        "planePosGoal",
-        "planeZoomIsMoving",
-        "debugMessage",
-      ],
-    });
+    const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage } = useStore(
+      (state) => state.global.main,
+      {
+        type: "global",
+        prop: ["planeZoom", "planeZoomGoal", "planePos", "planePosGoal", "planeZoomIsMoving", "debugMessage"],
+      }
+    );
 
     return (
       <div
@@ -48,9 +35,7 @@ export function makeShowStates<StoreHelpers extends PrendyStoreHelpers>(
       >
         <div style={{ color: "rgb(81, 164, 123)" }}>{`${debugMessage}`}</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>_</div>
-        <div
-          style={{ color: "rgb(81, 164, 123)" }}
-        >{`${planeZoomIsMoving}`}</div>
+        <div style={{ color: "rgb(81, 164, 123)" }}>{`${planeZoomIsMoving}`}</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>{planeZoom}</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>{planeZoomGoal}</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>_</div>

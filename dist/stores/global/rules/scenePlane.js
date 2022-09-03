@@ -1,10 +1,10 @@
-import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeTyped_scenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 import { makeRunMovers } from "pietem-movers";
 import { copyPoint } from "chootils/dist/points2d";
-import { makeGlobalStoreUtils } from "../utils";
-export function makeGlobalScenePlaneRules(storeHelpers, prendyStartOptions) {
-    const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll, } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
-    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+import { makeTyped_globalUtils } from "../utils/utils";
+export function makeTyped_globalScenePlaneRules(storeHelpers, prendyStartOptions) {
+    const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
     const { makeRules } = storeHelpers;
     const { runMover, runMover2d } = makeRunMovers(storeHelpers);
     return makeRules(({ itemEffect }) => ({

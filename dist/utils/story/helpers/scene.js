@@ -1,14 +1,14 @@
 import delay from "delay";
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import { makeCharacterStoryUtils } from "../utils/characters";
-import { makeSceneStoryUtils } from "../utils/scene";
-export function makeSceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { makeTyped_characterStoryUtils } from "../utils/characters";
+import { makeTyped_sceneStoryUtils } from "../utils/scene";
+export function makeTyped_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
     const { getRefs, getState, onNextTick, setState } = storeHelpers;
-    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
-    const { get2DAngleFromCharacterToSpot } = makeCharacterStoryUtils(storeHelpers);
-    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules, } = makeSceneStoryUtils(storeHelpers);
+    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+    const { get2DAngleFromCharacterToSpot } = makeTyped_characterStoryUtils(storeHelpers);
+    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
     async function changeSegmentAtLoop(_place, newSegmentName) {
         // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
         // to fix: could listen to changes to wantedSegmentNameAtLoop
@@ -121,12 +121,9 @@ export function makeSceneStoryHelpers(storeHelpers, placeInfoByName, characterNa
                 const newPlaceNowCamName = state.places[toPlace].nowCamName;
                 const nowSegmentName = state.global.main.nowSegmentName;
                 const placeInfo = placeInfoByName[toPlace];
-                toSpot =
-                    toSpot !== null && toSpot !== void 0 ? toSpot : placeInfo.spotNames[0];
-                toCam =
-                    toCam !== null && toCam !== void 0 ? toCam : placeInfo.cameraNames[0]; // types as a cam for the chosen place
-                toSegment =
-                    toSegment !== null && toSegment !== void 0 ? toSegment : placeInfo.segmentNames[0];
+                toSpot = toSpot !== null && toSpot !== void 0 ? toSpot : placeInfo.spotNames[0];
+                toCam = toCam !== null && toCam !== void 0 ? toCam : placeInfo.cameraNames[0]; // types as a cam for the chosen place
+                toSegment = toSegment !== null && toSegment !== void 0 ? toSegment : placeInfo.segmentNames[0];
                 const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
                 if (foundRuleSegmentName) {
                     toSegment = foundRuleSegmentName;

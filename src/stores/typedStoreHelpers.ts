@@ -1,21 +1,21 @@
 import { PrendyAssets } from "../declarations";
 import { StoreHelperTypes } from "pietem";
 import { createStoreHelpers } from "pietem";
-import { prendyStepNames } from ".";
+import { prendyStepNames } from "./stores";
 import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../storyRuleMakers/fakeStoryStore";
-import characters from "./characters";
-import dolls from "./dolls";
-import global from "./global";
-import keyboards from "./keyboards";
-import miniBubbles from "./miniBubbles";
-import models from "./models";
-import places from "./places";
-import players from "./players";
-import pointers from "./pointers";
-import safeVids from "./safeVids";
-import sectionVids from "./sectionVids";
-import speechBubbles from "./speechBubbles";
+import characters from "./characters/characters";
+import dolls from "./dolls/dolls";
+import global from "./global/global";
+import keyboards from "./keyboards/keyboards";
+import miniBubbles from "./miniBubbles/miniBubbles";
+import models from "./models/models";
+import places from "./places/places";
+import players from "./players/players";
+import pointers from "./pointers/pointers";
+import safeVids from "./safeVids/safeVids";
+import sectionVids from "./sectionVids/sectionVids";
+import speechBubbles from "./speechBubbles/speechBubbles";
 
 const TEST_START_OPTIONS = getPrendyOptions({
   // place: "cave",
@@ -82,10 +82,7 @@ const testArtStuff = {
       spotNames: testNames,
       soundspotNames: testNames,
       probesByCamera: { camA: "test" },
-      segmentTimesByCamera: { camA: { start: 0 } } as Record<
-        string,
-        Record<string, number>
-      >,
+      segmentTimesByCamera: { camA: { start: 0 } } as Record<string, Record<string, number>>,
     } as const,
   },
   dollOptions: {
@@ -112,10 +109,7 @@ export type CharacterOptionsPlaceholder<
   }
 >;
 
-export type DollOptionsPlaceholder<
-  DollName extends string,
-  ModelName extends string
-> = Record<
+export type DollOptionsPlaceholder<DollName extends string, ModelName extends string> = Record<
   DollName,
   {
     model: any;
@@ -276,9 +270,7 @@ export type PrendyOptionsUntyped = {
   walkSpeed: number;
   animationSpeed: number; // 1.75 for rodont
   headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
-  doorsInfo?: Partial<
-    Record<string, Partial<Record<string, ToNewOptionUntyped>>>
-  >;
+  doorsInfo?: Partial<Record<string, Partial<Record<string, ToNewOptionUntyped>>>>;
   modelNamesByPlace: Record<string, string[]>;
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)
   hasInteracting?: boolean;
@@ -319,15 +311,7 @@ export type PrendyOptionsGeneric<
   animationSpeed: number; // 1.75 for rodont
   headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<
-    Record<
-      PlaceName,
-      Partial<
-        Record<
-          string,
-          ToPlaceOption<AnyCameraName, AnySegmentName, PlaceName, AnySpotName>
-        >
-      >
-    >
+    Record<PlaceName, Partial<Record<string, ToPlaceOption<AnyCameraName, AnySegmentName, PlaceName, AnySpotName>>>>
   >;
   modelNamesByPlace: Record<PlaceName, ModelName[]>;
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)

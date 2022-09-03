@@ -1,5 +1,5 @@
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
-export declare function makeMiniBubbleRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
+export declare function makeTyped_miniBubbleRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

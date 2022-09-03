@@ -1,14 +1,12 @@
 import { Scene } from "@babylonjs/core";
-import { clearTimeoutSafe } from "../../../utils";
+import { clearTimeoutSafe } from "../../../utils/utils";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { PrendyStoreHelpers } from "../../typedStoreHelpers";
-import { makeGlobalStoreUtils } from "../utils";
+import { makeTyped_globalUtils } from "../utils/utils";
 
-export function makeGlobalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
-  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
 
   return makeRules(({ effect }) => ({
     whenAnythingChangesForRendering: effect({
@@ -24,13 +22,12 @@ export function makeGlobalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
         // (globalRefs.sceneRenderTarget as RenderTargetTexture)?.render();
         // (globalRefs.depthRenderTarget as RenderTargetTexture)?.render();
 
-        forEach(
-          (globalRefs.scenes.main as Scene)?.skeletons ?? [],
-          (skeleton) => {
+        if ((globalRefs.scenes.main as Scene)?.activeCamera) {
+          forEach((globalRefs.scenes.main as Scene)?.skeletons ?? [], (skeleton) => {
             skeleton.prepare();
-          }
-        );
-        (globalRefs.scenes.main as Scene)?.render(false, false);
+          });
+          (globalRefs.scenes.main as Scene)?.render(false, false);
+        }
 
         // globalRefs.scenes.backdrop?.render();
 
@@ -50,9 +47,7 @@ export function makeGlobalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
         let aBubbleIsShowing = false;
 
         // possibly ideally cached
-        const speechBubbleNames = Object.keys(
-          getState().speechBubbles
-        ) as (keyof typeof speechBubblesState)[];
+        const speechBubbleNames = Object.keys(getState().speechBubbles) as (keyof typeof speechBubblesState)[];
 
         breakableForEach(speechBubbleNames, (bubbleName) => {
           const speechBubbleState = speechBubblesState[bubbleName];

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { andLayout } from "../utils/styles";
-export function makeAllTestVideoStuff(storeHelpers, placeNames) {
+export function makeTyped_AllTestVideoStuff(storeHelpers, placeNames) {
     const { useStore, useStoreItemPropsEffect } = storeHelpers;
     function TestVideos({ placeName }) {
         const mainRef = useRef(null);
@@ -49,7 +49,11 @@ export function makeAllTestVideoStuff(storeHelpers, placeNames) {
                 React.createElement("div", { style: { ...andLayout("center") }, id: `${placeName}_b_depth` }))));
     }
     function TestVideoState({ placeName }) {
-        const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, { type: "sectionVids", prop: ["sectionVidState"], name: placeName });
+        const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, {
+            type: "sectionVids",
+            prop: ["sectionVidState"],
+            name: placeName,
+        });
         const { safeVidId_waiting, safeVidId_playing } = useStore((state) => state.sectionVids[placeName], {
             type: "sectionVids",
             prop: ["safeVidId_waiting", "safeVidId_playing"],

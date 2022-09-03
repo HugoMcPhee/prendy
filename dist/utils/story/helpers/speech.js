@@ -1,9 +1,9 @@
 import delay from "delay";
 import { length } from "stringz";
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import { makeSpeechBubblesStoreUtils } from "../../../stores/speechBubbles/utils";
-import { clearTimeoutSafe } from "../../../utils";
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { makeTyped_speechBubblesUtils } from "../../../stores/speechBubbles/utils";
+import { clearTimeoutSafe } from "../../utils";
 const showSpeechRefs = {
     closeTimeouts: {},
     waitTimeouts: {},
@@ -15,26 +15,24 @@ const showSpeechRefs = {
 const showMiniBubbleRefs = {
     closeTimeout: null, // TODO might need to have it per character if other characts have mini bubbles
 };
-export function makeSpeechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, _characterNames) {
+export function makeTyped_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, _characterNames) {
     const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
-    const { setGlobalState, getGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const { getTypingDelayForText } = makeSpeechBubblesStoreUtils(storeHelpers, prendyStores);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+    const { setGlobalState, getGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const { getTypingDelayForText } = makeTyped_speechBubblesUtils(storeHelpers, prendyStores);
     const SPEECH_ZOOM_AMOUNT = 1.2;
     const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
     const MIN_AUTO_SPEECH_TIME = 1500;
     async function showSpeech(text, options) {
         return new Promise((resolve, _reject) => {
             const { planeZoom: prevPlaneZoom } = getGlobalState();
-            const playerCharacter = getGlobalState()
-                .playerCharacter;
+            const playerCharacter = getGlobalState().playerCharacter;
             const { time, // time = 2600,
             showOnce = false, character = playerCharacter, zoomAmount = SPEECH_ZOOM_AMOUNT, returnToZoomBeforeConversation = false, stylesBySpecialText, } = options !== null && options !== void 0 ? options : {};
             const { dollName } = getCharDollStuff(character);
             const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
             // NOTE at the moment CharacterName and SpeechBubbleName are the same
-            const timeBasedOnText = MIN_AUTO_SPEECH_TIME +
-                getTypingDelayForText(text, character) * 2;
+            const timeBasedOnText = MIN_AUTO_SPEECH_TIME + getTypingDelayForText(text, character) * 2;
             const waitTime = time !== null && time !== void 0 ? time : timeBasedOnText;
             if (showOnce && showSpeechRefs.shownTextBools[text])
                 return;
@@ -96,9 +94,7 @@ export function makeSpeechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
                 const isFocusedOnTalkingCharacter = currentFocusedDoll === dollName;
                 // NOTE safer to use the setState((state)=> {}) callback to check the current focused doll
                 setGlobalState({
-                    focusedDoll: isFocusedOnTalkingCharacter
-                        ? playerDollName
-                        : currentFocusedDoll,
+                    focusedDoll: isFocusedOnTalkingCharacter ? playerDollName : currentFocusedDoll,
                     planeZoomGoal: returnToZoomBeforeConversation
                         ? showSpeechRefs.originalZoomAmount
                         : prendyStartOptions.zoomLevels.default,

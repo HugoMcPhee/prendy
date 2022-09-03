@@ -1,7 +1,4 @@
-export function story_fake<
-  ChapterName extends string,
-  StoryPartName extends string
->() {
+export function story_fake<ChapterName extends string, StoryPartName extends string>() {
   const state = () => {
     const initialState = {
       // screen stickers
@@ -11,16 +8,6 @@ export function story_fake<
       // to know what to start with when a place loads
       chapterName: "hallways" as ChapterName,
       storyPart: "010_before_start" as StoryPartName, // to know which part of the chapter is happening
-      //
-      //
-      // showSmellParticles: false,
-      //
-      // didWearGeo: false,
-      // didPickupKey: false,
-      // didOpenDoor: false,
-      // didShowEnding: false,
-      //
-      // gotMuddy: false,
     };
 
     // return initialState as typeof initialState & { [key: string]: any };

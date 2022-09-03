@@ -4,9 +4,7 @@ import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeScreenSticker<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_ScreenSticker<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};
@@ -14,19 +12,14 @@ export function makeScreenSticker<StoreHelpers extends PrendyStoreHelpers>(
   const EDGE_PADDING = 65;
 
   return function ScreenSticker(_props: Props) {
-    const {
-      screenStickerText,
-      screenStickerIsVisible,
-      screenStickerPosition,
-    } = useStore(({ story: { main } }) => main, {
-      type: "story",
-      name: "main",
-      prop: [
-        "screenStickerText",
-        "screenStickerIsVisible",
-        "screenStickerPosition",
-      ],
-    });
+    const { screenStickerText, screenStickerIsVisible, screenStickerPosition } = useStore(
+      ({ story: { main } }) => main,
+      {
+        type: "story",
+        name: "main",
+        prop: ["screenStickerText", "screenStickerIsVisible", "screenStickerPosition"],
+      }
+    );
 
     const [theSpring, theSpringApi] = useSpring(
       () => ({
@@ -50,22 +43,14 @@ export function makeScreenSticker<StoreHelpers extends PrendyStoreHelpers>(
     }
 
     return (
-      <div
-        key={`alarm_text_box`}
-        id={`alarm_text_box`}
-        style={styles.container}
-      >
+      <div key={`alarm_text_box`} id={`alarm_text_box`} style={styles.container}>
         <animated.div
           id={`alarm_text`}
           style={{
             ...styles.sticker,
             transform: `translate(${
-              EDGE_PADDING +
-              screenStickerPosition.x * (window.innerWidth - EDGE_PADDING * 2)
-            }px ,${
-              EDGE_PADDING +
-              screenStickerPosition.y * (window.innerHeight - EDGE_PADDING * 2)
-            }px)`,
+              EDGE_PADDING + screenStickerPosition.x * (window.innerWidth - EDGE_PADDING * 2)
+            }px ,${EDGE_PADDING + screenStickerPosition.y * (window.innerHeight - EDGE_PADDING * 2)}px)`,
             rotateZ: getRandomInt(-45, 45),
             ...theSpring,
           }}

@@ -1,15 +1,15 @@
-import { makeSectionVidStoreUtils } from "../../../stores/sectionVids/utils";
-import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalVideoRules(storeHelpers, _prendyStores, _prendyStartOptions, prendyAssets) {
+import { makeTyped_sectionVidUtils } from "../../../stores/sectionVids/utils";
+import { makeTyped_cameraChangeUtils } from "../utils/cameraChange";
+export function makeTyped_globalVideoRules(storeHelpers, _prendyStores, _prendyStartOptions, prendyAssets) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
-    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeSectionVidStoreUtils(storeHelpers, prendyAssets);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged, } = makeCameraChangeUtils(storeHelpers, prendyAssets);
+    const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
+    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
     return makeRules(({ itemEffect, effect }) => ({
         whenWantToChooseVideoSection: effect({
             run() {
                 const { nowPlaceName, nowSegmentName, wantedSegmentName, wantedSegmentNameAtLoop, nextSegmentNameWhenVidPlays, nextPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets wantedSegmentName and wantedCamName also sets nextPlaceName
                 isLoadingBetweenPlaces, } = getState().global.main;
-                const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName, } = getState().places[nowPlaceName];
+                const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName } = getState().places[nowPlaceName];
                 const { sectionVidState } = getState().sectionVids[nowPlaceName];
                 const videoIsOutsideOfCurrentLoop = checkForVideoLoop(nowPlaceName);
                 // do all the deciding section logic in here!
@@ -87,12 +87,10 @@ export function makeGlobalVideoRules(storeHelpers, _prendyStores, _prendyStartOp
                     return;
                 }
                 // console.log("here");
-                if (videoIsOutsideOfCurrentLoop &&
-                    (wantedCamNameAtLoop || wantedSegmentNameAtLoop)) {
+                if (videoIsOutsideOfCurrentLoop && (wantedCamNameAtLoop || wantedSegmentNameAtLoop)) {
                     // it should now go to a new section from thw wanted segment or cam at loop
                     decided_wantedCamName = wantedCamName || wantedCamNameAtLoop;
-                    decided_wantedSegmentName =
-                        wantedSegmentName || wantedSegmentNameAtLoop;
+                    decided_wantedSegmentName = wantedSegmentName || wantedSegmentNameAtLoop;
                     new_wantedCamNameAtLoop = null;
                     new_wantedSegmentNameAtLoop = null;
                 }
@@ -100,8 +98,7 @@ export function makeGlobalVideoRules(storeHelpers, _prendyStores, _prendyStartOp
                     // it'll definately be a wantedSection next
                     // set the other value if its undefined
                     decided_wantedCamName = decided_wantedCamName || nowCamName;
-                    decided_wantedSegmentName =
-                        decided_wantedSegmentName || nowSegmentName;
+                    decided_wantedSegmentName = decided_wantedSegmentName || nowSegmentName;
                     // make sure its a safe segment
                     // TODO retye intital state to have segments as strings
                     decided_wantedSegmentName = getSafeSegmentName({
@@ -111,8 +108,7 @@ export function makeGlobalVideoRules(storeHelpers, _prendyStores, _prendyStartOp
                         useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
                     });
                     // if either the decided segment or camera is different to the now segment and camera
-                    if (!(decided_wantedCamName === nowCamName &&
-                        decided_wantedSegmentName === nowSegmentName)) {
+                    if (!(decided_wantedCamName === nowCamName && decided_wantedSegmentName === nowSegmentName)) {
                         decided_wantedSection = getSectionForPlace(nowPlaceName, decided_wantedCamName, decided_wantedSegmentName // decided_wantedSegmentName should always be decided here
                         );
                         decided_wantToLoop = false;
@@ -122,9 +118,7 @@ export function makeGlobalVideoRules(storeHelpers, _prendyStores, _prendyStartOp
                 if (decided_wantedSegmentName !== nowSegmentName) {
                     decided_shouldKeepTime = false;
                 }
-                if (videoIsOutsideOfCurrentLoop &&
-                    !decided_wantedCamName &&
-                    !decided_wantedSegmentName) {
+                if (videoIsOutsideOfCurrentLoop && !decided_wantedCamName && !decided_wantedSegmentName) {
                     // it'll definately be a wantToLoop
                     decided_wantToLoop = true;
                     decided_wantedSection = null;

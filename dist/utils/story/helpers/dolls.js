@@ -1,17 +1,17 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { getShortestAngle, getVectorFromSpeedAndAngle, } from "chootils/dist/speedAngleDistance2d";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import { vector3ToPoint3d } from "../../babylonjs";
-import { makeDollStoryUtils } from "../utils/dolls";
-import { makeSpotStoryUtils } from "../utils/spots";
-export function makeDollStoryHelpers(storeHelpers, 
+import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { vector3ToPoint3d } from "../../babylonjs/babylonjs";
+import { makeTyped_dollStoryUtils } from "../utils/dolls";
+import { makeTyped_spotStoryUtils } from "../utils/spots";
+export function makeTyped_dollStoryHelpers(storeHelpers, 
 // prendyStores: PrendyStores,
 prendyStartOptions, modelInfoByName) {
     const { getRefs, getState, setState } = storeHelpers;
-    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot, } = makeDollStoryUtils(storeHelpers);
-    const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(storeHelpers);
+    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = makeTyped_dollStoryUtils(storeHelpers);
+    const { getSpotPosition, getSpotRotation } = makeTyped_spotStoryUtils(storeHelpers);
     // --------------------------------------------------------------
     function setDollPosition(dollName, newPositon) {
         const dollRefs = getRefs().dolls[dollName];
@@ -82,9 +82,7 @@ prendyStartOptions, modelInfoByName) {
     function focusOnDoll(dollName, zoom) {
         setGlobalState({
             focusedDoll: dollName,
-            planeZoomGoal: zoom !== undefined
-                ? Math.min(zoom, prendyStartOptions.zoomLevels.max)
-                : prendyStartOptions.zoomLevels.default,
+            planeZoomGoal: zoom !== undefined ? Math.min(zoom, prendyStartOptions.zoomLevels.max) : prendyStartOptions.zoomLevels.default,
         });
     }
     function setDollToSpot({ place, spot, doll: dollName, dontSetRotationState, }) {

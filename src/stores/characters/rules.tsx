@@ -1,19 +1,11 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import {
-  AnyCameraName,
-  AnyTriggerName,
-  PrendyAssets,
-  PrendyOptions,
-  CharacterName,
-} from "../../declarations";
+import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../../declarations";
 import pointIsInside from "../../utils/babylonjs/pointIsInside";
-import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
+import { makeTyped_scenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
-export function makeCharacterDynamicRules<
-  StoreHelpers extends PrendyStoreHelpers
->(
+export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -21,18 +13,11 @@ export function makeCharacterDynamicRules<
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { updatePlanePositionToFocusOnMesh } = makeScenePlaneUtils(
-    storeHelpers,
-    prendyStartOptions
-  );
+  const { updatePlanePositionToFocusOnMesh } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   const refs = getRefs();
 
   const placesRefs = refs.places;
-
-  // makeDynamicRules(({ itemEffect })=> ({
-  //   sdsdf: itemEffect()
-  // }))
 
   return makeDynamicRules(({ itemEffect, effect }) => ({
     whenPositionChanges: effect(
@@ -47,12 +32,11 @@ export function makeCharacterDynamicRules<
         run({ itemRefs, itemState }) {
           // TODO
           // only update the collider stuff here
-          // Also listen to dolls positions, and return if not the same dollNAme (easier than dynamic rules for now)
+          // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)
 
           if (!itemRefs.meshRef) return;
 
-          const { nowPlaceName, loadingOverlayToggled, focusedDoll } =
-            getState().global.main;
+          const { nowPlaceName, loadingOverlayToggled, focusedDoll } = getState().global.main;
           const nowPlaceInfo = placeInfoByName[nowPlaceName];
           const triggerNames = nowPlaceInfo.triggerNames as AnyTriggerName[];
           const cameraNames = nowPlaceInfo.cameraNames as AnyCameraName[];
@@ -70,8 +54,7 @@ export function makeCharacterDynamicRules<
           const currentAtCamCubes = characterState.atCamCubes;
           let atCamCubesHasChanged = false;
           forEach(cameraNames, (loopedCameraName) => {
-            const camsRefs =
-              placesRefs[nowPlaceName].camsRefs[loopedCameraName];
+            const camsRefs = placesRefs[nowPlaceName].camsRefs[loopedCameraName];
 
             let isAtLoopedCamCube = false;
 
@@ -88,10 +71,7 @@ export function makeCharacterDynamicRules<
               }
             });
             newAtTheseCamCubes[loopedCameraName] = isAtLoopedCamCube;
-            if (
-              currentAtCamCubes[loopedCameraName] !==
-              newAtTheseCamCubes[loopedCameraName]
-            ) {
+            if (currentAtCamCubes[loopedCameraName] !== newAtTheseCamCubes[loopedCameraName]) {
               atCamCubesHasChanged = true;
             }
           });
@@ -106,15 +86,11 @@ export function makeCharacterDynamicRules<
 
           // --------------------------
           // check triggers
-          let newAtTheseTriggers = {} as Record<
-            typeof triggerNames[number],
-            boolean
-          >;
+          let newAtTheseTriggers = {} as Record<typeof triggerNames[number], boolean>;
           const currentAtTriggers = characterState.atTriggers;
           let atTriggersHasChanged = false;
           forEach(triggerNames, (loopedTriggerName) => {
-            const loopedMesh =
-              placesRefs[nowPlaceName].triggerMeshes[loopedTriggerName];
+            const loopedMesh = placesRefs[nowPlaceName].triggerMeshes[loopedTriggerName];
 
             const isAtLoopedTrigger = !!(
               itemRefs.meshRef &&
@@ -123,10 +99,7 @@ export function makeCharacterDynamicRules<
             );
 
             newAtTheseTriggers[loopedTriggerName] = isAtLoopedTrigger;
-            if (
-              currentAtTriggers[loopedTriggerName] !==
-              newAtTheseTriggers[loopedTriggerName]
-            ) {
+            if (currentAtTriggers[loopedTriggerName] !== newAtTheseTriggers[loopedTriggerName]) {
               atTriggersHasChanged = true;
             }
           });
@@ -172,14 +145,10 @@ export function makeCharacterDynamicRules<
 // maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 
-export function makeStartDynamicCharacterRulesForInitialState<
+export function makeTyped_startDynamicCharacterRulesForInitialState<
   StoreHelpers extends PrendyStoreHelpers,
-  CharacterDynamicRules extends ReturnType<typeof makeCharacterDynamicRules>
->(
-  characterDynamicRules: CharacterDynamicRules,
-  characterNames: readonly CharacterName[],
-  storeHelpers: StoreHelpers
-) {
+  CharacterDynamicRules extends ReturnType<typeof makeTyped_characterDynamicRules>
+>(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
     forEach(characterNames, (characterName) => {
@@ -197,7 +166,7 @@ export function makeStartDynamicCharacterRulesForInitialState<
   };
 }
 
-export function makeCharacterRules<StoreHelpers extends PrendyStoreHelpers>(
+export function makeTyped_characterRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
@@ -215,26 +184,17 @@ export function makeCharacterRules<StoreHelpers extends PrendyStoreHelpers>(
     }),
 
     whenAtCamCubes: itemEffect({
-      run({
-        newValue: newAtCamCubes,
-        previousValue: prevAtCamCubes,
-        itemName: charName,
-      }) {
+      run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
         const { playerCharacter } = getState().global.main;
 
         if (charName !== playerCharacter) return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
 
         const { nowPlaceName } = getState().global.main;
         const { nowCamName } = getState().places[nowPlaceName];
-        const cameraNames = placeInfoByName[nowPlaceName]
-          .cameraNames as AnyCameraName[];
+        const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
 
         forEach(cameraNames, (loopedCameraName) => {
-          if (
-            loopedCameraName !== nowCamName &&
-            newAtCamCubes[loopedCameraName] &&
-            !prevAtCamCubes[loopedCameraName]
-          ) {
+          if (loopedCameraName !== nowCamName && newAtCamCubes[loopedCameraName] && !prevAtCamCubes[loopedCameraName]) {
             setState({
               places: {
                 // [nowPlaceName]: { nowCamName: loopedCameraName },

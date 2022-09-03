@@ -1,13 +1,8 @@
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import {
-  AnyCameraName,
-  AnySegmentName,
-  CameraNameByPlace,
-  PlaceName,
-} from "../../../declarations";
-import { makeGetUsefulStoryStuff } from "../../../storyRuleMakers";
+import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../../declarations";
+import { makeTyped_getUsefulStoryStuff } from "../../../storyRuleMakers/storyRuleMakers";
 
-export function makeSceneStoryUtils<
+export function makeTyped_sceneStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -16,24 +11,19 @@ export function makeSceneStoryUtils<
 >(storeHelpers: StoreHelpers) {
   const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
 
-  const getUsefulStoryStuff = makeGetUsefulStoryStuff(storeHelpers);
+  const getUsefulStoryStuff = makeTyped_getUsefulStoryStuff(storeHelpers);
   const globalRefs = getRefs().global.main;
 
-  function getSegmentFromStoryRules<
-    T_Place extends A_PlaceName,
-    T_Cam extends A_CameraNameByPlace[T_Place]
-  >(place: T_Place, cam: T_Cam) {
-    const foundRuleSegmentName = (globalRefs.camSegmentRulesOptions as any)?.[
-      place
-    ]?.[cam]?.(getUsefulStoryStuff());
+  function getSegmentFromStoryRules<T_Place extends A_PlaceName, T_Cam extends A_CameraNameByPlace[T_Place]>(
+    place: T_Place,
+    cam: T_Cam
+  ) {
+    const foundRuleSegmentName = (globalRefs.camSegmentRulesOptions as any)?.[place]?.[cam]?.(getUsefulStoryStuff());
 
     return foundRuleSegmentName;
   }
 
-  function doWhenNowSegmentChanges(
-    checkingSegmentName: A_AnySegmentName,
-    callback: () => void
-  ) {
+  function doWhenNowSegmentChanges(checkingSegmentName: A_AnySegmentName, callback: () => void) {
     const initialNowSegmentName = getState().global.main.nowSegmentName;
     if (checkingSegmentName === initialNowSegmentName) {
       callback();

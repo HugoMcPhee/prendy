@@ -1,21 +1,11 @@
 // @refresh-reset
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_scenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import {
-  CharacterName,
-  PrendyOptions,
-  SpeechVidFiles,
-} from "../../../declarations";
+import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
@@ -23,24 +13,19 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
+export function makeTyped_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
   const { getState, useStore, useStoreEffect } = storeHelpers;
-  const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(
-    storeHelpers,
-    prendyStartOptions
-  );
+  const { viewCenterPoint, getViewSize } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
-  type AllItemsState<T_ItemType extends ItemType> = ReturnType<
-    GetState
-  >[T_ItemType];
+  type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
 
-  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 
@@ -51,8 +36,7 @@ export function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
     const theText = useRef<HTMLDivElement>(null);
     const theTextHolder = useRef<HTMLDivElement>(null);
 
-    const forCharacter =
-      getState().speechBubbles[name].forCharacter ?? "walker";
+    const forCharacter = getState().speechBubbles[name].forCharacter ?? "walker";
 
     const [measuredHeight, setMeasuredHeight] = useState(0);
 
@@ -132,8 +116,7 @@ export function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
     const positionSpeechBubbleToCharacter = useCallback(() => {
       const { forCharacter } = getState().speechBubbles[name];
       if (!forCharacter) return;
-      const { dollState, dollName } =
-        getCharDollStuff(forCharacter as CharacterName) ?? {};
+      const { dollState, dollName } = getCharDollStuff(forCharacter as CharacterName) ?? {};
 
       if (!dollState || !dollName) return;
       const { focusedDoll, focusedDollIsInView } = getState().global.main;
@@ -323,35 +306,21 @@ export function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
               )}
               {_goalTextWordLetterArrays.map((wordLetters, wordIndex) => {
                 let letterAmountFromPreviousWords =
-                  wordIndex > 0
-                    ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat()
-                        .length
-                    : 0;
+                  wordIndex > 0 ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat().length : 0;
 
                 return (
-                  <span
-                    className="SpeechBubble-wordLettersHolder"
-                    key={"" + wordLetters + wordIndex}
-                  >
+                  <span className="SpeechBubble-wordLettersHolder" key={"" + wordLetters + wordIndex}>
                     {wordLetters.map((letter, wordLetterIndex) => {
-                      const textLetterIndex =
-                        (letterAmountFromPreviousWords || -1) + wordLetterIndex;
+                      const textLetterIndex = (letterAmountFromPreviousWords || -1) + wordLetterIndex;
                       const isVisible = textLetterIndex < visibleLetterAmount;
 
                       // NOTE this is maybe undefiend, but typescript rules dont treat it like that atm
-                      const customStyle =
-                        stylesBySpecialText[
-                          _specialTextByLetterIndex[textLetterIndex + 1]
-                        ];
+                      const customStyle = stylesBySpecialText[_specialTextByLetterIndex[textLetterIndex + 1]];
 
                       return (
                         <div
                           key={"" + letter + wordLetterIndex}
-                          className={
-                            isVisible
-                              ? "SpeechBubble-visibleLetter"
-                              : "SpeechBubble-hiddenLetter"
-                          }
+                          className={isVisible ? "SpeechBubble-visibleLetter" : "SpeechBubble-hiddenLetter"}
                           style={customStyle}
                         >
                           {`${letter}`}
@@ -364,12 +333,7 @@ export function makeSpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
             </div>
             {/* <SpeechBubbleVisibleText name={name} /> */}
           </animated.div>
-          <div
-            ref={refs.theTriangle}
-            key={`theTriangle`}
-            id={`theTriangle`}
-            style={styles.triangle}
-          ></div>
+          <div ref={refs.theTriangle} key={`theTriangle`} id={`theTriangle`} style={styles.triangle}></div>
         </animated.div>
       </div>
     );

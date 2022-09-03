@@ -1,14 +1,8 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import {
-  getShortestAngle,
-  getVectorFromSpeedAndAngle,
-} from "chootils/dist/speedAngleDistance2d";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../../../stores/typedStoreHelpers";
+import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
   PrendyOptions,
@@ -23,11 +17,11 @@ import {
   SpotNameByPlace,
   BoneNameByModel,
 } from "../../../declarations";
-import { vector3ToPoint3d } from "../../babylonjs";
-import { makeDollStoryUtils } from "../utils/dolls";
-import { makeSpotStoryUtils } from "../utils/spots";
+import { vector3ToPoint3d } from "../../babylonjs/babylonjs";
+import { makeTyped_dollStoryUtils } from "../utils/dolls";
+import { makeTyped_spotStoryUtils } from "../utils/spots";
 
-export function makeDollStoryHelpers<
+export function makeTyped_dollStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
@@ -50,28 +44,22 @@ export function makeDollStoryHelpers<
 ) {
   const { getRefs, getState, setState } = storeHelpers;
 
-  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> =
-    A_CharacterOptions[T_CharacterName]["doll"];
+  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> = A_CharacterOptions[T_CharacterName]["doll"];
 
-  type ModelNameFromDoll<T_DollName extends A_DollName> =
-    A_DollOptions[T_DollName]["model"];
+  type ModelNameFromDoll<T_DollName extends A_DollName> = A_DollOptions[T_DollName]["model"];
 
-  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> =
-    ModelNameFromDoll<DollNameFromCharacter<T_CharacterName>>;
+  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> = ModelNameFromDoll<
+    DollNameFromCharacter<T_CharacterName>
+  >;
 
   type AnimationNameFromCharacter<T_CharacterName extends A_CharacterName> =
     A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
-  type MeshNamesFromDoll<T_DollName extends A_DollName> =
-    A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
+  type MeshNamesFromDoll<T_DollName extends A_DollName> = A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
 
-  const {
-    getModelNameFromDoll,
-    get2DAngleBetweenDolls,
-    get2DAngleFromDollToSpot,
-  } = makeDollStoryUtils<
+  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = makeTyped_dollStoryUtils<
     StoreHelpers,
     PrendyStores,
     A_DollName,
@@ -79,7 +67,7 @@ export function makeDollStoryHelpers<
     A_SpotNameByPlace
   >(storeHelpers);
 
-  const { getSpotPosition, getSpotRotation } = makeSpotStoryUtils(storeHelpers);
+  const { getSpotPosition, getSpotRotation } = makeTyped_spotStoryUtils(storeHelpers);
 
   // --------------------------------------------------------------
 
@@ -90,13 +78,10 @@ export function makeDollStoryHelpers<
     const prevCollisionsEnabled = dollRefs.checkCollisions;
     dollRefs.checkCollisions = false;
 
-    setState(
-      { dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } },
-      () => {
-        // dollRefs.checkCollisions = prevCollisionsEnabled;
-        dollRefs.checkCollisions = true;
-      }
-    );
+    setState({ dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } }, () => {
+      // dollRefs.checkCollisions = prevCollisionsEnabled;
+      dollRefs.checkCollisions = true;
+    });
   }
 
   function springDollPosition(dollName: A_DollName, newPositon: Vector3) {}
@@ -150,11 +135,7 @@ export function makeDollStoryHelpers<
     setState({ dolls: { [dollName]: { rotationYGoal: newRotation } } });
   }
 
-  function springAddToDollRotationY(
-    dollName: A_DollName,
-    addedRotation: number,
-    useShortestAngle: boolean = false
-  ) {
+  function springAddToDollRotationY(dollName: A_DollName, addedRotation: number, useShortestAngle: boolean = false) {
     setState((state) => {
       state.useShortestAngle;
 
@@ -185,16 +166,11 @@ export function makeDollStoryHelpers<
     setState({ dolls: { [doll]: { nowAnimation: animation } } });
   }
 
-  function focusOnDoll<T_Doll extends A_DollName>(
-    dollName: T_Doll,
-    zoom?: number
-  ) {
+  function focusOnDoll<T_Doll extends A_DollName>(dollName: T_Doll, zoom?: number) {
     setGlobalState({
       focusedDoll: dollName,
       planeZoomGoal:
-        zoom !== undefined
-          ? Math.min(zoom, prendyStartOptions.zoomLevels.max)
-          : prendyStartOptions.zoomLevels.default,
+        zoom !== undefined ? Math.min(zoom, prendyStartOptions.zoomLevels.max) : prendyStartOptions.zoomLevels.default,
     });
   }
 
@@ -249,11 +225,7 @@ export function makeDollStoryHelpers<
     });
   }
 
-  function moveDollAt2DAngle(
-    dollName: A_DollName,
-    angle: number,
-    speed: number = 3
-  ) {
+  function moveDollAt2DAngle(dollName: A_DollName, angle: number, speed: number = 3) {
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { positionIsMoving, positionMoveMode } = dollState;
@@ -273,11 +245,7 @@ export function makeDollStoryHelpers<
     dollRefs.positionMoverRefs.velocity.y = -1.5;
   }
 
-  function pushDollRotationY(
-    dollName: A_DollName,
-    direction: "right" | "left",
-    speed: number = 3
-  ) {
+  function pushDollRotationY(dollName: A_DollName, direction: "right" | "left", speed: number = 3) {
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { rotationYIsMoving, rotationYMoveMode } = dollState;
@@ -329,8 +297,7 @@ export function makeDollStoryHelpers<
     const otherMeshes = getRefs().dolls[dollName].otherMeshes;
     const modelName = getModelNameFromDoll(dollName);
     const modelInfo = modelInfoByName[modelName as unknown as A_ModelName];
-    const typedMeshNames =
-      modelInfo.meshNames as unknown as MeshNamesFromDoll<T_DollName>[];
+    const typedMeshNames = modelInfo.meshNames as unknown as MeshNamesFromDoll<T_DollName>[];
 
     forEach(typedMeshNames, (meshName) => {
       const newToggle = toggledMeshes[meshName];

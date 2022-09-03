@@ -1,24 +1,19 @@
-import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeTyped_scenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 import { makeRunMovers } from "pietem-movers";
 import { copyPoint } from "chootils/dist/points2d";
-import {
-  PrendyStoreHelpers,
-  PrendyOptionsUntyped,
-} from "../../typedStoreHelpers";
-import { makeGlobalStoreUtils } from "../utils";
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../typedStoreHelpers";
+import { makeTyped_globalUtils } from "../utils/utils";
 
-export function makeGlobalScenePlaneRules<
+export function makeTyped_globalScenePlaneRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions) {
-  const {
-    getScenePlaneOverScreenEdgesAmount,
-    focusScenePlaneOnFocusedDoll,
-  } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
-  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
-
+  const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils(
+    storeHelpers,
+    prendyStartOptions
+  );
+  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
   const { makeRules } = storeHelpers;
-
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
 
   return makeRules(({ itemEffect }) => ({

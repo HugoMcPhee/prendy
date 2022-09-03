@@ -1,29 +1,16 @@
 import { AbstractMesh, Scene, TargetCamera } from "@babylonjs/core";
 import React, { useCallback } from "react";
 import { forEach } from "chootils/dist/loops";
-import {
-  PrendyStoreHelpers,
-  PrendyOptionsUntyped,
-} from "../stores/typedStoreHelpers";
-import { makeScenePlaneUtils } from "../utils/babylonjs/scenePlane";
+import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../stores/typedStoreHelpers";
+import { makeTyped_scenePlaneUtils } from "../utils/babylonjs/scenePlane";
 
-export function makeScenePlane<
+export function makeTyped_ScenePlane<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions) {
-  const {
-    getRefs,
-    getState,
-    useStoreEffect,
-    useStoreItemPropsEffect,
-  } = storeHelpers;
-
+  const { getRefs, getState, useStoreEffect, useStoreItemPropsEffect } = storeHelpers;
   const globalRefs = getRefs().global.main;
-
-  const { fitScenePlaneToScreen, applyPlanePosition } = makeScenePlaneUtils(
-    storeHelpers,
-    prendyStartOptions
-  );
+  const { fitScenePlaneToScreen, applyPlanePosition } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   type Props = {};
 

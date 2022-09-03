@@ -1,22 +1,15 @@
-import { SectionVidState, VidSection } from ".";
-import { makeCameraChangeUtils } from "../../stores/global/utils/cameraChange";
-import {
-  AnyCameraName,
-  PrendyAssets,
-  CameraNameByPlace,
-  PlaceName,
-  SegmentNameByPlace,
-} from "../../declarations";
-import { makeGlobalStoreUtils } from "../global/utils";
+import { SectionVidState, VidSection } from "./sectionVids";
+import { makeTyped_cameraChangeUtils } from "../../stores/global/utils/cameraChange";
+import { AnyCameraName, PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../declarations";
+import { makeTyped_globalUtils } from "../global/utils/utils";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
-export function makeGetSectionVidVideo<
-  StoreHelpers extends PrendyStoreHelpers,
-  PlaceName extends string
->(storeHelpers: StoreHelpers) {
+export function makeTyped_getSectionVidVideo<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
+  storeHelpers: StoreHelpers
+) {
   const { getRefs, getState } = storeHelpers;
 
   return function getSectionVidVideo(itemName: PlaceName) {
@@ -29,22 +22,16 @@ export function makeGetSectionVidVideo<
   };
 }
 
-export function makeSectionVidStoreUtils<
-  StoreHelpers extends PrendyStoreHelpers
->(storeHelpers: StoreHelpers, prendyAssets: PrendyAssets) {
+export function makeTyped_sectionVidUtils<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
+  prendyAssets: PrendyAssets
+) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
-
-  const getSectionVidVideo = makeGetSectionVidVideo<StoreHelpers, PlaceName>(
-    storeHelpers
-  );
-
-  const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(
-    storeHelpers,
-    prendyAssets
-  );
+  const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
+  const getSectionVidVideo = makeTyped_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const { getSafeCamName, getSafeSegmentName } = makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
 
   // __________________________
   // temporary rules
@@ -60,16 +47,14 @@ export function makeSectionVidStoreUtils<
     checkShouldRun: (newVidState: SectionVidState) => boolean,
     callback: () => void
   ) {
-    const initialVidState =
-      getState().sectionVids[sectionVidId].sectionVidState;
+    const initialVidState = getState().sectionVids[sectionVidId].sectionVidState;
     // console.log(" - - - doWhenSectionVidStateChanges initial", initialVidState);
     if (checkShouldRun(initialVidState)) {
       callback();
       return null;
     }
 
-    const ruleName =
-      "doWhenSectionVidStateChanges" + Math.random() + Math.random();
+    const ruleName = "doWhenSectionVidStateChanges" + Math.random() + Math.random();
 
     startItemEffect({
       name: ruleName,
@@ -90,15 +75,8 @@ export function makeSectionVidStoreUtils<
     return ruleName;
   }
 
-  function doWhenSectionVidPlaying(
-    sectionVidId: PlaceName,
-    callback: () => void
-  ) {
-    return doWhenSectionVidStateChanges(
-      sectionVidId,
-      (newState) => newState === "play",
-      callback
-    );
+  function doWhenSectionVidPlaying(sectionVidId: PlaceName, callback: () => void) {
+    return doWhenSectionVidStateChanges(sectionVidId, (newState) => newState === "play", callback);
   }
 
   function getSectionEndTime(section: VidSection) {
@@ -124,17 +102,13 @@ export function makeSectionVidStoreUtils<
     });
 
     // NOTE  might be a way to avoid using any but is internal so okay for now
-    const placeSegmentTimesByCamera = placeInfoByName[safePlace]
-      .segmentTimesByCamera as any;
+    const placeSegmentTimesByCamera = placeInfoByName[safePlace].segmentTimesByCamera as any;
     const typedCamName = safeCam as keyof typeof placeSegmentTimesByCamera;
 
     const placeSegmentDurations = placeInfoByName[safePlace].segmentDurations;
 
     const newTime = placeSegmentTimesByCamera[typedCamName][safeSegmentName];
-    const newDuration =
-      placeSegmentDurations[
-        safeSegmentName as keyof typeof placeSegmentDurations
-      ];
+    const newDuration = placeSegmentDurations[safeSegmentName as keyof typeof placeSegmentDurations];
 
     return { time: newTime, duration: newDuration };
   }

@@ -1,23 +1,11 @@
 import delay from "delay";
-import {
-  addItemToUniqueArray,
-  removeItemFromArray,
-} from "chootils/dist/arrays";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../../../stores/typedStoreHelpers";
-import {
-  AnyAnimationName,
-  PrendyOptions,
-  CharacterName,
-  ModelInfoByName,
-  PickupName,
-} from "../../../declarations";
-import { makeCharacterStoryHelpers } from "./characters";
+import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
+import { AnyAnimationName, PrendyOptions, CharacterName, ModelInfoByName, PickupName } from "../../../declarations";
+import { makeTyped_characterStoryHelpers } from "./characters";
 
-export function makerPlayerStoryHelpers<
+export function makeTyped_playerStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
@@ -34,7 +22,7 @@ export function makerPlayerStoryHelpers<
 ) {
   const { getState, setState } = storeHelpers;
 
-  const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
+  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
 
   type PlayerAnimationNames = {
     walking: A_AnyAnimationName;

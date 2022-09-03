@@ -1,23 +1,23 @@
 import { makeRunMovers } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
-import { samePoints as samePoints3d, subtractPointsSafer, } from "chootils/dist/points3d";
+import { samePoints as samePoints3d, subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
-import { getShortestAngle, getVectorAngle, } from "chootils/dist/speedAngleDistance2d";
-import { point3dToVector3, vector3ToSafePoint3d } from "../../utils/babylonjs";
-import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
+import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
+import { point3dToVector3, vector3ToSafePoint3d } from "../../utils/babylonjs/babylonjs";
+import { makeTyped_scenePlaneUtils } from "../../utils/babylonjs/scenePlane";
 //
 import { setGlobalPositionWithCollisions } from "../../utils/babylonjs/setGlobalPositionWithCollisions";
-import { getDefaultInRangeFunction } from "./indexUtils";
-import { makeDollStoreUtils, rangeOptionsQuick } from "./utils";
+import { getDefaultInRangeFunction } from "./dollStoreUtils";
+import { makeTyped_dollUtils, rangeOptionsQuick } from "./utils";
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
 export function makeDollDynamicRules(storeHelpers, prendyStartOptions, prendyStores, prendyAssets) {
-    const { saveModelStuffToDoll, setupLightMaterial } = makeDollStoreUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+    const { saveModelStuffToDoll, setupLightMaterial } = makeTyped_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
     const { getRefs, makeDynamicRules } = storeHelpers;
     return makeDynamicRules(({ itemEffect, effect }) => ({
-        waitForModelToLoad: itemEffect(({ dollName, modelName, }) => ({
+        waitForModelToLoad: itemEffect(({ dollName, modelName }) => ({
             run() {
                 saveModelStuffToDoll({ dollName, modelName });
             },
@@ -31,7 +31,7 @@ export function makeDollDynamicRules(storeHelpers, prendyStartOptions, prendySto
             atStepEnd: true,
         })),
         // When the plaec and all characters are loaded
-        whenWholePlaceFinishesLoading: itemEffect(({ dollName, modelName, }) => ({
+        whenWholePlaceFinishesLoading: itemEffect(({ dollName, modelName }) => ({
             run() {
                 const dollRefs = getRefs().dolls[dollName];
                 const modelRefs = getRefs().models[modelName];
@@ -84,10 +84,10 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
         });
     };
 }
-export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
+export function makeTyped_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
     const { modelInfoByName, dollNames } = prendyAssets;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition, } = makeDollStoreUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = makeTyped_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+    const { focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
     const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
@@ -95,7 +95,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         // loading model stuff
         // --------------------------------
         whenModelNameChanges: itemEffect({
-            run({ itemName: dollName, newValue: newModelName, previousValue: prevModelName, }) {
+            run({ itemName: dollName, newValue: newModelName, previousValue: prevModelName }) {
                 // stop the previous dynamic rule, and start the new one
                 dollDynamicRules.stopAll({ dollName, modelName: prevModelName });
                 dollDynamicRules.startAll({ dollName, modelName: newModelName });
@@ -123,8 +123,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         whenNowAnimationChanged: itemEffect({
             run({ newValue: nowAnimation, itemState, itemName: dollName }) {
                 const { modelName } = itemState;
-                const animationNames = modelInfoByName[modelName]
-                    .animationNames;
+                const animationNames = modelInfoByName[modelName].animationNames;
                 // type T_ModelName = typeof modelName;
                 // let newWeights = {} as Record<
                 //   AnimationNameByModel[T_ModelName],
@@ -165,8 +164,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         whenAnimWeightsChanged: itemEffect({
             run({ newValue: animWeights, itemState, itemRefs }) {
                 const { modelName } = itemState;
-                const animationNames = modelInfoByName[modelName]
-                    .animationNames;
+                const animationNames = modelInfoByName[modelName].animationNames;
                 if (!itemRefs.aniGroupsRef)
                     return;
                 forEach(animationNames, (aniName) => {
@@ -180,8 +178,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                     if (!aniRef) {
                         console.warn("tried to use undefined animation", aniName);
                     }
-                    if (aniRef &&
-                        (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyStartOptions.animationSpeed) {
+                    if (aniRef && (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyStartOptions.animationSpeed) {
                         aniRef.speedRatio = prendyStartOptions.animationSpeed;
                     }
                     const animWeight = animWeights[aniName];
@@ -218,7 +215,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         }),
         //
         whenRotationGoalChanged: itemEffect({
-            run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName, }) {
+            run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName }) {
                 const yRotationDifference = oldYRotation - newYRotation;
                 if (Math.abs(yRotationDifference) > 180) {
                     const shortestAngle = getShortestAngle(oldYRotation, newYRotation);
@@ -274,7 +271,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         // ___________________________________
         // position
         whenPositionChangesToEdit: itemEffect({
-            run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName, }) {
+            run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
                 if (!itemRefs.meshRef)
                     return;
                 if (samePoints3d(newPosition, prevPosition))
@@ -292,8 +289,7 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                     const { editedPosition, positionWasEdited, collidedPosOffset } = setGlobalPositionWithCollisions(itemRefs.meshRef, newMeshPosition);
                     // if a collision cauhed the mesh to not reach the position, update the position state
                     if (positionWasEdited) {
-                        const shouldChangeAngle = Math.abs(collidedPosOffset.z) > 0.01 ||
-                            Math.abs(collidedPosOffset.x) > 0.01;
+                        const shouldChangeAngle = Math.abs(collidedPosOffset.z) > 0.01 || Math.abs(collidedPosOffset.x) > 0.01;
                         let newYRotation = getState().dolls[dollName].rotationYGoal;
                         const positionOffset = subtractPointsSafer(prevPosition, editedPosition);
                         newYRotation = getVectorAngle({
@@ -367,14 +363,10 @@ export function makeDollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                             quickDistance = getQuickDistanceBetweenDolls(dollName, otherDollName);
                         }
                         // FIXME type?
-                        newQuickDistancesMap[dollName][otherDollName] =
-                            quickDistance;
-                        tempNewDollsState[dollName].inRange[otherDollName].touch =
-                            quickDistance < rangeOptionsQuick.touch;
-                        tempNewDollsState[dollName].inRange[otherDollName].talk =
-                            quickDistance < rangeOptionsQuick.talk;
-                        tempNewDollsState[dollName].inRange[otherDollName].see =
-                            quickDistance < rangeOptionsQuick.see;
+                        newQuickDistancesMap[dollName][otherDollName] = quickDistance;
+                        tempNewDollsState[dollName].inRange[otherDollName].touch = quickDistance < rangeOptionsQuick.touch;
+                        tempNewDollsState[dollName].inRange[otherDollName].talk = quickDistance < rangeOptionsQuick.talk;
+                        tempNewDollsState[dollName].inRange[otherDollName].see = quickDistance < rangeOptionsQuick.see;
                     });
                     const currentDollState = getState().dolls[dollName];
                     const tempNewDollState = tempNewDollsState[dollName];

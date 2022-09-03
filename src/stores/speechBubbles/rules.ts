@@ -1,11 +1,8 @@
 import { substring, length, toArray, indexOf } from "stringz";
 import { forEach } from "chootils/dist/loops";
-import { makeSpeechBubblesStoreUtils } from "./utils";
+import { makeTyped_speechBubblesUtils } from "./utils";
 import { CSSProperties } from "react";
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../typedStoreHelpers";
 import { StoreHelperTypes } from "pietem";
 
 let zIndexCounter = 100;
@@ -36,10 +33,7 @@ export function makeSpeechBubbleRules<
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
   type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
-  const { getTypingDelayForLetter } = makeSpeechBubblesStoreUtils(
-    storeHelpers,
-    prendyStores
-  );
+  const { getTypingDelayForLetter } = makeTyped_speechBubblesUtils(storeHelpers, prendyStores);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenGoalTextChanges: itemEffect({
@@ -50,10 +44,7 @@ export function makeSpeechBubbleRules<
             [itemName]: {
               typingFinished: false,
               visibleLetterAmount: 0,
-              _specialTextByLetterIndex: getSpecialTextByLetterIndex(
-                goalText,
-                stylesBySpecialText
-              ),
+              _specialTextByLetterIndex: getSpecialTextByLetterIndex(goalText, stylesBySpecialText),
               _goalTextWordLetterArrays: textToWordLetterArrays(goalText),
             },
           },
@@ -89,8 +80,7 @@ export function makeSpeechBubbleRules<
         forEach(diffInfo.itemsRemoved.speechBubbles, (itemName) => {
           // speechBubbleDynamicRules.stopAll
           const speechBubblesRefs = getRefs().speechBubbles;
-          const { currentTimeout } =
-            speechBubblesRefs[itemName as keyof typeof speechBubblesRefs];
+          const { currentTimeout } = speechBubblesRefs[itemName as keyof typeof speechBubblesRefs];
           if (currentTimeout !== null) clearTimeout(currentTimeout);
         });
       },
@@ -150,10 +140,7 @@ export function makeSpeechBubbleRules<
     return foundIndexes;
   }
 
-  function getSpecialTextByLetterIndex(
-    text: string,
-    stylesBySpecialText: Record<string, CSSProperties>
-  ) {
+  function getSpecialTextByLetterIndex(text: string, stylesBySpecialText: Record<string, CSSProperties>) {
     const specialTexts = Object.keys(stylesBySpecialText);
 
     const specialTextByLetterIndex: Record<number, string> = {};
@@ -162,11 +149,7 @@ export function makeSpeechBubbleRules<
       const specialTextLength = length(specialText);
       const foundStartIndexes = findIndexesOf(text, specialText);
       forEach(foundStartIndexes, (startIndex) => {
-        for (
-          let index = startIndex;
-          index < startIndex + specialTextLength;
-          index++
-        ) {
+        for (let index = startIndex; index < startIndex + specialTextLength; index++) {
           specialTextByLetterIndex[index] = specialText;
         }
       });
@@ -187,19 +170,10 @@ export function makeSpeechBubbleRules<
     if (itemRefs.currentTimeout !== null) clearTimeout(itemRefs.currentTimeout);
 
     // If visible/goal Text length not the same
-    const {
-      goalText,
-      typingFinished,
-      stylesBySpecialText,
-      visibleLetterAmount,
-    } = itemState;
+    const { goalText, typingFinished, stylesBySpecialText, visibleLetterAmount } = itemState;
     const goalLength = length(goalText);
     let newVisibleLetterAmount = visibleLetterAmount;
-    let latestLetter = substring(
-      goalText,
-      Math.max(visibleLetterAmount, 0) - 1,
-      Math.max(visibleLetterAmount, 1)
-    );
+    let latestLetter = substring(goalText, Math.max(visibleLetterAmount, 0) - 1, Math.max(visibleLetterAmount, 1));
 
     let newTypingFinished = typingFinished;
     if (visibleLetterAmount < length(goalText)) {

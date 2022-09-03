@@ -1,18 +1,11 @@
 // @refresh-reset
 import React from "react";
-export function makeShowStates(storeHelpers) {
+export function makeTyped_ShowStates(storeHelpers) {
     const { useStore } = storeHelpers;
     return function ShowStates(_props) {
-        const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage, } = useStore((state) => state.global.main, {
+        const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage } = useStore((state) => state.global.main, {
             type: "global",
-            prop: [
-                "planeZoom",
-                "planeZoomGoal",
-                "planePos",
-                "planePosGoal",
-                "planeZoomIsMoving",
-                "debugMessage",
-            ],
+            prop: ["planeZoom", "planeZoomGoal", "planePos", "planePosGoal", "planeZoomIsMoving", "debugMessage"],
         });
         return (React.createElement("div", { id: "show-states", style: {
                 pointerEvents: "none",

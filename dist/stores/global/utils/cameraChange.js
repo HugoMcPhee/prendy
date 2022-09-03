@@ -1,19 +1,19 @@
 import { Constants, Engine, PBRMaterial, RenderTargetTexture, ShaderMaterial, Texture, } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import { makeSceneStoryUtils } from "../../../utils/story/utils/scene";
+import { makeTyped_sceneStoryUtils } from "../../../utils/story/utils/scene";
 import shaders from "../../..//utils/shaders";
-import { makeGetSectionVidVideo } from "../../../stores/sectionVids/utils";
-import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
-import { makeGlobalStoreUtils } from "./";
-export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
+import { makeTyped_getSectionVidVideo } from "../../../stores/sectionVids/utils";
+import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
+import { makeTyped_globalUtils } from "./utils";
+export function makeTyped_cameraChangeUtils(storeHelpers, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName, dollNames } = prendyAssets;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
-    const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const getSectionVidVideo = makeGetSectionVidVideo(storeHelpers);
-    const { getSegmentFromStoryRules } = makeSceneStoryUtils(storeHelpers);
+    const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const getSectionVidVideo = makeTyped_getSectionVidVideo(storeHelpers);
+    const { getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
     function getSafeCamName(cam) {
         if (cam === null) {
             return null;
@@ -22,9 +22,7 @@ export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
         const safePlace = nowPlaceName;
         const { segmentTimesByCamera, cameraNames } = placeInfoByName[safePlace];
         // if the camera isn't in the nowPlace, then use the first camera for the nowPlace
-        const safeCam = (segmentTimesByCamera === null || segmentTimesByCamera === void 0 ? void 0 : segmentTimesByCamera[cam])
-            ? cam
-            : cameraNames[0];
+        const safeCam = (segmentTimesByCamera === null || segmentTimesByCamera === void 0 ? void 0 : segmentTimesByCamera[cam]) ? cam : cameraNames[0];
         return safeCam;
     }
     function getSafeSegmentName({ cam, place, segment, useStorySegmentRules, }) {
@@ -43,9 +41,7 @@ export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
         const camSegmentNames = Object.keys((_a = segmentTimesByCamera === null || segmentTimesByCamera === void 0 ? void 0 : segmentTimesByCamera[safeCam]) !== null && _a !== void 0 ? _a : {});
         // const camSegmentNames = [] as any;
         // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
-        const foundRuleSegmentName = useStorySegmentRules
-            ? getSegmentFromStoryRules(safePlace, safeCam)
-            : undefined;
+        const foundRuleSegmentName = useStorySegmentRules ? getSegmentFromStoryRules(safePlace, safeCam) : undefined;
         // const foundRuleSegmentName = undefined;
         return chooseClosestBeforeItemInArray({
             fullArray: segmentNames,
@@ -98,10 +94,7 @@ export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
         //   globalRefs.depthRenderTarget,
         // ];
         if (!scenes.main.customRenderTargets.length) {
-            scenes.main.customRenderTargets = [
-                globalRefs.sceneRenderTarget,
-                globalRefs.depthRenderTarget,
-            ];
+            scenes.main.customRenderTargets = [globalRefs.sceneRenderTarget, globalRefs.depthRenderTarget];
             // scenes.main.cameras.forEach((camera) => {
             // camera.outputRenderTarget = globalRefs.sceneRenderTarget;
             // camera.customRenderTargets = [globalRefs.depthRenderTarget];
@@ -235,10 +228,8 @@ export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
             const modelRefs = getRefs().models[modelName];
             // console.log("camsRefs[placeState.nowCamName].probeTexture");
             // console.log(camsRefs[placeState.nowCamName].probeTexture);
-            if (modelRefs.materialRef &&
-                camsRefs[placeState.nowCamName].probeTexture) {
-                modelRefs.materialRef.reflectionTexture =
-                    camsRefs[placeState.nowCamName].probeTexture;
+            if (modelRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
+                modelRefs.materialRef.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
             }
             // const scene = getScene();
             // if (scene) {
@@ -289,11 +280,8 @@ export function makeCameraChangeUtils(storeHelpers, prendyAssets) {
             var _a, _b, _c, _d;
             const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
             const material = particleSystem.mesh.material;
-            if (material &&
-                material instanceof PBRMaterial &&
-                camsRefs[placeState.nowCamName].probeTexture) {
-                material.reflectionTexture =
-                    camsRefs[placeState.nowCamName].probeTexture;
+            if (material && material instanceof PBRMaterial && camsRefs[placeState.nowCamName].probeTexture) {
+                material.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
             }
             (_b = (_a = globalRefs.sceneRenderTarget) === null || _a === void 0 ? void 0 : _a.renderList) === null || _b === void 0 ? void 0 : _b.push(particleSystem.mesh);
             (_d = (_c = globalRefs.depthRenderTarget) === null || _c === void 0 ? void 0 : _c.renderList) === null || _d === void 0 ? void 0 : _d.push(particleSystem.mesh);

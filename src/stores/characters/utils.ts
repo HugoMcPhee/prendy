@@ -9,7 +9,7 @@ import {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
 
-export function makeGetCharDollStuff<
+export function makeTyped_getCharDollStuff<
   StoreHelpers extends PrendyStoreHelpers,
   A_CharacterName extends CharacterName = CharacterName
 >(storeHelpers: StoreHelpers) {
@@ -40,9 +40,7 @@ export function makeGetCharDollStuff<
   // type MeshNamesFromDoll<T_DollName extends DollName> =
   //   MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-  return function getCharDollStuff<T_CharacterName extends A_CharacterName>(
-    charName: T_CharacterName
-  ) {
+  return function getCharDollStuff<T_CharacterName extends A_CharacterName>(charName: T_CharacterName) {
     if (!getState().characters[charName]) {
       console.log("charName", charName);
       console.log(getState().characters);

@@ -1,4 +1,4 @@
-export function makeSpotStoryUtils(storeHelpers) {
+export function makeTyped_spotStoryUtils(storeHelpers) {
     const { getRefs } = storeHelpers;
     function getSpotPosition(place, spot) {
         const placesRefs = getRefs().places;

@@ -10,6 +10,12 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
 
+v0.9.1
+
+- renamed wrapped functions with makeTyped\_ to be more understandable
+- fixed issue with activeCamera not being defined at the start
+- updated babylonjs and react-babylonjs
+
 v0.9.0
 
 - rename prendyArt to prendyAssets and concepts to stores

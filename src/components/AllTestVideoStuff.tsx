@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { andLayout } from "../utils/styles";
 
-export function makeAllTestVideoStuff<
-  StoreHelpers extends PrendyStoreHelpers,
-  PlaceName extends string
->(storeHelpers: StoreHelpers, placeNames: readonly PlaceName[]) {
+export function makeTyped_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
+  storeHelpers: StoreHelpers,
+  placeNames: readonly PlaceName[]
+) {
   const { useStore, useStoreItemPropsEffect } = storeHelpers;
 
   function TestVideos({ placeName }: { placeName: PlaceName }) {
@@ -53,20 +53,12 @@ export function makeAllTestVideoStuff<
 
     return (
       <div ref={mainRef}>
-        <div
-          ref={vidContainerRefA}
-          style={{ ...andLayout("center") }}
-          id={`${placeName}_a`}
-        >
+        <div ref={vidContainerRefA} style={{ ...andLayout("center") }} id={`${placeName}_a`}>
           A
           <div style={{ ...andLayout("center") }} id={`${placeName}_a_color`} />
           <div style={{ ...andLayout("center") }} id={`${placeName}_a_depth`} />
         </div>
-        <div
-          ref={vidContainerRefB}
-          style={{ ...andLayout("center") }}
-          id={`${placeName}_b`}
-        >
+        <div ref={vidContainerRefB} style={{ ...andLayout("center") }} id={`${placeName}_b`}>
           B
           <div style={{ ...andLayout("center") }} id={`${placeName}_b_color`} />
           <div style={{ ...andLayout("center") }} id={`${placeName}_b_depth`} />
@@ -76,18 +68,16 @@ export function makeAllTestVideoStuff<
   }
 
   function TestVideoState({ placeName }: { placeName: PlaceName }) {
-    const sectionVidState = useStore(
-      (state) => state.sectionVids[placeName].sectionVidState,
-      { type: "sectionVids", prop: ["sectionVidState"], name: placeName }
-    );
-    const { safeVidId_waiting, safeVidId_playing } = useStore(
-      (state) => state.sectionVids[placeName],
-      {
-        type: "sectionVids",
-        prop: ["safeVidId_waiting", "safeVidId_playing"],
-        name: placeName,
-      }
-    );
+    const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, {
+      type: "sectionVids",
+      prop: ["sectionVidState"],
+      name: placeName,
+    });
+    const { safeVidId_waiting, safeVidId_playing } = useStore((state) => state.sectionVids[placeName], {
+      type: "sectionVids",
+      prop: ["safeVidId_waiting", "safeVidId_playing"],
+      name: placeName,
+    });
 
     return (
       <div
@@ -108,9 +98,7 @@ export function makeAllTestVideoStuff<
     return (
       <>
         {placeNames.map((placeName) => (
-          <div
-            style={{ ...andLayout({ x: "center", y: "center", way: "right" }) }}
-          >
+          <div style={{ ...andLayout({ x: "center", y: "center", way: "right" }) }}>
             <TestVideos placeName={placeName} />
             <TestVideoState placeName={placeName} />
           </div>

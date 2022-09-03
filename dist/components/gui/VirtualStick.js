@@ -1,7 +1,7 @@
 import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "chootils/dist/speedAngleDistance2d";
 import React, { useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeVirtualStick(storeHelpers) {
+export function makeTyped_VirtualStick(storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
     const globalRefs = getRefs().global.main;
     const SIZES = {
@@ -105,14 +105,8 @@ export function makeVirtualStick(storeHelpers) {
                 };
                 if (!local.isDown)
                     return;
-                local.xAddPos =
-                    coordinates.x -
-                        SIZES.leftThumbContainer * 0.5 -
-                        local.leftJoystickOffset;
-                local.yAddPos =
-                    coordinates.y -
-                        SIZES.leftThumbContainer * 0.5 -
-                        local.topJoystickOffset;
+                local.xAddPos = coordinates.x - SIZES.leftThumbContainer * 0.5 - local.leftJoystickOffset;
+                local.yAddPos = coordinates.y - SIZES.leftThumbContainer * 0.5 - local.topJoystickOffset;
                 const limitedOffset = 35;
                 const { angle, speed } = getSpeedAndAngleFromVector({
                     x: local.xAddPos,
@@ -171,10 +165,8 @@ export function makeVirtualStick(storeHelpers) {
                         y: event.clientY,
                     };
                     // leftPuck.isVisible = true;
-                    local.leftJoystickOffset =
-                        coordinates.x - SIZES.leftThumbContainer * 0.5;
-                    local.topJoystickOffset =
-                        coordinates.y - SIZES.leftThumbContainer * 0.5;
+                    local.leftJoystickOffset = coordinates.x - SIZES.leftThumbContainer * 0.5;
+                    local.topJoystickOffset = coordinates.y - SIZES.leftThumbContainer * 0.5;
                     local.isDown = true;
                     outerPositionSpringApi.start({
                         position: [local.leftJoystickOffset, local.topJoystickOffset],

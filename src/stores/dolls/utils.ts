@@ -1,12 +1,4 @@
-import {
-  AbstractMesh,
-  AnimationGroup,
-  Bone,
-  Material,
-  Mesh,
-  PBRMaterial,
-  Vector3,
-} from "@babylonjs/core";
+import { AbstractMesh, AnimationGroup, Bone, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
@@ -18,12 +10,9 @@ import {
   ModelInfoByName,
   ModelName,
 } from "../../declarations";
-import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../typedStoreHelpers";
-import { getDefaultInRangeFunction, InRangeForDoll } from "./indexUtils";
+import { makeTyped_scenePlaneUtils } from "../../utils/babylonjs/scenePlane";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../typedStoreHelpers";
+import { getDefaultInRangeFunction, InRangeForDoll } from "./dollStoreUtils";
 
 // TODO add to art options?
 const rangeOptions = {
@@ -38,10 +27,7 @@ export const rangeOptionsQuick = {
   see: rangeOptions.see * rangeOptions.see,
 } as const;
 
-function inRangeForDollMatches(
-  inRangeForDollA: InRangeForDoll,
-  inRangeForDollB: InRangeForDoll
-) {
+function inRangeForDollMatches(inRangeForDollA: InRangeForDoll, inRangeForDollB: InRangeForDoll) {
   return (
     inRangeForDollA.see === inRangeForDollB.see &&
     inRangeForDollA.talk === inRangeForDollB.talk &&
@@ -60,7 +46,7 @@ export function enableCollisions(theMesh: AbstractMesh) {
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-export function makeDollStoreUtils<
+export function makeTyped_dollUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
@@ -77,7 +63,7 @@ export function makeDollStoreUtils<
     convertPointOnPlaneToPointOnScreen,
     getPositionOnPlane,
     checkPointIsInsidePlane,
-  } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
+  } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   // type PietemState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof PietemState["dolls"];
@@ -85,18 +71,13 @@ export function makeDollStoreUtils<
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
 
-  type StartState_Dolls = PrendyStores["dolls"]["startStates"] &
-    ReturnType<StoreHelpers["getState"]>["dolls"];
+  type StartState_Dolls = PrendyStores["dolls"]["startStates"] & ReturnType<StoreHelpers["getState"]>["dolls"];
 
-  type ModelNameFromDoll<T_DollName extends DollName> =
-    StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<T_DollName extends DollName> = StartState_Dolls[T_DollName]["modelName"];
 
   function setDollAnimWeight<
     T_DollName extends DollName,
-    T_NewWeights extends Record<
-      AnimationNameByModel[ModelNameFromDoll<T_DollName>],
-      number
-    >
+    T_NewWeights extends Record<AnimationNameByModel[ModelNameFromDoll<T_DollName>], number>
   >(dollName: T_DollName, newWeights: Partial<T_NewWeights>) {
     setState({
       dolls: {
@@ -124,17 +105,11 @@ export function makeDollStoreUtils<
   const defaultInRange = getDefaultInRangeFunction(dollNames);
   type InRangeProperty = ReturnType<typeof defaultInRange>;
 
-  function inRangesAreTheSame(
-    inRangePropA: InRangeProperty,
-    inRangePropB: InRangeProperty
-  ) {
+  function inRangesAreTheSame(inRangePropA: InRangeProperty, inRangePropB: InRangeProperty) {
     let bothMatch = true;
 
     breakableForEach(dollNames, (dollName) => {
-      const bothMatchInLoop = inRangeForDollMatches(
-        inRangePropA[dollName],
-        inRangePropB[dollName]
-      );
+      const bothMatchInLoop = inRangeForDollMatches(inRangePropA[dollName], inRangePropB[dollName]);
 
       if (!bothMatchInLoop) {
         bothMatch = false;
@@ -156,18 +131,20 @@ export function makeDollStoreUtils<
       theMaterial.enableSpecularAntiAliasing = true;
       theMaterial.roughness = 0.95;
       theMaterial.environmentIntensity = 2;
-      theMaterial.reflectionTexture =
-        placeRefs.camsRefs[nowCamName].probeTexture;
+      theMaterial.reflectionTexture = placeRefs.camsRefs[nowCamName].probeTexture;
       // theMaterial.enableSpecularAntiAliasing = false;
       // theMaterial.cameraToneMappingEnabled = true;
       // theMaterial.metallic = 0.25;
     }
   }
 
-  function saveModelStuffToDoll<
-    T_ModelName extends ModelName,
-    T_DollName extends DollName
-  >({ modelName, dollName }: { modelName: T_ModelName; dollName: T_DollName }) {
+  function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName extends DollName>({
+    modelName,
+    dollName,
+  }: {
+    modelName: T_ModelName;
+    dollName: T_DollName;
+  }) {
     const dollRefs = getRefs().dolls[dollName];
     const modelRefs = getRefs().models[modelName];
     const dollState = getState().dolls[dollName];
@@ -176,15 +153,12 @@ export function makeDollStoreUtils<
 
     const namePrefix = `clone_${dollName}_${modelName}_`;
 
-    let entries = modelRefs.container.instantiateModelsToScene(
-      (sourceName) => `${namePrefix}${sourceName}`,
-      false,
-      { doNotInstantiate: true }
-    );
+    let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, {
+      doNotInstantiate: true,
+    });
     dollRefs.entriesRef = entries;
 
-    const { meshNames, boneNames, animationNames, materialNames } =
-      modelInfoByName[modelName];
+    const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];
 
     type T_Mesh = typeof meshNames[number];
     type T_BoneName = typeof boneNames[number];
@@ -197,25 +171,18 @@ export function makeDollStoreUtils<
 
     const meshArray = rootNode.getChildMeshes();
 
-    const meshes = keyBy(meshArray, "name", removePrefix) as Record<
-      T_Mesh | "__root__",
-      AbstractMesh
-    >;
+    const meshes = keyBy(meshArray, "name", removePrefix) as Record<T_Mesh | "__root__", AbstractMesh>;
 
     const skeleton = entries.skeletons[0];
-    const bones = (
-      skeleton?.bones ? keyBy(skeleton.bones, "name", removePrefix) : {}
-    ) as Record<T_BoneName, Bone>;
+    const bones = (skeleton?.bones ? keyBy(skeleton.bones, "name", removePrefix) : {}) as Record<T_BoneName, Bone>;
 
-    const aniGroups = keyBy(entries.animationGroups, "name", (name) =>
-      name.replace(namePrefix, "")
-    ) as Record<T_AnimationName, AnimationGroup>;
+    const aniGroups = keyBy(entries.animationGroups, "name", (name) => name.replace(namePrefix, "")) as Record<
+      T_AnimationName,
+      AnimationGroup
+    >;
 
     // NOTE This references the original material, and not duplicated for each doll
-    const materials = keyBy(modelRefs.container.materials) as Record<
-      T_MaterialName,
-      Material
-    >;
+    const materials = keyBy(modelRefs.container.materials) as Record<T_MaterialName, Material>;
 
     const assetRefs = {
       meshes,
@@ -250,19 +217,12 @@ export function makeDollStoreUtils<
     enableCollisions(dollRefs.meshRef);
   }
 
-  function updateDollScreenPosition({
-    dollName,
-    instant,
-  }: {
-    dollName: DollName;
-    instant?: boolean;
-  }) {
+  function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {
     // Update screen positions :)
 
     const { meshRef } = getRefs().dolls[dollName];
     if (!meshRef) return;
-    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } =
-      getState().global.main;
+    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
 
     // need to get the doll screen position based on the current or safe plane position
@@ -271,14 +231,10 @@ export function makeDollStoreUtils<
       pointOnPlane: characterPointOnPlane,
       planePosition: instant ? planePosGoal : planePos,
     });
-    const positionOnPlaneScene = convertScreenPointToPlaneScenePoint(
-      characterPointOnScreen
-    );
+    const positionOnPlaneScene = convertScreenPointToPlaneScenePoint(characterPointOnScreen);
 
     const newFocusedDollIsInView =
-      dollName === focusedDoll
-        ? checkPointIsInsidePlane(characterPointOnPlane)
-        : focusedDollIsInView;
+      dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
 
     setState({
       dolls: { [dollName]: { positionOnPlaneScene } },

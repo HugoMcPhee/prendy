@@ -1,6 +1,6 @@
 import { AnyCameraName, PrendyAssets } from "../../../declarations";
 import { PrendyStoreHelpers } from "../../typedStoreHelpers";
-export declare function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyAssets: PrendyAssets): {
+export declare function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyAssets: PrendyAssets): {
     getSafeCamName: {
         (cam: AnyCameraName): AnyCameraName;
         (cam: null): null;

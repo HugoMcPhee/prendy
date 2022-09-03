@@ -1,29 +1,18 @@
 // @refresh-reset
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../stores/characters/utils";
+import { makeTyped_getCharDollStuff } from "../../stores/characters/utils";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStoreEffect, useStore, getState } = storeHelpers;
 
-  const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
-  type AllItemsState<T_ItemType extends ItemType> = ReturnType<
-    GetState
-  >[T_ItemType] &
-    Record<any, any>;
+  type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType] & Record<any, any>;
 
   type Props = { name: keyof AllItemsState<"miniBubbles"> };
 
@@ -52,13 +41,10 @@ export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
       prop: ["text", "isVisible"],
     });
 
-    const { nowPlaceName, aConvoIsHappening } = useStore(
-      (state) => state.global.main,
-      {
-        type: "global",
-        prop: ["nowPlaceName", "aConvoIsHappening"],
-      }
-    );
+    const { nowPlaceName, aConvoIsHappening } = useStore((state) => state.global.main, {
+      type: "global",
+      prop: ["nowPlaceName", "aConvoIsHappening"],
+    });
 
     const editedIsVisible = isVisible && !aConvoIsHappening;
 
@@ -210,20 +196,11 @@ export function makeMiniBubble<StoreHelpers extends PrendyStoreHelpers>(
             }}
           >
             {/* visible typed text */}
-            <div
-              ref={theGoalText}
-              id={`visibleText`}
-              style={styles.visibleText}
-            >
+            <div ref={theGoalText} id={`visibleText`} style={styles.visibleText}>
               {text}
             </div>
           </animated.div>
-          <div
-            ref={refs.theTriangle}
-            key={`theTriangle`}
-            id={`theTriangle`}
-            style={styles.triangle}
-          ></div>
+          <div ref={refs.theTriangle} key={`theTriangle`} id={`theTriangle`} style={styles.triangle}></div>
         </animated.div>
       </animated.div>
     );

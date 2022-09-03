@@ -1,15 +1,10 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import {
-  MusicFiles,
-  MusicName,
-  SoundFiles,
-  SoundName,
-} from "../../../declarations";
-import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
+import { MusicFiles, MusicName, SoundFiles, SoundName } from "../../../declarations";
+import { makeTyped_getSceneOrEngineUtils } from "../../babylonjs/getSceneOrEngineUtils";
 
-export function makeSoundStoryHelpers<
+export function makeTyped_soundStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   A_MusicFiles extends MusicFiles = MusicFiles,
   A_MusicName extends MusicName = MusicName,
@@ -23,7 +18,7 @@ export function makeSoundStoryHelpers<
   soundFiles: A_SoundFiles
 ) {
   const { getRefs } = storeHelpers;
-  const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
 
   const globalRefs = getRefs().global.main;
 
@@ -44,17 +39,11 @@ export function makeSoundStoryHelpers<
       return;
     }
 
-    globalRefs.sounds[soundName] = new Sound(
-      soundName,
-      soundFiles[soundName],
-      scene,
-      null,
-      {
-        loop: options?.loop ?? false,
-        autoplay: true,
-        spatialSound: false,
-      }
-    );
+    globalRefs.sounds[soundName] = new Sound(soundName, soundFiles[soundName], scene, null, {
+      loop: options?.loop ?? false,
+      autoplay: true,
+      spatialSound: false,
+    });
   }
 
   function stopSound(soundName: A_SoundName) {
@@ -87,17 +76,11 @@ export function makeSoundStoryHelpers<
       return;
     }
 
-    globalRefs.music[newMusicName] = new Sound(
-      newMusicName,
-      musicFiles[newMusicName],
-      scene,
-      null,
-      {
-        loop: true,
-        autoplay: true,
-        spatialSound: false,
-      }
-    );
+    globalRefs.music[newMusicName] = new Sound(newMusicName, musicFiles[newMusicName], scene, null, {
+      loop: true,
+      autoplay: true,
+      spatialSound: false,
+    });
   }
   function stopAllMusic() {
     forEach(musicNames, (musicName) => globalRefs.music[musicName]?.stop());

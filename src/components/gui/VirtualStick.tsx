@@ -7,9 +7,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 
-export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers
-) {
+export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, getState, setState } = storeHelpers;
 
   const globalRefs = getRefs().global.main;
@@ -127,15 +125,9 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
         };
 
         if (!local.isDown) return;
-        local.xAddPos =
-          coordinates.x -
-          SIZES.leftThumbContainer * 0.5 -
-          local.leftJoystickOffset;
+        local.xAddPos = coordinates.x - SIZES.leftThumbContainer * 0.5 - local.leftJoystickOffset;
 
-        local.yAddPos =
-          coordinates.y -
-          SIZES.leftThumbContainer * 0.5 -
-          local.topJoystickOffset;
+        local.yAddPos = coordinates.y - SIZES.leftThumbContainer * 0.5 - local.topJoystickOffset;
 
         const limitedOffset = 35;
 
@@ -147,10 +139,7 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
         let editedSpeed = speed > limitedOffset ? limitedOffset : speed;
 
         const clampedPosition = getVectorFromSpeedAndAngle(editedSpeed, angle);
-        const normalizedPosition = getVectorFromSpeedAndAngle(
-          editedSpeed / limitedOffset,
-          angle
-        );
+        const normalizedPosition = getVectorFromSpeedAndAngle(editedSpeed / limitedOffset, angle);
 
         local.floatLeft = clampedPosition.x;
         local.floatTop = clampedPosition.y;
@@ -207,10 +196,8 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
           };
 
           // leftPuck.isVisible = true;
-          local.leftJoystickOffset =
-            coordinates.x - SIZES.leftThumbContainer * 0.5;
-          local.topJoystickOffset =
-            coordinates.y - SIZES.leftThumbContainer * 0.5;
+          local.leftJoystickOffset = coordinates.x - SIZES.leftThumbContainer * 0.5;
+          local.topJoystickOffset = coordinates.y - SIZES.leftThumbContainer * 0.5;
           local.isDown = true;
 
           outerPositionSpringApi.start({
@@ -269,9 +256,7 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
               height: SIZES.leftThumbContainer + "px",
               width: SIZES.leftThumbContainer + "px",
               borderRadius: "500px",
-              transform: outerPositionSpring.position.to(
-                (x, y) => `translate(${x}px , ${y}px )`
-              ),
+              transform: outerPositionSpring.position.to((x, y) => `translate(${x}px , ${y}px )`),
               opacity: opacitySpring.outerOpacity,
               display: "flex",
               alignItems: "center",
@@ -293,9 +278,7 @@ export function makeVirtualStick<StoreHelpers extends PrendyStoreHelpers>(
                 width: "60px",
                 borderRadius: "500px",
                 // transform: `translate(${local.leftJoystickOffset}px , ${local.topJoystickOffset}px )`,
-                transform: spring.position.to(
-                  (x, y) => `translate(${x}px , ${y}px )`
-                ),
+                transform: spring.position.to((x, y) => `translate(${x}px , ${y}px )`),
                 opacity: opacitySpring.circleOpacity,
               } as any
             }

@@ -1,9 +1,9 @@
-import { Vector3, } from "@babylonjs/core";
+import { Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
-import { makeScenePlaneUtils } from "../../utils/babylonjs/scenePlane";
-import { getDefaultInRangeFunction } from "./indexUtils";
+import { makeTyped_scenePlaneUtils } from "../../utils/babylonjs/scenePlane";
+import { getDefaultInRangeFunction } from "./dollStoreUtils";
 // TODO add to art options?
 const rangeOptions = {
     touch: 1,
@@ -30,10 +30,10 @@ export function enableCollisions(theMesh) {
     theMesh.useOctreeForCollisions = true;
     theMesh.rotationQuaternion = null; // allow euler rotation again
 }
-export function makeDollStoreUtils(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
+export function makeTyped_dollUtils(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { dollNames, modelInfoByName } = prendyAssets;
-    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane, } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { convertScreenPointToPlaneScenePoint, convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane, } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
             dolls: {
@@ -77,14 +77,13 @@ export function makeDollStoreUtils(storeHelpers, _prendyStores, prendyStartOptio
             theMaterial.enableSpecularAntiAliasing = true;
             theMaterial.roughness = 0.95;
             theMaterial.environmentIntensity = 2;
-            theMaterial.reflectionTexture =
-                placeRefs.camsRefs[nowCamName].probeTexture;
+            theMaterial.reflectionTexture = placeRefs.camsRefs[nowCamName].probeTexture;
             // theMaterial.enableSpecularAntiAliasing = false;
             // theMaterial.cameraToneMappingEnabled = true;
             // theMaterial.metallic = 0.25;
         }
     }
-    function saveModelStuffToDoll({ modelName, dollName }) {
+    function saveModelStuffToDoll({ modelName, dollName, }) {
         var _a, _b;
         const dollRefs = getRefs().dolls[dollName];
         const modelRefs = getRefs().models[modelName];
@@ -92,7 +91,9 @@ export function makeDollStoreUtils(storeHelpers, _prendyStores, prendyStartOptio
         if (!modelRefs.container)
             return;
         const namePrefix = `clone_${dollName}_${modelName}_`;
-        let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, { doNotInstantiate: true });
+        let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, {
+            doNotInstantiate: true,
+        });
         dollRefs.entriesRef = entries;
         const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];
         const rootNode = entries.rootNodes[0];
@@ -132,7 +133,7 @@ export function makeDollStoreUtils(storeHelpers, _prendyStores, prendyStartOptio
         (_b = (_a = dollRefs.aniGroupsRef) === null || _a === void 0 ? void 0 : _a[dollState.nowAnimation]) === null || _b === void 0 ? void 0 : _b.start(true); // start looping the current animation
         enableCollisions(dollRefs.meshRef);
     }
-    function updateDollScreenPosition({ dollName, instant, }) {
+    function updateDollScreenPosition({ dollName, instant }) {
         // Update screen positions :)
         const { meshRef } = getRefs().dolls[dollName];
         if (!meshRef)
@@ -145,9 +146,7 @@ export function makeDollStoreUtils(storeHelpers, _prendyStores, prendyStartOptio
             planePosition: instant ? planePosGoal : planePos,
         });
         const positionOnPlaneScene = convertScreenPointToPlaneScenePoint(characterPointOnScreen);
-        const newFocusedDollIsInView = dollName === focusedDoll
-            ? checkPointIsInsidePlane(characterPointOnPlane)
-            : focusedDollIsInView;
+        const newFocusedDollIsInView = dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
         setState({
             dolls: { [dollName]: { positionOnPlaneScene } },
             global: { main: { focusedDollIsInView: newFocusedDollIsInView } },

@@ -1,7 +1,7 @@
 // async function testAnimWeights() {
 //   setDollAnimWeight("walker", { walker_idle: 0, walker_walking: 1 });
 // }
-export function makeGetCharDollStuff(storeHelpers) {
+export function makeTyped_getCharDollStuff(storeHelpers) {
     const { getRefs, getState } = storeHelpers;
     // NOTE TODO all these types need to be made inside the places using them (like story helpers)
     // And getCharDollStuff there too

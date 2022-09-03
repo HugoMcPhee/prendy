@@ -1,10 +1,9 @@
-export function makeKeyboardConnectRules(storeHelpers) {
+export function makeTyped_keyboardConnectRules(storeHelpers) {
     const { setState, getState } = storeHelpers;
     function handleKeyDown(event) {
         const keyboardState = getState().keyboards.main;
         const keyName = event.code;
-        if (keyboardState[keyName] !== undefined &&
-            keyboardState[keyName] === false) {
+        if (keyboardState[keyName] !== undefined && keyboardState[keyName] === false) {
             event.preventDefault();
             setState({ keyboards: { main: { [keyName]: true } } });
         }
@@ -12,8 +11,7 @@ export function makeKeyboardConnectRules(storeHelpers) {
     function handleKeyUp(event) {
         const keyboardState = getState().keyboards.main;
         const keyName = event.code;
-        if (keyboardState[keyName] !== undefined &&
-            keyboardState[keyName] === true) {
+        if (keyboardState[keyName] !== undefined && keyboardState[keyName] === true) {
             setState({ keyboards: { main: { [keyName]: false } } });
         }
     }

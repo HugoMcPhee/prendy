@@ -2,18 +2,14 @@
 import React from "react";
 import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
-export function makeScreenSticker(storeHelpers) {
+export function makeTyped_ScreenSticker(storeHelpers) {
     const { useStore } = storeHelpers;
     const EDGE_PADDING = 65;
     return function ScreenSticker(_props) {
-        const { screenStickerText, screenStickerIsVisible, screenStickerPosition, } = useStore(({ story: { main } }) => main, {
+        const { screenStickerText, screenStickerIsVisible, screenStickerPosition } = useStore(({ story: { main } }) => main, {
             type: "story",
             name: "main",
-            prop: [
-                "screenStickerText",
-                "screenStickerIsVisible",
-                "screenStickerPosition",
-            ],
+            prop: ["screenStickerText", "screenStickerIsVisible", "screenStickerPosition"],
         });
         const [theSpring, theSpringApi] = useSpring(() => ({
             // height: screenStickerIsVisible ? measuredHeight : 0,
@@ -34,9 +30,7 @@ export function makeScreenSticker(storeHelpers) {
         return (React.createElement("div", { key: `alarm_text_box`, id: `alarm_text_box`, style: styles.container },
             React.createElement(animated.div, { id: `alarm_text`, style: {
                     ...styles.sticker,
-                    transform: `translate(${EDGE_PADDING +
-                        screenStickerPosition.x * (window.innerWidth - EDGE_PADDING * 2)}px ,${EDGE_PADDING +
-                        screenStickerPosition.y * (window.innerHeight - EDGE_PADDING * 2)}px)`,
+                    transform: `translate(${EDGE_PADDING + screenStickerPosition.x * (window.innerWidth - EDGE_PADDING * 2)}px ,${EDGE_PADDING + screenStickerPosition.y * (window.innerHeight - EDGE_PADDING * 2)}px)`,
                     rotateZ: getRandomInt(-45, 45),
                     ...theSpring,
                 } }, screenStickerText)));

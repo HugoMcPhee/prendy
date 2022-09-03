@@ -1,20 +1,20 @@
 import { Ray, RayHelper, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
-import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle, } from "chootils/dist/speedAngleDistance2d";
-import { makeGetCharDollStuff } from "../../stores/characters/utils";
-import { clearTimeoutSafe } from "../../utils";
-import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
+import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
+import { makeTyped_getCharDollStuff } from "../../stores/characters/utils";
+import { clearTimeoutSafe } from "../../utils/utils";
+import { makeTyped_getSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngineUtils";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
+export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
     const globalRefs = getRefs().global.main;
-    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         whenDirectionKeysPressed: effect({
             run() {
-                const { ArrowDown, ArrowLeft, ArrowUp, ArrowRight, KeyW, KeyA, KeyS, KeyD, } = getState().keyboards.main;
+                const { ArrowDown, ArrowLeft, ArrowUp, ArrowRight, KeyW, KeyA, KeyS, KeyD } = getState().keyboards.main;
                 const rightPressed = ArrowRight || KeyD;
                 const upPressed = ArrowUp || KeyW;
                 const leftPressed = ArrowLeft || KeyA;
@@ -40,16 +40,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
             check: {
                 type: "keyboards",
                 name: "main",
-                prop: [
-                    "ArrowDown",
-                    "ArrowLeft",
-                    "ArrowRight",
-                    "ArrowUp",
-                    "KeyW",
-                    "KeyA",
-                    "KeyS",
-                    "KeyD",
-                ],
+                prop: ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "KeyW", "KeyA", "KeyS", "KeyD"],
             },
         }),
         whenInteractKeyPressed: itemEffect({
@@ -124,7 +115,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
             check: { type: "players", name: "main", prop: ["jumpButtonPressTime"] },
         }),
         whenJoystickMoves: itemEffect({
-            run({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs, }) {
+            run({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs }) {
                 var _a, _b;
                 const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
@@ -184,10 +175,8 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 }
                 //now we can apply the movement:
                 // * frameDuration * 0.1
-                dollRefs.positionMoverRefs.velocity.x =
-                    desiredMoveDirection.x * playerRefs.walkSpeed * timerSpeed;
-                dollRefs.positionMoverRefs.velocity.z =
-                    desiredMoveDirection.z * playerRefs.walkSpeed * timerSpeed;
+                dollRefs.positionMoverRefs.velocity.x = desiredMoveDirection.x * playerRefs.walkSpeed * timerSpeed;
+                dollRefs.positionMoverRefs.velocity.z = desiredMoveDirection.z * playerRefs.walkSpeed * timerSpeed;
                 // dollRefs.positionMoverRefs.velocity.y = -gravityValue * timerSpeed;
                 // if (shouldChangeAngle) {
                 if (!playerMovingPaused)
@@ -266,7 +255,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
             frameDuration, }) {
                 var _a, _b, _c, _d;
                 // NOTE should be a dynamic rule for each player listening to frame
-                const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName, } = getState().global.main;
+                const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const dollPosRefs = dollRefs.positionMoverRefs;
@@ -280,12 +269,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 const placeInfo = placeInfoByName[nowPlaceName];
                 const floorNames = placeInfo.floorNames;
                 const wallNames = placeInfo.wallNames;
-                if (!dollRefs ||
-                    !dollState ||
-                    !dollName ||
-                    !activeCamera ||
-                    !meshRef ||
-                    !scene)
+                if (!dollRefs || !dollState || !dollName || !activeCamera || !meshRef || !scene)
                     return;
                 // console.log("player move mode", dollState.positionMoveMode);
                 let newIsOnGround = isOnGround;
@@ -316,7 +300,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                     /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
                     );
                     const centerPick = scene.pickWithRay(ray, (mesh) => {
-                        return (floorNames.includes(mesh.name) || wallNames.includes(mesh.name));
+                        return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
                     }, true);
                     // if (centerPick) newIsOnGround = centerPick.hit;
                     if (centerPick) {
@@ -333,8 +317,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                             }
                         }
                         // console.log("hit ground", pick.hit);
-                        const isWalkng = Math.abs(dollPosRefs.velocity.x) > 0.1 ||
-                            Math.abs(dollPosRefs.velocity.z) > 0.1;
+                        const isWalkng = Math.abs(dollPosRefs.velocity.x) > 0.1 || Math.abs(dollPosRefs.velocity.z) > 0.1;
                         if (isWalkng) {
                             // console.log(
                             //   "is moving",
@@ -355,13 +338,11 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                             /*length*/ 6 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
                             );
                             const forwardPick = scene.pickWithRay(forwardRay, (mesh) => {
-                                return (floorNames.includes(mesh.name) ||
-                                    wallNames.includes(mesh.name));
+                                return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
                             }, true);
                             if (forwardPick) {
                                 if (forwardPick.hit) {
-                                    const heightDiff = (((_c = forwardPick === null || forwardPick === void 0 ? void 0 : forwardPick.pickedPoint) === null || _c === void 0 ? void 0 : _c.y) || 0) -
-                                        (((_d = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _d === void 0 ? void 0 : _d.y) || 0);
+                                    const heightDiff = (((_c = forwardPick === null || forwardPick === void 0 ? void 0 : forwardPick.pickedPoint) === null || _c === void 0 ? void 0 : _c.y) || 0) - (((_d = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _d === void 0 ? void 0 : _d.y) || 0);
                                     // in degrees I think
                                     // negative is down
                                     slope = getVectorAngle({
@@ -448,7 +429,7 @@ export function makePlayerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
             atStepEnd: true,
         }),
         whenIsOnGroundChanges: itemEffect({
-            run({ newValue: isOnGround, previousValue: prevIsOnGround, itemState: playerState, itemRefs: playerRefs, }) {
+            run({ newValue: isOnGround, previousValue: prevIsOnGround, itemState: playerState, itemRefs: playerRefs }) {
                 clearTimeoutSafe(playerRefs.canJumpTimeout);
                 const { isJumping } = playerState;
                 const justLeftTheGround = prevIsOnGround && !isOnGround;

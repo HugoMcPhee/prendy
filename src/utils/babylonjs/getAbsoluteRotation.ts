@@ -34,7 +34,7 @@ export function getAbsoluteRotation(child: TransformNode) {
   //   return new Vector3();
   // }
 
-  const originalParent = child.parent;
+  // const originalParent = child.parent;
   //
   // child.parent = null;
   // child.setParent(null);

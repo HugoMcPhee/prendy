@@ -1,17 +1,12 @@
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
 
-export function makeKeyboardConnectRules<
-  StoreHelpers extends PrendyStoreHelpers
->(storeHelpers: StoreHelpers) {
+export function makeTyped_keyboardConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { setState, getState } = storeHelpers;
 
   function handleKeyDown(event: KeyboardEvent) {
     const keyboardState = getState().keyboards.main;
     const keyName = event.code as keyof typeof keyboardState;
-    if (
-      keyboardState[keyName] !== undefined &&
-      keyboardState[keyName] === false
-    ) {
+    if (keyboardState[keyName] !== undefined && keyboardState[keyName] === false) {
       event.preventDefault();
       setState({ keyboards: { main: { [keyName]: true } } });
     }
@@ -19,10 +14,7 @@ export function makeKeyboardConnectRules<
   function handleKeyUp(event: KeyboardEvent) {
     const keyboardState = getState().keyboards.main;
     const keyName = event.code as keyof typeof keyboardState;
-    if (
-      keyboardState[keyName] !== undefined &&
-      keyboardState[keyName] === true
-    ) {
+    if (keyboardState[keyName] !== undefined && keyboardState[keyName] === true) {
       setState({ keyboards: { main: { [keyName]: false } } });
     }
   }

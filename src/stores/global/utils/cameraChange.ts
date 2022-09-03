@@ -10,10 +10,10 @@ import {
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import { makeSceneStoryUtils } from "../../../utils/story/utils/scene";
-import { DefaultCameraRefs } from "../../../stores/places";
+import { makeTyped_sceneStoryUtils } from "../../../utils/story/utils/scene";
+import { DefaultCameraRefs } from "../../places/places";
 import shaders from "../../..//utils/shaders";
-import { makeGetSectionVidVideo } from "../../../stores/sectionVids/utils";
+import { makeTyped_getSectionVidVideo } from "../../../stores/sectionVids/utils";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -22,11 +22,11 @@ import {
   PlaceName,
   SegmentNameByPlace,
 } from "../../../declarations";
-import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer";
+import { enableCustomDepthRenderer } from "../../../utils/babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
 import { PrendyStoreHelpers } from "../../typedStoreHelpers";
-import { makeGlobalStoreUtils } from "./";
+import { makeTyped_globalUtils } from "./utils";
 
-export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
+export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
@@ -36,11 +36,9 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
-  const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
-  const getSectionVidVideo = makeGetSectionVidVideo<StoreHelpers, PlaceName>(
-    storeHelpers
-  );
-  const { getSegmentFromStoryRules } = makeSceneStoryUtils(storeHelpers);
+  const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
+  const getSectionVidVideo = makeTyped_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const { getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
 
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -60,11 +58,7 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     const { segmentTimesByCamera, cameraNames } = placeInfoByName[safePlace];
 
     // if the camera isn't in the nowPlace, then use the first camera for the nowPlace
-    const safeCam = segmentTimesByCamera?.[
-      cam as keyof typeof segmentTimesByCamera
-    ]
-      ? cam
-      : cameraNames[0];
+    const safeCam = segmentTimesByCamera?.[cam as keyof typeof segmentTimesByCamera] ? cam : cameraNames[0];
 
     return safeCam;
   }
@@ -99,16 +93,12 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     // segmentTimesByCamera[cam]
     // }
 
-    const camSegmentNames = Object.keys(
-      segmentTimesByCamera?.[safeCam as keyof typeof segmentTimesByCamera] ?? {}
-    );
+    const camSegmentNames = Object.keys(segmentTimesByCamera?.[safeCam as keyof typeof segmentTimesByCamera] ?? {});
 
     // const camSegmentNames = [] as any;
 
     // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
-    const foundRuleSegmentName = useStorySegmentRules
-      ? getSegmentFromStoryRules(safePlace, safeCam)
-      : undefined;
+    const foundRuleSegmentName = useStorySegmentRules ? getSegmentFromStoryRules(safePlace, safeCam) : undefined;
     // const foundRuleSegmentName = undefined;
 
     return chooseClosestBeforeItemInArray({
@@ -118,10 +108,7 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     });
   }
 
-  function updateTexturesForNowCamera(
-    newCameraName: AnyCameraName,
-    didChangePlace = false
-  ) {
+  function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
     const { nowPlaceName } = getState().global.main;
     // const { scenes, backdropRenderSize } = globalRefs;
     const { backdropRenderSize } = globalRefs;
@@ -195,10 +182,7 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     // ];
 
     if (!scenes.main.customRenderTargets.length) {
-      scenes.main.customRenderTargets = [
-        globalRefs.sceneRenderTarget,
-        globalRefs.depthRenderTarget,
-      ];
+      scenes.main.customRenderTargets = [globalRefs.sceneRenderTarget, globalRefs.depthRenderTarget];
 
       // scenes.main.cameras.forEach((camera) => {
       // camera.outputRenderTarget = globalRefs.sceneRenderTarget;
@@ -231,14 +215,8 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
       );
       globalRefs.scenePlane.material = globalRefs.scenePlaneMaterial;
 
-      globalRefs.scenePlaneMaterial.setTexture(
-        "textureSampler",
-        globalRefs.sceneRenderTarget
-      );
-      globalRefs.scenePlaneMaterial.setTexture(
-        "SceneDepthTexture",
-        globalRefs.depthRenderTarget
-      );
+      globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+      globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
       updateVideoTexturesForNewPlace(nowPlaceName);
 
       globalRefs.scenePlane.material.freeze();
@@ -282,8 +260,7 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     forEach(particleSystemNames, (particleSystemName) => {
-      const particleSystem =
-        globalRefs.solidParticleSystems[particleSystemName];
+      const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
       globalRefs.sceneRenderTarget?.renderList?.push(particleSystem.mesh);
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
       (particleSystem as any)._camera = newCamRef.camera;
@@ -341,10 +318,7 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     // console.log("globalRefs?.scenePlaneMaterial");
     // console.log(globalRefs?.scenePlaneMaterial);
 
-    globalRefs?.scenePlaneMaterial?.setTexture(
-      "BackdropTextureSample",
-      globalRefs.backdropVideoTex
-    );
+    globalRefs?.scenePlaneMaterial?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
   }
 
   function applyProbeToAllDollMaterials() {
@@ -368,12 +342,8 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
       // console.log("camsRefs[placeState.nowCamName].probeTexture");
       // console.log(camsRefs[placeState.nowCamName].probeTexture);
 
-      if (
-        modelRefs.materialRef &&
-        camsRefs[placeState.nowCamName].probeTexture
-      ) {
-        modelRefs.materialRef.reflectionTexture =
-          camsRefs[placeState.nowCamName].probeTexture;
+      if (modelRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
+        modelRefs.materialRef.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
       }
 
       // const scene = getScene();
@@ -426,16 +396,10 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     particleSystemNames.forEach((particleSystemName) => {
-      const particleSystem =
-        globalRefs.solidParticleSystems[particleSystemName];
+      const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
       const material = particleSystem.mesh.material;
-      if (
-        material &&
-        material instanceof PBRMaterial &&
-        camsRefs[placeState.nowCamName].probeTexture
-      ) {
-        material.reflectionTexture =
-          camsRefs[placeState.nowCamName].probeTexture;
+      if (material && material instanceof PBRMaterial && camsRefs[placeState.nowCamName].probeTexture) {
+        material.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
       }
 
       globalRefs.sceneRenderTarget?.renderList?.push(particleSystem.mesh);
@@ -445,13 +409,10 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
   // note adding to section vids cause its easier to follow for now? even though its not seperated
   function updateNowStuffWhenSectionChanged() {
-    const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } =
-      getState().global.main;
-    const { nextCamNameWhenVidPlays, nowCamName } =
-      getState().places[nowPlaceName];
+    const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
+    const { nextCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
 
-    const waitingForASectionToChange =
-      nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
+    const waitingForASectionToChange = nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
 
     // if no segment or camera was waiting for the sectionVid to change, return early
     if (!waitingForASectionToChange) return;
@@ -461,8 +422,7 @@ export function makeCameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
       : null;
     const nextSegmentNameWhenVidPlaysSafe = nextSegmentNameWhenVidPlays
       ? getSafeSegmentName({
-          cam: (nextCamNameWhenVidPlaysSafe ??
-            nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
+          cam: (nextCamNameWhenVidPlaysSafe ?? nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
           place: nowPlaceName as PlaceName,
           segment: nextSegmentNameWhenVidPlays as SegmentNameByPlace[PlaceName],
           useStorySegmentRules: true,

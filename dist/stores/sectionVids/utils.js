@@ -1,8 +1,8 @@
-import { makeCameraChangeUtils } from "../../stores/global/utils/cameraChange";
-import { makeGlobalStoreUtils } from "../global/utils";
+import { makeTyped_cameraChangeUtils } from "../../stores/global/utils/cameraChange";
+import { makeTyped_globalUtils } from "../global/utils/utils";
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
-export function makeGetSectionVidVideo(storeHelpers) {
+export function makeTyped_getSectionVidVideo(storeHelpers) {
     const { getRefs, getState } = storeHelpers;
     return function getSectionVidVideo(itemName) {
         const sectionVidState = getState().sectionVids[itemName];
@@ -13,12 +13,12 @@ export function makeGetSectionVidVideo(storeHelpers) {
         return backdropVidRefs.videoElement;
     };
 }
-export function makeSectionVidStoreUtils(storeHelpers, prendyAssets) {
+export function makeTyped_sectionVidUtils(storeHelpers, prendyAssets) {
     const { getState, startItemEffect, stopEffect } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const getSectionVidVideo = makeGetSectionVidVideo(storeHelpers);
-    const { getSafeCamName, getSafeSegmentName } = makeCameraChangeUtils(storeHelpers, prendyAssets);
+    const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const getSectionVidVideo = makeTyped_getSectionVidVideo(storeHelpers);
+    const { getSafeCamName, getSafeSegmentName } = makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
     // __________________________
     // temporary rules
     async function doWhenSectionVidPlayingAsync(sectionVidId) {
@@ -70,8 +70,7 @@ export function makeSectionVidStoreUtils(storeHelpers, prendyAssets) {
             place: safePlace,
         });
         // NOTE  might be a way to avoid using any but is internal so okay for now
-        const placeSegmentTimesByCamera = placeInfoByName[safePlace]
-            .segmentTimesByCamera;
+        const placeSegmentTimesByCamera = placeInfoByName[safePlace].segmentTimesByCamera;
         const typedCamName = safeCam;
         const placeSegmentDurations = placeInfoByName[safePlace].segmentDurations;
         const newTime = placeSegmentTimesByCamera[typedCamName][safeSegmentName];

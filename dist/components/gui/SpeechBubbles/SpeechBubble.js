@@ -1,18 +1,18 @@
 // @refresh-reset
-import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_scenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
 // import "./SpeechBubble.css";
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
-export function makeSpeechBubble(storeHelpers, prendyStartOptions, speechVidFiles) {
+export function makeTyped_SpeechBubble(storeHelpers, prendyStartOptions, speechVidFiles) {
     const { getState, useStore, useStoreEffect } = storeHelpers;
-    const { viewCenterPoint, getViewSize } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
+    const { viewCenterPoint, getViewSize } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
     return function SpeechBubble({ name }) {
         var _a, _b;
         const theRectangle = useRef(null);
@@ -221,18 +221,13 @@ export function makeSpeechBubble(storeHelpers, prendyStartOptions, speechVidFile
                             // width="100%"
                             width: `${BUBBLE_WIDTH}px`, height: `${BUBBLE_HEIGHT}px`, autoPlay: true, loop: true, src: (_b = speechVidFiles[nowVideoName !== null && nowVideoName !== void 0 ? nowVideoName : ""]) !== null && _b !== void 0 ? _b : "" })),
                         _goalTextWordLetterArrays.map((wordLetters, wordIndex) => {
-                            let letterAmountFromPreviousWords = wordIndex > 0
-                                ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat()
-                                    .length
-                                : 0;
+                            let letterAmountFromPreviousWords = wordIndex > 0 ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat().length : 0;
                             return (React.createElement("span", { className: "SpeechBubble-wordLettersHolder", key: "" + wordLetters + wordIndex }, wordLetters.map((letter, wordLetterIndex) => {
                                 const textLetterIndex = (letterAmountFromPreviousWords || -1) + wordLetterIndex;
                                 const isVisible = textLetterIndex < visibleLetterAmount;
                                 // NOTE this is maybe undefiend, but typescript rules dont treat it like that atm
                                 const customStyle = stylesBySpecialText[_specialTextByLetterIndex[textLetterIndex + 1]];
-                                return (React.createElement("div", { key: "" + letter + wordLetterIndex, className: isVisible
-                                        ? "SpeechBubble-visibleLetter"
-                                        : "SpeechBubble-hiddenLetter", style: customStyle }, `${letter}`));
+                                return (React.createElement("div", { key: "" + letter + wordLetterIndex, className: isVisible ? "SpeechBubble-visibleLetter" : "SpeechBubble-hiddenLetter", style: customStyle }, `${letter}`));
                             })));
                         }))),
                 React.createElement("div", { ref: refs.theTriangle, key: `theTriangle`, id: `theTriangle`, style: styles.triangle }))));

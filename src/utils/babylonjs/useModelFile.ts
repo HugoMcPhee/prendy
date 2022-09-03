@@ -15,9 +15,9 @@ import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
-import { makeGetSceneOrEngineUtils } from "./getSceneOrEngine";
+import { makeTyped_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
-export function makeUseModelFile<StoreHelpers extends PrendyStoreHelpers>(
+export function makeTyped_useModelFile<StoreHelpers extends PrendyStoreHelpers>(
   // storeHelpers: StoreHelpers
   getScene: () => Scene | null
 ) {
@@ -36,10 +36,7 @@ export function makeUseModelFile<StoreHelpers extends PrendyStoreHelpers>(
   >(modelFile: string) {
     const scene = getScene();
 
-    const container: AssetContainer = usePromise(
-      SceneLoader.LoadAssetContainerAsync,
-      [modelFile, undefined, scene]
-    );
+    const container: AssetContainer = usePromise(SceneLoader.LoadAssetContainerAsync, [modelFile, undefined, scene]);
 
     useEffect(() => {
       // trying to get this more declarative
@@ -49,30 +46,17 @@ export function makeUseModelFile<StoreHelpers extends PrendyStoreHelpers>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const meshes: Record<T_Names["meshes"], Mesh> = keyBy(
-      container.meshes
-    ) as Record<T_Names["meshes"], Mesh>;
-    const materials: Record<T_Names["materials"], PBRMaterial> = keyBy(
-      container.materials as PBRMaterial[]
-    );
-    const textures: Record<T_Names["textures"], Texture> = keyBy(
-      container.textures
-    ) as Record<T_Names["textures"], Texture>;
-    const transformNodes: Record<
-      T_Names["transformNodes"],
-      TransformNode
-    > = keyBy(container.transformNodes);
+    const meshes: Record<T_Names["meshes"], Mesh> = keyBy(container.meshes) as Record<T_Names["meshes"], Mesh>;
+    const materials: Record<T_Names["materials"], PBRMaterial> = keyBy(container.materials as PBRMaterial[]);
+    const textures: Record<T_Names["textures"], Texture> = keyBy(container.textures) as Record<
+      T_Names["textures"],
+      Texture
+    >;
+    const transformNodes: Record<T_Names["transformNodes"], TransformNode> = keyBy(container.transformNodes);
 
-    const animationGroups: Record<
-      T_Names["animationGroups"],
-      AnimationGroup
-    > = keyBy(container.animationGroups);
-    const skeletons: Record<T_Names["skeletons"], Skeleton> = keyBy(
-      container.skeletons
-    );
-    const cameras: Record<T_Names["cameras"], Camera> = keyBy(
-      container.cameras
-    );
+    const animationGroups: Record<T_Names["animationGroups"], AnimationGroup> = keyBy(container.animationGroups);
+    const skeletons: Record<T_Names["skeletons"], Skeleton> = keyBy(container.skeletons);
+    const cameras: Record<T_Names["cameras"], Camera> = keyBy(container.cameras);
 
     return {
       meshes,

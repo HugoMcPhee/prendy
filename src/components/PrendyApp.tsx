@@ -1,37 +1,22 @@
-import {
-  Camera,
-  Color3,
-  Color4,
-  FxaaPostProcess,
-  TargetCamera,
-  Vector3,
-} from "@babylonjs/core";
-// import { AllTestVideoStuff } from "./AllTestVideoStuff";
+import { Camera, Color3, Color4, FxaaPostProcess, TargetCamera, Vector3 } from "@babylonjs/core";
 // ScreenGuiDom
 import React, { ReactNode, useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import { toRadians } from "chootils/dist/speedAngleDistance";
-import {
-  PrendyStoreHelpers,
-  PlaceholderPrendyStores,
-} from "../stores/typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
 import { PrendyAssets, PrendyOptions } from "../declarations";
 import loadStyles from "../utils/loadStyles";
-// import { makeAllTestVideoStuff } from "./AllTestVideoStuff";
-// import "./PrendyApp.css";
-import { makeScreenGui } from "./gui/ScreenGui";
-import { makeLoadingModels } from "./LoadingModels";
-import { makeScenePlane } from "./ScenePlane";
+import { makeTyped_ScreenGui } from "./gui/ScreenGui";
+import { makeTyped_LoadingModels } from "./LoadingModels";
+import { makeTyped_ScenePlane } from "./ScenePlane";
+// import { makeTyped_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 loadStyles();
 
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
-export function makePrendyApp<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
+export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(
   storeHelpers: StoreHelpers,
   prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
@@ -41,25 +26,11 @@ export function makePrendyApp<
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
-  const ScreenGuiDom = makeScreenGui(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
-  );
+  const ScreenGuiDom = makeTyped_ScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
+  const LoadingModels = makeTyped_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
+  const ScenePlane = makeTyped_ScenePlane(storeHelpers, prendyStartOptions);
 
-  const LoadingModels = makeLoadingModels(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
-  );
-
-  const ScenePlane = makeScenePlane(storeHelpers, prendyStartOptions);
-
-  // const AllTestVideoStuff = makeAllTestVideoStuff(storeHelpers, [
-  //   "city",
-  //   "cityb",
-  //   "beanshop",
-  // ]);
+  // const AllTestVideoStuff = makeTyped_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
 
   return function PrendyApp({ children, extraScenes }: Props) {
     const globalRefs = getRefs().global.main;
@@ -87,10 +58,7 @@ export function makePrendyApp<
     }, []);
 
     return (
-      <div
-        id="app"
-        style={{ width: "100vw", height: "100vh", overflow: "hidden" }}
-      >
+      <div id="app" style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
         {/*
         <div
           id="attachVidsForAutoPlay"
@@ -126,6 +94,10 @@ export function makePrendyApp<
               // setTimeout(() => {
               // info.scene.freezeActiveMeshes();
               // }, 5000);
+              console.log("info.scene");
+              console.log(info.scene);
+              console.log("engine");
+              console.log(engine);
               globalRefs.scenes.main = info.scene;
               globalRefs.scenes.backdrop = info.scene;
 
@@ -141,22 +113,27 @@ export function makePrendyApp<
                 });
               });
 
-              onNextTick(() => {
-                if (globalRefs.scenes.backdrop) {
-                  // const postProcess =
-                  new FxaaPostProcess(
-                    "fxaa",
-                    1.0,
-                    globalRefs.scenes.backdrop.activeCamera
-                  );
-                }
-              });
+              // onNextTick(() => {
+              //   if (globalRefs.scenes.backdrop) {
+              //     // const postProcess =
+              //     new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
+              //   }
+              // });
             }}
           >
             <LoadingModels>{children}</LoadingModels>
 
             {/*  scene plane stuff */}
             <targetCamera
+              onCreated={() => {
+                console.log("camera created");
+                onNextTick(() => {
+                  if (globalRefs.scenes.backdrop) {
+                    // const postProcess =
+                    new FxaaPostProcess("fxaa", 1.0, globalRefs.scenes.backdrop.activeCamera);
+                  }
+                });
+              }}
               name="camera1"
               position={new Vector3(0, 0, -2)}
               rotation={new Vector3(toRadians(0), toRadians(0), 0)}

@@ -1,11 +1,11 @@
 import { SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { makeGetSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngine";
+import { makeTyped_getSceneOrEngineUtils } from "../../utils/babylonjs/getSceneOrEngineUtils";
 // handle laoding here ??
-export function makeModelRules(storeHelpers, prendyAssets) {
+export function makeTyped_modelRules(storeHelpers, prendyAssets) {
     const { makeRules, setState, getRefs } = storeHelpers;
     const { modelInfoByName } = prendyAssets;
-    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
     async function startLoadingModel(modelName) {
         setState({ models: { [modelName]: { wantToLoad: false } } });
         const { modelFile } = modelInfoByName[modelName];
@@ -17,9 +17,7 @@ export function makeModelRules(storeHelpers, prendyAssets) {
         const container = await SceneLoader.LoadAssetContainerAsync(modelFile, undefined, scene);
         const modelRef = getRefs().models[modelName];
         modelRef.container = container;
-        modelRef.materialRef = container.materials[0]
-            ? container.materials[0]
-            : null;
+        modelRef.materialRef = container.materials[0] ? container.materials[0] : null;
         modelRef.materialRefs = container.materials;
         setState({ models: { [modelName]: { isLoaded: true } } });
         // maybe ideally type the AssetContainer based on modelInfoByName :) ?

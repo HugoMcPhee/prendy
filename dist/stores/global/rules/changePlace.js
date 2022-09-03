@@ -1,22 +1,22 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { CustomVideoTexture } from "../../../utils/babylonjs/CustomVideoTexture/CustomVideoTexture";
-import { makeScenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
-import { makeDollStoryHelpers } from "../../../utils/story/helpers/dolls";
-import { makeGetCharDollStuff } from "../../characters/utils";
-import { makeSectionVidStoreUtils } from "../../sectionVids/utils";
-import { makeGlobalStoreUtils } from "../utils";
-import { makeCameraChangeUtils } from "../utils/cameraChange";
-export function makeGlobalChangePlaceRules(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
+import { CustomVideoTexture } from "../../../utils/babylonjs/CustomVideoTexture";
+import { makeTyped_scenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeTyped_dollStoryHelpers } from "../../../utils/story/helpers/dolls";
+import { makeTyped_getCharDollStuff } from "../../characters/utils";
+import { makeTyped_sectionVidUtils } from "../../sectionVids/utils";
+import { makeTyped_globalUtils } from "../utils/utils";
+import { makeTyped_cameraChangeUtils } from "../utils/cameraChange";
+export function makeTyped_globalChangePlaceRules(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
     const globalRefs = getRefs().global.main;
-    const { getSectionVidVideo } = makeSectionVidStoreUtils(storeHelpers, prendyAssets);
-    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeCameraChangeUtils(storeHelpers, prendyAssets);
-    const { focusScenePlaneOnFocusedDoll } = makeScenePlaneUtils(storeHelpers, prendyStartOptions);
-    const { setGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
-    const { setDollToSpot } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
+    const { getSectionVidVideo } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
+    const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
+    const { focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+    const { setDollToSpot } = makeTyped_dollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
     function setPlayerPositionForNewPlace() {
         const { nowPlaceName, playerCharacter } = getState().global.main;
         const { dollName } = getCharDollStuff(playerCharacter);
@@ -93,8 +93,7 @@ export function makeGlobalChangePlaceRules(storeHelpers, _prendyStores, prendySt
                 // run on the start of the next pietem frame, so all the flows can run again
                 setState({}, () => {
                     const { nowPlaceName, nextPlaceName } = globalState;
-                    const cameraNames = placeInfoByName[nowPlaceName]
-                        .cameraNames;
+                    const cameraNames = placeInfoByName[nowPlaceName].cameraNames;
                     const placeRefs = getRefs().places[nowPlaceName];
                     setState({ sectionVids: { [nowPlaceName]: { wantToUnload: true } } });
                     forEach(cameraNames, (camName) => {
@@ -120,7 +119,7 @@ export function makeGlobalChangePlaceRules(storeHelpers, _prendyStores, prendySt
         }),
         whenEverythingsLoaded: itemEffect({
             run({ itemState: globalState }) {
-                const { nowPlaceName, newPlaceLoaded, modelNamesLoaded, wantedSegmentWhenNextPlaceLoads, } = globalState;
+                const { nowPlaceName, newPlaceLoaded, modelNamesLoaded, wantedSegmentWhenNextPlaceLoads } = globalState;
                 const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
                 const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
                 const loadedModelNames = modelNamesLoaded.sort();

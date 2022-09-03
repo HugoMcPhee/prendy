@@ -1,10 +1,10 @@
 import { StoreHelperTypes } from "pietem";
 import { minMaxRange } from "chootils/dist/numbers";
-import { SectionVidState } from ".";
-import { makeSafeVidStoreUtils } from "../../stores/safeVids/utils";
+import { SectionVidState } from "./sectionVids";
+import { makeTyped_safeVidUtils } from "../../stores/safeVids/utils";
 import { PrendyAssets, PlaceName } from "../../declarations";
 import { PrendyStoreHelpers } from "../typedStoreHelpers";
-import { BEFORE_LOOP_PADDING, makeSectionVidStoreUtils } from "./utils";
+import { BEFORE_LOOP_PADDING, makeTyped_sectionVidUtils } from "./utils";
 
 export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
@@ -14,8 +14,7 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
 
   const { getState, makeRules, setState } = storeHelpers;
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> &
-    keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
+  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> & keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
   type HelperType<T extends ItemType> = StoreHelperTypes<
     PrendyStoreHelpers["getState"],
     PrendyStoreHelpers["getRefs"],
@@ -23,19 +22,19 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
-  const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } =
-    makeSectionVidStoreUtils(storeHelpers, prendyAssets);
+  const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = makeTyped_sectionVidUtils(
+    storeHelpers,
+    prendyAssets
+  );
 
-  const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } =
-    makeSafeVidStoreUtils(storeHelpers);
+  const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = makeTyped_safeVidUtils(storeHelpers);
 
   return makeRules(({ itemEffect }) => ({
     rulesForSettingNewVideoStates: itemEffect({
       run({ newValue: vidState, itemName, itemState }) {
         const setItemState = (newState: Partial<ItemState<"sectionVids">>) =>
           setState({ sectionVids: { [itemName]: newState } });
-        const setVidState = (sectionVidState: SectionVidState) =>
-          setItemState({ sectionVidState });
+        const setVidState = (sectionVidState: SectionVidState) => setItemState({ sectionVidState });
 
         const { safeVidId_playing, safeVidId_waiting } = itemState;
         if (!safeVidId_playing || !safeVidId_waiting) return;
@@ -103,8 +102,7 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
 
         // before change section
         if (vidState === "beforeChangeSection") {
-          const { switchSection_keepProgress, wantedSection, nowSection } =
-            itemState;
+          const { switchSection_keepProgress, wantedSection, nowSection } = itemState;
 
           if (!wantedSection) return;
 
@@ -114,13 +112,10 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
           if (switchSection_keepProgress) {
             //    set it based on the playing vids current time and the previous nowSectionInfo
 
-            const backdropVidElement = getSectionVidVideo(
-              itemName as PlaceName
-            );
+            const backdropVidElement = getSectionVidVideo(itemName as PlaceName);
             if (backdropVidElement) {
               const nowSectionStartTime = nowSection.time;
-              let elapsedTime =
-                backdropVidElement.currentTime - nowSectionStartTime;
+              let elapsedTime = backdropVidElement.currentTime - nowSectionStartTime;
 
               const newStartTime = wantedSection.time; // + BEFORE_LOOP_PADDING; // maybe padding avoids flicker of the previous frame
 
@@ -190,8 +185,7 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
     // wants
     whenWantedSectionChanges: itemEffect({
       run({ newValue: wantedSection, itemName, itemState }) {
-        if (wantedSection === null || itemState.sectionVidState === "unloaded")
-          return; // don't react if wantedSection changed to null
+        if (wantedSection === null || itemState.sectionVidState === "unloaded") return; // don't react if wantedSection changed to null
 
         setState({
           sectionVids: {
@@ -217,11 +211,7 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
             },
           });
         } else {
-          console.warn(
-            "tried to load",
-            itemName,
-            " when it was already loaded"
-          );
+          console.warn("tried to load", itemName, " when it was already loaded");
           setState({
             sectionVids: { [itemName]: { wantToLoad: false } },
           });
@@ -253,8 +243,7 @@ export function makeSectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
     }),
     whenWantToLoop: itemEffect({
       run({ itemName, itemState: { sectionVidState } }) {
-        if (sectionVidState === "beforeLoad" || sectionVidState === "unloaded")
-          return;
+        if (sectionVidState === "beforeLoad" || sectionVidState === "unloaded") return;
 
         // get latest state just incase it changed
 

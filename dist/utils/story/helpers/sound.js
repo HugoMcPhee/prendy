@@ -1,9 +1,9 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeGetSceneOrEngineUtils } from "../../../utils/babylonjs/getSceneOrEngine";
-export function makeSoundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles) {
+import { makeTyped_getSceneOrEngineUtils } from "../../babylonjs/getSceneOrEngineUtils";
+export function makeTyped_soundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles) {
     const { getRefs } = storeHelpers;
-    const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
+    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
     const globalRefs = getRefs().global.main;
     // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
     // Auto load music and play it, and stop other music if it's already playing

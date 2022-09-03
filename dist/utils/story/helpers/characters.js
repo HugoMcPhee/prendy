@@ -1,12 +1,12 @@
-import { makeGetCharDollStuff } from "../../../stores/characters/utils";
-import { makeGlobalStoreUtils } from "../../../stores/global/utils";
-import { makeCharacterStoryUtils } from "../utils/characters";
-import { makeDollStoryHelpers } from "./dolls";
-export function makeCharacterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames) {
-    const { getGlobalState } = makeGlobalStoreUtils(storeHelpers);
-    const getCharDollStuff = makeGetCharDollStuff(storeHelpers);
-    const { get2DAngleBetweenCharacters } = makeCharacterStoryUtils(storeHelpers);
-    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeDollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
+import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
+import { makeTyped_globalUtils } from "../../../stores/global/utils/utils";
+import { makeTyped_characterStoryUtils } from "../utils/characters";
+import { makeTyped_dollStoryHelpers } from "./dolls";
+export function makeTyped_characterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames) {
+    const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
+    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+    const { get2DAngleBetweenCharacters } = makeTyped_characterStoryUtils(storeHelpers);
+    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeTyped_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
     function setCharAnimation(character, animation // AnimationNameFromModel might keep the type better
     ) {
         const { dollName } = getCharDollStuff(character);

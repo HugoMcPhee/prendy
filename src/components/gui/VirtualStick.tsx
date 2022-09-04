@@ -61,59 +61,8 @@ export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(
       config: { tension: 300, bounce: 0 },
     }));
 
-    // const pointerDownEvent = useCallback(
-    //   (event: React.PointerEvent<HTMLDivElement>) => {
-    //     local.pointerDownTime = Date.now();
-    //     const { leftPuck, leftThumbContainer } = refs;
-    //     if (!leftPuck || !leftThumbContainer) return;
-    //
-    //     const coordinates = {
-    //       x: event.clientX,
-    //       y: event.clientY,
-    //     };
-    //
-    //     // leftPuck.isVisible = true;
-    //     local.leftJoystickOffset =
-    //       coordinates.x - SIZES.leftThumbContainer * 0.5;
-    //     local.topJoystickOffset =
-    //       coordinates.y - SIZES.leftThumbContainer * 0.5;
-    //     local.isDown = true;
-    //
-    //     outerPositionSpringApi.start({
-    //       position: [local.leftJoystickOffset, local.topJoystickOffset],
-    //       immediate: true,
-    //     });
-    //
-    //     opacitySpringApi.start({
-    //       circleOpacity: 1.0,
-    //       outerOpacity: 0.9,
-    //     });
-    //
-    //     setState({
-    //       players: { main: { virtualControlsPressTime: Date.now() } },
-    //     });
-    //   },
-    //   []
-    // );
-
     useEffect(() => {
-      // leftThumbContainer.onPointerUpObservable.add((coordinates) => {});
-
       const pointerMoveEvent = (event: PointerEvent) => {
-        // const { playerMovingPaused } = getGlobalState();
-        // if (playerMovingPaused) {
-        //   if (local.isDown) {
-        //     pointerUpEvent();
-        //     setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
-        //     onNextTick(() =>
-        //       setState({
-        //         players: { main: { inputVelocity: { x: 0.01, y: 0.01 } } }, // hacky fix for now, its not seeing when the input velocity is 0, maybe if its check pointIsZero ?
-        //       })
-        //     );
-        //   }
-        //   return;
-        // }
-
         const { leftPuck, leftThumbContainer } = refs;
 
         if (!leftPuck || !leftThumbContainer) return;

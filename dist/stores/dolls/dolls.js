@@ -1,6 +1,6 @@
-import { mover3dRefs, mover3dState, moverRefs, moverState } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "chootils/dist/points2d";
+import { mover3dRefs, mover3dState, moverRefs, moverState } from "pietem-movers";
 import makeTyped_dollStoreUtils from "./dollStoreUtils";
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 export default function dolls(prendyAssets) {
@@ -57,12 +57,7 @@ export default function dolls(prendyAssets) {
                 friction: 0.5,
                 stiffness: 0.65,
             }),
-            ...moverRefs("rotationY", {
-                mass: 100,
-                damping: 2,
-                friction: 20,
-                stiffness: 20,
-            }),
+            ...moverRefs("rotationY", { mass: 100, damping: 2, stiffness: 20, friction: 20 }),
             ...modelMoverRefs(modelName, "animWeights"),
         };
     };

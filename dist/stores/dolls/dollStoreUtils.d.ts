@@ -1,17 +1,6 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { PrendyAssets, DollName } from "../../declarations";
-export declare type InRangeForDoll = {
-    touch: boolean;
-    talk: boolean;
-    see: boolean;
-};
-export declare function defaultInRangeForDoll(): {
-    touch: boolean;
-    talk: boolean;
-    see: boolean;
-};
-declare type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
-export declare function getDefaultInRangeFunction(dollNames: readonly DollName[]): () => InRangeForAllDolls;
+import { PrendyAssets } from "../../declarations";
+import { defaultInRangeForDoll, InRangeForDoll } from "../../helpers/prendyUtils/dolls";
 export default function makeTyped_dollStoreUtils(prendyAssets: PrendyAssets): {
     makeModelAnimWeightsMoverState: <T_ModelName extends string>(modelName: T_ModelName) => <T_Name extends string, T_PhysicsNames extends string, T_InitialState extends {
         value?: Record<string, number> | undefined;
@@ -41,4 +30,3 @@ export default function makeTyped_dollStoreUtils(prendyAssets: PrendyAssets): {
     defaultInRangeForDoll: typeof defaultInRangeForDoll;
     defaultInRange: () => Record<string, InRangeForDoll>;
 };
-export {};

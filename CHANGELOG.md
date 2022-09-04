@@ -10,6 +10,10 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
 
+v0.9.2
+
+- organized code to be more understandable and fit a newer pietem pattern
+
 v0.9.1
 
 - renamed wrapped functions with makeTyped\_ to be more understandable

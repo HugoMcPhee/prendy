@@ -1,18 +1,18 @@
 import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
-import { mover3dRefs, mover3dState, moverRefs, moverState } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "chootils/dist/points2d";
+import { mover3dRefs, mover3dState, moverRefs, moverState } from "pietem-movers";
 import {
   AnimationNameByModel,
   AnyAnimationName,
   AnySpotName,
-  PrendyAssets,
   BoneNameByModel,
   DollName,
   DollOptions,
   MaterialNameByModel,
   MeshNameByModel,
   ModelName,
+  PrendyAssets,
 } from "../../declarations";
 import makeTyped_dollStoreUtils from "./dollStoreUtils";
 
@@ -109,12 +109,7 @@ export default function dolls<
         friction: 0.5,
         stiffness: 0.65,
       }), // maybe also start movers using the main name
-      ...moverRefs("rotationY", {
-        mass: 100,
-        damping: 2,
-        friction: 20,
-        stiffness: 20,
-      }),
+      ...moverRefs("rotationY", { mass: 100, damping: 2, stiffness: 20, friction: 20 }),
       ...modelMoverRefs(modelName, "animWeights"),
     };
   };

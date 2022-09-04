@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { andLayout } from "../utils/styles";
+import { andLayout } from "../helpers/styles";
 export function makeTyped_AllTestVideoStuff(storeHelpers, placeNames) {
     const { useStore, useStoreItemPropsEffect } = storeHelpers;
     function TestVideos({ placeName }) {

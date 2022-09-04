@@ -2,8 +2,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../../stores/characters/utils";
-import { makeTyped_scenePlaneUtils } from "../../../utils/babylonjs/scenePlane";
+import { makeTyped_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { makeTyped_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
 // import "./SpeechBubble.css";
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;

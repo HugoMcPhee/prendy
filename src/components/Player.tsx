@@ -9,38 +9,14 @@ import {
   SegmentNameByPlace,
   SpotNameByPlace,
 } from "../declarations";
-import { makeTyped_sceneStoryHelpers } from "../utils/story/helpers/scene";
+import { makeTyped_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 
-export function makeTyped_Player<
-  StoreHelpers extends PrendyStoreHelpers
-  // PrendyOptions extends PrendyOptionsUntyped,
-  // AnyCameraName extends string,
-  // AnySegmentName extends string,
-  // PlaceName extends string,
-  // CharacterName extends string,
-  // PlaceInfoByName extends PlaceInfoByNamePlaceholder<string>,
-  // SpotNameByPlace extends Record<PlaceName, string>,
-  // WallNameByPlace extends Record<PlaceName, string>,
-  // SegmentNameByPlace extends Record<PlaceName, string>,
-  // CameraNameByPlace extends Record<PlaceName, string>
->(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets) {
+export function makeTyped_Player<StoreHelpers extends PrendyStoreHelpers>(
+  storeHelpers: StoreHelpers,
+  prendyStartOptions: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { placeInfoByName, characterNames } = prendyAssets;
-
-  // type AnyToPlaceOption = {
-  //   toPlace: PlaceName;
-  //   toSpot: AnySpotName;
-  //   toCam?: AnyCameraName;
-  //   toSegment?: AnySegmentName;
-  // };
-  // type DoorsInfoLoose = Partial<
-  //   Record<PlaceName, Partial<Record<AnyTriggerName, AnyToPlaceOption>>>
-  // >;
-  // type AnyToPlaceOption = {
-  //   toPlace: PlaceName;
-  //   toSpot: string;
-  //   toCam?: string;
-  //   toSegment?: string;
-  // };
 
   type ToPlaceOption<T_PlaceName extends PlaceName> = {
     toPlace: T_PlaceName;
@@ -53,7 +29,6 @@ export function makeTyped_Player<
   type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
   const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-
   const { goToNewPlace } = makeTyped_sceneStoryHelpers<StoreHelpers>(storeHelpers, placeInfoByName, characterNames);
 
   type Props = {};

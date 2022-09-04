@@ -1,37 +1,8 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { AnimationNameByModel, PrendyAssets, DollName, MeshNameByModel, ModelName } from "../../declarations";
-import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
-//
-
-export type InRangeForDoll = {
-  touch: boolean;
-  talk: boolean;
-  see: boolean;
-};
-
-export function defaultInRangeForDoll() {
-  return {
-    touch: false,
-    talk: false,
-    see: false,
-  };
-}
-
-type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
-
-export function getDefaultInRangeFunction(dollNames: readonly DollName[]) {
-  function defaultInRange() {
-    const untypedInRangeObject = {} as Record<string, InRangeForDoll>;
-
-    forEach(dollNames, (dollName) => {
-      untypedInRangeObject[dollName] = defaultInRangeForDoll();
-    });
-    return untypedInRangeObject as InRangeForAllDolls;
-  }
-
-  return defaultInRange;
-}
+import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
+import { AnimationNameByModel, DollName, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
+import { defaultInRangeForDoll, InRangeForDoll } from "../../helpers/prendyUtils/dolls";
 
 export default function makeTyped_dollStoreUtils(prendyAssets: PrendyAssets) {
   const { dollNames, modelInfoByName } = prendyAssets;

@@ -216,12 +216,9 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
                 };
                 physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
             };
-            backdropVideoTex: import("../utils/babylonjs/CustomVideoTexture").CustomVideoTexture | null;
-            scenes: {
-                main: import("@babylonjs/core").Scene | null;
-                backdrop: import("@babylonjs/core").Scene | null;
-            };
-            depthRenderer: import("../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize").DepthRendererWithSize | null;
+            backdropVideoTex: import("../helpers/babylonjs/CustomVideoTexture").CustomVideoTexture | null;
+            scene: import("@babylonjs/core").Scene | null;
+            depthRenderer: import("../helpers/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize").DepthRendererWithSize | null;
             sceneRenderTarget: import("@babylonjs/core").RenderTargetTexture | null;
             depthRenderTarget: import("@babylonjs/core").RenderTargetTexture | null;
             scenePlane: import("@babylonjs/core").Mesh | null;
@@ -262,7 +259,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         startStates: { [K_DollName in A_DollName]: {
             nowAnimation: A_AnyAnimationName;
             animationLoops: boolean;
-            inRange: Record<string, import("./dolls/dollStoreUtils").InRangeForDoll>;
+            inRange: Record<string, import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             animWeights: Record<string, number>;
             animWeightsGoal: Record<string, number>;
             animWeightsIsMoving: boolean;
@@ -288,7 +285,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         state: <T_DollName extends string, T_ModelName_2 extends A_ModelName>(_dollName: T_DollName, modelName?: T_ModelName_2 | undefined) => {
             nowAnimation: A_AnyAnimationName;
             animationLoops: boolean;
-            inRange: Record<string, import("./dolls/dollStoreUtils").InRangeForDoll>;
+            inRange: Record<string, import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             animWeights: Record<string, number>;
             animWeightsGoal: Record<string, number>;
             animWeightsIsMoving: boolean;
@@ -314,7 +311,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         refs: <T_DollName_1 extends A_DollName, T_ModelName_3 extends A_ModelName>(dollName: T_DollName_1, itemState: {
             nowAnimation: A_AnyAnimationName;
             animationLoops: boolean;
-            inRange: Record<string, import("./dolls/dollStoreUtils").InRangeForDoll>;
+            inRange: Record<string, import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             animWeights: Record<string, number>;
             animWeightsGoal: Record<string, number>;
             animWeightsIsMoving: boolean;
@@ -532,7 +529,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
     };
     safeVids: {
         state: <T_ItemName_2 extends string>(itemName: T_ItemName_2) => {
-            vidState: import("./safeVids/safeVids").VidState;
+            vidState: import("./safeVids").VidState;
             playType: "pause" | "play";
             wantedSeekTime: number | null;
             wantToPlay: boolean;
@@ -546,7 +543,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             videoElement: HTMLVideoElement | null;
         };
         startStates: import("pietem").InitialItemsState<(<T_ItemName_2 extends string>(itemName: T_ItemName_2) => {
-            vidState: import("./safeVids/safeVids").VidState;
+            vidState: import("./safeVids").VidState;
             playType: "pause" | "play";
             wantedSeekTime: number | null;
             wantToPlay: boolean;
@@ -561,12 +558,12 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         state: <T_ItemName_3 extends string>(itemName: T_ItemName_3) => {
             safeVidId_playing: string | null;
             safeVidId_waiting: string | null;
-            sectionVidState: import("./sectionVids/sectionVids").SectionVidState;
+            sectionVidState: import("./sectionVids").SectionVidState;
             nowSection: {
                 time: number;
                 duration: number;
             };
-            wantedSection: import("./sectionVids/sectionVids").VidSection | null;
+            wantedSection: import("./sectionVids").VidSection | null;
             wantToLoad: boolean;
             wantToUnload: boolean;
             wantToLoop: boolean;
@@ -581,12 +578,12 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
         startStates: Record<A_PlaceName, {
             safeVidId_playing: string | null;
             safeVidId_waiting: string | null;
-            sectionVidState: import("./sectionVids/sectionVids").SectionVidState;
+            sectionVidState: import("./sectionVids").SectionVidState;
             nowSection: {
                 time: number;
                 duration: number;
             };
-            wantedSection: import("./sectionVids/sectionVids").VidSection | null;
+            wantedSection: import("./sectionVids").VidSection | null;
             wantToLoad: boolean;
             wantToUnload: boolean;
             wantToLoop: boolean;

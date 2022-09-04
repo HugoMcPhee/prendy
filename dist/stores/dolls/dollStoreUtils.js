@@ -1,22 +1,6 @@
-import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
-export function defaultInRangeForDoll() {
-    return {
-        touch: false,
-        talk: false,
-        see: false,
-    };
-}
-export function getDefaultInRangeFunction(dollNames) {
-    function defaultInRange() {
-        const untypedInRangeObject = {};
-        forEach(dollNames, (dollName) => {
-            untypedInRangeObject[dollName] = defaultInRangeForDoll();
-        });
-        return untypedInRangeObject;
-    }
-    return defaultInRange;
-}
+import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
+import { defaultInRangeForDoll } from "../../helpers/prendyUtils/dolls";
 export default function makeTyped_dollStoreUtils(prendyAssets) {
     const { dollNames, modelInfoByName } = prendyAssets;
     function makeModelAnimWeightsMoverState(modelName) {

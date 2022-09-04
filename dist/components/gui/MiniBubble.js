@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../stores/characters/utils";
+import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 export function makeTyped_MiniBubble(storeHelpers) {
     const { useStoreEffect, useStore, getState } = storeHelpers;
     const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);

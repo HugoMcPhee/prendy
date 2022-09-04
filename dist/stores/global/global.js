@@ -1,5 +1,5 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
-import { makeTyped_globalStoreUtils } from "./utils/globalStoreUtils";
+import makeTyped_globalStoreUtils from "./globalStoreUtils";
 export default function global(prendyStartOptions, prendyAssets) {
     const { musicNames, soundNames } = prendyAssets;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = makeTyped_globalStoreUtils(musicNames, soundNames);
@@ -64,11 +64,7 @@ export default function global(prendyStartOptions, prendyAssets) {
     // Refs
     const refs = () => ({
         backdropVideoTex: null,
-        //
-        scenes: {
-            main: null,
-            backdrop: null,
-        },
+        scene: null,
         depthRenderer: null,
         //
         sceneRenderTarget: null,
@@ -81,18 +77,8 @@ export default function global(prendyStartOptions, prendyAssets) {
         backdropRenderSize: { width: 1280, height: 720 },
         depthRenderSize: { width: 1280, height: 720 },
         //
-        ...mover2dRefs("planePos", {
-            mass: 41.5,
-            stiffness: 50,
-            damping: 10,
-            friction: 0.35, // for sliding
-        }),
-        ...moverRefs("planeZoom", {
-            mass: 41.5,
-            stiffness: 25,
-            damping: 10,
-            friction: 0.35, // for sliding
-        }),
+        ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35 }),
+        ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
         //
         sounds: makeAutomaticSoundStartRefs(),
         music: makeAutomaticMusicStartRefs(),

@@ -1,6 +1,6 @@
 import { Vector3 } from "@babylonjs/core";
 import React, { Suspense } from "react";
-import { makeTyped_usePlace } from "../utils/babylonjs/usePlace/usePlace";
+import { makeTyped_usePlace } from "../helpers/babylonjs/usePlace/usePlace";
 import { makeTyped_Player } from "./Player";
 export function makeTyped_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets) {
     const { useStore } = storeHelpers;

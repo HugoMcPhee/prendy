@@ -1,5 +1,5 @@
 import { breakableForEach } from "chootils/dist/loops";
-import { makeTyped_sceneStoryHelpers } from "../utils/story/helpers/scene";
+import { makeTyped_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 export function makeTyped_Player(storeHelpers, prendyStartOptions, prendyAssets) {
     const { placeInfoByName, characterNames } = prendyAssets;
     const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;

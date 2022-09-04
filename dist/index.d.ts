@@ -1,20 +1,20 @@
 import "@babylonjs/loaders";
 import { PrendyStoreHelpers } from "./stores/typedStoreHelpers";
-export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d } from "./utils/babylonjs/babylonjs";
-export { makePrendyStoryUtils } from "./utils/story/utils/utils";
+export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d } from "./helpers/babylonjs/babylonjs";
+export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { makePrendyStores } from "./stores/stores";
 export { getPrendyOptions } from "./getPrendyOptions";
 export { makePrendyApp as makePrendyApp } from "./components/PrendyApp";
-export { makePrendyStoryHelpers } from "./utils/story/helpers/helpers";
+export { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 export { prendyStepNames } from "./stores/stores";
-export { makeStartPrendyRules } from "./stores/start";
-export { makeTyped_usePlaceUtils as makeUsePlaceUtils } from "./utils/babylonjs/usePlace/utils";
-export { makeAllStoryRuleMakers } from "./storyRuleMakers/storyRuleMakers";
+export { makeStartPrendyRules } from "./rules/rules";
+export { makeTyped_usePlaceUtils as makeUsePlaceUtils } from "./helpers/babylonjs/usePlace/utils";
+export { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 export declare function makeOtherUsefulPrendyUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     setStoryState: (newState: Partial<ReturnType<StoreHelpers["getState"]>["story"]["main"]>) => void;
     getGlobalState: () => ReturnType<StoreHelpers["getState"]>["global"]["main"];
     setGlobalState: <GlobalItemState extends ReturnType<StoreHelpers["getState"]>["global"]["main"] & Record<any, any>, PartialGlobalState extends Partial<GlobalItemState>>(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: (() => void) | undefined) => void;
-    getScene: (sceneType?: "main" | "backdrop" | undefined) => import("@babylonjs/core").Scene | null;
+    getScene: () => import("@babylonjs/core").Scene | null;
     getEngine: () => import("@babylonjs/core").Engine | null;
 };
 export * from "./declarations";

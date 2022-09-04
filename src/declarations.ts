@@ -48,9 +48,7 @@ export interface AssetsTypesUntyped {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CustomAssetsTypes {}
 
-export interface FinalAssetsTypes
-  extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>,
-    CustomAssetsTypes {}
+export interface FinalAssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {}
 
 export type PrendyOptions = FinalAssetsTypes["PrendyOptions"];
 export type PlaceInfoByName = FinalAssetsTypes["PlaceInfoByName"];

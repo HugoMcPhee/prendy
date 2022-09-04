@@ -24,18 +24,18 @@ import {
   TriggerNameByPlace,
   WallNameByPlace,
 } from "../declarations";
-import characters from "./characters/characters";
+import characters from "./characters";
 import dolls from "./dolls/dolls";
 import global from "./global/global";
-import keyboards from "./keyboards/keyboards";
-import miniBubbles from "./miniBubbles/miniBubbles";
-import models from "./models/models";
-import places from "./places/places";
-import players from "./players/players";
-import pointers from "./pointers/pointers";
-import safeVids from "./safeVids/safeVids";
-import sectionVids from "./sectionVids/sectionVids";
-import speechBubbles from "./speechBubbles/speechBubbles";
+import keyboards from "./keyboards";
+import miniBubbles from "./miniBubbles";
+import models from "./models";
+import places from "./places";
+import players from "./players";
+import pointers from "./pointers";
+import safeVids from "./safeVids";
+import sectionVids from "./sectionVids";
+import speechBubbles from "./speechBubbles";
 
 export const prendyStepNames = [
   // updating internal video states

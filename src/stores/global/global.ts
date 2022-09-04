@@ -1,19 +1,19 @@
 import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
+import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
 import {
   AnySegmentName,
-  PrendyAssets,
-  PrendyOptions,
   CharacterName,
   DollName,
   ModelName,
   PickupName,
   PlaceInfoByName,
   PlaceName,
+  PrendyAssets,
+  PrendyOptions,
 } from "../../declarations";
-import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
-import { CustomVideoTexture } from "../../utils/babylonjs/CustomVideoTexture";
-import { DepthRendererWithSize } from "../../utils/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-import { makeTyped_globalStoreUtils } from "./utils/globalStoreUtils";
+import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
+import { DepthRendererWithSize } from "../../helpers/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
+import makeTyped_globalStoreUtils from "./globalStoreUtils";
 
 export default function global<
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -110,11 +110,7 @@ export default function global<
   // Refs
   const refs = () => ({
     backdropVideoTex: null as null | CustomVideoTexture,
-    //
-    scenes: {
-      main: null as null | Scene,
-      backdrop: null as null | Scene,
-    },
+    scene: null as null | Scene,
     depthRenderer: null as DepthRendererWithSize | null,
     //
     sceneRenderTarget: null as null | RenderTargetTexture,
@@ -127,18 +123,8 @@ export default function global<
     backdropRenderSize: { width: 1280, height: 720 },
     depthRenderSize: { width: 1280, height: 720 },
     //
-    ...mover2dRefs("planePos", {
-      mass: 41.5,
-      stiffness: 50,
-      damping: 10,
-      friction: 0.35, // for sliding
-    }),
-    ...moverRefs("planeZoom", {
-      mass: 41.5,
-      stiffness: 25,
-      damping: 10,
-      friction: 0.35, // for sliding
-    }),
+    ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35 }),
+    ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
 
     //
     sounds: makeAutomaticSoundStartRefs(),

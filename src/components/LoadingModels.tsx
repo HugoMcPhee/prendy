@@ -1,8 +1,8 @@
 import { Vector3 } from "@babylonjs/core";
 import React, { ReactNode, Suspense } from "react";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
-import { PrendyAssets, PrendyOptions, PlaceName } from "../declarations";
-import { makeTyped_usePlace } from "../utils/babylonjs/usePlace/usePlace";
+import { PlaceName, PrendyAssets, PrendyOptions } from "../declarations";
+import { makeTyped_usePlace } from "../helpers/babylonjs/usePlace/usePlace";
+import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { makeTyped_Player } from "./Player";
 
 type Props = { children?: ReactNode };

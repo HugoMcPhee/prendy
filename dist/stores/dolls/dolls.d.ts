@@ -1,10 +1,10 @@
 import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
-import { AnimationNameByModel, AnyAnimationName, AnySpotName, PrendyAssets, BoneNameByModel, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName } from "../../declarations";
+import { AnimationNameByModel, AnyAnimationName, AnySpotName, BoneNameByModel, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
 export default function dolls<A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_AnySpotName extends AnySpotName = AnySpotName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_BoneNameByModel extends BoneNameByModel = BoneNameByModel, A_DollName extends DollName = DollName, A_DollOptions extends DollOptions = DollOptions, A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_ModelName extends ModelName = ModelName>(prendyAssets: A_PrendyAssets): {
     startStates: { [K_DollName in A_DollName]: {
         nowAnimation: A_AnyAnimationName;
         animationLoops: boolean;
-        inRange: Record<string, import("./dollStoreUtils").InRangeForDoll>;
+        inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         animWeights: Record<string, number>;
         animWeightsGoal: Record<string, number>;
         animWeightsIsMoving: boolean;
@@ -30,7 +30,7 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
     state: <T_DollName extends string, T_ModelName extends A_ModelName>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
         nowAnimation: A_AnyAnimationName;
         animationLoops: boolean;
-        inRange: Record<string, import("./dollStoreUtils").InRangeForDoll>;
+        inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         animWeights: Record<string, number>;
         animWeightsGoal: Record<string, number>;
         animWeightsIsMoving: boolean;
@@ -56,7 +56,7 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
     refs: <T_DollName_1 extends A_DollName, T_ModelName_1 extends A_ModelName>(dollName: T_DollName_1, itemState: {
         nowAnimation: A_AnyAnimationName;
         animationLoops: boolean;
-        inRange: Record<string, import("./dollStoreUtils").InRangeForDoll>;
+        inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         animWeights: Record<string, number>;
         animWeightsGoal: Record<string, number>;
         animWeightsIsMoving: boolean;

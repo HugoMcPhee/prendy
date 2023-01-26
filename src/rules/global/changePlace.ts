@@ -2,15 +2,15 @@ import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { AnyCameraName, PrendyAssets, PrendyOptions, DollName, PlaceName } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { makeTyped_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
-import { makeTyped_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { makeTyped_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
+import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-import { makeTyped_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 
-export function makeTyped_globalChangePlaceRules<
+export function get_globalChangePlaceRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
@@ -24,20 +24,20 @@ export function makeTyped_globalChangePlaceRules<
 
   const globalRefs = getRefs().global.main;
 
-  const { getSectionVidVideo } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
+  const { getSectionVidVideo } = get_sectionVidUtils(storeHelpers, prendyAssets);
 
-  const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = makeTyped_cameraChangeUtils(
+  const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
     storeHelpers,
     prendyAssets
   );
 
-  const { focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils<StoreHelpers, PrendyOptions>(
+  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils<StoreHelpers, PrendyOptions>(
     storeHelpers,
     prendyStartOptions
   );
-  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
-  const { setDollToSpot } = makeTyped_dollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+  const { setDollToSpot } = get_dollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
 
   function setPlayerPositionForNewPlace() {
     const { nowPlaceName, playerCharacter } = getState().global.main;

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { andLayout } from "../helpers/styles";
 
-export function makeTyped_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
+export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
   storeHelpers: StoreHelpers,
   placeNames: readonly PlaceName[]
 ) {

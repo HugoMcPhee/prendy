@@ -13,7 +13,7 @@ import {
 } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { DepthRendererWithSize } from "../../helpers/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
-import makeTyped_globalStoreUtils from "./globalStoreUtils";
+import get_globalStoreUtils from "./globalStoreUtils";
 
 export default function global<
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -46,10 +46,7 @@ export default function global<
     }>;
   }>;
 
-  const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = makeTyped_globalStoreUtils(
-    musicNames,
-    soundNames
-  );
+  const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
   console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
   console.log(prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll);
 

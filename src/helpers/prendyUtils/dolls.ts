@@ -13,13 +13,13 @@ import {
   PrendyOptions,
   SpotNameByPlace,
 } from "../../declarations";
-import { makeTyped_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { makeTyped_spotStoryUtils } from "./spots";
+import { get_spotStoryUtils } from "./spots";
 import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { MeshNameByModel } from "../../declarations";
 
-export function makeTyped_dollStoryUtils<
+export function get_dollStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_DollName extends DollName = DollName,
@@ -27,7 +27,7 @@ export function makeTyped_dollStoryUtils<
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
 >(storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
-  const { getSpotPosition } = makeTyped_spotStoryUtils(storeHelpers);
+  const { getSpotPosition } = get_spotStoryUtils(storeHelpers);
 
   type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
   type ModelNameFromDoll<T_DollName extends A_DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
@@ -130,10 +130,7 @@ export function enableCollisions(theMesh: AbstractMesh) {
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-export function makeTyped_dollUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
+export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(
   storeHelpers: StoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
@@ -147,7 +144,7 @@ export function makeTyped_dollUtils<
     convertPointOnPlaneToPointOnScreen,
     getPositionOnPlane,
     checkPointIsInsidePlane,
-  } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   // type PietemState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof PietemState["dolls"];

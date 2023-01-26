@@ -2,11 +2,11 @@ import { Scene } from "@babylonjs/core";
 import { clearTimeoutSafe } from "../../helpers/utils";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
 
-export function makeTyped_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
-  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
 
   return makeRules(({ effect }) => ({
     whenAnythingChangesForRendering: effect({

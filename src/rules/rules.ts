@@ -1,19 +1,19 @@
 import { PrendyAssets, PrendyOptions } from "../declarations";
 import loadGoogleFonts from "../helpers/loadGoogleFonts";
 import {
-  makeTyped_characterDynamicRules,
-  makeTyped_characterRules,
-  makeTyped_startDynamicCharacterRulesForInitialState,
+  get_characterDynamicRules,
+  get_characterRules,
+  get_startDynamicCharacterRulesForInitialState,
 } from "./characters";
-import { makeTyped_dollDynamicRules, makeTyped_dollRules, startDynamicDollRulesForInitialState } from "./dolls";
-import { makeTyped_startAllGlobalRules } from "./global/global";
-import { makeTyped_keyboardConnectRules } from "./keyboards";
-import { makeTyped_modelRules } from "./models";
-import { makeTyped_playerRules } from "./players";
-import { makeTyped_pointersConnectRules } from "./pointers";
-import { makeTyped_safeVidRules } from "./safeVids";
-import { makeTyped_sectionVidRules } from "./sectionVids";
-import { makeTyped_speechBubbleRules } from "./speechBubbles";
+import { get_dollDynamicRules, get_dollRules, startDynamicDollRulesForInitialState } from "./dolls";
+import { get_startAllGlobalRules } from "./global/global";
+import { get_keyboardConnectRules } from "./keyboards";
+import { get_modelRules } from "./models";
+import { get_playerRules } from "./players";
+import { get_pointersConnectRules } from "./pointers";
+import { get_safeVidRules } from "./safeVids";
+import { get_sectionVidRules } from "./sectionVids";
+import { get_speechBubbleRules } from "./speechBubbles";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
 export function makeStartPrendyRules<
@@ -24,30 +24,30 @@ export function makeStartPrendyRules<
 
   // making rules
 
-  const keyboardConnectRules = makeTyped_keyboardConnectRules(storeHelpers);
-  const pointerConnectRules = makeTyped_pointersConnectRules(storeHelpers);
-  const startAllGlobalRules = makeTyped_startAllGlobalRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
+  const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
+  const pointerConnectRules = get_pointersConnectRules(storeHelpers);
+  const startAllGlobalRules = get_startAllGlobalRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
 
-  const modelRules = makeTyped_modelRules(storeHelpers, prendyAssets);
-  const playerRules = makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-  const dollDynamicRules = makeTyped_dollDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyStores, prendyAssets);
-  const dollRules = makeTyped_dollRules(
+  const modelRules = get_modelRules(storeHelpers, prendyAssets);
+  const playerRules = get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
+  const dollDynamicRules = get_dollDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyStores, prendyAssets);
+  const dollRules = get_dollRules(
     PRENDY_OPTIONS,
-    dollDynamicRules as ReturnType<typeof makeTyped_dollDynamicRules>,
+    dollDynamicRules as ReturnType<typeof get_dollDynamicRules>,
     storeHelpers,
     prendyStores,
     prendyAssets
   );
-  const speechBubbleRules = makeTyped_speechBubbleRules(storeHelpers, prendyStores);
-  const safeVidRules = makeTyped_safeVidRules(storeHelpers);
-  const safeSectionVidRules = makeTyped_sectionVidRules(storeHelpers, prendyAssets);
+  const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
+  const safeVidRules = get_safeVidRules(storeHelpers);
+  const safeSectionVidRules = get_sectionVidRules(storeHelpers, prendyAssets);
 
-  const characterDynamicRules = makeTyped_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-  const characterRules = makeTyped_characterRules(storeHelpers, prendyAssets);
+  const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
+  const characterRules = get_characterRules(storeHelpers, prendyAssets);
 
-  const startDynamicCharacterRulesForInitialState = makeTyped_startDynamicCharacterRulesForInitialState<
+  const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState<
     StoreHelpers,
-    ReturnType<typeof makeTyped_characterDynamicRules>
+    ReturnType<typeof get_characterDynamicRules>
   >(characterDynamicRules, characterNames, storeHelpers);
 
   // ----------------------------------------------
@@ -66,8 +66,8 @@ export function makeStartPrendyRules<
     dollRules.startAll();
     const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState<
       StoreHelpers,
-      ReturnType<typeof makeTyped_dollDynamicRules>
-    >(storeHelpers, dollDynamicRules as ReturnType<typeof makeTyped_dollDynamicRules>, dollNames);
+      ReturnType<typeof get_dollDynamicRules>
+    >(storeHelpers, dollDynamicRules as ReturnType<typeof get_dollDynamicRules>, dollNames);
     /**/
     playerRules.startAll();
     speechBubbleRules.startAll();

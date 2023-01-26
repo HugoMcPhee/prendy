@@ -1,6 +1,6 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
 import { VidSection } from "../../stores/sectionVids";
-import { makeTyped_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
+import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -11,9 +11,9 @@ import {
   SegmentNameByPlace,
 } from "../../declarations";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-import { makeTyped_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
+import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 
-export function makeTyped_globalVideoRules<
+export function get_globalVideoRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
@@ -24,12 +24,11 @@ export function makeTyped_globalVideoRules<
 ) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
 
-  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeTyped_sectionVidUtils(
+  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = get_sectionVidUtils(storeHelpers, prendyAssets);
+  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
     storeHelpers,
     prendyAssets
   );
-  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } =
-    makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenWantToChooseVideoSection: effect({

@@ -1,6 +1,6 @@
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_speechBubblesUtils<
+export function get_speechBubblesUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(storeHelpers: StoreHelpers, prendyStores: PrendyStores) {

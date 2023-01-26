@@ -6,7 +6,7 @@ import { makeVideoElementFromPath } from "../helpers/prendyUtils/safeVids";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
-export function makeTyped_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getState, makeRules, onNextTick, setState } = storeHelpers;
 
   type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> & keyof ReturnType<PrendyStoreHelpers["getRefs"]>;

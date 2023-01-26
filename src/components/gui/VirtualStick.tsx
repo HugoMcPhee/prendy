@@ -7,7 +7,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { animated, useSpring } from "react-spring";
 
-export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, getState, setState } = storeHelpers;
 
   const globalRefs = getRefs().global.main;
@@ -200,7 +200,7 @@ export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(
           style={
             {
               position: "relative",
-              backgroundColor: "rgba(232, 232, 232, 0.1)",
+              backgroundColor: "rgba(232, 232, 232, 0.5)",
               padding: 0,
               height: SIZES.leftThumbContainer + "px",
               width: SIZES.leftThumbContainer + "px",
@@ -211,6 +211,7 @@ export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(
               alignItems: "center",
               justifyContent: "center",
               direction: "row",
+              willChange: "transform, opacity",
             } as any
           }
           id="leftThumb"
@@ -221,7 +222,7 @@ export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(
             style={
               {
                 position: "relative",
-                backgroundColor: "rgba(232, 232, 232, 0.25)",
+                backgroundColor: "rgba(232, 232, 232, 0.75)",
                 padding: 0,
                 height: "60px",
                 width: "60px",
@@ -229,6 +230,7 @@ export function makeTyped_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(
                 // transform: `translate(${local.leftJoystickOffset}px , ${local.topJoystickOffset}px )`,
                 transform: spring.position.to((x, y) => `translate(${x}px , ${y}px )`),
                 opacity: opacitySpring.circleOpacity,
+                willChange: "transform, opacity",
               } as any
             }
             id="leftPuck"

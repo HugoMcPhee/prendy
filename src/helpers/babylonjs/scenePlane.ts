@@ -1,18 +1,18 @@
 import { AbstractMesh, Camera, Matrix, Mesh, Vector3 } from "@babylonjs/core";
-import { makeTyped_globalUtils } from "../prendyUtils/global";
+import { get_globalUtils } from "../prendyUtils/global";
 import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
 
-export function makeTyped_scenePlaneUtils<
+export function get_scenePlaneUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions) {
   const { getRefs, getState } = storeHelpers;
 
-  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
   const globalRefs = getRefs().global.main;
 
   function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { width: number; height: number }) {
@@ -360,18 +360,10 @@ export function makeTyped_scenePlaneUtils<
 
     const amountOverEdges = getScenePlaneOverScreenEdgesAmount(newPlanePosition);
 
-    if (amountOverEdges.bottom < 0) {
-      newPlanePosition.y += amountOverEdges.bottom;
-    }
-    if (amountOverEdges.top < 0) {
-      newPlanePosition.y -= amountOverEdges.top;
-    }
-    if (amountOverEdges.left < 0) {
-      newPlanePosition.x += amountOverEdges.left;
-    }
-    if (amountOverEdges.right < 0) {
-      newPlanePosition.x -= amountOverEdges.right;
-    }
+    if (amountOverEdges.bottom < 0) newPlanePosition.y += amountOverEdges.bottom;
+    if (amountOverEdges.top < 0) newPlanePosition.y -= amountOverEdges.top;
+    if (amountOverEdges.left < 0) newPlanePosition.x += amountOverEdges.left;
+    if (amountOverEdges.right < 0) newPlanePosition.x -= amountOverEdges.right;
 
     // And also ideally take zoom into account somehow (keep a zoom level / scale variable to alter the xywidthheight stuff)
     // also have it smothely go towards it? spring? :)

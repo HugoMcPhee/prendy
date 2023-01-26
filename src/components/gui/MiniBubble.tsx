@@ -2,13 +2,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStoreEffect, useStore, getState } = storeHelpers;
 
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;

@@ -1,25 +1,26 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeTyped_getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { PrendyAssets, CharacterName } from "../declarations";
 import { clearTimeoutSafe } from "../helpers/utils";
-import { makeTyped_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../stores/typedStoreHelpers";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
-export function makeTyped_playerRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets) {
+export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
+  storeHelpers: StoreHelpers,
+  PRENDY_OPTIONS: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
-  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenDirectionKeysPressed: effect({

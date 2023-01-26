@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_LoadingOverlay<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_LoadingOverlay<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStoreItemPropsEffect, setState } = storeHelpers;
 
   type Props = {};

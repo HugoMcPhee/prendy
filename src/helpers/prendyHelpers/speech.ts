@@ -1,9 +1,9 @@
 import delay from "delay";
 import { CSSProperties } from "react";
 import { length } from "stringz";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-import { makeTyped_speechBubblesUtils } from "../../helpers/prendyUtils/speechBubbles";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_speechBubblesUtils } from "../../helpers/prendyUtils/speechBubbles";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
 import { PrendyOptions, CharacterName } from "../../declarations";
 import { clearTimeoutSafe } from "../utils";
@@ -24,7 +24,7 @@ const showMiniBubbleRefs = {
   closeTimeout: null as ReturnType<typeof setTimeout> | null, // TODO might need to have it per character if other characts have mini bubbles
 };
 
-export function makeTyped_speechStoryHelpers<
+export function get_speechStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
@@ -37,10 +37,10 @@ export function makeTyped_speechStoryHelpers<
 ) {
   const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
 
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
-  const { setGlobalState, getGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const { getTypingDelayForText } = makeTyped_speechBubblesUtils(storeHelpers, prendyStores);
+  const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
+  const { getTypingDelayForText } = get_speechBubblesUtils(storeHelpers, prendyStores);
 
   type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
 

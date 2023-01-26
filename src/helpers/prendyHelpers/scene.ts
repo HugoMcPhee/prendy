@@ -1,6 +1,6 @@
 import delay from "delay";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import {
   AnyCameraName,
@@ -13,10 +13,10 @@ import {
   SpotNameByPlace,
   WallNameByPlace,
 } from "../../declarations";
-import { makeTyped_characterStoryUtils } from "../../helpers/prendyUtils/characters";
-import { makeTyped_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
+import { get_characterStoryUtils } from "../../helpers/prendyUtils/characters";
+import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
 
-export function makeTyped_sceneStoryHelpers<
+export function get_sceneStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -41,11 +41,10 @@ export function makeTyped_sceneStoryHelpers<
     toSegment?: A_SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
-  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
-  const { get2DAngleFromCharacterToSpot } = makeTyped_characterStoryUtils(storeHelpers);
-  const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } =
-    makeTyped_sceneStoryUtils(storeHelpers);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+  const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
+  const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
   async function changeSegmentAtLoop<
     T_Place extends A_PlaceName,

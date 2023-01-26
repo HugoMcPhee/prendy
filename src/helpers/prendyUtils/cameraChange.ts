@@ -10,23 +10,23 @@ import {
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_sceneStoryUtils } from "./scene";
-import { DefaultCameraRefs } from "../../stores/places";
-import shaders from "../shaders";
-import { makeTyped_getSectionVidVideo } from "./sectionVids";
 import {
   AnyCameraName,
   AnySegmentName,
-  PrendyAssets,
   CameraNameByPlace,
   PlaceName,
+  PrendyAssets,
   SegmentNameByPlace,
 } from "../../declarations";
-import { enableCustomDepthRenderer } from "../babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
+import { DefaultCameraRefs } from "../../stores/places";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { makeTyped_globalUtils } from "./global";
+import { enableCustomDepthRenderer } from "../babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
+import shaders from "../shaders";
+import { get_globalUtils } from "./global";
+import { get_sceneStoryUtils } from "./scene";
+import { get_getSectionVidVideo } from "./sectionVids";
 
-export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
+export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
@@ -36,9 +36,9 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
-  const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const getSectionVidVideo = makeTyped_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
-  const { getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
+  const { getGlobalState } = get_globalUtils(storeHelpers);
+  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -175,6 +175,7 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
 
       globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
       globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+
       updateVideoTexturesForNewPlace(nowPlaceName);
 
       globalRefs.scenePlane.material.freeze();

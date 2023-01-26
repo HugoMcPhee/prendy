@@ -14,7 +14,7 @@ import {
   ModelName,
   PrendyAssets,
 } from "../../declarations";
-import makeTyped_dollStoreUtils from "./dollStoreUtils";
+import get_dollStoreUtils from "./dollStoreUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 
@@ -33,7 +33,7 @@ export default function dolls<
   const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyAssets;
 
   const { defaultInRange, makeModelAnimWeightsMoverState, modelMoverRefs, modelOtherMeshesRefs } =
-    makeTyped_dollStoreUtils(prendyAssets);
+    get_dollStoreUtils(prendyAssets);
 
   const defaultModelName = modelNames[0];
 

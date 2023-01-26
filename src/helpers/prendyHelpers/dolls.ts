@@ -1,7 +1,7 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
 import {
   AnimationNameByModel,
@@ -18,10 +18,10 @@ import {
   BoneNameByModel,
 } from "../../declarations";
 import { vector3ToPoint3d } from "../../helpers/babylonjs/babylonjs";
-import { makeTyped_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
-import { makeTyped_spotStoryUtils } from "../../helpers/prendyUtils/spots";
+import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
+import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 
-export function makeTyped_dollStoryHelpers<
+export function get_dollStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
@@ -57,9 +57,9 @@ export function makeTyped_dollStoryHelpers<
 
   type MeshNamesFromDoll<T_DollName extends A_DollName> = A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
 
-  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = makeTyped_dollStoryUtils<
+  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<
     StoreHelpers,
     PrendyStores,
     A_DollName,
@@ -67,7 +67,7 @@ export function makeTyped_dollStoryHelpers<
     A_SpotNameByPlace
   >(storeHelpers);
 
-  const { getSpotPosition, getSpotRotation } = makeTyped_spotStoryUtils(storeHelpers);
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
 
   // --------------------------------------------------------------
 

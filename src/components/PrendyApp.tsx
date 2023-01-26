@@ -6,10 +6,10 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
 import { PrendyAssets, PrendyOptions } from "../declarations";
 import loadStyles from "../helpers/loadStyles";
-import { makeTyped_ScreenGui } from "./gui/ScreenGui";
-import { makeTyped_LoadingModels } from "./LoadingModels";
-import { makeTyped_ScenePlane } from "./ScenePlane";
-// import { makeTyped_AllTestVideoStuff } from "./AllTestVideoStuff";
+import { get_ScreenGui } from "./gui/ScreenGui";
+import { get_LoadingModels } from "./LoadingModels";
+import { get_ScenePlane } from "./ScenePlane";
+// import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 loadStyles();
 
@@ -25,11 +25,11 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
-  const ScreenGuiDom = makeTyped_ScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
-  const LoadingModels = makeTyped_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
-  const ScenePlane = makeTyped_ScenePlane(storeHelpers, prendyStartOptions);
+  const ScreenGuiDom = get_ScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
+  const LoadingModels = get_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
+  const ScenePlane = get_ScenePlane(storeHelpers, prendyStartOptions);
 
-  // const AllTestVideoStuff = makeTyped_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
+  // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
 
   return function PrendyApp({ children, extraScenes }: Props) {
     const globalRefs = getRefs().global.main;
@@ -79,7 +79,8 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               onCreated={() => {
                 onNextTick(() => {
                   if (globalRefs.scene) {
-                    /* const postProcess = */ new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+                    // const postProcess =
+                    new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
                   }
                 });
               }}

@@ -1,8 +1,8 @@
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../declarations";
-import { makeTyped_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
+import { get_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
-export function makeTyped_sceneStoryUtils<
+export function get_sceneStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_AnySegmentName extends AnySegmentName = AnySegmentName,
@@ -11,7 +11,7 @@ export function makeTyped_sceneStoryUtils<
 >(storeHelpers: StoreHelpers) {
   const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
 
-  const getUsefulStoryStuff = makeTyped_getUsefulStoryStuff(storeHelpers);
+  const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
   const globalRefs = getRefs().global.main;
 
   function getSegmentFromStoryRules<T_Place extends A_PlaceName, T_Cam extends A_CameraNameByPlace[T_Place]>(

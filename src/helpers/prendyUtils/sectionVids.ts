@@ -1,13 +1,13 @@
 import { SectionVidState, VidSection } from "../../stores/sectionVids";
-import { makeTyped_cameraChangeUtils } from "./cameraChange";
+import { get_cameraChangeUtils } from "./cameraChange";
 import { AnyCameraName, PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../declarations";
-import { makeTyped_globalUtils } from "./global";
+import { get_globalUtils } from "./global";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
-export function makeTyped_getSectionVidVideo<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
+export function get_getSectionVidVideo<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
   storeHelpers: StoreHelpers
 ) {
   const { getRefs, getState } = storeHelpers;
@@ -22,16 +22,16 @@ export function makeTyped_getSectionVidVideo<StoreHelpers extends PrendyStoreHel
   };
 }
 
-export function makeTyped_sectionVidUtils<StoreHelpers extends PrendyStoreHelpers>(
+export function get_sectionVidUtils<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const getSectionVidVideo = makeTyped_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
-  const { getSafeCamName, getSafeSegmentName } = makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
+  const { getGlobalState } = get_globalUtils(storeHelpers);
+  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyAssets);
 
   // __________________________
   // temporary rules

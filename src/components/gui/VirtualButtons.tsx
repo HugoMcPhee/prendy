@@ -15,10 +15,10 @@ type VirtualButtonProps = {
   disabled: boolean;
 };
 
-export function makeTyped_VirtualButtons<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions) {
+export function get_VirtualButtons<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
+  storeHelpers: StoreHelpers,
+  PRENDY_OPTIONS: PrendyOptions
+) {
   const { getRefs, getState, setState, useStore } = storeHelpers;
   const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
 

@@ -1,6 +1,6 @@
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
-export function makeTyped_keyboardConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_keyboardConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { setState, getState } = storeHelpers;
 
   function handleKeyDown(event: KeyboardEvent) {

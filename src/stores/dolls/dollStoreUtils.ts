@@ -4,7 +4,7 @@ import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { AnimationNameByModel, DollName, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
 import { defaultInRangeForDoll, InRangeForDoll } from "../../helpers/prendyUtils/dolls";
 
-export default function makeTyped_dollStoreUtils(prendyAssets: PrendyAssets) {
+export default function get_dollStoreUtils(prendyAssets: PrendyAssets) {
   const { dollNames, modelInfoByName } = prendyAssets;
 
   function makeModelAnimWeightsMoverState<T_ModelName extends ModelName>(modelName: T_ModelName) {

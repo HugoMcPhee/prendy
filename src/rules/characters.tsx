@@ -2,10 +2,10 @@ import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { makeTyped_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
-export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
+export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -13,7 +13,7 @@ export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStore
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { updatePlanePositionToFocusOnMesh } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { updatePlanePositionToFocusOnMesh } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   const refs = getRefs();
 
@@ -145,9 +145,9 @@ export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStore
 // maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 
-export function makeTyped_startDynamicCharacterRulesForInitialState<
+export function get_startDynamicCharacterRulesForInitialState<
   StoreHelpers extends PrendyStoreHelpers,
-  CharacterDynamicRules extends ReturnType<typeof makeTyped_characterDynamicRules>
+  CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>
 >(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
@@ -166,7 +166,7 @@ export function makeTyped_startDynamicCharacterRulesForInitialState<
   };
 }
 
-export function makeTyped_characterRules<StoreHelpers extends PrendyStoreHelpers>(
+export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {

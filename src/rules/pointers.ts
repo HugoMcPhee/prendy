@@ -1,7 +1,7 @@
 import { Point2D } from "chootils/dist/points2d";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
-export function makeTyped_pointersConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_pointersConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, setState, addItem, removeItem } = storeHelpers;
 
   const onPointerDown = (event: PointerEvent) => {

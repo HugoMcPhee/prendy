@@ -2,8 +2,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { makeTyped_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
+import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { get_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
@@ -13,19 +13,19 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function makeTyped_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
+export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
   const { getState, useStore, useStoreEffect } = storeHelpers;
-  const { viewCenterPoint, getViewSize } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { viewCenterPoint, getViewSize } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
 
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 

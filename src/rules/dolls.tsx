@@ -6,10 +6,10 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { AnyAnimationName, PrendyAssets, PrendyOptions, DollName, ModelName } from "../declarations";
 import { point3dToVector3, vector3ToSafePoint3d } from "../helpers/babylonjs/babylonjs";
-import { makeTyped_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
-import { makeTyped_dollUtils, getDefaultInRangeFunction, InRangeForDoll } from "../helpers/prendyUtils/dolls";
+import { get_dollUtils, getDefaultInRangeFunction, InRangeForDoll } from "../helpers/prendyUtils/dolls";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -30,7 +30,7 @@ export const rangeOptionsQuick = {
   see: rangeOptions.see * rangeOptions.see,
 } as const;
 
-export function makeTyped_dollDynamicRules<
+export function get_dollDynamicRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
@@ -39,7 +39,7 @@ export function makeTyped_dollDynamicRules<
   prendyStores: PrendyStores,
   prendyAssets: PrendyAssets
 ) {
-  const { saveModelStuffToDoll, setupLightMaterial } = makeTyped_dollUtils(
+  const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(
     storeHelpers,
     prendyStores,
     prendyStartOptions,
@@ -108,7 +108,7 @@ export function makeTyped_dollDynamicRules<
 
 export function startDynamicDollRulesForInitialState<
   StoreHelpers extends PrendyStoreHelpers,
-  DollDynamicRules extends ReturnType<typeof makeTyped_dollDynamicRules>
+  DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>
 >(storeHelpers: StoreHelpers, dollDynamicRules: DollDynamicRules, dollNames: readonly DollName[]) {
   const { getState } = storeHelpers;
 
@@ -127,8 +127,8 @@ export function startDynamicDollRulesForInitialState<
   };
 }
 
-export function makeTyped_dollRules<
-  DollDynamicRules extends ReturnType<typeof makeTyped_dollDynamicRules>,
+export function get_dollRules<
+  DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
@@ -140,8 +140,8 @@ export function makeTyped_dollRules<
 ) {
   const { modelInfoByName, dollNames } = prendyAssets;
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
-    makeTyped_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-  const { focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
   const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
 

@@ -218,7 +218,7 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
         "depthy",
-        ["testOffset"],
+        ["planePos"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
         globalRefs.scene.activeCamera
@@ -315,7 +315,20 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     // globalRefs?.scenePlaneMaterial?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
     globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
-    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("testOffset", 0.5, 1);
+    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("testOffset", 0.5, 1);
+
+    const { planePos } = getState().global.main;
+
+    // console.log("planePos", planePos.x / 1280, planePos.y / 720);
+    console.log("planePos", planePos);
+
+    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+      "planePos",
+      // planePos.x / 1280,
+      // planePos.y / 720
+      0,
+      0
+    );
   }
 
   function applyProbeToAllDollMaterials() {

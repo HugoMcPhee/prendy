@@ -119,13 +119,25 @@ const shaders = {
     return smoothstep(highlightThreshold, 1.0, dot(color, vec3(0.3, 0.59, 0.11)));
     }
 
+    mat3 makeTranslation(vec2 t) {  
+        mat3 m = mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, t.x, t.y, 1.0);
+        return m;
+    }   
+    mat3 makeRotation( float angleInRadians ){
+        float c = cos(angleInRadians);
+        float s = sin(angleInRadians);
+        mat3 m = mat3(c, -s, 0, s, c, 0, 0, 0, 1);
+        return m;
+    }
+    mat3 makeScale(vec2 s) {
+      mat3 m = mat3( s.x, 0, 0, 0, s.y, 0, 0, 0, 1);
+        return m;
+    }
+
     void main(void)
     {
 
-      // vUV = uv;
-      vUVdepth = vec2(vUV.x ,vUV.y * 0.5);
-      vUVbackdrop = vec2(vUV.x ,vUV.y * 0.5 + 0.5);;
-
+ 
     // vec2 texelSize = vec2(1.0 / screenSize.x, 1.0 / screenSize.y);
     // vec4 baseColor = texture2D(textureSampler, vUV + vec2(-1.0, -1.0) * texelSize) * 0.25;
     // baseColor += texture2D(textureSampler, vUV + vec2(1.0, -1.0) * texelSize) * 0.25;
@@ -134,7 +146,7 @@ const shaders = {
     
     // baseColor.a = highlights(baseColor.rgb);
 
-    vec4 baseColor = texture2D(textureSampler, vUV);
+    // vec4 baseColor = texture2D(textureSampler, vUV);
 
 
     // gl_FragColor = baseColor;
@@ -150,8 +162,42 @@ const shaders = {
 
     // vec4 color = texture2D(textureSampler, vUV.xy);
 
-    vec4 color = texture2D(textureSampler, vUV);
-    vec4 sceneDepthTexture = texture2D(SceneDepthTexture, vUV);
+    // vec2 vUVBackdropShift = vec2(vUVbackdrop.x * 2  ,vUVbackdrop.y * 2 );
+
+
+
+    vec2 screen_res = vec2(1280.0,720.0);
+    
+    vec2 position = vec2(0.1,0.1);  
+    vec2 scale = vec2(1.4,1.4);  
+    float rotation = 0.0;   // degrees
+    float r = rotation/180.0*3.14159; // radians
+        
+    //vec2 target_res = vec2(textureSize(iChannel0,0).xy)/float(textureSize(iChannel0,0).y);
+    vec2 target_res = vec2(1.0,1.0);
+    
+    mat3 mt = makeTranslation( position );
+    mat3 mr = makeRotation( r ); 
+    mat3 ms = makeScale( 1.0/scale ); 
+
+    //transform
+    vec3 newCoord = vec3(vUV.xy,1.0);                
+    newCoord = mt*newCoord; 
+    
+    newCoord = mr*ms*vec3(newCoord.x - 0.5*target_res.x, newCoord.y - 0.5*target_res.y,0.0) + vec3(0.5*target_res, 0.0);
+    newCoord.xy*= 1./target_res;
+    
+    vec2 newUv = vec2(newCoord.x, newCoord.y);
+    // vec2 newUv = vec2(vUV.x, vUV.y);
+    
+    // vUV = uv;
+    vUVdepth = vec2(newUv.x ,newUv.y * 0.5);
+    vUVbackdrop = vec2(newUv.x ,newUv.y * 0.5 + 0.5);;
+
+
+
+    vec4 color = texture2D(textureSampler, newUv);
+    vec4 sceneDepthTexture = texture2D(SceneDepthTexture, newUv);
     vec4 depthTexture = texture2D(BackdropTextureSample, vUVdepth);
     vec4 backdropTexture = texture2D(BackdropTextureSample, vUVbackdrop);
 
@@ -167,6 +213,11 @@ const shaders = {
     // amount for backdrop
     // should both be a number combined make 1
 
+    
+
+    // vec4 shiftedFinal = texture2D(testColor2, vUV);
+    
+    // gl_FragColor = shiftedFinal;
 
     gl_FragColor = testColor2;
     // gl_FragColor = color;

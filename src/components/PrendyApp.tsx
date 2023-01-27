@@ -1,4 +1,16 @@
-import { Camera, Color3, Color4, FxaaPostProcess, TargetCamera, Vector3 } from "@babylonjs/core";
+import {
+  Camera,
+  Color3,
+  Color4,
+  Effect,
+  FxaaPostProcess,
+  PassPostProcess,
+  PostProcess,
+  ShaderStore,
+  TargetCamera,
+  Texture,
+  Vector3,
+} from "@babylonjs/core";
 import React, { ReactNode, useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
@@ -9,6 +21,7 @@ import loadStyles from "../helpers/loadStyles";
 import { get_ScreenGui } from "./gui/ScreenGui";
 import { get_LoadingModels } from "./LoadingModels";
 import { get_ScenePlane } from "./ScenePlane";
+import shaders from "../helpers/shaders";
 // import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 loadStyles();
@@ -62,6 +75,7 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               // Each frame is rendered manually inside the video looping check function atm
               engine.stopRenderLoop();
               engine.disableUniformBuffers = true;
+              engine.setSize(1280, 760);
               info.scene.autoClear = false;
               info.scene.autoClearDepthAndStencil = false;
               info.scene.skipFrustumClipping = true;
@@ -80,14 +94,70 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
                 onNextTick(() => {
                   if (globalRefs.scene) {
                     // const postProcess =
-                    new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+                    // new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+                    // const postProcess1 = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+                    // var postProcess2 = new PassPostProcess("Scene copy", 1.0, globalRefs.scene.activeCamera);
+                    // if (globalRefs.scene.activeCamera) {
+                    //   ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.postProcess;
+                    //   const postProcess = new PostProcess(
+                    //     "backdropAndDepthShader",
+                    //     "depthy",
+                    //     null,
+                    //     ["sceneSampler"], // textures
+                    //     1,
+                    //     globalRefs.scene.activeCamera
+                    //     // globalRefs.activeCamera
+                    //     // Texture.BILINEAR_SAMPLINGMODE, // sampling
+                    //     // globalRefs.scene.engine // engine
+                    //   );
+                    //   // // const appliedProcess = postProcess.apply();
+                    //   postProcess.onApply = (effect) => {
+                    //     // effect.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+                    //     // effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+                    //     effect.setFloat2("screenSize", postProcess.width, postProcess.height);
+                    //     effect.setFloat("highlightThreshold", 0.9);
+                    //     effect.setTexture("sceneSampler", globalRefs.depthRenderTarget);
+                    //     // effect.setTextureFromPostProcess("sceneSampler", globalRefs.sceneRenderTarget);
+                    //     // effect.setTextureFromPostProcess("sceneSampler", postProcess2);
+                    //   };
+                    // }
+                    // const name = "passCustomPixelShader";
+                    // const shader = `varying vec2 vUV;
+                    // uniform sampler2D textureSampler;
+                    // #define CUSTOM_FRAGMENT_DEFINITIONS
+                    // void main(void)
+                    // {
+                    // gl_FragColor=texture2D(textureSampler,vUV);
+                    // }`;
+                    // // Sideeffect
+                    // ShaderStore.ShadersStore[name] = shader;
+                    // const customFragmentShader = `varying vec2 vUV;
+                    // uniform sampler2D textureSampler;
+                    // #define CUSTOM_FRAGMENT_DEFINITIONS
+                    // void main(void)
+                    // {
+                    // gl_FragColor=texture2D(textureSampler,vUV);
+                    // }`;
+                    // var postProcess = new PostProcess(
+                    //   "My custom post process",
+                    //   "passCustom",
+                    //   null,
+                    //   null,
+                    //   1,
+                    //   globalRefs.scene.activeCamera
+                    // );
+                    // postProcess.onApply = function (effect) {
+                    //   effect.setFloat2("screenSize", postProcess.width, postProcess.height);
+                    //   effect.setFloat("threshold", 0.3);
+                    // };
                   }
                 });
               }}
               name="camera1"
-              position={new Vector3(0, 0, -2)}
+              // position={new Vector3(0, 0, -2)}
+              position={new Vector3(0, 0, -20)}
               rotation={new Vector3(toRadians(0), toRadians(0), 0)}
-              mode={Camera.ORTHOGRAPHIC_CAMERA}
+              mode={Camera.PERSPECTIVE_CAMERA}
               ref={scenePlaneCameraRef}
               layerMask={23}
             />

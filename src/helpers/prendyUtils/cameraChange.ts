@@ -1,11 +1,15 @@
 import {
   AbstractMesh,
   Constants,
+  Effect,
   Engine,
+  FxaaPostProcess,
   PBRMaterial,
+  PostProcess,
   RenderTargetTexture,
   Scene,
   ShaderMaterial,
+  ShaderStore,
   Texture,
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
@@ -109,6 +113,8 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
   }
 
   function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
+    console.log("updateTexturesForNowCamera");
+
     const { nowPlaceName } = getState().global.main;
     // const { scenes, backdropRenderSize } = globalRefs;
     const { backdropRenderSize } = globalRefs;
@@ -141,6 +147,8 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     }
 
     globalRefs.sceneRenderTarget.activeCamera = newCamRef.camera;
+    // globalRefs.scene.activeCamera = null;
+    globalRefs.scene.activeCamera = newCamRef.camera;
 
     if (!globalRefs.depthRenderer) {
       globalRefs.depthRenderer = enableCustomDepthRenderer(
@@ -160,25 +168,94 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
 
     if (!scene.customRenderTargets.length) {
-      scene.customRenderTargets = [globalRefs.sceneRenderTarget, globalRefs.depthRenderTarget];
+      // scene.customRenderTargets = [globalRefs.sceneRenderTarget, globalRefs.depthRenderTarget];
+      scene.customRenderTargets = [globalRefs.depthRenderTarget];
 
       addMeshesToRenderLists(newCamRef);
     }
 
     // Plane material
     if (!globalRefs.scenePlaneMaterial) {
+      globalRefs.scenePlaneMaterial = true;
+
       globalRefs.scenePlaneMaterial = new ShaderMaterial("backdropAndDepthShader", scene, shaders.backdropAndDepth, {
         attributes: ["position", "uv"],
         uniforms: ["worldViewProjection"],
       });
-      globalRefs.scenePlane.material = globalRefs.scenePlaneMaterial;
 
-      globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-      globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+      // const postProcess1 = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
 
-      updateVideoTexturesForNewPlace(nowPlaceName);
+      // if (globalRefs.activeCamera) {
+      //   const postProcess = new PostProcess(
+      //     "backdropAndDepthShader",
+      //     shaders.backdropAndDepth.postProcess,
+      //     null,
+      //     null,
+      //     1,
+      //     // globalRefs.scene.activeCamera
+      //     globalRefs.activeCamera
+      //   );
 
-      globalRefs.scenePlane.material.freeze();
+      //   // // const appliedProcess = postProcess.apply();
+
+      //   postProcess.onApply = (effect) => {
+      //     // effect.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+      //     // effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+
+      //     effect.setFloat2("screenSize", postProcess.width, postProcess.height);
+      //     effect.setFloat("highlightThreshold", 0.9);
+      //     effect.setTextureFromPostProcess("sceneSampler", globalRefs.sceneRenderTarget);
+      //   };
+      // }
+
+      // appliedProcess?.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+      // appliedProcess?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+    }
+
+    if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
+      ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.postProcess;
+
+      globalRefs.backdropPostProcess = new PostProcess(
+        "backdropAndDepthShader",
+        "depthy",
+        ["testOffset"],
+        ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
+        1,
+        globalRefs.scene.activeCamera
+        // globalRefs.activeCamera
+        // Texture.BILINEAR_SAMPLINGMODE, // sampling
+        // globalRefs.scene.engine // engine
+      );
+
+      // // const appliedProcess = postProcess.apply();
+
+      globalRefs.backdropPostProcess.onApply = (effect) => {
+        globalRefs.backdropPostProcessEffect = effect;
+        // effect.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+        effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+
+        // effect.setFloat2("screenSize", postProcess.width, postProcess.height);
+        // effect.setFloat("highlightThreshold", 0.9);
+        // effect.setTexture("sceneSampler", globalRefs.depthRenderTarget);
+        // effect.setTextureFromPostProcess("sceneSampler", globalRefs.sceneRenderTarget);
+        // effect.setTextureFromPostProcess("sceneSampler", postProcess2);
+
+        updateVideoTexturesForNewPlace(nowPlaceName);
+      };
+
+      // globalRefs.scenePlane.material = globalRefs.scenePlaneMaterial;
+
+      // globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
+      // globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+
+      // updateVideoTexturesForNewPlace(nowPlaceName);
+
+      // globalRefs.scenePlane.material.freeze();
+
+      // const mainScene = globalRefs.scenes?.main;
+      // if (mainScene) {
+      //   mainScene.activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+      // }
     }
 
     if (didChangePlace) {
@@ -234,8 +311,11 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
         globalRefs.backdropVideoTex.updateVid(backdropVidElement);
       }
     }
+    // console.log("globalRefs?.backdropPostProcessEffect", !!globalRefs?.backdropPostProcessEffect);
 
-    globalRefs?.scenePlaneMaterial?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
+    // globalRefs?.scenePlaneMaterial?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
+    globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
+    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("testOffset", 0.5, 1);
   }
 
   function applyProbeToAllDollMaterials() {

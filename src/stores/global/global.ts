@@ -1,4 +1,13 @@
-import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
+import {
+  Effect,
+  Mesh,
+  PostProcess,
+  RenderTargetTexture,
+  Scene,
+  ShaderMaterial,
+  SolidParticleSystem,
+  TargetCamera,
+} from "@babylonjs/core";
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
 import {
   AnySegmentName,
@@ -115,6 +124,9 @@ export default function global<
     scenePlane: null as null | Mesh,
     scenePlaneMaterial: null as null | ShaderMaterial,
     scenePlaneCamera: null as null | TargetCamera,
+    //
+    backdropPostProcess: null as null | PostProcess,
+    backdropPostProcessEffect: null as null | Effect,
     //
     backdropImageSize: { width: 1280, height: 720 },
     backdropRenderSize: { width: 1280, height: 720 },

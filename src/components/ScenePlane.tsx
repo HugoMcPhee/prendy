@@ -39,7 +39,8 @@ export function get_ScenePlane<StoreHelpers extends PrendyStoreHelpers, PrendyOp
       <plane
         ref={planeRef}
         name="backdropPlane"
-        size={1}
+        // size={0.25}
+        size={0.1}
         billboardMode={AbstractMesh.BILLBOARDMODE_ALL}
         layerMask={23}
       />

@@ -1,4 +1,4 @@
-import { Scene } from "@babylonjs/core";
+import { RenderTargetTexture, Scene } from "@babylonjs/core";
 import { clearTimeoutSafe } from "../../helpers/utils";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
@@ -18,6 +18,8 @@ export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
             skeleton.prepare();
           });
           (globalRefs.scene as Scene)?.render(false, false);
+          // (globalRefs.sceneRenderTarget as RenderTargetTexture).render(false, false);
+          // (globalRefs.depthRenderTarget as RenderTargetTexture).render(false, false);
         }
 
         // runs in a callback to set before the new pietem frame

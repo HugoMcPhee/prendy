@@ -5,6 +5,7 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
+import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
 export function get_scenePlaneUtils<
   StoreHelpers extends PrendyStoreHelpers,
@@ -54,7 +55,7 @@ export function get_scenePlaneUtils<
   function getPositionOnPlane(theMesh: AbstractMesh) {
     // This is a position on the plane itself
 
-    if (!globalRefs.scenePlane) return new Vector3();
+    // if (!globalRefs.scenePlane) return new Vector3();
 
     const { nowPlaceName } = getState().global.main;
     const { nowCamName } = getState().places[nowPlaceName];
@@ -111,7 +112,9 @@ export function get_scenePlaneUtils<
   const { backdropImageSize } = getRefs().global.main;
 
   function getSceneEngine() {
-    if (!globalRefs.scenePlane) return;
+    const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
+
+    if (!globalRefs.scenePlane) return getEngine();
     return globalRefs.scenePlane.getEngine();
   }
 
@@ -146,16 +149,6 @@ export function get_scenePlaneUtils<
         height: (planeZoom * viewSize.width) / planeAspectRatio,
       };
     }
-  }
-
-  function planeCenterPoint() {
-    const planeUnzoomedSize = backdropImageSize;
-
-    const planeCenterPoint = {
-      x: planeUnzoomedSize.width / 2,
-      y: planeUnzoomedSize.height / 2,
-    };
-    return planeCenterPoint;
   }
 
   function viewCenterPoint() {
@@ -212,9 +205,6 @@ export function get_scenePlaneUtils<
         y: 0 - OUT_OF_FRAME_PADDING * 3,
       })
     );
-    // if (!pointSortOfIsInsidePlane) {
-    //   return planeCenterPoint();
-    // }
     return pointOnPlane;
   }
 
@@ -275,7 +265,7 @@ export function get_scenePlaneUtils<
   };
 
   function getScenePlanePositionOnScreen(thePosition: Vector3) {
-    if (!globalRefs.scenePlane) return new Vector3();
+    // if (!globalRefs.scenePlane) return new Vector3();
     const currentCamera = globalRefs.scenePlaneCamera;
     if (!currentCamera) return new Vector3();
     const viewSize = getViewSize();
@@ -401,7 +391,7 @@ export function get_scenePlaneUtils<
     focusScenePlaneOnFocusedDoll,
     getViewSize,
     getPlaneSize,
-    planeCenterPoint,
+    // planeCenterPoint,
     viewCenterPoint,
     fitScenePlaneToScreen,
     convertPointOnPlaneToUnmovedPointOnScreen,

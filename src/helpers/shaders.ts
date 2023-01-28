@@ -112,6 +112,7 @@ const shaders = {
 
     // Parameters
     uniform vec2 planePos;
+    uniform float planeZoom;
     uniform float highlightThreshold;
 
     float highlights(vec3 color)
@@ -170,7 +171,8 @@ const shaders = {
     
     // vec2 position = vec2(0.1,0.1);  
     vec2 position = planePos;  
-    vec2 scale = vec2(1.4,1.4);  
+    // vec2 scale = vec2(1.4,1.4);  
+    vec2 scale = vec2(planeZoom,planeZoom);  
     float rotation = 0.0;   // degrees
     float r = rotation/180.0*3.14159; // radians
         

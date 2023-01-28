@@ -1,4 +1,4 @@
-import { AbstractMesh, AnimationGroup, Bone, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, AnimationGroup, Bone, Effect, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { subtractPoints } from "chootils/dist/points2d";
@@ -305,6 +305,44 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     if (!meshRef) return;
     const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
+    // console.log("characterPointOnPlane", characterPointOnPlane.x / 1280, characterPointOnPlane.y / 720);
+
+    const globalRefs = getRefs().global.main;
+
+    const testZoom = 1.5;
+    // const testZoom = 1 + Math.random();
+
+    let testShiftXBB = characterPointOnPlane.x / 1280 - 0.5;
+    let testShiftYBB = 1 - characterPointOnPlane.y / 720 - 0.5;
+
+    let testShiftX = (characterPointOnPlane.x / 1280 - 0.5) * testZoom;
+    let testShiftY = (1 - characterPointOnPlane.y / 720 - 0.5) * testZoom;
+
+    const maxShift = (testZoom - 1) / 2;
+
+    // console.log(maxShift, testShiftX, testShiftY);
+
+    if (testShiftX > maxShift) testShiftX = maxShift;
+    if (testShiftX < -maxShift) testShiftX = -maxShift;
+
+    if (testShiftY > maxShift) testShiftY = maxShift;
+    if (testShiftY < -maxShift) testShiftY = -maxShift;
+
+    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+      "planePos",
+      // planePos.x / 1280,
+      // planePos.y / 720
+      // getEdgeShiftFromZoom(testZoom),
+      // getEdgeShiftFromZoom(testZoom)
+      testShiftX,
+      testShiftY
+      // 0,
+      // 0
+      // planePosGoal.x / 1280 / (1280 / 8),
+      // planePosGoal.y / 720 / (720 / 8)
+    );
+    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
+    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", testZoom);
 
     // need to get the doll screen position based on the current or safe plane position
 

@@ -218,7 +218,7 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
         "depthy",
-        ["planePos"],
+        ["planePos", "planeZoom"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
         globalRefs.scene.activeCamera
@@ -317,18 +317,50 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
     // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("testOffset", 0.5, 1);
 
-    const { planePos } = getState().global.main;
+    const { planePos, planePosGoal, planeZoom, planeZoomGoal } = getState().global.main;
 
     // console.log("planePos", planePos.x / 1280, planePos.y / 720);
-    console.log("planePos", planePos);
+    // console.log("planePos", planePos, "planePosGoal", planePosGoal);
+    // console.log("planeZoom", planeZoom, "planeZoomGoal", planeZoomGoal);
 
-    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-      "planePos",
-      // planePos.x / 1280,
-      // planePos.y / 720
-      0,
-      0
-    );
+    function getEdgeShiftFromZoom(zoom: number) {
+      return (zoom - 1) / 2;
+    }
+
+    const testZoom = 1 + Math.random();
+
+    // console.log(getPositionOnPlane());
+
+    // const { meshRef } = getRefs().dolls[dollName];
+    // if (!meshRef) return;
+    // const { focusedDoll, focusedDollIsInView } = getState().global.main;
+    // const characterPointOnPlane = getPositionOnPlane(meshRef);
+
+    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+    //   "planePos",
+    //   // planePos.x / 1280,
+    //   // planePos.y / 720
+    //   // getEdgeShiftFromZoom(testZoom),
+    //   // getEdgeShiftFromZoom(testZoom)
+    //   0,
+    //   0
+    //   // planePosGoal.x / 1280 / (1280 / 8),
+    //   // planePosGoal.y / 720 / (720 / 8)
+    // );
+    // // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
+    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", 1);
+
+    // get the max translation in each direction
+    // zoom 1.5, pos 0.25, 0.25
+    // zoom 2, pos 0.5, 0.5
+    // zoom 2, pos 0.5, 0.5
+    // zoom 1.25, pos 0.125, 0.125
+
+    // it's -1 /2 !
+
+    // pos 0.5,0.5 is top right corner
+
+    // try to center on character
   }
 
   function applyProbeToAllDollMaterials() {

@@ -6,13 +6,14 @@ import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers, PlaceholderPrendyStores, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 
 export function get_globalChangePlaceRules<
   StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
+  PrendyStores extends PlaceholderPrendyStores,
+  PrendyOptions extends PrendyOptionsUntyped
 >(
   storeHelpers: StoreHelpers,
   _prendyStores: PrendyStores,
@@ -24,10 +25,11 @@ export function get_globalChangePlaceRules<
 
   const globalRefs = getRefs().global.main;
 
-  const { getSectionVidVideo } = get_sectionVidUtils(storeHelpers, prendyAssets);
+  const { getSectionVidVideo } = get_sectionVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
 
   const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
     storeHelpers,
+    prendyStartOptions,
     prendyAssets
   );
 

@@ -40,7 +40,7 @@ export function makeStartPrendyRules<
   );
   const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = get_safeVidRules(storeHelpers);
-  const safeSectionVidRules = get_sectionVidRules(storeHelpers, prendyAssets);
+  const safeSectionVidRules = get_sectionVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
 
   const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
   const characterRules = get_characterRules(storeHelpers, prendyAssets);

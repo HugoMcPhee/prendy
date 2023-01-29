@@ -31,6 +31,7 @@ export function get_usePlace<
 
   const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(
     storeHelpers,
+    prendyStartOptions,
     prendyAssets
   );
 

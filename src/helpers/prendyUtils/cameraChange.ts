@@ -24,18 +24,20 @@ import {
   PrendyAssets,
   SegmentNameByPlace,
 } from "../../declarations";
+import { get_globalScenePlaneRules } from "../../rules/global/scenePlane";
 import { DefaultCameraRefs } from "../../stores/places";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { enableCustomDepthRenderer } from "../babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
+import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
 import { get_getSectionVidVideo } from "./sectionVids";
 
-export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_cameraChangeUtils<
+  StoreHelpers extends PrendyStoreHelpers,
+  PrendyOptions extends PrendyOptionsUntyped
+>(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, dollNames } = prendyAssets;
 
@@ -256,129 +258,24 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     const { planePos, planePosGoal, planeZoom, planeZoomGoal } = getState().global.main;
 
-    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
-    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", planeZoom);
-    // console.log("globalRefs.scene", globalRefs.scene);
     const scene = globalRefs.scene as Scene | null;
 
     const engine = scene?.getEngine(); // engine
     if (engine) {
-      // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
-
-      // check the screen ratio, and compare that to the video ratio
-      const videoRatio = 1280 / 720; // 16/9
-      const screenRatio = screenWidth / screenHeight;
-      // console.log("videoRatio", videoRatio);
-      // console.log("screenRatio", screenRatio);
-      // console.log("new", 1 + videoRatio - screenRatio);
-
-      const ratioDiff = videoRatio - screenRatio;
-      // const xDiff = 1280 / engine.getRenderWidth();
-      // const yDiff = 720 / engine.getRenderHeight();
-      const xDiff = 1280 / screenWidth;
-      const yDiff = 720 / screenHeight;
-
-      let stretchVideoX = 1;
-      let stretchVideoY = 1;
-
-      const screenIsThinnerThenVideo = screenRatio < videoRatio;
-
-      const camera = scene?.activeCamera;
-
-      // console.log("engine.getRenderWidth()", engine.getRenderWidth(true) / 2);
-      // console.log("viewIsThinner", screenIsThinnerThenVideo);
-      // console.log("xDiff", xDiff);
-
-      // Ahhhh changing the width keep the babylon camera zoom the same,
-      // but changing the height zooms out,
-      //
-
-      const inverseYDiff = 1 / yDiff;
-
-      // the stretch for each is 1 for full stretch
-
-      // if the view is wider (shorter), the total zoom should be affected smaller
-      // and if it's taller than 16/9 the total zoom should increase
-
-      const alteredZoomFromViewHeight = yDiff;
-
-      const editedPlaneZoomX = planeZoom / xDiff;
-      const editedPlaneZoomY = planeZoom / yDiff;
-      // console.log("ratioDiff", ratioDiff);
-
-      const betterXDiff = 1 - xDiff;
-      const betterRatioDiff = 1 - ratioDiff;
-
-      // console.log("betterXDiff", betterXDiff);
-      // console.log("betterRatioDiff", betterRatioDiff);
-      // console.log("screenRatio", screenRatio);
-
-      let editedPlaneSceneZoom = planeZoom;
-
-      stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
-      stretchVideoY = editedPlaneZoomY + (Math.abs(yDiff) - 1);
-
-      if (screenIsThinnerThenVideo) {
-        stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
-        stretchVideoY = planeZoom;
-        // if (camera) camera.fovMode = Camera.FOVMODE_VERTICAL_FIXED;
-      } else {
-        // stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
-        stretchVideoX = planeZoom;
-        stretchVideoY = editedPlaneZoomX * Math.abs(yDiff);
-        editedPlaneSceneZoom = planeZoom * (screenRatio / videoRatio);
-        // if (camera) camera.fovMode = Camera.FOVMODE_HORIZONTAL_FIXED;
-      }
-      // if (engine._hardwareScalingLevel !== yDiff) {
-      // the hardware scaling level should be bigger, if goin in portrait mode? , since it zooms in more?
-      // actually you dont need to worry about it until u manually zoom, cause the camera zooms out automatically and renders at full resolution
-      // engine.setHardwareScalingLevel(yDiff);
-      // }
-
-      // if the screen height is biggger than the video height, increase the video zoom
-
-      // console.log("yDiff", 1 / yDiff);
-
-      // the height needs to grow to atleast go to the top and bottom ,
-      // zoom still applies though
-
-      // the height always needs to match no matter what
-      // But that's not what I want,
-      // I need to camera to also zoom in
-
-      // change the planeZoom
-
-      // when it's wider than 16/9, stretch x (1.0), and increase y by the same ratio
-      // when it's wider than 16/9, stretch y (1.0), and increase x by the same ratio
-
-      // try to get the background filing the screem,
-      // then zoom the scene render to match it
-      // then increase the hardware scaling, so the scene zoom doesn't affect the blurryness
-      // but it would be better to ortho zoom the camera
-
-      // const editedPlaneSceneZoom2 = 1 * Math.max(screenRatio / videoRatio, 1);
-      console.log(screenRatio / videoRatio);
-
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
-
-      const editedHardwareScaling = 1 / editedPlaneSceneZoom;
-      console.log("editedHardwareScaling", editedHardwareScaling);
+      const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
+      const { editedHardwareScaling, editedPlaneSceneZoom, stretchVideoX, stretchVideoY } = getShaderTransformStuff();
 
       if (engine._hardwareScalingLevel !== editedHardwareScaling) {
-        // the hardware scaling level should be bigger, if goin in portrait mode? , since it zooms in more?
-        // actually you dont need to worry about it until u manually zoom, cause the camera zooms out automatically and renders at full resolution
-
         // this increases the scene rednering resolution if it's zoomed in at all,
-        // but it can still look blocky because the depth video stays low res?
-
-        // ah it works within the model,
-        // but the edges can still be blocky...
-        // it might be the depth render part?
         engine.setHardwareScalingLevel(editedHardwareScaling);
       }
 
+      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+        "planePos",
+        planePos.x * stretchVideoX,
+        planePos.y * stretchVideoY
+      );
+      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "stretchVideoAmount",
         stretchVideoX,

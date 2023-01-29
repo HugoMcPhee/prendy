@@ -3,13 +3,13 @@ import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from "../stores/sectionVids";
 import { get_safeVidUtils } from "../helpers/prendyUtils/safeVids";
 import { PrendyAssets, PlaceName } from "../declarations";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { BEFORE_LOOP_PADDING, get_sectionVidUtils } from "../helpers/prendyUtils/sectionVids";
 
-export function get_sectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_sectionVidRules<
+  StoreHelpers extends PrendyStoreHelpers,
+  PrendyOptions extends PrendyOptionsUntyped
+>(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   // safe Section Stack Vid Rules
 
   const { getState, makeRules, setState } = storeHelpers;
@@ -24,6 +24,7 @@ export function get_sectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
 
   const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = get_sectionVidUtils(
     storeHelpers,
+    prendyOptions,
     prendyAssets
   );
 

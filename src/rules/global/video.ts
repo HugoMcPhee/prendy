@@ -19,14 +19,19 @@ export function get_globalVideoRules<
 >(
   storeHelpers: StoreHelpers,
   _prendyStores: PrendyStores,
-  _prendyStartOptions: PrendyOptions,
+  prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
 
-  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = get_sectionVidUtils(storeHelpers, prendyAssets);
+  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = get_sectionVidUtils(
+    storeHelpers,
+    prendyStartOptions,
+    prendyAssets
+  );
   const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
     storeHelpers,
+    prendyStartOptions,
     prendyAssets
   );
 

@@ -2,7 +2,7 @@
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { get_sectionVidUtils } from "../../prendyUtils/sectionVids";
-import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../../declarations";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 
@@ -14,14 +14,19 @@ export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementT
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
+export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
   storeHelpers: StoreHelpers,
+  prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { doWhenSectionVidPlayingAsync, getSectionForPlace } = get_sectionVidUtils(storeHelpers, prendyAssets);
+  const { doWhenSectionVidPlayingAsync, getSectionForPlace } = get_sectionVidUtils(
+    storeHelpers,
+    prendyOptions,
+    prendyAssets
+  );
 
   const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 

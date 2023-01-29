@@ -391,6 +391,59 @@ export function get_scenePlaneUtils<
     };
   }
 
+  // -----------
+  // new
+  function getShaderTransformStuff() {
+    const { planeZoom } = getState().global.main;
+
+    // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // check the screen ratio, and compare that to the video ratio
+    const videoRatio = 1280 / 720; // 16/9
+    const screenRatio = screenWidth / screenHeight;
+
+    const xDiff = 1280 / screenWidth;
+    const yDiff = 720 / screenHeight;
+
+    let stretchVideoX = 1;
+    let stretchVideoY = 1;
+
+    const screenIsThinnerThenVideo = screenRatio < videoRatio;
+
+    // Changing width means same babylon camera zoom, but changing height zooms out,
+    // because of camera.fovMode = Camera.FOVMODE_VERTICAL_FIXED;
+
+    // the stretch for each is 1 for full stretch
+
+    const editedPlaneZoomX = planeZoom / xDiff;
+    const editedPlaneZoomY = planeZoom / yDiff;
+
+    let editedPlaneSceneZoom = planeZoom;
+
+    stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
+    stretchVideoY = editedPlaneZoomY + (Math.abs(yDiff) - 1);
+
+    if (screenIsThinnerThenVideo) {
+      stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
+      stretchVideoY = planeZoom;
+    } else {
+      stretchVideoX = planeZoom;
+      stretchVideoY = editedPlaneZoomX * Math.abs(yDiff);
+      editedPlaneSceneZoom = planeZoom * (screenRatio / videoRatio);
+    }
+
+    const editedHardwareScaling = 1 / editedPlaneSceneZoom;
+
+    return {
+      stretchVideoX,
+      stretchVideoY,
+      editedPlaneSceneZoom,
+      editedHardwareScaling,
+    };
+  }
+
   return {
     getPositionOnPlane,
     updatePlanePositionToFocusOnMesh,
@@ -409,5 +462,7 @@ export function get_scenePlaneUtils<
     convertScreenPointToPlaneScenePoint,
     convertPlaneScenePointToScreenPoint,
     checkPointIsInsidePlane,
+    //
+    getShaderTransformStuff,
   };
 }

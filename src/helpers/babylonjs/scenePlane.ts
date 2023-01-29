@@ -82,9 +82,17 @@ export function get_scenePlaneUtils<
     const { planeZoom } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef);
 
-    let testShiftX = (characterPointOnPlane.x / 1280 - 0.5) * planeZoom;
-    let testShiftY = (1 - characterPointOnPlane.y / 720 - 0.5) * planeZoom;
-    const maxShift = (planeZoom - 1) / 2;
+    // const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { editedHardwareScaling, editedPlaneSceneZoom, stretchVideoX, stretchVideoY } = getShaderTransformStuff();
+
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    let testShiftX = characterPointOnPlane.x / 1280 - 0.5;
+    let testShiftY = 1 - characterPointOnPlane.y / 720 - 0.5;
+    const maxShift = (planeZoom - 1) / 4;
+    // stretchVideoX
+    console.log("maxShift", maxShift);
 
     if (testShiftX > maxShift) testShiftX = maxShift;
     if (testShiftX < -maxShift) testShiftX = -maxShift;
@@ -97,6 +105,10 @@ export function get_scenePlaneUtils<
       x: shortenDecimals(testShiftX),
       y: shortenDecimals(testShiftY),
     };
+
+    // zoom 2, edges are 0.25
+
+    console.log("xy", safeNumbersSafePlanePosition.x, safeNumbersSafePlanePosition.y);
 
     if (instant) {
       setGlobalState({

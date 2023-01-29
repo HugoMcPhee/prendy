@@ -106,8 +106,8 @@ export function get_globalScenePlaneRules<
         focusScenePlaneOnFocusedDoll("instant");
         const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();
         if (!engine) return;
-        console.log("size hanging", engine.getRenderWidth(), engine.getRenderHeight());
-        console.log(globalRefs.depthRenderTarget);
+        // console.log("size changing", engine.getRenderWidth(), engine.getRenderHeight());
+        // console.log(globalRefs.depthRenderTarget);
 
         globalRefs.depthRenderTarget?.resize({ width: engine.getRenderWidth(), height: engine.getRenderHeight() });
       },

@@ -196,9 +196,9 @@ export function get_cameraChangeUtils<
         globalRefs.backdropPostProcessEffect = effect;
         effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
 
-        const { planePos, planeZoom } = getState().global.main;
+        const { planePos, planePosGoal, planeZoom } = getState().global.main;
 
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePosGoal.x, planePosGoal.y);
         (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", planeZoom);
         (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
@@ -272,8 +272,8 @@ export function get_cameraChangeUtils<
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "planePos",
-        planePos.x * stretchVideoX,
-        planePos.y * stretchVideoY
+        planePosGoal.x * stretchVideoX,
+        planePosGoal.y * stretchVideoY
       );
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(

@@ -112,13 +112,13 @@ const shaders = {
 
     // Parameters
     uniform vec2 planePos;
-    uniform float planeZoom;
-    uniform float highlightThreshold;
+    uniform float planeZoomScene;
+    uniform vec2 stretchVideoAmount;
 
-    float highlights(vec3 color)
-    {
-    return smoothstep(highlightThreshold, 1.0, dot(color, vec3(0.3, 0.59, 0.11)));
-    }
+    // float highlights(vec3 color)
+    // {
+    // return smoothstep(highlightThreshold, 1.0, dot(color, vec3(0.3, 0.59, 0.11)));
+    // }
 
     mat3 makeTranslation(vec2 t) {  
         mat3 m = mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, t.x, t.y, 1.0);
@@ -172,30 +172,38 @@ const shaders = {
     // vec2 position = vec2(0.1,0.1);  
     vec2 position = planePos;  
     // vec2 scale = vec2(1.4,1.4);  
-    vec2 scale = vec2(planeZoom,planeZoom);  
+    vec2 scale = vec2(planeZoomScene,planeZoomScene);  
     float rotation = 0.0;   // degrees
     float r = rotation/180.0*3.14159; // radians
         
     //vec2 target_res = vec2(textureSize(iChannel0,0).xy)/float(textureSize(iChannel0,0).y);
     vec2 target_res = vec2(1.0,1.0);
     
+
+    
+
     mat3 mt = makeTranslation( position );
     mat3 mr = makeRotation( r ); 
     mat3 ms = makeScale( 1.0/scale ); 
+    mat3 msVideo = makeScale( 1.0/stretchVideoAmount ); 
 
     //transform
     vec3 newCoord = vec3(vUV.xy,1.0);                
     newCoord = mt*newCoord; 
-    
     newCoord = mr*ms*vec3(newCoord.x - 0.5*target_res.x, newCoord.y - 0.5*target_res.y,0.0) + vec3(0.5*target_res, 0.0);
     newCoord.xy*= 1./target_res;
     
     vec2 newUv = vec2(newCoord.x, newCoord.y);
-    // vec2 newUv = vec2(vUV.x, vUV.y);
+
+
+    vec3 newVideoCoord = vec3(vUV.xy,1.0);                
+    newVideoCoord = mt*newVideoCoord; 
+    newVideoCoord = mr*msVideo*vec3(newVideoCoord.x - 0.5*target_res.x, newVideoCoord.y - 0.5*target_res.y,0.0) + vec3(0.5*target_res, 0.0);
+    newVideoCoord.xy*= 1./target_res;
+    vec2 newVideoUv = vec2(newVideoCoord.x, newVideoCoord.y);
     
-    // vUV = uv;
-    vUVdepth = vec2(newUv.x ,newUv.y * 0.5);
-    vUVbackdrop = vec2(newUv.x ,newUv.y * 0.5 + 0.5);;
+    vUVdepth = vec2(newVideoUv.x ,newVideoUv.y * 0.5);
+    vUVbackdrop = vec2(newVideoUv.x ,newVideoUv.y * 0.5 + 0.5);;
 
 
 
@@ -210,18 +218,23 @@ const shaders = {
 
 
     vec4 testColor2A = (sceneDepth >= imageDepth) ?   backdropTexture : color;
+
+    // this one prevents the weird white outlines
     vec4 testColor2 = mix(backdropTexture, testColor2A, color.w);
 
     // amount for color
     // amount for backdrop
     // should both be a number combined make 1
 
-    
+    // vec4 depthFinal = vec4(imageDepth,imageDepth,imageDepth,imageDepth);
+
 
     // vec4 shiftedFinal = texture2D(testColor2, vUV);
     
     // gl_FragColor = shiftedFinal;
+    // gl_FragColor = sceneDepthTexture;
 
+    // gl_FragColor = depthFinal;
     gl_FragColor = testColor2;
     // gl_FragColor = color;
     // gl_FragColor = testColor2A;

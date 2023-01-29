@@ -1,5 +1,6 @@
 import {
   AbstractMesh,
+  Camera,
   Constants,
   Effect,
   Engine,
@@ -10,6 +11,7 @@ import {
   Scene,
   ShaderMaterial,
   ShaderStore,
+  Texture,
   Texture,
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
@@ -116,7 +118,7 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     console.log("updateTexturesForNowCamera");
 
     const { nowPlaceName } = getState().global.main;
-    // const { scenes, backdropRenderSize } = globalRefs;
+    // const { scene, backdropRenderSize } = globalRefs;
     const { backdropRenderSize } = globalRefs;
     const scene = globalRefs.scene as Scene;
     const placeRef = placesRefs[nowPlaceName];
@@ -129,31 +131,19 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     // Render target
 
-    if (!globalRefs.sceneRenderTarget) {
-      globalRefs.sceneRenderTarget = new RenderTargetTexture(
-        "screenShot",
-        backdropRenderSize,
-        scene,
-        false,
-        false,
-        Constants.TEXTURETYPE_UNSIGNED_INT,
-        false,
-        Texture.NEAREST_SAMPLINGMODE,
-        undefined,
-        undefined,
-        undefined,
-        Engine.TEXTUREFORMAT_RGBA
-      );
-    }
-
-    globalRefs.sceneRenderTarget.activeCamera = newCamRef.camera;
-    // globalRefs.scene.activeCamera = null;
     globalRefs.scene.activeCamera = newCamRef.camera;
 
+    // console.log("newCamRef.camera");
+    // newCamRef.camera.maxZ = 1000;
+    // console.log(newCamRef.camera.maxZ);
+
     if (!globalRefs.depthRenderer) {
+      console.log("making new depth renderer");
+
       globalRefs.depthRenderer = enableCustomDepthRenderer(
         scene,
-        getRefs().global.main.depthRenderSize,
+        // getRefs().global.main.depthRenderSize,
+        getState().global.main.zoomLevel,
         newCamRef.camera,
         false
       );
@@ -163,14 +153,13 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     if (!globalRefs.depthRenderTarget) {
       globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
+      console.log("globalRefs.depthRenderTarget", globalRefs.depthRenderTarget);
     }
 
     globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
 
     if (!scene.customRenderTargets.length) {
-      // scene.customRenderTargets = [globalRefs.sceneRenderTarget, globalRefs.depthRenderTarget];
       scene.customRenderTargets = [globalRefs.depthRenderTarget];
-
       addMeshesToRenderLists(newCamRef);
     }
 
@@ -182,34 +171,6 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
         attributes: ["position", "uv"],
         uniforms: ["worldViewProjection"],
       });
-
-      // const postProcess1 = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-
-      // if (globalRefs.activeCamera) {
-      //   const postProcess = new PostProcess(
-      //     "backdropAndDepthShader",
-      //     shaders.backdropAndDepth.postProcess,
-      //     null,
-      //     null,
-      //     1,
-      //     // globalRefs.scene.activeCamera
-      //     globalRefs.activeCamera
-      //   );
-
-      //   // // const appliedProcess = postProcess.apply();
-
-      //   postProcess.onApply = (effect) => {
-      //     // effect.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-      //     // effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
-
-      //     effect.setFloat2("screenSize", postProcess.width, postProcess.height);
-      //     effect.setFloat("highlightThreshold", 0.9);
-      //     effect.setTextureFromPostProcess("sceneSampler", globalRefs.sceneRenderTarget);
-      //   };
-      // }
-
-      // appliedProcess?.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-      // appliedProcess?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
     }
 
     if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
@@ -218,12 +179,12 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
         "depthy",
-        ["planePos", "planeZoom"],
+        ["planePos", "planeZoomScene", "stretchVideoAmount"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
         globalRefs.scene.activeCamera
         // globalRefs.activeCamera
-        // Texture.BILINEAR_SAMPLINGMODE, // sampling
+        // Texture.NEAREST_SAMPLINGMODE // sampling
         // globalRefs.scene.engine // engine
       );
 
@@ -231,31 +192,16 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
       globalRefs.backdropPostProcess.onApply = (effect) => {
         globalRefs.backdropPostProcessEffect = effect;
-        // effect.setTexture("textureSampler", globalRefs.sceneRenderTarget);
         effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
 
-        // effect.setFloat2("screenSize", postProcess.width, postProcess.height);
-        // effect.setFloat("highlightThreshold", 0.9);
-        // effect.setTexture("sceneSampler", globalRefs.depthRenderTarget);
-        // effect.setTextureFromPostProcess("sceneSampler", globalRefs.sceneRenderTarget);
-        // effect.setTextureFromPostProcess("sceneSampler", postProcess2);
+        const { planePos, planeZoom } = getState().global.main;
+
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", planeZoom);
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
         updateVideoTexturesForNewPlace(nowPlaceName);
       };
-
-      // globalRefs.scenePlane.material = globalRefs.scenePlaneMaterial;
-
-      // globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-      // globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
-
-      // updateVideoTexturesForNewPlace(nowPlaceName);
-
-      // globalRefs.scenePlane.material.freeze();
-
-      // const mainScene = globalRefs.scenes?.main;
-      // if (mainScene) {
-      //   mainScene.activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
-      // }
     }
 
     if (didChangePlace) {
@@ -272,7 +218,6 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
 
     // scene.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
 
-    globalRefs.sceneRenderTarget.renderList = [];
     globalRefs.depthRenderTarget.renderList = [];
 
     forEach(dollNames, (dollName) => {
@@ -286,7 +231,6 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
         if (loopedMesh) {
           loopedMesh.isInFrustum = () => true;
           // loopedMesh.alwaysSelectAsActiveMesh = true;
-          globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
           globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
         }
       });
@@ -295,7 +239,6 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     forEach(particleSystemNames, (particleSystemName) => {
       const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
-      globalRefs.sceneRenderTarget?.renderList?.push(particleSystem.mesh);
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
       (particleSystem as any)._camera = newCamRef.camera;
     });
@@ -306,61 +249,142 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
     if (globalRefs.backdropVideoTex) {
       const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
-
-      if (backdropVidElement) {
-        globalRefs.backdropVideoTex.updateVid(backdropVidElement);
-      }
+      if (backdropVidElement) globalRefs.backdropVideoTex.updateVid(backdropVidElement);
     }
-    // console.log("globalRefs?.backdropPostProcessEffect", !!globalRefs?.backdropPostProcessEffect);
 
-    // globalRefs?.scenePlaneMaterial?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
     globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
-    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("testOffset", 0.5, 1);
 
     const { planePos, planePosGoal, planeZoom, planeZoomGoal } = getState().global.main;
 
-    // console.log("planePos", planePos.x / 1280, planePos.y / 720);
-    // console.log("planePos", planePos, "planePosGoal", planePosGoal);
-    // console.log("planeZoom", planeZoom, "planeZoomGoal", planeZoomGoal);
+    (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
+    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", planeZoom);
+    // console.log("globalRefs.scene", globalRefs.scene);
+    const scene = globalRefs.scene as Scene | null;
 
-    function getEdgeShiftFromZoom(zoom: number) {
-      return (zoom - 1) / 2;
+    const engine = scene?.getEngine(); // engine
+    if (engine) {
+      // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      // check the screen ratio, and compare that to the video ratio
+      const videoRatio = 1280 / 720; // 16/9
+      const screenRatio = screenWidth / screenHeight;
+      // console.log("videoRatio", videoRatio);
+      // console.log("screenRatio", screenRatio);
+      // console.log("new", 1 + videoRatio - screenRatio);
+
+      const ratioDiff = videoRatio - screenRatio;
+      // const xDiff = 1280 / engine.getRenderWidth();
+      // const yDiff = 720 / engine.getRenderHeight();
+      const xDiff = 1280 / screenWidth;
+      const yDiff = 720 / screenHeight;
+
+      let stretchVideoX = 1;
+      let stretchVideoY = 1;
+
+      const screenIsThinnerThenVideo = screenRatio < videoRatio;
+
+      const camera = scene?.activeCamera;
+
+      // console.log("engine.getRenderWidth()", engine.getRenderWidth(true) / 2);
+      // console.log("viewIsThinner", screenIsThinnerThenVideo);
+      // console.log("xDiff", xDiff);
+
+      // Ahhhh changing the width keep the babylon camera zoom the same,
+      // but changing the height zooms out,
+      //
+
+      const inverseYDiff = 1 / yDiff;
+
+      // the stretch for each is 1 for full stretch
+
+      // if the view is wider (shorter), the total zoom should be affected smaller
+      // and if it's taller than 16/9 the total zoom should increase
+
+      const alteredZoomFromViewHeight = yDiff;
+
+      const editedPlaneZoomX = planeZoom / xDiff;
+      const editedPlaneZoomY = planeZoom / yDiff;
+      // console.log("ratioDiff", ratioDiff);
+
+      const betterXDiff = 1 - xDiff;
+      const betterRatioDiff = 1 - ratioDiff;
+
+      // console.log("betterXDiff", betterXDiff);
+      // console.log("betterRatioDiff", betterRatioDiff);
+      // console.log("screenRatio", screenRatio);
+
+      let editedPlaneSceneZoom = planeZoom;
+
+      stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
+      stretchVideoY = editedPlaneZoomY + (Math.abs(yDiff) - 1);
+
+      if (screenIsThinnerThenVideo) {
+        stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
+        stretchVideoY = planeZoom;
+        // if (camera) camera.fovMode = Camera.FOVMODE_VERTICAL_FIXED;
+      } else {
+        // stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
+        stretchVideoX = planeZoom;
+        stretchVideoY = editedPlaneZoomX * Math.abs(yDiff);
+        editedPlaneSceneZoom = planeZoom * (screenRatio / videoRatio);
+        // if (camera) camera.fovMode = Camera.FOVMODE_HORIZONTAL_FIXED;
+      }
+      // if (engine._hardwareScalingLevel !== yDiff) {
+      // the hardware scaling level should be bigger, if goin in portrait mode? , since it zooms in more?
+      // actually you dont need to worry about it until u manually zoom, cause the camera zooms out automatically and renders at full resolution
+      // engine.setHardwareScalingLevel(yDiff);
+      // }
+
+      // if the screen height is biggger than the video height, increase the video zoom
+
+      // console.log("yDiff", 1 / yDiff);
+
+      // the height needs to grow to atleast go to the top and bottom ,
+      // zoom still applies though
+
+      // the height always needs to match no matter what
+      // But that's not what I want,
+      // I need to camera to also zoom in
+
+      // change the planeZoom
+
+      // when it's wider than 16/9, stretch x (1.0), and increase y by the same ratio
+      // when it's wider than 16/9, stretch y (1.0), and increase x by the same ratio
+
+      // try to get the background filing the screem,
+      // then zoom the scene render to match it
+      // then increase the hardware scaling, so the scene zoom doesn't affect the blurryness
+      // but it would be better to ortho zoom the camera
+
+      // const editedPlaneSceneZoom2 = 1 * Math.max(screenRatio / videoRatio, 1);
+      console.log(screenRatio / videoRatio);
+
+      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
+
+      const editedHardwareScaling = 1 / editedPlaneSceneZoom;
+      console.log("editedHardwareScaling", editedHardwareScaling);
+
+      if (engine._hardwareScalingLevel !== editedHardwareScaling) {
+        // the hardware scaling level should be bigger, if goin in portrait mode? , since it zooms in more?
+        // actually you dont need to worry about it until u manually zoom, cause the camera zooms out automatically and renders at full resolution
+
+        // this increases the scene rednering resolution if it's zoomed in at all,
+        // but it can still look blocky because the depth video stays low res?
+
+        // ah it works within the model,
+        // but the edges can still be blocky...
+        // it might be the depth render part?
+        engine.setHardwareScalingLevel(editedHardwareScaling);
+      }
+
+      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+        "stretchVideoAmount",
+        stretchVideoX,
+        stretchVideoY
+      );
     }
-
-    const testZoom = 1 + Math.random();
-
-    // console.log(getPositionOnPlane());
-
-    // const { meshRef } = getRefs().dolls[dollName];
-    // if (!meshRef) return;
-    // const { focusedDoll, focusedDollIsInView } = getState().global.main;
-    // const characterPointOnPlane = getPositionOnPlane(meshRef);
-
-    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-    //   "planePos",
-    //   // planePos.x / 1280,
-    //   // planePos.y / 720
-    //   // getEdgeShiftFromZoom(testZoom),
-    //   // getEdgeShiftFromZoom(testZoom)
-    //   0,
-    //   0
-    //   // planePosGoal.x / 1280 / (1280 / 8),
-    //   // planePosGoal.y / 720 / (720 / 8)
-    // );
-    // // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
-    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", 1);
-
-    // get the max translation in each direction
-    // zoom 1.5, pos 0.25, 0.25
-    // zoom 2, pos 0.5, 0.5
-    // zoom 2, pos 0.5, 0.5
-    // zoom 1.25, pos 0.125, 0.125
-
-    // it's -1 /2 !
-
-    // pos 0.5,0.5 is top right corner
-
-    // try to center on character
   }
 
   function applyProbeToAllDollMaterials() {
@@ -442,7 +466,6 @@ export function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
         material.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
       }
 
-      globalRefs.sceneRenderTarget?.renderList?.push(particleSystem.mesh);
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
     });
   }

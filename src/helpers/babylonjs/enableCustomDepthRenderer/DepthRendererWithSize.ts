@@ -81,10 +81,7 @@ export class DepthRendererWithSize {
     var engine = scene.getEngine();
 
     // Render target
-    var format =
-      this.isPacked || engine.webGLVersion === 1
-        ? Constants.TEXTUREFORMAT_RGBA
-        : Constants.TEXTUREFORMAT_R;
+    var format = this.isPacked || engine.webGLVersion === 1 ? Constants.TEXTUREFORMAT_RGBA : Constants.TEXTUREFORMAT_R;
     this._depthMap = new RenderTargetTexture(
       "depthMap",
       { width: customSize.width, height: customSize.height },
@@ -119,10 +116,7 @@ export class DepthRendererWithSize {
     // Custom render function
     var renderSubMesh = (subMesh: SubMesh): void => {
       var ownerMesh = subMesh.getMesh();
-      var replacementMesh = ownerMesh._internalAbstractMeshDataInfo
-        ._actAsRegularMesh
-        ? ownerMesh
-        : null;
+      var replacementMesh = ownerMesh._internalAbstractMeshDataInfo._actAsRegularMesh ? ownerMesh : null;
       var renderingMesh = subMesh.getRenderingMesh();
       var effectiveMesh = replacementMesh ? replacementMesh : renderingMesh;
       var scene = this._scene;
@@ -136,26 +130,16 @@ export class DepthRendererWithSize {
       }
 
       // Culling and reverse (right handed system)
-      engine.setState(
-        material.backFaceCulling,
-        0,
-        false,
-        scene.useRightHandedSystem
-      );
+      engine.setState(material.backFaceCulling, 0, false, scene.useRightHandedSystem);
 
       // Managing instances
-      var batch = renderingMesh._getInstancesRenderList(
-        subMesh._id,
-        !!replacementMesh
-      );
+      var batch = renderingMesh._getInstancesRenderList(subMesh._id, !!replacementMesh);
 
       if (batch.mustReturn) {
         return;
       }
 
-      var hardwareInstancedRendering =
-        engine.getCaps().instancedArrays &&
-        batch.visibleInstances[subMesh._id] !== null;
+      var hardwareInstancedRendering = engine.getCaps().instancedArrays && batch.visibleInstances[subMesh._id] !== null;
 
       var camera = this._camera || scene.activeCamera;
       if (this.isReady(subMesh, hardwareInstancedRendering) && camera) {
@@ -164,11 +148,7 @@ export class DepthRendererWithSize {
 
         this._effect.setMatrix("viewProjection", scene.getTransformMatrix());
 
-        this._effect.setFloat2(
-          "depthValues",
-          camera.minZ,
-          camera.minZ + camera.maxZ
-        );
+        this._effect.setFloat2("depthValues", camera.minZ, camera.minZ + camera.maxZ);
 
         // Alpha test
         if (material && material.needAlphaTesting()) {
@@ -176,23 +156,13 @@ export class DepthRendererWithSize {
 
           if (alphaTexture) {
             this._effect.setTexture("diffuseSampler", alphaTexture);
-            this._effect.setMatrix(
-              "diffuseMatrix",
-              alphaTexture.getTextureMatrix()
-            );
+            this._effect.setMatrix("diffuseMatrix", alphaTexture.getTextureMatrix());
           }
         }
 
         // Bones
-        if (
-          renderingMesh.useBones &&
-          renderingMesh.computeBonesUsingShaders &&
-          renderingMesh.skeleton
-        ) {
-          this._effect.setMatrices(
-            "mBones",
-            renderingMesh.skeleton.getTransformMatrices(renderingMesh)
-          );
+        if (renderingMesh.useBones && renderingMesh.computeBonesUsingShaders && renderingMesh.skeleton) {
+          this._effect.setMatrices("mBones", renderingMesh.skeleton.getTransformMatrices(renderingMesh));
         }
 
         // Morph targets
@@ -258,11 +228,7 @@ export class DepthRendererWithSize {
     // console.log(mesh.name);
 
     // Alpha test
-    if (
-      material &&
-      material.needAlphaTesting() &&
-      material.getAlphaTestTexture()
-    ) {
+    if (material && material.needAlphaTesting() && material.getAlphaTestTexture()) {
       defines.push("#define ALPHATEST");
       if (mesh.isVerticesDataPresent(VertexBuffer.UVKind)) {
         attribs.push(VertexBuffer.UVKind);
@@ -283,10 +249,7 @@ export class DepthRendererWithSize {
         attribs.push(VertexBuffer.MatricesWeightsExtraKind);
       }
       defines.push("#define NUM_BONE_INFLUENCERS " + mesh.numBoneInfluencers);
-      defines.push(
-        "#define BonesPerMesh " +
-          (mesh.skeleton ? mesh.skeleton.bones.length + 1 : 0)
-      );
+      defines.push("#define BonesPerMesh " + (mesh.skeleton ? mesh.skeleton.bones.length + 1 : 0));
     } else {
       defines.push("#define NUM_BONE_INFLUENCERS 0");
     }
@@ -301,11 +264,7 @@ export class DepthRendererWithSize {
         defines.push("#define MORPHTARGETS");
         defines.push("#define NUM_MORPH_INFLUENCERS " + numMorphInfluencers);
 
-        MaterialHelper.PrepareAttributesForMorphTargetsInfluencers(
-          attribs,
-          mesh,
-          numMorphInfluencers
-        );
+        MaterialHelper.PrepareAttributesForMorphTargetsInfluencers(attribs, mesh, numMorphInfluencers);
       }
     }
 
@@ -335,14 +294,7 @@ export class DepthRendererWithSize {
         .createEffect(
           "depth",
           attribs,
-          [
-            "world",
-            "mBones",
-            "viewProjection",
-            "diffuseMatrix",
-            "depthValues",
-            "morphTargetInfluences",
-          ],
+          ["world", "mBones", "viewProjection", "diffuseMatrix", "depthValues", "morphTargetInfluences"],
           ["diffuseSampler"],
           join,
           undefined,

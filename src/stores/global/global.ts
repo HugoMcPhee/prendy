@@ -119,7 +119,6 @@ export default function global<
     scene: null as null | Scene,
     depthRenderer: null as DepthRendererWithSize | null,
     //
-    sceneRenderTarget: null as null | RenderTargetTexture,
     depthRenderTarget: null as null | RenderTargetTexture,
     scenePlane: null as null | Mesh,
     scenePlaneMaterial: null as null | ShaderMaterial,
@@ -131,6 +130,7 @@ export default function global<
     backdropImageSize: { width: 1280, height: 720 },
     backdropRenderSize: { width: 1280, height: 720 },
     depthRenderSize: { width: 1280, height: 720 },
+    startRenderSize: { width: 1280, height: 720 }, // gets set when the engine starts, this is to prevent the camera zooming out when resizing the screen
     //
     ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35 }),
     ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),

@@ -3,6 +3,8 @@ import { makeRunMovers } from "pietem-movers";
 import { copyPoint } from "chootils/dist/points2d";
 import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { Effect } from "@babylonjs/core";
+import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 
 export function get_globalScenePlaneRules<
   StoreHelpers extends PrendyStoreHelpers,
@@ -13,39 +15,45 @@ export function get_globalScenePlaneRules<
     prendyStartOptions
   );
   const { setGlobalState } = get_globalUtils(storeHelpers);
-  const { makeRules } = storeHelpers;
+  const { makeRules, getRefs } = storeHelpers;
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
+
+  const globalRefs = getRefs().global.main;
 
   return makeRules(({ itemEffect }) => ({
     whenPlanePositionChanges: itemEffect({
-      run({ newValue: planePos }) {
-        const amountOverEdges = getScenePlaneOverScreenEdgesAmount(planePos);
-
-        // FIXME ? Might be better to set the target x an y position based on a safe level for the target zoom
-        // to prevents sliding at the edges when zooming out
-
-        if (
-          !(
-            amountOverEdges.top < 0 ||
-            amountOverEdges.bottom < 0 ||
-            amountOverEdges.left < 0 ||
-            amountOverEdges.right < 0
-          )
-        ) {
-          return;
-        }
-
-        const newPlanePos = copyPoint(planePos);
-
-        if (amountOverEdges.bottom < 0) newPlanePos.y += amountOverEdges.bottom;
-        if (amountOverEdges.top < 0) newPlanePos.y -= amountOverEdges.top;
-        if (amountOverEdges.left < 0) newPlanePos.x += amountOverEdges.left;
-        if (amountOverEdges.right < 0) newPlanePos.x -= amountOverEdges.right;
-
-        setGlobalState({ planePos: newPlanePos });
+      run({ newValue: planePos, itemState: globalState }) {
+        // const amountOverEdges = getScenePlaneOverScreenEdgesAmount(planePos);
+        // // FIXME ? Might be better to set the target x an y position based on a safe level for the target zoom
+        // // to prevents sliding at the edges when zooming out
+        // if (
+        //   !(
+        //     amountOverEdges.top < 0 ||
+        //     amountOverEdges.bottom < 0 ||
+        //     amountOverEdges.left < 0 ||
+        //     amountOverEdges.right < 0
+        //   )
+        // ) {
+        //   return;
+        // }
+        // const newPlanePos = copyPoint(planePos);
+        // if (amountOverEdges.bottom < 0) newPlanePos.y += amountOverEdges.bottom;
+        // if (amountOverEdges.top < 0) newPlanePos.y -= amountOverEdges.top;
+        // if (amountOverEdges.left < 0) newPlanePos.x += amountOverEdges.left;
+        // if (amountOverEdges.right < 0) newPlanePos.x -= amountOverEdges.right;
+        // setGlobalState({ planePos: newPlanePos });
+        // use logic from updatePlanePositionToFocusOnMesh to correct how it's over edges (maybe a reusable function)
+        // it clamps the animation values so they dont spring over
+        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
+        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
+        // const { planeZoom, planePosGoal } = globalState;
+        // console.log("whenPlanePositionChanges", planePos.x, planePos.y);
+        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
+        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
       },
-      check: { prop: "planePos", type: "global" },
+      check: { prop: ["planePos", "planeZoom"], type: "global" },
       atStepEnd: false,
+      // atStepEnd: true,
       step: "planePosition",
     }),
     whenPlanePositionGoalChanges: itemEffect({
@@ -94,7 +102,15 @@ export function get_globalScenePlaneRules<
       step: "planePosition",
     }),
     whenScreenResizes: itemEffect({
-      run: () => focusScenePlaneOnFocusedDoll("instant"),
+      run: () => {
+        focusScenePlaneOnFocusedDoll("instant");
+        const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();
+        if (!engine) return;
+        console.log("size hanging", engine.getRenderWidth(), engine.getRenderHeight());
+        console.log(globalRefs.depthRenderTarget);
+
+        globalRefs.depthRenderTarget?.resize({ width: engine.getRenderWidth(), height: engine.getRenderHeight() });
+      },
       check: { prop: "timeScreenResized", type: "global" },
       // atStepEnd: true,
       step: "planePosition",

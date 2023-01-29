@@ -22,16 +22,16 @@ export function get_ScenePlane<StoreHelpers extends PrendyStoreHelpers, PrendyOp
       fitScenePlaneToScreen(globalRefs.scenePlane);
     }, []);
 
-    useStoreEffect(() => applyPlanePosition(getState().global.main.planePos), {
-      type: "global",
-      prop: ["planePos", "planeZoom"],
-    });
+    // useStoreEffect(() => applyPlanePosition(getState().global.main.planePos), {
+    //   type: "global",
+    //   prop: ["planePos", "planeZoom"],
+    // });
     useStoreItemPropsEffect(
       { type: "global", name: "main" },
       {
         timeScreenResized({ itemRefs }) {
           if (!itemRefs.scenePlane) return;
-          fitScenePlaneToScreen(itemRefs.scenePlane);
+          // fitScenePlaneToScreen(itemRefs.scenePlane);
         },
       }
     );
@@ -40,9 +40,10 @@ export function get_ScenePlane<StoreHelpers extends PrendyStoreHelpers, PrendyOp
         ref={planeRef}
         name="backdropPlane"
         // size={0.25}
+        isVisible={false}
         size={0.1}
         billboardMode={AbstractMesh.BILLBOARDMODE_ALL}
-        layerMask={23}
+        // layerMask={23}
       />
     );
   };

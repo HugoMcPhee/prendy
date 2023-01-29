@@ -65,6 +65,9 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
           engineOptions={{
             disableWebGL2Support: false,
             powerPreference: "high-performance",
+
+            adaptToDeviceRatio: true, // NOTE this can mess with the calculating video stretch with engine.getRenderWidth(), but it does make the edges cleaner and higher res!
+            // adaptToDeviceRatio: false,
           }}
         >
           <Scene
@@ -75,12 +78,17 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               // Each frame is rendered manually inside the video looping check function atm
               engine.stopRenderLoop();
               engine.disableUniformBuffers = true;
-              engine.setSize(1280, 760);
+              engine.setHardwareScalingLevel(1); // NOTE set this based on the zoom level to prevent objects getting blurry when zooming in
+              // engine.setSize(1280, 720);
+              // engine.
               info.scene.autoClear = false;
               info.scene.autoClearDepthAndStencil = false;
               info.scene.skipFrustumClipping = true;
               // add this to see scene behind the scene texture rectangle
               // info.scene.autoClear = false;
+
+              // let startw = engine.getRenderWidth(), starth = engine.getRenderHeight();
+              // globalRefs.startRenderSize = { width: engine.getRenderWidth(), height: engine.getRenderHeight() };
 
               engine.onResizeObservable.add(() => {
                 setState({ global: { main: { timeScreenResized: Date.now() } } });
@@ -95,61 +103,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
                   if (globalRefs.scene) {
                     // const postProcess =
                     // new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-                    // const postProcess1 = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-                    // var postProcess2 = new PassPostProcess("Scene copy", 1.0, globalRefs.scene.activeCamera);
-                    // if (globalRefs.scene.activeCamera) {
-                    //   ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.postProcess;
-                    //   const postProcess = new PostProcess(
-                    //     "backdropAndDepthShader",
-                    //     "depthy",
-                    //     null,
-                    //     ["sceneSampler"], // textures
-                    //     1,
-                    //     globalRefs.scene.activeCamera
-                    //     // globalRefs.activeCamera
-                    //     // Texture.BILINEAR_SAMPLINGMODE, // sampling
-                    //     // globalRefs.scene.engine // engine
-                    //   );
-                    //   // // const appliedProcess = postProcess.apply();
-                    //   postProcess.onApply = (effect) => {
-                    //     // effect.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-                    //     // effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
-                    //     effect.setFloat2("screenSize", postProcess.width, postProcess.height);
-                    //     effect.setFloat("highlightThreshold", 0.9);
-                    //     effect.setTexture("sceneSampler", globalRefs.depthRenderTarget);
-                    //     // effect.setTextureFromPostProcess("sceneSampler", globalRefs.sceneRenderTarget);
-                    //     // effect.setTextureFromPostProcess("sceneSampler", postProcess2);
-                    //   };
-                    // }
-                    // const name = "passCustomPixelShader";
-                    // const shader = `varying vec2 vUV;
-                    // uniform sampler2D textureSampler;
-                    // #define CUSTOM_FRAGMENT_DEFINITIONS
-                    // void main(void)
-                    // {
-                    // gl_FragColor=texture2D(textureSampler,vUV);
-                    // }`;
-                    // // Sideeffect
-                    // ShaderStore.ShadersStore[name] = shader;
-                    // const customFragmentShader = `varying vec2 vUV;
-                    // uniform sampler2D textureSampler;
-                    // #define CUSTOM_FRAGMENT_DEFINITIONS
-                    // void main(void)
-                    // {
-                    // gl_FragColor=texture2D(textureSampler,vUV);
-                    // }`;
-                    // var postProcess = new PostProcess(
-                    //   "My custom post process",
-                    //   "passCustom",
-                    //   null,
-                    //   null,
-                    //   1,
-                    //   globalRefs.scene.activeCamera
-                    // );
-                    // postProcess.onApply = function (effect) {
-                    //   effect.setFloat2("screenSize", postProcess.width, postProcess.height);
-                    //   effect.setFloat("threshold", 0.3);
-                    // };
                   }
                 });
               }}
@@ -159,7 +112,7 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               rotation={new Vector3(toRadians(0), toRadians(0), 0)}
               mode={Camera.PERSPECTIVE_CAMERA}
               ref={scenePlaneCameraRef}
-              layerMask={23}
+              // layerMask={23}
             />
             <ScenePlane />
           </Scene>

@@ -1,4 +1,4 @@
-import { AbstractMesh, Camera, Matrix, Mesh, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, Camera, Effect, Matrix, Mesh, Vector3 } from "@babylonjs/core";
 import { get_globalUtils } from "../prendyUtils/global";
 import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import { shortenDecimals } from "chootils/dist/numbers";
@@ -79,17 +79,23 @@ export function get_scenePlaneUtils<
   }
 
   function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
-    // position = setting where a mesh is,
-    // point = a point
+    const { planeZoom } = getState().global.main;
+    const characterPointOnPlane = getPositionOnPlane(meshRef);
 
-    const meshPointOnPlane = getPositionOnPlane(meshRef);
-    // const meshSafePointOnPlane = convertToSafePointOnPlane(meshPointOnPlane);
+    let testShiftX = (characterPointOnPlane.x / 1280 - 0.5) * planeZoom;
+    let testShiftY = (1 - characterPointOnPlane.y / 720 - 0.5) * planeZoom;
+    const maxShift = (planeZoom - 1) / 2;
 
-    const safePlanePosition = getSafePlanePositionFocusedOnPointOnPlain(meshPointOnPlane);
+    if (testShiftX > maxShift) testShiftX = maxShift;
+    if (testShiftX < -maxShift) testShiftX = -maxShift;
+    if (testShiftY > maxShift) testShiftY = maxShift;
+    if (testShiftY < -maxShift) testShiftY = -maxShift;
 
     const safeNumbersSafePlanePosition = {
-      x: shortenDecimals(safePlanePosition.x),
-      y: shortenDecimals(safePlanePosition.y),
+      // x: shortenDecimals(testShiftX),
+      // y: shortenDecimals(testShiftY),
+      x: shortenDecimals(testShiftX),
+      y: shortenDecimals(testShiftY),
     };
 
     if (instant) {
@@ -363,10 +369,10 @@ export function get_scenePlaneUtils<
   function applyPlanePosition(planePosition: { x: number; y: number }) {
     if (!globalRefs.scenePlane) return;
     // And also ideally take zoom into account somehow (keep a zoom level / scale variable to alter the xywidthheight stuff)
-    fitScenePlaneToScreen(globalRefs.scenePlane);
+    // fitScenePlaneToScreen(globalRefs.scenePlane);
     // also have it smothely go towards it? spring? :)
-    globalRefs.scenePlane.position.x = planePosition.x;
-    globalRefs.scenePlane.position.y = planePosition.y;
+    // globalRefs.scenePlane.position.x = planePosition.x;
+    // globalRefs.scenePlane.position.y = planePosition.y;
   }
 
   function convertScreenPointToPlaneScenePoint(theScreenPoint: { x: number; y: number }) {

@@ -96,10 +96,9 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
         const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
         const { isOnGround, canJump } = playerState;
-        const { scenes } = globalRefs;
+        const { scene } = globalRefs;
 
-        // const activeCamera = scenes?.main?.activeCamera;
-        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+        const activeCamera = scene?.activeCamera;
 
         if (!dollRefs || !dollState || !dollName || !activeCamera) return;
 
@@ -135,10 +134,9 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
         const { timerSpeed } = globalRefs;
         const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
-        const { scenes } = globalRefs;
+        const { scene } = globalRefs;
 
-        // const activeCamera = scenes?.main?.activeCamera;
-        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+        const activeCamera = scene?.activeCamera;
 
         if (!dollRefs || !dollState || !dollName || !activeCamera) return;
         const { lastSafeInputAngle } = playerState;
@@ -298,11 +296,10 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
 
         // if (!dollRefs.checkCollisions) return;
 
-        const { scenes } = globalRefs;
+        // const { scene } = globalRefs;
         const { meshRef } = dollRefs;
         const scene = getScene();
-        // const activeCamera = scene?.activeCamera;
-        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+        const activeCamera = scene?.activeCamera;
 
         const placeInfo = placeInfoByName[nowPlaceName];
 

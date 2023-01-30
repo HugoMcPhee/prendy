@@ -112,7 +112,8 @@ const shaders = {
 
     // Parameters
     uniform vec2 planePos;
-    uniform float planeZoomScene;
+    // uniform float planeZoomScene;
+    uniform vec2 stretchSceneAmount;
     uniform vec2 stretchVideoAmount;
 
     // float highlights(vec3 color)
@@ -172,7 +173,7 @@ const shaders = {
     // vec2 position = vec2(0.1,0.1);  
     vec2 position = planePos;  
     // vec2 scale = vec2(1.4,1.4);  
-    vec2 scale = vec2(planeZoomScene,planeZoomScene);  
+    vec2 scale = stretchSceneAmount;  
     float rotation = 0.0;   // degrees
     float r = rotation/180.0*3.14159; // radians
         

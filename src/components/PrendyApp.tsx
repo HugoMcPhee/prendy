@@ -79,7 +79,7 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               engine.stopRenderLoop();
               engine.disableUniformBuffers = true;
               engine.setHardwareScalingLevel(1); // NOTE set this based on the zoom level to prevent objects getting blurry when zooming in
-              // engine.setSize(1280, 720);
+              engine.setSize(1280, 720);
               // engine.
               info.scene.autoClear = false;
               info.scene.autoClearDepthAndStencil = false;

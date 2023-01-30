@@ -85,19 +85,40 @@ export function get_scenePlaneUtils<
     // const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
     const { editedHardwareScaling, editedPlaneSceneZoom, stretchVideoX, stretchVideoY } = getShaderTransformStuff();
 
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
+    // const screenWidth = window.innerWidth;
+    // const screenHeight = window.innerHeight;
 
     let testShiftX = characterPointOnPlane.x / 1280 - 0.5;
     let testShiftY = 1 - characterPointOnPlane.y / 720 - 0.5;
-    const maxShift = (planeZoom - 1) / 4;
-    // stretchVideoX
-    console.log("maxShift", maxShift);
 
-    if (testShiftX > maxShift) testShiftX = maxShift;
-    if (testShiftX < -maxShift) testShiftX = -maxShift;
-    if (testShiftY > maxShift) testShiftY = maxShift;
-    if (testShiftY < -maxShift) testShiftY = -maxShift;
+    // const extraPlaneZoomAmount = planeZoom - 1;
+
+    // const stretchVidXScale = stretchVideoX / stretchVideoY;
+    // const stretchVidXOpposite = 1 / stretchVidXScale;
+
+    // const stretchVidYScale = stretchVideoY / stretchVideoX;
+    // const stretchVidYOpposite = 1 / stretchVidYScale;
+
+    // console.log("planeZoom", planeZoom);
+    // console.log("stretchVideoX", stretchVideoX);
+    // console.log("stretchVidXScale", stretchVidXScale);
+    // console.log("stretchVidXOpposite", stretchVidXOpposite);
+    // console.log("stretchVideoX", stretchVideoX / stretchVideoY);
+    // console.log("stretchVideoX", 1 / (stretchVideoX / stretchVideoY));
+    // console.log("(planeZoom - 1) / planeZoom", planeZoom - 1);
+    // console.log("(planeZoom - 1) / planeZoom", (planeZoom - 1) / planeZoom);
+
+    const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
+    const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
+
+    // (planeZoom - 1) / planeZoom;
+    // stretchVideoX
+    // console.log("maxShift", maxShiftX, maxShiftY);
+
+    if (testShiftX > maxShiftX) testShiftX = maxShiftX;
+    if (testShiftX < -maxShiftX) testShiftX = -maxShiftX;
+    if (testShiftY > maxShiftY) testShiftY = maxShiftY;
+    if (testShiftY < -maxShiftY) testShiftY = -maxShiftY;
 
     const safeNumbersSafePlanePosition = {
       // x: shortenDecimals(testShiftX),
@@ -106,9 +127,13 @@ export function get_scenePlaneUtils<
       y: shortenDecimals(testShiftY),
     };
 
+    // zoom 1.5, edges are 0.1625?
     // zoom 2, edges are 0.25
+    // zoom 2.5, edges are ~0.3?
+    // zoom 3, edges are ~0.33?
+    // zoom 1, edges are 0
 
-    console.log("xy", safeNumbersSafePlanePosition.x, safeNumbersSafePlanePosition.y);
+    // console.log("xy", safeNumbersSafePlanePosition.x, safeNumbersSafePlanePosition.y);
 
     if (instant) {
       setGlobalState({
@@ -416,8 +441,10 @@ export function get_scenePlaneUtils<
     const videoRatio = 1280 / 720; // 16/9
     const screenRatio = screenWidth / screenHeight;
 
-    const xDiff = 1280 / screenWidth;
-    const yDiff = 720 / screenHeight;
+    const videoXDiff = 1280 / screenWidth;
+    const videoYDiff = 720 / screenHeight;
+
+    const ratioDiff = screenRatio / videoRatio;
 
     let stretchVideoX = 1;
     let stretchVideoY = 1;
@@ -429,28 +456,33 @@ export function get_scenePlaneUtils<
 
     // the stretch for each is 1 for full stretch
 
-    const editedPlaneZoomX = planeZoom / xDiff;
-    const editedPlaneZoomY = planeZoom / yDiff;
+    const editedPlaneZoomX = planeZoom / videoXDiff;
+    const editedPlaneZoomY = planeZoom / videoYDiff;
 
     let editedPlaneSceneZoom = planeZoom;
 
-    stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
-    stretchVideoY = editedPlaneZoomY + (Math.abs(yDiff) - 1);
+    stretchVideoX = editedPlaneZoomY * Math.abs(videoXDiff);
+    stretchVideoY = editedPlaneZoomY + (Math.abs(videoYDiff) - 1);
 
     if (screenIsThinnerThenVideo) {
-      stretchVideoX = editedPlaneZoomY * Math.abs(xDiff);
+      stretchVideoX = editedPlaneZoomY * Math.abs(videoXDiff);
       stretchVideoY = planeZoom;
     } else {
       stretchVideoX = planeZoom;
-      stretchVideoY = editedPlaneZoomX * Math.abs(yDiff);
+      stretchVideoY = editedPlaneZoomX * Math.abs(videoYDiff);
       editedPlaneSceneZoom = planeZoom * (screenRatio / videoRatio);
     }
+
+    let stretchSceneX = editedPlaneSceneZoom / ratioDiff;
+    let stretchSceneY = editedPlaneSceneZoom;
 
     const editedHardwareScaling = 1 / editedPlaneSceneZoom;
 
     return {
       stretchVideoX,
       stretchVideoY,
+      stretchSceneX,
+      stretchSceneY,
       editedPlaneSceneZoom,
       editedHardwareScaling,
     };

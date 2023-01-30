@@ -109,7 +109,10 @@ export function get_globalScenePlaneRules<
         // console.log("size changing", engine.getRenderWidth(), engine.getRenderHeight());
         // console.log(globalRefs.depthRenderTarget);
 
-        globalRefs.depthRenderTarget?.resize({ width: engine.getRenderWidth(), height: engine.getRenderHeight() });
+        // TODO maybe recalculate render target size stuff here instead of on every frame,
+        // but if it uses zoom, the zoom can change every frame
+
+        // globalRefs.depthRenderTarget?.resize({ width: engine.getRenderWidth(), height: engine.getRenderHeight() });
       },
       check: { prop: "timeScreenResized", type: "global" },
       // atStepEnd: true,

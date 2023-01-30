@@ -12,7 +12,6 @@ import {
   ShaderMaterial,
   ShaderStore,
   Texture,
-  Texture,
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
@@ -181,7 +180,7 @@ export function get_cameraChangeUtils<
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
         "depthy",
-        ["planePos", "planeZoomScene", "stretchVideoAmount"],
+        ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
         globalRefs.scene.activeCamera
@@ -199,7 +198,7 @@ export function get_cameraChangeUtils<
         const { planePos, planePosGoal, planeZoom } = getState().global.main;
 
         (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePosGoal.x, planePosGoal.y);
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", planeZoom);
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchSceneAmount", planeZoom, planeZoom);
         (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
         updateVideoTexturesForNewPlace(nowPlaceName);
@@ -263,23 +262,59 @@ export function get_cameraChangeUtils<
     const engine = scene?.getEngine(); // engine
     if (engine) {
       const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
-      const { editedHardwareScaling, editedPlaneSceneZoom, stretchVideoX, stretchVideoY } = getShaderTransformStuff();
+      const {
+        editedHardwareScaling,
+        editedPlaneSceneZoom,
+        stretchVideoX,
+        stretchVideoY,
+        stretchSceneX,
+        stretchSceneY,
+      } = getShaderTransformStuff();
+
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
 
       if (engine._hardwareScalingLevel !== editedHardwareScaling) {
-        // this increases the scene rednering resolution if it's zoomed in at all,
         engine.setHardwareScalingLevel(editedHardwareScaling);
+        const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
+        const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
+
+        engine.setSize(newRenderWidth, newRenderHeight);
+
+        // FIXME , if this updates on each frame, it goes black, only update it once when the screen size changes? to the default zoom, then the extra zooms won't update the depth texture size
+        globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
+
+        console.log("getRenderHeight", engine.getRenderHeight);
+        console.log(engine.getRenderHeight);
+
+        // this increases the scene rednering resolution if it's zoomed in at all,
       }
+
+      // console.log("new width", screenHeight * (16 / 9), "screenHeight", screenHeight);
+      // console.log(
+      //   "new width",
+      //   screenHeight * (16 / 9) * editedHardwareScaling,
+      //   "screenHeight",
+      //   screenHeight * editedHardwareScaling
+      // );
+
+      engine.setSize(screenHeight * (16 / 9) * (1 / editedHardwareScaling), screenHeight * (1 / editedHardwareScaling));
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "planePos",
-        planePosGoal.x * stretchVideoX,
-        planePosGoal.y * stretchVideoY
+        planePos.x * stretchVideoX,
+        planePos.y * stretchVideoY
       );
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
+      // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "stretchVideoAmount",
         stretchVideoX,
         stretchVideoY
+      );
+      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+        "stretchSceneAmount",
+        stretchSceneX,
+        stretchSceneY
       );
     }
   }

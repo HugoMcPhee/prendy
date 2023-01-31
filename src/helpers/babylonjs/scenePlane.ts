@@ -82,38 +82,13 @@ export function get_scenePlaneUtils<
     const { planeZoom } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef);
 
-    // const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
     const { editedHardwareScaling, editedPlaneSceneZoom, stretchVideoX, stretchVideoY } = getShaderTransformStuff();
-
-    // const screenWidth = window.innerWidth;
-    // const screenHeight = window.innerHeight;
 
     let testShiftX = characterPointOnPlane.x / 1280 - 0.5;
     let testShiftY = 1 - characterPointOnPlane.y / 720 - 0.5;
 
-    // const extraPlaneZoomAmount = planeZoom - 1;
-
-    // const stretchVidXScale = stretchVideoX / stretchVideoY;
-    // const stretchVidXOpposite = 1 / stretchVidXScale;
-
-    // const stretchVidYScale = stretchVideoY / stretchVideoX;
-    // const stretchVidYOpposite = 1 / stretchVidYScale;
-
-    // console.log("planeZoom", planeZoom);
-    // console.log("stretchVideoX", stretchVideoX);
-    // console.log("stretchVidXScale", stretchVidXScale);
-    // console.log("stretchVidXOpposite", stretchVidXOpposite);
-    // console.log("stretchVideoX", stretchVideoX / stretchVideoY);
-    // console.log("stretchVideoX", 1 / (stretchVideoX / stretchVideoY));
-    // console.log("(planeZoom - 1) / planeZoom", planeZoom - 1);
-    // console.log("(planeZoom - 1) / planeZoom", (planeZoom - 1) / planeZoom);
-
     const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
     const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
-
-    // (planeZoom - 1) / planeZoom;
-    // stretchVideoX
-    // console.log("maxShift", maxShiftX, maxShiftY);
 
     if (testShiftX > maxShiftX) testShiftX = maxShiftX;
     if (testShiftX < -maxShiftX) testShiftX = -maxShiftX;
@@ -121,8 +96,6 @@ export function get_scenePlaneUtils<
     if (testShiftY < -maxShiftY) testShiftY = -maxShiftY;
 
     const safeNumbersSafePlanePosition = {
-      // x: shortenDecimals(testShiftX),
-      // y: shortenDecimals(testShiftY),
       x: shortenDecimals(testShiftX),
       y: shortenDecimals(testShiftY),
     };
@@ -132,8 +105,6 @@ export function get_scenePlaneUtils<
     // zoom 2.5, edges are ~0.3?
     // zoom 3, edges are ~0.33?
     // zoom 1, edges are 0
-
-    // console.log("xy", safeNumbersSafePlanePosition.x, safeNumbersSafePlanePosition.y);
 
     if (instant) {
       setGlobalState({

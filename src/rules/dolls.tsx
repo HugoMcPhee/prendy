@@ -337,7 +337,8 @@ export function get_dollRules<
       run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
         if (!itemRefs.meshRef) return;
 
-        if (samePoints3d(newPosition, prevPosition)) return;
+        // if (samePoints3d(newPosition, prevPosition)) console.log("was same");
+        // console.log("whenPositionChangesToEdit");
 
         // if (dollName === "key") {
         //   console.log("sdkfksfdlfsdkkfsdlkfsd");
@@ -366,6 +367,7 @@ export function get_dollRules<
               x: positionOffset.z,
               y: positionOffset.x,
             });
+            // console.log("collidedPosOffset", collidedPosOffset, "positionOffset", positionOffset);
 
             setState(() => ({
               dolls: {
@@ -398,6 +400,8 @@ export function get_dollRules<
     }),
     whenPositionChangesCheckInRange: effect({
       run(_diffInfo) {
+        // console.log("a doll moved", _diffInfo);
+
         // forEach(diffInfo.itemsChanged.dolls)
 
         const defaultInRange = getDefaultInRangeFunction(dollNames);

@@ -21,9 +21,7 @@ export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
         }
 
         // runs in a callback to set before the new pietem frame
-        setState({}, () => {
-          setState({ global: { main: { frameTick: Date.now() } } });
-        });
+        setState({}, () => setState({ global: { main: { frameTick: Date.now() } } }));
       },
       check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
       step: "rendering",

@@ -1,9 +1,11 @@
 import { AbstractMesh } from "@babylonjs/core";
+import { c } from "chootils/dist/points3d";
 import { forEach } from "chootils/dist/loops";
 import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { samePoints, defaultPosition } from "chootils/dist/points2d";
 
 export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
@@ -29,10 +31,14 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
         dollName: string | any; // DollName
       }) => ({
         // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-        run({ itemRefs, itemState }) {
+        run({ itemRefs, newValue, previousValue }) {
+          // console.log("prevItemState", other);
+
           // TODO
           // only update the collider stuff here
           // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)
+
+          // if (samePoints(newValue ?? defaultPosition, previousValue ?? defaultPosition)) return;
 
           if (!itemRefs.meshRef) return;
 
@@ -112,6 +118,10 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
           }
 
           if (dollName === focusedDoll) {
+            // console.log("position changed", newValue, previousValue);
+
+            // console.log("updatePlanePositionToFocusOnMesh");
+
             // Update screen position :)
             updatePlanePositionToFocusOnMesh({ meshRef: itemRefs.meshRef });
           }
@@ -119,6 +129,12 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
         check: { type: "dolls", prop: "position", name: dollName },
         atStepEnd: true, // so it only runs once (it sometimes ran twice with  "derive" (without the "beforePainting" flow I think))
         step: "checkCollisions",
+        // NOTE "becomes" isn't working for dynamic rules?
+        // becomes: (position, prevPosition) => {
+        //   console.log("becomes", position, prevPosition);
+
+        //   return samePoints(position ?? defaultPosition, prevPosition ?? defaultPosition);
+        // },
       })
     ),
     // whenInRangeChanges: itemEffect(

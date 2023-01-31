@@ -92,6 +92,7 @@ export default function global<
     ...moverState("planeZoom", {
       value: prendyStartOptions.zoomLevels.default,
       valueGoal: prendyStartOptions.zoomLevels.default,
+      // springStopSpeed: 0.001, // NOTE not used in mover yet
     }), // (like scale)
     planePosMoveConfigName: "default", // todo move to mover2dState()
     //
@@ -132,8 +133,8 @@ export default function global<
     depthRenderSize: { width: 1280, height: 720 },
     startRenderSize: { width: 1280, height: 720 }, // gets set when the engine starts, this is to prevent the camera zooming out when resizing the screen
     //
-    ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35 }),
-    ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
+    ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
+    ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
 
     //
     sounds: makeAutomaticSoundStartRefs(),

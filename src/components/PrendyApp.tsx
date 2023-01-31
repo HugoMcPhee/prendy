@@ -6,6 +6,7 @@ import {
   FxaaPostProcess,
   PassPostProcess,
   PostProcess,
+  ScenePerformancePriority,
   ShaderStore,
   TargetCamera,
   Texture,
@@ -80,6 +81,9 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               engine.disableUniformBuffers = true;
               engine.setHardwareScalingLevel(1); // NOTE set this based on the zoom level to prevent objects getting blurry when zooming in
               engine.setSize(1280, 720);
+
+              globalRefs.scene.performancePriority = ScenePerformancePriority.BackwardCompatible;
+
               // engine.
               info.scene.autoClear = false;
               info.scene.autoClearDepthAndStencil = false;
@@ -91,6 +95,8 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               // globalRefs.startRenderSize = { width: engine.getRenderWidth(), height: engine.getRenderHeight() };
 
               engine.onResizeObservable.add(() => {
+                // console.log("bing bong");
+
                 setState({ global: { main: { timeScreenResized: Date.now() } } });
               });
             }}

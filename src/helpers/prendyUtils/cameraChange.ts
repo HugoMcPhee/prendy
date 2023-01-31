@@ -247,6 +247,8 @@ export function get_cameraChangeUtils<
     (scene as any)._skipEvaluateActiveMeshesCompletely = true;
   }
 
+  const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
+
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
     if (globalRefs.backdropVideoTex) {
       const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
@@ -261,7 +263,6 @@ export function get_cameraChangeUtils<
 
     const engine = scene?.getEngine(); // engine
     if (engine) {
-      const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
       const {
         editedHardwareScaling,
         editedPlaneSceneZoom,
@@ -270,6 +271,8 @@ export function get_cameraChangeUtils<
         stretchSceneX,
         stretchSceneY,
       } = getShaderTransformStuff();
+
+      // NOTE TODO: change the shaderTransformStuff to update in state, so it only calcuates if the screenSize or zoom changes
 
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
@@ -284,10 +287,8 @@ export function get_cameraChangeUtils<
         // FIXME , if this updates on each frame, it goes black, only update it once when the screen size changes? to the default zoom, then the extra zooms won't update the depth texture size
         globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
 
-        console.log("getRenderHeight", engine.getRenderHeight);
-        console.log(engine.getRenderHeight);
-
         // this increases the scene rednering resolution if it's zoomed in at all,
+        // engine.setSize(screenHeight * (16 / 9) * 1, screenHeight * 1);
       }
 
       // console.log("new width", screenHeight * (16 / 9), "screenHeight", screenHeight);
@@ -298,7 +299,7 @@ export function get_cameraChangeUtils<
       //   screenHeight * editedHardwareScaling
       // );
 
-      engine.setSize(screenHeight * (16 / 9) * (1 / editedHardwareScaling), screenHeight * (1 / editedHardwareScaling));
+      // engine.setSize(screenHeight * (16 / 9) * 1, screenHeight * 1);
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "planePos",

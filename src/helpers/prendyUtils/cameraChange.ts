@@ -131,8 +131,15 @@ export function get_cameraChangeUtils<
     // if (!globalRefs.scenePlane) return;
 
     // Render target
+    if (globalRefs.backdropPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.backdropPostProcess);
+    }
 
     globalRefs.scene.activeCamera = newCamRef.camera;
+
+    if (globalRefs.backdropPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.backdropPostProcess);
+    }
 
     // console.log("newCamRef.camera");
     // newCamRef.camera.maxZ = 1000;

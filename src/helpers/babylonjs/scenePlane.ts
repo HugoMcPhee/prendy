@@ -80,14 +80,16 @@ export function get_scenePlaneUtils<
 
   function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
     const { planeZoom } = getState().global.main;
+
+    const planeSize = { x: 1280, y: 720 };
+
     const characterPointOnPlane = getPositionOnPlane(meshRef);
 
-    // const { stretchVideoX, stretchVideoY } = getShaderTransformStuff();
     const stretchVideoX = globalRefs.stretchVideoSize.x;
     const stretchVideoY = globalRefs.stretchVideoSize.y;
 
-    let testShiftX = characterPointOnPlane.x / 1280 - 0.5;
-    let testShiftY = 1 - characterPointOnPlane.y / 720 - 0.5;
+    let testShiftX = characterPointOnPlane.x / planeSize.x - 0.5;
+    let testShiftY = 1 - characterPointOnPlane.y / planeSize.y - 0.5;
 
     const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
     const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
@@ -524,6 +526,34 @@ export function get_scenePlaneUtils<
     };
   }
 
+  function getClampedPlanePosInfo(planePos: Point2D) {
+    const planeSize = { x: 1280, y: 720 };
+
+    const stretchVideoX = globalRefs.stretchVideoSize.x;
+    const stretchVideoY = globalRefs.stretchVideoSize.y;
+
+    let newShiftX = planePos.x;
+    let newShiftY = planePos.y;
+
+    const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
+    const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
+
+    if (newShiftX > maxShiftX) newShiftX = maxShiftX;
+    if (newShiftX < -maxShiftX) newShiftX = -maxShiftX;
+    if (newShiftY > maxShiftY) newShiftY = maxShiftY;
+    if (newShiftY < -maxShiftY) newShiftY = -maxShiftY;
+
+    const safeNumbersSafePlanePosition = {
+      x: shortenDecimals(newShiftX),
+      y: shortenDecimals(newShiftY),
+    };
+
+    const wasOutsideBoundary =
+      safeNumbersSafePlanePosition.x !== planePos.x || safeNumbersSafePlanePosition.y !== planePos.y;
+
+    return { newPlanePos: safeNumbersSafePlanePosition, wasOutsideBoundary };
+  }
+
   return {
     getPositionOnPlane,
     updatePlanePositionToFocusOnMesh,
@@ -545,5 +575,7 @@ export function get_scenePlaneUtils<
     checkPointIsInsidePlane,
     //
     getShaderTransformStuff,
+    //
+    getClampedPlanePosInfo,
   };
 }

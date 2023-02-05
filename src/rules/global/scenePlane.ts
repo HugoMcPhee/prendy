@@ -1,24 +1,21 @@
-import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
-import { makeRunMovers } from "pietem-movers";
-import { copyPoint } from "chootils/dist/points2d";
-import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { Effect, RenderTargetTexture, Scene } from "@babylonjs/core";
-import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
-import { PlaceName } from "../../declarations";
-import { get_getSectionVidVideo } from "../../helpers/prendyUtils/sectionVids";
 import delay from "delay";
+import { makeRunMovers } from "pietem-movers";
+import { PlaceName } from "../../declarations";
+import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
+import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_getSectionVidVideo } from "../../helpers/prendyUtils/sectionVids";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function get_globalScenePlaneRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions) {
-  const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(
-    storeHelpers,
-    prendyOptions
-  );
+  const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll, getClampedPlanePosInfo } =
+    get_scenePlaneUtils(storeHelpers, prendyOptions);
   const { setGlobalState } = get_globalUtils(storeHelpers);
-  const { makeRules, getRefs, getState } = storeHelpers;
+  const { makeRules, getRefs, getState, setState } = storeHelpers;
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
   const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
@@ -26,54 +23,30 @@ export function get_globalScenePlaneRules<
   const globalRefs = getRefs().global.main;
 
   return makeRules(({ itemEffect, effect }) => ({
+    whenPlanePositionChangesClamp: effect({
+      run(diffInfo) {
+        const { planePos } = getState().global.main;
+
+        const { newPlanePos, wasOutsideBoundary } = getClampedPlanePosInfo(planePos);
+        if (wasOutsideBoundary) {
+          console.log("wasOutsideBoundary");
+
+          setState({ global: { main: { planePos: newPlanePos } } });
+        }
+      },
+      check: { prop: ["planePos", "planeZoom"], type: "global" },
+      atStepEnd: false,
+      step: "planePosition",
+    }),
     whenPlanePositionChanges: effect({
       run(diffInfo) {
-        // const amountOverEdges = getScenePlaneOverScreenEdgesAmount(planePos);
-        // // FIXME ? Might be better to set the target x an y position based on a safe level for the target zoom
-        // // to prevents sliding at the edges when zooming out
-        // if (
-        //   !(
-        //     amountOverEdges.top < 0 ||
-        //     amountOverEdges.bottom < 0 ||
-        //     amountOverEdges.left < 0 ||
-        //     amountOverEdges.right < 0
-        //   )
-        // ) {
-        //   return;
-        // }
-        // const newPlanePos = copyPoint(planePos);
-        // if (amountOverEdges.bottom < 0) newPlanePos.y += amountOverEdges.bottom;
-        // if (amountOverEdges.top < 0) newPlanePos.y -= amountOverEdges.top;
-        // if (amountOverEdges.left < 0) newPlanePos.x += amountOverEdges.left;
-        // if (amountOverEdges.right < 0) newPlanePos.x -= amountOverEdges.right;
-        // setGlobalState({ planePos: newPlanePos });
-        // use logic from updatePlanePositionToFocusOnMesh to correct how it's over edges (maybe a reusable function)
-        // it clamps the animation values so they dont spring over
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
-        // const { planeZoom, planePosGoal } = globalState;
-        // console.log("whenPlanePositionChanges", planePos.x, planePos.y);
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePos.x, planePos.y);
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
-
-        const { planePos, planePosGoal, planeZoom, planeZoomGoal, nowPlaceName } = getState().global.main;
-        // console.log("diffInfo", diffInfo.propsChangedBool.global.main);
+        const { planePos } = getState().global.main;
         const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
         const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
 
-        // if (diffInfo.propsChangedBool.global.main)
-
         const scene = globalRefs.scene as Scene | null;
         if (zoomChanged) {
-          const {
-            editedHardwareScaling,
-            editedPlaneSceneZoom,
-            stretchVideoX,
-            stretchVideoY,
-            stretchSceneX,
-            stretchSceneY,
-          } = getShaderTransformStuff();
-          // console.log("globalRefs", globalRefs);
+          const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
             "stretchVideoAmount",
@@ -102,8 +75,7 @@ export function get_globalScenePlaneRules<
         }
       },
       check: { prop: ["planePos", "planeZoom"], type: "global" },
-      atStepEnd: false,
-      // atStepEnd: true,
+      atStepEnd: true,
       step: "planePosition",
     }),
     whenPlanePositionGoalChanges: itemEffect({

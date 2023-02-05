@@ -307,10 +307,12 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
     // console.log("characterPointOnPlane", characterPointOnPlane.x / 1280, characterPointOnPlane.y / 720);
 
+    const planeSize = { x: 1280, y: 720 };
+
     const globalRefs = getRefs().global.main;
 
-    let testShiftX = (characterPointOnPlane.x / 1280 - 0.5) * planeZoom;
-    let testShiftY = (1 - characterPointOnPlane.y / 720 - 0.5) * planeZoom;
+    let testShiftX = (characterPointOnPlane.x / planeSize.x - 0.5) * planeZoom;
+    let testShiftY = (1 - characterPointOnPlane.y / planeSize.y - 0.5) * planeZoom;
     const maxShift = (planeZoom - 1) / 2;
 
     if (testShiftX > maxShift) testShiftX = maxShift;

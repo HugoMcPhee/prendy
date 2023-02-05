@@ -79,17 +79,17 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
       if (!forCharacter) return;
       const { dollState, dollName } = getCharDollStuff(forCharacter) ?? {};
       if (!dollState || !dollName) return;
-      const { positionOnPlaneScene } = dollState;
+      const { positionOnScreen } = dollState;
 
       // const playerCameraDistance =
       //   meshRef && camera
       //     ? Vector3.Distance(meshRef?.position, camera?.position)
       //     : 4;
 
-      const newPositionX = positionOnPlaneScene.x;
+      const newPositionX = positionOnScreen.x;
       let yOffset = (refs.theTextRectangle.current?.offsetHeight ?? 190) / 2;
 
-      const newPositionY = positionOnPlaneScene.y - yOffset;
+      const newPositionY = positionOnScreen.y - yOffset;
 
       theSpringApi.start({
         position: [newPositionX, newPositionY],
@@ -103,7 +103,7 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
         positionMiniBubbleToCharacter();
       },
       [
-        { type: ["dolls"], name: forCharacter, prop: ["positionOnPlaneScene"] },
+        { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },

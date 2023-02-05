@@ -133,6 +133,9 @@ export default function global<
     depthRenderSize: { width: 1280, height: 720 },
     startRenderSize: { width: 1280, height: 720 }, // gets set when the engine starts, this is to prevent the camera zooming out when resizing the screen
     //
+    stretchVideoSize: { x: 1, y: 1 },
+
+    //
     ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
     ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
 

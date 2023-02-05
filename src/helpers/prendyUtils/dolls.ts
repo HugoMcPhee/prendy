@@ -1,7 +1,7 @@
 import { AbstractMesh, AnimationGroup, Bone, Effect, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { subtractPoints } from "chootils/dist/points2d";
+import { Point2D, subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
@@ -325,15 +325,15 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
 
     const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
       pointOnPlane: characterPointOnPlane,
-      planePosition: instant ? planePosGoal : planePos,
+      planePos: instant ? planePosGoal : planePos,
+      planeZoom,
     });
-    const positionOnPlaneScene = convertScreenPointToPlaneScenePoint(characterPointOnScreen);
 
     const newFocusedDollIsInView =
       dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
 
     setState({
-      dolls: { [dollName]: { positionOnPlaneScene } },
+      dolls: { [dollName]: { positionOnScreen: characterPointOnScreen } },
       global: { main: { focusedDollIsInView: newFocusedDollIsInView } },
     });
   }

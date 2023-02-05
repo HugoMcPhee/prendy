@@ -128,7 +128,7 @@ export function get_cameraChangeUtils<
 
     if (scene === null) return;
     if (!newCamRef.camera) return;
-    if (!globalRefs.scenePlane) return;
+    // if (!globalRefs.scenePlane) return;
 
     // Render target
 
@@ -154,7 +154,7 @@ export function get_cameraChangeUtils<
 
     if (!globalRefs.depthRenderTarget) {
       globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
-      console.log("globalRefs.depthRenderTarget", globalRefs.depthRenderTarget);
+      // globalRefs.depthRenderTarget?.resize({ width: 1280, height: 720 });
     }
 
     globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
@@ -162,16 +162,6 @@ export function get_cameraChangeUtils<
     if (!scene.customRenderTargets.length) {
       scene.customRenderTargets = [globalRefs.depthRenderTarget];
       addMeshesToRenderLists(newCamRef);
-    }
-
-    // Plane material
-    if (!globalRefs.scenePlaneMaterial) {
-      globalRefs.scenePlaneMaterial = true;
-
-      globalRefs.scenePlaneMaterial = new ShaderMaterial("backdropAndDepthShader", scene, shaders.backdropAndDepth, {
-        attributes: ["position", "uv"],
-        uniforms: ["worldViewProjection"],
-      });
     }
 
     if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
@@ -189,19 +179,39 @@ export function get_cameraChangeUtils<
         // globalRefs.scene.engine // engine
       );
 
+      // const fxaaPP = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+
+      // fxaaPP.
+
       // // const appliedProcess = postProcess.apply();
 
       globalRefs.backdropPostProcess.onApply = (effect) => {
-        globalRefs.backdropPostProcessEffect = effect;
-        effect.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
+        if (!globalRefs.backdropPostProcessEffect) {
+          globalRefs.backdropPostProcessEffect = effect;
+          console.log("reapplying");
 
-        const { planePos, planePosGoal, planeZoom } = getState().global.main;
+          const { planePos, planePosGoal, planeZoom } = getState().global.main;
 
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", planePosGoal.x, planePosGoal.y);
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchSceneAmount", planeZoom, planeZoom);
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+            "planePos",
+            planePosGoal.x,
+            planePosGoal.y
+          );
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+            "stretchSceneAmount",
+            planeZoom,
+            planeZoom
+          );
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
-        updateVideoTexturesForNewPlace(nowPlaceName);
+          // setState({ global: { main: { timeScreenResized: Date.now() } } });
+          setTimeout(() => {
+            setState({ global: { main: { timeScreenResized: Date.now() } } });
+          }, 10);
+
+          updateVideoTexturesForNewPlace(nowPlaceName);
+        }
+        updateVideoTexture();
       };
     }
 
@@ -247,77 +257,20 @@ export function get_cameraChangeUtils<
     (scene as any)._skipEvaluateActiveMeshesCompletely = true;
   }
 
-  const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
-
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
     if (globalRefs.backdropVideoTex) {
       const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
       if (backdropVidElement) globalRefs.backdropVideoTex.updateVid(backdropVidElement);
     }
 
+    updateVideoTexture();
+  }
+
+  function updateVideoTexture() {
+    // if (Math.random() > 0.7) {
     globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
-
-    const { planePos, planePosGoal, planeZoom, planeZoomGoal } = getState().global.main;
-
-    const scene = globalRefs.scene as Scene | null;
-
-    const engine = scene?.getEngine(); // engine
-    if (engine) {
-      const {
-        editedHardwareScaling,
-        editedPlaneSceneZoom,
-        stretchVideoX,
-        stretchVideoY,
-        stretchSceneX,
-        stretchSceneY,
-      } = getShaderTransformStuff();
-
-      // NOTE TODO: change the shaderTransformStuff to update in state, so it only calcuates if the screenSize or zoom changes
-
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
-
-      if (engine._hardwareScalingLevel !== editedHardwareScaling) {
-        engine.setHardwareScalingLevel(editedHardwareScaling);
-        const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
-        const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
-
-        engine.setSize(newRenderWidth, newRenderHeight);
-
-        // FIXME , if this updates on each frame, it goes black, only update it once when the screen size changes? to the default zoom, then the extra zooms won't update the depth texture size
-        globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
-
-        // this increases the scene rednering resolution if it's zoomed in at all,
-        // engine.setSize(screenHeight * (16 / 9) * 1, screenHeight * 1);
-      }
-
-      // console.log("new width", screenHeight * (16 / 9), "screenHeight", screenHeight);
-      // console.log(
-      //   "new width",
-      //   screenHeight * (16 / 9) * editedHardwareScaling,
-      //   "screenHeight",
-      //   screenHeight * editedHardwareScaling
-      // );
-
-      // engine.setSize(screenHeight * (16 / 9) * 1, screenHeight * 1);
-
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        "planePos",
-        planePos.x * stretchVideoX,
-        planePos.y * stretchVideoY
-      );
-      // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        "stretchVideoAmount",
-        stretchVideoX,
-        stretchVideoY
-      );
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        "stretchSceneAmount",
-        stretchSceneX,
-        stretchSceneY
-      );
-    }
+    // }
+    globalRefs?.backdropPostProcessEffect?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
   }
 
   function applyProbeToAllDollMaterials() {
@@ -332,7 +285,7 @@ export function get_cameraChangeUtils<
 
     if (scene === null) return;
     // if (!newCamRef.camera) return;
-    if (!globalRefs.scenePlane) return;
+    // if (!globalRefs.scenePlane) return;
 
     forEach(modelNamesLoaded, (modelName: any & string) => {
       const modelRefs = getRefs().models[modelName];
@@ -389,7 +342,7 @@ export function get_cameraChangeUtils<
 
     if (scene === null) return;
     // if (!newCamRef.camera) return;
-    if (!globalRefs.scenePlane) return;
+    // if (!globalRefs.scenePlane) return;
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     particleSystemNames.forEach((particleSystemName) => {

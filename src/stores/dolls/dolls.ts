@@ -57,7 +57,7 @@ export default function dolls<
       }), // could have semnticolor icons split by numbers too
       ...moverState("rotationY"),
       //
-      positionOnPlaneScene: defaultPosition2d(),
+      positionOnScreen: defaultPosition2d(),
       // nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName],
       // animation Weights mover
       ...makeModelAnimWeightsMoverState(safeModelName)("animWeights"),

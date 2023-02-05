@@ -16,9 +16,9 @@ export function get_ScenePlane<StoreHelpers extends PrendyStoreHelpers, PrendyOp
 
   return function ScenePlane(_: Props) {
     const planeRef = useCallback((node) => {
-      globalRefs.scenePlane = node;
-      if (!globalRefs.scenePlane) return;
-      globalRefs.scenePlane.alwaysSelectAsActiveMesh = true;
+      // globalRefs.scenePlane = node;
+      // if (!globalRefs.scenePlane) return;
+      // globalRefs.scenePlane.alwaysSelectAsActiveMesh = true;
       fitScenePlaneToScreen(globalRefs.scenePlane);
     }, []);
 
@@ -35,6 +35,7 @@ export function get_ScenePlane<StoreHelpers extends PrendyStoreHelpers, PrendyOp
         },
       }
     );
+    // return null;
     return (
       <plane
         ref={planeRef}
@@ -42,7 +43,7 @@ export function get_ScenePlane<StoreHelpers extends PrendyStoreHelpers, PrendyOp
         // size={0.25}
         isVisible={false}
         size={0.1}
-        billboardMode={AbstractMesh.BILLBOARDMODE_ALL}
+        // billboardMode={AbstractMesh.BILLBOARDDE_NONE}
         // layerMask={23}
       />
     );

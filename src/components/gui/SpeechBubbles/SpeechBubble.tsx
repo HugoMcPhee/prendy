@@ -18,8 +18,13 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
-  const { getState, useStore, useStoreEffect } = storeHelpers;
-  const { viewCenterPoint, getViewSize } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
+  const { viewCenterPoint, getViewSize, getScreenSize, convertPointOnPlaneToPointOnScreen } = get_scenePlaneUtils(
+    storeHelpers,
+    prendyStartOptions
+  );
+
+  const globalRefs = getRefs().global.main;
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
@@ -115,37 +120,53 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
 
     const positionSpeechBubbleToCharacter = useCallback(() => {
       const { forCharacter } = getState().speechBubbles[name];
+      const { planePos } = getState().global.main;
       if (!forCharacter) return;
       const { dollState, dollName } = getCharDollStuff(forCharacter as CharacterName) ?? {};
 
       if (!dollState || !dollName) return;
       const { focusedDoll, focusedDollIsInView } = getState().global.main;
-      const positionOnPlaneScene = dollState.positionOnPlaneScene;
-      // console.log(positionOnPlaneScene);
+      const positionOnScreen = dollState.positionOnScreen;
+      // const positionOnScreen = { x: 1280 / 2, y: 720 / 2 };
+      // console.log(positionOnScreen);
 
       // BUBBLE_WIDTH
       // if (dollName === focusedDoll && !focusedDollIsInView) {
-      //   positionOnPlaneScene = { x: 0, y: 0 };
+      //   positionOnScreen = { x: 0, y: 0 };
       // }
 
-      const viewSize = getViewSize();
+      const viewSize = getScreenSize();
+      const stretchVideoX = globalRefs.stretchVideoSize.x;
+      const stretchVideoY = globalRefs.stretchVideoSize.y;
+
+      // console.log(stretchVideoX);
+      // console.log(stretchVideoY);
 
       const farLeft = -viewSize.width / 2;
       const farRight = viewSize.width / 2;
       const farTop = -viewSize.height / 2;
       const farBottom = viewSize.height / 2;
+      // const farLeft = 0;
+      // const farRight = 1280;
+      // const farTop = 0;
+      // const farBottom = 720;
 
       const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
       const halfBubbleHeight = bubbleHeight / 2;
       const halfBubbleWidth = BUBBLE_WIDTH / 2;
       const halfTriangleSize = TRIANGLE_SIZE / 2;
-      // console.log(positionOnPlaneScene.x * 2);
+      // console.log(positionOnScreen.x * 2);
+      // console.log(positionOnScreen);
 
-      let newPositionX = positionOnPlaneScene.x;
+      const screenSize = getScreenSize();
+
+      // need function to get position on screen
+
+      let newPositionX = positionOnScreen.x - screenSize.width / 2;
 
       let yOffset = bubbleHeight / 2;
 
-      let newPositionY = positionOnPlaneScene.y - yOffset;
+      let newPositionY = positionOnScreen.y - yOffset - screenSize.height / 2;
 
       // Keep the focused dolls speech bubble inside the view
       if (dollName === focusedDoll) {
@@ -164,6 +185,8 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
         }
       }
 
+      // console.log("newPositionX", newPositionX);
+
       theSpringApi.start({
         position: [newPositionX, newPositionY],
         immediate: true,
@@ -179,7 +202,7 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
         {
           type: ["dolls"],
           name: forCharacter,
-          prop: ["positionOnPlaneScene"],
+          prop: ["positionOnScreen"],
         },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },

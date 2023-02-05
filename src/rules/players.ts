@@ -9,6 +9,23 @@ import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../stores/typedStoreHe
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
+const downRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const downRayHelper = new RayHelper(downRay);
+const downRayDirection = new Vector3(0, -1, 0);
+const downRayRelativeOrigin = new Vector3(0, 1, 0);
+
+const RAY_FORWARD_DIST = 0.25;
+const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const forwardRayHelper = new RayHelper(forwardRay);
+const forwardRayDirection = downRayDirection;
+const forwardRayRelativeOrigin = new Vector3(
+  // dollPosRefs.velocity.x * 0.1,
+  0,
+  3,
+  RAY_FORWARD_DIST
+  // dollPosRefs.velocity.z * 0.1
+);
+
 export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
   storeHelpers: StoreHelpers,
   PRENDY_OPTIONS: PrendyOptions,
@@ -336,18 +353,17 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
           // console.log("falling");
           // fall faster than going up
 
-          // check if they've reached the ground
-          const ray = new Ray(Vector3.Zero(), Vector3.Zero());
-          const rayHelper = new RayHelper(ray);
-          rayHelper.attachToMesh(
+          // check if they've reached the gr  ound
+
+          downRayHelper.attachToMesh(
             /*mesh*/ meshRef,
-            /*direction*/ new Vector3(0, -1, 0),
-            /*relativeOrigin*/ new Vector3(0, 1, 0), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
+            /*direction*/ downRayDirection,
+            /*relativeOrigin*/ downRayRelativeOrigin, // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
             /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
           );
 
           const centerPick = scene.pickWithRay(
-            ray,
+            downRay,
             (mesh) => {
               return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
             },
@@ -382,19 +398,11 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
 
               const RAY_FORWARD_DIST = 0.25;
 
-              const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
-              const forwardRayHelper = new RayHelper(forwardRay);
               forwardRayHelper.attachToMesh(
                 /*mesh*/ meshRef,
-                /*direction*/ new Vector3(0, -1, 0),
-                /*relativeOrigin*/ new Vector3(
-                  // dollPosRefs.velocity.x * 0.1,
-                  0,
-                  3,
-                  RAY_FORWARD_DIST
-                  // dollPosRefs.velocity.z * 0.1
-                ), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
-                /*length*/ 6 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
+                forwardRayDirection,
+                forwardRayRelativeOrigin,
+                /*length*/ 6
               );
 
               const forwardPick = scene.pickWithRay(

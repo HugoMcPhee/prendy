@@ -82,7 +82,9 @@ export function get_scenePlaneUtils<
     const { planeZoom } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef);
 
-    const { editedHardwareScaling, editedPlaneSceneZoom, stretchVideoX, stretchVideoY } = getShaderTransformStuff();
+    // const { stretchVideoX, stretchVideoY } = getShaderTransformStuff();
+    const stretchVideoX = globalRefs.stretchVideoSize.x;
+    const stretchVideoY = globalRefs.stretchVideoSize.y;
 
     let testShiftX = characterPointOnPlane.x / 1280 - 0.5;
     let testShiftY = 1 - characterPointOnPlane.y / 720 - 0.5;
@@ -127,9 +129,9 @@ export function get_scenePlaneUtils<
 
   function getSceneEngine() {
     const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
-
-    if (!globalRefs.scenePlane) return getEngine();
-    return globalRefs.scenePlane.getEngine();
+    return getEngine();
+    // if (!globalRefs.scenePlane) return getEngine();
+    // return globalRefs.scenePlane.getEngine();
   }
 
   function getViewSize() {
@@ -139,6 +141,10 @@ export function get_scenePlaneUtils<
       width: engine.getRenderWidth(),
       height: engine.getRenderHeight(),
     };
+  }
+
+  function getScreenSize() {
+    return { width: window.innerWidth, height: window.innerHeight };
   }
 
   function getPlaneSize(useGoalZoom = false) {
@@ -176,10 +182,9 @@ export function get_scenePlaneUtils<
   }
 
   function fitScenePlaneToScreen(thePlane: Mesh) {
-    const planeSize = getPlaneSize();
-
-    thePlane.scaling.y = planeSize.height;
-    thePlane.scaling.x = planeSize.width;
+    // const planeSize = getPlaneSize();
+    // thePlane.scaling.y = planeSize.height;
+    // thePlane.scaling.x = planeSize.width;
   }
 
   // This is before ScnePlane's moved!
@@ -244,30 +249,89 @@ export function get_scenePlaneUtils<
   // This includes after the scenePlane moved
   function convertPointOnPlaneToPointOnScreen({
     pointOnPlane, // point on plane goes from 0 - 1280, 0 - 720, when the point is from the top left to bottom right
-    planePosition, // plane position is 0 when centered, then its the amount of offset in pixels
+    planePos, // plane position is 0 when centered, then its the amount of offset (in percentage?)
+    planeZoom,
   }: {
     pointOnPlane: Point2D;
-    planePosition: Point2D;
+    planePos: Point2D;
+    planeZoom: number;
   }) {
-    if (!planePosition) return defaultPosition();
-    const viewSize = getViewSize();
-    const planeSize = getPlaneSize();
+    if (!planePos) return defaultPosition();
 
-    const unmovedPointOnScreen = convertPointOnPlaneToUnmovedPointOnScreen(pointOnPlane);
+    const screenSize = { x: window.innerWidth, y: window.innerHeight };
+    const planeSize = { x: 1280, y: 720 };
 
-    const amountClippedView = {
-      x: planeSize.width - viewSize.width,
-      y: planeSize.height - viewSize.height,
+    const planePosPixels = {
+      x: planePos.x * planeSize.x,
+      y: planePos.y * planeSize.y,
     };
 
-    const pointOnScreen = {
-      x: unmovedPointOnScreen.x + planePosition.x - amountClippedView.x / 2,
-      y: unmovedPointOnScreen.y + -planePosition.y - amountClippedView.y / 2,
+    const center = { x: planeSize.x / 2, y: planeSize.y / 2 };
+
+    // somehow this works
+    function transformIt(point: Point2D, scale: number, translation: Point2D = { x: 0, y: 0 }): Point2D {
+      const transformedPoint = {
+        x: (point.x + translation.x - center.x) * scale + center.x,
+        y: (point.y - translation.y - center.y) * scale + center.y,
+      };
+      return transformedPoint;
+    }
+
+    const transformedPoint = transformIt(pointOnPlane, planeZoom, {
+      x: -planePosPixels.x,
+      y: -planePosPixels.y,
+    });
+
+    const planeToScreenSize = {
+      x: screenSize.x / planeSize.x,
+      y: screenSize.y / planeSize.y,
     };
 
-    // maybe just get point on plane, then add the plane position?
+    const planeRatio = planeSize.x / planeSize.y; // 16/9
+    const screenRatio = screenSize.x / screenSize.y;
+    const screenIsThinnerThenVideo = screenRatio < planeRatio;
 
-    return pointOnScreen;
+    let heightDifference = 0;
+    let widthDifference = 0;
+
+    let pixelScaler = 1;
+
+    let planeRelativeScreenSize = {
+      x: screenSize.x,
+      y: screenSize.y,
+    };
+
+    if (screenIsThinnerThenVideo) {
+      planeRelativeScreenSize = {
+        x: screenSize.x / planeToScreenSize.y,
+        y: screenSize.y / planeToScreenSize.y,
+      };
+
+      widthDifference = (planeRelativeScreenSize.x - planeSize.x) / 2;
+      // scale based on fixed height
+      pixelScaler = planeToScreenSize.y;
+    } else {
+      planeRelativeScreenSize = {
+        x: screenSize.x / planeToScreenSize.x,
+        y: screenSize.y / planeToScreenSize.x,
+      };
+
+      heightDifference = (planeRelativeScreenSize.y - planeSize.y) / 2;
+      // scale based on fixed width
+      pixelScaler = planeToScreenSize.x;
+    }
+
+    // NOTE this is only working when it's thinner
+
+    // IN THIN MODE, the height is consistant,
+    // in WIDE mode the width is consistnat
+
+    let positionOnScreen = {
+      x: (transformedPoint.x + widthDifference) * pixelScaler,
+      y: (transformedPoint.y + heightDifference) * pixelScaler,
+    };
+
+    return positionOnScreen;
   }
 
   //
@@ -304,7 +368,7 @@ export function get_scenePlaneUtils<
 
   function getScenePlaneOverScreenEdgesAmount(newPosition: { x: number; y: number }) {
     // const zoomLevel = getState().global.main.zoomLevel;
-    if (!globalRefs.scenePlane) return { top: 0, bottom: 0, left: 0, right: 0 };
+    // if (!globalRefs.scenePlane) return { top: 0, bottom: 0, left: 0, right: 0 };
 
     const screenPosition = { x: 0, y: 0 };
     const viewSize = getViewSize();
@@ -375,7 +439,7 @@ export function get_scenePlaneUtils<
   }
 
   function applyPlanePosition(planePosition: { x: number; y: number }) {
-    if (!globalRefs.scenePlane) return;
+    // if (!globalRefs.scenePlane) return;
     // And also ideally take zoom into account somehow (keep a zoom level / scale variable to alter the xywidthheight stuff)
     // fitScenePlaneToScreen(globalRefs.scenePlane);
     // also have it smothely go towards it? spring? :)
@@ -403,6 +467,7 @@ export function get_scenePlaneUtils<
   // new
   function getShaderTransformStuff() {
     const { planeZoom } = getState().global.main;
+    // const planeZoom = prendyStartOptions.zoomLevels.default;
 
     // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
     const screenWidth = window.innerWidth;
@@ -464,6 +529,7 @@ export function get_scenePlaneUtils<
     updatePlanePositionToFocusOnMesh,
     focusScenePlaneOnFocusedDoll,
     getViewSize,
+    getScreenSize,
     getPlaneSize,
     // planeCenterPoint,
     viewCenterPoint,

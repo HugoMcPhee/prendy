@@ -1,4 +1,4 @@
-import { PBRMaterial } from "@babylonjs/core";
+import { Mesh, PBRMaterial } from "@babylonjs/core";
 import { makeRunMovers } from "pietem-movers";
 import { forEach } from "chootils/dist/loops";
 import { samePoints as samePoints3d, subtractPointsSafer } from "chootils/dist/points3d";
@@ -53,12 +53,7 @@ export function get_dollDynamicRules<
         saveModelStuffToDoll({ dollName, modelName });
       },
       name: `doll_waitForModelToLoad${dollName}_${modelName}`,
-      check: {
-        type: "models",
-        name: modelName,
-        prop: "isLoaded",
-        becomes: true,
-      },
+      check: { type: "models", name: modelName, prop: "isLoaded", becomes: true },
       atStepEnd: true,
     })),
     // When the plaec and all characters are loaded
@@ -92,11 +87,7 @@ export function get_dollDynamicRules<
           // setupLightMaterial(dollRefs.materialRef);
         },
         name: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-        check: {
-          type: "global",
-          prop: ["isLoadingBetweenPlaces"],
-          becomes: false,
-        },
+        check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },
         atStepEnd: true,
       })
     ),
@@ -199,9 +190,7 @@ export function get_dollRules<
     }),
     whenAnimWeightsGoalChanged: itemEffect({
       run({ itemName: dollName }) {
-        setState({
-          dolls: { [dollName]: { animWeightsIsMoving: true } },
-        });
+        setState({ dolls: { [dollName]: { animWeightsIsMoving: true } } });
       },
       check: { type: "dolls", prop: "animWeightsGoal" },
       step: "dollAnimation2",
@@ -209,11 +198,7 @@ export function get_dollRules<
     }),
     whenAnimationWeightsStartedMoving: itemEffect({
       run({ itemName: dollName }) {
-        runMoverMulti({
-          name: dollName,
-          type: "dolls",
-          mover: "animWeights",
-        });
+        runMoverMulti({ name: dollName, type: "dolls", mover: "animWeights" });
       },
       check: { type: "dolls", prop: "animWeightsIsMoving", becomes: true },
       step: "dollAnimationStartMovers",
@@ -245,13 +230,9 @@ export function get_dollRules<
           // stops playing if the weight is 0ish
 
           if (animIsStopped) {
-            if (aniRef?.isPlaying) {
-              aniRef.stop();
-            }
+            if (aniRef?.isPlaying) aniRef.stop();
           } else {
-            if (!aniRef?.isPlaying) {
-              aniRef.start(itemState.animationLoops);
-            }
+            if (!aniRef?.isPlaying) aniRef.start(itemState.animationLoops);
           }
 
           aniRef?.setWeightForAllAnimatables(animWeights[aniName]);
@@ -283,17 +264,10 @@ export function get_dollRules<
           let editedYRotation = oldYRotation + shortestAngle;
 
           setState({
-            dolls: {
-              [dollName]: {
-                rotationYGoal: editedYRotation,
-                rotationYIsMoving: true,
-              },
-            },
+            dolls: { [dollName]: { rotationYGoal: editedYRotation, rotationYIsMoving: true } },
           });
         } else {
-          setState({
-            dolls: { [dollName]: { rotationYIsMoving: true } },
-          });
+          setState({ dolls: { [dollName]: { rotationYIsMoving: true } } });
         }
       },
       check: { type: "dolls", prop: "rotationYGoal" },
@@ -321,11 +295,7 @@ export function get_dollRules<
     }),
     whenStartedRotating: itemEffect({
       run({ itemName: dollName }) {
-        runMover({
-          name: dollName,
-          type: "dolls",
-          mover: "rotationY",
-        });
+        runMover({ name: dollName, type: "dolls", mover: "rotationY" });
       },
       check: { type: "dolls", prop: "rotationYIsMoving", becomes: true },
       atStepEnd: true,
@@ -350,11 +320,12 @@ export function get_dollRules<
         // }
 
         if (itemRefs.checkCollisions) {
-          const newMeshPosition = point3dToVector3(newPosition);
           const { editedPosition, positionWasEdited, collidedPosOffset } = setGlobalPositionWithCollisions(
             itemRefs.meshRef,
-            newMeshPosition
+            newPosition
           );
+
+          // (itemRefs.meshRef as Mesh).position = newMeshPosition;
 
           // if a collision cauhed the mesh to not reach the position, update the position state
           if (positionWasEdited) {
@@ -363,16 +334,13 @@ export function get_dollRules<
             let newYRotation = getState().dolls[dollName].rotationYGoal;
 
             const positionOffset = subtractPointsSafer(prevPosition, editedPosition);
-            newYRotation = getVectorAngle({
-              x: positionOffset.z,
-              y: positionOffset.x,
-            });
+            newYRotation = getVectorAngle({ x: positionOffset.z, y: positionOffset.x });
             // console.log("collidedPosOffset", collidedPosOffset, "positionOffset", positionOffset);
 
             setState(() => ({
               dolls: {
                 [dollName]: {
-                  position: vector3ToSafePoint3d(editedPosition),
+                  position: editedPosition,
                   rotationYGoal: shouldChangeAngle ? newYRotation : undefined,
                 },
               },
@@ -384,6 +352,8 @@ export function get_dollRules<
           //
           //   console.log("itemRefs.checkCollisions", itemRefs.checkCollisions);
           // if (!itemRefs.checkCollisions) {
+          console.log("not checking collisions and setting position");
+
           itemRefs.meshRef.setAbsolutePosition(point3dToVector3(newPosition));
           // }
           // }

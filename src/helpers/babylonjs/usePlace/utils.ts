@@ -39,18 +39,6 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
     return videoBlob;
   }
 
-  // async function makeVideoElementFromBlob(videoBlob: Blob) {
-  //   const arrayBufferResult = await videoBlob.arrayBuffer();
-  //   const saferVideoBlob = new Blob([arrayBufferResult]);
-  //
-  //   const videoElement = document.createElement("video");
-  //   videoElement.controls = false;
-  //   videoElement.src = window.URL.createObjectURL(saferVideoBlob); // videoElement.src = filepath;
-  //   videoElement.muted = true; // allow playing without interaction
-  //   videoElement.preload = "auto"; // prevent first frame blank when playing
-  //   return videoElement;
-  // }
-
   async function loadNowVideosForPlace() {
     const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
     const { nowCamName, wantedCamName } = getState().places[nowPlaceName];

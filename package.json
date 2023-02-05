@@ -28,7 +28,7 @@
     "@babylonjs/inspector": "5.44.0",
     "@babylonjs/loaders": "5.44.0",
     "@types/react": "^18.0.15",
-    "chootils": "^0.3.4",
+    "chootils": "^0.3.8",
     "delay": "^5.0.0",
     "pietem": "^0.8.5",
     "pietem-movers": "^0.5.7",

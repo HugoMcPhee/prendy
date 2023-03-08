@@ -304,7 +304,7 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
         frameDuration,
       }) {
         // console.log(parseInt(frameDuration));
-
+        // return false;
         // NOTE should be a dynamic rule for each player listening to frame
         const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName } = getState().global.main;
         const { timerSpeed } = globalRefs;

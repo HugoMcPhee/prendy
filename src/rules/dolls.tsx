@@ -352,7 +352,7 @@ export function get_dollRules<
           //
           //   console.log("itemRefs.checkCollisions", itemRefs.checkCollisions);
           // if (!itemRefs.checkCollisions) {
-          console.log("not checking collisions and setting position");
+          console.log("not checking collisions and setting position", dollName);
 
           itemRefs.meshRef.setAbsolutePosition(point3dToVector3(newPosition));
           // }
@@ -458,12 +458,13 @@ export function get_dollRules<
         const { dollName } = getState().characters[playerCharacter];
         if (!dollName) return;
 
-        // NOTE TODO ideally add for each character autamotically as a dynamic rule?
+        // NOTE TODO ideally add for each character automatically as a dynamic rule?
         forEach(dollNames, (dollName) => updateDollScreenPosition({ dollName: dollName, instant: false }));
       },
       // this happens before rendering because its in "derive" instead of "subscribe"
       check: { type: "global", prop: ["planePos", "planeZoom"] },
       step: "planePosition",
+      atStepEnd: true,
     }),
   }));
 }

@@ -9,6 +9,15 @@ TODO
 - setCamera type not limited to place
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
+- get better resolutions and antianiliasing, now that the shaders being used
+
+v0.9.3 todo?
+
+- update minibubble to use same position as speech bubble
+
+v0.9.3
+
+- lots of perforamnce improvements
 
 v0.9.2
 

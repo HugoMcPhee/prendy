@@ -74,6 +74,8 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
     }, [measuredHeight, theSpringApi]);
 
     const positionMiniBubbleToCharacter = useCallback(() => {
+      // TODO use the same code from SpeechBubble
+
       const { forCharacter } = getState().miniBubbles[name];
 
       if (!forCharacter) return;

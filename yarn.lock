@@ -194,15 +194,15 @@ loose-envify@^1.1.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-pietem-movers@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/pietem-movers/-/pietem-movers-0.5.7.tgz#05d374cb1369e8aac565aed2f7415d1de0312e90"
-  integrity sha512-JB8lHZwpHOJxRnrEBh5f2nQTa5boK58wIskQIV+ySeqmbDU+L3xeFMVxsWEAVQXpgIuzxfH8SkrAuwvkyUdjRQ==
+pietem-movers@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/pietem-movers/-/pietem-movers-0.6.0.tgz#b90f4cd2cf16f8b3d23e602b993449200fb7f5ac"
+  integrity sha512-8p9UWs+OqMsS36qXz6/ubJezpvh0ohRZ1VKf5k3Xy8xvkLj7xPQFNBUOQXLh3nylkFn/Naby3BSurC1764ra6Q==
 
-pietem@^0.8.5:
-  version "0.8.5"
-  resolved "https://registry.yarnpkg.com/pietem/-/pietem-0.8.5.tgz#9cf18202081914cc4aa907e9533ff4b81ce2be7a"
-  integrity sha512-kNoPlZzCQzpSPiu0O6pQ9SB5CoCG3YhVKUnTKEWjhHSkUq4egCSMCabwzbtnoKRozGFJh19uhKTGiwbB6bb13g==
+pietem@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/pietem/-/pietem-0.9.0.tgz#5df1f83ba8ce48d565f2e8b5f57ff459b7b47d3a"
+  integrity sha512-OIiTpW9tGalY0VBt6W6dPOIU5mOCp75t9bV2UNY5CBZ6KIWJM/8feoChXglNnzN5lOKalYe546LcW/f5cnIsWw==
 
 react-babylonjs@^3.1.9:
   version "3.1.15"

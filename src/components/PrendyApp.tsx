@@ -2,27 +2,20 @@ import {
   Camera,
   Color3,
   Color4,
-  Effect,
   FxaaPostProcess,
-  PassPostProcess,
-  PostProcess,
   ScenePerformancePriority,
-  ShaderStore,
   TargetCamera,
-  Texture,
   Vector3,
 } from "@babylonjs/core";
+import { toRadians } from "chootils/dist/speedAngleDistance";
 import React, { ReactNode, useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
-import { toRadians } from "chootils/dist/speedAngleDistance";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
 import { PrendyAssets, PrendyOptions } from "../declarations";
 import loadStyles from "../helpers/loadStyles";
+import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { get_ScreenGui } from "./gui/ScreenGui";
 import { get_LoadingModels } from "./LoadingModels";
-import { get_ScenePlane } from "./ScenePlane";
-import shaders from "../helpers/shaders";
 // import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 loadStyles();
@@ -41,7 +34,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
 
   const ScreenGuiDom = get_ScreenGui(storeHelpers, prendyStartOptions, prendyAssets);
   const LoadingModels = get_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets);
-  const ScenePlane = get_ScenePlane(storeHelpers, prendyStartOptions);
 
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
 
@@ -55,7 +47,7 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
       [globalRefs]
     );
 
-    useEffect(() => setState({ global: { main: { frameTick: Date.now() } } }), []);
+    useEffect(() => setState({ global: { main: { frameTick: 1 } } }), []);
 
     return (
       <div id="app" style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
@@ -67,7 +59,7 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
             disableWebGL2Support: false,
             powerPreference: "high-performance",
 
-            adaptToDeviceRatio: true, // NOTE this can mess with the calculating video stretch with engine.getRenderWidth(), but it does make the edges cleaner and higher res!
+            // adaptToDeviceRatio: true, // NOTE this can mess with the calculating video stretch with engine.getRenderWidth(), but it does make the edges cleaner and higher res!
             // adaptToDeviceRatio: false,
           }}
         >
@@ -88,6 +80,18 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               info.scene.autoClear = false;
               info.scene.autoClearDepthAndStencil = false;
               info.scene.skipFrustumClipping = true;
+              info.scene.skipPointerMovePicking = true;
+              info.scene.constantlyUpdateMeshUnderPointer = false;
+
+              info.scene.onPrePointerObservable.add((pointerInfo) => {
+                pointerInfo.skipOnPointerObservable = true;
+              });
+
+              info.scene.detachControl();
+              // info.scene._inputManager.detachControl();
+
+              // info.scene._inputManager.;
+
               // add this to see scene behind the scene texture rectangle
               // info.scene.autoClear = false;
 
@@ -104,12 +108,22 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
             <LoadingModels>{children}</LoadingModels>
             {/*  scene plane stuff */}
             <targetCamera
-              onCreated={() => {
+              onCreated={(item) => {
+                item.detachControl();
                 onNextTick(() => {
-                  if (globalRefs.scene) {
-                    // const postProcess =
-                    // new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-                  }
+                  setTimeout(() => {
+                    if (globalRefs.scene) {
+                      // const postProcess =
+                      // new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+                      // const pasPostProcess = new PassPostProcess("Scene copy", 1.0, globalRefs.scene.activeCamera);
+                      // if (globalRefs.scene) {
+                      const postProcess = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+                      // postProcess.onApply = (effect) => {
+                      //   effect.setTextureFromPostProcess("textureSampler", pasPostProcess);
+                      // };
+                      // }
+                    }
+                  }, 4000);
                 });
               }}
               name="camera1"
@@ -120,7 +134,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               ref={scenePlaneCameraRef}
               // layerMask={23}
             />
-            <ScenePlane />
           </Scene>
           {extraScenes}
         </Engine>

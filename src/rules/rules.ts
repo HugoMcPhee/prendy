@@ -25,7 +25,7 @@ export function makeStartPrendyRules<
   // making rules
 
   const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-  const pointerConnectRules = get_pointersConnectRules(storeHelpers);
+  // const pointerConnectRules = get_pointersConnectRules(storeHelpers);
   const startAllGlobalRules = get_startAllGlobalRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
 
   const modelRules = get_modelRules(storeHelpers, prendyAssets);
@@ -55,7 +55,7 @@ export function makeStartPrendyRules<
 
   function startPrendyMainRules() {
     keyboardConnectRules.startAll();
-    pointerConnectRules.startAll();
+    // pointerConnectRules.startAll();
     // keyboardRules.startAll(); // NOTE does nothing
     const stopAllGlobalRules = startAllGlobalRules();
     modelRules.startAll();
@@ -76,7 +76,7 @@ export function makeStartPrendyRules<
 
     return function stopPrendyMainRules() {
       keyboardConnectRules.stopAll();
-      pointerConnectRules.stopAll();
+      // pointerConnectRules.stopAll();
       // keyboardRules.stopAll();
       stopAllGlobalRules();
       modelRules.stopAll();

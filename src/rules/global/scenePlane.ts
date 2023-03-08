@@ -1,43 +1,24 @@
 import { Effect, RenderTargetTexture, Scene } from "@babylonjs/core";
 import delay from "delay";
 import { makeRunMovers } from "pietem-movers";
-import { PlaceName } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
-import { get_getSectionVidVideo } from "../../helpers/prendyUtils/sectionVids";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function get_globalScenePlaneRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions) {
-  const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll, getClampedPlanePosInfo } =
-    get_scenePlaneUtils(storeHelpers, prendyOptions);
+  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyOptions);
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState, setState } = storeHelpers;
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
-  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
 
   const globalRefs = getRefs().global.main;
 
   return makeRules(({ itemEffect, effect }) => ({
-    whenPlanePositionChangesClamp: effect({
-      run(diffInfo) {
-        const { planePos } = getState().global.main;
-
-        const { newPlanePos, wasOutsideBoundary } = getClampedPlanePosInfo(planePos);
-        if (wasOutsideBoundary) {
-          console.log("wasOutsideBoundary");
-
-          setState({ global: { main: { planePos: newPlanePos } } });
-        }
-      },
-      check: { prop: ["planePos", "planeZoom"], type: "global" },
-      atStepEnd: false,
-      step: "planePosition",
-    }),
     whenPlanePositionChanges: effect({
       run(diffInfo) {
         const { planePos } = getState().global.main;
@@ -47,31 +28,38 @@ export function get_globalScenePlaneRules<
         const scene = globalRefs.scene as Scene | null;
         if (zoomChanged) {
           const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
-
-          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "stretchVideoAmount",
-            stretchVideoX,
-            stretchVideoY
-          );
-          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "stretchSceneAmount",
-            stretchSceneX,
-            stretchSceneY
-          );
-
           globalRefs.stretchVideoSize.x = stretchVideoX;
           globalRefs.stretchVideoSize.y = stretchVideoY;
+          globalRefs.stretchSceneSize.x = stretchSceneX;
+          globalRefs.stretchSceneSize.y = stretchSceneY;
+
+          // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          //   "stretchVideoAmount",
+          //   stretchVideoX,
+          //   stretchVideoY
+          // );
+          // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          //   "stretchSceneAmount",
+          //   stretchSceneX,
+          //   stretchSceneY
+          // );
         }
 
         const engine = scene?.getEngine(); // engine
         if (engine && (positionChanged || zoomChanged)) {
-          const stretchVideoSize = globalRefs.stretchVideoSize;
+          const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
+          globalRefs.stretchVideoSize.x = stretchVideoX;
+          globalRefs.stretchVideoSize.y = stretchVideoY;
+          globalRefs.stretchSceneSize.x = stretchSceneX;
+          globalRefs.stretchSceneSize.y = stretchSceneY;
 
-          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "planePos",
-            planePos.x * stretchVideoSize.x,
-            planePos.y * stretchVideoSize.y
-          );
+          // const stretchVideoSize = globalRefs.stretchVideoSize;
+
+          // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          //   "planePos",
+          //   planePos.x * stretchVideoSize.x,
+          //   planePos.y * stretchVideoSize.y
+          // );
         }
       },
       check: { prop: ["planePos", "planeZoom"], type: "global" },
@@ -115,12 +103,19 @@ export function get_globalScenePlaneRules<
     whenPlaneZoomChangesToUpdatePlanePan: itemEffect({
       run: () => focusScenePlaneOnFocusedDoll(),
       check: { prop: "planeZoom", type: "global" },
-      // atStepEnd: true,
+      atStepEnd: true,
       step: "planePosition",
     }),
     whenFocusedDollChanges: itemEffect({
       run: () => focusScenePlaneOnFocusedDoll(),
       check: { prop: "focusedDoll", type: "global" },
+      atStepEnd: true,
+      step: "planePosition",
+    }),
+    whenNowCamChanges: itemEffect({
+      run: () => focusScenePlaneOnFocusedDoll("instant"),
+      check: { prop: "nowCamName", type: "places" },
+      atStepEnd: true,
       step: "planePosition",
     }),
     whenScreenResizes: itemEffect({
@@ -142,15 +137,18 @@ export function get_globalScenePlaneRules<
           stretchSceneX,
           stretchSceneY,
         } = getShaderTransformStuff();
-
         globalRefs.stretchVideoSize.x = stretchVideoX;
         globalRefs.stretchVideoSize.y = stretchVideoY;
+        globalRefs.stretchSceneSize.x = stretchSceneX;
+        globalRefs.stretchSceneSize.y = stretchSceneY;
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
         const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
         const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
+        // const newRenderWidth = screenHeight * (16 / 9) * 1;
+        // const newRenderHeight = screenHeight * 1;
 
         engine.setSize(newRenderWidth, newRenderHeight);
 
@@ -159,25 +157,19 @@ export function get_globalScenePlaneRules<
         globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
 
         // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-          "stretchVideoAmount",
-          stretchVideoX,
-          stretchVideoY
-        );
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-          "stretchSceneAmount",
-          stretchSceneX,
-          stretchSceneY
-        );
+        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+        //   "stretchVideoAmount",
+        //   stretchVideoX,
+        //   stretchVideoY
+        // );
+        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+        //   "stretchSceneAmount",
+        //   stretchSceneX,
+        //   stretchSceneY
+        // );
       },
       check: { prop: "timeScreenResized", type: "global" },
-      // atStepEnd: true,
-      step: "planePosition",
-    }),
-    whenNowCamChanges: itemEffect({
-      run: () => focusScenePlaneOnFocusedDoll("instant"),
-      check: { prop: "nowCamName", type: "places" },
-      // atStepEnd: true,
+      atStepEnd: true,
       step: "planePosition",
     }),
   }));

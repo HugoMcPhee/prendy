@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { get_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
+import { getScreenSize, get_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
@@ -19,10 +19,6 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
   speechVidFiles: SpeechVidFiles
 ) {
   const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
-  const { viewCenterPoint, getViewSize, getScreenSize, convertPointOnPlaneToPointOnScreen } = get_scenePlaneUtils(
-    storeHelpers,
-    prendyStartOptions
-  );
 
   const globalRefs = getRefs().global.main;
 
@@ -120,53 +116,36 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
 
     const positionSpeechBubbleToCharacter = useCallback(() => {
       const { forCharacter } = getState().speechBubbles[name];
-      const { planePos } = getState().global.main;
       if (!forCharacter) return;
       const { dollState, dollName } = getCharDollStuff(forCharacter as CharacterName) ?? {};
 
       if (!dollState || !dollName) return;
       const { focusedDoll, focusedDollIsInView } = getState().global.main;
       const positionOnScreen = dollState.positionOnScreen;
-      // const positionOnScreen = { x: 1280 / 2, y: 720 / 2 };
-      // console.log(positionOnScreen);
 
-      // BUBBLE_WIDTH
-      // if (dollName === focusedDoll && !focusedDollIsInView) {
-      //   positionOnScreen = { x: 0, y: 0 };
-      // }
+      // if (dollName === focusedDoll && !focusedDollIsInView) {}
 
       const viewSize = getScreenSize();
-      const stretchVideoX = globalRefs.stretchVideoSize.x;
-      const stretchVideoY = globalRefs.stretchVideoSize.y;
 
-      // console.log(stretchVideoX);
-      // console.log(stretchVideoY);
-
-      const farLeft = -viewSize.width / 2;
-      const farRight = viewSize.width / 2;
-      const farTop = -viewSize.height / 2;
-      const farBottom = viewSize.height / 2;
-      // const farLeft = 0;
-      // const farRight = 1280;
-      // const farTop = 0;
-      // const farBottom = 720;
+      const farLeft = -viewSize.x / 2;
+      const farRight = viewSize.x / 2;
+      const farTop = -viewSize.y / 2;
+      const farBottom = viewSize.y / 2;
 
       const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
       const halfBubbleHeight = bubbleHeight / 2;
       const halfBubbleWidth = BUBBLE_WIDTH / 2;
       const halfTriangleSize = TRIANGLE_SIZE / 2;
-      // console.log(positionOnScreen.x * 2);
-      // console.log(positionOnScreen);
 
       const screenSize = getScreenSize();
 
       // need function to get position on screen
 
-      let newPositionX = positionOnScreen.x - screenSize.width / 2;
+      let newPositionX = positionOnScreen.x - screenSize.x / 2;
 
       let yOffset = bubbleHeight / 2;
 
-      let newPositionY = positionOnScreen.y - yOffset - screenSize.height / 2;
+      let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
 
       // Keep the focused dolls speech bubble inside the view
       if (dollName === focusedDoll) {

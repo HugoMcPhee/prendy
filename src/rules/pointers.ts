@@ -42,14 +42,16 @@ export function get_pointersConnectRules<StoreHelpers extends PrendyStoreHelpers
       y: event.clientY,
     };
 
+    // console.log(newPointerPosition);
+
     const pointerId = event.pointerId.toString();
     const pointerRefs = getRefs().pointers[pointerId];
     const pointerExists = !!pointerRefs;
-    if (pointerExists) {
-      setState({
-        pointers: { [pointerId]: { pointerPosition: newPointerPosition } },
-      });
-    }
+    // if (pointerExists) {
+    //   setState({
+    //     pointers: { [pointerId]: { pointerPosition: newPointerPosition } },
+    //   });
+    // }
   };
 
   // const onPointerCancel = (event: PointerEvent) => {

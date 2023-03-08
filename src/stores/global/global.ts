@@ -109,7 +109,7 @@ export default function global<
     aSpeechBubbleIsShowing: false,
     aConvoIsHappening: false,
     //
-    frameTick: Date.now(),
+    frameTick: 0, // Date.now()
     //
     debugMessage: "",
   });
@@ -134,6 +134,7 @@ export default function global<
     startRenderSize: { width: 1280, height: 720 }, // gets set when the engine starts, this is to prevent the camera zooming out when resizing the screen
     //
     stretchVideoSize: { x: 1, y: 1 },
+    stretchSceneSize: { x: 1, y: 1 },
 
     //
     ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),

@@ -15,7 +15,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { updatePlanePositionToFocusOnMesh } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   const refs = getRefs();
 
@@ -118,12 +118,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
           }
 
           if (dollName === focusedDoll) {
-            // console.log("position changed", newValue, previousValue);
-
-            // console.log("updatePlanePositionToFocusOnMesh");
-
-            // Update screen position :)
-            updatePlanePositionToFocusOnMesh({ meshRef: itemRefs.meshRef });
+            focusScenePlaneOnFocusedDoll();
           }
         },
         check: { type: "dolls", prop: "position", name: dollName },
@@ -190,15 +185,6 @@ export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
   const { placeInfoByName } = prendyAssets;
 
   return makeRules(({ itemEffect, effect }) => ({
-    // should be a  dynamic rule ?
-    whenCameraChangesForPlanePosition: effect({
-      // in a different flow to "cameraChange"
-      run() {
-        // focusScenePlaneOnFocusedDoll();
-      },
-      check: { type: "places", prop: ["nowCamName"] },
-    }),
-
     whenAtCamCubes: itemEffect({
       run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
         const { playerCharacter } = getState().global.main;

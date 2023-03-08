@@ -51,7 +51,8 @@ export function get_globalVideoRules<
         const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName } =
           getState().places[nowPlaceName];
 
-        const { sectionVidState } = getState().sectionVids[nowPlaceName];
+        const { sectionVidState, wantedSection, wantToLoop, switchSection_keepProgress } =
+          getState().sectionVids[nowPlaceName];
 
         const videoIsOutsideOfCurrentLoop = checkForVideoLoop(nowPlaceName as PlaceName);
 
@@ -163,6 +164,19 @@ export function get_globalVideoRules<
 
         // set State for the global and place state, and also the sectionState
 
+        const somethingChanged =
+          wantedSegmentName !== null ||
+          new_wantedSegmentNameAtLoop !== wantedSegmentNameAtLoop ||
+          decided_wantedSegmentName !== nextSegmentNameWhenVidPlays ||
+          wantedCamName !== null ||
+          new_wantedCamNameAtLoop !== wantedCamNameAtLoop ||
+          decided_wantedCamName !== nextCamNameWhenVidPlays ||
+          decided_wantedSection !== wantedSection ||
+          decided_wantToLoop !== wantToLoop ||
+          decided_shouldKeepTime !== switchSection_keepProgress;
+
+        if (!somethingChanged) return;
+
         setState({
           global: {
             main: {
@@ -191,7 +205,7 @@ export function get_globalVideoRules<
       // check every frame so it can handle wanted things that didnt get set yet because there was already a waiting section vid!
       check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
       step: "chooseVideoSection",
-      // atStepEnd: true,
+      // atStepEnd: true, // NOTE changed this recently
     }),
     whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
       run() {

@@ -139,12 +139,10 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
   const { getRefs, getState, setState } = storeHelpers;
   const { dollNames, modelInfoByName } = prendyAssets;
 
-  const {
-    convertScreenPointToPlaneScenePoint,
-    convertPointOnPlaneToPointOnScreen,
-    getPositionOnPlane,
-    checkPointIsInsidePlane,
-  } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane } = get_scenePlaneUtils(
+    storeHelpers,
+    prendyStartOptions
+  );
 
   // type PietemState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof PietemState["dolls"];
@@ -305,25 +303,6 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     if (!meshRef) return;
     const { planePos, planePosGoal, focusedDoll, focusedDollIsInView, planeZoom } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
-    // console.log("characterPointOnPlane", characterPointOnPlane.x / 1280, characterPointOnPlane.y / 720);
-
-    const planeSize = { x: 1280, y: 720 };
-
-    const globalRefs = getRefs().global.main;
-
-    let testShiftX = (characterPointOnPlane.x / planeSize.x - 0.5) * planeZoom;
-    let testShiftY = (1 - characterPointOnPlane.y / planeSize.y - 0.5) * planeZoom;
-    const maxShift = (planeZoom - 1) / 2;
-
-    if (testShiftX > maxShift) testShiftX = maxShift;
-    if (testShiftX < -maxShift) testShiftX = -maxShift;
-    if (testShiftY > maxShift) testShiftY = maxShift;
-    if (testShiftY < -maxShift) testShiftY = -maxShift;
-
-    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("planePos", testShiftX, testShiftY);
-    // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoom", planeZoom);
-
-    // need to get the doll screen position based on the current or safe plane position
 
     const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
       pointOnPlane: characterPointOnPlane,

@@ -108,7 +108,7 @@ export function makePrendyStores<
   return {
     keyboards: keyboards(),
     miniBubbles: miniBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
-    pointers: pointers(),
+    // pointers: pointers(),
     global: global<
       A_AnySegmentName,
       A_PrendyAssets,

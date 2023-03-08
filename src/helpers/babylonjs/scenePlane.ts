@@ -1,11 +1,17 @@
-import { AbstractMesh, Camera, Effect, Matrix, Mesh, Vector3 } from "@babylonjs/core";
-import { get_globalUtils } from "../prendyUtils/global";
-import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
+import { AbstractMesh, Camera, Matrix, Vector3 } from "@babylonjs/core";
 import { shortenDecimals } from "chootils/dist/numbers";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { get_globalUtils } from "../prendyUtils/global";
 import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
+
+export function getScreenSize() {
+  return { x: window.innerWidth, y: window.innerHeight };
+}
+
+export const planeSize = { x: 1280, y: 720 };
 
 export function get_scenePlaneUtils<
   StoreHelpers extends PrendyStoreHelpers,
@@ -14,7 +20,10 @@ export function get_scenePlaneUtils<
   const { getRefs, getState } = storeHelpers;
 
   const { setGlobalState } = get_globalUtils(storeHelpers);
+  const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);
   const globalRefs = getRefs().global.main;
+
+  const { backdropImageSize } = globalRefs;
 
   function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { width: number; height: number }) {
     // Only for perspective camera here :)
@@ -81,8 +90,6 @@ export function get_scenePlaneUtils<
   function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
     const { planeZoom } = getState().global.main;
 
-    const planeSize = { x: 1280, y: 720 };
-
     const characterPointOnPlane = getPositionOnPlane(meshRef);
 
     const stretchVideoX = globalRefs.stretchVideoSize.x;
@@ -93,6 +100,11 @@ export function get_scenePlaneUtils<
 
     const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
     const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
+
+    // const isOverEdges =
+    //   testShiftX > maxShiftX || testShiftX < -maxShiftX || testShiftY > maxShiftY || testShiftY < -maxShiftY;
+
+    // if (!isOverEdges) return;
 
     if (testShiftX > maxShiftX) testShiftX = maxShiftX;
     if (testShiftX < -maxShiftX) testShiftX = -maxShiftX;
@@ -109,6 +121,7 @@ export function get_scenePlaneUtils<
     // zoom 2.5, edges are ~0.3?
     // zoom 3, edges are ~0.33?
     // zoom 1, edges are 0
+    // console.log("editing plane pos");
 
     if (instant) {
       setGlobalState({
@@ -127,17 +140,8 @@ export function get_scenePlaneUtils<
     updatePlanePositionToFocusOnMesh({ meshRef: meshRef, instant: !!instant });
   }
 
-  const { backdropImageSize } = getRefs().global.main;
-
-  function getSceneEngine() {
-    const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
-    return getEngine();
-    // if (!globalRefs.scenePlane) return getEngine();
-    // return globalRefs.scenePlane.getEngine();
-  }
-
   function getViewSize() {
-    const engine = getSceneEngine();
+    const engine = getEngine();
     if (!engine) return defaultSize();
     return {
       width: engine.getRenderWidth(),
@@ -145,92 +149,7 @@ export function get_scenePlaneUtils<
     };
   }
 
-  function getScreenSize() {
-    return { width: window.innerWidth, height: window.innerHeight };
-  }
-
-  function getPlaneSize(useGoalZoom = false) {
-    const viewSize = getViewSize();
-
-    const globalState = getState().global.main;
-    const planeZoom = useGoalZoom ? globalState.planeZoomGoal : globalState.planeZoom;
-
-    const viewAspectRatio = viewSize.width / viewSize.height;
-    const planeAspectRatio = 16 / 9;
-
-    const viewIsThinner = viewAspectRatio < planeAspectRatio;
-
-    if (viewIsThinner) {
-      return {
-        width: planeZoom * viewSize.height * planeAspectRatio,
-        height: planeZoom * viewSize.height,
-      };
-    } else {
-      return {
-        width: planeZoom * viewSize.width,
-        height: (planeZoom * viewSize.width) / planeAspectRatio,
-      };
-    }
-  }
-
-  function viewCenterPoint() {
-    const viewSize = getViewSize();
-
-    const viewCenterPoint = {
-      x: viewSize.width / 2,
-      y: viewSize.height / 2,
-    };
-    return viewCenterPoint;
-  }
-
-  function fitScenePlaneToScreen(thePlane: Mesh) {
-    // const planeSize = getPlaneSize();
-    // thePlane.scaling.y = planeSize.height;
-    // thePlane.scaling.x = planeSize.width;
-  }
-
-  // This is before ScnePlane's moved!
-  // might need to store scenePlane position in miniworld
-  function convertPointOnPlaneToUnmovedPointOnScreen(thePoint: { x: number; y: number }) {
-    const sceneSize = backdropImageSize; // 1280x720 (the point is in here)
-    const planeSize = getPlaneSize(); // fits to screen width or height (need to convert point to here) (same spect ratio as sceneSize)
-    // const viewSize = getViewSize(); // screen width and height
-
-    const sceneToPlaneSizeMultiplier = {
-      width: planeSize.width / sceneSize.width,
-      height: planeSize.height / sceneSize.height,
-    };
-
-    return {
-      x: thePoint.x * sceneToPlaneSizeMultiplier.width,
-      y: thePoint.y * sceneToPlaneSizeMultiplier.height,
-    };
-  }
-  //
-
-  // todo could maybe cleanup some of this plane stuff
-  // TODO change it so pointOnPlane is normalized, and try to not invole 1280x720, maybe only 16x9
-  function convertToSafePointOnPlane(pointOnPlane: Point2D) {
-    // const planeSize = getPlaneSize();
-    const sceneSize = backdropImageSize; // 1280x720 (the point is in here)
-
-    const OUT_OF_FRAME_PADDING = 200;
-    // const OUT_OF_FRAME_PADDING = 0;
-
-    const pointSortOfIsInsidePlane = pointInsideRect(
-      pointOnPlane,
-      measurementToRect({
-        width: sceneSize.width + OUT_OF_FRAME_PADDING,
-        height: sceneSize.height + OUT_OF_FRAME_PADDING * 3, // Y is easier to go over the edges when the camera angle's low
-        x: 0 - OUT_OF_FRAME_PADDING,
-        y: 0 - OUT_OF_FRAME_PADDING * 3,
-      })
-    );
-    return pointOnPlane;
-  }
-
   function checkPointIsInsidePlane(pointOnPlane: Point2D) {
-    // const planeSize = getPlaneSize();
     const sceneSize = backdropImageSize; // 1280x720 (the point is in here)
 
     const OUT_OF_FRAME_PADDING = 200;
@@ -260,8 +179,7 @@ export function get_scenePlaneUtils<
   }) {
     if (!planePos) return defaultPosition();
 
-    const screenSize = { x: window.innerWidth, y: window.innerHeight };
-    const planeSize = { x: 1280, y: 720 };
+    const screenSize = getScreenSize();
 
     const planePosPixels = {
       x: planePos.x * planeSize.x,
@@ -326,7 +244,7 @@ export function get_scenePlaneUtils<
     // NOTE this is only working when it's thinner
 
     // IN THIN MODE, the height is consistant,
-    // in WIDE mode the width is consistnat
+    // in WIDE mode the width is consistant
 
     let positionOnScreen = {
       x: (transformedPoint.x + widthDifference) * pixelScaler,
@@ -336,137 +254,12 @@ export function get_scenePlaneUtils<
     return positionOnScreen;
   }
 
-  //
-
-  // NOTE WARNING this might not work chen rotating phoen or changing screen size,
+  // NOTE WARNING this might not work chen rotating phone or changing screen size,
   const cachedParams = {
     identityMatrix: null as null | Matrix,
     // scenePlaneCamTransformMatrix: null as null | Matrix,
   };
 
-  function getScenePlanePositionOnScreen(thePosition: Vector3) {
-    // if (!globalRefs.scenePlane) return new Vector3();
-    const currentCamera = globalRefs.scenePlaneCamera;
-    if (!currentCamera) return new Vector3();
-    const viewSize = getViewSize();
-
-    if (!cachedParams.identityMatrix) {
-      cachedParams.identityMatrix = Matrix.Identity();
-    }
-
-    // if (!cachedParams.scenePlaneCamTransformMatrix) {
-    //   cachedParams.scenePlaneCamTransformMatrix = currentCamera
-    //     .getViewMatrix()
-    //     .multiply(currentCamera.getProjectionMatrix());
-    // }
-
-    return Vector3.Project(
-      thePosition,
-      cachedParams.identityMatrix,
-      currentCamera.getViewMatrix().multiply(currentCamera.getProjectionMatrix()),
-      currentCamera.viewport.toGlobal(viewSize.width, viewSize.height)
-    );
-  }
-
-  function getScenePlaneOverScreenEdgesAmount(newPosition: { x: number; y: number }) {
-    // const zoomLevel = getState().global.main.zoomLevel;
-    // if (!globalRefs.scenePlane) return { top: 0, bottom: 0, left: 0, right: 0 };
-
-    const screenPosition = { x: 0, y: 0 };
-    const viewSize = getViewSize();
-    const planeSize = getPlaneSize();
-    // const screenHalfSize = {
-    //   x: viewSize.width / 2,
-    //   y: viewSize.height / 2,
-    // };
-    const planeHalfSize = {
-      x: planeSize.width / 2,
-      y: planeSize.height / 2,
-    };
-
-    const planePositionOnScreenVector = getScenePlanePositionOnScreen(new Vector3(newPosition.x, newPosition.y, 0));
-    const planePositionOnScreen = {
-      x: planePositionOnScreenVector.x,
-      y: planePositionOnScreenVector.y,
-    };
-
-    const planeEdgesOnScreen = {
-      top: planePositionOnScreen.y - planeHalfSize.y,
-      bottom: planePositionOnScreen.y + planeHalfSize.y,
-      left: planePositionOnScreen.x - planeHalfSize.x,
-      right: planePositionOnScreen.x + planeHalfSize.x,
-    };
-
-    const amountOverEdges = {
-      top: shortenDecimals(screenPosition.y - planeEdgesOnScreen.top),
-      bottom: shortenDecimals(planeEdgesOnScreen.bottom - viewSize.height),
-      left: shortenDecimals(screenPosition.x - planeEdgesOnScreen.left),
-      right: shortenDecimals(planeEdgesOnScreen.right - viewSize.width),
-    };
-
-    return amountOverEdges;
-  }
-
-  function getSafePlanePositionFocusedOnPointOnPlain(pointOnPlane: Point2D) {
-    // const
-    const planeSize = getPlaneSize();
-
-    const planeCenterPoint = {
-      x: planeSize.width / 2,
-      y: planeSize.height / 2,
-    };
-
-    const scaledPointOnPlane = convertPointOnPlaneToUnmovedPointOnScreen(pointOnPlane);
-
-    // once this works it should work for any point on the plane woo
-    // also limiting it to the egdes
-    // and zoom
-
-    const newPlanePosition = {
-      x: planeCenterPoint.x - scaledPointOnPlane.x,
-      y: scaledPointOnPlane.y - planeCenterPoint.y,
-    };
-    // console.log(newPlanePosition);
-
-    const amountOverEdges = getScenePlaneOverScreenEdgesAmount(newPlanePosition);
-
-    if (amountOverEdges.bottom < 0) newPlanePosition.y += amountOverEdges.bottom;
-    if (amountOverEdges.top < 0) newPlanePosition.y -= amountOverEdges.top;
-    if (amountOverEdges.left < 0) newPlanePosition.x += amountOverEdges.left;
-    if (amountOverEdges.right < 0) newPlanePosition.x -= amountOverEdges.right;
-
-    // And also ideally take zoom into account somehow (keep a zoom level / scale variable to alter the xywidthheight stuff)
-    // also have it smothely go towards it? spring? :)
-    return newPlanePosition;
-  }
-
-  function applyPlanePosition(planePosition: { x: number; y: number }) {
-    // if (!globalRefs.scenePlane) return;
-    // And also ideally take zoom into account somehow (keep a zoom level / scale variable to alter the xywidthheight stuff)
-    // fitScenePlaneToScreen(globalRefs.scenePlane);
-    // also have it smothely go towards it? spring? :)
-    // globalRefs.scenePlane.position.x = planePosition.x;
-    // globalRefs.scenePlane.position.y = planePosition.y;
-  }
-
-  function convertScreenPointToPlaneScenePoint(theScreenPoint: { x: number; y: number }) {
-    const viewSize = getViewSize();
-    return {
-      x: theScreenPoint.x - viewSize.width / 2,
-      y: theScreenPoint.y - viewSize.height / 2,
-    };
-  }
-
-  function convertPlaneScenePointToScreenPoint(thePlaneScenePoint: { x: number; y: number }) {
-    const viewSize = getViewSize();
-    return {
-      x: thePlaneScenePoint.x + viewSize.width / 2,
-      y: thePlaneScenePoint.y + viewSize.height / 2,
-    };
-  }
-
-  // -----------
-  // new
   function getShaderTransformStuff() {
     const { planeZoom } = getState().global.main;
     // const planeZoom = prendyStartOptions.zoomLevels.default;
@@ -476,11 +269,11 @@ export function get_scenePlaneUtils<
     const screenHeight = window.innerHeight;
 
     // check the screen ratio, and compare that to the video ratio
-    const videoRatio = 1280 / 720; // 16/9
+    const videoRatio = planeSize.x / planeSize.y; // 16/9
     const screenRatio = screenWidth / screenHeight;
 
-    const videoXDiff = 1280 / screenWidth;
-    const videoYDiff = 720 / screenHeight;
+    const videoXDiff = planeSize.x / screenWidth;
+    const videoYDiff = planeSize.y / screenHeight;
 
     const ratioDiff = screenRatio / videoRatio;
 
@@ -526,56 +319,12 @@ export function get_scenePlaneUtils<
     };
   }
 
-  function getClampedPlanePosInfo(planePos: Point2D) {
-    const planeSize = { x: 1280, y: 720 };
-
-    const stretchVideoX = globalRefs.stretchVideoSize.x;
-    const stretchVideoY = globalRefs.stretchVideoSize.y;
-
-    let newShiftX = planePos.x;
-    let newShiftY = planePos.y;
-
-    const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
-    const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
-
-    if (newShiftX > maxShiftX) newShiftX = maxShiftX;
-    if (newShiftX < -maxShiftX) newShiftX = -maxShiftX;
-    if (newShiftY > maxShiftY) newShiftY = maxShiftY;
-    if (newShiftY < -maxShiftY) newShiftY = -maxShiftY;
-
-    const safeNumbersSafePlanePosition = {
-      x: shortenDecimals(newShiftX),
-      y: shortenDecimals(newShiftY),
-    };
-
-    const wasOutsideBoundary =
-      safeNumbersSafePlanePosition.x !== planePos.x || safeNumbersSafePlanePosition.y !== planePos.y;
-
-    return { newPlanePos: safeNumbersSafePlanePosition, wasOutsideBoundary };
-  }
-
   return {
     getPositionOnPlane,
-    updatePlanePositionToFocusOnMesh,
     focusScenePlaneOnFocusedDoll,
     getViewSize,
-    getScreenSize,
-    getPlaneSize,
-    // planeCenterPoint,
-    viewCenterPoint,
-    fitScenePlaneToScreen,
-    convertPointOnPlaneToUnmovedPointOnScreen,
-    convertToSafePointOnPlane,
     convertPointOnPlaneToPointOnScreen,
-    getScenePlaneOverScreenEdgesAmount,
-    getSafePlanePositionFocusedOnPointOnPlain,
-    applyPlanePosition,
-    convertScreenPointToPlaneScenePoint,
-    convertPlaneScenePointToScreenPoint,
     checkPointIsInsidePlane,
-    //
     getShaderTransformStuff,
-    //
-    getClampedPlanePosInfo,
   };
 }

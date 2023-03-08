@@ -47,6 +47,8 @@ export function get_cameraChangeUtils<
   const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
+  const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
+
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
   T_SegmentName extends SegmentNameFromCameraAndPlace<T_PlaceName, T_CameraName>
@@ -172,7 +174,11 @@ export function get_cameraChangeUtils<
     }
 
     if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
-      ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.postProcess;
+      ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
+      ShaderStore.ShadersStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
+
+      // ShaderStore.ShadersStore["translatedFxaaPixelShader"] = shaders.translatedFxaa.translatedFxaaFragment;
+      // ShaderStore.ShadersStore["translatedFxaaVertexShader"] = shaders.translatedFxaa.translatedFxaaVertex;
 
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
@@ -180,11 +186,37 @@ export function get_cameraChangeUtils<
         ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
-        globalRefs.scene.activeCamera
+        globalRefs.scene.activeCamera,
         // globalRefs.activeCamera
         // Texture.NEAREST_SAMPLINGMODE // sampling
-        // globalRefs.scene.engine // engine
+        // globalRefs.scene.engine // engine,
+        // Texture.BILINEAR_SAMPLINGMODE,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        "depthy"
       );
+      // setTimeout(() => {
+      //   globalRefs.backdropPostProcess = new PostProcess(
+      //     "backdropAndDepthShader",
+      //     "translatedFxaa",
+      //     null, // ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+      //     null, //["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
+      //     1,
+      //     globalRefs.scene.activeCamera,
+      //     // globalRefs.activeCamera
+      //     // Texture.NEAREST_SAMPLINGMODE // sampling
+      //     // globalRefs.scene.engine // engine,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     "translatedFxaa"
+      //   );
+      // }, 4000);
 
       // const fxaaPP = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
 
@@ -193,11 +225,10 @@ export function get_cameraChangeUtils<
       // // const appliedProcess = postProcess.apply();
 
       globalRefs.backdropPostProcess.onApply = (effect) => {
+        const { planePos, planePosGoal, planeZoom } = getState().global.main;
         if (!globalRefs.backdropPostProcessEffect) {
           globalRefs.backdropPostProcessEffect = effect;
           console.log("reapplying");
-
-          const { planePos, planePosGoal, planeZoom } = getState().global.main;
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
             "planePos",
@@ -213,10 +244,46 @@ export function get_cameraChangeUtils<
 
           // setState({ global: { main: { timeScreenResized: Date.now() } } });
           setTimeout(() => {
+            console.log("resizing");
+
             setState({ global: { main: { timeScreenResized: Date.now() } } });
           }, 10);
 
           updateVideoTexturesForNewPlace(nowPlaceName);
+        }
+        // const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
+
+        // const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
+        // globalRefs.stretchVideoSize.x = stretchVideoX;
+        // globalRefs.stretchVideoSize.y = stretchVideoY;
+        // globalRefs.stretchSceneSize.x = stretchSceneX;
+        // globalRefs.stretchSceneSize.y = stretchSceneY;
+
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          "stretchVideoAmount",
+          globalRefs.stretchVideoSize.x,
+          globalRefs.stretchVideoSize.y
+        );
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          "stretchSceneAmount",
+          globalRefs.stretchSceneSize.x,
+          globalRefs.stretchSceneSize.y
+        );
+
+        // const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
+        // const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
+        const positionChanged = true;
+        const zoomChanged = true;
+
+        const engine = scene?.getEngine(); // engine
+        if (engine && (positionChanged || zoomChanged)) {
+          const stretchVideoSize = globalRefs.stretchVideoSize;
+
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+            "planePos",
+            planePos.x * stretchVideoSize.x,
+            planePos.y * stretchVideoSize.y
+          );
         }
         updateVideoTexture();
       };

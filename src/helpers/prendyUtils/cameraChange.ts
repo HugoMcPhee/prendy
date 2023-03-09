@@ -136,11 +136,17 @@ export function get_cameraChangeUtils<
     if (globalRefs.backdropPostProcess) {
       (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.backdropPostProcess);
     }
+    if (globalRefs.fxaaPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.fxaaPostProcess);
+    }
 
     globalRefs.scene.activeCamera = newCamRef.camera;
 
     if (globalRefs.backdropPostProcess) {
       (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.backdropPostProcess);
+    }
+    if (globalRefs.fxaaPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.fxaaPostProcess);
     }
 
     // console.log("newCamRef.camera");
@@ -287,6 +293,10 @@ export function get_cameraChangeUtils<
         }
         updateVideoTexture();
       };
+    }
+
+    if (globalRefs.scene.activeCamera && !globalRefs.fxaaPostProcess) {
+      globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
     }
 
     if (didChangePlace) {

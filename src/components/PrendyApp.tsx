@@ -110,21 +110,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
             <targetCamera
               onCreated={(item) => {
                 item.detachControl();
-                onNextTick(() => {
-                  setTimeout(() => {
-                    if (globalRefs.scene) {
-                      // const postProcess =
-                      // new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-                      // const pasPostProcess = new PassPostProcess("Scene copy", 1.0, globalRefs.scene.activeCamera);
-                      // if (globalRefs.scene) {
-                      const postProcess = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-                      // postProcess.onApply = (effect) => {
-                      //   effect.setTextureFromPostProcess("textureSampler", pasPostProcess);
-                      // };
-                      // }
-                    }
-                  }, 4000);
-                });
               }}
               name="camera1"
               // position={new Vector3(0, 0, -2)}

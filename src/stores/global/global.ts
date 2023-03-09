@@ -127,6 +127,7 @@ export default function global<
     //
     backdropPostProcess: null as null | PostProcess,
     backdropPostProcessEffect: null as null | Effect,
+    fxaaPostProcess: null as null | PostProcess,
     //
     backdropImageSize: { width: 1280, height: 720 },
     backdropRenderSize: { width: 1280, height: 720 },

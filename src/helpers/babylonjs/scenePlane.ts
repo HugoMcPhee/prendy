@@ -121,34 +121,25 @@ export function get_scenePlaneUtils<
   }
 
   function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
-    const { planeZoom } = getState().global.main;
-    onNextTick(() => {
-      console.log("bongus");
-
+    function updatePlanePos() {
       const characterPointOnPlane = getPositionOnPlane(meshRef);
 
-      let newPlanePos: Point2D | null = null;
-
-      // if (getGlobalState().planeZoomIsMoving) {
-      // } else {
-      // }
-      // newPlanePos = {
-      //   x: shortenDecimals(characterPointOnPlane.x / planeSize.x - 0.5),
-      //   y: shortenDecimals(1 - characterPointOnPlane.y / planeSize.y - 0.5),
-      // };
-      newPlanePos = getPlanePositionNotOverEdges({
+      const newPlanePos = getPlanePositionNotOverEdges({
         x: characterPointOnPlane.x / planeSize.x - 0.5,
         y: 1 - characterPointOnPlane.y / planeSize.y - 0.5,
       });
 
-      if (newPlanePos) {
-        if (instant) {
-          setGlobalState({ planePosGoal: newPlanePos, planePos: newPlanePos });
-        } else {
-          setGlobalState({ planePosGoal: newPlanePos });
-        }
+      if (instant) {
+        setGlobalState({ planePosGoal: newPlanePos, planePos: newPlanePos });
+      } else {
+        setGlobalState({ planePosGoal: newPlanePos });
       }
-    });
+    }
+    if (instant) {
+      updatePlanePos();
+    } else {
+      onNextTick(updatePlanePos);
+    }
   }
 
   function focusScenePlaneOnFocusedDoll(instant?: "instant") {

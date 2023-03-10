@@ -444,14 +444,6 @@ export function get_dollRules<
       step: "checkCollisions",
     }),
     // should be a  dynamic rule ?
-    whenCameraChangesForPlanePosition: effect({
-      // in a different flow to "cameraChange"
-      run() {
-        focusScenePlaneOnFocusedDoll("instant");
-      },
-      check: { type: "places", prop: ["nowCamName"] },
-      step: "planePosition",
-    }),
     updateDollScreenPositionWhenScenePlaneMoves: effect({
       run() {
         const { playerCharacter } = getState().global.main;

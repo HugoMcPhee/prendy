@@ -1,6 +1,6 @@
 import { AbstractMesh, Camera, Matrix, Vector3 } from "@babylonjs/core";
 import { shortenDecimals } from "chootils/dist/numbers";
-import { defaultPosition, Point2D } from "chootils/dist/points2d";
+import { copyPoint, defaultPosition, Point2D } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
@@ -17,9 +17,9 @@ export function get_scenePlaneUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions) {
-  const { getRefs, getState } = storeHelpers;
+  const { getRefs, getState, onNextTick } = storeHelpers;
 
-  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);
   const globalRefs = getRefs().global.main;
 
@@ -87,34 +87,28 @@ export function get_scenePlaneUtils<
     );
   }
 
-  function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
-    const { planeZoom } = getState().global.main;
+  function getPlanePositionNotOverEdges(planePos: Point2D, useGoal?: boolean) {
+    const newPlanePos = copyPoint(planePos);
 
-    const characterPointOnPlane = getPositionOnPlane(meshRef);
-
-    const stretchVideoX = globalRefs.stretchVideoSize.x;
-    const stretchVideoY = globalRefs.stretchVideoSize.y;
-
-    let testShiftX = characterPointOnPlane.x / planeSize.x - 0.5;
-    let testShiftY = 1 - characterPointOnPlane.y / planeSize.y - 0.5;
+    const stretchVideoX = useGoal ? globalRefs.stretchVideoGoalSize.x : globalRefs.stretchVideoSize.x;
+    const stretchVideoY = useGoal ? globalRefs.stretchVideoGoalSize.y : globalRefs.stretchVideoSize.y;
 
     const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
     const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
 
-    // const isOverEdges =
-    //   testShiftX > maxShiftX || testShiftX < -maxShiftX || testShiftY > maxShiftY || testShiftY < -maxShiftY;
+    const isOverRightEdge = newPlanePos.x > maxShiftX;
+    const isOverLeftEdge = newPlanePos.x < -maxShiftX;
+    const isOverBottomEdge = newPlanePos.y > maxShiftY;
+    const isOverTopEdge = newPlanePos.y < -maxShiftY;
+    const isOverEdge = isOverRightEdge || isOverLeftEdge || isOverBottomEdge || isOverTopEdge;
 
-    // if (!isOverEdges) return;
+    if (isOverRightEdge) newPlanePos.x = maxShiftX;
+    if (isOverLeftEdge) newPlanePos.x = -maxShiftX;
+    if (isOverBottomEdge) newPlanePos.y = maxShiftY;
+    if (isOverTopEdge) newPlanePos.y = -maxShiftY;
 
-    if (testShiftX > maxShiftX) testShiftX = maxShiftX;
-    if (testShiftX < -maxShiftX) testShiftX = -maxShiftX;
-    if (testShiftY > maxShiftY) testShiftY = maxShiftY;
-    if (testShiftY < -maxShiftY) testShiftY = -maxShiftY;
-
-    const safeNumbersSafePlanePosition = {
-      x: shortenDecimals(testShiftX),
-      y: shortenDecimals(testShiftY),
-    };
+    newPlanePos.x = shortenDecimals(newPlanePos.x);
+    newPlanePos.y = shortenDecimals(newPlanePos.y);
 
     // zoom 1.5, edges are 0.1625?
     // zoom 2, edges are 0.25
@@ -123,14 +117,38 @@ export function get_scenePlaneUtils<
     // zoom 1, edges are 0
     // console.log("editing plane pos");
 
-    if (instant) {
-      setGlobalState({
-        planePosGoal: safeNumbersSafePlanePosition,
-        planePos: safeNumbersSafePlanePosition,
+    return newPlanePos;
+  }
+
+  function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
+    const { planeZoom } = getState().global.main;
+    onNextTick(() => {
+      console.log("bongus");
+
+      const characterPointOnPlane = getPositionOnPlane(meshRef);
+
+      let newPlanePos: Point2D | null = null;
+
+      // if (getGlobalState().planeZoomIsMoving) {
+      // } else {
+      // }
+      // newPlanePos = {
+      //   x: shortenDecimals(characterPointOnPlane.x / planeSize.x - 0.5),
+      //   y: shortenDecimals(1 - characterPointOnPlane.y / planeSize.y - 0.5),
+      // };
+      newPlanePos = getPlanePositionNotOverEdges({
+        x: characterPointOnPlane.x / planeSize.x - 0.5,
+        y: 1 - characterPointOnPlane.y / planeSize.y - 0.5,
       });
-    } else {
-      setGlobalState({ planePosGoal: safeNumbersSafePlanePosition });
-    }
+
+      if (newPlanePos) {
+        if (instant) {
+          setGlobalState({ planePosGoal: newPlanePos, planePos: newPlanePos });
+        } else {
+          setGlobalState({ planePosGoal: newPlanePos });
+        }
+      }
+    });
   }
 
   function focusScenePlaneOnFocusedDoll(instant?: "instant") {
@@ -261,7 +279,7 @@ export function get_scenePlaneUtils<
   };
 
   function getShaderTransformStuff() {
-    const { planeZoom } = getState().global.main;
+    const { planeZoom, planeZoomGoal } = getState().global.main;
     // const planeZoom = prendyStartOptions.zoomLevels.default;
 
     // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
@@ -280,6 +298,9 @@ export function get_scenePlaneUtils<
     let stretchVideoX = 1;
     let stretchVideoY = 1;
 
+    let stretchVideoGoalX = 1;
+    let stretchVideoGoalY = 1;
+
     const screenIsThinnerThenVideo = screenRatio < videoRatio;
 
     // Changing width means same babylon camera zoom, but changing height zooms out,
@@ -290,6 +311,9 @@ export function get_scenePlaneUtils<
     const editedPlaneZoomX = planeZoom / videoXDiff;
     const editedPlaneZoomY = planeZoom / videoYDiff;
 
+    const editedPlaneZoomGoalX = planeZoomGoal / videoXDiff;
+    const editedPlaneZoomGoalY = planeZoomGoal / videoYDiff;
+
     let editedPlaneSceneZoom = planeZoom;
 
     stretchVideoX = editedPlaneZoomY * Math.abs(videoXDiff);
@@ -298,16 +322,25 @@ export function get_scenePlaneUtils<
     if (screenIsThinnerThenVideo) {
       stretchVideoX = editedPlaneZoomY * Math.abs(videoXDiff);
       stretchVideoY = planeZoom;
+
+      stretchVideoGoalX = editedPlaneZoomGoalY * Math.abs(videoXDiff);
+      stretchVideoGoalY = planeZoomGoal;
     } else {
       stretchVideoX = planeZoom;
       stretchVideoY = editedPlaneZoomX * Math.abs(videoYDiff);
       editedPlaneSceneZoom = planeZoom * (screenRatio / videoRatio);
+
+      stretchVideoGoalX = planeZoomGoal;
+      stretchVideoGoalY = editedPlaneZoomGoalX * Math.abs(videoYDiff);
     }
 
     let stretchSceneX = editedPlaneSceneZoom / ratioDiff;
     let stretchSceneY = editedPlaneSceneZoom;
 
     const editedHardwareScaling = 1 / editedPlaneSceneZoom;
+
+    globalRefs.stretchVideoGoalSize.x = stretchVideoGoalX;
+    globalRefs.stretchVideoGoalSize.y = stretchVideoGoalY;
 
     return {
       stretchVideoX,
@@ -322,6 +355,7 @@ export function get_scenePlaneUtils<
   return {
     getPositionOnPlane,
     focusScenePlaneOnFocusedDoll,
+    getPlanePositionNotOverEdges,
     getViewSize,
     convertPointOnPlaneToPointOnScreen,
     checkPointIsInsidePlane,

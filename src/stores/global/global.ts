@@ -135,6 +135,7 @@ export default function global<
     startRenderSize: { width: 1280, height: 720 }, // gets set when the engine starts, this is to prevent the camera zooming out when resizing the screen
     //
     stretchVideoSize: { x: 1, y: 1 },
+    stretchVideoGoalSize: { x: 1, y: 1 },
     stretchSceneSize: { x: 1, y: 1 },
 
     //

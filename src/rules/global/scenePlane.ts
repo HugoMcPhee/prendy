@@ -10,8 +10,11 @@ export function get_globalScenePlaneRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions) {
-  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyOptions);
-  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const { focusScenePlaneOnFocusedDoll, getPlanePositionNotOverEdges } = get_scenePlaneUtils(
+    storeHelpers,
+    prendyOptions
+  );
+  const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState, setState } = storeHelpers;
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
   const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
@@ -94,23 +97,31 @@ export function get_globalScenePlaneRules<
       atStepEnd: true,
       step: "planePositionStartMovers",
     }),
-    whenPlaneZoomGoalChangesToUpdatePlanePan: itemEffect({
+    whenShouldFocusOnDoll: itemEffect({
       run: () => focusScenePlaneOnFocusedDoll(),
-      check: { prop: "planeZoomGoal", type: "global" },
+      check: {
+        prop: [
+          "focusedDoll",
+          "planeZoomGoal",
+          // recalculating position when planeZoom changes is what allows it to stick to corners when zooming
+          // it also requires focusScenePlaneOnFocusedDoll to run in the next tick
+          "planeZoom",
+        ],
+        type: "global",
+      },
       atStepEnd: true,
       step: "planePosition",
     }),
-    whenPlaneZoomChangesToUpdatePlanePan: itemEffect({
-      run: () => focusScenePlaneOnFocusedDoll(),
-      check: { prop: "planeZoom", type: "global" },
+    whenPlaneZoomChangesToUpdatePlanePanOverEdges: itemEffect({
+      // run: () => focusScenePlaneOnFocusedDoll(),
+      run: () => {
+        const planePos = getState().global.main.planePos;
+        const newPlanePos = getPlanePositionNotOverEdges(planePos);
+        setGlobalState({ planePos: newPlanePos });
+      },
+      check: { prop: ["planeZoom"], type: "global" },
       atStepEnd: true,
-      step: "planePosition",
-    }),
-    whenFocusedDollChanges: itemEffect({
-      run: () => focusScenePlaneOnFocusedDoll(),
-      check: { prop: "focusedDoll", type: "global" },
-      atStepEnd: true,
-      step: "planePosition",
+      step: "planePositionDontGoOverEdges",
     }),
     whenNowCamChanges: itemEffect({
       run: () => focusScenePlaneOnFocusedDoll("instant"),
@@ -120,7 +131,8 @@ export function get_globalScenePlaneRules<
     }),
     whenScreenResizes: itemEffect({
       run: async () => {
-        await delay(10);
+        await delay(10); // this helps it work on ipad
+
         focusScenePlaneOnFocusedDoll("instant");
 
         const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();

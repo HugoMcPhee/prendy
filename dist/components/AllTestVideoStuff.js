@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { andLayout } from "../helpers/styles";
-export function makeTyped_AllTestVideoStuff(storeHelpers, placeNames) {
+export function get_AllTestVideoStuff(storeHelpers, placeNames) {
     const { useStore, useStoreItemPropsEffect } = storeHelpers;
     function TestVideos({ placeName }) {
         const mainRef = useRef(null);

@@ -1,7 +1,7 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { PrendyAssets } from "../../declarations";
 import { defaultInRangeForDoll, InRangeForDoll } from "../../helpers/prendyUtils/dolls";
-export default function makeTyped_dollStoreUtils(prendyAssets: PrendyAssets): {
+export default function get_dollStoreUtils(prendyAssets: PrendyAssets): {
     makeModelAnimWeightsMoverState: <T_ModelName extends string>(modelName: T_ModelName) => <T_Name extends string, T_PhysicsNames extends string, T_InitialState extends {
         value?: Record<string, number> | undefined;
         valueGoal?: Record<string, number> | undefined;

@@ -1,5 +1,5 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { makeTyped_getCharDollStuff } from "../prendyUtils/characters";
+import { get_getCharDollStuff } from "../prendyUtils/characters";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import {
   AnyTriggerName,
@@ -12,11 +12,11 @@ import {
   StoryPartName,
   TriggerNameByPlace,
 } from "../../declarations";
-import { makeTyped_dollStoryHelpers } from "../prendyHelpers/dolls";
+import { get_dollStoryHelpers } from "../prendyHelpers/dolls";
 
 // export each of the rule makers stuff from here :)
 
-export function makeTyped_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, getState } = storeHelpers;
 
   type AllState = ReturnType<StoreHelpers["getState"]>;
@@ -64,7 +64,7 @@ export function makeTyped_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHe
   };
 }
 
-export function makeTyped_setStoryState<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_setStoryState<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { setState } = storeHelpers;
 
   // ItemState
@@ -105,9 +105,9 @@ export function makeAllStoryRuleMakers<
 ) {
   const { getRefs, getState, makeRules, startItemEffect, stopEffect, onNextTick } = storeHelpers;
 
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
-  const getUsefulStoryStuff = makeTyped_getUsefulStoryStuff(storeHelpers);
+  const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
 
   type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
 

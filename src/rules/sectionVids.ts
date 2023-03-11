@@ -1,15 +1,15 @@
 import { StoreHelperTypes } from "pietem";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from "../stores/sectionVids";
-import { makeTyped_safeVidUtils } from "../helpers/prendyUtils/safeVids";
+import { get_safeVidUtils } from "../helpers/prendyUtils/safeVids";
 import { PrendyAssets, PlaceName } from "../declarations";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { BEFORE_LOOP_PADDING, makeTyped_sectionVidUtils } from "../helpers/prendyUtils/sectionVids";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { BEFORE_LOOP_PADDING, get_sectionVidUtils } from "../helpers/prendyUtils/sectionVids";
 
-export function makeTyped_sectionVidRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_sectionVidRules<
+  StoreHelpers extends PrendyStoreHelpers,
+  PrendyOptions extends PrendyOptionsUntyped
+>(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   // safe Section Stack Vid Rules
 
   const { getState, makeRules, setState } = storeHelpers;
@@ -22,12 +22,13 @@ export function makeTyped_sectionVidRules<StoreHelpers extends PrendyStoreHelper
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
-  const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = makeTyped_sectionVidUtils(
+  const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = get_sectionVidUtils(
     storeHelpers,
+    prendyOptions,
     prendyAssets
   );
 
-  const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = makeTyped_safeVidUtils(storeHelpers);
+  const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = get_safeVidUtils(storeHelpers);
 
   return makeRules(({ itemEffect }) => ({
     rulesForSettingNewVideoStates: itemEffect({

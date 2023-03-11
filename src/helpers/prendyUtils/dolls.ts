@@ -1,7 +1,7 @@
-import { AbstractMesh, AnimationGroup, Bone, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, AnimationGroup, Bone, Effect, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { subtractPoints } from "chootils/dist/points2d";
+import { Point2D, subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
@@ -13,13 +13,13 @@ import {
   PrendyOptions,
   SpotNameByPlace,
 } from "../../declarations";
-import { makeTyped_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { makeTyped_spotStoryUtils } from "./spots";
+import { get_spotStoryUtils } from "./spots";
 import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { MeshNameByModel } from "../../declarations";
 
-export function makeTyped_dollStoryUtils<
+export function get_dollStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_DollName extends DollName = DollName,
@@ -27,7 +27,7 @@ export function makeTyped_dollStoryUtils<
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
 >(storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
-  const { getSpotPosition } = makeTyped_spotStoryUtils(storeHelpers);
+  const { getSpotPosition } = get_spotStoryUtils(storeHelpers);
 
   type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
   type ModelNameFromDoll<T_DollName extends A_DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
@@ -130,10 +130,7 @@ export function enableCollisions(theMesh: AbstractMesh) {
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-export function makeTyped_dollUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
+export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(
   storeHelpers: StoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
@@ -142,12 +139,10 @@ export function makeTyped_dollUtils<
   const { getRefs, getState, setState } = storeHelpers;
   const { dollNames, modelInfoByName } = prendyAssets;
 
-  const {
-    convertScreenPointToPlaneScenePoint,
-    convertPointOnPlaneToPointOnScreen,
-    getPositionOnPlane,
-    checkPointIsInsidePlane,
-  } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane } = get_scenePlaneUtils(
+    storeHelpers,
+    prendyStartOptions
+  );
 
   // type PietemState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof PietemState["dolls"];
@@ -306,22 +301,20 @@ export function makeTyped_dollUtils<
 
     const { meshRef } = getRefs().dolls[dollName];
     if (!meshRef) return;
-    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView } = getState().global.main;
+    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView, planeZoom } = getState().global.main;
     const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
-
-    // need to get the doll screen position based on the current or safe plane position
 
     const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
       pointOnPlane: characterPointOnPlane,
-      planePosition: instant ? planePosGoal : planePos,
+      planePos: instant ? planePosGoal : planePos,
+      planeZoom,
     });
-    const positionOnPlaneScene = convertScreenPointToPlaneScenePoint(characterPointOnScreen);
 
     const newFocusedDollIsInView =
       dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
 
     setState({
-      dolls: { [dollName]: { positionOnPlaneScene } },
+      dolls: { [dollName]: { positionOnScreen: characterPointOnScreen } },
       global: { main: { focusedDollIsInView: newFocusedDollIsInView } },
     });
   }

@@ -1,4 +1,4 @@
-export function makeTyped_speechBubblesUtils(storeHelpers, prendyStores) {
+export function get_speechBubblesUtils(storeHelpers, prendyStores) {
     const { getState } = storeHelpers;
     function getTypingDelayForLetter(letter, speechBubbleName) {
         const { typingSpeed } = getState().speechBubbles[speechBubbleName];

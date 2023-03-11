@@ -2,9 +2,9 @@ import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { MusicFiles, MusicName, SoundFiles, SoundName } from "../../declarations";
-import { makeTyped_getSceneOrEngineUtils } from "../babylonjs/getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "../babylonjs/getSceneOrEngineUtils";
 
-export function makeTyped_soundStoryHelpers<
+export function get_soundStoryHelpers<
   StoreHelpers extends PrendyStoreHelpers,
   A_MusicFiles extends MusicFiles = MusicFiles,
   A_MusicName extends MusicName = MusicName,
@@ -18,7 +18,7 @@ export function makeTyped_soundStoryHelpers<
   soundFiles: A_SoundFiles
 ) {
   const { getRefs } = storeHelpers;
-  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
+  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 
   const globalRefs = getRefs().global.main;
 

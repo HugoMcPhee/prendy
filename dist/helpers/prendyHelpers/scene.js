@@ -1,14 +1,14 @@
 import delay from "delay";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-import { makeTyped_characterStoryUtils } from "../../helpers/prendyUtils/characters";
-import { makeTyped_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
-export function makeTyped_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_characterStoryUtils } from "../../helpers/prendyUtils/characters";
+import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
+export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
     const { getRefs, getState, onNextTick, setState } = storeHelpers;
-    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
-    const { get2DAngleFromCharacterToSpot } = makeTyped_characterStoryUtils(storeHelpers);
-    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
+    const { setGlobalState } = get_globalUtils(storeHelpers);
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+    const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
+    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
     async function changeSegmentAtLoop(_place, newSegmentName) {
         // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
         // to fix: could listen to changes to wantedSegmentNameAtLoop

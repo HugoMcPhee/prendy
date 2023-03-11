@@ -1,19 +1,19 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { PrendyAssets, ModelName } from "../declarations";
-import { makeTyped_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
 // handle laoding here ??
 
-export function makeTyped_modelRules<StoreHelpers extends PrendyStoreHelpers>(
+export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
 
-  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
+  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 
   async function startLoadingModel<T_ModelName extends ModelName>(modelName: T_ModelName) {
     setState({ models: { [modelName]: { wantToLoad: false } } });

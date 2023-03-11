@@ -1,11 +1,11 @@
 import { PrendyAssets, PrendyOptions } from "../../declarations";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-import { makeTyped_globalChangePlaceRules } from "./changePlace";
-import { makeTyped_globalGeneralRules } from "./general";
-import { makeTyped_globalScenePlaneRules } from "./scenePlane";
-import { makeTyped_globalVideoRules } from "./video";
+import { get_globalChangePlaceRules } from "./changePlace";
+import { get_globalGeneralRules } from "./general";
+import { get_globalScenePlaneRules } from "./scenePlane";
+import { get_globalVideoRules } from "./video";
 
-export function makeTyped_startAllGlobalRules<
+export function get_startAllGlobalRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
@@ -15,15 +15,15 @@ export function makeTyped_startAllGlobalRules<
   prendyAssets: PrendyAssets
 ) {
   // making rules
-  const globalVideoRules = makeTyped_globalVideoRules(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-  const globalChangePlaceRules = makeTyped_globalChangePlaceRules(
+  const globalVideoRules = get_globalVideoRules(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+  const globalChangePlaceRules = get_globalChangePlaceRules(
     storeHelpers,
     prendyStores,
     prendyStartOptions,
     prendyAssets
   );
-  const globalGeneralRules = makeTyped_globalGeneralRules(storeHelpers);
-  const globalScenePlaneRules = makeTyped_globalScenePlaneRules(storeHelpers, prendyStartOptions);
+  const globalGeneralRules = get_globalGeneralRules(storeHelpers);
+  const globalScenePlaneRules = get_globalScenePlaneRules(storeHelpers, prendyStartOptions);
 
   return function startAllGlobalRules() {
     globalVideoRules.startAll();

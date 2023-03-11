@@ -4,7 +4,7 @@ import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_ScreenSticker<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_ScreenSticker<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};

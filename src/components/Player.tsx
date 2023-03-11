@@ -9,9 +9,9 @@ import {
   SegmentNameByPlace,
   SpotNameByPlace,
 } from "../declarations";
-import { makeTyped_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
+import { get_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 
-export function makeTyped_Player<StoreHelpers extends PrendyStoreHelpers>(
+export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -29,7 +29,7 @@ export function makeTyped_Player<StoreHelpers extends PrendyStoreHelpers>(
   type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
   const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-  const { goToNewPlace } = makeTyped_sceneStoryHelpers<StoreHelpers>(storeHelpers, placeInfoByName, characterNames);
+  const { goToNewPlace } = get_sceneStoryHelpers<StoreHelpers>(storeHelpers, placeInfoByName, characterNames);
 
   type Props = {};
 

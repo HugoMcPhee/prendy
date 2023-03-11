@@ -1,7 +1,7 @@
 // import { getState, ItemState, setState } from "stores";
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
-export function makeTyped_globalUtils(storeHelpers) {
+export function get_globalUtils(storeHelpers) {
     const { getState, setState } = storeHelpers;
     // type GlobalItemState = AllState["global"]["main"];
     // type PartialGlobalState = Partial<GlobalItemState>;

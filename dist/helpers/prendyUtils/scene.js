@@ -1,7 +1,7 @@
-import { makeTyped_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
-export function makeTyped_sceneStoryUtils(storeHelpers) {
+import { get_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
+export function get_sceneStoryUtils(storeHelpers) {
     const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
-    const getUsefulStoryStuff = makeTyped_getUsefulStoryStuff(storeHelpers);
+    const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
     const globalRefs = getRefs().global.main;
     function getSegmentFromStoryRules(place, cam) {
         var _a, _b, _c;

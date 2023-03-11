@@ -2,10 +2,11 @@ import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { makeTyped_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { samePoints, defaultPosition } from "chootils/dist/points2d";
 
-export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
+export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -13,7 +14,7 @@ export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStore
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { updatePlanePositionToFocusOnMesh } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
 
   const refs = getRefs();
 
@@ -29,10 +30,14 @@ export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStore
         dollName: string | any; // DollName
       }) => ({
         // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-        run({ itemRefs, itemState }) {
+        run({ itemRefs, newValue, previousValue }) {
+          // console.log("prevItemState", other);
+
           // TODO
           // only update the collider stuff here
           // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)
+
+          // if (samePoints(newValue ?? defaultPosition, previousValue ?? defaultPosition)) return;
 
           if (!itemRefs.meshRef) return;
 
@@ -112,13 +117,18 @@ export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStore
           }
 
           if (dollName === focusedDoll) {
-            // Update screen position :)
-            updatePlanePositionToFocusOnMesh({ meshRef: itemRefs.meshRef });
+            focusScenePlaneOnFocusedDoll();
           }
         },
         check: { type: "dolls", prop: "position", name: dollName },
         atStepEnd: true, // so it only runs once (it sometimes ran twice with  "derive" (without the "beforePainting" flow I think))
         step: "checkCollisions",
+        // NOTE "becomes" isn't working for dynamic rules?
+        // becomes: (position, prevPosition) => {
+        //   console.log("becomes", position, prevPosition);
+
+        //   return samePoints(position ?? defaultPosition, prevPosition ?? defaultPosition);
+        // },
       })
     ),
     // whenInRangeChanges: itemEffect(
@@ -145,9 +155,9 @@ export function makeTyped_characterDynamicRules<StoreHelpers extends PrendyStore
 // maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 
-export function makeTyped_startDynamicCharacterRulesForInitialState<
+export function get_startDynamicCharacterRulesForInitialState<
   StoreHelpers extends PrendyStoreHelpers,
-  CharacterDynamicRules extends ReturnType<typeof makeTyped_characterDynamicRules>
+  CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>
 >(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], storeHelpers: StoreHelpers) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
@@ -166,7 +176,7 @@ export function makeTyped_startDynamicCharacterRulesForInitialState<
   };
 }
 
-export function makeTyped_characterRules<StoreHelpers extends PrendyStoreHelpers>(
+export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyAssets: PrendyAssets
 ) {
@@ -174,15 +184,6 @@ export function makeTyped_characterRules<StoreHelpers extends PrendyStoreHelpers
   const { placeInfoByName } = prendyAssets;
 
   return makeRules(({ itemEffect, effect }) => ({
-    // should be a  dynamic rule ?
-    whenCameraChangesForPlanePosition: effect({
-      // in a different flow to "cameraChange"
-      run() {
-        // focusScenePlaneOnFocusedDoll();
-      },
-      check: { type: "places", prop: ["nowCamName"] },
-    }),
-
     whenAtCamCubes: itemEffect({
       run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
         const { playerCharacter } = getState().global.main;

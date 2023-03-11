@@ -1,5 +1,5 @@
 import { forEach } from "chootils/dist/loops";
-export default function makeTyped_globalStoreUtils(musicNames, soundNames) {
+export default function get_globalStoreUtils(musicNames, soundNames) {
     function makeAutomaticMusicStartRefs() {
         const partialMusicRefs = {};
         forEach(musicNames, (musicName) => {

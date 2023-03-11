@@ -1,10 +1,8 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
-import makeTyped_globalStoreUtils from "./globalStoreUtils";
+import get_globalStoreUtils from "./globalStoreUtils";
 export default function global(prendyStartOptions, prendyAssets) {
     const { musicNames, soundNames } = prendyAssets;
-    const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = makeTyped_globalStoreUtils(musicNames, soundNames);
-    console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
-    console.log(prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll);
+    const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
     // State
     const state = () => {
         var _a;
@@ -40,6 +38,7 @@ export default function global(prendyStartOptions, prendyAssets) {
             ...moverState("planeZoom", {
                 value: prendyStartOptions.zoomLevels.default,
                 valueGoal: prendyStartOptions.zoomLevels.default,
+                // springStopSpeed: 0.001, // NOTE not used in mover yet
             }),
             planePosMoveConfigName: "default",
             //
@@ -56,28 +55,27 @@ export default function global(prendyStartOptions, prendyAssets) {
             aSpeechBubbleIsShowing: false,
             aConvoIsHappening: false,
             //
-            frameTick: Date.now(),
+            frameTick: 0,
             //
             debugMessage: "",
         });
     };
     // Refs
     const refs = () => ({
-        backdropVideoTex: null,
         scene: null,
+        backdropVideoTex: null,
         depthRenderer: null,
-        //
-        sceneRenderTarget: null,
         depthRenderTarget: null,
-        scenePlane: null,
-        scenePlaneMaterial: null,
-        scenePlaneCamera: null,
+        backdropPostProcess: null,
+        backdropPostProcessEffect: null,
+        fxaaPostProcess: null,
         //
-        backdropImageSize: { width: 1280, height: 720 },
-        backdropRenderSize: { width: 1280, height: 720 },
-        depthRenderSize: { width: 1280, height: 720 },
+        backdropSize: { width: 1280, height: 720 },
+        stretchVideoSize: { x: 1, y: 1 },
+        stretchVideoGoalSize: { x: 1, y: 1 },
+        stretchSceneSize: { x: 1, y: 1 },
         //
-        ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35 }),
+        ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
         ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
         //
         sounds: makeAutomaticSoundStartRefs(),
@@ -100,9 +98,7 @@ export default function global(prendyStartOptions, prendyAssets) {
         //
         camSegmentRulesOptions: null,
         // onPickupButtonClick: null as null | ((pickupName: PickupName) => void), // what to do when pressing the pickup button
-        onPickupButtonClick: null,
-        //
-        hasAlreadyStartedRuningBeforeChangeSectionThisFrame: false,
+        onPickupButtonClick: null, // what to do when pressing the pickup button
     });
     // const startStates: InitialItemsState<typeof state> = {
     const startStates = {

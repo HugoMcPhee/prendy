@@ -8,7 +8,7 @@ When characters position changes
   bubble position to character
 */
 
-export function makeTyped_miniBubbleRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_miniBubbleRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { makeRules, setState } = storeHelpers;
 
   return makeRules(({ itemEffect, effect }) => ({

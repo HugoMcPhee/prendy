@@ -1,5 +1,5 @@
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
-export declare function makeTyped_speechBubbleRules<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(storeHelpers: StoreHelpers, prendyStores: PrendyStores): {
+export declare function get_speechBubbleRules<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(storeHelpers: StoreHelpers, prendyStores: PrendyStores): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

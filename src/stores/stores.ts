@@ -52,6 +52,7 @@ export const prendyStepNames = [
   "story", // might need to set things for the next frame, so it can respond, OR have story stuff run in different flows ")"
   "storyReaction", // if playerMovingPaused was set in or before story, this is where it can be reacted to before dollAnimation
   "planePosition",
+  "planePositionDontGoOverEdges",
   "planePositionStartMovers",
   "dollAnimation",
   "dollAnimation2",
@@ -108,7 +109,7 @@ export function makePrendyStores<
   return {
     keyboards: keyboards(),
     miniBubbles: miniBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
-    pointers: pointers(),
+    // pointers: pointers(),
     global: global<
       A_AnySegmentName,
       A_PrendyAssets,

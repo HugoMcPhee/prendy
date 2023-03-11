@@ -15,9 +15,9 @@ import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
-import { makeTyped_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
-export function makeTyped_useModelFile<StoreHelpers extends PrendyStoreHelpers>(
+export function get_useModelFile<StoreHelpers extends PrendyStoreHelpers>(
   // storeHelpers: StoreHelpers
   getScene: () => Scene | null
 ) {

@@ -1,6 +1,6 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
 import { VidSection } from "../../stores/sectionVids";
-import { makeTyped_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
+import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -11,25 +11,29 @@ import {
   SegmentNameByPlace,
 } from "../../declarations";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-import { makeTyped_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
+import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 
-export function makeTyped_globalVideoRules<
+export function get_globalVideoRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(
   storeHelpers: StoreHelpers,
   _prendyStores: PrendyStores,
-  _prendyStartOptions: PrendyOptions,
+  prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
 
-  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = makeTyped_sectionVidUtils(
+  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = get_sectionVidUtils(
     storeHelpers,
+    prendyStartOptions,
     prendyAssets
   );
-  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } =
-    makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
+  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
+    storeHelpers,
+    prendyStartOptions,
+    prendyAssets
+  );
 
   return makeRules(({ itemEffect, effect }) => ({
     whenWantToChooseVideoSection: effect({
@@ -47,7 +51,8 @@ export function makeTyped_globalVideoRules<
         const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName } =
           getState().places[nowPlaceName];
 
-        const { sectionVidState } = getState().sectionVids[nowPlaceName];
+        const { sectionVidState, wantedSection, wantToLoop, switchSection_keepProgress } =
+          getState().sectionVids[nowPlaceName];
 
         const videoIsOutsideOfCurrentLoop = checkForVideoLoop(nowPlaceName as PlaceName);
 
@@ -159,6 +164,19 @@ export function makeTyped_globalVideoRules<
 
         // set State for the global and place state, and also the sectionState
 
+        const somethingChanged =
+          wantedSegmentName !== null ||
+          new_wantedSegmentNameAtLoop !== wantedSegmentNameAtLoop ||
+          decided_wantedSegmentName !== nextSegmentNameWhenVidPlays ||
+          wantedCamName !== null ||
+          new_wantedCamNameAtLoop !== wantedCamNameAtLoop ||
+          decided_wantedCamName !== nextCamNameWhenVidPlays ||
+          decided_wantedSection !== wantedSection ||
+          decided_wantToLoop !== wantToLoop ||
+          decided_shouldKeepTime !== switchSection_keepProgress;
+
+        if (!somethingChanged) return;
+
         setState({
           global: {
             main: {
@@ -187,7 +205,7 @@ export function makeTyped_globalVideoRules<
       // check every frame so it can handle wanted things that didnt get set yet because there was already a waiting section vid!
       check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
       step: "chooseVideoSection",
-      // atStepEnd: true,
+      // atStepEnd: true, // NOTE changed this recently
     }),
     whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
       run() {

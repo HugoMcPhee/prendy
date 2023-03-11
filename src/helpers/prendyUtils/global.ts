@@ -8,7 +8,7 @@ import { forEach } from "chootils/dist/loops";
 // type GlobalItemState = ItemState<"global">;
 // type PartialGlobalState = Partial<GlobalItemState>;
 
-export function makeTyped_globalUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_globalUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getState, setState } = storeHelpers;
 
   type AllState = ReturnType<StoreHelpers["getState"]>;

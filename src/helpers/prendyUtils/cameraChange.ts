@@ -1,44 +1,44 @@
 import {
   AbstractMesh,
-  Constants,
-  Engine,
+  Camera,
+  Effect,
+  FxaaPostProcess,
   PBRMaterial,
-  RenderTargetTexture,
+  PostProcess,
   Scene,
-  ShaderMaterial,
-  Texture,
+  ShaderStore,
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_sceneStoryUtils } from "./scene";
-import { DefaultCameraRefs } from "../../stores/places";
-import shaders from "../shaders";
-import { makeTyped_getSectionVidVideo } from "./sectionVids";
 import {
   AnyCameraName,
   AnySegmentName,
-  PrendyAssets,
   CameraNameByPlace,
   PlaceName,
+  PrendyAssets,
   SegmentNameByPlace,
 } from "../../declarations";
-import { enableCustomDepthRenderer } from "../babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { makeTyped_globalUtils } from "./global";
+import { DefaultCameraRefs } from "../../stores/places";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
+import shaders from "../shaders";
+import { get_globalUtils } from "./global";
+import { get_sceneStoryUtils } from "./scene";
+import { get_getSectionVidVideo } from "./sectionVids";
 
-export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_cameraChangeUtils<
+  StoreHelpers extends PrendyStoreHelpers,
+  PrendyOptions extends PrendyOptionsUntyped
+>(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, dollNames } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
-  const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const getSectionVidVideo = makeTyped_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
-  const { getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
+  const { getGlobalState } = get_globalUtils(storeHelpers);
+  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -109,9 +109,9 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
   }
 
   function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
+    console.log("updateTexturesForNowCamera");
+
     const { nowPlaceName } = getState().global.main;
-    // const { scenes, backdropRenderSize } = globalRefs;
-    const { backdropRenderSize } = globalRefs;
     const scene = globalRefs.scene as Scene;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
@@ -119,65 +119,159 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
 
     if (scene === null) return;
     if (!newCamRef.camera) return;
-    if (!globalRefs.scenePlane) return;
 
     // Render target
-
-    if (!globalRefs.sceneRenderTarget) {
-      globalRefs.sceneRenderTarget = new RenderTargetTexture(
-        "screenShot",
-        backdropRenderSize,
-        scene,
-        false,
-        false,
-        Constants.TEXTURETYPE_UNSIGNED_INT,
-        false,
-        Texture.NEAREST_SAMPLINGMODE,
-        undefined,
-        undefined,
-        undefined,
-        Engine.TEXTUREFORMAT_RGBA
-      );
+    if (globalRefs.backdropPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.backdropPostProcess);
+    }
+    if (globalRefs.fxaaPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.fxaaPostProcess);
     }
 
-    globalRefs.sceneRenderTarget.activeCamera = newCamRef.camera;
+    globalRefs.scene.activeCamera = newCamRef.camera;
+
+    if (globalRefs.backdropPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.backdropPostProcess);
+    }
+    if (globalRefs.fxaaPostProcess) {
+      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.fxaaPostProcess);
+    }
+
+    // console.log("newCamRef.camera");
+    // newCamRef.camera.maxZ = 1000;
+    // console.log(newCamRef.camera.maxZ);
 
     if (!globalRefs.depthRenderer) {
-      globalRefs.depthRenderer = enableCustomDepthRenderer(
-        scene,
-        getRefs().global.main.depthRenderSize,
-        newCamRef.camera,
-        false
-      );
+      console.log("making new depth renderer");
+
+      globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
     }
 
     (globalRefs.depthRenderer as any)._camera = newCamRef.camera;
 
     if (!globalRefs.depthRenderTarget) {
       globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
+      // globalRefs.depthRenderTarget?.resize({ width: 1280, height: 720 });
     }
 
     globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
 
     if (!scene.customRenderTargets.length) {
-      scene.customRenderTargets = [globalRefs.sceneRenderTarget, globalRefs.depthRenderTarget];
-
+      scene.customRenderTargets = [globalRefs.depthRenderTarget];
       addMeshesToRenderLists(newCamRef);
     }
 
-    // Plane material
-    if (!globalRefs.scenePlaneMaterial) {
-      globalRefs.scenePlaneMaterial = new ShaderMaterial("backdropAndDepthShader", scene, shaders.backdropAndDepth, {
-        attributes: ["position", "uv"],
-        uniforms: ["worldViewProjection"],
-      });
-      globalRefs.scenePlane.material = globalRefs.scenePlaneMaterial;
+    if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
+      ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
+      ShaderStore.ShadersStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
 
-      globalRefs.scenePlaneMaterial.setTexture("textureSampler", globalRefs.sceneRenderTarget);
-      globalRefs.scenePlaneMaterial.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
-      updateVideoTexturesForNewPlace(nowPlaceName);
+      // ShaderStore.ShadersStore["translatedFxaaPixelShader"] = shaders.translatedFxaa.translatedFxaaFragment;
+      // ShaderStore.ShadersStore["translatedFxaaVertexShader"] = shaders.translatedFxaa.translatedFxaaVertex;
 
-      globalRefs.scenePlane.material.freeze();
+      globalRefs.backdropPostProcess = new PostProcess(
+        "backdropAndDepthShader",
+        "depthy",
+        ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+        ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
+        1,
+        globalRefs.scene.activeCamera,
+        // globalRefs.activeCamera
+        // Texture.NEAREST_SAMPLINGMODE // sampling
+        // globalRefs.scene.engine // engine,
+        // Texture.BILINEAR_SAMPLINGMODE,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        "depthy"
+      );
+      // setTimeout(() => {
+      //   globalRefs.backdropPostProcess = new PostProcess(
+      //     "backdropAndDepthShader",
+      //     "translatedFxaa",
+      //     null, // ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+      //     null, //["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
+      //     1,
+      //     globalRefs.scene.activeCamera,
+      //     // globalRefs.activeCamera
+      //     // Texture.NEAREST_SAMPLINGMODE // sampling
+      //     // globalRefs.scene.engine // engine,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     "translatedFxaa"
+      //   );
+      // }, 4000);
+
+      // const fxaaPP = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+
+      // fxaaPP.
+
+      // // const appliedProcess = postProcess.apply();
+
+      globalRefs.backdropPostProcess.onApply = (effect) => {
+        const { planePos, planePosGoal, planeZoom } = getState().global.main;
+        if (!globalRefs.backdropPostProcessEffect) {
+          globalRefs.backdropPostProcessEffect = effect;
+          console.log("reapplying");
+
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+            "planePos",
+            planePosGoal.x,
+            planePosGoal.y
+          );
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+            "stretchSceneAmount",
+            planeZoom,
+            planeZoom
+          );
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
+
+          // setState({ global: { main: { timeScreenResized: Date.now() } } });
+          setTimeout(() => {
+            console.log("resizing");
+
+            setState({ global: { main: { timeScreenResized: Date.now() } } });
+          }, 10);
+
+          updateVideoTexturesForNewPlace(nowPlaceName);
+        }
+
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          "stretchVideoAmount",
+          globalRefs.stretchVideoSize.x,
+          globalRefs.stretchVideoSize.y
+        );
+        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+          "stretchSceneAmount",
+          globalRefs.stretchSceneSize.x,
+          globalRefs.stretchSceneSize.y
+        );
+
+        // const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
+        // const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
+        const positionChanged = true;
+        const zoomChanged = true;
+
+        const engine = scene?.getEngine(); // engine
+        if (engine && (positionChanged || zoomChanged)) {
+          const stretchVideoSize = globalRefs.stretchVideoSize;
+
+          (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
+            "planePos",
+            planePos.x * stretchVideoSize.x,
+            planePos.y * stretchVideoSize.y
+          );
+        }
+        updateVideoTexture();
+      };
+    }
+
+    if (globalRefs.scene.activeCamera && !globalRefs.fxaaPostProcess) {
+      globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
     }
 
     if (didChangePlace) {
@@ -194,7 +288,6 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
 
     // scene.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
 
-    globalRefs.sceneRenderTarget.renderList = [];
     globalRefs.depthRenderTarget.renderList = [];
 
     forEach(dollNames, (dollName) => {
@@ -208,7 +301,6 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
         if (loopedMesh) {
           loopedMesh.isInFrustum = () => true;
           // loopedMesh.alwaysSelectAsActiveMesh = true;
-          globalRefs.sceneRenderTarget?.renderList?.push(loopedMesh);
           globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
         }
       });
@@ -217,7 +309,6 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     forEach(particleSystemNames, (particleSystemName) => {
       const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
-      globalRefs.sceneRenderTarget?.renderList?.push(particleSystem.mesh);
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
       (particleSystem as any)._camera = newCamRef.camera;
     });
@@ -228,13 +319,17 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
     if (globalRefs.backdropVideoTex) {
       const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
-
-      if (backdropVidElement) {
-        globalRefs.backdropVideoTex.updateVid(backdropVidElement);
-      }
+      if (backdropVidElement) globalRefs.backdropVideoTex.updateVid(backdropVidElement);
     }
 
-    globalRefs?.scenePlaneMaterial?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
+    updateVideoTexture();
+  }
+
+  function updateVideoTexture() {
+    // if (Math.random() > 0.7) {
+    globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
+    // }
+    globalRefs?.backdropPostProcessEffect?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
   }
 
   function applyProbeToAllDollMaterials() {
@@ -248,24 +343,13 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
     // const newCamRef = camsRefs[placeState.nowCamName];
 
     if (scene === null) return;
-    // if (!newCamRef.camera) return;
-    if (!globalRefs.scenePlane) return;
 
     forEach(modelNamesLoaded, (modelName: any & string) => {
       const modelRefs = getRefs().models[modelName];
 
-      // console.log("camsRefs[placeState.nowCamName].probeTexture");
-      // console.log(camsRefs[placeState.nowCamName].probeTexture);
-
       if (modelRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
         modelRefs.materialRef.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
       }
-
-      // const scene = getScene();
-      // if (scene) {
-      //   dollRefs.materialRef = new StandardMaterial("redMat", scene) as any;
-      //   (dollRefs.materialRef as any).ambientColor = new Color3(0, 1, 0);
-      // }
     });
     //
     // // looks like the dolls material doesn't automatically update with the models material
@@ -274,28 +358,17 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
       const dollRefs = getRefs().dolls[dollName];
       const { modelName } = getState().dolls[dollName];
       const modelRefs = getRefs().models[modelName];
-      // console.log("alreaddy", dollRefs.materialRef === modelRefs.materialRef);
 
-      // dollRefs.materialRef = modelRefs.materialRef;
-      // dollRefs.materialRef = modelRefs.materialRef;
       if (dollRefs.meshRef) {
         // (modelRefs.materialRef as PBRMaterial).isReadyForSubMesh = () => false;
         dollRefs.meshRef.material = modelRefs.materialRef;
         dollRefs.meshRef.material.freeze();
       }
     });
-
-    // forEach(dollNames, (dollName) => {
-    //   const dollRefs = getRefs().dolls[dollName];
-    //   if (dollRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
-    //     dollRefs.materialRef.reflectionTexture =
-    //       camsRefs[placeState.nowCamName].probeTexture;
-    //   }
-    // });
   }
 
   function applyProbeToAllParticleMaterials() {
-    const { nowPlaceName, modelNamesLoaded } = getState().global.main;
+    const { nowPlaceName } = getState().global.main;
 
     const placeState = getState().places[nowPlaceName];
 
@@ -305,8 +378,6 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
     // const newCamRef = camsRefs[placeState.nowCamName];
 
     if (scene === null) return;
-    // if (!newCamRef.camera) return;
-    if (!globalRefs.scenePlane) return;
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     particleSystemNames.forEach((particleSystemName) => {
@@ -316,7 +387,6 @@ export function makeTyped_cameraChangeUtils<StoreHelpers extends PrendyStoreHelp
         material.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
       }
 
-      globalRefs.sceneRenderTarget?.renderList?.push(particleSystem.mesh);
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
     });
   }

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 /// <reference types="react" />
 import { AnimationNameByModel, AnyAnimationName, AnyCameraName, AnySegmentName, AnySpotName, AnyTriggerName, PrendyAssets, PrendyOptions, BoneNameByModel, CameraNameByPlace, CharacterName, CharacterOptions, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PickupName, PlaceInfoByName, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../declarations";
-export declare const prendyStepNames: readonly ["safeVidStateUpdates", "sectionVidStateUpdates", "respondToNewPlace", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "planePosition", "planePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSection", "sectionVidWantsToPlay", "sectionVidWantsToPlay2", "safeVidWantsToPlay", "default", "rendering", "overlay"];
+export declare const prendyStepNames: readonly ["safeVidStateUpdates", "sectionVidStateUpdates", "respondToNewPlace", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "planePosition", "planePositionDontGoOverEdges", "planePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSection", "sectionVidWantsToPlay", "sectionVidWantsToPlay2", "safeVidWantsToPlay", "default", "rendering", "overlay"];
 export declare type StepName = typeof prendyStepNames[number];
 export declare function makePrendyStores<A_CharacterName extends CharacterName = CharacterName, A_PlaceName extends PlaceName = PlaceName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace, A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_AnySegmentName extends AnySegmentName = AnySegmentName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_AnySpotName extends AnySpotName = AnySpotName, A_BoneNameByModel extends BoneNameByModel = BoneNameByModel, A_DollOptions extends DollOptions = DollOptions, A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CharacterOptions extends CharacterOptions = CharacterOptions>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): {
     keyboards: {
@@ -67,17 +67,6 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             forCharacter: string | null;
             position: import("chootils/dist/points2d").Point2D;
         }; };
-    };
-    pointers: {
-        state: () => {
-            pointerPosition: import("chootils/dist/points2d").Point2D;
-        };
-        refs: () => {
-            pointerId: string;
-            firstInputPosition: import("chootils/dist/points2d").Point2D;
-            isFirstMovement: boolean;
-            offset: import("chootils/dist/points2d").Point2D;
-        };
     };
     global: {
         startStates: {
@@ -187,7 +176,6 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             aConvoIsHappening_timeout: NodeJS.Timeout | null;
             camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
             onPickupButtonClick: ((pickupName: any) => void) | null;
-            hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
             planeZoomMoverRefs: {
                 velocity: number;
                 recentSpeeds: number[];
@@ -216,25 +204,28 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
                 };
                 physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
             };
-            backdropVideoTex: import("../helpers/babylonjs/CustomVideoTexture").CustomVideoTexture | null;
             scene: import("@babylonjs/core").Scene | null;
-            depthRenderer: import("../helpers/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize").DepthRendererWithSize | null;
-            sceneRenderTarget: import("@babylonjs/core").RenderTargetTexture | null;
+            backdropVideoTex: import("../helpers/babylonjs/CustomVideoTexture").CustomVideoTexture | null;
+            depthRenderer: import("@babylonjs/core").DepthRenderer | null;
             depthRenderTarget: import("@babylonjs/core").RenderTargetTexture | null;
-            scenePlane: import("@babylonjs/core").Mesh | null;
-            scenePlaneMaterial: import("@babylonjs/core").ShaderMaterial | null;
-            scenePlaneCamera: import("@babylonjs/core").TargetCamera | null;
-            backdropImageSize: {
+            backdropPostProcess: import("@babylonjs/core").PostProcess | null;
+            backdropPostProcessEffect: import("@babylonjs/core").Effect | null;
+            fxaaPostProcess: import("@babylonjs/core").PostProcess | null;
+            backdropSize: {
                 width: number;
                 height: number;
             };
-            backdropRenderSize: {
-                width: number;
-                height: number;
+            stretchVideoSize: {
+                x: number;
+                y: number;
             };
-            depthRenderSize: {
-                width: number;
-                height: number;
+            stretchVideoGoalSize: {
+                x: number;
+                y: number;
+            };
+            stretchSceneSize: {
+                x: number;
+                y: number;
             };
         };
     };
@@ -266,7 +257,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
-            positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
+            positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
@@ -292,7 +283,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
-            positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
+            positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
@@ -318,7 +309,7 @@ export declare function makePrendyStores<A_CharacterName extends CharacterName =
             animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
-            positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
+            positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;

@@ -1,6 +1,6 @@
 import { substring, length, toArray, indexOf } from "stringz";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
+import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
 import { CSSProperties } from "react";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
 import { StoreHelperTypes } from "pietem";
@@ -13,7 +13,7 @@ When characters position changes
   bubble position to character
 */
 
-export function makeTyped_speechBubbleRules<
+export function get_speechBubbleRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores
 >(storeHelpers: StoreHelpers, prendyStores: PrendyStores) {
@@ -33,7 +33,7 @@ export function makeTyped_speechBubbleRules<
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
   type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
-  const { getTypingDelayForLetter } = makeTyped_speechBubblesUtils(storeHelpers, prendyStores);
+  const { getTypingDelayForLetter } = get_speechBubblesUtils(storeHelpers, prendyStores);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenGoalTextChanges: itemEffect({

@@ -2,7 +2,7 @@
 import React from "react";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_AlarmText<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_AlarmText<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};

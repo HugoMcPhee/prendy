@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { PrendyStoreHelpers, PickupsInfoPlaceholder } from "../../../stores/typedStoreHelpers";
 
-export function makeTyped_PickupButton<
+export function get_PickupButton<
   StoreHelpers extends PrendyStoreHelpers,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>

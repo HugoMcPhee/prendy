@@ -1,14 +1,24 @@
 // @refresh-reset
+import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { CharacterName } from "../../declarations";
+import { getScreenSize } from "../../helpers/babylonjs/scenePlane";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+// NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
+// So some of it could be shared code
+
+const BUBBLE_WIDTH = 70;
+const BUBBLE_HEIGHT_RATIO = 0.74814;
+const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
+const TRIANGLE_SIZE = 25;
+
+export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { useStoreEffect, useStore, getState } = storeHelpers;
 
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
@@ -74,22 +84,56 @@ export function makeTyped_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(st
     }, [measuredHeight, theSpringApi]);
 
     const positionMiniBubbleToCharacter = useCallback(() => {
-      const { forCharacter } = getState().miniBubbles[name];
-
+      const { forCharacter } = getState().speechBubbles[name];
       if (!forCharacter) return;
-      const { dollState, dollName } = getCharDollStuff(forCharacter) ?? {};
+      const { dollState, dollName } = getCharDollStuff(forCharacter as CharacterName) ?? {};
+
       if (!dollState || !dollName) return;
-      const { positionOnPlaneScene } = dollState;
+      const { focusedDoll, focusedDollIsInView } = getState().global.main;
+      const positionOnScreen = dollState.positionOnScreen;
 
-      // const playerCameraDistance =
-      //   meshRef && camera
-      //     ? Vector3.Distance(meshRef?.position, camera?.position)
-      //     : 4;
+      // if (dollName === focusedDoll && !focusedDollIsInView) {}
 
-      const newPositionX = positionOnPlaneScene.x;
-      let yOffset = (refs.theTextRectangle.current?.offsetHeight ?? 190) / 2;
+      const viewSize = getScreenSize();
 
-      const newPositionY = positionOnPlaneScene.y - yOffset;
+      const farLeft = -viewSize.x / 2;
+      const farRight = viewSize.x / 2;
+      const farTop = -viewSize.y / 2;
+      const farBottom = viewSize.y / 2;
+
+      const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
+      const halfBubbleHeight = bubbleHeight / 2;
+      const halfBubbleWidth = BUBBLE_WIDTH / 2;
+      const halfTriangleSize = TRIANGLE_SIZE / 2;
+
+      const screenSize = getScreenSize();
+
+      // need function to get position on screen
+
+      let newPositionX = positionOnScreen.x - screenSize.x / 2;
+
+      let yOffset = bubbleHeight / 2;
+
+      let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
+
+      // Keep the focused dolls speech bubble inside the view
+      if (dollName === focusedDoll) {
+        if (newPositionX - halfBubbleWidth < farLeft) {
+          newPositionX = farLeft + halfBubbleWidth;
+        }
+        if (newPositionX + halfBubbleWidth > farRight) {
+          newPositionX = farRight - halfBubbleWidth;
+        }
+
+        if (newPositionY - halfBubbleHeight - halfTriangleSize < farTop) {
+          newPositionY = farTop + halfBubbleHeight + halfTriangleSize;
+        }
+        if (newPositionY + halfBubbleHeight + halfTriangleSize > farBottom) {
+          newPositionY = farBottom - halfBubbleHeight - halfTriangleSize;
+        }
+      }
+
+      // console.log("newPositionX", newPositionX);
 
       theSpringApi.start({
         position: [newPositionX, newPositionY],
@@ -103,7 +147,7 @@ export function makeTyped_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(st
         positionMiniBubbleToCharacter();
       },
       [
-        { type: ["dolls"], name: forCharacter, prop: ["positionOnPlaneScene"] },
+        { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },

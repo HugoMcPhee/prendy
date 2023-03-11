@@ -2,8 +2,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { makeTyped_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
+import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { getScreenSize, get_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
@@ -13,19 +13,20 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function makeTyped_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
+export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
-  const { getState, useStore, useStoreEffect } = storeHelpers;
-  const { viewCenterPoint, getViewSize } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
+
+  const globalRefs = getRefs().global.main;
 
   type GetState = StoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
 
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 
@@ -120,32 +121,31 @@ export function makeTyped_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
 
       if (!dollState || !dollName) return;
       const { focusedDoll, focusedDollIsInView } = getState().global.main;
-      const positionOnPlaneScene = dollState.positionOnPlaneScene;
-      // console.log(positionOnPlaneScene);
+      const positionOnScreen = dollState.positionOnScreen;
 
-      // BUBBLE_WIDTH
-      // if (dollName === focusedDoll && !focusedDollIsInView) {
-      //   positionOnPlaneScene = { x: 0, y: 0 };
-      // }
+      // if (dollName === focusedDoll && !focusedDollIsInView) {}
 
-      const viewSize = getViewSize();
+      const viewSize = getScreenSize();
 
-      const farLeft = -viewSize.width / 2;
-      const farRight = viewSize.width / 2;
-      const farTop = -viewSize.height / 2;
-      const farBottom = viewSize.height / 2;
+      const farLeft = -viewSize.x / 2;
+      const farRight = viewSize.x / 2;
+      const farTop = -viewSize.y / 2;
+      const farBottom = viewSize.y / 2;
 
       const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
       const halfBubbleHeight = bubbleHeight / 2;
       const halfBubbleWidth = BUBBLE_WIDTH / 2;
       const halfTriangleSize = TRIANGLE_SIZE / 2;
-      // console.log(positionOnPlaneScene.x * 2);
 
-      let newPositionX = positionOnPlaneScene.x;
+      const screenSize = getScreenSize();
+
+      // need function to get position on screen
+
+      let newPositionX = positionOnScreen.x - screenSize.x / 2;
 
       let yOffset = bubbleHeight / 2;
 
-      let newPositionY = positionOnPlaneScene.y - yOffset;
+      let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
 
       // Keep the focused dolls speech bubble inside the view
       if (dollName === focusedDoll) {
@@ -164,6 +164,8 @@ export function makeTyped_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
         }
       }
 
+      // console.log("newPositionX", newPositionX);
+
       theSpringApi.start({
         position: [newPositionX, newPositionY],
         immediate: true,
@@ -179,7 +181,7 @@ export function makeTyped_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
         {
           type: ["dolls"],
           name: forCharacter,
-          prop: ["positionOnPlaneScene"],
+          prop: ["positionOnScreen"],
         },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },

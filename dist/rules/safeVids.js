@@ -1,7 +1,7 @@
 import { makeVideoElementFromPath } from "../helpers/prendyUtils/safeVids";
 // import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
-export function makeTyped_safeVidRules(storeHelpers) {
+export function get_safeVidRules(storeHelpers) {
     const { getState, makeRules, onNextTick, setState } = storeHelpers;
     return makeRules(({ itemEffect }) => ({
         rulesForSettingNewVideoStates: itemEffect({

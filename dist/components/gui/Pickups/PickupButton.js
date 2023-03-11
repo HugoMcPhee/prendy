@@ -1,6 +1,6 @@
 // @refresh-reset
 import React, { useState } from "react";
-export function makeTyped_PickupButton(storeHelpers, pickupsInfo) {
+export function get_PickupButton(storeHelpers, pickupsInfo) {
     const { getRefs } = storeHelpers;
     const globalRefs = getRefs().global.main;
     return function PickupButton({ name }) {

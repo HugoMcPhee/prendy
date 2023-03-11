@@ -1,7 +1,7 @@
-import { AbstractMesh, Vector3 } from "@babylonjs/core";
+import { AbstractMesh } from "@babylonjs/core";
 import { Point3D } from "chootils/dist/points3d";
-export declare function setGlobalPositionWithCollisions(theMesh: AbstractMesh, newMeshPos: Vector3): {
-    editedPosition: Vector3;
+export declare function setGlobalPositionWithCollisions(theMesh: AbstractMesh, newMeshPos: Point3D): {
+    editedPosition: Point3D;
     positionWasEdited: boolean;
     positionDidChange: boolean;
     collidedPosOffset: Point3D;

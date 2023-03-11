@@ -1,4 +1,4 @@
-export function makeTyped_keyboardConnectRules(storeHelpers) {
+export function get_keyboardConnectRules(storeHelpers) {
     const { setState, getState } = storeHelpers;
     function handleKeyDown(event) {
         const keyboardState = getState().keyboards.main;

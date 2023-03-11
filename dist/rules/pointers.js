@@ -1,4 +1,4 @@
-export function makeTyped_pointersConnectRules(storeHelpers) {
+export function get_pointersConnectRules(storeHelpers) {
     const { getRefs, setState, addItem, removeItem } = storeHelpers;
     const onPointerDown = (event) => {
         const pointerId = event.pointerId.toString();
@@ -33,14 +33,15 @@ export function makeTyped_pointersConnectRules(storeHelpers) {
             x: event.clientX,
             y: event.clientY,
         };
+        // console.log(newPointerPosition);
         const pointerId = event.pointerId.toString();
         const pointerRefs = getRefs().pointers[pointerId];
         const pointerExists = !!pointerRefs;
-        if (pointerExists) {
-            setState({
-                pointers: { [pointerId]: { pointerPosition: newPointerPosition } },
-            });
-        }
+        // if (pointerExists) {
+        //   setState({
+        //     pointers: { [pointerId]: { pointerPosition: newPointerPosition } },
+        //   });
+        // }
     };
     // const onPointerCancel = (event: PointerEvent) => {
     //   console.log("-                            cancel");

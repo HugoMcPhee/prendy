@@ -1,19 +1,21 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { makeTyped_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
-export function makeTyped_characterDynamicRules(storeHelpers, prendyStartOptions, prendyAssets) {
+import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+export function get_characterDynamicRules(storeHelpers, prendyStartOptions, prendyAssets) {
     const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { updatePlanePositionToFocusOnMesh } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
     return makeDynamicRules(({ itemEffect, effect }) => ({
         whenPositionChanges: effect(({ characterName, dollName, }) => ({
             // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-            run({ itemRefs, itemState }) {
+            run({ itemRefs, newValue, previousValue }) {
+                // console.log("prevItemState", other);
                 // TODO
                 // only update the collider stuff here
                 // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)
+                // if (samePoints(newValue ?? defaultPosition, previousValue ?? defaultPosition)) return;
                 if (!itemRefs.meshRef)
                     return;
                 const { nowPlaceName, loadingOverlayToggled, focusedDoll } = getState().global.main;
@@ -75,13 +77,17 @@ export function makeTyped_characterDynamicRules(storeHelpers, prendyStartOptions
                     });
                 }
                 if (dollName === focusedDoll) {
-                    // Update screen position :)
-                    updatePlanePositionToFocusOnMesh({ meshRef: itemRefs.meshRef });
+                    focusScenePlaneOnFocusedDoll();
                 }
             },
             check: { type: "dolls", prop: "position", name: dollName },
             atStepEnd: true,
             step: "checkCollisions",
+            // NOTE "becomes" isn't working for dynamic rules?
+            // becomes: (position, prevPosition) => {
+            //   console.log("becomes", position, prevPosition);
+            //   return samePoints(position ?? defaultPosition, prevPosition ?? defaultPosition);
+            // },
         })),
         // whenInRangeChanges: itemEffect(
         //   ({
@@ -105,7 +111,7 @@ export function makeTyped_characterDynamicRules(storeHelpers, prendyStartOptions
 // FIXME
 // maybe allow pietem to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
-export function makeTyped_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers) {
+export function get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers) {
     const { getState } = storeHelpers;
     return function startDynamicCharacterRulesForInitialState() {
         forEach(characterNames, (characterName) => {
@@ -124,18 +130,10 @@ export function makeTyped_startDynamicCharacterRulesForInitialState(characterDyn
         };
     };
 }
-export function makeTyped_characterRules(storeHelpers, prendyAssets) {
+export function get_characterRules(storeHelpers, prendyAssets) {
     const { makeRules, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
     return makeRules(({ itemEffect, effect }) => ({
-        // should be a  dynamic rule ?
-        whenCameraChangesForPlanePosition: effect({
-            // in a different flow to "cameraChange"
-            run() {
-                // focusScenePlaneOnFocusedDoll();
-            },
-            check: { type: "places", prop: ["nowCamName"] },
-        }),
         whenAtCamCubes: itemEffect({
             run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
                 const { playerCharacter } = getState().global.main;

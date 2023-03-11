@@ -1,72 +1,27 @@
-import { AbstractMesh, Mesh, Vector3 } from "@babylonjs/core";
-import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
+import { AbstractMesh, Vector3 } from "@babylonjs/core";
 import { Point2D } from "chootils/dist/points2d";
-export declare function makeTyped_scenePlaneUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions): {
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+export declare function getScreenSize(): {
+    x: number;
+    y: number;
+};
+export declare const planeSize: {
+    x: number;
+    y: number;
+};
+export declare function get_scenePlaneUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions): {
     getPositionOnPlane: (theMesh: AbstractMesh) => Vector3;
-    updatePlanePositionToFocusOnMesh: ({ meshRef, instant }: {
-        meshRef: AbstractMesh;
-        instant?: boolean | undefined;
-    }) => void;
     focusScenePlaneOnFocusedDoll: (instant?: "instant") => void;
-    getViewSize: () => {
-        width: any;
-        height: any;
-    };
-    getPlaneSize: (useGoalZoom?: boolean) => {
-        width: number;
-        height: number;
-    };
-    planeCenterPoint: () => {
-        x: number;
-        y: number;
-    };
-    viewCenterPoint: () => {
-        x: number;
-        y: number;
-    };
-    fitScenePlaneToScreen: (thePlane: Mesh) => void;
-    convertPointOnPlaneToUnmovedPointOnScreen: (thePoint: {
-        x: number;
-        y: number;
-    }) => {
-        x: number;
-        y: number;
-    };
-    convertToSafePointOnPlane: (pointOnPlane: Point2D) => Point2D;
-    convertPointOnPlaneToPointOnScreen: ({ pointOnPlane, planePosition, }: {
+    getPlanePositionNotOverEdges: (planePos: Point2D, useGoal?: boolean) => Point2D;
+    getViewSize: () => import("chootils/dist/sizes").Size;
+    convertPointOnPlaneToPointOnScreen: ({ pointOnPlane, planePos, planeZoom, }: {
         pointOnPlane: Point2D;
-        planePosition: Point2D;
+        planePos: Point2D;
+        planeZoom: number;
     }) => Point2D;
-    getScenePlaneOverScreenEdgesAmount: (newPosition: {
-        x: number;
-        y: number;
-    }) => {
-        top: number;
-        bottom: number;
-        left: number;
-        right: number;
-    };
-    getSafePlanePositionFocusedOnPointOnPlain: (pointOnPlane: Point2D) => {
-        x: number;
-        y: number;
-    };
-    applyPlanePosition: (planePosition: {
-        x: number;
-        y: number;
-    }) => void;
-    convertScreenPointToPlaneScenePoint: (theScreenPoint: {
-        x: number;
-        y: number;
-    }) => {
-        x: number;
-        y: number;
-    };
-    convertPlaneScenePointToScreenPoint: (thePlaneScenePoint: {
-        x: number;
-        y: number;
-    }) => {
-        x: number;
-        y: number;
-    };
     checkPointIsInsidePlane: (pointOnPlane: Point2D) => boolean;
+    getShaderTransformStuff: () => {
+        editedPlaneSceneZoom: any;
+        editedHardwareScaling: number;
+    };
 };

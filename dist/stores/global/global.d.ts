@@ -1,8 +1,7 @@
 /// <reference types="node" />
-import { Mesh, RenderTargetTexture, Scene, ShaderMaterial, SolidParticleSystem, TargetCamera } from "@babylonjs/core";
+import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
 import { AnySegmentName, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName, PrendyAssets, PrendyOptions } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { DepthRendererWithSize } from "../../helpers/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 export default function global<A_AnySegmentName extends AnySegmentName = AnySegmentName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): {
     startStates: {
         main: {
@@ -111,7 +110,6 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
         aConvoIsHappening_timeout: NodeJS.Timeout | null;
         camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
-        hasAlreadyStartedRuningBeforeChangeSectionThisFrame: boolean;
         planeZoomMoverRefs: {
             velocity: number;
             recentSpeeds: number[];
@@ -140,25 +138,28 @@ export default function global<A_AnySegmentName extends AnySegmentName = AnySegm
             };
             physicsConfigs: import("pietem-movers/dist/types").DefinedPhysicsConfig;
         };
-        backdropVideoTex: CustomVideoTexture | null;
         scene: Scene | null;
-        depthRenderer: DepthRendererWithSize | null;
-        sceneRenderTarget: RenderTargetTexture | null;
+        backdropVideoTex: CustomVideoTexture | null;
+        depthRenderer: DepthRenderer | null;
         depthRenderTarget: RenderTargetTexture | null;
-        scenePlane: Mesh | null;
-        scenePlaneMaterial: ShaderMaterial | null;
-        scenePlaneCamera: TargetCamera | null;
-        backdropImageSize: {
+        backdropPostProcess: PostProcess | null;
+        backdropPostProcessEffect: Effect | null;
+        fxaaPostProcess: PostProcess | null;
+        backdropSize: {
             width: number;
             height: number;
         };
-        backdropRenderSize: {
-            width: number;
-            height: number;
+        stretchVideoSize: {
+            x: number;
+            y: number;
         };
-        depthRenderSize: {
-            width: number;
-            height: number;
+        stretchVideoGoalSize: {
+            x: number;
+            y: number;
+        };
+        stretchSceneSize: {
+            x: number;
+            y: number;
         };
     };
 };

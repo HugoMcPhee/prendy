@@ -1,7 +1,7 @@
 import { Point2D } from "chootils/dist/points2d";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
-export function makeTyped_pointersConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_pointersConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getRefs, setState, addItem, removeItem } = storeHelpers;
 
   const onPointerDown = (event: PointerEvent) => {
@@ -42,14 +42,16 @@ export function makeTyped_pointersConnectRules<StoreHelpers extends PrendyStoreH
       y: event.clientY,
     };
 
+    // console.log(newPointerPosition);
+
     const pointerId = event.pointerId.toString();
     const pointerRefs = getRefs().pointers[pointerId];
     const pointerExists = !!pointerRefs;
-    if (pointerExists) {
-      setState({
-        pointers: { [pointerId]: { pointerPosition: newPointerPosition } },
-      });
-    }
+    // if (pointerExists) {
+    //   setState({
+    //     pointers: { [pointerId]: { pointerPosition: newPointerPosition } },
+    //   });
+    // }
   };
 
   // const onPointerCancel = (event: PointerEvent) => {

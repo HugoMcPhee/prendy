@@ -9,14 +9,14 @@ import {
   PlaceName,
   SoundName,
 } from "../../../declarations";
-import { makeTyped_globalUtils } from "../../prendyUtils/global";
+import { get_globalUtils } from "../../prendyUtils/global";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
-import { makeTyped_useModelFile } from "../useModelFile";
+import { get_useModelFile } from "../useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
-import { makeTyped_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
-import { makeTyped_usePlaceUtils } from "./utils";
+import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { get_usePlaceUtils } from "./utils";
 
-export function makeTyped_usePlace<
+export function get_usePlace<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyStores extends PlaceholderPrendyStores,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
@@ -25,12 +25,13 @@ export function makeTyped_usePlace<
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, soundFiles } = prendyAssets;
 
-  const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
-  const useModelFile = makeTyped_useModelFile(getScene);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
+  const useModelFile = get_useModelFile(getScene);
 
-  const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = makeTyped_usePlaceUtils(
+  const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(
     storeHelpers,
+    prendyStartOptions,
     prendyAssets
   );
 

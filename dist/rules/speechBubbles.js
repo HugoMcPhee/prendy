@@ -1,6 +1,6 @@
 import { substring, length, toArray, indexOf } from "stringz";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
+import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
 let zIndexCounter = 100;
 /*
 Dynamic rules
@@ -8,9 +8,9 @@ Dynamic rules
 When characters position changes
   bubble position to character
 */
-export function makeTyped_speechBubbleRules(storeHelpers, prendyStores) {
+export function get_speechBubbleRules(storeHelpers, prendyStores) {
     const { makeRules, setState, getRefs } = storeHelpers;
-    const { getTypingDelayForLetter } = makeTyped_speechBubblesUtils(storeHelpers, prendyStores);
+    const { getTypingDelayForLetter } = get_speechBubblesUtils(storeHelpers, prendyStores);
     return makeRules(({ itemEffect, effect }) => ({
         whenGoalTextChanges: itemEffect({
             run({ itemName, itemRefs, itemState }) {

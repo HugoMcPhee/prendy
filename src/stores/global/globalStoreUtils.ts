@@ -1,7 +1,7 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 
-export default function makeTyped_globalStoreUtils<MusicName extends string, SoundName extends string>(
+export default function get_globalStoreUtils<MusicName extends string, SoundName extends string>(
   musicNames: readonly MusicName[],
   soundNames: readonly SoundName[]
 ) {

@@ -1,7 +1,7 @@
 import { VidState } from "../../stores/safeVids";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function makeTyped_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
 
   function doWhenSafeVidStateChanges(
@@ -30,25 +30,6 @@ export function makeTyped_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(
     });
     return ruleName;
   }
-
-  // the same but waits for checkShouldRun to be false before checking for true
-
-  // function doWhenSafeVidStateChangesSafer(
-  //   safeVidId: string,
-  //   checkShouldRun: (newVidState: VidState) => boolean,
-  //   callback: () => void
-  // ) {
-  //   return doWhenSafeVidStateChanges(
-  //     safeVidId,
-  //     (newState) => !checkShouldRun(newState),
-  //     () =>
-  //       doWhenSafeVidStateChanges(
-  //         safeVidId,
-  //         (newState) => checkShouldRun(newState),
-  //         callback
-  //       )
-  //   );
-  // }
 
   function doWhenSafeVidStateReady(
     safeVidId: string,

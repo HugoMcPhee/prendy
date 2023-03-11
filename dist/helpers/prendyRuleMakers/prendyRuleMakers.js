@@ -1,7 +1,7 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { makeTyped_getCharDollStuff } from "../prendyUtils/characters";
+import { get_getCharDollStuff } from "../prendyUtils/characters";
 // export each of the rule makers stuff from here :)
-export function makeTyped_getUsefulStoryStuff(storeHelpers) {
+export function get_getUsefulStoryStuff(storeHelpers) {
     const { getRefs, getState } = storeHelpers;
     return function getUsefulStoryStuff() {
         const storyState = getState().story.main;
@@ -33,7 +33,7 @@ export function makeTyped_getUsefulStoryStuff(storeHelpers) {
         };
     };
 }
-export function makeTyped_setStoryState(storeHelpers) {
+export function get_setStoryState(storeHelpers) {
     const { setState } = storeHelpers;
     return function setStoryState(newState) {
         setState({ story: { main: newState } });
@@ -41,8 +41,8 @@ export function makeTyped_setStoryState(storeHelpers) {
 }
 export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterNames, dollNames) {
     const { getRefs, getState, makeRules, startItemEffect, stopEffect, onNextTick } = storeHelpers;
-    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
-    const getUsefulStoryStuff = makeTyped_getUsefulStoryStuff(storeHelpers);
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+    const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
     function makeCamChangeRules(callBacksObject) {
         return makeRules(({ itemEffect }) => ({
             whenCameraChanges: itemEffect({

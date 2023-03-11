@@ -1,9 +1,9 @@
 // @refresh-reset
 import React, { useEffect } from "react";
 import { PrendyStoreHelpers, PickupsInfoPlaceholder } from "../../../stores/typedStoreHelpers";
-import { makeTyped_PickupButton } from "./PickupButton";
+import { get_PickupButton } from "./PickupButton";
 
-export function makeTyped_Pickups<
+export function get_Pickups<
   StoreHelpers extends PrendyStoreHelpers,
   PickupName extends string,
   PickupsInfo extends PickupsInfoPlaceholder<PickupName>
@@ -14,7 +14,7 @@ export function makeTyped_Pickups<
 
   type Props = {};
 
-  const PickupButton = makeTyped_PickupButton<StoreHelpers, PickupName, PickupsInfo>(storeHelpers, pickupsInfo);
+  const PickupButton = get_PickupButton<StoreHelpers, PickupName, PickupsInfo>(storeHelpers, pickupsInfo);
 
   return function Pickups(_props: Props) {
     // const buttonsHolderRef = useRef<StackPanel>(null);

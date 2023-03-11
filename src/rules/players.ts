@@ -1,25 +1,43 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeTyped_getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { PrendyAssets, CharacterName } from "../declarations";
 import { clearTimeoutSafe } from "../helpers/utils";
-import { makeTyped_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../stores/typedStoreHelpers";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
-export function makeTyped_playerRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets) {
+const downRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const downRayHelper = new RayHelper(downRay);
+const downRayDirection = new Vector3(0, -1, 0);
+const downRayRelativeOrigin = new Vector3(0, 1, 0);
+
+const RAY_FORWARD_DIST = 0.25;
+const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const forwardRayHelper = new RayHelper(forwardRay);
+const forwardRayDirection = downRayDirection;
+const forwardRayRelativeOrigin = new Vector3(
+  // dollPosRefs.velocity.x * 0.1,
+  0,
+  3,
+  RAY_FORWARD_DIST
+  // dollPosRefs.velocity.z * 0.1
+);
+
+export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
+  storeHelpers: StoreHelpers,
+  PRENDY_OPTIONS: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
-  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
-  const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenDirectionKeysPressed: effect({
@@ -95,10 +113,9 @@ export function makeTyped_playerRules<
         const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
         const { isOnGround, canJump } = playerState;
-        const { scenes } = globalRefs;
+        const { scene } = globalRefs;
 
-        // const activeCamera = scenes?.main?.activeCamera;
-        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+        const activeCamera = scene?.activeCamera;
 
         if (!dollRefs || !dollState || !dollName || !activeCamera) return;
 
@@ -134,10 +151,9 @@ export function makeTyped_playerRules<
         const { timerSpeed } = globalRefs;
         const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter as CharacterName) ?? {};
 
-        const { scenes } = globalRefs;
+        const { scene } = globalRefs;
 
-        // const activeCamera = scenes?.main?.activeCamera;
-        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+        const activeCamera = scene?.activeCamera;
 
         if (!dollRefs || !dollState || !dollName || !activeCamera) return;
         const { lastSafeInputAngle } = playerState;
@@ -287,6 +303,8 @@ export function makeTyped_playerRules<
         // itemRefs: playerRefs,
         frameDuration,
       }) {
+        // console.log(parseInt(frameDuration));
+        // return false;
         // NOTE should be a dynamic rule for each player listening to frame
         const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName } = getState().global.main;
         const { timerSpeed } = globalRefs;
@@ -297,11 +315,10 @@ export function makeTyped_playerRules<
 
         // if (!dollRefs.checkCollisions) return;
 
-        const { scenes } = globalRefs;
+        // const { scene } = globalRefs;
         const { meshRef } = dollRefs;
         const scene = getScene();
-        // const activeCamera = scene?.activeCamera;
-        const activeCamera = globalRefs?.sceneRenderTarget?.activeCamera;
+        const activeCamera = scene?.activeCamera;
 
         const placeInfo = placeInfoByName[nowPlaceName];
 
@@ -336,18 +353,17 @@ export function makeTyped_playerRules<
           // console.log("falling");
           // fall faster than going up
 
-          // check if they've reached the ground
-          const ray = new Ray(Vector3.Zero(), Vector3.Zero());
-          const rayHelper = new RayHelper(ray);
-          rayHelper.attachToMesh(
+          // check if they've reached the gr  ound
+
+          downRayHelper.attachToMesh(
             /*mesh*/ meshRef,
-            /*direction*/ new Vector3(0, -1, 0),
-            /*relativeOrigin*/ new Vector3(0, 1, 0), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
+            /*direction*/ downRayDirection,
+            /*relativeOrigin*/ downRayRelativeOrigin, // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
             /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
           );
 
           const centerPick = scene.pickWithRay(
-            ray,
+            downRay,
             (mesh) => {
               return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
             },
@@ -382,19 +398,11 @@ export function makeTyped_playerRules<
 
               const RAY_FORWARD_DIST = 0.25;
 
-              const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
-              const forwardRayHelper = new RayHelper(forwardRay);
               forwardRayHelper.attachToMesh(
                 /*mesh*/ meshRef,
-                /*direction*/ new Vector3(0, -1, 0),
-                /*relativeOrigin*/ new Vector3(
-                  // dollPosRefs.velocity.x * 0.1,
-                  0,
-                  3,
-                  RAY_FORWARD_DIST
-                  // dollPosRefs.velocity.z * 0.1
-                ), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
-                /*length*/ 6 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
+                forwardRayDirection,
+                forwardRayRelativeOrigin,
+                /*length*/ 6
               );
 
               const forwardPick = scene.pickWithRay(

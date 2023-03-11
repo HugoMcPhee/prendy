@@ -2,7 +2,7 @@
 import React from "react";
 import { animated, useSpring } from "react-spring";
 import { getRandomInt } from "chootils/dist/numbers";
-export function makeTyped_ScreenSticker(storeHelpers) {
+export function get_ScreenSticker(storeHelpers) {
     const { useStore } = storeHelpers;
     const EDGE_PADDING = 65;
     return function ScreenSticker(_props) {

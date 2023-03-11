@@ -1,10 +1,10 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_sectionVidUtils } from "../../prendyUtils/sectionVids";
-import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
+import { get_sectionVidUtils } from "../../prendyUtils/sectionVids";
+import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../../declarations";
-import { makeTyped_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 
 export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
   theVideo.width = 160;
@@ -14,16 +14,21 @@ export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementT
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function makeTyped_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers>(
+export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
   storeHelpers: StoreHelpers,
+  prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
+  const { doWhenSectionVidPlayingAsync, getSectionForPlace } = get_sectionVidUtils(
+    storeHelpers,
+    prendyOptions,
+    prendyAssets
+  );
 
-  const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
+  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 
   const placesRefs = getRefs().places;
 
@@ -33,18 +38,6 @@ export function makeTyped_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers>
 
     return videoBlob;
   }
-
-  // async function makeVideoElementFromBlob(videoBlob: Blob) {
-  //   const arrayBufferResult = await videoBlob.arrayBuffer();
-  //   const saferVideoBlob = new Blob([arrayBufferResult]);
-  //
-  //   const videoElement = document.createElement("video");
-  //   videoElement.controls = false;
-  //   videoElement.src = window.URL.createObjectURL(saferVideoBlob); // videoElement.src = filepath;
-  //   videoElement.muted = true; // allow playing without interaction
-  //   videoElement.preload = "auto"; // prevent first frame blank when playing
-  //   return videoElement;
-  // }
 
   async function loadNowVideosForPlace() {
     const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;

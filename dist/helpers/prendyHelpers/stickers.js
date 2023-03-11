@@ -1,4 +1,4 @@
-export function makeTyped_stickerStoryHelpers(storeHelpers) {
+export function get_stickerStoryHelpers(storeHelpers) {
     const { setState } = storeHelpers;
     function moveSticker(x, y) {
         setState({ story: { main: { screenStickerPosition: { x, y } } } });

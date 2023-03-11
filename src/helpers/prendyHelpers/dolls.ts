@@ -17,7 +17,7 @@ import {
   SpotNameByPlace,
   BoneNameByModel,
 } from "../../declarations";
-import { vector3ToPoint3d } from "../../helpers/babylonjs/babylonjs";
+import { vector3ToPoint3d } from "../babylonjs/vectors";
 import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 

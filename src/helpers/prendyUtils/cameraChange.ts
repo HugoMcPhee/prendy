@@ -1,17 +1,12 @@
 import {
   AbstractMesh,
   Camera,
-  Constants,
   Effect,
-  Engine,
   FxaaPostProcess,
   PBRMaterial,
   PostProcess,
-  RenderTargetTexture,
   Scene,
-  ShaderMaterial,
   ShaderStore,
-  Texture,
 } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
@@ -23,10 +18,8 @@ import {
   PrendyAssets,
   SegmentNameByPlace,
 } from "../../declarations";
-import { get_globalScenePlaneRules } from "../../rules/global/scenePlane";
 import { DefaultCameraRefs } from "../../stores/places";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { enableCustomDepthRenderer } from "../babylonjs/enableCustomDepthRenderer/enableCustomDepthRenderer";
 import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
@@ -154,12 +147,7 @@ export function get_cameraChangeUtils<
     if (!globalRefs.depthRenderer) {
       console.log("making new depth renderer");
 
-      globalRefs.depthRenderer = enableCustomDepthRenderer(
-        scene,
-        getState().global.main.zoomLevel,
-        newCamRef.camera,
-        false
-      );
+      globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
     }
 
     (globalRefs.depthRenderer as any)._camera = newCamRef.camera;

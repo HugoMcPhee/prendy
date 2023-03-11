@@ -5,7 +5,7 @@ import { PrendyStoreHelpers } from "./stores/typedStoreHelpers";
 import { get_setStoryState } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 import { get_getSceneOrEngineUtils } from "./helpers/babylonjs/getSceneOrEngineUtils";
 
-export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d } from "./helpers/babylonjs/babylonjs";
+export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d } from "./helpers/babylonjs/vectors";
 export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { makePrendyStores } from "./stores/stores";
 export { getPrendyOptions } from "./getPrendyOptions";

@@ -1,4 +1,5 @@
 import {
+  DepthRenderer,
   Effect,
   Mesh,
   PostProcess,
@@ -21,7 +22,6 @@ import {
   PrendyOptions,
 } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { DepthRendererWithSize } from "../../helpers/babylonjs/enableCustomDepthRenderer/DepthRendererWithSize";
 import get_globalStoreUtils from "./globalStoreUtils";
 
 export default function global<
@@ -118,7 +118,7 @@ export default function global<
   const refs = () => ({
     backdropVideoTex: null as null | CustomVideoTexture,
     scene: null as null | Scene,
-    depthRenderer: null as DepthRendererWithSize | null,
+    depthRenderer: null as DepthRenderer | null,
     //
     depthRenderTarget: null as null | RenderTargetTexture,
     scenePlane: null as null | Mesh,

@@ -1,7 +1,7 @@
 import { AbstractMesh, Vector3 } from "@babylonjs/core";
 // import { useSpring } from "@react-spring/core";
 import { Point3D, pointIsZero, subtractPointsSafer, subtractPoints, pointBasicallyZero } from "chootils/dist/points3d";
-import { vector3ToPoint3d } from "./babylonjs";
+import { vector3ToPoint3d } from "./vectors";
 
 const reusablePosition = new Vector3(0, 0, 0);
 

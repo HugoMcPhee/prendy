@@ -1,15 +1,15 @@
-import { Mesh, PBRMaterial } from "@babylonjs/core";
-import { makeRunMovers } from "pietem-movers";
+import { PBRMaterial } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { samePoints as samePoints3d, subtractPointsSafer } from "chootils/dist/points3d";
+import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { AnyAnimationName, PrendyAssets, PrendyOptions, DollName, ModelName } from "../declarations";
-import { point3dToVector3, vector3ToSafePoint3d } from "../helpers/babylonjs/babylonjs";
+import { makeRunMovers } from "pietem-movers";
+import { AnyAnimationName, DollName, ModelName, PrendyAssets, PrendyOptions } from "../declarations";
 import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
-import { get_dollUtils, getDefaultInRangeFunction, InRangeForDoll } from "../helpers/prendyUtils/dolls";
+import { point3dToVector3 } from "../helpers/babylonjs/vectors";
+import { getDefaultInRangeFunction, get_dollUtils, InRangeForDoll } from "../helpers/prendyUtils/dolls";
+import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll

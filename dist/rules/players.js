@@ -1,16 +1,29 @@
 import { Ray, RayHelper, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeTyped_getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { clearTimeoutSafe } from "../helpers/utils";
-import { makeTyped_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
+import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
-export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
+const downRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const downRayHelper = new RayHelper(downRay);
+const downRayDirection = new Vector3(0, -1, 0);
+const downRayRelativeOrigin = new Vector3(0, 1, 0);
+const RAY_FORWARD_DIST = 0.25;
+const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const forwardRayHelper = new RayHelper(forwardRay);
+const forwardRayDirection = downRayDirection;
+const forwardRayRelativeOrigin = new Vector3(
+// dollPosRefs.velocity.x * 0.1,
+0, 3, RAY_FORWARD_DIST
+// dollPosRefs.velocity.z * 0.1
+);
+export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
     const globalRefs = getRefs().global.main;
-    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
-    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+    const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         whenDirectionKeysPressed: effect({
             run() {
@@ -80,14 +93,13 @@ export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets
         //
         whenJumpPressed: itemEffect({
             run({ itemState: playerState, frameDuration }) {
-                var _a, _b;
+                var _a;
                 const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
                 const { isOnGround, canJump } = playerState;
-                const { scenes } = globalRefs;
-                // const activeCamera = scenes?.main?.activeCamera;
-                const activeCamera = (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.sceneRenderTarget) === null || _b === void 0 ? void 0 : _b.activeCamera;
+                const { scene } = globalRefs;
+                const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
                 if (!dollRefs || !dollState || !dollName || !activeCamera)
                     return;
                 if (playerMovingPaused || !canJump)
@@ -116,13 +128,12 @@ export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets
         }),
         whenJoystickMoves: itemEffect({
             run({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs }) {
-                var _a, _b;
+                var _a;
                 const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
                 const { timerSpeed } = globalRefs;
                 const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
-                const { scenes } = globalRefs;
-                // const activeCamera = scenes?.main?.activeCamera;
-                const activeCamera = (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.sceneRenderTarget) === null || _b === void 0 ? void 0 : _b.activeCamera;
+                const { scene } = globalRefs;
+                const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
                 if (!dollRefs || !dollState || !dollName || !activeCamera)
                     return;
                 const { lastSafeInputAngle } = playerState;
@@ -253,7 +264,9 @@ export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets
             // itemState: playerState,
             // itemRefs: playerRefs,
             frameDuration, }) {
-                var _a, _b, _c, _d;
+                var _a, _b, _c;
+                // console.log(parseInt(frameDuration));
+                // return false;
                 // NOTE should be a dynamic rule for each player listening to frame
                 const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName } = getState().global.main;
                 const { timerSpeed } = globalRefs;
@@ -261,11 +274,10 @@ export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets
                 const dollPosRefs = dollRefs.positionMoverRefs;
                 const { isJumping, isOnGround, inputVelocity } = getState().players.main;
                 // if (!dollRefs.checkCollisions) return;
-                const { scenes } = globalRefs;
+                // const { scene } = globalRefs;
                 const { meshRef } = dollRefs;
                 const scene = getScene();
-                // const activeCamera = scene?.activeCamera;
-                const activeCamera = (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.sceneRenderTarget) === null || _b === void 0 ? void 0 : _b.activeCamera;
+                const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
                 const placeInfo = placeInfoByName[nowPlaceName];
                 const floorNames = placeInfo.floorNames;
                 const wallNames = placeInfo.wallNames;
@@ -290,16 +302,14 @@ export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets
                 if (isGoingDownOrStill) {
                     // console.log("falling");
                     // fall faster than going up
-                    // check if they've reached the ground
-                    const ray = new Ray(Vector3.Zero(), Vector3.Zero());
-                    const rayHelper = new RayHelper(ray);
-                    rayHelper.attachToMesh(
+                    // check if they've reached the gr  ound
+                    downRayHelper.attachToMesh(
                     /*mesh*/ meshRef, 
-                    /*direction*/ new Vector3(0, -1, 0), 
-                    /*relativeOrigin*/ new Vector3(0, 1, 0), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
+                    /*direction*/ downRayDirection, 
+                    /*relativeOrigin*/ downRayRelativeOrigin, // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
                     /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
                     );
-                    const centerPick = scene.pickWithRay(ray, (mesh) => {
+                    const centerPick = scene.pickWithRay(downRay, (mesh) => {
                         return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
                     }, true);
                     // if (centerPick) newIsOnGround = centerPick.hit;
@@ -325,24 +335,15 @@ export function makeTyped_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets
                             //   dollPosRefs.velocity.z
                             // );
                             const RAY_FORWARD_DIST = 0.25;
-                            const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
-                            const forwardRayHelper = new RayHelper(forwardRay);
                             forwardRayHelper.attachToMesh(
-                            /*mesh*/ meshRef, 
-                            /*direction*/ new Vector3(0, -1, 0), 
-                            /*relativeOrigin*/ new Vector3(
-                            // dollPosRefs.velocity.x * 0.1,
-                            0, 3, RAY_FORWARD_DIST
-                            // dollPosRefs.velocity.z * 0.1
-                            ), // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
-                            /*length*/ 6 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
-                            );
+                            /*mesh*/ meshRef, forwardRayDirection, forwardRayRelativeOrigin, 
+                            /*length*/ 6);
                             const forwardPick = scene.pickWithRay(forwardRay, (mesh) => {
                                 return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
                             }, true);
                             if (forwardPick) {
                                 if (forwardPick.hit) {
-                                    const heightDiff = (((_c = forwardPick === null || forwardPick === void 0 ? void 0 : forwardPick.pickedPoint) === null || _c === void 0 ? void 0 : _c.y) || 0) - (((_d = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _d === void 0 ? void 0 : _d.y) || 0);
+                                    const heightDiff = (((_b = forwardPick === null || forwardPick === void 0 ? void 0 : forwardPick.pickedPoint) === null || _b === void 0 ? void 0 : _b.y) || 0) - (((_c = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _c === void 0 ? void 0 : _c.y) || 0);
                                     // in degrees I think
                                     // negative is down
                                     slope = getVectorAngle({

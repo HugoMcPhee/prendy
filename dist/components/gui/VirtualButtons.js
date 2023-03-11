@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeTyped_VirtualButtons(storeHelpers, PRENDY_OPTIONS) {
+export function get_VirtualButtons(storeHelpers, PRENDY_OPTIONS) {
     const { getRefs, getState, setState, useStore } = storeHelpers;
     const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
     const globalRefs = getRefs().global.main;

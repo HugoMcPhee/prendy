@@ -1,8 +1,8 @@
-import { makeTyped_cameraChangeUtils } from "./cameraChange";
-import { makeTyped_globalUtils } from "./global";
+import { get_cameraChangeUtils } from "./cameraChange";
+import { get_globalUtils } from "./global";
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
-export function makeTyped_getSectionVidVideo(storeHelpers) {
+export function get_getSectionVidVideo(storeHelpers) {
     const { getRefs, getState } = storeHelpers;
     return function getSectionVidVideo(itemName) {
         const sectionVidState = getState().sectionVids[itemName];
@@ -13,12 +13,12 @@ export function makeTyped_getSectionVidVideo(storeHelpers) {
         return backdropVidRefs.videoElement;
     };
 }
-export function makeTyped_sectionVidUtils(storeHelpers, prendyAssets) {
+export function get_sectionVidUtils(storeHelpers, prendyOptions, prendyAssets) {
     const { getState, startItemEffect, stopEffect } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
-    const getSectionVidVideo = makeTyped_getSectionVidVideo(storeHelpers);
-    const { getSafeCamName, getSafeSegmentName } = makeTyped_cameraChangeUtils(storeHelpers, prendyAssets);
+    const { getGlobalState } = get_globalUtils(storeHelpers);
+    const getSectionVidVideo = get_getSectionVidVideo(storeHelpers);
+    const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
     // __________________________
     // temporary rules
     async function doWhenSectionVidPlayingAsync(sectionVidId) {

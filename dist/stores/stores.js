@@ -6,7 +6,6 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import pointers from "./pointers";
 import safeVids from "./safeVids";
 import sectionVids from "./sectionVids";
 import speechBubbles from "./speechBubbles";
@@ -25,6 +24,7 @@ export const prendyStepNames = [
     "story",
     "storyReaction",
     "planePosition",
+    "planePositionDontGoOverEdges",
     "planePositionStartMovers",
     "dollAnimation",
     "dollAnimation2",
@@ -52,7 +52,7 @@ export function makePrendyStores(prendyStartOptions, prendyAssets) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(prendyAssets),
-        pointers: pointers(),
+        // pointers: pointers(),
         global: global(prendyStartOptions, prendyAssets),
         models: models(prendyAssets),
         dolls: dolls(prendyAssets),

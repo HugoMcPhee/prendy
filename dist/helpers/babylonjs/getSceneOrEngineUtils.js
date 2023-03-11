@@ -1,4 +1,4 @@
-export function makeTyped_getSceneOrEngineUtils(storeHelpers) {
+export function get_getSceneOrEngineUtils(storeHelpers) {
     const { getRefs } = storeHelpers;
     function getScene() {
         const globalRefs = getRefs().global.main;

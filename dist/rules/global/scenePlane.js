@@ -1,37 +1,26 @@
-import { makeTyped_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import delay from "delay";
 import { makeRunMovers } from "pietem-movers";
-import { copyPoint } from "chootils/dist/points2d";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-export function makeTyped_globalScenePlaneRules(storeHelpers, prendyStartOptions) {
-    const { getScenePlaneOverScreenEdgesAmount, focusScenePlaneOnFocusedDoll } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
-    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-    const { makeRules } = storeHelpers;
+import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
+import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+export function get_globalScenePlaneRules(storeHelpers, prendyOptions) {
+    const { focusScenePlaneOnFocusedDoll, getPlanePositionNotOverEdges } = get_scenePlaneUtils(storeHelpers, prendyOptions);
+    const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
+    const { makeRules, getRefs, getState, setState } = storeHelpers;
     const { runMover, runMover2d } = makeRunMovers(storeHelpers);
-    return makeRules(({ itemEffect }) => ({
-        whenPlanePositionChanges: itemEffect({
-            run({ newValue: planePos }) {
-                const amountOverEdges = getScenePlaneOverScreenEdgesAmount(planePos);
-                // FIXME ? Might be better to set the target x an y position based on a safe level for the target zoom
-                // to prevents sliding at the edges when zooming out
-                if (!(amountOverEdges.top < 0 ||
-                    amountOverEdges.bottom < 0 ||
-                    amountOverEdges.left < 0 ||
-                    amountOverEdges.right < 0)) {
-                    return;
-                }
-                const newPlanePos = copyPoint(planePos);
-                if (amountOverEdges.bottom < 0)
-                    newPlanePos.y += amountOverEdges.bottom;
-                if (amountOverEdges.top < 0)
-                    newPlanePos.y -= amountOverEdges.top;
-                if (amountOverEdges.left < 0)
-                    newPlanePos.x += amountOverEdges.left;
-                if (amountOverEdges.right < 0)
-                    newPlanePos.x -= amountOverEdges.right;
-                setGlobalState({ planePos: newPlanePos });
+    const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
+    const globalRefs = getRefs().global.main;
+    return makeRules(({ itemEffect, effect }) => ({
+        whenPlanePositionChanges: effect({
+            run(diffInfo) {
+                const { planePos } = getState().global.main;
+                const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
+                const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
+                if (positionChanged || zoomChanged)
+                    getShaderTransformStuff();
             },
-            check: { prop: "planePos", type: "global" },
-            atStepEnd: false,
+            check: { prop: ["planePos", "planeZoom"], type: "global" },
+            atStepEnd: true,
             step: "planePosition",
         }),
         whenPlanePositionGoalChanges: itemEffect({
@@ -62,33 +51,60 @@ export function makeTyped_globalScenePlaneRules(storeHelpers, prendyStartOptions
             atStepEnd: true,
             step: "planePositionStartMovers",
         }),
-        whenPlaneZoomGoalChangesToUpdatePlanePan: itemEffect({
+        whenShouldFocusOnDoll: itemEffect({
             run: () => focusScenePlaneOnFocusedDoll(),
-            check: { prop: "planeZoomGoal", type: "global" },
+            check: {
+                prop: [
+                    "focusedDoll",
+                    "planeZoomGoal",
+                    // recalculating position when planeZoom changes is what allows it to stick to corners when zooming
+                    // it also requires focusScenePlaneOnFocusedDoll to run in the next tick
+                    "planeZoom",
+                ],
+                type: "global",
+            },
             atStepEnd: true,
             step: "planePosition",
         }),
-        whenPlaneZoomChangesToUpdatePlanePan: itemEffect({
-            run: () => focusScenePlaneOnFocusedDoll(),
-            check: { prop: "planeZoom", type: "global" },
-            // atStepEnd: true,
-            step: "planePosition",
-        }),
-        whenFocusedDollChanges: itemEffect({
-            run: () => focusScenePlaneOnFocusedDoll(),
-            check: { prop: "focusedDoll", type: "global" },
-            step: "planePosition",
-        }),
-        whenScreenResizes: itemEffect({
-            run: () => focusScenePlaneOnFocusedDoll("instant"),
-            check: { prop: "timeScreenResized", type: "global" },
-            // atStepEnd: true,
-            step: "planePosition",
+        whenPlaneZoomChangesToUpdatePlanePanOverEdges: itemEffect({
+            // run: () => focusScenePlaneOnFocusedDoll(),
+            run: () => {
+                const planePos = getState().global.main.planePos;
+                const newPlanePos = getPlanePositionNotOverEdges(planePos);
+                setGlobalState({ planePos: newPlanePos });
+            },
+            check: { prop: ["planeZoom"], type: "global" },
+            atStepEnd: true,
+            step: "planePositionDontGoOverEdges",
         }),
         whenNowCamChanges: itemEffect({
             run: () => focusScenePlaneOnFocusedDoll("instant"),
             check: { prop: "nowCamName", type: "places" },
-            // atStepEnd: true,
+            atStepEnd: true,
+            step: "planePosition",
+        }),
+        whenScreenResizes: itemEffect({
+            run: async () => {
+                var _a;
+                await delay(10); // this helps it work on ipad
+                const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();
+                if (!engine)
+                    return;
+                console.log("resized");
+                const { editedHardwareScaling, editedPlaneSceneZoom } = getShaderTransformStuff();
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
+                const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
+                // const newRenderWidth = screenHeight * (16 / 9) * 1;
+                // const newRenderHeight = screenHeight * 1;
+                engine.setSize(newRenderWidth, newRenderHeight);
+                const depthRenderWidth = globalRefs.depthRenderTarget.getRenderSize();
+                (_a = globalRefs.depthRenderTarget) === null || _a === void 0 ? void 0 : _a.resize({ width: newRenderWidth, height: newRenderHeight });
+                focusScenePlaneOnFocusedDoll("instant");
+            },
+            check: { prop: "timeScreenResized", type: "global" },
+            atStepEnd: true,
             step: "planePosition",
         }),
     }));

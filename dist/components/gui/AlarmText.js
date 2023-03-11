@@ -1,6 +1,6 @@
 // @refresh-reset
 import React from "react";
-export function makeTyped_AlarmText(storeHelpers) {
+export function get_AlarmText(storeHelpers) {
     const { useStore } = storeHelpers;
     return function AlarmText(_props) {
         const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {

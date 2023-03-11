@@ -1,8 +1,8 @@
 // import React from "react";
 import { AssetsManager, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_sectionVidUtils } from "../../prendyUtils/sectionVids";
-import { makeTyped_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { get_sectionVidUtils } from "../../prendyUtils/sectionVids";
+import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 export function testAppendVideo(theVideo, id, elementTag = "app") {
     var _a;
     theVideo.width = 160;
@@ -11,28 +11,17 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
     // theVideo.preload = "auto";
     (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
 }
-export function makeTyped_usePlaceUtils(storeHelpers, prendyAssets) {
+export function get_usePlaceUtils(storeHelpers, prendyOptions, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
-    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
+    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = get_sectionVidUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
     const placesRefs = getRefs().places;
     async function loadVideoBlob(filepath) {
         const result = await fetch(filepath);
         const videoBlob = await result.blob();
         return videoBlob;
     }
-    // async function makeVideoElementFromBlob(videoBlob: Blob) {
-    //   const arrayBufferResult = await videoBlob.arrayBuffer();
-    //   const saferVideoBlob = new Blob([arrayBufferResult]);
-    //
-    //   const videoElement = document.createElement("video");
-    //   videoElement.controls = false;
-    //   videoElement.src = window.URL.createObjectURL(saferVideoBlob); // videoElement.src = filepath;
-    //   videoElement.muted = true; // allow playing without interaction
-    //   videoElement.preload = "auto"; // prevent first frame blank when playing
-    //   return videoElement;
-    // }
     async function loadNowVideosForPlace() {
         const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
         const { nowCamName, wantedCamName } = getState().places[nowPlaceName];

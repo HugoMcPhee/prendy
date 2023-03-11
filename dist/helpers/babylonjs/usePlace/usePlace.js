@@ -1,18 +1,18 @@
 import { Sound } from "@babylonjs/core";
 import { useEffect } from "react";
 import { forEach } from "chootils/dist/loops";
-import { makeTyped_globalUtils } from "../../prendyUtils/global";
-import { makeTyped_useModelFile } from "../useModelFile";
+import { get_globalUtils } from "../../prendyUtils/global";
+import { get_useModelFile } from "../useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
-import { makeTyped_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
-import { makeTyped_usePlaceUtils } from "./utils";
-export function makeTyped_usePlace(storeHelpers, prendyStartOptions, prendyAssets) {
+import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { get_usePlaceUtils } from "./utils";
+export function get_usePlace(storeHelpers, prendyStartOptions, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName, soundFiles } = prendyAssets;
-    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-    const { getScene } = makeTyped_getSceneOrEngineUtils(storeHelpers);
-    const useModelFile = makeTyped_useModelFile(getScene);
-    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = makeTyped_usePlaceUtils(storeHelpers, prendyAssets);
+    const { setGlobalState } = get_globalUtils(storeHelpers);
+    const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
+    const useModelFile = get_useModelFile(getScene);
+    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(storeHelpers, prendyStartOptions, prendyAssets);
     const placesRefs = getRefs().places;
     return function usePlace(placeName) {
         const placeInfo = placeInfoByName[placeName];

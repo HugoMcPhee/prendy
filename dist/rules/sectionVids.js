@@ -1,11 +1,11 @@
 import { minMaxRange } from "chootils/dist/numbers";
-import { makeTyped_safeVidUtils } from "../helpers/prendyUtils/safeVids";
-import { BEFORE_LOOP_PADDING, makeTyped_sectionVidUtils } from "../helpers/prendyUtils/sectionVids";
-export function makeTyped_sectionVidRules(storeHelpers, prendyAssets) {
+import { get_safeVidUtils } from "../helpers/prendyUtils/safeVids";
+import { BEFORE_LOOP_PADDING, get_sectionVidUtils } from "../helpers/prendyUtils/sectionVids";
+export function get_sectionVidRules(storeHelpers, prendyOptions, prendyAssets) {
     // safe Section Stack Vid Rules
     const { getState, makeRules, setState } = storeHelpers;
-    const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = makeTyped_sectionVidUtils(storeHelpers, prendyAssets);
-    const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = makeTyped_safeVidUtils(storeHelpers);
+    const { doWhenSectionVidPlaying, getSectionEndTime, getSectionVidVideo } = get_sectionVidUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = get_safeVidUtils(storeHelpers);
     return makeRules(({ itemEffect }) => ({
         rulesForSettingNewVideoStates: itemEffect({
             run({ newValue: vidState, itemName, itemState }) {

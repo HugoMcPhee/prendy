@@ -1,6 +1,6 @@
 import "@babylonjs/loaders";
 import { PrendyStoreHelpers } from "./stores/typedStoreHelpers";
-export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d } from "./helpers/babylonjs/babylonjs";
+export { vector3ToPoint3d, point3dToVector3, vector3ToSafePoint3d } from "./helpers/babylonjs/vectors";
 export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { makePrendyStores } from "./stores/stores";
 export { getPrendyOptions } from "./getPrendyOptions";
@@ -8,7 +8,7 @@ export { makePrendyApp as makePrendyApp } from "./components/PrendyApp";
 export { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 export { prendyStepNames } from "./stores/stores";
 export { makeStartPrendyRules } from "./rules/rules";
-export { makeTyped_usePlaceUtils as makeUsePlaceUtils } from "./helpers/babylonjs/usePlace/utils";
+export { get_usePlaceUtils as makeUsePlaceUtils } from "./helpers/babylonjs/usePlace/utils";
 export { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 export declare function makeOtherUsefulPrendyUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
     setStoryState: (newState: Partial<ReturnType<StoreHelpers["getState"]>["story"]["main"]>) => void;

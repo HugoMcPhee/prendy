@@ -1,12 +1,12 @@
-import { makeTyped_characterStoryUtils } from "./characters";
-import { makeTyped_dollStoryUtils } from "./dolls";
-import { makeTyped_sceneStoryUtils } from "./scene";
-import { makeTyped_spotStoryUtils } from "./spots";
+import { get_characterStoryUtils } from "./characters";
+import { get_dollStoryUtils } from "./dolls";
+import { get_sceneStoryUtils } from "./scene";
+import { get_spotStoryUtils } from "./spots";
 export function makePrendyStoryUtils(storeHelpers, _prendyStores) {
-    const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot } = makeTyped_characterStoryUtils(storeHelpers);
-    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = makeTyped_dollStoryUtils(storeHelpers);
-    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = makeTyped_sceneStoryUtils(storeHelpers);
-    const { getSpotPosition, getSpotRotation } = makeTyped_spotStoryUtils(storeHelpers);
+    const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
+    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
+    const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
+    const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
     return {
         // characters
         get2DAngleBetweenCharacters,

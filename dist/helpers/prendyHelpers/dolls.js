@@ -1,17 +1,17 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-import { vector3ToPoint3d } from "../../helpers/babylonjs/babylonjs";
-import { makeTyped_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
-import { makeTyped_spotStoryUtils } from "../../helpers/prendyUtils/spots";
-export function makeTyped_dollStoryHelpers(storeHelpers, 
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { vector3ToPoint3d } from "../babylonjs/vectors";
+import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
+import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
+export function get_dollStoryHelpers(storeHelpers, 
 // prendyStores: PrendyStores,
 prendyStartOptions, modelInfoByName) {
     const { getRefs, getState, setState } = storeHelpers;
-    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
-    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = makeTyped_dollStoryUtils(storeHelpers);
-    const { getSpotPosition, getSpotRotation } = makeTyped_spotStoryUtils(storeHelpers);
+    const { setGlobalState } = get_globalUtils(storeHelpers);
+    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
+    const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
     // --------------------------------------------------------------
     function setDollPosition(dollName, newPositon) {
         const dollRefs = getRefs().dolls[dollName];

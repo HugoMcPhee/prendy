@@ -1,12 +1,12 @@
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-import { makeTyped_characterStoryUtils } from "../../helpers/prendyUtils/characters";
-import { makeTyped_dollStoryHelpers } from "./dolls";
-export function makeTyped_characterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames) {
-    const { getGlobalState } = makeTyped_globalUtils(storeHelpers);
-    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
-    const { get2DAngleBetweenCharacters } = makeTyped_characterStoryUtils(storeHelpers);
-    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = makeTyped_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_characterStoryUtils } from "../../helpers/prendyUtils/characters";
+import { get_dollStoryHelpers } from "./dolls";
+export function get_characterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames) {
+    const { getGlobalState } = get_globalUtils(storeHelpers);
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+    const { get2DAngleBetweenCharacters } = get_characterStoryUtils(storeHelpers);
+    const { moveDollAt2DAngle, setDollAnimation, setDollPosition, setDollRotationY, springAddToDollRotationY, springDollRotationY, } = get_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
     function setCharAnimation(character, animation // AnimationNameFromModel might keep the type better
     ) {
         const { dollName } = getCharDollStuff(character);

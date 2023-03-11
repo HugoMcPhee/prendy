@@ -1,8 +1,8 @@
-import { makeTyped_dollStoryUtils } from "./dolls";
-export function makeTyped_characterStoryUtils(storeHelpers) {
+import { get_dollStoryUtils } from "./dolls";
+export function get_characterStoryUtils(storeHelpers) {
     const { getState } = storeHelpers;
     // const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
-    const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = makeTyped_dollStoryUtils(storeHelpers);
+    const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
     function get2DAngleFromCharacterToSpot(character, place, spot) {
         const charactersState = getState().characters;
         const dollA = charactersState[character].dollName;
@@ -19,7 +19,7 @@ export function makeTyped_characterStoryUtils(storeHelpers) {
     }
     return { get2DAngleFromCharacterToSpot, get2DAngleBetweenCharacters };
 }
-export function makeTyped_getCharDollStuff(storeHelpers) {
+export function get_getCharDollStuff(storeHelpers) {
     const { getRefs, getState } = storeHelpers;
     return function getCharDollStuff(charName) {
         if (!getState().characters[charName]) {

@@ -1,5 +1,4 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { c } from "chootils/dist/points3d";
 import { forEach } from "chootils/dist/loops";
 import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";

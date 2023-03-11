@@ -1,11 +1,11 @@
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "chootils/dist/points2d";
 import { mover3dRefs, mover3dState, moverRefs, moverState } from "pietem-movers";
-import makeTyped_dollStoreUtils from "./dollStoreUtils";
+import get_dollStoreUtils from "./dollStoreUtils";
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 export default function dolls(prendyAssets) {
     const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyAssets;
-    const { defaultInRange, makeModelAnimWeightsMoverState, modelMoverRefs, modelOtherMeshesRefs } = makeTyped_dollStoreUtils(prendyAssets);
+    const { defaultInRange, makeModelAnimWeightsMoverState, modelMoverRefs, modelOtherMeshesRefs } = get_dollStoreUtils(prendyAssets);
     const defaultModelName = modelNames[0];
     const state = (_dollName, modelName) => {
         const safeModelName = modelName !== null && modelName !== void 0 ? modelName : defaultModelName;
@@ -22,7 +22,7 @@ export default function dolls(prendyAssets) {
             }),
             ...moverState("rotationY"),
             //
-            positionOnPlaneScene: defaultPosition2d(),
+            positionOnScreen: defaultPosition2d(),
             // nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName],
             // animation Weights mover
             ...makeModelAnimWeightsMoverState(safeModelName)("animWeights"),

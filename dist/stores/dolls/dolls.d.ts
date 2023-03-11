@@ -11,7 +11,7 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
         animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
-        positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
+        positionOnScreen: import("chootils/dist/points2d").Point2D;
         rotationY: number;
         rotationYGoal: number;
         rotationYIsMoving: boolean;
@@ -37,7 +37,7 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
         animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
-        positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
+        positionOnScreen: import("chootils/dist/points2d").Point2D;
         rotationY: number;
         rotationYGoal: number;
         rotationYIsMoving: boolean;
@@ -63,7 +63,7 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         animWeightsMoveMode: import("pietem-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
         animWeightsMoveConfigs: Record<string, import("pietem-movers/dist/types").PhysicsOptions>;
-        positionOnPlaneScene: import("chootils/dist/points2d").Point2D;
+        positionOnScreen: import("chootils/dist/points2d").Point2D;
         rotationY: number;
         rotationYGoal: number;
         rotationYIsMoving: boolean;

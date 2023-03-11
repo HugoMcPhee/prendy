@@ -2,6 +2,7 @@ import { Quaternion, Vector3 } from "@babylonjs/core";
 const addToHelpFixRotationVector = new Vector3(0, Math.PI, Math.PI); // Math.PI same as toRadians(180)?
 const multiplyToHelpFixRotationVector = new Vector3(-1, 1, -1);
 export function getAbsoluteRotation(child) {
+    console.log("getAbsoluteRotation");
     var scale = new Vector3(0, 0, 0);
     var rotation = new Quaternion();
     var position = new Vector3(0, 0, 0);

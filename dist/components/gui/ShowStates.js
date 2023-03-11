@@ -1,6 +1,6 @@
 // @refresh-reset
 import React from "react";
-export function makeTyped_ShowStates(storeHelpers) {
+export function get_ShowStates(storeHelpers) {
     const { useStore } = storeHelpers;
     return function ShowStates(_props) {
         const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage } = useStore((state) => state.global.main, {

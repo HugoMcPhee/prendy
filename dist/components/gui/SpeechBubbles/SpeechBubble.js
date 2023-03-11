@@ -2,17 +2,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { makeTyped_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
+import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { getScreenSize } from "../../../helpers/babylonjs/scenePlane";
 // import "./SpeechBubble.css";
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
-export function makeTyped_SpeechBubble(storeHelpers, prendyStartOptions, speechVidFiles) {
-    const { getState, useStore, useStoreEffect } = storeHelpers;
-    const { viewCenterPoint, getViewSize } = makeTyped_scenePlaneUtils(storeHelpers, prendyStartOptions);
-    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+export function get_SpeechBubble(storeHelpers, prendyStartOptions, speechVidFiles) {
+    const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
+    const globalRefs = getRefs().global.main;
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     return function SpeechBubble({ name }) {
         var _a, _b;
         const theRectangle = useRef(null);
@@ -88,25 +88,22 @@ export function makeTyped_SpeechBubble(storeHelpers, prendyStartOptions, speechV
             if (!dollState || !dollName)
                 return;
             const { focusedDoll, focusedDollIsInView } = getState().global.main;
-            const positionOnPlaneScene = dollState.positionOnPlaneScene;
-            // console.log(positionOnPlaneScene);
-            // BUBBLE_WIDTH
-            // if (dollName === focusedDoll && !focusedDollIsInView) {
-            //   positionOnPlaneScene = { x: 0, y: 0 };
-            // }
-            const viewSize = getViewSize();
-            const farLeft = -viewSize.width / 2;
-            const farRight = viewSize.width / 2;
-            const farTop = -viewSize.height / 2;
-            const farBottom = viewSize.height / 2;
+            const positionOnScreen = dollState.positionOnScreen;
+            // if (dollName === focusedDoll && !focusedDollIsInView) {}
+            const viewSize = getScreenSize();
+            const farLeft = -viewSize.x / 2;
+            const farRight = viewSize.x / 2;
+            const farTop = -viewSize.y / 2;
+            const farBottom = viewSize.y / 2;
             const bubbleHeight = (_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190;
             const halfBubbleHeight = bubbleHeight / 2;
             const halfBubbleWidth = BUBBLE_WIDTH / 2;
             const halfTriangleSize = TRIANGLE_SIZE / 2;
-            // console.log(positionOnPlaneScene.x * 2);
-            let newPositionX = positionOnPlaneScene.x;
+            const screenSize = getScreenSize();
+            // need function to get position on screen
+            let newPositionX = positionOnScreen.x - screenSize.x / 2;
             let yOffset = bubbleHeight / 2;
-            let newPositionY = positionOnPlaneScene.y - yOffset;
+            let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
             // Keep the focused dolls speech bubble inside the view
             if (dollName === focusedDoll) {
                 if (newPositionX - halfBubbleWidth < farLeft) {
@@ -122,6 +119,7 @@ export function makeTyped_SpeechBubble(storeHelpers, prendyStartOptions, speechV
                     newPositionY = farBottom - halfBubbleHeight - halfTriangleSize;
                 }
             }
+            // console.log("newPositionX", newPositionX);
             theSpringApi.start({
                 position: [newPositionX, newPositionY],
                 immediate: true,
@@ -134,7 +132,7 @@ export function makeTyped_SpeechBubble(storeHelpers, prendyStartOptions, speechV
             {
                 type: ["dolls"],
                 name: forCharacter,
-                prop: ["positionOnPlaneScene"],
+                prop: ["positionOnScreen"],
             },
             { type: ["global"], name: "main", prop: ["planePos"] },
             { type: ["global"], name: "main", prop: ["planeZoom"] },

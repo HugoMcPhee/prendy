@@ -5,8 +5,10 @@ Ray, Vector3, } from "@babylonjs/core";
 // from https://doc.babylonjs.com/toolsAndResources/utilities/IsInside
 const RAY_LIMIT = 100;
 const SCALE_DOWN_AMOUNT = 0.00001; // originally 0.00000001 but caused too many iterations
+const ray = new Ray(Vector3.Zero(), Axis.X, 2);
 export default function pointIsInside(point, mesh) {
     var _a;
+    // return false;
     let boundInfo = mesh.getBoundingInfo();
     // let max = boundInfo.maximum;
     // let min = boundInfo.minimum;
@@ -20,9 +22,8 @@ export default function pointIsInside(point, mesh) {
     // if (point.z < min.z || point.z > max.z) {
     //   return false;
     // }
-    if (!mesh.intersectsPoint(point)) {
+    if (!mesh.intersectsPoint(point))
         return false;
-    }
     let pointFound = false;
     // let d = 0;
     let hitCount = 0;
@@ -44,8 +45,7 @@ export default function pointIsInside(point, mesh) {
         ray.origin = refPoint;
         pickInfo = ray.intersectsMesh(mesh);
     }
-    if (hitCount % 2 === 1) {
+    if (hitCount % 2 === 1)
         pointFound = true;
-    }
     return pointFound;
 }

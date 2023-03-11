@@ -1,10 +1,10 @@
-import { makeTyped_characterStoryHelpers } from "./characters";
-import { makeTyped_dollStoryHelpers } from "./dolls";
-import { makeTyped_playerStoryHelpers } from "./players";
-import { makeTyped_sceneStoryHelpers } from "./scene";
-import { makeTyped_soundStoryHelpers } from "./sound";
-import { makeTyped_speechStoryHelpers } from "./speech";
-import { makeTyped_stickerStoryHelpers } from "./stickers";
+import { get_characterStoryHelpers } from "./characters";
+import { get_dollStoryHelpers } from "./dolls";
+import { get_playerStoryHelpers } from "./players";
+import { get_sceneStoryHelpers } from "./scene";
+import { get_soundStoryHelpers } from "./sound";
+import { get_speechStoryHelpers } from "./speech";
+import { get_stickerStoryHelpers } from "./stickers";
 // importing each of the helpers
 // function doThis
 export function makePrendyStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, prendyAssets) {
@@ -15,14 +15,14 @@ export function makePrendyStoryHelpers(storeHelpers, prendyStores, prendyStartOp
     const musicFiles = prendyAssets.musicFiles;
     const soundNames = prendyAssets.soundNames;
     const soundFiles = prendyAssets.soundFiles;
-    const { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } = makeTyped_characterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames);
-    const { focusOnDoll, hideDoll, moveDollAt2DAngle, lookAtOtherDoll, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, pushDollRotationY, springDollToSpot, dollLooksAtSpot, toggleDollMeshes, getDollBonePosition, } = makeTyped_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
-    const { enableMovement, isHolding, setPlayerAnimations, takePickup } = makeTyped_playerStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames);
+    const { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } = get_characterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames);
+    const { focusOnDoll, hideDoll, moveDollAt2DAngle, lookAtOtherDoll, setDollAnimation, setDollPosition, setDollRotation, setDollRotationY, setDollToSpot, springAddToDollRotationY, springDollRotationY, pushDollRotationY, springDollToSpot, dollLooksAtSpot, toggleDollMeshes, getDollBonePosition, } = get_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName);
+    const { enableMovement, isHolding, setPlayerAnimations, takePickup } = get_playerStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames);
     // NOTE maybe return in categores like players.enableMovement()
-    const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView } = makeTyped_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
-    const { playNewMusic, stopAllMusic, playSound, stopSound, stopAllSounds } = makeTyped_soundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles);
-    const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } = makeTyped_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, characterNames);
-    const { hideSticker, moveSticker, showSticker } = makeTyped_stickerStoryHelpers(storeHelpers);
+    const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView } = get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
+    const { playNewMusic, stopAllMusic, playSound, stopSound, stopAllSounds } = get_soundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles);
+    const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } = get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, characterNames);
+    const { hideSticker, moveSticker, showSticker } = get_stickerStoryHelpers(storeHelpers);
     return {
         // characters
         lookAtEachother,

@@ -1,7 +1,7 @@
 import { forEach } from "chootils/dist/loops";
 import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
 import { defaultInRangeForDoll } from "../../helpers/prendyUtils/dolls";
-export default function makeTyped_dollStoreUtils(prendyAssets) {
+export default function get_dollStoreUtils(prendyAssets) {
     const { dollNames, modelInfoByName } = prendyAssets;
     function makeModelAnimWeightsMoverState(modelName) {
         const modelInfo = modelInfoByName[modelName];

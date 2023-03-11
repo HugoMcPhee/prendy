@@ -1,11 +1,18 @@
 // @refresh-reset
+import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { sizeFromRef } from "chootils/dist/elements";
-import { makeTyped_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-export function makeTyped_MiniBubble(storeHelpers) {
+import { getScreenSize } from "../../helpers/babylonjs/scenePlane";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+// NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
+// So some of it could be shared code
+const BUBBLE_WIDTH = 70;
+const BUBBLE_HEIGHT_RATIO = 0.74814;
+const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
+const TRIANGLE_SIZE = 25;
+export function get_MiniBubble(storeHelpers) {
     const { useStoreEffect, useStore, getState } = storeHelpers;
-    const getCharDollStuff = makeTyped_getCharDollStuff(storeHelpers);
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     return function MiniBubble({ name }) {
         var _a;
         const theRectangle = useRef(null);
@@ -53,20 +60,45 @@ export function makeTyped_MiniBubble(storeHelpers) {
         }, [measuredHeight, theSpringApi]);
         const positionMiniBubbleToCharacter = useCallback(() => {
             var _a, _b, _c;
-            const { forCharacter } = getState().miniBubbles[name];
+            const { forCharacter } = getState().speechBubbles[name];
             if (!forCharacter)
                 return;
             const { dollState, dollName } = (_a = getCharDollStuff(forCharacter)) !== null && _a !== void 0 ? _a : {};
             if (!dollState || !dollName)
                 return;
-            const { positionOnPlaneScene } = dollState;
-            // const playerCameraDistance =
-            //   meshRef && camera
-            //     ? Vector3.Distance(meshRef?.position, camera?.position)
-            //     : 4;
-            const newPositionX = positionOnPlaneScene.x;
-            let yOffset = ((_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190) / 2;
-            const newPositionY = positionOnPlaneScene.y - yOffset;
+            const { focusedDoll, focusedDollIsInView } = getState().global.main;
+            const positionOnScreen = dollState.positionOnScreen;
+            // if (dollName === focusedDoll && !focusedDollIsInView) {}
+            const viewSize = getScreenSize();
+            const farLeft = -viewSize.x / 2;
+            const farRight = viewSize.x / 2;
+            const farTop = -viewSize.y / 2;
+            const farBottom = viewSize.y / 2;
+            const bubbleHeight = (_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190;
+            const halfBubbleHeight = bubbleHeight / 2;
+            const halfBubbleWidth = BUBBLE_WIDTH / 2;
+            const halfTriangleSize = TRIANGLE_SIZE / 2;
+            const screenSize = getScreenSize();
+            // need function to get position on screen
+            let newPositionX = positionOnScreen.x - screenSize.x / 2;
+            let yOffset = bubbleHeight / 2;
+            let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
+            // Keep the focused dolls speech bubble inside the view
+            if (dollName === focusedDoll) {
+                if (newPositionX - halfBubbleWidth < farLeft) {
+                    newPositionX = farLeft + halfBubbleWidth;
+                }
+                if (newPositionX + halfBubbleWidth > farRight) {
+                    newPositionX = farRight - halfBubbleWidth;
+                }
+                if (newPositionY - halfBubbleHeight - halfTriangleSize < farTop) {
+                    newPositionY = farTop + halfBubbleHeight + halfTriangleSize;
+                }
+                if (newPositionY + halfBubbleHeight + halfTriangleSize > farBottom) {
+                    newPositionY = farBottom - halfBubbleHeight - halfTriangleSize;
+                }
+            }
+            // console.log("newPositionX", newPositionX);
             theSpringApi.start({
                 position: [newPositionX, newPositionY],
                 immediate: true,
@@ -76,7 +108,7 @@ export function makeTyped_MiniBubble(storeHelpers) {
         useStoreEffect(() => {
             positionMiniBubbleToCharacter();
         }, [
-            { type: ["dolls"], name: forCharacter, prop: ["positionOnPlaneScene"] },
+            { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
             { type: ["global"], name: "main", prop: ["planePos"] },
             { type: ["global"], name: "main", prop: ["planeZoom"] },
             { type: ["story"], name: "main", prop: ["storyPart"] },

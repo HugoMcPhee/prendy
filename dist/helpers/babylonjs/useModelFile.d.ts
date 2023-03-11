@@ -1,7 +1,7 @@
 import { AnimationGroup, AssetContainer, Camera, Mesh, PBRMaterial, Scene, Skeleton, Texture, TransformNode } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function makeTyped_useModelFile<StoreHelpers extends PrendyStoreHelpers>(getScene: () => Scene | null): <T_Names extends {
+export declare function get_useModelFile<StoreHelpers extends PrendyStoreHelpers>(getScene: () => Scene | null): <T_Names extends {
     meshes: any;
     materials: any;
     animationGroups: any;

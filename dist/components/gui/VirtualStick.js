@@ -1,7 +1,7 @@
 import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "chootils/dist/speedAngleDistance2d";
 import React, { useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeTyped_VirtualStick(storeHelpers) {
+export function get_VirtualStick(storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
     const globalRefs = getRefs().global.main;
     const SIZES = {
@@ -161,7 +161,7 @@ export function makeTyped_VirtualStick(storeHelpers) {
             } },
             React.createElement(animated.div, { ref: refs.leftThumbContainer, style: {
                     position: "relative",
-                    backgroundColor: "rgba(232, 232, 232, 0.1)",
+                    backgroundColor: "rgba(232, 232, 232, 0.5)",
                     padding: 0,
                     height: SIZES.leftThumbContainer + "px",
                     width: SIZES.leftThumbContainer + "px",
@@ -172,10 +172,11 @@ export function makeTyped_VirtualStick(storeHelpers) {
                     alignItems: "center",
                     justifyContent: "center",
                     direction: "row",
+                    willChange: "transform, opacity",
                 }, id: "leftThumb" },
                 React.createElement(animated.div, { ref: refs.leftPuck, style: {
                         position: "relative",
-                        backgroundColor: "rgba(232, 232, 232, 0.25)",
+                        backgroundColor: "rgba(232, 232, 232, 0.75)",
                         padding: 0,
                         height: "60px",
                         width: "60px",
@@ -183,6 +184,7 @@ export function makeTyped_VirtualStick(storeHelpers) {
                         // transform: `translate(${local.leftJoystickOffset}px , ${local.topJoystickOffset}px )`,
                         transform: spring.position.to((x, y) => `translate(${x}px , ${y}px )`),
                         opacity: opacitySpring.circleOpacity,
+                        willChange: "transform, opacity",
                     }, id: "leftPuck" }))));
     };
 }

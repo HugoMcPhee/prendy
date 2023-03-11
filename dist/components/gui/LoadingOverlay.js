@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-export function makeTyped_LoadingOverlay(storeHelpers) {
+export function get_LoadingOverlay(storeHelpers) {
     const { useStoreItemPropsEffect, setState } = storeHelpers;
     return function LoadingOverlay(_props) {
         const theOverlay = useRef(null);

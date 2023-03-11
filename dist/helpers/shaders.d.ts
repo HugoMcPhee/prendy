@@ -1,7 +1,11 @@
 declare const shaders: {
     backdropAndDepth: {
-        vertexSource: string;
-        fragmentSource: string;
+        backdropVertex: string;
+        backdropFragment: string;
+    };
+    translatedFxaa: {
+        translatedFxaaVertex: string;
+        translatedFxaaFragment: string;
     };
 };
 export default shaders;

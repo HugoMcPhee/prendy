@@ -2,6 +2,7 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
+import { CharacterName } from "../../declarations";
 import { getScreenSize } from "../../helpers/babylonjs/scenePlane";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";

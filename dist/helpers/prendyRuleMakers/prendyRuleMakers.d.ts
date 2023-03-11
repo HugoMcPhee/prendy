@@ -1,6 +1,6 @@
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PickupName, PlaceInfoByName, PlaceName, StoryPartName, TriggerNameByPlace } from "../../declarations";
-export declare function makeTyped_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): () => {
+export declare function get_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): () => {
     storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
     storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
     globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
@@ -15,7 +15,7 @@ export declare function makeTyped_getUsefulStoryStuff<StoreHelpers extends Prend
     camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
     camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
 };
-export declare function makeTyped_setStoryState<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): (newState: Partial<ReturnType<StoreHelpers["getState"]>["story"]["main"]>) => void;
+export declare function get_setStoryState<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): (newState: Partial<ReturnType<StoreHelpers["getState"]>["story"]["main"]>) => void;
 export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreHelpers, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_StoryPartName extends StoryPartName = StoryPartName, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace>(storeHelpers: StoreHelpers, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[], dollNames: readonly A_DollName[]): {
     makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
         storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];

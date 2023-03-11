@@ -1,25 +1,31 @@
 import { clearTimeoutSafe } from "../../helpers/utils";
-import { breakableForEach, forEach } from "chootils/dist/loops";
-import { makeTyped_globalUtils } from "../../helpers/prendyUtils/global";
-export function makeTyped_globalGeneralRules(storeHelpers) {
-    const { getRefs, getState, makeRules, setState } = storeHelpers;
-    const { setGlobalState } = makeTyped_globalUtils(storeHelpers);
+import { breakableForEach } from "chootils/dist/loops";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+// let canRender = true;
+// setTimeout(() => {
+//   canRender = false;
+// }, 20000);
+export function get_globalGeneralRules(storeHelpers) {
+    const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
+    const { setGlobalState } = get_globalUtils(storeHelpers);
     return makeRules(({ effect }) => ({
         whenAnythingChangesForRendering: effect({
             run() {
-                var _a, _b, _c, _d;
+                var _a, _b;
                 const globalRefs = getRefs().global.main;
+                // const frameTick = getState().global.main.frameTick;
                 // Renders the scene manually
+                // console.log("frameTick", frameTick);
                 if ((_a = globalRefs.scene) === null || _a === void 0 ? void 0 : _a.activeCamera) {
-                    forEach((_c = (_b = globalRefs.scene) === null || _b === void 0 ? void 0 : _b.skeletons) !== null && _c !== void 0 ? _c : [], (skeleton) => {
-                        skeleton.prepare();
-                    });
-                    (_d = globalRefs.scene) === null || _d === void 0 ? void 0 : _d.render(false, false);
+                    // forEach((globalRefs.scene as Scene)?.skeletons ?? [], (skeleton) => {
+                    //   skeleton.prepare();
+                    // });
+                    (_b = globalRefs.scene) === null || _b === void 0 ? void 0 : _b.render(false, false);
                 }
                 // runs in a callback to set before the new pietem frame
-                setState({}, () => {
-                    setState({ global: { main: { frameTick: Date.now() } } });
-                });
+                // setState({}, () => setState({ global: { main: { frameTick: Date.now() } } }));
+                // onNextTick(() => setState({ global: { main: { frameTick: Date.now() } } }));
+                onNextTick(() => setState({ global: { main: { frameTick: getState().global.main.frameTick + 1 } } }));
             },
             check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
             step: "rendering",

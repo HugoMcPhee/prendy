@@ -121,8 +121,6 @@ export function get_cameraChangeUtils<
     console.log("updateTexturesForNowCamera");
 
     const { nowPlaceName } = getState().global.main;
-    // const { scene, backdropRenderSize } = globalRefs;
-    const { backdropRenderSize } = globalRefs;
     const scene = globalRefs.scene as Scene;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
@@ -158,7 +156,6 @@ export function get_cameraChangeUtils<
 
       globalRefs.depthRenderer = enableCustomDepthRenderer(
         scene,
-        // getRefs().global.main.depthRenderSize,
         getState().global.main.zoomLevel,
         newCamRef.camera,
         false

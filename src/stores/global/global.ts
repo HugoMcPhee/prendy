@@ -129,10 +129,7 @@ export default function global<
     backdropPostProcessEffect: null as null | Effect,
     fxaaPostProcess: null as null | PostProcess,
     //
-    backdropImageSize: { width: 1280, height: 720 },
-    backdropRenderSize: { width: 1280, height: 720 },
-    depthRenderSize: { width: 1280, height: 720 },
-    startRenderSize: { width: 1280, height: 720 }, // gets set when the engine starts, this is to prevent the camera zooming out when resizing the screen
+    backdropSize: { width: 1280, height: 720 },
     //
     stretchVideoSize: { x: 1, y: 1 },
     stretchVideoGoalSize: { x: 1, y: 1 },

@@ -2,9 +2,10 @@ import { Nullable, Camera, Scene, Constants, DepthRenderer } from "@babylonjs/co
 import { DepthRendererWithSize } from "./DepthRendererWithSize";
 import { Size } from "chootils/dist/sizes";
 
+// NOTE this may be able to use the standard enableDepthRenderer again
+
 export function enableCustomDepthRenderer(
   scene: Scene,
-  // depthRenderSize: Size,
   depthRenderSize: number,
   camera?: Nullable<Camera>,
   storeNonLinearDepth = false
@@ -23,9 +24,6 @@ export function enableCustomDepthRenderer(
   }
 
   const newDepthRenderer = new DepthRenderer(scene, textureType, camera, storeNonLinearDepth);
-
-  // const newDepthRenderer = new DepthRendererWithSize(scene, textureType, camera, storeNonLinearDepth, depthRenderSize);
-  // const newDepthRenderer = new DepthRenderer(scene, textureType, camera, storeNonLinearDepth);
 
   return newDepthRenderer;
 }

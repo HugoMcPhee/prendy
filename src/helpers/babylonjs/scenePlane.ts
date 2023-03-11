@@ -23,7 +23,7 @@ export function get_scenePlaneUtils<
   const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);
   const globalRefs = getRefs().global.main;
 
-  const { backdropImageSize } = globalRefs;
+  const { backdropSize } = globalRefs;
 
   function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { width: number; height: number }) {
     // Only for perspective camera here :)
@@ -82,8 +82,8 @@ export function get_scenePlaneUtils<
       currentCamera
         .getViewMatrix()
         // .multiply(currentCamera.getProjectionMatrix()),
-        .multiply(getProjectionMatrixCustomSize(currentCamera, globalRefs.backdropImageSize)),
-      currentCamera.viewport.toGlobal(globalRefs.backdropImageSize.width, globalRefs.backdropImageSize.height)
+        .multiply(getProjectionMatrixCustomSize(currentCamera, globalRefs.backdropSize)),
+      currentCamera.viewport.toGlobal(globalRefs.backdropSize.width, globalRefs.backdropSize.height)
     );
   }
 
@@ -159,7 +159,7 @@ export function get_scenePlaneUtils<
   }
 
   function checkPointIsInsidePlane(pointOnPlane: Point2D) {
-    const sceneSize = backdropImageSize; // 1280x720 (the point is in here)
+    const sceneSize = backdropSize; // 1280x720 (the point is in here)
 
     const OUT_OF_FRAME_PADDING = 200;
 

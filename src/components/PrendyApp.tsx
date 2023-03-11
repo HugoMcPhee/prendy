@@ -1,12 +1,4 @@
-import {
-  Camera,
-  Color3,
-  Color4,
-  FxaaPostProcess,
-  ScenePerformancePriority,
-  TargetCamera,
-  Vector3,
-} from "@babylonjs/core";
+import { Camera, Color3, Color4, ScenePerformancePriority, TargetCamera, Vector3 } from "@babylonjs/core";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import React, { ReactNode, useCallback, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
@@ -94,9 +86,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
 
               // add this to see scene behind the scene texture rectangle
               // info.scene.autoClear = false;
-
-              // let startw = engine.getRenderWidth(), starth = engine.getRenderHeight();
-              // globalRefs.startRenderSize = { width: engine.getRenderWidth(), height: engine.getRenderHeight() };
 
               engine.onResizeObservable.add(() => {
                 // console.log("bing bong");

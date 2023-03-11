@@ -5,19 +5,15 @@ TODO
 - fix jump button not handling holding on andorid and ios
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
-- makeAllStoryRuleMakers with BACKDOP_ART ?
+- makeAllStoryRuleMakers with BACKDROP_ART ?
 - setCamera type not limited to place
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
-- get better resolutions and antianiliasing, now that the shaders being used
-
-v0.9.3 todo?
-
-- update minibubble to use same position as speech bubble
 
 v0.9.3
 
 - lots of perforamnce improvements
+- changed from using a plane object showing the scene, to panning and zooming in a post process shader
 
 v0.9.2
 

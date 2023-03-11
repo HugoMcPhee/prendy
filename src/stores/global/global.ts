@@ -1,14 +1,4 @@
-import {
-  DepthRenderer,
-  Effect,
-  Mesh,
-  PostProcess,
-  RenderTargetTexture,
-  Scene,
-  ShaderMaterial,
-  SolidParticleSystem,
-  TargetCamera,
-} from "@babylonjs/core";
+import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
 import {
   AnySegmentName,
@@ -56,8 +46,6 @@ export default function global<
   }>;
 
   const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
-  console.log("characterOptions[prendyStartOptions.playerCharacter].dollName");
-  console.log(prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll);
 
   // State
   const state = () => ({
@@ -109,36 +97,28 @@ export default function global<
     aSpeechBubbleIsShowing: false,
     aConvoIsHappening: false,
     //
-    frameTick: 0, // Date.now()
+    frameTick: 0,
     //
     debugMessage: "",
   });
 
   // Refs
   const refs = () => ({
-    backdropVideoTex: null as null | CustomVideoTexture,
     scene: null as null | Scene,
+    backdropVideoTex: null as null | CustomVideoTexture,
     depthRenderer: null as DepthRenderer | null,
-    //
     depthRenderTarget: null as null | RenderTargetTexture,
-    scenePlane: null as null | Mesh,
-    scenePlaneMaterial: null as null | ShaderMaterial,
-    scenePlaneCamera: null as null | TargetCamera,
-    //
     backdropPostProcess: null as null | PostProcess,
     backdropPostProcessEffect: null as null | Effect,
     fxaaPostProcess: null as null | PostProcess,
     //
     backdropSize: { width: 1280, height: 720 },
-    //
     stretchVideoSize: { x: 1, y: 1 },
     stretchVideoGoalSize: { x: 1, y: 1 },
     stretchSceneSize: { x: 1, y: 1 },
-
     //
     ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
     ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
-
     //
     sounds: makeAutomaticSoundStartRefs(),
     music: makeAutomaticMusicStartRefs(),
@@ -161,8 +141,6 @@ export default function global<
     camSegmentRulesOptions: null as null | CamSegmentRulesOptionsUntyped, // NOTE if using the typed version,  might need to define it in consts to remove cyclic dependancy
     // onPickupButtonClick: null as null | ((pickupName: PickupName) => void), // what to do when pressing the pickup button
     onPickupButtonClick: null as null | ((pickupName: any) => void), // what to do when pressing the pickup button
-    //
-    hasAlreadyStartedRuningBeforeChangeSectionThisFrame: false,
   });
 
   // const startStates: InitialItemsState<typeof state> = {

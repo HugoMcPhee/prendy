@@ -40,8 +40,6 @@ export function get_cameraChangeUtils<
   const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
-  const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
-
   /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
   T_SegmentName extends SegmentNameFromCameraAndPlace<T_PlaceName, T_CameraName>
@@ -121,7 +119,6 @@ export function get_cameraChangeUtils<
 
     if (scene === null) return;
     if (!newCamRef.camera) return;
-    // if (!globalRefs.scenePlane) return;
 
     // Render target
     if (globalRefs.backdropPostProcess) {
@@ -242,13 +239,6 @@ export function get_cameraChangeUtils<
 
           updateVideoTexturesForNewPlace(nowPlaceName);
         }
-        // const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
-
-        // const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
-        // globalRefs.stretchVideoSize.x = stretchVideoX;
-        // globalRefs.stretchVideoSize.y = stretchVideoY;
-        // globalRefs.stretchSceneSize.x = stretchSceneX;
-        // globalRefs.stretchSceneSize.y = stretchSceneY;
 
         (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
           "stretchVideoAmount",
@@ -353,24 +343,13 @@ export function get_cameraChangeUtils<
     // const newCamRef = camsRefs[placeState.nowCamName];
 
     if (scene === null) return;
-    // if (!newCamRef.camera) return;
-    // if (!globalRefs.scenePlane) return;
 
     forEach(modelNamesLoaded, (modelName: any & string) => {
       const modelRefs = getRefs().models[modelName];
 
-      // console.log("camsRefs[placeState.nowCamName].probeTexture");
-      // console.log(camsRefs[placeState.nowCamName].probeTexture);
-
       if (modelRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
         modelRefs.materialRef.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
       }
-
-      // const scene = getScene();
-      // if (scene) {
-      //   dollRefs.materialRef = new StandardMaterial("redMat", scene) as any;
-      //   (dollRefs.materialRef as any).ambientColor = new Color3(0, 1, 0);
-      // }
     });
     //
     // // looks like the dolls material doesn't automatically update with the models material
@@ -379,28 +358,17 @@ export function get_cameraChangeUtils<
       const dollRefs = getRefs().dolls[dollName];
       const { modelName } = getState().dolls[dollName];
       const modelRefs = getRefs().models[modelName];
-      // console.log("alreaddy", dollRefs.materialRef === modelRefs.materialRef);
 
-      // dollRefs.materialRef = modelRefs.materialRef;
-      // dollRefs.materialRef = modelRefs.materialRef;
       if (dollRefs.meshRef) {
         // (modelRefs.materialRef as PBRMaterial).isReadyForSubMesh = () => false;
         dollRefs.meshRef.material = modelRefs.materialRef;
         dollRefs.meshRef.material.freeze();
       }
     });
-
-    // forEach(dollNames, (dollName) => {
-    //   const dollRefs = getRefs().dolls[dollName];
-    //   if (dollRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
-    //     dollRefs.materialRef.reflectionTexture =
-    //       camsRefs[placeState.nowCamName].probeTexture;
-    //   }
-    // });
   }
 
   function applyProbeToAllParticleMaterials() {
-    const { nowPlaceName, modelNamesLoaded } = getState().global.main;
+    const { nowPlaceName } = getState().global.main;
 
     const placeState = getState().places[nowPlaceName];
 
@@ -410,8 +378,6 @@ export function get_cameraChangeUtils<
     // const newCamRef = camsRefs[placeState.nowCamName];
 
     if (scene === null) return;
-    // if (!newCamRef.camera) return;
-    // if (!globalRefs.scenePlane) return;
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     particleSystemNames.forEach((particleSystemName) => {

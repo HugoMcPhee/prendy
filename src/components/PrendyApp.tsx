@@ -32,13 +32,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
   return function PrendyApp({ children, extraScenes }: Props) {
     const globalRefs = getRefs().global.main;
 
-    const scenePlaneCameraRef = useCallback(
-      (node: TargetCamera) => {
-        globalRefs.scenePlaneCamera = node;
-      },
-      [globalRefs]
-    );
-
     useEffect(() => setState({ global: { main: { frameTick: 1 } } }), []);
 
     return (
@@ -105,7 +98,6 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
               position={new Vector3(0, 0, -20)}
               rotation={new Vector3(toRadians(0), toRadians(0), 0)}
               mode={Camera.PERSPECTIVE_CAMERA}
-              ref={scenePlaneCameraRef}
               // layerMask={23}
             />
           </Scene>

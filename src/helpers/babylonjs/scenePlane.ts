@@ -64,8 +64,6 @@ export function get_scenePlaneUtils<
   function getPositionOnPlane(theMesh: AbstractMesh) {
     // This is a position on the plane itself
 
-    // if (!globalRefs.scenePlane) return new Vector3();
-
     const { nowPlaceName } = getState().global.main;
     const { nowCamName } = getState().places[nowPlaceName];
     const placeRefs = getRefs().places[nowPlaceName];
@@ -263,12 +261,6 @@ export function get_scenePlaneUtils<
     return positionOnScreen;
   }
 
-  // NOTE WARNING this might not work chen rotating phone or changing screen size,
-  const cachedParams = {
-    identityMatrix: null as null | Matrix,
-    // scenePlaneCamTransformMatrix: null as null | Matrix,
-  };
-
   function getShaderTransformStuff() {
     const { planeZoom, planeZoomGoal } = getState().global.main;
     // const planeZoom = prendyStartOptions.zoomLevels.default;
@@ -332,12 +324,12 @@ export function get_scenePlaneUtils<
 
     globalRefs.stretchVideoGoalSize.x = stretchVideoGoalX;
     globalRefs.stretchVideoGoalSize.y = stretchVideoGoalY;
+    globalRefs.stretchVideoSize.x = stretchVideoX;
+    globalRefs.stretchVideoSize.y = stretchVideoY;
+    globalRefs.stretchSceneSize.x = stretchSceneX;
+    globalRefs.stretchSceneSize.y = stretchSceneY;
 
     return {
-      stretchVideoX,
-      stretchVideoY,
-      stretchSceneX,
-      stretchSceneY,
       editedPlaneSceneZoom,
       editedHardwareScaling,
     };

@@ -139,6 +139,9 @@ const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
   dontSetMeta: true,
 });
 
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // NOTE Change these to typeof  to have known types while making prendys library
 // export type PlaceholderPrendyStores = typeof placeholderPrendyStores;
 // export type PrendyStoreHelpers = typeof storeHelpers;

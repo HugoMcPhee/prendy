@@ -28,42 +28,7 @@ export function get_globalScenePlaneRules<
         const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
         const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
 
-        const scene = globalRefs.scene as Scene | null;
-        if (zoomChanged) {
-          const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
-          globalRefs.stretchVideoSize.x = stretchVideoX;
-          globalRefs.stretchVideoSize.y = stretchVideoY;
-          globalRefs.stretchSceneSize.x = stretchSceneX;
-          globalRefs.stretchSceneSize.y = stretchSceneY;
-
-          // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-          //   "stretchVideoAmount",
-          //   stretchVideoX,
-          //   stretchVideoY
-          // );
-          // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-          //   "stretchSceneAmount",
-          //   stretchSceneX,
-          //   stretchSceneY
-          // );
-        }
-
-        const engine = scene?.getEngine(); // engine
-        if (engine && (positionChanged || zoomChanged)) {
-          const { stretchVideoX, stretchVideoY, stretchSceneX, stretchSceneY } = getShaderTransformStuff();
-          globalRefs.stretchVideoSize.x = stretchVideoX;
-          globalRefs.stretchVideoSize.y = stretchVideoY;
-          globalRefs.stretchSceneSize.x = stretchSceneX;
-          globalRefs.stretchSceneSize.y = stretchSceneY;
-
-          // const stretchVideoSize = globalRefs.stretchVideoSize;
-
-          // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-          //   "planePos",
-          //   planePos.x * stretchVideoSize.x,
-          //   planePos.y * stretchVideoSize.y
-          // );
-        }
+        if (positionChanged || zoomChanged) getShaderTransformStuff();
       },
       check: { prop: ["planePos", "planeZoom"], type: "global" },
       atStepEnd: true,
@@ -133,26 +98,12 @@ export function get_globalScenePlaneRules<
       run: async () => {
         await delay(10); // this helps it work on ipad
 
-        focusScenePlaneOnFocusedDoll("instant");
-
         const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();
 
         if (!engine) return;
         console.log("resized");
 
-        // globalRefs.depthRenderTarget?.resize({ width: engine.getRenderWidth(), height: engine.getRenderHeight() });
-        const {
-          editedHardwareScaling,
-          editedPlaneSceneZoom,
-          stretchVideoX,
-          stretchVideoY,
-          stretchSceneX,
-          stretchSceneY,
-        } = getShaderTransformStuff();
-        globalRefs.stretchVideoSize.x = stretchVideoX;
-        globalRefs.stretchVideoSize.y = stretchVideoY;
-        globalRefs.stretchSceneSize.x = stretchSceneX;
-        globalRefs.stretchSceneSize.y = stretchSceneY;
+        const { editedHardwareScaling, editedPlaneSceneZoom } = getShaderTransformStuff();
 
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -163,22 +114,10 @@ export function get_globalScenePlaneRules<
         // const newRenderHeight = screenHeight * 1;
 
         engine.setSize(newRenderWidth, newRenderHeight);
-
         const depthRenderWidth = (globalRefs.depthRenderTarget as RenderTargetTexture).getRenderSize();
-
         globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
 
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat("planeZoomScene", editedPlaneSceneZoom);
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        //   "stretchVideoAmount",
-        //   stretchVideoX,
-        //   stretchVideoY
-        // );
-        // (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        //   "stretchSceneAmount",
-        //   stretchSceneX,
-        //   stretchSceneY
-        // );
+        focusScenePlaneOnFocusedDoll("instant");
       },
       check: { prop: "timeScreenResized", type: "global" },
       atStepEnd: true,

@@ -9,6 +9,7 @@ import {
   SpotNameByPlace,
   TriggerNameByPlace,
   WallNameByPlace,
+  PrendyOptions,
 } from "../declarations";
 
 const defaultCamRefs = () => ({
@@ -25,6 +26,7 @@ export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 // export
 
 export default function places<
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_PlaceName extends PlaceName = PlaceName,
   A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_PrendyAssets extends PrendyAssets = PrendyAssets,
@@ -33,7 +35,7 @@ export default function places<
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(prendyAssets: A_PrendyAssets) {
+>(prendyAssets: A_PrendyAssets, prendyStartOptions: A_PrendyOptions) {
   const { placeInfoByName } = prendyAssets;
   const placeNames = prendyAssets.placeNames as A_PlaceName[];
 
@@ -59,20 +61,23 @@ export default function places<
   };
 
   type PlaceState<K_PlaceName extends A_PlaceName> = {
-    wantedCamNameAtLoop: MaybeCam<K_PlaceName>;
-    wantedCamName: MaybeCam<K_PlaceName>;
+    goalCamNameAtLoop: MaybeCam<K_PlaceName>;
+    goalCamName: MaybeCam<K_PlaceName>;
     nowCamName: A_CameraNameByPlace[K_PlaceName];
   };
 
   // State
   const state = <K_PlaceName extends A_PlaceName>(placeName: K_PlaceName) => {
+    console.log("setting initial place state again");
+
     return {
-      wantedCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
+      goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
       nextCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the section vid has finished changing, this is used as the new nowCamName
-      wantedCamNameAtLoop: null as MaybeCam<K_PlaceName>,
-      wantedCamName: null as MaybeCam<K_PlaceName>,
+      goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
+      goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
       nowCamName:
-        ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName) ??
+        ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+          ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName)) ??
         ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
     };
   };

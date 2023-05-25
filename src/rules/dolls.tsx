@@ -3,7 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeRunMovers } from "pietem-movers";
+import { makeRunMovers } from "repond-movers";
 import { AnyAnimationName, DollName, ModelName, PrendyAssets, PrendyOptions } from "../declarations";
 import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
@@ -95,7 +95,7 @@ export function get_dollDynamicRules<
 }
 
 // FIXME
-// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
+// maybe allow repond to run 'addedOrRemoved' rules for initialState?
 
 export function startDynamicDollRulesForInitialState<
   StoreHelpers extends PrendyStoreHelpers,

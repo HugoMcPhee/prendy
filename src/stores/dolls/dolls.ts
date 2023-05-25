@@ -1,7 +1,7 @@
 import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "chootils/dist/points2d";
-import { mover3dRefs, mover3dState, moverRefs, moverState } from "pietem-movers";
+import { mover3dRefs, mover3dState, moverRefs, moverState } from "repond-movers";
 import {
   AnimationNameByModel,
   AnyAnimationName,

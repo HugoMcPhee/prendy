@@ -1,4 +1,4 @@
-import { StoreHelperTypes } from "pietem";
+import { StoreHelperTypes } from "repond";
 import { VidState } from "../stores/safeVids";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { makeVideoElementFromPath } from "../helpers/prendyUtils/safeVids";

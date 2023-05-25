@@ -1,4 +1,4 @@
-import { createStoreHelpers } from "pietem";
+import { createStoreHelpers } from "repond";
 import { prendyStepNames } from "./stores";
 import { getPrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../helpers/prendyRuleMakers/fakeStoryStore";

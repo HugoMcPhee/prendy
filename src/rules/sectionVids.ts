@@ -1,4 +1,4 @@
-import { StoreHelperTypes } from "pietem";
+import { StoreHelperTypes } from "repond";
 import { minMaxRange } from "chootils/dist/numbers";
 import { SectionVidState } from "../stores/sectionVids";
 import { get_safeVidUtils } from "../helpers/prendyUtils/safeVids";
@@ -70,7 +70,7 @@ export function get_sectionVidRules<
                 sectionVids: {
                   [itemName]: {
                     sectionVidState: "play",
-                    newplayingVidStartedTime: Date.now(),
+                    newPlayingVidStartedTime: Date.now(),
                   },
                 },
                 safeVids: {
@@ -126,7 +126,7 @@ export function get_sectionVidRules<
 
               // check if the new seek time is too close to the end so it would loop
               // for example   newSeekTime: 2.017258  newEndTime: 2.0333300000000003  caused a big quick loop
-              if (newEndTime - newSeekTime < 0.15) {
+              if (newEndTime - newSeekTime < 0.2) {
                 console.warn("was close to looping while changing section");
                 newSeekTime = newStartTime;
               }
@@ -183,39 +183,22 @@ export function get_sectionVidRules<
       atStepEnd: true,
     }),
 
-    // wants
-    whenWantedSectionChanges: itemEffect({
+    // Wjhen goals change
+    whenGoalSectionChanges: itemEffect({
       run({ newValue: wantedSection, itemName, itemState }) {
         if (wantedSection === null || itemState.sectionVidState === "unloaded") return; // don't react if wantedSection changed to null
-
-        setState({
-          sectionVids: {
-            [itemName]: {
-              sectionVidState: "beforeChangeSection",
-            },
-          },
-        });
+        setState({ sectionVids: { [itemName]: { sectionVidState: "beforeChangeSection" } } });
       },
       check: { type: "sectionVids", prop: "wantedSection" },
       step: "sectionVidWantsToPlay",
     }),
-
     whenWantToLoad: itemEffect({
       run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState === "unloaded") {
-          setState({
-            sectionVids: {
-              [itemName]: {
-                sectionVidState: "beforeLoad",
-                wantToLoad: false,
-              },
-            },
-          });
+          setState({ sectionVids: { [itemName]: { sectionVidState: "beforeLoad", wantToLoad: false } } });
         } else {
           console.warn("tried to load", itemName, " when it was already loaded");
-          setState({
-            sectionVids: { [itemName]: { wantToLoad: false } },
-          });
+          setState({ sectionVids: { [itemName]: { wantToLoad: false } } });
         }
       },
       check: { type: "sectionVids", prop: "wantToLoad", becomes: true },
@@ -225,14 +208,7 @@ export function get_sectionVidRules<
       run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState !== "unloaded") {
           doWhenSectionVidPlaying(itemName as PlaceName, () => {
-            setState({
-              sectionVids: {
-                [itemName]: {
-                  sectionVidState: "beforeUnload",
-                  wantToUnload: false,
-                },
-              },
-            });
+            setState({ sectionVids: { [itemName]: { sectionVidState: "beforeUnload", wantToUnload: false } } });
           });
         } else {
           console.warn("tried to unload", itemName, " when it was unloaded");
@@ -245,59 +221,24 @@ export function get_sectionVidRules<
     whenWantToLoop: itemEffect({
       run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState === "beforeLoad" || sectionVidState === "unloaded") return;
-
-        // get latest state just incase it changed
-
-        setState({
-          sectionVids: {
-            [itemName]: {
-              sectionVidState: "beforeDoLoop",
-              wantToLoop: false,
-            },
-          },
-        });
+        setState({ sectionVids: { [itemName]: { sectionVidState: "beforeDoLoop", wantToLoop: false } } });
       },
       check: { type: "sectionVids", prop: "wantToLoop", becomes: true },
       step: "sectionVidWantsToPlay",
     }),
-    //
-    // when the play and wait vids swap
-
+    // When the play and wait vids swap (loop a and b vids)
     whenPlayVidChanges: itemEffect({
       run({ newValue: safeVidId_playing, itemName: sectionVidName }) {
-        // const { nowPlaceName } = getGlobalState();
-        // if (nowPlaceName !== sectionVidName) return;
-
         if (!safeVidId_playing) return;
-
         setState({ safeVids: { [safeVidId_playing]: { wantToPlay: true } } });
 
         doWhenSafeVidStateReady(
           safeVidId_playing,
           "play",
           () => {
-            const { sectionVidState } = getState().sectionVids[sectionVidName];
-
-            if (sectionVidState === "waitingForChangeSection") {
-              // setState({
-              //   sectionVids: {
-              //     [itemName]: {
-              //       nowSection: wantedSection,
-              //       wantedSection: null,
-              //     },
-              //   },
-              // });
-              // update Now Stuff When Section Changed();
-            }
-
-            // this was where the sectionVid play state was set before
+            // NOTE could be pause if wanted pausing
             setState({
-              sectionVids: {
-                [sectionVidName]: {
-                  sectionVidState: "play", // NOTE could be pause if wanted pausing
-                  newplayingVidStartedTime: Date.now(),
-                },
-              },
+              sectionVids: { [sectionVidName]: { sectionVidState: "play", newPlayingVidStartedTime: Date.now() } },
             });
           },
           false /* check initital */
@@ -310,14 +251,10 @@ export function get_sectionVidRules<
 
     whenWaitVidChanges: itemEffect({
       run({ newValue: safeVidId_waiting, itemState }) {
-        // const { nowPlaceName } = getGlobalState();
-        // if (nowPlaceName !== sectionVidName) return;
         if (!safeVidId_waiting) return;
         const { nowSection } = itemState;
         // set the video to paused
-        setState({
-          safeVids: { [safeVidId_waiting]: { wantToPause: true } },
-        });
+        setState({ safeVids: { [safeVidId_waiting]: { wantToPause: true } } });
 
         // when it finished pausing, set the time to the correct time
         // (it might already be paused, and pause might not be needed)
@@ -325,13 +262,7 @@ export function get_sectionVidRules<
           safeVidId_waiting,
           "pause",
           () => {
-            setState({
-              safeVids: {
-                [safeVidId_waiting]: {
-                  wantedSeekTime: nowSection.time + BEFORE_LOOP_PADDING,
-                },
-              },
-            });
+            setState({ safeVids: { [safeVidId_waiting]: { wantedSeekTime: nowSection.time + BEFORE_LOOP_PADDING } } });
           }
           //  false /*  check initial */
         );

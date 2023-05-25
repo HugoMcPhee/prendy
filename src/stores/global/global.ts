@@ -1,5 +1,5 @@
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
-import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
+import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import {
   AnySegmentName,
   CharacterName,
@@ -52,7 +52,7 @@ export default function global<
     // segments and section video
     wantedSegmentWhenNextPlaceLoads: null as MaybeSegment,
     nextSegmentNameWhenVidPlays: null as MaybeSegment, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
-    wantedSegmentNameAtLoop: null as MaybeSegment,
+    goalSegmentNameAtLoop: null as MaybeSegment,
     wantedSegmentName: null as MaybeSegment,
     nowSegmentName: prendyStartOptions.segment as A_AnySegmentName,
     wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sectionVids
@@ -60,7 +60,10 @@ export default function global<
     //
     // changing places
     modelNamesLoaded: [] as A_ModelName[],
-    newPlaceLoaded: false,
+    newPlaceModelLoaded: false,
+    newPlaceVideosLoaded: false,
+    newPlaceProbesLoaded: false,
+    //
     isLoadingBetweenPlaces: true,
     nowPlaceName: prendyStartOptions.place as A_PlaceName,
     readyToSwapPlace: false,

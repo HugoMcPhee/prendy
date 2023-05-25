@@ -1,4 +1,4 @@
-import { mover2dRefs, mover2dState, moverRefs, moverState } from "pietem-movers";
+import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import get_globalStoreUtils from "./globalStoreUtils";
 export default function global(prendyStartOptions, prendyAssets) {
     const { musicNames, soundNames } = prendyAssets;

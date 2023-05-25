@@ -1,9 +1,9 @@
-import { InitialItemsState } from "pietem";
+import { InitialItemsState } from "repond";
 import { forEach } from "chootils/dist/loops";
 import { PrendyAssets, PlaceName } from "../declarations";
 
 /*
-a wrapped way to play/pause/seek videos using pietem state
+A wrapped way to play/pause/seek videos using repond state
 */
 
 export type VidState =

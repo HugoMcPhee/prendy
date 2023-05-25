@@ -1,5 +1,5 @@
 import delay from "delay";
-import { makeRunMovers } from "pietem-movers";
+import { makeRunMovers } from "repond-movers";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";

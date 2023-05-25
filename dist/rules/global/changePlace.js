@@ -90,7 +90,7 @@ export function get_globalChangePlaceRules(storeHelpers, _prendyStores, prendySt
         }),
         whenReadyToSwapPlace: itemEffect({
             run({ itemState: globalState }) {
-                // run on the start of the next pietem frame, so all the flows can run again
+                // run on the start of the next repond frame, so all the flows can run again
                 setState({}, () => {
                     const { nowPlaceName, nextPlaceName } = globalState;
                     const cameraNames = placeInfoByName[nowPlaceName].cameraNames;

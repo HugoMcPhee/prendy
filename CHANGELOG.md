@@ -10,9 +10,14 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
 
+v0.9.5
+
+- updated to use repond and updated packages
+- more predictable logic for loading and playing videos
+
 v0.9.3
 
-- lots of perforamnce improvements
+- lots of performance improvements
 - changed from using a plane object showing the scene, to panning and zooming in a post process shader
 
 v0.9.2

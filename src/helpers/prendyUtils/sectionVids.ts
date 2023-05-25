@@ -115,11 +115,14 @@ export function get_sectionVidUtils<
 
   // runs on changes to tick, in the checkVideoLoop flow
 
-  function checkForVideoLoop(itemName: PlaceName) {
+  function checkForVideoLoop(placeName: PlaceName) {
     // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSection for too many frames, then do something?
-    const itemState = getState().sectionVids[itemName];
+    const itemState = getState().sectionVids[placeName];
+    const placeState = getState().places[placeName];
     const { nowSection, sectionVidState } = itemState;
-    const backdropVid = getSectionVidVideo(itemName);
+    const backdropVid = getSectionVidVideo(placeName);
+
+    const { nowCamName } = placeState;
 
     /*
   !nextSegmentNameWhenVidPlays &&
@@ -128,37 +131,44 @@ export function get_sectionVidUtils<
 
     if (
       // sectionVidState === "play" // might've been getting skipped sometimes?
-      sectionVidState !== "unloaded" &&
-      sectionVidState !== "waitingForUnload"
+      sectionVidState === "unloaded" ||
+      sectionVidState === "waitingForUnload"
+    )
+      return false;
+
+    const currentTime = backdropVid?.currentTime ?? 0;
+
+    const endTime = getSectionEndTime(nowSection);
+    const isAtOrAfterEndOfLoop = currentTime >= endTime;
+    const isBeforeStartOfLoop = currentTime < nowSection.time; // if the current time is before the video sections start time
+
+    const isAlreadyLoopingOrChangingSection =
+      sectionVidState === "beforeDoLoop" ||
+      sectionVidState === "beforeChangeSection" ||
+      sectionVidState === "waitingForDoLoop" ||
+      sectionVidState === "waitingForChangeSection";
+    // sectionVidState === "play"
+    // !wantToLoop
+
+    if (!isAlreadyLoopingOrChangingSection) {
+      if (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) {
+        // console.log("isAtOrAfterEndOfLoop", isAtOrAfterEndOfLoop);
+        // console.log("isBeforeStartOfLoop", isBeforeStartOfLoop);
+      }
+    }
+
+    // console.log("isAlreadyLoopingOrChangingSection", isAlreadyLoopingOrChangingSection, sectionVidState);
+    // console.log("nowSection", nowSection, isAtOrAfterEndOfLoop);
+    // console.log("nowCamName", nowCamName, nowSection.time, nowSection.duration);
+    // console.log("nowCamName", nowCamName, placeName, nowSection.time, nowSection.duration);
+    // console.log("isBeforeStartOfLoop", isBeforeStartOfLoop);
+
+    if (
+      (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) &&
+      // isAtOrAfterEndOfLoop &&
+      !isAlreadyLoopingOrChangingSection
     ) {
-      const currentTime = backdropVid?.currentTime ?? 0;
-
-      const endTime = getSectionEndTime(nowSection);
-      const isAtOrAfterEndOfLoop = currentTime >= endTime;
-      const isBeforeStartOfLoop = currentTime < nowSection.time; // if the current time is before the video sections start time
-
-      const isAlreadyLoopingOrChangingSection =
-        sectionVidState === "beforeDoLoop" ||
-        sectionVidState === "beforeChangeSection" ||
-        sectionVidState === "waitingForDoLoop" ||
-        sectionVidState === "waitingForChangeSection";
-      // sectionVidState === "play"
-      // !wantToLoop
-
-      if (!isAlreadyLoopingOrChangingSection) {
-        if (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) {
-          // console.log("isAtOrAfterEndOfLoop", isAtOrAfterEndOfLoop);
-          // console.log("isBeforeStartOfLoop", isBeforeStartOfLoop);
-        }
-      }
-
-      if (
-        (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) &&
-        // isAtOrAfterEndOfLoop &&
-        !isAlreadyLoopingOrChangingSection
-      ) {
-        return true;
-      }
+      return true;
     }
 
     return false;

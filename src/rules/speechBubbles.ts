@@ -3,7 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
 import { CSSProperties } from "react";
 import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
-import { StoreHelperTypes } from "pietem";
+import { StoreHelperTypes } from "repond";
 
 let zIndexCounter = 100;
 /*

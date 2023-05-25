@@ -47,11 +47,11 @@ export default function sectionVids<
     wantToLoad: false,
     wantToUnload: false,
     wantToLoop: false,
-    switchSection_keepProgress: true, // maybe always default to truw
+    switchSection_keepProgress: true, // maybe always default to true
     // wantedSectionInstant: null as VidSection | null,
     // wantedSectionAtLoop: null as VidSection | null,
     //
-    newplayingVidStartedTime: 0, // timestamp when the video starts playing after vidLetter_play changes
+    newPlayingVidStartedTime: 0, // timestamp when the video starts playing after vidLetter_play changes
     nowSectionSeekedTime: 0, // timestamp when the new section seeked (but not played yet)
     //
   });

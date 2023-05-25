@@ -76,21 +76,6 @@ export function get_globalChangePlaceRules<
         { autoPlay: false, loop: false, autoUpdateTexture: true }
       );
     }
-
-    // focus on the player
-    focusScenePlaneOnFocusedDoll();
-
-    // fix for chrome video texture being black / not ready when the video is?
-    // (setion vidElement.autoplay or preload true also fixed it, but those can make things less predictable without videos appended on the page )
-    updateTexturesForNowCamera(nowCamName as AnyCameraName, true);
-    setState({
-      global: {
-        main: {
-          loadingOverlayToggled: false,
-          loadingOverlayFullyShowing: false,
-        },
-      },
-    });
   }
 
   return makeRules(({ itemEffect }) => ({
@@ -127,7 +112,7 @@ export function get_globalChangePlaceRules<
     }),
     whenReadyToSwapPlace: itemEffect({
       run({ itemState: globalState }) {
-        // run on the start of the next pietem frame, so all the flows can run again
+        // run on the start of the next repond frame, so all the flows can run again
         setState({}, () => {
           const { nowPlaceName, nextPlaceName } = globalState;
           const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
@@ -146,9 +131,21 @@ export function get_globalChangePlaceRules<
           setGlobalState({
             nowPlaceName: nextPlaceName,
             isLoadingBetweenPlaces: true,
-            newPlaceLoaded: false,
+            newPlaceVideosLoaded: false,
+            newPlaceProbesLoaded: false,
+            newPlaceModelLoaded: false,
             nextPlaceName: null,
             readyToSwapPlace: false,
+          });
+
+          const { nowCamName, goalCamWhenNextPlaceLoads } = getState().places[nextPlaceName];
+
+          setState({
+            places: {
+              [nextPlaceName]: {
+                nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName,
+              },
+            },
           });
         });
       },
@@ -158,60 +155,71 @@ export function get_globalChangePlaceRules<
     }),
     whenEverythingsLoaded: itemEffect({
       run({ itemState: globalState }) {
-        const { nowPlaceName, newPlaceLoaded, modelNamesLoaded, wantedSegmentWhenNextPlaceLoads } = globalState;
-        const { wantedCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
-
+        const {
+          nowPlaceName,
+          newPlaceVideosLoaded,
+          newPlaceProbesLoaded,
+          modelNamesLoaded,
+          wantedSegmentWhenNextPlaceLoads,
+        } = globalState;
+        const { goalCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
         const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
         const loadedModelNames = modelNamesLoaded.sort();
         let allModelsAreLoaded = true;
 
         forEach(wantedModelsForPlace, (loopedCharacterName) => {
-          if (!loadedModelNames.includes(loopedCharacterName)) {
-            allModelsAreLoaded = false;
-          }
+          if (!loadedModelNames.includes(loopedCharacterName)) allModelsAreLoaded = false;
         });
 
-        if (newPlaceLoaded && allModelsAreLoaded) {
-          onNextTick(() => {
-            if (wantedSegmentWhenNextPlaceLoads) {
-              setGlobalState({
-                wantedSegmentWhenNextPlaceLoads: null,
-                wantedSegmentName: wantedSegmentWhenNextPlaceLoads,
-              });
-            }
+        // when a new place loads it handles checking and clearing
+        // nextSegmentNameWhenVidPlays & nextCamNameWhenVidPlays
+        // otheriwse the video wont loop because it thinks its waiting for a section to change
 
-            if (wantedCamWhenNextPlaceLoads) {
-              setState({
-                places: {
-                  [nowPlaceName]: {
-                    wantedCamWhenNextPlaceLoads: null,
-                    wantedCamName: wantedCamWhenNextPlaceLoads,
-                  },
-                },
-              });
-            }
-
-            setPlayerPositionForNewPlace();
-
-            // onNextTick because sometimes the character position was starting incorrect
-            // (maybe because the place-load story-rules werent reacting because it was the wrong flow)
-            setGlobalState({ isLoadingBetweenPlaces: false });
-
-            onNextTick(() => {
-              // when a new place loads it handles checking and clearing nextSegmentNameWhenVidPlays  nextCamNameWhenVidPlays
-              // otheriwse the video wont loop because it thinks its waiting for a section to change
-              // its set to run when a vid starts playing, but its missing it , maybe because the new vid playing property is updating before theres a wanted next cam etc,
-              //or maybe to do with the flow order
-              updateNowStuffWhenSectionChanged();
-
-              whenAllVideosLoadedForPlace();
+        if (newPlaceVideosLoaded) {
+          if (wantedSegmentWhenNextPlaceLoads) {
+            setGlobalState({
+              wantedSegmentWhenNextPlaceLoads: null,
+              wantedSegmentName: wantedSegmentWhenNextPlaceLoads,
             });
+          }
+
+          if (goalCamWhenNextPlaceLoads) {
+            setState({
+              places: {
+                [nowPlaceName]: {
+                  goalCamWhenNextPlaceLoads: null,
+                  goalCamName: goalCamWhenNextPlaceLoads,
+                },
+              },
+            });
+          }
+          onNextTick(() => {
+            if (newPlaceVideosLoaded && newPlaceProbesLoaded && allModelsAreLoaded) {
+              setPlayerPositionForNewPlace();
+
+              // onNextTick because sometimes the character position was starting incorrect
+              // (maybe because the place-load story-rules werent reacting because it was the wrong flow)
+              setGlobalState({ isLoadingBetweenPlaces: false });
+
+              onNextTick(() => {
+                const { nowPlaceName } = getState().global.main;
+                const { nowCamName } = getState().places[nowPlaceName];
+
+                updateNowStuffWhenSectionChanged();
+                whenAllVideosLoadedForPlace();
+                updateTexturesForNowCamera(nowCamName, true);
+                focusScenePlaneOnFocusedDoll(); // focus on the player
+
+                // Start fading in the scene
+                setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });
+              });
+            }
           });
         }
       },
       check: {
         type: "global",
-        prop: ["newPlaceLoaded", "modelNamesLoaded"],
+        prop: ["newPlaceVideosLoaded", "newPlaceProbesLoaded", "modelNamesLoaded"],
       },
       atStepEnd: true,
       step: "loadNewPlace",

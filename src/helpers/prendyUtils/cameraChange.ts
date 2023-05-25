@@ -108,9 +108,8 @@ export function get_cameraChangeUtils<
     });
   }
 
+  // Updates both video textures and probe textures for the new cameras
   function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
-    console.log("updateTexturesForNowCamera");
-
     const { nowPlaceName } = getState().global.main;
     const scene = globalRefs.scene as Scene;
     const placeRef = placesRefs[nowPlaceName];
@@ -119,40 +118,23 @@ export function get_cameraChangeUtils<
 
     if (scene === null) return;
     if (!newCamRef.camera) return;
+    // if (!scene.activeCamera) return;
 
     // Render target
-    if (globalRefs.backdropPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.backdropPostProcess);
-    }
-    if (globalRefs.fxaaPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.fxaaPostProcess);
-    }
+    if (globalRefs.backdropPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.backdropPostProcess);
+    if (globalRefs.fxaaPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.fxaaPostProcess);
 
-    globalRefs.scene.activeCamera = newCamRef.camera;
+    scene.activeCamera = newCamRef.camera;
 
-    if (globalRefs.backdropPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.backdropPostProcess);
-    }
-    if (globalRefs.fxaaPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.fxaaPostProcess);
-    }
+    if (globalRefs.backdropPostProcess) scene.activeCamera.attachPostProcess(globalRefs.backdropPostProcess);
+    if (globalRefs.fxaaPostProcess) scene.activeCamera.attachPostProcess(globalRefs.fxaaPostProcess);
 
-    // console.log("newCamRef.camera");
-    // newCamRef.camera.maxZ = 1000;
-    // console.log(newCamRef.camera.maxZ);
+    if (!globalRefs.depthRenderer) globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
 
-    if (!globalRefs.depthRenderer) {
-      console.log("making new depth renderer");
+    // @ts-ignore
+    globalRefs.depthRenderer._camera = newCamRef.camera;
 
-      globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
-    }
-
-    (globalRefs.depthRenderer as any)._camera = newCamRef.camera;
-
-    if (!globalRefs.depthRenderTarget) {
-      globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
-      // globalRefs.depthRenderTarget?.resize({ width: 1280, height: 720 });
-    }
+    if (!globalRefs.depthRenderTarget) globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
 
     globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
 
@@ -161,7 +143,7 @@ export function get_cameraChangeUtils<
       addMeshesToRenderLists(newCamRef);
     }
 
-    if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
+    if (scene.activeCamera && !globalRefs.backdropPostProcess) {
       ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
       ShaderStore.ShadersStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
 
@@ -174,7 +156,7 @@ export function get_cameraChangeUtils<
         ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
-        globalRefs.scene.activeCamera,
+        scene.activeCamera,
         // globalRefs.activeCamera
         // Texture.NEAREST_SAMPLINGMODE // sampling
         // globalRefs.scene.engine // engine,
@@ -270,8 +252,8 @@ export function get_cameraChangeUtils<
       };
     }
 
-    if (globalRefs.scene.activeCamera && !globalRefs.fxaaPostProcess) {
-      globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+    if (scene.activeCamera && !globalRefs.fxaaPostProcess) {
+      globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, scene.activeCamera);
     }
 
     if (didChangePlace) {
@@ -288,7 +270,7 @@ export function get_cameraChangeUtils<
 
     // scene.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
 
-    globalRefs.depthRenderTarget.renderList = [];
+    if (globalRefs.depthRenderTarget) globalRefs.depthRenderTarget.renderList = [];
 
     forEach(dollNames, (dollName) => {
       const dollMeshes = getRefs().dolls[dollName].otherMeshes;
@@ -296,12 +278,10 @@ export function get_cameraChangeUtils<
       const dollMeshNames = Object.keys(dollMeshes);
 
       forEach(dollMeshNames, (meshName) => {
-        const loopedMesh = dollMeshes[meshName] as AbstractMesh;
-
-        if (loopedMesh) {
-          loopedMesh.isInFrustum = () => true;
-          // loopedMesh.alwaysSelectAsActiveMesh = true;
-          globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
+        const dollMesh = dollMeshes[meshName] as AbstractMesh;
+        if (dollMesh) {
+          dollMesh.isInFrustum = () => true;
+          globalRefs.depthRenderTarget?.renderList?.push(dollMesh);
         }
       });
     });
@@ -313,7 +293,8 @@ export function get_cameraChangeUtils<
       (particleSystem as any)._camera = newCamRef.camera;
     });
 
-    (scene as any)._skipEvaluateActiveMeshesCompletely = true;
+    // @ts-ignore
+    scene._skipEvaluateActiveMeshesCompletely = true;
   }
 
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
@@ -326,9 +307,7 @@ export function get_cameraChangeUtils<
   }
 
   function updateVideoTexture() {
-    // if (Math.random() > 0.7) {
     globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
-    // }
     globalRefs?.backdropPostProcessEffect?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
   }
 
@@ -340,18 +319,18 @@ export function get_cameraChangeUtils<
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    // const newCamRef = camsRefs[placeState.nowCamName];
+    const newCamRef = camsRefs[placeState.nowCamName];
 
     if (scene === null) return;
 
     forEach(modelNamesLoaded, (modelName: any & string) => {
       const modelRefs = getRefs().models[modelName];
 
-      if (modelRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
-        modelRefs.materialRef.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
+      if (modelRefs.materialRef && newCamRef.probeTexture) {
+        modelRefs.materialRef.reflectionTexture = newCamRef.probeTexture;
       }
     });
-    //
+
     // // looks like the dolls material doesn't automatically update with the models material
     // // so setting it here works :)
     forEach(dollNames, (dollName) => {
@@ -360,31 +339,27 @@ export function get_cameraChangeUtils<
       const modelRefs = getRefs().models[modelName];
 
       if (dollRefs.meshRef) {
-        // (modelRefs.materialRef as PBRMaterial).isReadyForSubMesh = () => false;
         dollRefs.meshRef.material = modelRefs.materialRef;
-        dollRefs.meshRef.material.freeze();
+        dollRefs.meshRef.material?.freeze();
       }
     });
   }
 
   function applyProbeToAllParticleMaterials() {
     const { nowPlaceName } = getState().global.main;
-
     const placeState = getState().places[nowPlaceName];
-
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    // const newCamRef = camsRefs[placeState.nowCamName];
-
+    const newCamRef = camsRefs[placeState.nowCamName];
     if (scene === null) return;
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     particleSystemNames.forEach((particleSystemName) => {
       const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
       const material = particleSystem.mesh.material;
-      if (material && material instanceof PBRMaterial && camsRefs[placeState.nowCamName].probeTexture) {
-        material.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
+      if (material && material instanceof PBRMaterial && newCamRef.probeTexture) {
+        material.reflectionTexture = newCamRef.probeTexture;
       }
 
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
@@ -393,6 +368,8 @@ export function get_cameraChangeUtils<
 
   // note adding to section vids cause its easier to follow for now? even though its not seperated
   function updateNowStuffWhenSectionChanged() {
+    // I think everything is a 'wanted' state , and this function swaps them all to 'now' states at once
+
     const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
     const { nextCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
 
@@ -412,7 +389,6 @@ export function get_cameraChangeUtils<
           useStorySegmentRules: true,
         })
       : null;
-    // if (sectionVidState === "play") {
 
     setState({
       global: {

@@ -1,6 +1,6 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
+import { makeMoverStateMaker, moverMultiRefs } from "repond-movers";
 import { AnimationNameByModel, DollName, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
 import { defaultInRangeForDoll, InRangeForDoll } from "../../helpers/prendyUtils/dolls";
 

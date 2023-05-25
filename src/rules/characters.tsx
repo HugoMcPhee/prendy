@@ -91,7 +91,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 
           // --------------------------
           // check triggers
-          let newAtTheseTriggers = {} as Record<typeof triggerNames[number], boolean>;
+          let newAtTheseTriggers = {} as Record<(typeof triggerNames)[number], boolean>;
           const currentAtTriggers = characterState.atTriggers;
           let atTriggersHasChanged = false;
           forEach(triggerNames, (loopedTriggerName) => {
@@ -152,7 +152,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 }
 
 // FIXME
-// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
+// maybe allow repond to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 
 export function get_startDynamicCharacterRulesForInitialState<
@@ -199,7 +199,7 @@ export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
             setState({
               places: {
                 // [nowPlaceName]: { nowCamName: loopedCameraName },
-                [nowPlaceName]: { wantedCamName: loopedCameraName },
+                [nowPlaceName]: { goalCamName: loopedCameraName },
               },
             });
           }

@@ -1,4 +1,4 @@
-import { InitialItemsState } from "pietem";
+import { InitialItemsState } from "repond";
 import { PrendyAssets, PlaceName } from "../declarations";
 export declare type VidState = "beforePlay" | "waitingForPlay" | "readyToPlay" | "play" | "beforeSeek" | "waitingForSeek" | "beforePause" | "waitingForPause" | "pause" | "beforeLoad" | "waitingForLoad" | "beforeUnload" | "waitingForUnload" | "unloaded";
 export declare const abLetters: readonly ["a", "b"];

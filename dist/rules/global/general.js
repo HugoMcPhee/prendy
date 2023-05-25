@@ -22,7 +22,7 @@ export function get_globalGeneralRules(storeHelpers) {
                     // });
                     (_b = globalRefs.scene) === null || _b === void 0 ? void 0 : _b.render(false, false);
                 }
-                // runs in a callback to set before the new pietem frame
+                // runs in a callback to set before the new repond frame
                 // setState({}, () => setState({ global: { main: { frameTick: Date.now() } } }));
                 // onNextTick(() => setState({ global: { main: { frameTick: Date.now() } } }));
                 onNextTick(() => setState({ global: { main: { frameTick: getState().global.main.frameTick + 1 } } }));

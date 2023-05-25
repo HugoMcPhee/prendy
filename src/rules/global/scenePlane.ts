@@ -1,6 +1,6 @@
 import { Effect, RenderTargetTexture, Scene } from "@babylonjs/core";
 import delay from "delay";
-import { makeRunMovers } from "pietem-movers";
+import { makeRunMovers } from "repond-movers";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
@@ -10,14 +10,13 @@ export function get_globalScenePlaneRules<
   StoreHelpers extends PrendyStoreHelpers,
   PrendyOptions extends PrendyOptionsUntyped
 >(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions) {
-  const { focusScenePlaneOnFocusedDoll, getPlanePositionNotOverEdges } = get_scenePlaneUtils(
+  const { focusScenePlaneOnFocusedDoll, getPlanePositionNotOverEdges, getShaderTransformStuff } = get_scenePlaneUtils(
     storeHelpers,
     prendyOptions
   );
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState, setState } = storeHelpers;
   const { runMover, runMover2d } = makeRunMovers(storeHelpers);
-  const { getShaderTransformStuff } = get_scenePlaneUtils(storeHelpers, prendyOptions);
 
   const globalRefs = getRefs().global.main;
 

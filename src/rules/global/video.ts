@@ -42,14 +42,13 @@ export function get_globalVideoRules<
           nowPlaceName,
           nowSegmentName,
           wantedSegmentName,
-          wantedSegmentNameAtLoop,
+          goalSegmentNameAtLoop,
           nextSegmentNameWhenVidPlays,
-          nextPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets wantedSegmentName and wantedCamName also sets nextPlaceName
+          nextPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets wantedSegmentName and goalCamName also sets nextPlaceName
           isLoadingBetweenPlaces,
         } = getState().global.main;
 
-        const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName } =
-          getState().places[nowPlaceName];
+        const { nextCamNameWhenVidPlays, goalCamNameAtLoop, goalCamName, nowCamName } = getState().places[nowPlaceName];
 
         const { sectionVidState, wantedSection, wantToLoop, switchSection_keepProgress } =
           getState().sectionVids[nowPlaceName];
@@ -59,10 +58,10 @@ export function get_globalVideoRules<
         // do all the deciding section logic in here!
 
         // all other wanted valeus get cleared each time
-        let new_wantedSegmentNameAtLoop = wantedSegmentNameAtLoop;
-        let new_wantedCamNameAtLoop = wantedCamNameAtLoop;
+        let new_goalSegmentNameAtLoop = goalSegmentNameAtLoop;
+        let new_goalCamNameAtLoop = goalCamNameAtLoop;
 
-        let decided_wantedCamName = wantedCamName;
+        let decided_goalCamName = goalCamName;
         let decided_wantedSegmentName = wantedSegmentName;
         let decided_wantToLoop = videoIsOutsideOfCurrentLoop;
 
@@ -82,15 +81,15 @@ export function get_globalVideoRules<
               global: {
                 main: {
                   // wantedSegmentName: null,
-                  wantedSegmentNameAtLoop: null,
+                  goalSegmentNameAtLoop: null,
                   // wantToLoop: false,
                   nextSegmentNameWhenVidPlays: null,
                 },
               },
               places: {
                 [nowPlaceName]: {
-                  // wantedCamName: null,
-                  wantedCamNameAtLoop: null,
+                  // goalCamName: null,
+                  goalCamNameAtLoop: null,
                   nextCamNameWhenVidPlays: null,
                 },
               },
@@ -113,37 +112,37 @@ export function get_globalVideoRules<
         // this wanted stuff should be checked every frame, then it will update when it's ready!
         if (alreadyWaitingForASectionToChange) return;
 
-        if (videoIsOutsideOfCurrentLoop && (wantedCamNameAtLoop || wantedSegmentNameAtLoop)) {
+        if (videoIsOutsideOfCurrentLoop && (goalCamNameAtLoop || goalSegmentNameAtLoop)) {
           // it should now go to a new section from thw wanted segment or cam at loop
-          decided_wantedCamName = wantedCamName || wantedCamNameAtLoop;
-          decided_wantedSegmentName = wantedSegmentName || wantedSegmentNameAtLoop;
+          decided_goalCamName = goalCamName || goalCamNameAtLoop;
+          decided_wantedSegmentName = wantedSegmentName || goalSegmentNameAtLoop;
 
-          new_wantedCamNameAtLoop = null;
-          new_wantedSegmentNameAtLoop = null;
+          new_goalCamNameAtLoop = null;
+          new_goalSegmentNameAtLoop = null;
         }
 
-        if (decided_wantedSegmentName || decided_wantedCamName) {
+        if (decided_wantedSegmentName || decided_goalCamName) {
           // it'll definately be a wantedSection next
 
           // set the other value if its undefined
-          decided_wantedCamName = decided_wantedCamName || nowCamName;
+          decided_goalCamName = decided_goalCamName || nowCamName;
           decided_wantedSegmentName = decided_wantedSegmentName || nowSegmentName;
 
           // make sure its a safe segment
 
           // TODO retype intital state to have segments as strings
           decided_wantedSegmentName = getSafeSegmentName({
-            cam: decided_wantedCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
+            cam: decided_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
             place: nowPlaceName as PlaceName,
             segment: decided_wantedSegmentName as SegmentNameByPlace[PlaceName] & AnySegmentName,
             useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
           });
 
           // if either the decided segment or camera is different to the now segment and camera
-          if (!(decided_wantedCamName === nowCamName && decided_wantedSegmentName === nowSegmentName)) {
+          if (!(decided_goalCamName === nowCamName && decided_wantedSegmentName === nowSegmentName)) {
             decided_wantedSection = getSectionForPlace(
               nowPlaceName as PlaceName,
-              decided_wantedCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
+              decided_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
               decided_wantedSegmentName! as SegmentNameByPlace[PlaceName] // decided_wantedSegmentName should always be decided here
             );
             decided_wantToLoop = false;
@@ -155,7 +154,7 @@ export function get_globalVideoRules<
           decided_shouldKeepTime = false;
         }
 
-        if (videoIsOutsideOfCurrentLoop && !decided_wantedCamName && !decided_wantedSegmentName) {
+        if (videoIsOutsideOfCurrentLoop && !decided_goalCamName && !decided_wantedSegmentName) {
           // it'll definately be a wantToLoop
 
           decided_wantToLoop = true;
@@ -166,11 +165,11 @@ export function get_globalVideoRules<
 
         const somethingChanged =
           wantedSegmentName !== null ||
-          new_wantedSegmentNameAtLoop !== wantedSegmentNameAtLoop ||
+          new_goalSegmentNameAtLoop !== goalSegmentNameAtLoop ||
           decided_wantedSegmentName !== nextSegmentNameWhenVidPlays ||
-          wantedCamName !== null ||
-          new_wantedCamNameAtLoop !== wantedCamNameAtLoop ||
-          decided_wantedCamName !== nextCamNameWhenVidPlays ||
+          goalCamName !== null ||
+          new_goalCamNameAtLoop !== goalCamNameAtLoop ||
+          decided_goalCamName !== nextCamNameWhenVidPlays ||
           decided_wantedSection !== wantedSection ||
           decided_wantToLoop !== wantToLoop ||
           decided_shouldKeepTime !== switchSection_keepProgress;
@@ -181,16 +180,16 @@ export function get_globalVideoRules<
           global: {
             main: {
               wantedSegmentName: null,
-              wantedSegmentNameAtLoop: new_wantedSegmentNameAtLoop,
+              goalSegmentNameAtLoop: new_goalSegmentNameAtLoop,
               // wantToLoop: false,
               nextSegmentNameWhenVidPlays: decided_wantedSegmentName,
             },
           },
           places: {
             [nowPlaceName]: {
-              wantedCamName: null,
-              wantedCamNameAtLoop: new_wantedCamNameAtLoop,
-              nextCamNameWhenVidPlays: decided_wantedCamName,
+              goalCamName: null,
+              goalCamNameAtLoop: new_goalCamNameAtLoop,
+              nextCamNameWhenVidPlays: decided_goalCamName,
             },
           },
           sectionVids: {
@@ -208,10 +207,8 @@ export function get_globalVideoRules<
       // atStepEnd: true, // NOTE changed this recently
     }),
     whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
-      run() {
-        updateNowStuffWhenSectionChanged();
-      },
-      check: { type: "sectionVids", prop: ["newplayingVidStartedTime"] },
+      run: () => updateNowStuffWhenSectionChanged(),
+      check: { type: "sectionVids", prop: ["newPlayingVidStartedTime"] },
       step: "sectionVidStateUpdates",
       atStepEnd: true,
     }),
@@ -260,7 +257,7 @@ export function get_globalVideoRules<
 
         globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
       },
-      check: { type: "sectionVids", prop: "newplayingVidStartedTime" },
+      check: { type: "sectionVids", prop: "newPlayingVidStartedTime" },
       step: "cameraChange",
       atStepEnd: true,
     }),

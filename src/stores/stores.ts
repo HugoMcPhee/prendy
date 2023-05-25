@@ -72,7 +72,7 @@ export const prendyStepNames = [
   "overlay", // = painting extra scenes to show ontop of everything
 ] as const;
 
-export type StepName = typeof prendyStepNames[number];
+export type StepName = (typeof prendyStepNames)[number];
 
 // NOTE the generic types are used to prevent the typescript compiler widneing
 // [K_CharacterName in CharacterName] to [x: string]
@@ -145,6 +145,7 @@ export function makePrendyStores<
     players: players<A_AnyAnimationName, A_PrendyOptions>(prendyStartOptions),
     speechBubbles: speechBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
     places: places<
+      A_PrendyOptions,
       A_PlaceName,
       A_AnyCameraName,
       A_PrendyAssets,
@@ -153,7 +154,7 @@ export function makePrendyStores<
       A_SpotNameByPlace,
       A_TriggerNameByPlace,
       A_WallNameByPlace
-    >(prendyAssets),
+    >(prendyAssets, prendyStartOptions),
     safeVids: safeVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
     sectionVids: sectionVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
   };

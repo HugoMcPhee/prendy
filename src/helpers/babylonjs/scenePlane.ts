@@ -65,11 +65,11 @@ export function get_scenePlaneUtils<
     // This is a position on the plane itself
 
     const { nowPlaceName } = getState().global.main;
-    const { nowCamName } = getState().places[nowPlaceName];
+    const { nowCamName, goalCamName } = getState().places[nowPlaceName];
     const placeRefs = getRefs().places[nowPlaceName];
 
-    const currentCamera = placeRefs.camsRefs[nowCamName].camera;
-    if (!currentCamera) return new Vector3();
+    const nowCam = placeRefs.camsRefs[nowCamName]?.camera;
+    if (!nowCam) return new Vector3();
 
     // FIXME Temporary value to use the characters head position instead of center position
     const Y_OFFSET = prendyStartOptions.headHeightOffset;
@@ -77,11 +77,11 @@ export function get_scenePlaneUtils<
     return Vector3.Project(
       new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z),
       Matrix.Identity(),
-      currentCamera
+      nowCam
         .getViewMatrix()
         // .multiply(currentCamera.getProjectionMatrix()),
-        .multiply(getProjectionMatrixCustomSize(currentCamera, globalRefs.backdropSize)),
-      currentCamera.viewport.toGlobal(globalRefs.backdropSize.width, globalRefs.backdropSize.height)
+        .multiply(getProjectionMatrixCustomSize(nowCam, globalRefs.backdropSize)),
+      nowCam.viewport.toGlobal(globalRefs.backdropSize.width, globalRefs.backdropSize.height)
     );
   }
 

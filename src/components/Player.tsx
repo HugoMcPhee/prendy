@@ -45,17 +45,13 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
       { type: "characters", name: charName },
       {
         atTriggers({ newValue: atTriggers }) {
+          // if atTriggers changes, respond here
+
           const { nowPlaceName } = getState().global.main;
           const { hasLeftFirstTrigger } = getState().characters[charName];
 
-          // -------------------------------------------------------------------------------
-          // Other story Triggers
-          // if (atTriggers.)
-          // -------------------------------------------------------------------------------
-
-          // starting on a trigger
+          // When starting on a trigger, mark when they have left the first trigger
           if (!hasLeftFirstTrigger) {
-            // previousValue
             let hasAnyCollision = false;
             breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
               if (atTriggers[triggerName]) {
@@ -64,12 +60,13 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
               }
             });
             if (!hasAnyCollision) {
-              setState({
-                characters: { [charName]: { hasLeftFirstTrigger: true } },
-              });
+              setState({ characters: { [charName]: { hasLeftFirstTrigger: true } } });
             }
           } else {
-            // going to new places at door triggers
+            // If has left the first trigger
+            // Check for going to new places at door triggers
+
+            // TODO move to a rule
             breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
               if (atTriggers[triggerName]) {
                 const toOption = (prendyStartOptions.doorsInfo as DoorsInfoLoose)[nowPlaceName as PlaceName]?.[
@@ -77,7 +74,6 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
                 ];
                 if (toOption) {
                   goToNewPlace(toOption, charName as CharacterName);
-
                   return true; // break
                 }
               }

@@ -39,15 +39,16 @@ export function get_usePlace<
 
   return function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
     const placeInfo = placeInfoByName[placeName];
+    const { modelFile, cameraNames, floorNames, triggerNames, spotNames, soundspotNames, wallNames } = placeInfo;
     const placeRefs = placesRefs[placeName];
     const scene = getScene();
-
-    const { modelFile, cameraNames, floorNames, triggerNames, spotNames, soundspotNames, wallNames } = placeInfo;
 
     const { container, meshes, cameras, transformNodes } = useModelFile<any>(modelFile);
 
     useEffect(() => {
       // this runs after useModelFile finished
+      setGlobalState({ newPlaceModelLoaded: true });
+
       if (!scene) return;
 
       forEach(cameraNames, (cameraName) => {
@@ -55,6 +56,7 @@ export function get_usePlace<
         camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
       });
 
+      // Load any models for this place that weren't already loaded
       const { modelNamesLoaded } = getState().global.main;
       forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
         if (!modelNamesLoaded.includes(modelName)) {
@@ -63,16 +65,13 @@ export function get_usePlace<
       });
 
       // loadProbeImagesForPlace(placeName);
-      Promise.all([loadNowVideosForPlace(), loadProbeImagesForPlace(placeName)])
-        .then(() => {
-          // When a new place is loading, only set newPlaceLoaded,
-          // so 'whenAllVideosLoadedForPlace' can run when both the characters and place loaded
-          setGlobalState({ newPlaceLoaded: true });
-        })
-        .catch((error) => {
-          console.warn("something went wrong loading videos and probes");
-          console.warn(error);
-        });
+      loadNowVideosForPlace()
+        .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
+        .catch((error) => console.warn("error loading videos", error));
+
+      loadProbeImagesForPlace(placeName)
+        .then(() => setGlobalState({ newPlaceProbesLoaded: true }))
+        .catch((error) => console.warn("error loading probes", error));
 
       placeRefs.rootMesh = meshes["__root__"];
 

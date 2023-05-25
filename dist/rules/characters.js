@@ -109,7 +109,7 @@ export function get_characterDynamicRules(storeHelpers, prendyStartOptions, pren
     }));
 }
 // FIXME
-// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
+// maybe allow repond to run 'addedOrRemoved' rules for initialState?
 // TODO add addOrRemovd rules for characters
 export function get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers) {
     const { getState } = storeHelpers;

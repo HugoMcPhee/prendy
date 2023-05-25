@@ -50,24 +50,24 @@ export function get_sceneStoryHelpers<
     T_Place extends A_PlaceName,
     T_Segment extends A_AnySegmentName // NOTE & might mes with the tye here
   >(_place: T_Place, newSegmentName: T_Segment) {
-    // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
-    // to fix: could listen to changes to wantedSegmentNameAtLoop
+    // NOTE WARNING This will probably break if goalSegmentNameAtLoop changes from somewhere else!!!
+    // to fix: could listen to changes to goalSegmentNameAtLoop
     // might be fixed now that doWhenNowSegmentChanges listens to any change, instead of waiting for the expected segment name
     // FIXME this can not work? (the async resolve part)
     return new Promise<void>((resolve, _reject) => {
       onNextTick(() => {
         setGlobalState((state) => {
-          const { wantedSegmentNameAtLoop } = state;
-          if (wantedSegmentNameAtLoop) {
-            // TEMP resolve straight away if there's already a wantedSegmentNameAtLoop
-            console.error("there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync");
+          const { goalSegmentNameAtLoop } = state;
+          if (goalSegmentNameAtLoop) {
+            // TEMP resolve straight away if there's already a goalSegmentNameAtLoop
+            console.error("there was already a goalSegmentNameAtLoop when running changeSegmentAtLoopAsync");
             resolve();
             return {};
           }
 
           doWhenNowSegmentChanges(newSegmentName, () => resolve());
 
-          return { wantedSegmentNameAtLoop: newSegmentName };
+          return { goalSegmentNameAtLoop: newSegmentName };
         });
       });
     });
@@ -81,10 +81,10 @@ export function get_sceneStoryHelpers<
     return new Promise<void>((resolve, _reject) => {
       setState((state) => {
         const { nowPlaceName } = state.global.main;
-        const { wantedCamNameAtLoop } = state.places[nowPlaceName];
-        if (wantedCamNameAtLoop) {
-          // TEMP resolve straight away if there's already a wantedCamNameAtLoop
-          console.error("there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync");
+        const { goalCamNameAtLoop } = state.places[nowPlaceName];
+        if (goalCamNameAtLoop) {
+          // TEMP resolve straight away if there's already a goalCamNameAtLoop
+          console.error("there was already a goalSegmentNameAtLoop when running changeSegmentAtLoopAsync");
           resolve();
           return {};
         }
@@ -94,7 +94,7 @@ export function get_sceneStoryHelpers<
         return {
           places: {
             [nowPlaceName]: {
-              wantedCamNameAtLoop: newCamName,
+              goalCamNameAtLoop: newCamName,
             }, // AnyCameraName needed if there's only 1 place
           },
         };
@@ -172,7 +172,7 @@ export function get_sceneStoryHelpers<
         setState(
           {
             places: {
-              [nowPlaceName]: { wantedCamName: cameraName }, // AnyCameraName needed if there's only 1 place
+              [nowPlaceName]: { goalCamName: cameraName }, // AnyCameraName needed if there's only 1 place
             },
           },
           () => resolve()
@@ -189,6 +189,9 @@ export function get_sceneStoryHelpers<
   ) {
     let { toSpot, toPlace, toCam, toSegment } = toOption;
     const { dollName } = getCharDollStuff(charName) ?? {};
+    console.log("toOption");
+    console.log(toOption);
+
     if (!dollName) return;
 
     onNextTick(() => {
@@ -202,10 +205,7 @@ export function get_sceneStoryHelpers<
         toSegment = toSegment ?? (placeInfo.segmentNames[0] as A_SegmentNameByPlace[T_PlaceName]);
 
         const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
-
-        if (foundRuleSegmentName) {
-          toSegment = foundRuleSegmentName;
-        }
+        if (foundRuleSegmentName) toSegment = foundRuleSegmentName;
 
         return {
           global: {
@@ -215,11 +215,7 @@ export function get_sceneStoryHelpers<
             },
           },
           // Note might need to check , if the place rules reacts to nowCamName changing, but maybe shouldnt while changing place
-          places: {
-            [toPlace]: {
-              wantedCamWhenNextPlaceLoads: toCam || newPlaceNowCamName,
-            },
-          },
+          places: { [toPlace]: { goalCamWhenNextPlaceLoads: toCam || newPlaceNowCamName } },
           dolls: { [dollName]: { nextSpotName: toSpot } },
         };
       });

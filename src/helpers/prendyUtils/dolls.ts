@@ -16,7 +16,7 @@ import {
 import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_spotStoryUtils } from "./spots";
-import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
+import { makeMoverStateMaker, moverMultiRefs } from "repond-movers";
 import { MeshNameByModel } from "../../declarations";
 
 export function get_dollStoryUtils<
@@ -144,8 +144,8 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     prendyStartOptions
   );
 
-  // type PietemState = ReturnType<StoreHelpers["getState"]>;
-  // type DollName = keyof PietemState["dolls"];
+  // type RepondState = ReturnType<StoreHelpers["getState"]>;
+  // type DollName = keyof RepondState["dolls"];
   // type DollName = keyof typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;

@@ -1,4 +1,4 @@
-import { StoreHelperTypes } from "pietem";
+import { StoreHelperTypes } from "repond";
 export declare type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
     doll: any;
     font: any;

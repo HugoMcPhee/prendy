@@ -5,7 +5,7 @@ import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
+import { get_sectionVidUtils } from "../../helpers/prendyUtils/loopVids";
 import { PrendyStoreHelpers, PlaceholderPrendyStores, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
@@ -118,7 +118,7 @@ export function get_globalChangePlaceRules<
           const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
           const placeRefs = getRefs().places[nowPlaceName];
 
-          setState({ sectionVids: { [nowPlaceName]: { wantToUnload: true } } });
+          setState({ loopVids: { [nowPlaceName]: { wantToUnload: true } } });
 
           forEach(cameraNames, (camName) => {
             const camRef = placeRefs.camsRefs[camName];

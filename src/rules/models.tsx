@@ -4,7 +4,7 @@ import { PrendyAssets, ModelName } from "../declarations";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
-// handle laoding here ??
+// handle loading here ??
 
 export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
   storeHelpers: StoreHelpers,
@@ -49,8 +49,6 @@ export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
     }),
     whenIsLoaded: itemEffect({
       run({ itemName: modelName }) {
-        // console.log(modelName, " loaded");
-
         setState((state) => {
           // if (state.global.main.modelNamesLoaded.includes(modelName)) return {};
 

@@ -1,10 +1,10 @@
 import { StoreHelperTypes } from "repond";
 import { minMaxRange } from "chootils/dist/numbers";
-import { SectionVidState } from "../stores/sectionVids";
-import { get_safeVidUtils } from "../helpers/prendyUtils/safeVids";
+import { SectionVidState } from "../stores/loopVids";
+import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 import { PrendyAssets, PlaceName } from "../declarations";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { BEFORE_LOOP_PADDING, get_sectionVidUtils } from "../helpers/prendyUtils/sectionVids";
+import { BEFORE_LOOP_PADDING, get_sectionVidUtils } from "../helpers/prendyUtils/loopVids";
 
 export function get_sectionVidRules<
   StoreHelpers extends PrendyStoreHelpers,
@@ -33,12 +33,12 @@ export function get_sectionVidRules<
   return makeRules(({ itemEffect }) => ({
     rulesForSettingNewVideoStates: itemEffect({
       run({ newValue: vidState, itemName, itemState }) {
-        const setItemState = (newState: Partial<ItemState<"sectionVids">>) =>
-          setState({ sectionVids: { [itemName]: newState } });
+        const setItemState = (newState: Partial<ItemState<"loopVids">>) =>
+          setState({ loopVids: { [itemName]: newState } });
         const setVidState = (sectionVidState: SectionVidState) => setItemState({ sectionVidState });
 
-        const { safeVidId_playing, safeVidId_waiting } = itemState;
-        if (!safeVidId_playing || !safeVidId_waiting) return;
+        const { stateVidId_playing, stateVidId_waiting } = itemState;
+        if (!stateVidId_playing || !stateVidId_waiting) return;
 
         // before load
         if (vidState === "beforeLoad") {
@@ -46,36 +46,24 @@ export function get_sectionVidRules<
           const { nowSection } = itemState;
 
           // set all child videos to wantToLoad, and set autoplay? only on the playing one, or no autoplay
-
           setState({
-            safeVids: {
-              [safeVidId_playing]: {
-                wantToLoad: true,
-                autoplay: true,
-              },
-              [safeVidId_waiting]: {
-                wantToLoad: true,
-                autoplay: false,
-              },
+            stateVids: {
+              [stateVidId_playing]: { wantToLoad: true, autoplay: true },
+              [stateVidId_waiting]: { wantToLoad: true, autoplay: false },
             },
           });
 
           doWhenSafeVidStateReady(
-            safeVidId_playing,
+            stateVidId_playing,
             "play",
             () => {
               const wantedSeekTime = nowSection?.time ?? 0;
 
               setState({
-                sectionVids: {
-                  [itemName]: {
-                    sectionVidState: "play",
-                    newPlayingVidStartedTime: Date.now(),
-                  },
-                },
-                safeVids: {
-                  [safeVidId_playing]: { wantedSeekTime },
-                  [safeVidId_waiting]: { wantedSeekTime },
+                loopVids: { [itemName]: { sectionVidState: "play", newPlayingVidStartedTime: Date.now() } },
+                stateVids: {
+                  [stateVidId_playing]: { wantedSeekTime },
+                  [stateVidId_waiting]: { wantedSeekTime },
                 },
               });
             },
@@ -87,18 +75,14 @@ export function get_sectionVidRules<
         if (vidState === "beforeUnload") {
           // set all child videos to wantToLoad, and set autoplay? only on the playing one, or no autoplay
           setState({
-            sectionVids: {
-              [itemName]: { sectionVidState: "waitingForUnload" },
-            },
-            safeVids: {
-              [safeVidId_playing]: { wantToUnload: true },
-              [safeVidId_waiting]: { wantToUnload: true },
+            loopVids: { [itemName]: { sectionVidState: "waitingForUnload" } },
+            stateVids: {
+              [stateVidId_playing]: { wantToUnload: true },
+              [stateVidId_waiting]: { wantToUnload: true },
             },
           });
 
-          doWhenSafeVidStateReady(safeVidId_playing, "unloaded", () => {
-            setVidState("unloaded");
-          });
+          doWhenSafeVidStateReady(stateVidId_playing, "unloaded", () => setVidState("unloaded"));
         }
 
         // before change section
@@ -134,28 +118,26 @@ export function get_sectionVidRules<
           }
 
           setState({
-            sectionVids: {
+            loopVids: {
               [itemName]: {
                 sectionVidState: "waitingForChangeSection",
                 nowSection: wantedSection,
                 wantedSection: null,
               },
             },
-            safeVids: {
-              [safeVidId_waiting]: { wantedSeekTime: newSeekTime },
-            },
+            stateVids: { [stateVidId_waiting]: { wantedSeekTime: newSeekTime } },
           });
 
           doWhenSafeVidPlayOrPause(
-            safeVidId_waiting,
+            stateVidId_waiting,
             () => {
               // when the time seeked,
               setState({
-                sectionVids: {
+                loopVids: {
                   [itemName]: {
                     nowSectionSeekedTime: Date.now(),
-                    safeVidId_playing: safeVidId_waiting,
-                    safeVidId_waiting: safeVidId_playing,
+                    stateVidId_playing: stateVidId_waiting,
+                    stateVidId_waiting: stateVidId_playing,
                   },
                 },
               });
@@ -168,17 +150,17 @@ export function get_sectionVidRules<
         if (vidState === "beforeDoLoop") {
           // swap the playing and nextLoop vids
           setState({
-            sectionVids: {
+            loopVids: {
               [itemName]: {
                 sectionVidState: "waitingForDoLoop",
-                safeVidId_playing: safeVidId_waiting,
-                safeVidId_waiting: safeVidId_playing,
+                stateVidId_playing: stateVidId_waiting,
+                stateVidId_waiting: stateVidId_playing,
               },
             },
           });
         }
       },
-      check: { type: "sectionVids", prop: "sectionVidState" },
+      check: { type: "loopVids", prop: "sectionVidState" },
       step: "sectionVidWantsToPlay",
       atStepEnd: true,
     }),
@@ -187,87 +169,89 @@ export function get_sectionVidRules<
     whenGoalSectionChanges: itemEffect({
       run({ newValue: wantedSection, itemName, itemState }) {
         if (wantedSection === null || itemState.sectionVidState === "unloaded") return; // don't react if wantedSection changed to null
-        setState({ sectionVids: { [itemName]: { sectionVidState: "beforeChangeSection" } } });
+        setState({ loopVids: { [itemName]: { sectionVidState: "beforeChangeSection" } } });
       },
-      check: { type: "sectionVids", prop: "wantedSection" },
+      check: { type: "loopVids", prop: "wantedSection" },
       step: "sectionVidWantsToPlay",
     }),
     whenWantToLoad: itemEffect({
       run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState === "unloaded") {
-          setState({ sectionVids: { [itemName]: { sectionVidState: "beforeLoad", wantToLoad: false } } });
+          setState({ loopVids: { [itemName]: { sectionVidState: "beforeLoad", wantToLoad: false } } });
         } else {
           console.warn("tried to load", itemName, " when it was already loaded");
-          setState({ sectionVids: { [itemName]: { wantToLoad: false } } });
+          setState({ loopVids: { [itemName]: { wantToLoad: false } } });
         }
       },
-      check: { type: "sectionVids", prop: "wantToLoad", becomes: true },
+      check: { type: "loopVids", prop: "wantToLoad", becomes: true },
       step: "sectionVidWantsToPlay",
     }),
     whenWantToUnload: itemEffect({
       run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState !== "unloaded") {
           doWhenSectionVidPlaying(itemName as PlaceName, () => {
-            setState({ sectionVids: { [itemName]: { sectionVidState: "beforeUnload", wantToUnload: false } } });
+            setState({ loopVids: { [itemName]: { sectionVidState: "beforeUnload", wantToUnload: false } } });
           });
         } else {
           console.warn("tried to unload", itemName, " when it was unloaded");
-          setState({ safeVids: { [itemName]: { wantToUnload: false } } });
+          setState({ stateVids: { [itemName]: { wantToUnload: false } } });
         }
       },
-      check: { type: "sectionVids", prop: "wantToUnload", becomes: true },
+      check: { type: "loopVids", prop: "wantToUnload", becomes: true },
       step: "sectionVidWantsToPlay",
     }),
     whenWantToLoop: itemEffect({
       run({ itemName, itemState: { sectionVidState } }) {
         if (sectionVidState === "beforeLoad" || sectionVidState === "unloaded") return;
-        setState({ sectionVids: { [itemName]: { sectionVidState: "beforeDoLoop", wantToLoop: false } } });
+        setState({ loopVids: { [itemName]: { sectionVidState: "beforeDoLoop", wantToLoop: false } } });
       },
-      check: { type: "sectionVids", prop: "wantToLoop", becomes: true },
+      check: { type: "loopVids", prop: "wantToLoop", becomes: true },
       step: "sectionVidWantsToPlay",
     }),
     // When the play and wait vids swap (loop a and b vids)
     whenPlayVidChanges: itemEffect({
-      run({ newValue: safeVidId_playing, itemName: sectionVidName }) {
-        if (!safeVidId_playing) return;
-        setState({ safeVids: { [safeVidId_playing]: { wantToPlay: true } } });
+      run({ newValue: stateVidId_playing, itemName: sectionVidName }) {
+        if (!stateVidId_playing) return;
+        setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
 
         doWhenSafeVidStateReady(
-          safeVidId_playing,
+          stateVidId_playing,
           "play",
           () => {
             // NOTE could be pause if wanted pausing
             setState({
-              sectionVids: { [sectionVidName]: { sectionVidState: "play", newPlayingVidStartedTime: Date.now() } },
+              loopVids: { [sectionVidName]: { sectionVidState: "play", newPlayingVidStartedTime: Date.now() } },
             });
           },
           false /* check initital */
         );
       },
-      check: { type: "sectionVids", prop: "safeVidId_playing" },
+      check: { type: "loopVids", prop: "stateVidId_playing" },
       step: "sectionVidWantsToPlay2",
       atStepEnd: true,
     }),
 
     whenWaitVidChanges: itemEffect({
-      run({ newValue: safeVidId_waiting, itemState }) {
-        if (!safeVidId_waiting) return;
+      run({ newValue: stateVidId_waiting, itemState }) {
+        if (!stateVidId_waiting) return;
         const { nowSection } = itemState;
         // set the video to paused
-        setState({ safeVids: { [safeVidId_waiting]: { wantToPause: true } } });
+        setState({ stateVids: { [stateVidId_waiting]: { wantToPause: true } } });
 
         // when it finished pausing, set the time to the correct time
         // (it might already be paused, and pause might not be needed)
         doWhenSafeVidStateReady(
-          safeVidId_waiting,
+          stateVidId_waiting,
           "pause",
           () => {
-            setState({ safeVids: { [safeVidId_waiting]: { wantedSeekTime: nowSection.time + BEFORE_LOOP_PADDING } } });
+            setState({
+              stateVids: { [stateVidId_waiting]: { wantedSeekTime: nowSection.time + BEFORE_LOOP_PADDING } },
+            });
           }
           //  false /*  check initial */
         );
       },
-      check: { type: "sectionVids", prop: "safeVidId_waiting" },
+      check: { type: "loopVids", prop: "stateVidId_waiting" },
       step: "sectionVidWantsToPlay2",
       atStepEnd: true,
     }),

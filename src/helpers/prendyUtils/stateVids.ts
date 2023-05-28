@@ -1,22 +1,22 @@
-import { VidState } from "../../stores/safeVids";
+import { VidState } from "../../stores/stateVids";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function get_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
 
-  function doWhenSafeVidStateChanges(
-    safeVidId: string,
+  function doWhenStateVidStateChanges(
+    stateVidId: string,
     checkShouldRun: (newVidState: VidState) => boolean,
     callback: () => void,
     checkInitial: boolean = true
   ) {
-    const initialVidState = getState().safeVids[safeVidId].vidState;
+    const initialVidState = getState().stateVids[stateVidId].vidState;
     if (checkInitial && checkShouldRun(initialVidState)) {
       callback();
       return null;
     }
 
-    const ruleName = "doWhenSafeVidStateChanges" + Math.random();
+    const ruleName = "doWhenStateVidStateChanges" + Math.random();
     startItemEffect({
       name: ruleName,
       run: ({ newValue: newVidState }) => {
@@ -24,25 +24,25 @@ export function get_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(storeH
         stopEffect(ruleName);
         callback();
       },
-      check: { type: "safeVids", prop: "vidState", name: safeVidId },
+      check: { type: "stateVids", prop: "vidState", name: stateVidId },
       atStepEnd: true,
-      step: "safeVidStateUpdates",
+      step: "stateVidStateUpdates",
     });
     return ruleName;
   }
 
   function doWhenSafeVidStateReady(
-    safeVidId: string,
+    stateVidId: string,
     vidStateToCheck: VidState,
     callback: () => void,
     checkInitial: boolean = true
   ) {
-    return doWhenSafeVidStateChanges(safeVidId, (newState) => newState === vidStateToCheck, callback, checkInitial);
+    return doWhenStateVidStateChanges(stateVidId, (newState) => newState === vidStateToCheck, callback, checkInitial);
   }
 
-  function doWhenSafeVidPlayOrPause(safeVidId: string, callback: () => void, checkInitial: boolean = true) {
-    return doWhenSafeVidStateChanges(
-      safeVidId,
+  function doWhenSafeVidPlayOrPause(stateVidId: string, callback: () => void, checkInitial: boolean = true) {
+    return doWhenStateVidStateChanges(
+      stateVidId,
       (newState) => newState === "play" || newState === "pause",
       callback,
       checkInitial

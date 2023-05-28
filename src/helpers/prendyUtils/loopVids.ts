@@ -1,4 +1,4 @@
-import { SectionVidState, VidSection } from "../../stores/sectionVids";
+import { SectionVidState, VidSection } from "../../stores/loopVids";
 import { get_cameraChangeUtils } from "./cameraChange";
 import { AnyCameraName, PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../declarations";
 import { get_globalUtils } from "./global";
@@ -13,11 +13,11 @@ export function get_getSectionVidVideo<StoreHelpers extends PrendyStoreHelpers, 
   const { getRefs, getState } = storeHelpers;
 
   return function getSectionVidVideo(itemName: PlaceName) {
-    const sectionVidState = getState().sectionVids[itemName];
-    const { safeVidId_playing } = sectionVidState;
-    if (!safeVidId_playing) return;
+    const sectionVidState = getState().loopVids[itemName];
+    const { stateVidId_playing } = sectionVidState;
+    if (!stateVidId_playing) return;
 
-    const backdropVidRefs = getRefs().safeVids[safeVidId_playing];
+    const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
     return backdropVidRefs.videoElement;
   };
 }
@@ -33,22 +33,13 @@ export function get_sectionVidUtils<
   const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
 
-  // __________________________
-  // temporary rules
-
-  async function doWhenSectionVidPlayingAsync(sectionVidId: PlaceName) {
-    return new Promise<void>((resolve, _reject) => {
-      doWhenSectionVidPlaying(sectionVidId, resolve);
-    });
-  }
-
+  // temporary rule, that gets removed when it finishes
   function doWhenSectionVidStateChanges(
     sectionVidId: PlaceName,
     checkShouldRun: (newVidState: SectionVidState) => boolean,
     callback: () => void
   ) {
-    const initialVidState = getState().sectionVids[sectionVidId].sectionVidState;
-    // console.log(" - - - doWhenSectionVidStateChanges initial", initialVidState);
+    const initialVidState = getState().loopVids[sectionVidId].sectionVidState;
     if (checkShouldRun(initialVidState)) {
       callback();
       return null;
@@ -65,11 +56,11 @@ export function get_sectionVidUtils<
         callback();
       },
       check: {
-        type: "sectionVids",
+        type: "loopVids",
         prop: "sectionVidState",
         name: sectionVidId,
       },
-      step: "sectionVidStateUpdates",
+      step: "loopVidStateUpdates",
       atStepEnd: true,
     });
     return ruleName;
@@ -77,6 +68,12 @@ export function get_sectionVidUtils<
 
   function doWhenSectionVidPlaying(sectionVidId: PlaceName, callback: () => void) {
     return doWhenSectionVidStateChanges(sectionVidId, (newState) => newState === "play", callback);
+  }
+
+  async function doWhenSectionVidPlayingAsync(sectionVidId: PlaceName) {
+    return new Promise<void>((resolve, _reject) => {
+      doWhenSectionVidPlaying(sectionVidId, resolve);
+    });
   }
 
   function getSectionEndTime(section: VidSection) {
@@ -117,7 +114,7 @@ export function get_sectionVidUtils<
 
   function checkForVideoLoop(placeName: PlaceName) {
     // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSection for too many frames, then do something?
-    const itemState = getState().sectionVids[placeName];
+    const itemState = getState().loopVids[placeName];
     const placeState = getState().places[placeName];
     const { nowSection, sectionVidState } = itemState;
     const backdropVid = getSectionVidVideo(placeName);

@@ -1,4 +1,4 @@
-import { Sound, Vector3 } from "@babylonjs/core";
+import { Mesh, Sound, Vector3 } from "@babylonjs/core";
 import { useEffect } from "react";
 import { forEach } from "chootils/dist/loops";
 import {
@@ -45,8 +45,8 @@ export function get_usePlace<
 
     const { container, meshes, cameras, transformNodes } = useModelFile<any>(modelFile);
 
+    // this runs after useModelFile finished
     useEffect(() => {
-      // this runs after useModelFile finished
       setGlobalState({ newPlaceModelLoaded: true });
 
       if (!scene) return;
@@ -64,7 +64,6 @@ export function get_usePlace<
         }
       });
 
-      // loadProbeImagesForPlace(placeName);
       loadNowVideosForPlace()
         .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
         .catch((error) => console.warn("error loading videos", error));
@@ -75,22 +74,21 @@ export function get_usePlace<
 
       placeRefs.rootMesh = meshes["__root__"];
 
+      function setupWallOrFloor(mesh: Mesh) {
+        mesh.checkCollisions = true;
+        mesh.collisionGroup = 11;
+        mesh.useOctreeForCollisions = true;
+        mesh.isVisible = false;
+        mesh.freezeWorldMatrix();
+        mesh.doNotSyncBoundingInfo = true;
+      }
+
       forEach(floorNames, (name) => {
-        meshes[name].checkCollisions = true;
-        meshes[name].collisionGroup = 11;
-        meshes[name].useOctreeForCollisions = true;
-        meshes[name].isVisible = false;
-        meshes[name].freezeWorldMatrix();
-        meshes[name].doNotSyncBoundingInfo = true;
+        setupWallOrFloor(meshes[name]);
       });
 
       forEach(wallNames, (name) => {
-        meshes[name].checkCollisions = true;
-        meshes[name].collisionGroup = 11;
-        meshes[name].useOctreeForCollisions = true;
-        meshes[name].isVisible = false;
-        meshes[name].freezeWorldMatrix();
-        meshes[name].doNotSyncBoundingInfo = true;
+        setupWallOrFloor(meshes[name]);
         placeRefs.wallMeshes[name] = meshes[name];
       });
 

@@ -232,9 +232,7 @@ export function get_dollStoryHelpers<
 
     if (!positionIsMoving || positionMoveMode !== "push") {
       setState({
-        dolls: {
-          [dollName]: { positionIsMoving: true, positionMoveMode: "push" },
-        },
+        dolls: { [dollName]: { positionIsMoving: true, positionMoveMode: "push" } },
       });
     }
 

@@ -28,7 +28,7 @@ export type VidState =
 
 export const abLetters = ["a", "b"] as const;
 
-export default function safeVids<
+export default function stateVids<
   A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PlaceName extends PlaceName = PlaceName
 >(prendyAssets: A_PrendyAssets) {

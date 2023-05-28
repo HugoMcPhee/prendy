@@ -12,9 +12,8 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import pointers from "./pointers";
-import safeVids from "./safeVids";
-import sectionVids from "./sectionVids";
+import stateVids from "./stateVids";
+import loopVids from "./loopVids";
 import speechBubbles from "./speechBubbles";
 
 const TEST_START_OPTIONS = getPrendyOptions({
@@ -119,16 +118,15 @@ export type DollOptionsPlaceholder<DollName extends string, ModelName extends st
 const placeholderPrendyStores = {
   keyboards: keyboards(),
   miniBubbles: miniBubbles(testArtStuff),
-  pointers: pointers(),
   global: global(TEST_START_OPTIONS as any, testArtStuff),
   models: models(testArtStuff),
   dolls: dolls(testArtStuff),
   characters: characters(testArtStuff),
   players: players(TEST_START_OPTIONS as any),
   speechBubbles: speechBubbles(testArtStuff),
-  places: places(testArtStuff),
-  safeVids: safeVids(testArtStuff),
-  sectionVids: sectionVids(testArtStuff),
+  places: places(testArtStuff, TEST_START_OPTIONS as any),
+  stateVids: stateVids(testArtStuff),
+  loopVids: loopVids(testArtStuff),
   //
   story: story_fake<any, any>(),
 };
@@ -143,10 +141,10 @@ const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // NOTE Change these to typeof  to have known types while making prendys library
-export type PlaceholderPrendyStores = typeof placeholderPrendyStores;
-export type PrendyStoreHelpers = typeof storeHelpers;
+export type PlaceholderPrendyStores_ = typeof placeholderPrendyStores;
+export type PrendyStoreHelpers_ = typeof storeHelpers;
 
-export type PlaceholderPrendyStores_ = Record<
+export type PlaceholderPrendyStores = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -154,7 +152,7 @@ export type PlaceholderPrendyStores_ = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type PrendyStoreHelpers_ = {
+export type PrendyStoreHelpers = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;

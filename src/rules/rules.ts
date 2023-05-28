@@ -10,9 +10,8 @@ import { get_startAllGlobalRules } from "./global/global";
 import { get_keyboardConnectRules } from "./keyboards";
 import { get_modelRules } from "./models";
 import { get_playerRules } from "./players";
-import { get_pointersConnectRules } from "./pointers";
-import { get_safeVidRules } from "./safeVids";
-import { get_sectionVidRules } from "./sectionVids";
+import { get_safeVidRules } from "./stateVids";
+import { get_sectionVidRules } from "./loopVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
@@ -25,7 +24,6 @@ export function makeStartPrendyRules<
   // making rules
 
   const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-  // const pointerConnectRules = get_pointersConnectRules(storeHelpers);
   const startAllGlobalRules = get_startAllGlobalRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
 
   const modelRules = get_modelRules(storeHelpers, prendyAssets);

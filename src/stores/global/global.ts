@@ -27,7 +27,7 @@ export default function global<
 >(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
   const { musicNames, soundNames } = prendyAssets;
 
-  type MaybeSegment = null | A_AnySegmentName;
+  type MaybeSegmentName = null | A_AnySegmentName;
 
   type SegmentNameFromCameraAndPlace<
     T_Place extends keyof A_PlaceInfoByName,
@@ -50,12 +50,12 @@ export default function global<
   // State
   const state = () => ({
     // segments and section video
-    wantedSegmentWhenNextPlaceLoads: null as MaybeSegment,
-    nextSegmentNameWhenVidPlays: null as MaybeSegment, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
-    goalSegmentNameAtLoop: null as MaybeSegment,
-    wantedSegmentName: null as MaybeSegment,
+    wantedSegmentWhenNextPlaceLoads: null as MaybeSegmentName,
+    nextSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
+    goalSegmentNameAtLoop: null as MaybeSegmentName,
+    wantedSegmentName: null as MaybeSegmentName,
     nowSegmentName: prendyStartOptions.segment as A_AnySegmentName,
-    wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sectionVids
+    wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to loopVids
     // TODO? move nowCamName etc to here, since never change cam for non-now place
     //
     // changing places

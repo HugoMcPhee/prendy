@@ -1,7 +1,7 @@
 import { StoreHelperTypes } from "repond";
-import { VidState } from "../stores/safeVids";
+import { VidState } from "../stores/stateVids";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { makeVideoElementFromPath } from "../helpers/prendyUtils/safeVids";
+import { makeVideoElementFromPath } from "../helpers/prendyUtils/stateVids";
 // import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
@@ -17,15 +17,17 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
+  function setVid(itemName: string, newState: Partial<ItemState<"stateVids">>) {
+    setState({ stateVids: { [itemName]: newState } });
+  }
+
   return makeRules(({ itemEffect }) => ({
-    rulesForSettingNewVideoStates: itemEffect({
+    whenVideoStateChanges: itemEffect({
       run({ newValue: vidState, itemState, itemRefs, itemName }) {
         const { wantedSeekTime, autoplay } = itemState;
-        function setItemState(newState: Partial<ItemState<"safeVids">>) {
-          setState({ safeVids: { [itemName]: newState } });
-        }
+
         function setVidState(vidState: VidState) {
-          setItemState({ vidState });
+          setVid(itemName, { vidState });
         }
 
         // beforeLoad
@@ -43,24 +45,22 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
           itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);
           // manual alternative for preload / autoplay, make sure the video is loaded and has played like 1 frame
           itemRefs.videoElement?.play().finally(() => {
-            // console.log("itemRefs.videoEleme nt");
-            // console.log(itemRefs.videoElement);
             if (autoplay) {
-              setItemState({ vidState: "play", playType: "play" });
+              setVid(itemName, { vidState: "play", playType: "play" });
             } else {
               itemRefs.videoElement?.pause();
-              setItemState({ vidState: "pause", playType: "pause" });
+              setVid(itemName, { vidState: "pause", playType: "pause" });
             }
           });
         }
         // beforeSeek
         if (vidState === "beforeSeek") {
           if (itemRefs.videoElement && wantedSeekTime !== null) {
-            setItemState({ vidState: "waitingForSeek", wantedSeekTime: null });
+            setVid(itemName, { vidState: "waitingForSeek", wantedSeekTime: null });
 
             // note only works on safari is the video was already loaded / played one frame?
             function onSeeked() {
-              const newState = getState().safeVids[itemName];
+              const newState = getState().stateVids[itemName];
               setVidState(newState.playType);
               itemRefs.videoElement?.removeEventListener("seeked", onSeeked); // stop listening to when the video's seeked
             }
@@ -71,17 +71,17 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
         // beforePlay
         if (vidState === "beforePlay") {
           if (itemRefs.videoElement) {
-            setItemState({ vidState: "waitingForPlay", playType: "play" });
+            setVid(itemName, { vidState: "waitingForPlay", playType: "play" });
 
             itemRefs.videoElement
               .play()
               .then(() => {
-                setItemState({ vidState: "play", wantedSeekTime: null });
+                setVid(itemName, { vidState: "play", wantedSeekTime: null });
               })
               .catch((error) => {
                 console.warn("Video play error");
                 console.error(error);
-                setItemState({ vidState: "pause", playType: "pause" });
+                setVid(itemName, { vidState: "pause", playType: "pause" });
               });
           }
         }
@@ -90,7 +90,7 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
           if (itemRefs.videoElement) {
             setVidState("waitingForPause");
             function onPaused() {
-              setItemState({ vidState: "pause", playType: "pause" });
+              setVid(itemName, { vidState: "pause", playType: "pause" });
               itemRefs.videoElement?.removeEventListener("pause", onPaused);
             }
             itemRefs.videoElement.addEventListener("pause", onPaused);
@@ -114,74 +114,50 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
           }
         }
       },
-      check: { type: "safeVids", prop: "vidState" },
+      check: { type: "stateVids", prop: "vidState" },
       step: "safeVidWantsToPlay",
       atStepEnd: true,
     }),
     // wants
     whenWantToLoad: itemEffect({
       run({ itemName, itemState: { vidState } }) {
-        // console.log("want to load");
-
         if (vidState === "unloaded") {
-          setState({
-            safeVids: {
-              [itemName]: { vidState: "beforeLoad", wantToLoad: false },
-            },
-          });
+          setVid(itemName, { vidState: "beforeLoad", wantToLoad: false });
         } else {
           console.warn("tried to load", itemName, " when it wasn't unloaded");
-          setState({ safeVids: { [itemName]: { wantToLoad: false } } });
+          setVid(itemName, { wantToLoad: false });
         }
       },
-      check: { type: "safeVids", prop: "wantToLoad", becomes: true },
+      check: { type: "stateVids", prop: "wantToLoad", becomes: true },
       step: "safeVidWantsToPlay",
     }),
     whenWantToUnload: itemEffect({
       run({ itemName, itemState: { vidState } }) {
         if (vidState !== "unloaded") {
-          setState({
-            safeVids: {
-              [itemName]: { vidState: "beforeUnload", wantToUnload: false },
-            },
-          });
+          setVid(itemName, { vidState: "beforeUnload", wantToUnload: false });
         } else {
           console.warn("tried to unload", itemName, " when it was unloaded");
-          setState({ safeVids: { [itemName]: { wantToUnload: false } } });
+          setVid(itemName, { wantToUnload: false });
         }
       },
-      check: { type: "safeVids", prop: "wantToUnload", becomes: true },
+      check: { type: "stateVids", prop: "wantToUnload", becomes: true },
       step: "safeVidWantsToPlay",
     }),
     whenWantToSeek: itemEffect({
       run({ newValue: wantedSeekTime, itemName }) {
-        if (wantedSeekTime !== null) {
-          setState({ safeVids: { [itemName]: { vidState: "beforeSeek" } } });
-        }
+        if (wantedSeekTime !== null) setVid(itemName, { vidState: "beforeSeek" });
       },
-      check: { type: "safeVids", prop: "wantedSeekTime" },
+      check: { type: "stateVids", prop: "wantedSeekTime" },
       step: "safeVidWantsToPlay",
     }),
     whenWantToPlay: itemEffect({
-      run({ itemName }) {
-        setState({
-          safeVids: {
-            [itemName]: { vidState: "beforePlay", wantToPlay: false },
-          },
-        });
-      },
-      check: { type: "safeVids", prop: "wantToPlay", becomes: true },
+      run: ({ itemName }) => setVid(itemName, { vidState: "beforePlay", wantToPlay: false }),
+      check: { type: "stateVids", prop: "wantToPlay", becomes: true },
       step: "safeVidWantsToPlay",
     }),
     whenWantToPause: itemEffect({
-      run({ itemName }) {
-        setState({
-          safeVids: {
-            [itemName]: { vidState: "beforePause", wantToPause: false },
-          },
-        });
-      },
-      check: { type: "safeVids", prop: "wantToPause", becomes: true },
+      run: ({ itemName }) => setVid(itemName, { vidState: "beforePause", wantToPause: false }),
+      check: { type: "stateVids", prop: "wantToPause", becomes: true },
       step: "safeVidWantsToPlay",
     }),
   }));

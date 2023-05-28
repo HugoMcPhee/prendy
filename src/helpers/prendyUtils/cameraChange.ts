@@ -24,7 +24,7 @@ import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
-import { get_getSectionVidVideo } from "./sectionVids";
+import { get_getSectionVidVideo } from "./loopVids";
 
 export function get_cameraChangeUtils<
   StoreHelpers extends PrendyStoreHelpers,

@@ -1,6 +1,6 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
-import { VidSection } from "../../stores/sectionVids";
-import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
+import { VidSection } from "../../stores/loopVids";
+import { get_sectionVidUtils } from "../../helpers/prendyUtils/loopVids";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -51,7 +51,7 @@ export function get_globalVideoRules<
         const { nextCamNameWhenVidPlays, goalCamNameAtLoop, goalCamName, nowCamName } = getState().places[nowPlaceName];
 
         const { sectionVidState, wantedSection, wantToLoop, switchSection_keepProgress } =
-          getState().sectionVids[nowPlaceName];
+          getState().loopVids[nowPlaceName];
 
         const videoIsOutsideOfCurrentLoop = checkForVideoLoop(nowPlaceName as PlaceName);
 
@@ -93,7 +93,7 @@ export function get_globalVideoRules<
                   nextCamNameWhenVidPlays: null,
                 },
               },
-              sectionVids: {
+              loopVids: {
                 [nowPlaceName]: {
                   wantedSection: null,
                   wantToLoop: false,
@@ -192,7 +192,7 @@ export function get_globalVideoRules<
               nextCamNameWhenVidPlays: decided_goalCamName,
             },
           },
-          sectionVids: {
+          loopVids: {
             [nowPlaceName]: {
               wantedSection: decided_wantedSection,
               wantToLoop: decided_wantToLoop,
@@ -208,8 +208,8 @@ export function get_globalVideoRules<
     }),
     whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
       run: () => updateNowStuffWhenSectionChanged(),
-      check: { type: "sectionVids", prop: ["newPlayingVidStartedTime"] },
-      step: "sectionVidStateUpdates",
+      check: { type: "loopVids", prop: ["newPlayingVidStartedTime"] },
+      step: "loopVidStateUpdates",
       atStepEnd: true,
     }),
 
@@ -257,7 +257,7 @@ export function get_globalVideoRules<
 
         globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
       },
-      check: { type: "sectionVids", prop: "newPlayingVidStartedTime" },
+      check: { type: "loopVids", prop: "newPlayingVidStartedTime" },
       step: "cameraChange",
       atStepEnd: true,
     }),

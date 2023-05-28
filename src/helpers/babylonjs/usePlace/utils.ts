@@ -1,7 +1,7 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { get_sectionVidUtils } from "../../prendyUtils/sectionVids";
+import { get_sectionVidUtils } from "../../prendyUtils/loopVids";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../../declarations";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
@@ -32,13 +32,6 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
 
   const placesRefs = getRefs().places;
 
-  async function loadVideoBlob(filepath: string) {
-    const result = await fetch(filepath);
-    const videoBlob = await result.blob();
-
-    return videoBlob;
-  }
-
   async function loadNowVideosForPlace() {
     const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
     const { nowCamName, goalCamName } = getState().places[nowPlaceName];
@@ -50,12 +43,7 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
     );
 
     setState({
-      sectionVids: {
-        [nowPlaceName]: {
-          wantToLoad: true,
-          nowSection: wantedSection,
-        },
-      },
+      loopVids: { [nowPlaceName]: { wantToLoad: true, nowSection: wantedSection } },
     });
 
     await doWhenSectionVidPlayingAsync(nowPlaceName as PlaceName);
@@ -90,7 +78,7 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
   }
 
   function makeCameraFromModel(theCamera: Camera, scene: Scene) {
-    const newCamera = new TargetCamera("camera1", theCamera.globalPosition, scene);
+    const newCamera = new TargetCamera(theCamera.name + "_made", theCamera.globalPosition, scene);
     newCamera.rotationQuaternion = theCamera.absoluteRotation;
     newCamera.fov = theCamera.fov;
     // should have a visual min maxZ and depth min max Z
@@ -100,7 +88,6 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
   }
 
   return {
-    loadVideoBlob,
     testAppendVideo,
     loadNowVideosForPlace,
     loadProbeImagesForPlace,

@@ -14,6 +14,7 @@ v0.9.5
 
 - updated to use repond and updated packages
 - more predictable logic for loading and playing videos
+- better walking on slopes and jumping
 
 v0.9.3
 

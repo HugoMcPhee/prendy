@@ -26,9 +26,9 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
 
     // show one vid at a time
     useStoreItemPropsEffect(
-      { type: "sectionVids", name: placeName },
+      { type: "loopVids", name: placeName },
       {
-        safeVidId_playing() {
+        stateVidId_playing() {
           // vidLetter_play({ newValue }) {
           // if (!newValue) return;
           // const playingVidId = getLetterVidId("house", newValue);
@@ -68,14 +68,14 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
   }
 
   function TestVideoState({ placeName }: { placeName: PlaceName }) {
-    const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, {
-      type: "sectionVids",
+    const sectionVidState = useStore((state) => state.loopVids[placeName].sectionVidState, {
+      type: "loopVids",
       prop: ["sectionVidState"],
       name: placeName,
     });
-    const { safeVidId_waiting, safeVidId_playing } = useStore((state) => state.sectionVids[placeName], {
-      type: "sectionVids",
-      prop: ["safeVidId_waiting", "safeVidId_playing"],
+    const { stateVidId_waiting, stateVidId_playing } = useStore((state) => state.loopVids[placeName], {
+      type: "loopVids",
+      prop: ["stateVidId_waiting", "stateVidId_playing"],
       name: placeName,
     });
 
@@ -87,8 +87,8 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
         }}
       >
         <div>{sectionVidState}</div>
-        <div>{`▶ ${safeVidId_playing}`}</div>
-        <div>{`➰ ${safeVidId_waiting}`}</div>
+        <div>{`▶ ${stateVidId_playing}`}</div>
+        <div>{`➰ ${stateVidId_waiting}`}</div>
         {/* <div>{`⏭ ${vidLetter_nextSection}`}</div> */}
       </div>
     );

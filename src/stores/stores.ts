@@ -32,18 +32,17 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import pointers from "./pointers";
-import safeVids from "./safeVids";
-import sectionVids from "./sectionVids";
+import stateVids from "./stateVids";
+import loopVids from "./loopVids";
 import speechBubbles from "./speechBubbles";
 
 export const prendyStepNames = [
   // updating internal video states
-  "safeVidStateUpdates",
-  "sectionVidStateUpdates",
+  "stateVidStateUpdates",
+  "loopVidStateUpdates",
   // game stuff
   "respondToNewPlace", // TODO Maybe use this for when a place loads, and the other "loadNewPlace" for starting to load a place?
-  "cameraChange", // meant for checking stuff like nowCamName and nowSegmentName changed by listening to sectionVidStateUpdates
+  "cameraChange", // meant for checking stuff like nowCamName and nowSegmentName changed by listening to loopVidStateUpdates
   "input", // input updates position
   "editPosition", // editMovement" ,?
   "positionReaction", // ?
@@ -64,7 +63,7 @@ export const prendyStepNames = [
   // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSection" , so mvoed to the last flow as a quick probably temporary fix
   "chooseVideoSection", // when game logic changes to choose a new video section ( like when wantedCamera or segment changes)
   "sectionVidWantsToPlay",
-  "sectionVidWantsToPlay2", // just a easier way to react to a second subscriber in sectionVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes
+  "sectionVidWantsToPlay2", // just a easier way to react to a second subscriber in loopVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes
   "safeVidWantsToPlay",
   // drawing to the screen
   "default", // draw components
@@ -109,7 +108,6 @@ export function makePrendyStores<
   return {
     keyboards: keyboards(),
     miniBubbles: miniBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
-    // pointers: pointers(),
     global: global<
       A_AnySegmentName,
       A_PrendyAssets,
@@ -155,7 +153,7 @@ export function makePrendyStores<
       A_TriggerNameByPlace,
       A_WallNameByPlace
     >(prendyAssets, prendyStartOptions),
-    safeVids: safeVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
-    sectionVids: sectionVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
+    stateVids: stateVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
+    loopVids: loopVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
   };
 }

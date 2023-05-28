@@ -4,6 +4,7 @@ import { forEach } from "chootils/dist/loops";
 /*
 A way to loop and change "sections" of videos seamlessly
 it has two videos loaded at once, and switches between them when looping and seeking to avoid delays
+it uses "stateVids" as the two videos it controls
 */
 
 // making PlaceName generic didn't seem to work with autocomplete?
@@ -30,15 +31,15 @@ export type VidLetter = "a" | "b";
 
 export type VidSection = { time: number; duration: number };
 
-export default function sectionVids<
+export default function loopVids<
   A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PlaceName extends PlaceName = PlaceName
 >(prendyAssets: A_PrendyAssets) {
   const { placeNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
-    safeVidId_playing: `${itemName}_a` as string | null,
-    safeVidId_waiting: `${itemName}_b` as string | null,
+    stateVidId_playing: `${itemName}_a` as string | null,
+    stateVidId_waiting: `${itemName}_b` as string | null,
     //
     sectionVidState: "unloaded" as SectionVidState,
     //
@@ -48,8 +49,6 @@ export default function sectionVids<
     wantToUnload: false,
     wantToLoop: false,
     switchSection_keepProgress: true, // maybe always default to true
-    // wantedSectionInstant: null as VidSection | null,
-    // wantedSectionAtLoop: null as VidSection | null,
     //
     newPlayingVidStartedTime: 0, // timestamp when the video starts playing after vidLetter_play changes
     nowSectionSeekedTime: 0, // timestamp when the new section seeked (but not played yet)
@@ -59,9 +58,6 @@ export default function sectionVids<
   const refs = () => ({
     waitingForPlayToDoLoopRuleName: null as null | string,
     waitingForPlayToChangeSectionRuleName: null as null | string,
-    //
-    // waitingForWhenPlayingVidChangesRuleName: null as null | string,
-    // waitingForWhenLoopingVidChangesRuleName: null as null | string,
   });
 
   function makeStartStatesForPlaces() {
@@ -70,9 +66,7 @@ export default function sectionVids<
     // enable autocompleted properties when using a variable for name
     // const newStartStates = {} as InitialItemsState<typeof state>;
 
-    forEach(placeNames, (placeName) => {
-      newStartStates[placeName] = state(placeName);
-    });
+    forEach(placeNames, (placeName) => (newStartStates[placeName] = state(placeName)));
     return newStartStates;
   }
 

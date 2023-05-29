@@ -35,6 +35,8 @@ export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeH
       floatTop: 0,
       //
       pointerDownTime: 0, // timestamp
+      //
+      pointerId: 0,
     });
 
     const leftPuck = useRef<HTMLDivElement>(null);
@@ -63,17 +65,20 @@ export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeH
 
     useEffect(() => {
       const pointerMoveEvent = (event: PointerEvent) => {
+        // if the pointerId doesnt match, return
+        if (event.pointerId !== local.pointerId) return;
+
         const { leftPuck, leftThumbContainer } = refs;
 
         if (!leftPuck || !leftThumbContainer) return;
 
         if (!local.isDown) return;
+
         const coordinates = {
           x: event.clientX,
           y: event.clientY,
         };
 
-        if (!local.isDown) return;
         local.xAddPos = coordinates.x - SIZES.leftThumbContainer * 0.5 - local.leftJoystickOffset;
 
         local.yAddPos = coordinates.y - SIZES.leftThumbContainer * 0.5 - local.topJoystickOffset;
@@ -105,7 +110,12 @@ export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeH
         });
       };
 
-      const pointerUpEvent = (_event: PointerEvent) => {
+      const pointerUpEvent = (event: PointerEvent) => {
+        console.log("event.type", event.type, event.pointerId);
+
+        // if the pointerId doesnt match, return
+        if (event.pointerId !== local.pointerId) return;
+
         local.isDown = false;
         const { inputVelocity } = getState().players.main;
         opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
@@ -133,7 +143,16 @@ export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeH
 
       const pointerDownEvent = (event: PointerEvent) => {
         requestAnimationFrame(() => {
-          if (!globalRefs.isHoveringVirtualStickArea) return;
+          // if (!globalRefs.isHoveringVirtualStickArea) return;
+
+          // if the stick is already being held down, don't do anything
+          if (local.isDown) return;
+
+          local.pointerId = event.pointerId;
+
+          // const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players.main;
+          // const virtualStickIsHeld = virtualControlsPressTime > virtualControlsReleaseTime;
+          // if (virtualStickIsHeld) return;
 
           local.pointerDownTime = Date.now();
           const { leftPuck, leftThumbContainer } = refs;

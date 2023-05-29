@@ -131,8 +131,8 @@ export default function global<
       extraGain: null as null | GainNode,
     },
     //
-    isHoveringPickupButton: false,
-    isHoveringVirtualStickArea: true,
+    isHoveringPickupButton: false, // FIXME this won't work on touchscreens
+    // isHoveringVirtualStickArea: true,
     //
     solidParticleSystems: {} as Record<string, SolidParticleSystem>,
     //

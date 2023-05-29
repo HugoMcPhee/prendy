@@ -52,6 +52,10 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 
           // --------------------------
           // check cam cubes
+          // TODO only check for the player character?
+          // const { playerCharacter } = getState().global.main;
+          // if (charName !== playerCharacter) return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
+
           let newAtTheseCamCubes = {} as Partial<
             // Record<AnyCameraName, boolean>
             Record<string, boolean>

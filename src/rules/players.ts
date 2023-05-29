@@ -499,6 +499,7 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
           if (isJumping) {
             setState({ players: { main: { canJump: false } } });
           } else {
+            // allow jumping for a short time after leaving the ground
             playerRefs.canJumpTimeout = setTimeout(() => {
               setState({ players: { main: { canJump: false } } });
             }, LEAVE_GROUND_CANT_JUMP_DELAY);

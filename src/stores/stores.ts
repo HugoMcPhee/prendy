@@ -33,16 +33,16 @@ import models from "./models";
 import places from "./places";
 import players from "./players";
 import stateVids from "./stateVids";
-import loopVids from "./loopVids";
+import sliceVids from "./sliceVids";
 import speechBubbles from "./speechBubbles";
 
 export const prendyStepNames = [
   // updating internal video states
   "stateVidStateUpdates",
-  "loopVidStateUpdates",
+  "sliceVidStateUpdates",
   // game stuff
   "respondToNewPlace", // TODO Maybe use this for when a place loads, and the other "loadNewPlace" for starting to load a place?
-  "cameraChange", // meant for checking stuff like nowCamName and nowSegmentName changed by listening to loopVidStateUpdates
+  "cameraChange", // meant for checking stuff like nowCamName and nowSegmentName changed by listening to sliceVidStateUpdates
   "input", // input updates position
   "editPosition", // editMovement" ,?
   "positionReaction", // ?
@@ -60,10 +60,10 @@ export const prendyStepNames = [
   "loadNewPlaceModels", //
   "loadNewPlace", // might ned a load new place, and respondToNewPlace seperate parts
   // deciding and changing for next videos
-  // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSection" , so mvoed to the last flow as a quick probably temporary fix
-  "chooseVideoSection", // when game logic changes to choose a new video section ( like when wantedCamera or segment changes)
-  "sectionVidWantsToPlay",
-  "sectionVidWantsToPlay2", // just a easier way to react to a second subscriber in loopVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes
+  // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSlice" , so mvoed to the last flow as a quick probably temporary fix
+  "chooseVideoSlice", // when game logic changes to choose a new video slice ( like when goalCamera or segment changes)
+  "sliceVidWantsToPlay",
+  "sliceVidWantsToPlay2", // just a easier way to react to a second subscriber in sliceVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes
   "safeVidWantsToPlay",
   // drawing to the screen
   "default", // draw components
@@ -154,6 +154,6 @@ export function makePrendyStores<
       A_WallNameByPlace
     >(prendyAssets, prendyStartOptions),
     stateVids: stateVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
-    loopVids: loopVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
+    sliceVids: sliceVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
   };
 }

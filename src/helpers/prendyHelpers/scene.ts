@@ -148,7 +148,7 @@ export function get_sceneStoryHelpers<
       //     resolve();
       //     return;
       //   }
-      //   setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
+      //   setGlobalState({ goalSegmentName: segmentName }, () => resolve());
       // } else if (whenToRun === "at loop") {
       changeSegmentAtLoop(_placeName, segmentName as any).finally(() => resolve());
       // }
@@ -210,13 +210,12 @@ export function get_sceneStoryHelpers<
         return {
           global: {
             main: {
-              nextPlaceName: toPlace,
-              wantedSegmentWhenNextPlaceLoads: toSegment || nowSegmentName,
+              goalPlaceName: toPlace,
+              goalSegmentWhenGoalPlaceLoads: toSegment || nowSegmentName,
             },
           },
-          // Note might need to check , if the place rules reacts to nowCamName changing, but maybe shouldnt while changing place
           places: { [toPlace]: { goalCamWhenNextPlaceLoads: toCam || newPlaceNowCamName } },
-          dolls: { [dollName]: { nextSpotName: toSpot } },
+          dolls: { [dollName]: { goalSpotName: toSpot } },
         };
       });
     });

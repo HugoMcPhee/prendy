@@ -2,19 +2,20 @@ TODO
 
 - fix particles not showing (some small particles show in atleast the first alley in smelldog)
 - fix jump arrow svg not showing, and interact emoji in ios
-- fix jump button not handling holding on andorid and ios
 - fix android jump button moving vrtual stick
 - fix virtual buttons being cutoff on android and ios
 - makeAllStoryRuleMakers with BACKDROP_ART ?
 - setCamera type not limited to place
 - doorsInfo type doesn't autocomplete place name
-- maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
+- maybe update makeTriggerRules to be by character name, and it skips for characters without rules
 
 v0.9.5
 
 - updated to use repond and updated packages
 - more predictable logic for loading and playing videos
 - better walking on slopes and jumping
+- renamed safeVids to stateVids and sectionVids to sliceVids, and reanmed wanted/next state properties to goal
+- fix jump button not handling holding on andorid and ios
 
 v0.9.3
 

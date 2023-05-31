@@ -1,7 +1,7 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { get_sectionVidUtils } from "../../prendyUtils/loopVids";
+import { get_sliceVidUtils } from "../../prendyUtils/sliceVids";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../../declarations";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
@@ -22,31 +22,25 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { doWhenSectionVidPlayingAsync, getSectionForPlace } = get_sectionVidUtils(
-    storeHelpers,
-    prendyOptions,
-    prendyAssets
-  );
+  const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
 
   const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 
   const placesRefs = getRefs().places;
 
   async function loadNowVideosForPlace() {
-    const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
+    const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
     const { nowCamName, goalCamName } = getState().places[nowPlaceName];
 
-    const wantedSection = getSectionForPlace(
+    const goalSlice = getSliceForPlace(
       nowPlaceName as PlaceName,
       (goalCamName ?? nowCamName) as CameraNameByPlace[PlaceName],
-      (wantedSegmentName ?? nowSegmentName) as SegmentNameByPlace[PlaceName]
+      (goalSegmentName ?? nowSegmentName) as SegmentNameByPlace[PlaceName]
     );
 
-    setState({
-      loopVids: { [nowPlaceName]: { wantToLoad: true, nowSection: wantedSection } },
-    });
+    setState({ sliceVids: { [nowPlaceName]: { wantToLoad: true, nowSlice: goalSlice } } });
 
-    await doWhenSectionVidPlayingAsync(nowPlaceName as PlaceName);
+    await doWhenSliceVidPlayingAsync(nowPlaceName as PlaceName);
 
     return true;
   }

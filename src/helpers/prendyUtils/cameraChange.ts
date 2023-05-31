@@ -24,7 +24,7 @@ import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
-import { get_getSectionVidVideo } from "./loopVids";
+import { get_getSliceVidVideo } from "./sliceVids";
 
 export function get_cameraChangeUtils<
   StoreHelpers extends PrendyStoreHelpers,
@@ -37,7 +37,7 @@ export function get_cameraChangeUtils<
   const placesRefs = getRefs().places;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
-  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const getSliceVidVideo = get_getSliceVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
   /*
@@ -299,7 +299,7 @@ export function get_cameraChangeUtils<
 
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
     if (globalRefs.backdropVideoTex) {
-      const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
+      const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
       if (backdropVidElement) globalRefs.backdropVideoTex.updateVid(backdropVidElement);
     }
 
@@ -366,26 +366,26 @@ export function get_cameraChangeUtils<
     });
   }
 
-  // note adding to section vids cause its easier to follow for now? even though its not seperated
-  function updateNowStuffWhenSectionChanged() {
-    // I think everything is a 'wanted' state , and this function swaps them all to 'now' states at once
+  // note adding to slice vids cause its easier to follow for now? even though it's not seperated
+  function updateNowStuffWhenSliceChanged() {
+    // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
 
-    const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
-    const { nextCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
+    const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
+    const { goalCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
 
-    const waitingForASectionToChange = nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
+    const waitingForASliceToChange = goalSegmentNameWhenVidPlays || goalCamNameWhenVidPlays;
 
-    // if no segment or camera was waiting for the sectionVid to change, return early
-    if (!waitingForASectionToChange) return;
+    // if no segment or camera was waiting for the sliceVid to change, return early
+    if (!waitingForASliceToChange) return;
 
-    const nextCamNameWhenVidPlaysSafe = nextCamNameWhenVidPlays
-      ? getSafeCamName(nextCamNameWhenVidPlays as AnyCameraName)
+    const goalCamNameWhenVidPlaysSafe = goalCamNameWhenVidPlays
+      ? getSafeCamName(goalCamNameWhenVidPlays as AnyCameraName)
       : null;
-    const nextSegmentNameWhenVidPlaysSafe = nextSegmentNameWhenVidPlays
+    const goalSegmentNameWhenVidPlaysSafe = goalSegmentNameWhenVidPlays
       ? getSafeSegmentName({
-          cam: (nextCamNameWhenVidPlaysSafe ?? nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
+          cam: (goalCamNameWhenVidPlaysSafe ?? nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
           place: nowPlaceName as PlaceName,
-          segment: nextSegmentNameWhenVidPlays as SegmentNameByPlace[PlaceName],
+          segment: goalSegmentNameWhenVidPlays as SegmentNameByPlace[PlaceName],
           useStorySegmentRules: true,
         })
       : null;
@@ -393,14 +393,14 @@ export function get_cameraChangeUtils<
     setState({
       global: {
         main: {
-          nowSegmentName: nextSegmentNameWhenVidPlaysSafe || nowSegmentName,
-          nextSegmentNameWhenVidPlays: null,
+          nowSegmentName: goalSegmentNameWhenVidPlaysSafe || nowSegmentName,
+          goalSegmentNameWhenVidPlays: null,
         },
       },
       places: {
         [nowPlaceName]: {
-          nowCamName: nextCamNameWhenVidPlaysSafe || nowCamName,
-          nextCamNameWhenVidPlays: null,
+          nowCamName: goalCamNameWhenVidPlaysSafe || nowCamName,
+          goalCamNameWhenVidPlays: null,
         },
       },
     });
@@ -411,6 +411,6 @@ export function get_cameraChangeUtils<
     getSafeCamName,
     getSafeSegmentName,
     updateTexturesForNowCamera,
-    updateNowStuffWhenSectionChanged,
+    updateNowStuffWhenSliceChanged,
   };
 }

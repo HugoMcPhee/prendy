@@ -24,7 +24,7 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
   return makeRules(({ itemEffect }) => ({
     whenVideoStateChanges: itemEffect({
       run({ newValue: vidState, itemState, itemRefs, itemName }) {
-        const { wantedSeekTime, autoplay } = itemState;
+        const { goalSeekTime, autoplay } = itemState;
 
         function setVidState(vidState: VidState) {
           setVid(itemName, { vidState });
@@ -55,8 +55,8 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
         }
         // beforeSeek
         if (vidState === "beforeSeek") {
-          if (itemRefs.videoElement && wantedSeekTime !== null) {
-            setVid(itemName, { vidState: "waitingForSeek", wantedSeekTime: null });
+          if (itemRefs.videoElement && goalSeekTime !== null) {
+            setVid(itemName, { vidState: "waitingForSeek", goalSeekTime: null });
 
             // note only works on safari is the video was already loaded / played one frame?
             function onSeeked() {
@@ -65,7 +65,7 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
               itemRefs.videoElement?.removeEventListener("seeked", onSeeked); // stop listening to when the video's seeked
             }
             itemRefs.videoElement.addEventListener("seeked", onSeeked); // start listening to when the video's seeked
-            itemRefs.videoElement.currentTime = wantedSeekTime; // seek the video
+            itemRefs.videoElement.currentTime = goalSeekTime; // seek the video
           }
         }
         // beforePlay
@@ -76,12 +76,12 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
             itemRefs.videoElement
               .play()
               .then(() => {
-                setVid(itemName, { vidState: "play", wantedSeekTime: null });
+                setVid(itemName, { vidState: "play", goalSeekTime: null });
               })
               .catch((error) => {
                 console.warn("Video play error");
                 console.error(error);
-                setVid(itemName, { vidState: "pause", playType: "pause" });
+                // setVid(itemName, { vidState: "pause", playType: "pause" });
               });
           }
         }
@@ -144,10 +144,10 @@ export function get_safeVidRules<StoreHelpers extends PrendyStoreHelpers>(storeH
       step: "safeVidWantsToPlay",
     }),
     whenWantToSeek: itemEffect({
-      run({ newValue: wantedSeekTime, itemName }) {
-        if (wantedSeekTime !== null) setVid(itemName, { vidState: "beforeSeek" });
+      run({ newValue: goalSeekTime, itemName }) {
+        if (goalSeekTime !== null) setVid(itemName, { vidState: "beforeSeek" });
       },
-      check: { type: "stateVids", prop: "wantedSeekTime" },
+      check: { type: "stateVids", prop: "goalSeekTime" },
       step: "safeVidWantsToPlay",
     }),
     whenWantToPlay: itemEffect({

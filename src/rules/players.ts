@@ -360,13 +360,7 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
         let isAboveUpSlope = false;
         let isAboveASlope = false;
 
-        // if (!newIsOnGround) {
         if (isGoingDownOrStill) {
-          // console.log("falling");
-          // fall faster than going up
-
-          // check if they've reached the ground
-          // downRayHelper.show(scene, new Color3(1, 0, 0));
           downRayHelper.attachToMesh(
             /*mesh*/ meshRef,
             /*direction*/ downRayDirection,
@@ -402,27 +396,18 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
 
               const frontPick = scene.pickWithRay(
                 frontRay,
-                (mesh) => {
-                  return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
-                },
+                (mesh) => floorNames.includes(mesh.name) || wallNames.includes(mesh.name),
                 true
               );
 
-              if (frontPick) {
-                if (!centerPick.hit) {
-                  console.log("no center pick with forward pick");
-                }
-                if (frontPick.hit) {
-                  const heightDiff = (frontPick?.pickedPoint?.y || 0) - (centerPick?.pickedPoint?.y || 0);
+              if (frontPick?.hit) {
+                const heightDiff = (frontPick?.pickedPoint?.y || 0) - (centerPick?.pickedPoint?.y || 0);
 
-                  // in degrees I think
-                  // negative is down
-
-                  slopeUnderPlayer = getVectorAngle({
-                    x: RAY_FORWARD_DIST,
-                    y: heightDiff,
-                  });
-                }
+                // In degrees, negative is down
+                slopeUnderPlayer = getVectorAngle({
+                  x: RAY_FORWARD_DIST,
+                  y: heightDiff,
+                });
               }
             }
 
@@ -439,30 +424,23 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
           }
         }
 
-        // const downSlopeDamp = Math.max(Math.abs(slope) * 5 + 1, 1);
-        // const safeSlopeDivider = Math.max(Math.abs(slope) * 0.2, 1);
         const safeSlopeDivider = Math.max(Math.abs(slope) * 0.7, 1);
-        // const slopeFallSpeed = (gravityValue / downSlopeDamp) * frameDuration;
         const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
 
         if (isAboveDownSlope && newIsOnGround) {
           dollPosRefs.velocity.y = -slopeFallSpeed * 4; // need to multiply by player walk speed
-          if (dollPosRefs.velocity.y !== 0) newIsMoving = true;
         }
 
         if (newIsOnGround) {
           if (!isAboveDownSlope) {
             dollPosRefs.velocity.y = Math.max(0, dollPosRefs.velocity.y);
-
-            if (dollPosRefs.velocity.y !== 0) newIsMoving = true;
           }
         } else {
-          {
-            newIsMoving = true;
-            // is falling
-            dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
-          }
+          // is falling
+          dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
         }
+
+        if (dollPosRefs.velocity.y !== 0) newIsMoving = true;
 
         // if (!playerMovingPaused) newPositionMoveMode = "push";
         newPositionMoveMode = "push";

@@ -48,8 +48,7 @@ export default function dolls<
     return {
       modelName: safeModelName as NonNullable<T_ModelName>, // to reference in refs aswell
       //  New room
-      // nextSpotName: null as null | AnySpotName, // when going to new place, start at this spot
-      nextSpotName: null as null | A_AnySpotName, // when going to new place, start at this spot
+      goalSpotName: null as null | A_AnySpotName, // when going to new place, start at this spot
       //  Movers
       ...mover3dState("position", {
         value: HIDDEN_POSITION,

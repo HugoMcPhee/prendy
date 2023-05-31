@@ -1,4 +1,4 @@
-import { SectionVidState, VidSection } from "../../stores/loopVids";
+import { SliceVidState, VidSlice } from "../../stores/sliceVids";
 import { get_cameraChangeUtils } from "./cameraChange";
 import { AnyCameraName, PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../declarations";
 import { get_globalUtils } from "./global";
@@ -7,14 +7,14 @@ import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStor
 // const BEFORE_LOOP_PADDING = 0.001; // seconds before video end to do loop
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
-export function get_getSectionVidVideo<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
+export function get_getSliceVidVideo<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
   storeHelpers: StoreHelpers
 ) {
   const { getRefs, getState } = storeHelpers;
 
-  return function getSectionVidVideo(itemName: PlaceName) {
-    const sectionVidState = getState().loopVids[itemName];
-    const { stateVidId_playing } = sectionVidState;
+  return function getSliceVidVideo(itemName: PlaceName) {
+    const sliceVidState = getState().sliceVids[itemName];
+    const { stateVidId_playing } = sliceVidState;
     if (!stateVidId_playing) return;
 
     const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
@@ -22,30 +22,31 @@ export function get_getSectionVidVideo<StoreHelpers extends PrendyStoreHelpers, 
   };
 }
 
-export function get_sectionVidUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
+export function get_sliceVidUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
+  storeHelpers: StoreHelpers,
+  prendyOptions: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
-  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const getSliceVidVideo = get_getSliceVidVideo<StoreHelpers, PlaceName>(storeHelpers);
   const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
 
   // temporary rule, that gets removed when it finishes
-  function doWhenSectionVidStateChanges(
-    sectionVidId: PlaceName,
-    checkShouldRun: (newVidState: SectionVidState) => boolean,
+  function doWhenSliceVidStateChanges(
+    sliceVidId: PlaceName,
+    checkShouldRun: (newVidState: SliceVidState) => boolean,
     callback: () => void
   ) {
-    const initialVidState = getState().loopVids[sectionVidId].sectionVidState;
+    const initialVidState = getState().sliceVids[sliceVidId].sliceVidState;
     if (checkShouldRun(initialVidState)) {
       callback();
       return null;
     }
 
-    const ruleName = "doWhenSectionVidStateChanges" + Math.random() + Math.random();
+    const ruleName = "doWhenSliceVidStateChanges" + Math.random() + Math.random();
 
     startItemEffect({
       name: ruleName,
@@ -56,31 +57,31 @@ export function get_sectionVidUtils<
         callback();
       },
       check: {
-        type: "loopVids",
-        prop: "sectionVidState",
-        name: sectionVidId,
+        type: "sliceVids",
+        prop: "sliceVidState",
+        name: sliceVidId,
       },
-      step: "loopVidStateUpdates",
+      step: "sliceVidStateUpdates",
       atStepEnd: true,
     });
     return ruleName;
   }
 
-  function doWhenSectionVidPlaying(sectionVidId: PlaceName, callback: () => void) {
-    return doWhenSectionVidStateChanges(sectionVidId, (newState) => newState === "play", callback);
+  function doWhenSliceVidPlaying(sliceVidId: PlaceName, callback: () => void) {
+    return doWhenSliceVidStateChanges(sliceVidId, (newState) => newState === "play", callback);
   }
 
-  async function doWhenSectionVidPlayingAsync(sectionVidId: PlaceName) {
+  async function doWhenSliceVidPlayingAsync(sliceVidId: PlaceName) {
     return new Promise<void>((resolve, _reject) => {
-      doWhenSectionVidPlaying(sectionVidId, resolve);
+      doWhenSliceVidPlaying(sliceVidId, resolve);
     });
   }
 
-  function getSectionEndTime(section: VidSection) {
-    return section.time + section.duration - BEFORE_LOOP_PADDING;
+  function getSliceEndTime(slice: VidSlice) {
+    return slice.time + slice.duration - BEFORE_LOOP_PADDING;
   }
 
-  function getSectionForPlace<T_PlaceName extends PlaceName>(
+  function getSliceForPlace<T_PlaceName extends PlaceName>(
     place: T_PlaceName,
     camName: CameraNameByPlace[T_PlaceName],
     segment: SegmentNameByPlace[T_PlaceName]
@@ -89,7 +90,7 @@ export function get_sectionVidUtils<
     const safeCam = getSafeCamName(camName as any) as AnyCameraName | null;
 
     if (place !== safePlace) {
-      console.warn("tried to getSectionForPlace with non current place", place);
+      console.warn("tried to getSliceForPlace with non current place", place);
     }
 
     const safeSegmentName = getSafeSegmentName({
@@ -113,57 +114,57 @@ export function get_sectionVidUtils<
   // runs on changes to tick, in the checkVideoLoop flow
 
   function checkForVideoLoop(placeName: PlaceName) {
-    // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSection for too many frames, then do something?
-    const itemState = getState().loopVids[placeName];
+    // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
+    const itemState = getState().sliceVids[placeName];
     const placeState = getState().places[placeName];
-    const { nowSection, sectionVidState } = itemState;
-    const backdropVid = getSectionVidVideo(placeName);
+    const { nowSlice, sliceVidState } = itemState;
+    const backdropVid = getSliceVidVideo(placeName);
 
     const { nowCamName } = placeState;
 
     /*
-  !nextSegmentNameWhenVidPlays &&
-  !nextCamNameWhenVidPlays
+  !goalSegmentNameWhenVidPlays &&
+  !goalCamNameWhenVidPlays
   */
 
     if (
-      // sectionVidState === "play" // might've been getting skipped sometimes?
-      sectionVidState === "unloaded" ||
-      sectionVidState === "waitingForUnload"
+      // sliceVidState === "play" // might've been getting skipped sometimes?
+      sliceVidState === "unloaded" ||
+      sliceVidState === "waitingForUnload"
     )
       return false;
 
     const currentTime = backdropVid?.currentTime ?? 0;
 
-    const endTime = getSectionEndTime(nowSection);
+    const endTime = getSliceEndTime(nowSlice);
     const isAtOrAfterEndOfLoop = currentTime >= endTime;
-    const isBeforeStartOfLoop = currentTime < nowSection.time; // if the current time is before the video sections start time
+    const isBeforeStartOfLoop = currentTime < nowSlice.time; // if the current time is before the video slices start time
 
-    const isAlreadyLoopingOrChangingSection =
-      sectionVidState === "beforeDoLoop" ||
-      sectionVidState === "beforeChangeSection" ||
-      sectionVidState === "waitingForDoLoop" ||
-      sectionVidState === "waitingForChangeSection";
-    // sectionVidState === "play"
+    const isAlreadyLoopingOrChangingSlice =
+      sliceVidState === "beforeDoLoop" ||
+      sliceVidState === "beforeChangeSlice" ||
+      sliceVidState === "waitingForDoLoop" ||
+      sliceVidState === "waitingForChangeSlice";
+    // sliceVidState === "play"
     // !wantToLoop
 
-    if (!isAlreadyLoopingOrChangingSection) {
+    if (!isAlreadyLoopingOrChangingSlice) {
       if (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) {
         // console.log("isAtOrAfterEndOfLoop", isAtOrAfterEndOfLoop);
         // console.log("isBeforeStartOfLoop", isBeforeStartOfLoop);
       }
     }
 
-    // console.log("isAlreadyLoopingOrChangingSection", isAlreadyLoopingOrChangingSection, sectionVidState);
-    // console.log("nowSection", nowSection, isAtOrAfterEndOfLoop);
-    // console.log("nowCamName", nowCamName, nowSection.time, nowSection.duration);
-    // console.log("nowCamName", nowCamName, placeName, nowSection.time, nowSection.duration);
+    // console.log("isAlreadyLoopingOrChangingSlice", isAlreadyLoopingOrChangingSlice, sliceVidState);
+    // console.log("nowSlice", nowSlice, isAtOrAfterEndOfLoop);
+    // console.log("nowCamName", nowCamName, nowSlice.time, nowSlice.duration);
+    // console.log("nowCamName", nowCamName, placeName, nowSlice.time, nowSlice.duration);
     // console.log("isBeforeStartOfLoop", isBeforeStartOfLoop);
 
     if (
       (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) &&
       // isAtOrAfterEndOfLoop &&
-      !isAlreadyLoopingOrChangingSection
+      !isAlreadyLoopingOrChangingSlice
     ) {
       return true;
     }
@@ -172,12 +173,12 @@ export function get_sectionVidUtils<
   }
 
   return {
-    getSectionVidVideo,
-    doWhenSectionVidPlayingAsync,
-    doWhenSectionVidStateChanges,
-    doWhenSectionVidPlaying,
-    getSectionEndTime,
-    getSectionForPlace,
+    getSliceVidVideo,
+    doWhenSliceVidPlayingAsync,
+    doWhenSliceVidStateChanges,
+    doWhenSliceVidPlaying,
+    getSliceEndTime,
+    getSliceForPlace,
     checkForVideoLoop,
   };
 }

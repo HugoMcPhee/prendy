@@ -72,7 +72,7 @@ export default function places<
 
     return {
       goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
-      nextCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the section vid has finished changing, this is used as the new nowCamName
+      goalCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
       goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
       goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
       nowCamName:

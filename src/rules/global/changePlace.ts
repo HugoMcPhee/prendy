@@ -5,7 +5,7 @@ import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
 import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { get_sectionVidUtils } from "../../helpers/prendyUtils/loopVids";
+import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { PrendyStoreHelpers, PlaceholderPrendyStores, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
@@ -25,9 +25,9 @@ export function get_globalChangePlaceRules<
 
   const globalRefs = getRefs().global.main;
 
-  const { getSectionVidVideo } = get_sectionVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
+  const { getSliceVidVideo: getSliceVidVideo } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
 
-  const { updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
+  const { updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
     storeHelpers,
     prendyStartOptions,
     prendyAssets
@@ -46,9 +46,9 @@ export function get_globalChangePlaceRules<
     const { dollName } = getCharDollStuff(playerCharacter);
     const placeInfo = placeInfoByName[nowPlaceName];
     const { spotNames } = placeInfo;
-    const { nextSpotName } = getState().dolls[dollName];
+    const { goalSpotName } = getState().dolls[dollName];
 
-    const newSpotName = nextSpotName || spotNames[0];
+    const newSpotName = goalSpotName || spotNames[0];
 
     setDollToSpot({
       doll: dollName as DollName,
@@ -63,7 +63,7 @@ export function get_globalChangePlaceRules<
 
     globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
 
-    const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
+    const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
 
     if (backdropVidElement) {
       globalRefs.backdropVideoTex = new CustomVideoTexture(
@@ -80,16 +80,16 @@ export function get_globalChangePlaceRules<
 
   return makeRules(({ itemEffect }) => ({
     whenPlaceNameChanges: itemEffect({
-      run({ newValue: nextPlaceName, itemState: globalState }) {
-        if (nextPlaceName === null || globalState.loadingOverlayFullyShowing) return;
+      run({ newValue: goalPlaceName, itemState: globalState }) {
+        if (goalPlaceName === null || globalState.loadingOverlayFullyShowing) return;
         setState({ global: { main: { loadingOverlayToggled: true } } });
       },
-      check: { type: "global", prop: "nextPlaceName" },
+      check: { type: "global", prop: "goalPlaceName" },
       step: "loadNewPlace",
     }),
     whenOverlayFadedOut: itemEffect({
       run({ itemState }) {
-        if (!itemState.nextPlaceName) return;
+        if (!itemState.goalPlaceName) return;
         setState({ global: { main: { readyToSwapPlace: true } } });
       },
       check: {
@@ -114,11 +114,11 @@ export function get_globalChangePlaceRules<
       run({ itemState: globalState }) {
         // run on the start of the next repond frame, so all the flows can run again
         setState({}, () => {
-          const { nowPlaceName, nextPlaceName } = globalState;
+          const { nowPlaceName, goalPlaceName } = globalState;
           const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
           const placeRefs = getRefs().places[nowPlaceName];
 
-          setState({ loopVids: { [nowPlaceName]: { wantToUnload: true } } });
+          setState({ sliceVids: { [nowPlaceName]: { wantToUnload: true } } });
 
           forEach(cameraNames, (camName) => {
             const camRef = placeRefs.camsRefs[camName];
@@ -126,23 +126,23 @@ export function get_globalChangePlaceRules<
             camRef.probeTexture = null;
           });
 
-          if (!nextPlaceName) return;
+          if (!goalPlaceName) return;
 
           setGlobalState({
-            nowPlaceName: nextPlaceName,
+            nowPlaceName: goalPlaceName,
             isLoadingBetweenPlaces: true,
             newPlaceVideosLoaded: false,
             newPlaceProbesLoaded: false,
             newPlaceModelLoaded: false,
-            nextPlaceName: null,
+            goalPlaceName: null,
             readyToSwapPlace: false,
           });
 
-          const { nowCamName, goalCamWhenNextPlaceLoads } = getState().places[nextPlaceName];
+          const { nowCamName, goalCamWhenNextPlaceLoads } = getState().places[goalPlaceName];
 
           setState({
             places: {
-              [nextPlaceName]: {
+              [goalPlaceName]: {
                 nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName,
               },
             },
@@ -160,7 +160,7 @@ export function get_globalChangePlaceRules<
           newPlaceVideosLoaded,
           newPlaceProbesLoaded,
           modelNamesLoaded,
-          wantedSegmentWhenNextPlaceLoads,
+          goalSegmentWhenGoalPlaceLoads,
         } = globalState;
         const { goalCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
         const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
@@ -172,14 +172,14 @@ export function get_globalChangePlaceRules<
         });
 
         // when a new place loads it handles checking and clearing
-        // nextSegmentNameWhenVidPlays & nextCamNameWhenVidPlays
-        // otheriwse the video wont loop because it thinks its waiting for a section to change
+        // goalSegmentNameWhenVidPlays & goalCamNameWhenVidPlays
+        // otheriwse the video wont loop because it thinks its waiting for a slice to change
 
         if (newPlaceVideosLoaded) {
-          if (wantedSegmentWhenNextPlaceLoads) {
+          if (goalSegmentWhenGoalPlaceLoads) {
             setGlobalState({
-              wantedSegmentWhenNextPlaceLoads: null,
-              wantedSegmentName: wantedSegmentWhenNextPlaceLoads,
+              goalSegmentWhenGoalPlaceLoads: null,
+              goalSegmentName: goalSegmentWhenGoalPlaceLoads,
             });
           }
 
@@ -205,7 +205,7 @@ export function get_globalChangePlaceRules<
                 const { nowPlaceName } = getState().global.main;
                 const { nowCamName } = getState().places[nowPlaceName];
 
-                updateNowStuffWhenSectionChanged();
+                updateNowStuffWhenSliceChanged();
                 whenAllVideosLoadedForPlace();
                 updateTexturesForNowCamera(nowCamName, true);
                 focusScenePlaneOnFocusedDoll(); // focus on the player

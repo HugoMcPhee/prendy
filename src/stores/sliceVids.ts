@@ -2,9 +2,12 @@ import { PrendyAssets, PlaceName } from "../declarations";
 import { forEach } from "chootils/dist/loops";
 
 /*
-A way to loop and change "sections" of videos seamlessly
-it has two videos loaded at once, and switches between them when looping and seeking to avoid delays
-it uses "stateVids" as the two videos it controls
+A way to loop and change "slices" of videos seamlessly 
+It's like seamless A-B looping for parts of a video
+
+it has two duplicate video files loaded at once, and switches between them when looping and seeking to avoid delays
+it uses "stateVids" for the two videos it controls 
+(stateVids are a way to control web videos through repond state)
 */
 
 // making PlaceName generic didn't seem to work with autocomplete?
@@ -14,11 +17,11 @@ it uses "stateVids" as the two videos it controls
 //   [K_ItemName in PlaceName]: ReturnType<T_defaultStateFunctionType>;
 // };
 
-export type SectionVidState =
+export type SliceVidState =
   | "beforeDoLoop"
   | "waitingForDoLoop" // while seeking and swapping videos
-  | "beforeChangeSection"
-  | "waitingForChangeSection" // while seeking and swapping videos
+  | "beforeChangeSlice"
+  | "waitingForChangeSlice" // while seeking and swapping videos
   | "play"
   | "pause" // ? (the visible video should never really be paused, unless maybe for the first loading stuff?)
   | "beforeUnload"
@@ -29,9 +32,9 @@ export type SectionVidState =
 
 export type VidLetter = "a" | "b";
 
-export type VidSection = { time: number; duration: number };
+export type VidSlice = { time: number; duration: number };
 
-export default function loopVids<
+export default function sliceVids<
   A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PlaceName extends PlaceName = PlaceName
 >(prendyAssets: A_PrendyAssets) {
@@ -41,23 +44,23 @@ export default function loopVids<
     stateVidId_playing: `${itemName}_a` as string | null,
     stateVidId_waiting: `${itemName}_b` as string | null,
     //
-    sectionVidState: "unloaded" as SectionVidState,
+    sliceVidState: "unloaded" as SliceVidState,
     //
-    nowSection: { time: 0, duration: 1 },
-    wantedSection: null as VidSection | null,
+    nowSlice: { time: 0, duration: 1 },
+    goalSlice: null as VidSlice | null,
     wantToLoad: false,
     wantToUnload: false,
     wantToLoop: false,
-    switchSection_keepProgress: true, // maybe always default to true
+    switchSlice_keepProgress: true, // maybe always default to true
     //
     newPlayingVidStartedTime: 0, // timestamp when the video starts playing after vidLetter_play changes
-    nowSectionSeekedTime: 0, // timestamp when the new section seeked (but not played yet)
+    nowSliceSeekedTime: 0, // timestamp when the new slice seeked (but not played yet)
     //
   });
 
   const refs = () => ({
     waitingForPlayToDoLoopRuleName: null as null | string,
-    waitingForPlayToChangeSectionRuleName: null as null | string,
+    // waitingForPlayToChangeSliceRuleName: null as null | string,
   });
 
   function makeStartStatesForPlaces() {

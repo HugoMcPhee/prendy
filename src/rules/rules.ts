@@ -11,7 +11,7 @@ import { get_keyboardConnectRules } from "./keyboards";
 import { get_modelRules } from "./models";
 import { get_playerRules } from "./players";
 import { get_safeVidRules } from "./stateVids";
-import { get_sectionVidRules } from "./loopVids";
+import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
@@ -38,7 +38,7 @@ export function makeStartPrendyRules<
   );
   const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = get_safeVidRules(storeHelpers);
-  const safeSectionVidRules = get_sectionVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
+  const safeSliceVidRules = get_sliceVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
 
   const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
   const characterRules = get_characterRules(storeHelpers, prendyAssets);
@@ -70,7 +70,7 @@ export function makeStartPrendyRules<
     playerRules.startAll();
     speechBubbleRules.startAll();
     safeVidRules.startAll();
-    safeSectionVidRules.startAll();
+    safeSliceVidRules.startAll();
 
     return function stopPrendyMainRules() {
       keyboardConnectRules.stopAll();
@@ -88,7 +88,7 @@ export function makeStartPrendyRules<
       playerRules.stopAll();
       speechBubbleRules.stopAll();
       safeVidRules.stopAll();
-      safeSectionVidRules.stopAll();
+      safeSliceVidRules.stopAll();
     };
   }
 

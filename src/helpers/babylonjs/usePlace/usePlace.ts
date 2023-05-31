@@ -83,9 +83,7 @@ export function get_usePlace<
         mesh.doNotSyncBoundingInfo = true;
       }
 
-      forEach(floorNames, (name) => {
-        setupWallOrFloor(meshes[name]);
-      });
+      forEach(floorNames, (name) => setupWallOrFloor(meshes[name]));
 
       forEach(wallNames, (name) => {
         setupWallOrFloor(meshes[name]);

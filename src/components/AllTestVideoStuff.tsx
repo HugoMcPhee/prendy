@@ -26,7 +26,7 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
 
     // show one vid at a time
     useStoreItemPropsEffect(
-      { type: "loopVids", name: placeName },
+      { type: "sliceVids", name: placeName },
       {
         stateVidId_playing() {
           // vidLetter_play({ newValue }) {
@@ -42,7 +42,7 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
           //     newValue === "b" ? "block" : "none";
           // }
         },
-        sectionVidState({ newValue }) {
+        sliceVidState({ newValue }) {
           const isLoaded = newValue !== "unloaded";
           if (mainRef.current) {
             mainRef.current.style.display = isLoaded ? "block" : "none";
@@ -68,13 +68,13 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
   }
 
   function TestVideoState({ placeName }: { placeName: PlaceName }) {
-    const sectionVidState = useStore((state) => state.loopVids[placeName].sectionVidState, {
-      type: "loopVids",
-      prop: ["sectionVidState"],
+    const sliceVidState = useStore((state) => state.sliceVids[placeName].sliceVidState, {
+      type: "sliceVids",
+      prop: ["sliceVidState"],
       name: placeName,
     });
-    const { stateVidId_waiting, stateVidId_playing } = useStore((state) => state.loopVids[placeName], {
-      type: "loopVids",
+    const { stateVidId_waiting, stateVidId_playing } = useStore((state) => state.sliceVids[placeName], {
+      type: "sliceVids",
       prop: ["stateVidId_waiting", "stateVidId_playing"],
       name: placeName,
     });
@@ -82,14 +82,14 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
     return (
       <div
         style={{
-          display: sectionVidState === "unloaded" ? "none" : "block",
+          display: sliceVidState === "unloaded" ? "none" : "block",
           width: 100,
         }}
       >
-        <div>{sectionVidState}</div>
+        <div>{sliceVidState}</div>
         <div>{`▶ ${stateVidId_playing}`}</div>
         <div>{`➰ ${stateVidId_waiting}`}</div>
-        {/* <div>{`⏭ ${vidLetter_nextSection}`}</div> */}
+        {/* <div>{`⏭ ${vidLetter_goalSlice}`}</div> */}
       </div>
     );
   }

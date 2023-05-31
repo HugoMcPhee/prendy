@@ -49,7 +49,7 @@ export default function stateVids<
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
     vidState: "unloaded" as VidState,
     playType: "pause" as "play" | "pause", // playing | paused (so it knows what it’ll return to after seeking)
-    wantedSeekTime: null as null | number, // when this changes, it starts seeking
+    goalSeekTime: null as null | number, // when this changes, it starts seeking
     wantToPlay: false, // boolean, set to true to start the play state stuff automatically (instead of needing to set to vidState = beforePlayAndPaused etc
     wantToPause: false,
     wantToUnload: false,

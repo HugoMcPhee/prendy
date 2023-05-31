@@ -49,14 +49,15 @@ export default function global<
 
   // State
   const state = () => ({
-    // segments and section video
-    wantedSegmentWhenNextPlaceLoads: null as MaybeSegmentName,
-    nextSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the section vid has finished changing, this is used as the new nowSegmentName
-    goalSegmentNameAtLoop: null as MaybeSegmentName,
-    wantedSegmentName: null as MaybeSegmentName,
+    // segments and slice video
     nowSegmentName: prendyStartOptions.segment as A_AnySegmentName,
-    wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to loopVids
+    goalSegmentName: null as MaybeSegmentName,
+    goalSegmentNameAtLoop: null as MaybeSegmentName,
+    goalSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowSegmentName
+    goalSegmentWhenGoalPlaceLoads: null as MaybeSegmentName,
+    wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sliceVids
     // TODO? move nowCamName etc to here, since never change cam for non-now place
+    // and segment names are per place too
     //
     // changing places
     modelNamesLoaded: [] as A_ModelName[],
@@ -64,10 +65,10 @@ export default function global<
     newPlaceVideosLoaded: false,
     newPlaceProbesLoaded: false,
     //
-    isLoadingBetweenPlaces: true,
     nowPlaceName: prendyStartOptions.place as A_PlaceName,
+    goalPlaceName: null as null | A_PlaceName,
     readyToSwapPlace: false,
-    nextPlaceName: null as null | A_PlaceName,
+    isLoadingBetweenPlaces: true,
     loadingOverlayToggled: true,
     loadingOverlayFullyShowing: true,
     //

@@ -204,13 +204,16 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     const placesRefs = getRefs().places;
     const globalState = getState().global.main;
     const { nowPlaceName } = globalState;
-    const { nowCamName } = getState().places[nowPlaceName];
+    const { nowCamName, goalCamNameWhenVidPlays } = getState().global.main;
+    const newCamName = goalCamNameWhenVidPlays || nowCamName;
+
     const placeRefs = placesRefs[nowPlaceName];
+
     if (theMaterial) {
       theMaterial.enableSpecularAntiAliasing = true;
       theMaterial.roughness = 0.95;
       theMaterial.environmentIntensity = 2;
-      theMaterial.reflectionTexture = placeRefs.camsRefs[nowCamName].probeTexture;
+      theMaterial.reflectionTexture = placeRefs.camsRefs[newCamName].probeTexture;
       // theMaterial.enableSpecularAntiAliasing = false;
       // theMaterial.cameraToneMappingEnabled = true;
       // theMaterial.metallic = 0.25;
@@ -239,10 +242,10 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
 
     const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];
 
-    type T_Mesh = typeof meshNames[number];
-    type T_BoneName = typeof boneNames[number];
-    type T_AnimationName = typeof animationNames[number];
-    type T_MaterialName = typeof materialNames[number];
+    type T_Mesh = (typeof meshNames)[number];
+    type T_BoneName = (typeof boneNames)[number];
+    type T_AnimationName = (typeof animationNames)[number];
+    type T_MaterialName = (typeof materialNames)[number];
 
     const rootNode = entries.rootNodes[0];
 

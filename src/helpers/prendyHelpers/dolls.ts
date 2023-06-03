@@ -137,8 +137,6 @@ export function get_dollStoryHelpers<
 
   function springAddToDollRotationY(dollName: A_DollName, addedRotation: number, useShortestAngle: boolean = false) {
     setState((state) => {
-      state.useShortestAngle;
-
       const currentAngle = state.dolls[dollName].rotationYGoal;
 
       let newAngle = currentAngle + addedRotation;

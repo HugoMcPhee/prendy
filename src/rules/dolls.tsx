@@ -56,7 +56,7 @@ export function get_dollDynamicRules<
       check: { type: "models", name: modelName, prop: "isLoaded", becomes: true },
       atStepEnd: true,
     })),
-    // When the plaec and all characters are loaded
+    // When the place and all characters are loaded
     whenWholePlaceFinishesLoading: itemEffect(
       ({ dollName, modelName }: { dollName: DollName; modelName: ModelName }) => ({
         run() {
@@ -68,23 +68,6 @@ export function get_dollDynamicRules<
           }
 
           setupLightMaterial(modelRefs.materialRef);
-
-          if (dollRefs.meshRef) {
-            // dollRefs.meshRef.material = modelRefs.materialRef;
-          }
-
-          // forEach(modelNamesLoaded, (modelName) => {
-          //   const modelRefs = getRefs().models[modelName];
-          //   setupLightMaterial(modelRefs.materialRef);
-          // });
-          // forEach(dollNames, (dollName) => {
-          //   const dollRefs = getRefs().dolls[dollName];
-          //   const { modelName } = getState().dolls[dollName];
-          //   const modelRefs = getRefs().models[modelName];
-          //
-          //   dollRefs.materialRef = modelRefs.materialRef;
-          // });
-          // setupLightMaterial(dollRefs.materialRef);
         },
         name: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
         check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },

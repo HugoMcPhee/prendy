@@ -48,7 +48,7 @@ export function get_globalVideoRules<
           isLoadingBetweenPlaces,
         } = getState().global.main;
 
-        const { goalCamNameWhenVidPlays, goalCamNameAtLoop, goalCamName, nowCamName } = getState().places[nowPlaceName];
+        const { goalCamNameWhenVidPlays, goalCamNameAtLoop, goalCamName, nowCamName } = getState().global.main;
 
         const { sliceVidState, goalSlice, wantToLoop, switchSlice_keepProgress } = getState().sliceVids[nowPlaceName];
 
@@ -77,8 +77,14 @@ export function get_globalVideoRules<
 
           if (alreadyWaitingForASliceToChange) {
             setState({
-              global: { main: { goalSegmentNameAtLoop: null, goalSegmentNameWhenVidPlays: null } },
-              places: { [nowPlaceName]: { goalCamNameAtLoop: null, goalCamNameWhenVidPlays: null } },
+              global: {
+                main: {
+                  goalSegmentNameAtLoop: null,
+                  goalSegmentNameWhenVidPlays: null,
+                  goalCamNameAtLoop: null,
+                  goalCamNameWhenVidPlays: null,
+                },
+              },
               sliceVids: { [nowPlaceName]: { goalSlice: null, wantToLoop: false } },
             });
           }
@@ -163,10 +169,6 @@ export function get_globalVideoRules<
               goalSegmentNameAtLoop: new_goalSegmentNameAtLoop,
               // wantToLoop: false,
               goalSegmentNameWhenVidPlays: decided_goalSegmentName,
-            },
-          },
-          places: {
-            [nowPlaceName]: {
               goalCamName: null,
               goalCamNameAtLoop: new_goalCamNameAtLoop,
               goalCamNameWhenVidPlays: decided_goalCamName,
@@ -192,30 +194,24 @@ export function get_globalVideoRules<
       step: "sliceVidStateUpdates",
       atStepEnd: true,
     }),
-
-    //
-
-    // previous stuff
-
     // note no setState's done in here so its running on subscribe
     whenNowCameraChanges: effect({
       run(diffInfo) {
         const globalState = getState().global.main;
-        const { nowPlaceName, goalPlaceName } = globalState;
+        const { goalPlaceName } = globalState;
         if (goalPlaceName !== null) return;
 
-        const { nowCamName } = getState().places[nowPlaceName];
+        const { nowCamName } = getState().global.main;
         const globalChangedBools = diffInfo.propsChangedBool.global.main;
-        const placeChangedBools = diffInfo.propsChangedBool.places[nowPlaceName];
 
         const placeChanged = globalChangedBools?.nowPlaceName;
-        const cameraChanged = placeChangedBools?.nowCamName;
+        const cameraChanged = globalChangedBools?.nowCamName;
 
         if (!cameraChanged && !placeChanged) return;
         // if the place or camera changed
         updateTexturesForNowCamera(nowCamName as AnyCameraName);
       },
-      check: { prop: ["nowCamName"], type: ["places"] },
+      check: { prop: ["nowCamName"], type: ["global"] },
       step: "cameraChange",
       atStepEnd: true,
     }),

@@ -195,17 +195,12 @@ export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
         if (charName !== playerCharacter) return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
 
         const { nowPlaceName } = getState().global.main;
-        const { nowCamName } = getState().places[nowPlaceName];
+        const { nowCamName } = getState().global.main;
         const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
 
         forEach(cameraNames, (loopedCameraName) => {
           if (loopedCameraName !== nowCamName && newAtCamCubes[loopedCameraName] && !prevAtCamCubes[loopedCameraName]) {
-            setState({
-              places: {
-                // [nowPlaceName]: { nowCamName: loopedCameraName },
-                [nowPlaceName]: { goalCamName: loopedCameraName },
-              },
-            });
+            setState({ global: { main: { goalCamName: loopedCameraName } } });
           }
         });
       },

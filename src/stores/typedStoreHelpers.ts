@@ -141,10 +141,10 @@ const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // NOTE Change these to typeof to have known types while making prendys library
-export type PlaceholderPrendyStores_ = typeof placeholderPrendyStores;
-export type PrendyStoreHelpers_ = typeof storeHelpers;
+export type PlaceholderPrendyStores = typeof placeholderPrendyStores;
+export type PrendyStoreHelpers = typeof storeHelpers;
 
-export type PlaceholderPrendyStores = Record<
+export type PlaceholderPrendyStores_ = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -152,7 +152,7 @@ export type PlaceholderPrendyStores = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type PrendyStoreHelpers = {
+export type PrendyStoreHelpers_ = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;

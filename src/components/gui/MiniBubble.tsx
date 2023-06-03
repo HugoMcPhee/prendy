@@ -143,16 +143,13 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
     }, []);
 
     useStoreEffect(
-      () => {
-        positionMiniBubbleToCharacter();
-      },
+      positionMiniBubbleToCharacter,
       [
         { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },
+        { type: ["global"], name: "main", prop: ["nowCamName"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },
-        { type: ["places"], name: nowPlaceName, prop: ["nowCamName"] },
-        { type: ["places"], prop: ["nowCamName"] },
       ],
       [nowPlaceName]
     );

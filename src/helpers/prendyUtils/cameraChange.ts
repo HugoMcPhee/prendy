@@ -110,8 +110,13 @@ export function get_cameraChangeUtils<
 
   // Updates both video textures and probe textures for the new cameras
   function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
-    const { nowPlaceName } = getState().global.main;
+    const { nowPlaceName, goalCamNameWhenVidPlays } = getState().global.main;
     const scene = globalRefs.scene as Scene;
+
+    console.log("====================", newCameraName);
+    console.log("newCameraName", newCameraName);
+    console.log("nowPlaceName", nowPlaceName);
+
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
     const newCamRef = camsRefs[newCameraName];
@@ -126,8 +131,8 @@ export function get_cameraChangeUtils<
 
     scene.activeCamera = newCamRef.camera;
 
-    if (globalRefs.backdropPostProcess) scene.activeCamera.attachPostProcess(globalRefs.backdropPostProcess);
-    if (globalRefs.fxaaPostProcess) scene.activeCamera.attachPostProcess(globalRefs.fxaaPostProcess);
+    if (globalRefs.backdropPostProcess) scene.activeCamera?.attachPostProcess(globalRefs.backdropPostProcess);
+    if (globalRefs.fxaaPostProcess) scene.activeCamera?.attachPostProcess(globalRefs.fxaaPostProcess);
 
     if (!globalRefs.depthRenderer) globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
 
@@ -314,12 +319,13 @@ export function get_cameraChangeUtils<
   function applyProbeToAllDollMaterials() {
     const { nowPlaceName, modelNamesLoaded } = getState().global.main;
 
-    const placeState = getState().places[nowPlaceName];
+    const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
+    const newCamName = goalCamNameWhenVidPlays ?? nowCamName;
 
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    const newCamRef = camsRefs[placeState.nowCamName];
+    const newCamRef = camsRefs[newCamName];
 
     if (scene === null) return;
 
@@ -347,11 +353,11 @@ export function get_cameraChangeUtils<
 
   function applyProbeToAllParticleMaterials() {
     const { nowPlaceName } = getState().global.main;
-    const placeState = getState().places[nowPlaceName];
+    const { nowCamName } = getState().global.main;
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    const newCamRef = camsRefs[placeState.nowCamName];
+    const newCamRef = camsRefs[nowCamName];
     if (scene === null) return;
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
@@ -371,7 +377,7 @@ export function get_cameraChangeUtils<
     // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
 
     const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
-    const { goalCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
+    const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
 
     const waitingForASliceToChange = goalSegmentNameWhenVidPlays || goalCamNameWhenVidPlays;
 
@@ -395,10 +401,6 @@ export function get_cameraChangeUtils<
         main: {
           nowSegmentName: goalSegmentNameWhenVidPlaysSafe || nowSegmentName,
           goalSegmentNameWhenVidPlays: null,
-        },
-      },
-      places: {
-        [nowPlaceName]: {
           nowCamName: goalCamNameWhenVidPlaysSafe || nowCamName,
           goalCamNameWhenVidPlays: null,
         },

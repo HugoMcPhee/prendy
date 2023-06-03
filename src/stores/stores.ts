@@ -109,9 +109,10 @@ export function makePrendyStores<
     keyboards: keyboards(),
     miniBubbles: miniBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
     global: global<
-      A_AnySegmentName,
       A_PrendyAssets,
       A_PrendyOptions,
+      A_AnySegmentName,
+      A_AnyCameraName,
       A_CharacterName,
       A_DollName,
       A_ModelName,

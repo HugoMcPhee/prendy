@@ -126,7 +126,7 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
 
         setState({
           dolls: {
-            [dollName]: {
+            [dollName as string]: {
               // nowAnimation: newAnimationName,
               positionMoveMode: "push",
               positionIsMoving: true,
@@ -520,7 +520,7 @@ export function get_playerRules<StoreHelpers extends PrendyStoreHelpers, PrendyO
         }));
       },
       step: "cameraChange",
-      check: { type: "places", prop: "nowCamName" },
+      check: { type: "global", prop: "nowCamName" },
     }),
     whenPlayerMovementPausedChanges: itemEffect({
       run({ newValue: playerMovingPaused }) {

@@ -64,8 +64,7 @@ export function get_scenePlaneUtils<
   function getPositionOnPlane(theMesh: AbstractMesh) {
     // This is a position on the plane itself
 
-    const { nowPlaceName } = getState().global.main;
-    const { nowCamName, goalCamName } = getState().places[nowPlaceName];
+    const { nowPlaceName, nowCamName } = getState().global.main;
     const placeRefs = getRefs().places[nowPlaceName];
 
     const nowCam = placeRefs.camsRefs[nowCamName]?.camera;

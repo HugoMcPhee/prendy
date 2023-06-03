@@ -61,27 +61,26 @@ export default function places<
   };
 
   type PlaceState<K_PlaceName extends A_PlaceName> = {
-    goalCamNameAtLoop: MaybeCam<K_PlaceName>;
-    goalCamName: MaybeCam<K_PlaceName>;
-    nowCamName: A_CameraNameByPlace[K_PlaceName];
+    testState: number;
+    // goalCamWhenNextPlaceLoads: MaybeCam<K_PlaceName>;
+    // goalCamNameWhenVidPlays: MaybeCam<K_PlaceName>;
+    // goalCamNameAtLoop: MaybeCam<K_PlaceName>;
+    // goalCamName: MaybeCam<K_PlaceName>;
+    // nowCamName: A_CameraNameByPlace[K_PlaceName];
   };
 
   // State
-  const state = <K_PlaceName extends A_PlaceName>(placeName: K_PlaceName) => {
-    console.log("setting initial place state again");
-
-    return {
-      goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
-      goalCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
-      goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
-      goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
-      nowCamName:
-        ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
-          ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName)) ??
-        ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
-    };
-  };
-
+  const state = <K_PlaceName extends A_PlaceName>(placeName: K_PlaceName) => ({
+    testState: 0,
+    // goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
+    // goalCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
+    // goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
+    // goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
+    // nowCamName:
+    //   ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+    //     ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName)) ??
+    //   ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
+  });
   type PlaceRefs<K_PlaceName extends A_PlaceName> = {
     rootMesh: null | AbstractMesh;
     spotPositions: SpotPositions<K_PlaceName>;

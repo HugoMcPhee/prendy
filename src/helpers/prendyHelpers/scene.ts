@@ -80,8 +80,7 @@ export function get_sceneStoryHelpers<
   >(_place: T_Place, newCamName: T_Cam) {
     return new Promise<void>((resolve, _reject) => {
       setState((state) => {
-        const { nowPlaceName } = state.global.main;
-        const { goalCamNameAtLoop } = state.places[nowPlaceName];
+        const { goalCamNameAtLoop } = state.global.main;
         if (goalCamNameAtLoop) {
           // TEMP resolve straight away if there's already a goalCamNameAtLoop
           console.error("there was already a goalSegmentNameAtLoop when running changeSegmentAtLoopAsync");
@@ -92,11 +91,8 @@ export function get_sceneStoryHelpers<
         doWhenNowCamChanges(newCamName, () => resolve());
 
         return {
-          places: {
-            [nowPlaceName]: {
-              goalCamNameAtLoop: newCamName,
-            }, // AnyCameraName needed if there's only 1 place
-          },
+          // AnyCameraName needed if there's only 1 place
+          global: { main: { goalCamNameAtLoop: newCamName } },
         };
       });
     });
@@ -162,21 +158,16 @@ export function get_sceneStoryHelpers<
     return new Promise<void>((resolve, _reject) => {
       if (whenToRun === "now") {
         const { nowPlaceName } = getState().global.main;
-        const { nowCamName } = getState().places[nowPlaceName];
+        const { nowCamName } = getState().global.main;
 
         // already on that camera
         if (nowCamName === cameraName) {
           resolve();
           return;
         }
-        setState(
-          {
-            places: {
-              [nowPlaceName]: { goalCamName: cameraName }, // AnyCameraName needed if there's only 1 place
-            },
-          },
-          () => resolve()
-        );
+
+        // AnyCameraName needed if there's only 1 place
+        setState({ global: { main: { goalCamName: cameraName } } }, () => resolve());
       } else if (whenToRun === "at loop") {
         changeCameraAtLoop(_placeName, cameraName as any).finally(() => resolve());
       }
@@ -196,7 +187,7 @@ export function get_sceneStoryHelpers<
 
     onNextTick(() => {
       setState((state) => {
-        const newPlaceNowCamName = state.places[toPlace].nowCamName;
+        const newPlaceDefaultCamName = placeInfoByName[toPlace].cameraNames[0];
         const nowSegmentName = state.global.main.nowSegmentName;
 
         const placeInfo = placeInfoByName[toPlace];
@@ -207,14 +198,16 @@ export function get_sceneStoryHelpers<
         const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
         if (foundRuleSegmentName) toSegment = foundRuleSegmentName;
 
+        console.log("toCam", toCam);
+
         return {
           global: {
             main: {
               goalPlaceName: toPlace,
               goalSegmentWhenGoalPlaceLoads: toSegment || nowSegmentName,
+              goalCamWhenNextPlaceLoads: toCam || newPlaceDefaultCamName,
             },
           },
-          places: { [toPlace]: { goalCamWhenNextPlaceLoads: toCam || newPlaceNowCamName } },
           dolls: { [dollName]: { goalSpotName: toSpot } },
         };
       });

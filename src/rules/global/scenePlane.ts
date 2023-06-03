@@ -89,8 +89,8 @@ export function get_globalScenePlaneRules<
     }),
     whenNowCamChanges: itemEffect({
       run: () => focusScenePlaneOnFocusedDoll("instant"),
-      check: { prop: "nowCamName", type: "places" },
-      atStepEnd: true,
+      check: { prop: "nowCamName", type: "global" },
+      // atStepEnd: true,
       step: "planePosition",
     }),
     whenScreenResizes: itemEffect({
@@ -100,7 +100,6 @@ export function get_globalScenePlaneRules<
         const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();
 
         if (!engine) return;
-        console.log("resized");
 
         const { editedHardwareScaling, editedPlaneSceneZoom } = getShaderTransformStuff();
 

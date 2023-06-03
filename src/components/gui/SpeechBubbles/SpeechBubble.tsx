@@ -174,20 +174,13 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
     }, []);
 
     useStoreEffect(
-      () => {
-        positionSpeechBubbleToCharacter();
-      },
+      positionSpeechBubbleToCharacter,
       [
-        {
-          type: ["dolls"],
-          name: forCharacter,
-          prop: ["positionOnScreen"],
-        },
+        { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
         { type: ["global"], name: "main", prop: ["planePos"] },
         { type: ["global"], name: "main", prop: ["planeZoom"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },
-        { type: ["places"], name: nowPlaceName, prop: ["nowCamName"] },
-        { type: ["places"], prop: ["nowCamName"] },
+        { type: ["global"], name: "main", prop: ["nowCamName"] },
       ],
       [nowPlaceName]
     );

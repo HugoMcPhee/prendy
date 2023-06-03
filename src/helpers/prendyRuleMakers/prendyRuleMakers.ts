@@ -38,9 +38,7 @@ export function get_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>
     const globalState = getState().global.main as GlobalState;
     const { chapterName, storyPart } = storyState;
     const { nowPlaceName, nowSegmentName } = globalState;
-    const allPlacesState = getState().places as AllPlacesState;
-    const placeState = allPlacesState[nowPlaceName];
-    const { nowCamName } = placeState;
+    const { nowCamName } = globalState;
     const placesRefs = getRefs().places as AllPlacesRefs;
     const placeRefs = placesRefs[nowPlaceName];
     const { camsRefs } = placesRefs[nowPlaceName];
@@ -54,8 +52,7 @@ export function get_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>
       storyPart: storyPart as StoryState["storyPart"],
       nowSegmentName: nowSegmentName as GlobalState["nowSegmentName"],
       nowPlaceName: nowPlaceName as GlobalState["nowPlaceName"],
-      placeState: placeState as AllPlacesState[keyof AllPlacesState],
-      nowCamName: nowCamName as AllPlacesState[keyof AllPlacesState]["nowCamName"],
+      nowCamName: nowCamName as GlobalState["nowCamName"],
       placesRefs: placesRefs as AllPlacesRefs,
       placeRefs: placeRefs as APlaceRefs,
       camsRefs: camsRefs as APlaceRefsCamsRefs,
@@ -143,7 +140,7 @@ export function makeAllStoryRuleMakers<
           const { nowPlaceName } = usefulStoryStuff;
           (callBacksObject as Record<any, any>)[nowPlaceName]?.[nowCamName]?.(usefulStoryStuff);
         },
-        check: { prop: "nowCamName", type: "places" },
+        check: { prop: "nowCamName", type: "global" },
         step: "cameraChange",
         atStepEnd: true,
       }),
@@ -157,7 +154,7 @@ export function makeAllStoryRuleMakers<
           const { nowPlaceName } = usefulStoryStuff;
           (callBacksObject as Record<any, any>)[nowPlaceName]?.[prevCamName]?.(usefulStoryStuff);
         },
-        check: { prop: "nowCamName", type: "places" },
+        check: { prop: "nowCamName", type: "global" },
         step: "cameraChange",
         atStepEnd: true,
       }),

@@ -9,13 +9,16 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters without rules
 
-v0.9.5
+v0.9.6
 
 - updated to use repond and updated packages
 - more predictable logic for loading and playing videos
 - better walking on slopes and jumping
 - renamed safeVids to stateVids and sectionVids to sliceVids, and reanmed wanted/next state properties to goal
 - fix jump button not handling holding on andorid and ios
+- changed nowCamName to be global instead of per place
+
+v0.9.5
 
 v0.9.3
 

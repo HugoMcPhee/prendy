@@ -46,7 +46,7 @@ export function get_globalChangePlaceRules<
     const { dollName } = getCharDollStuff(playerCharacter);
     const placeInfo = placeInfoByName[nowPlaceName];
     const { spotNames } = placeInfo;
-    const { goalSpotName } = getState().dolls[dollName];
+    const { goalSpotName } = getState().dolls[dollName as string];
 
     const newSpotName = goalSpotName || spotNames[0];
 
@@ -59,7 +59,7 @@ export function get_globalChangePlaceRules<
 
   function whenAllVideosLoadedForPlace() {
     const { nowPlaceName } = getState().global.main;
-    const { nowCamName } = getState().places[nowPlaceName];
+    const { nowCamName } = getState().global.main;
 
     globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
 
@@ -141,11 +141,7 @@ export function get_globalChangePlaceRules<
           const { nowCamName, goalCamWhenNextPlaceLoads } = getState().places[goalPlaceName];
 
           setState({
-            places: {
-              [goalPlaceName]: {
-                nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName,
-              },
-            },
+            global: { main: { nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName } },
           });
         });
       },
@@ -162,7 +158,7 @@ export function get_globalChangePlaceRules<
           modelNamesLoaded,
           goalSegmentWhenGoalPlaceLoads,
         } = globalState;
-        const { goalCamWhenNextPlaceLoads } = getState().places[nowPlaceName];
+        const { goalCamWhenNextPlaceLoads } = getState().global.main;
         const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
         const loadedModelNames = modelNamesLoaded.sort();
         let allModelsAreLoaded = true;
@@ -185,8 +181,8 @@ export function get_globalChangePlaceRules<
 
           if (goalCamWhenNextPlaceLoads) {
             setState({
-              places: {
-                [nowPlaceName]: {
+              global: {
+                main: {
                   goalCamWhenNextPlaceLoads: null,
                   goalCamName: goalCamWhenNextPlaceLoads,
                 },
@@ -202,12 +198,12 @@ export function get_globalChangePlaceRules<
               setGlobalState({ isLoadingBetweenPlaces: false });
 
               onNextTick(() => {
-                const { nowPlaceName } = getState().global.main;
-                const { nowCamName } = getState().places[nowPlaceName];
+                const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
+                const newCamName = goalCamNameWhenVidPlays ?? nowCamName;
 
                 updateNowStuffWhenSliceChanged();
                 whenAllVideosLoadedForPlace();
-                updateTexturesForNowCamera(nowCamName, true);
+                updateTexturesForNowCamera(newCamName, true);
                 focusScenePlaneOnFocusedDoll(); // focus on the player
 
                 // Start fading in the scene

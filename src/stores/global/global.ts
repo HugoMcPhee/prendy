@@ -1,6 +1,7 @@
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import {
+  AnyCameraName,
   AnySegmentName,
   CharacterName,
   DollName,
@@ -15,9 +16,10 @@ import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import get_globalStoreUtils from "./globalStoreUtils";
 
 export default function global<
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
   A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
   A_CharacterName extends CharacterName = CharacterName,
   A_DollName extends DollName = DollName,
   A_ModelName extends ModelName = ModelName,
@@ -25,9 +27,10 @@ export default function global<
   A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
   A_PlaceName extends PlaceName = PlaceName
 >(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
-  const { musicNames, soundNames } = prendyAssets;
+  const { musicNames, soundNames, placeInfoByName } = prendyAssets;
 
   type MaybeSegmentName = null | A_AnySegmentName;
+  type MaybeCam = null | A_PlaceName;
 
   type SegmentNameFromCameraAndPlace<
     T_Place extends keyof A_PlaceInfoByName,
@@ -47,8 +50,26 @@ export default function global<
 
   const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
 
+  const placeName = prendyStartOptions.place;
+
   // State
   const state = () => ({
+    // place
+    nowPlaceName: placeName as A_PlaceName,
+    goalPlaceName: null as null | A_PlaceName,
+    readyToSwapPlace: false,
+    isLoadingBetweenPlaces: true,
+    loadingOverlayToggled: true,
+    loadingOverlayFullyShowing: true,
+    // cameras
+    goalCamWhenNextPlaceLoads: null as MaybeCam,
+    goalCamNameWhenVidPlays: null as MaybeCam, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
+    goalCamNameAtLoop: null as MaybeCam,
+    goalCamName: null as MaybeCam, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
+    nowCamName:
+      ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+        ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName)) ??
+      ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
     // segments and slice video
     nowSegmentName: prendyStartOptions.segment as A_AnySegmentName,
     goalSegmentName: null as MaybeSegmentName,
@@ -56,21 +77,13 @@ export default function global<
     goalSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowSegmentName
     goalSegmentWhenGoalPlaceLoads: null as MaybeSegmentName,
     wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sliceVids
-    // TODO? move nowCamName etc to here, since never change cam for non-now place
-    // and segment names are per place too
     //
     // changing places
     modelNamesLoaded: [] as A_ModelName[],
     newPlaceModelLoaded: false,
     newPlaceVideosLoaded: false,
     newPlaceProbesLoaded: false,
-    //
-    nowPlaceName: prendyStartOptions.place as A_PlaceName,
-    goalPlaceName: null as null | A_PlaceName,
-    readyToSwapPlace: false,
-    isLoadingBetweenPlaces: true,
-    loadingOverlayToggled: true,
-    loadingOverlayFullyShowing: true,
+
     //
     // player
     playerCharacter: prendyStartOptions.playerCharacter as A_CharacterName, // TODO Move to players ?
@@ -105,7 +118,6 @@ export default function global<
     //
     debugMessage: "",
   });
-
   // Refs
   const refs = () => ({
     scene: null as null | Scene,

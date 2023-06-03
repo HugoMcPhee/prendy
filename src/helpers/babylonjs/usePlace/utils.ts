@@ -30,7 +30,7 @@ export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, Prend
 
   async function loadNowVideosForPlace() {
     const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
-    const { nowCamName, goalCamName } = getState().places[nowPlaceName];
+    const { nowCamName, goalCamName } = getState().global.main;
 
     const goalSlice = getSliceForPlace(
       nowPlaceName as PlaceName,

@@ -116,11 +116,11 @@ export function get_sliceVidUtils<StoreHelpers extends PrendyStoreHelpers, Prend
   function checkForVideoLoop(placeName: PlaceName) {
     // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
     const itemState = getState().sliceVids[placeName];
-    const placeState = getState().places[placeName];
+    const globalState = getState().global.main;
     const { nowSlice, sliceVidState } = itemState;
     const backdropVid = getSliceVidVideo(placeName);
 
-    const { nowCamName } = placeState;
+    const { nowCamName } = globalState;
 
     /*
   !goalSegmentNameWhenVidPlays &&

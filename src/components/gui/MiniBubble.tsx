@@ -3,7 +3,7 @@ import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
 import { CharacterName } from "../../declarations";
-import { getScreenSize } from "../../helpers/babylonjs/scenePlane";
+import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
@@ -146,8 +146,8 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
       positionMiniBubbleToCharacter,
       [
         { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
-        { type: ["global"], name: "main", prop: ["planePos"] },
-        { type: ["global"], name: "main", prop: ["planeZoom"] },
+        { type: ["global"], name: "main", prop: ["slatePos"] },
+        { type: ["global"], name: "main", prop: ["slateZoom"] },
         { type: ["global"], name: "main", prop: ["nowCamName"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },
       ],

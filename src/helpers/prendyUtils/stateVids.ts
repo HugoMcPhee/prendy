@@ -49,10 +49,7 @@ export function get_safeVidUtils<StoreHelpers extends PrendyStoreHelpers>(storeH
     );
   }
 
-  return {
-    doWhenSafeVidPlayOrPause,
-    doWhenSafeVidStateReady,
-  };
+  return { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady };
 }
 
 export function makeVideoElementFromPath(filepath: string) {

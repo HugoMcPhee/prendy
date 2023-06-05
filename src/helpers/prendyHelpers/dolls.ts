@@ -167,7 +167,7 @@ export function get_dollStoryHelpers<
   function focusOnDoll<T_Doll extends A_DollName>(dollName: T_Doll, zoom?: number) {
     setGlobalState({
       focusedDoll: dollName,
-      planeZoomGoal:
+      slateZoomGoal:
         zoom !== undefined ? Math.min(zoom, prendyStartOptions.zoomLevels.max) : prendyStartOptions.zoomLevels.default,
     });
   }
@@ -331,8 +331,6 @@ export function get_dollStoryHelpers<
 
   return {
     setDollPosition,
-    // springDollPosition,
-    // slideDollPosition,
     setDollRotation,
     setDollRotationY,
     springDollRotationY,
@@ -348,5 +346,7 @@ export function get_dollStoryHelpers<
     hideDoll,
     toggleDollMeshes,
     getDollBonePosition,
+    // springDollPosition,
+    // slideDollPosition,
   };
 }

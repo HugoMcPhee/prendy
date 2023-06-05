@@ -11,12 +11,12 @@ export function getScreenSize() {
   return { x: window.innerWidth, y: window.innerHeight };
 }
 
-export const planeSize = { x: 1280, y: 720 };
+export const slateSize = { x: 1280, y: 720 };
 
-export function get_scenePlaneUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions) {
+export function get_slateUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
+  storeHelpers: StoreHelpers,
+  prendyStartOptions: PrendyOptions
+) {
   const { getRefs, getState, onNextTick } = storeHelpers;
 
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
@@ -61,8 +61,8 @@ export function get_scenePlaneUtils<
     return theProjectionMatrix;
   }
 
-  function getPositionOnPlane(theMesh: AbstractMesh) {
-    // This is a position on the plane itself
+  function getPositionOnSlate(theMesh: AbstractMesh) {
+    // This is a position on the slate itself
 
     const { nowPlaceName, nowCamName } = getState().global.main;
     const placeRefs = getRefs().places[nowPlaceName];
@@ -84,8 +84,8 @@ export function get_scenePlaneUtils<
     );
   }
 
-  function getPlanePositionNotOverEdges(planePos: Point2D, useGoal?: boolean) {
-    const newPlanePos = copyPoint(planePos);
+  function getSlatePositionNotOverEdges(slatePos: Point2D, useGoal?: boolean) {
+    const newSlatePos = copyPoint(slatePos);
 
     const stretchVideoX = useGoal ? globalRefs.stretchVideoGoalSize.x : globalRefs.stretchVideoSize.x;
     const stretchVideoY = useGoal ? globalRefs.stretchVideoGoalSize.y : globalRefs.stretchVideoSize.y;
@@ -93,57 +93,57 @@ export function get_scenePlaneUtils<
     const maxShiftX = (stretchVideoX - 1) / stretchVideoX / 2;
     const maxShiftY = (stretchVideoY - 1) / stretchVideoY / 2;
 
-    const isOverRightEdge = newPlanePos.x > maxShiftX;
-    const isOverLeftEdge = newPlanePos.x < -maxShiftX;
-    const isOverBottomEdge = newPlanePos.y > maxShiftY;
-    const isOverTopEdge = newPlanePos.y < -maxShiftY;
+    const isOverRightEdge = newSlatePos.x > maxShiftX;
+    const isOverLeftEdge = newSlatePos.x < -maxShiftX;
+    const isOverBottomEdge = newSlatePos.y > maxShiftY;
+    const isOverTopEdge = newSlatePos.y < -maxShiftY;
     const isOverEdge = isOverRightEdge || isOverLeftEdge || isOverBottomEdge || isOverTopEdge;
 
-    if (isOverRightEdge) newPlanePos.x = maxShiftX;
-    if (isOverLeftEdge) newPlanePos.x = -maxShiftX;
-    if (isOverBottomEdge) newPlanePos.y = maxShiftY;
-    if (isOverTopEdge) newPlanePos.y = -maxShiftY;
+    if (isOverRightEdge) newSlatePos.x = maxShiftX;
+    if (isOverLeftEdge) newSlatePos.x = -maxShiftX;
+    if (isOverBottomEdge) newSlatePos.y = maxShiftY;
+    if (isOverTopEdge) newSlatePos.y = -maxShiftY;
 
-    newPlanePos.x = shortenDecimals(newPlanePos.x);
-    newPlanePos.y = shortenDecimals(newPlanePos.y);
+    newSlatePos.x = shortenDecimals(newSlatePos.x);
+    newSlatePos.y = shortenDecimals(newSlatePos.y);
 
     // zoom 1.5, edges are 0.1625?
     // zoom 2, edges are 0.25
     // zoom 2.5, edges are ~0.3?
     // zoom 3, edges are ~0.33?
     // zoom 1, edges are 0
-    // console.log("editing plane pos");
+    // console.log("editing slate pos");
 
-    return newPlanePos;
+    return newSlatePos;
   }
 
-  function updatePlanePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
-    function updatePlanePos() {
-      const characterPointOnPlane = getPositionOnPlane(meshRef);
+  function updateSlatePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
+    function updateSlatePos() {
+      const characterPointOnSlate = getPositionOnSlate(meshRef);
 
-      const newPlanePos = getPlanePositionNotOverEdges({
-        x: characterPointOnPlane.x / planeSize.x - 0.5,
-        y: 1 - characterPointOnPlane.y / planeSize.y - 0.5,
+      const newSlatePos = getSlatePositionNotOverEdges({
+        x: characterPointOnSlate.x / slateSize.x - 0.5,
+        y: 1 - characterPointOnSlate.y / slateSize.y - 0.5,
       });
 
       if (instant) {
-        setGlobalState({ planePosGoal: newPlanePos, planePos: newPlanePos });
+        setGlobalState({ slatePosGoal: newSlatePos, slatePos: newSlatePos });
       } else {
-        setGlobalState({ planePosGoal: newPlanePos });
+        setGlobalState({ slatePosGoal: newSlatePos });
       }
     }
     if (instant) {
-      updatePlanePos();
+      updateSlatePos();
     } else {
-      onNextTick(updatePlanePos);
+      onNextTick(updateSlatePos);
     }
   }
 
-  function focusScenePlaneOnFocusedDoll(instant?: "instant") {
+  function focusSlateOnFocusedDoll(instant?: "instant") {
     const { focusedDoll } = getState().global.main;
     const { meshRef } = getRefs().dolls[focusedDoll];
     if (!meshRef) return;
-    updatePlanePositionToFocusOnMesh({ meshRef: meshRef, instant: !!instant });
+    updateSlatePositionToFocusOnMesh({ meshRef: meshRef, instant: !!instant });
   }
 
   function getViewSize() {
@@ -155,13 +155,13 @@ export function get_scenePlaneUtils<
     };
   }
 
-  function checkPointIsInsidePlane(pointOnPlane: Point2D) {
+  function checkPointIsInsideSlate(pointOnSlate: Point2D) {
     const sceneSize = backdropSize; // 1280x720 (the point is in here)
 
     const OUT_OF_FRAME_PADDING = 200;
 
-    const pointSortOfIsInsidePlane = pointInsideRect(
-      pointOnPlane,
+    const pointSortOfIsInsideSlate = pointInsideRect(
+      pointOnSlate,
       measurementToRect({
         width: sceneSize.width + OUT_OF_FRAME_PADDING,
         height: sceneSize.height + OUT_OF_FRAME_PADDING * 3, // Y is easier to go over the edges when the camera angle's low
@@ -170,29 +170,29 @@ export function get_scenePlaneUtils<
       })
     );
 
-    return pointSortOfIsInsidePlane;
+    return pointSortOfIsInsideSlate;
   }
 
-  // This includes after the scenePlane moved
-  function convertPointOnPlaneToPointOnScreen({
-    pointOnPlane, // point on plane goes from 0 - 1280, 0 - 720, when the point is from the top left to bottom right
-    planePos, // plane position is 0 when centered, then its the amount of offset (in percentage?)
-    planeZoom,
+  // This includes after the slate moved
+  function convertPointOnSlateToPointOnScreen({
+    pointOnSlate, // point on slate goes from 0 - 1280, 0 - 720, when the point is from the top left to bottom right
+    slatePos, // slate position is 0 when centered, then its the amount of offset (in percentage?)
+    slateZoom,
   }: {
-    pointOnPlane: Point2D;
-    planePos: Point2D;
-    planeZoom: number;
+    pointOnSlate: Point2D;
+    slatePos: Point2D;
+    slateZoom: number;
   }) {
-    if (!planePos) return defaultPosition();
+    if (!slatePos) return defaultPosition();
 
     const screenSize = getScreenSize();
 
-    const planePosPixels = {
-      x: planePos.x * planeSize.x,
-      y: planePos.y * planeSize.y,
+    const slatePosPixels = {
+      x: slatePos.x * slateSize.x,
+      y: slatePos.y * slateSize.y,
     };
 
-    const center = { x: planeSize.x / 2, y: planeSize.y / 2 };
+    const center = { x: slateSize.x / 2, y: slateSize.y / 2 };
 
     // somehow this works
     function transformIt(point: Point2D, scale: number, translation: Point2D = { x: 0, y: 0 }): Point2D {
@@ -203,48 +203,48 @@ export function get_scenePlaneUtils<
       return transformedPoint;
     }
 
-    const transformedPoint = transformIt(pointOnPlane, planeZoom, {
-      x: -planePosPixels.x,
-      y: -planePosPixels.y,
+    const transformedPoint = transformIt(pointOnSlate, slateZoom, {
+      x: -slatePosPixels.x,
+      y: -slatePosPixels.y,
     });
 
-    const planeToScreenSize = {
-      x: screenSize.x / planeSize.x,
-      y: screenSize.y / planeSize.y,
+    const slateToScreenSize = {
+      x: screenSize.x / slateSize.x,
+      y: screenSize.y / slateSize.y,
     };
 
-    const planeRatio = planeSize.x / planeSize.y; // 16/9
+    const slateRatio = slateSize.x / slateSize.y; // 16/9
     const screenRatio = screenSize.x / screenSize.y;
-    const screenIsThinnerThenVideo = screenRatio < planeRatio;
+    const screenIsThinnerThenVideo = screenRatio < slateRatio;
 
     let heightDifference = 0;
     let widthDifference = 0;
 
     let pixelScaler = 1;
 
-    let planeRelativeScreenSize = {
+    let slateRelativeScreenSize = {
       x: screenSize.x,
       y: screenSize.y,
     };
 
     if (screenIsThinnerThenVideo) {
-      planeRelativeScreenSize = {
-        x: screenSize.x / planeToScreenSize.y,
-        y: screenSize.y / planeToScreenSize.y,
+      slateRelativeScreenSize = {
+        x: screenSize.x / slateToScreenSize.y,
+        y: screenSize.y / slateToScreenSize.y,
       };
 
-      widthDifference = (planeRelativeScreenSize.x - planeSize.x) / 2;
+      widthDifference = (slateRelativeScreenSize.x - slateSize.x) / 2;
       // scale based on fixed height
-      pixelScaler = planeToScreenSize.y;
+      pixelScaler = slateToScreenSize.y;
     } else {
-      planeRelativeScreenSize = {
-        x: screenSize.x / planeToScreenSize.x,
-        y: screenSize.y / planeToScreenSize.x,
+      slateRelativeScreenSize = {
+        x: screenSize.x / slateToScreenSize.x,
+        y: screenSize.y / slateToScreenSize.x,
       };
 
-      heightDifference = (planeRelativeScreenSize.y - planeSize.y) / 2;
+      heightDifference = (slateRelativeScreenSize.y - slateSize.y) / 2;
       // scale based on fixed width
-      pixelScaler = planeToScreenSize.x;
+      pixelScaler = slateToScreenSize.x;
     }
 
     // NOTE this is only working when it's thinner
@@ -261,19 +261,19 @@ export function get_scenePlaneUtils<
   }
 
   function getShaderTransformStuff() {
-    const { planeZoom, planeZoomGoal } = getState().global.main;
-    // const planeZoom = prendyStartOptions.zoomLevels.default;
+    const { slateZoom, slateZoomGoal } = getState().global.main;
+    // const slateZoom = prendyStartOptions.zoomLevels.default;
 
     // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
     // check the screen ratio, and compare that to the video ratio
-    const videoRatio = planeSize.x / planeSize.y; // 16/9
+    const videoRatio = slateSize.x / slateSize.y; // 16/9
     const screenRatio = screenWidth / screenHeight;
 
-    const videoXDiff = planeSize.x / screenWidth;
-    const videoYDiff = planeSize.y / screenHeight;
+    const videoXDiff = slateSize.x / screenWidth;
+    const videoYDiff = slateSize.y / screenHeight;
 
     const ratioDiff = screenRatio / videoRatio;
 
@@ -290,36 +290,36 @@ export function get_scenePlaneUtils<
 
     // the stretch for each is 1 for full stretch
 
-    const editedPlaneZoomX = planeZoom / videoXDiff;
-    const editedPlaneZoomY = planeZoom / videoYDiff;
+    const editedSlateZoomX = slateZoom / videoXDiff;
+    const editedSlateZoomY = slateZoom / videoYDiff;
 
-    const editedPlaneZoomGoalX = planeZoomGoal / videoXDiff;
-    const editedPlaneZoomGoalY = planeZoomGoal / videoYDiff;
+    const editedSlateZoomGoalX = slateZoomGoal / videoXDiff;
+    const editedSlateZoomGoalY = slateZoomGoal / videoYDiff;
 
-    let editedPlaneSceneZoom = planeZoom;
+    let editedSlateSceneZoom = slateZoom;
 
-    stretchVideoX = editedPlaneZoomY * Math.abs(videoXDiff);
-    stretchVideoY = editedPlaneZoomY + (Math.abs(videoYDiff) - 1);
+    stretchVideoX = editedSlateZoomY * Math.abs(videoXDiff);
+    stretchVideoY = editedSlateZoomY + (Math.abs(videoYDiff) - 1);
 
     if (screenIsThinnerThenVideo) {
-      stretchVideoX = editedPlaneZoomY * Math.abs(videoXDiff);
-      stretchVideoY = planeZoom;
+      stretchVideoX = editedSlateZoomY * Math.abs(videoXDiff);
+      stretchVideoY = slateZoom;
 
-      stretchVideoGoalX = editedPlaneZoomGoalY * Math.abs(videoXDiff);
-      stretchVideoGoalY = planeZoomGoal;
+      stretchVideoGoalX = editedSlateZoomGoalY * Math.abs(videoXDiff);
+      stretchVideoGoalY = slateZoomGoal;
     } else {
-      stretchVideoX = planeZoom;
-      stretchVideoY = editedPlaneZoomX * Math.abs(videoYDiff);
-      editedPlaneSceneZoom = planeZoom * (screenRatio / videoRatio);
+      stretchVideoX = slateZoom;
+      stretchVideoY = editedSlateZoomX * Math.abs(videoYDiff);
+      editedSlateSceneZoom = slateZoom * (screenRatio / videoRatio);
 
-      stretchVideoGoalX = planeZoomGoal;
-      stretchVideoGoalY = editedPlaneZoomGoalX * Math.abs(videoYDiff);
+      stretchVideoGoalX = slateZoomGoal;
+      stretchVideoGoalY = editedSlateZoomGoalX * Math.abs(videoYDiff);
     }
 
-    let stretchSceneX = editedPlaneSceneZoom / ratioDiff;
-    let stretchSceneY = editedPlaneSceneZoom;
+    let stretchSceneX = editedSlateSceneZoom / ratioDiff;
+    let stretchSceneY = editedSlateSceneZoom;
 
-    const editedHardwareScaling = 1 / editedPlaneSceneZoom;
+    const editedHardwareScaling = 1 / editedSlateSceneZoom;
 
     globalRefs.stretchVideoGoalSize.x = stretchVideoGoalX;
     globalRefs.stretchVideoGoalSize.y = stretchVideoGoalY;
@@ -329,18 +329,18 @@ export function get_scenePlaneUtils<
     globalRefs.stretchSceneSize.y = stretchSceneY;
 
     return {
-      editedPlaneSceneZoom,
+      editedSlateSceneZoom,
       editedHardwareScaling,
     };
   }
 
   return {
-    getPositionOnPlane,
-    focusScenePlaneOnFocusedDoll,
-    getPlanePositionNotOverEdges,
+    getPositionOnSlate,
+    focusSlateOnFocusedDoll,
+    getSlatePositionNotOverEdges,
     getViewSize,
-    convertPointOnPlaneToPointOnScreen,
-    checkPointIsInsidePlane,
+    convertPointOnSlateToPointOnScreen,
+    checkPointIsInsideSlate: checkPointIsInsideSlate,
     getShaderTransformStuff,
   };
 }

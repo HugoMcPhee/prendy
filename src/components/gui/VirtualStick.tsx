@@ -111,100 +111,91 @@ export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeH
       };
 
       const pointerUpEvent = (event: PointerEvent) => {
-        console.log("event.type", event.type, event.pointerId);
-
-        // if the pointerId doesnt match, return
-        if (event.pointerId !== local.pointerId) return;
-
-        local.isDown = false;
-        const { inputVelocity } = getState().players.main;
-        opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
-        springApi.start({ position: [0, 0], immediate: false });
-
-        // check if its been a short time since pressing down,
-        // and if the stick hasnt moved much?
-        const timeSincePointerDown = Date.now() - local.pointerDownTime;
-        const wasAShortTime = timeSincePointerDown < 250;
-        const didntMoveJoystickFar = getVectorSpeed(inputVelocity) < 0.1;
-        if (wasAShortTime && didntMoveJoystickFar) {
-          if (!globalRefs.isHoveringPickupButton) {
-            setState({
-              players: { main: { interactButtonPressTime: Date.now() } },
-            });
-          }
-        } else {
-          // set the input velocity to 0 if the virtual stick wasn't pressed
-          setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
-        }
-        setState({
-          players: { main: { virtualControlsReleaseTime: Date.now() } },
-        });
-      };
-
-      const pointerDownEvent = (event: PointerEvent) => {
         requestAnimationFrame(() => {
-          // if (!globalRefs.isHoveringVirtualStickArea) return;
+          // if the pointerId doesnt match, return
+          if (event.pointerId !== local.pointerId) return;
 
-          // if the stick is already being held down, don't do anything
-          if (local.isDown) return;
+          local.isDown = false;
+          const { inputVelocity } = getState().players.main;
+          opacitySpringApi.start({ circleOpacity: 0.5, outerOpacity: 0 });
+          springApi.start({ position: [0, 0], immediate: false });
 
-          local.pointerId = event.pointerId;
-
-          // const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players.main;
-          // const virtualStickIsHeld = virtualControlsPressTime > virtualControlsReleaseTime;
-          // if (virtualStickIsHeld) return;
-
-          local.pointerDownTime = Date.now();
-          const { leftPuck, leftThumbContainer } = refs;
-          if (!leftPuck || !leftThumbContainer) return;
-
-          const coordinates = {
-            x: event.clientX,
-            y: event.clientY,
-          };
-
-          // leftPuck.isVisible = true;
-          local.leftJoystickOffset = coordinates.x - SIZES.leftThumbContainer * 0.5;
-          local.topJoystickOffset = coordinates.y - SIZES.leftThumbContainer * 0.5;
-          local.isDown = true;
-
-          outerPositionSpringApi.start({
-            position: [local.leftJoystickOffset, local.topJoystickOffset],
-            immediate: true,
-          });
-
-          opacitySpringApi.start({
-            circleOpacity: 1.0,
-            outerOpacity: 0.9,
-          });
-
-          setState({
-            players: { main: { virtualControlsPressTime: Date.now() } },
-          });
+          // check if its been a short time since pressing down,
+          // and if the stick hasnt moved much?
+          const timeSincePointerDown = Date.now() - local.pointerDownTime;
+          const wasAShortTime = timeSincePointerDown < 250;
+          const didntMoveJoystickFar = getVectorSpeed(inputVelocity) < 0.1;
+          if (wasAShortTime && didntMoveJoystickFar) {
+            setState({ players: { main: { interactButtonPressTime: Date.now() } } });
+          } else {
+            // set the input velocity to 0 if the virtual stick wasn't pressed
+            setState({ players: { main: { inputVelocity: { x: 0, y: 0 } } } });
+          }
+          setState({ players: { main: { virtualControlsReleaseTime: Date.now() } } });
         });
       };
 
       window.addEventListener("pointerup", pointerUpEvent);
       window.addEventListener("pointercancel", pointerUpEvent);
-      window.addEventListener("pointerdown", pointerDownEvent);
+      // window.addEventListener("pointerdown", pointerDownEvent);
       window.addEventListener("pointermove", pointerMoveEvent);
       return () => {
         window.removeEventListener("pointerup", pointerUpEvent);
         window.removeEventListener("pointercancel", pointerUpEvent);
-        window.removeEventListener("pointerdown", pointerDownEvent);
+        // window.removeEventListener("pointerdown", pointerDownEvent);
         window.removeEventListener("pointermove", pointerMoveEvent);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const pointerDownEvent = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+      requestAnimationFrame(() => {
+        // if the stick is already being held down, don't do anything
+        if (local.isDown) return;
+
+        local.pointerId = event.pointerId;
+
+        // const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players.main;
+        // const virtualStickIsHeld = virtualControlsPressTime > virtualControlsReleaseTime;
+        // if (virtualStickIsHeld) return;
+
+        local.pointerDownTime = Date.now();
+        const { leftPuck, leftThumbContainer } = refs;
+        if (!leftPuck || !leftThumbContainer) return;
+
+        const coordinates = {
+          x: event.clientX,
+          y: event.clientY,
+        };
+
+        // leftPuck.isVisible = true;
+        local.leftJoystickOffset = coordinates.x - SIZES.leftThumbContainer * 0.5;
+        local.topJoystickOffset = coordinates.y - SIZES.leftThumbContainer * 0.5;
+        local.isDown = true;
+
+        outerPositionSpringApi.start({
+          position: [local.leftJoystickOffset, local.topJoystickOffset],
+          immediate: true,
+        });
+
+        opacitySpringApi.start({
+          circleOpacity: 1.0,
+          outerOpacity: 0.9,
+        });
+
+        setState({
+          players: { main: { virtualControlsPressTime: Date.now() } },
+        });
+      });
+    }, []);
+
     return (
       <div
         id="virtual-stick"
-        // onPointerDown={pointerDownEvent}
-        // onPointerUp={pointerUpEvent}
+        onPointerDown={pointerDownEvent}
         style={{
-          // pointerEvents: "auto" as const,
-          pointerEvents: "none" as const,
+          pointerEvents: "auto" as const,
+          // pointerEvents: "none" as const,
           position: "absolute" as const,
           top: 0,
           left: 0,
@@ -212,6 +203,8 @@ export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeH
           height: "100vh",
           zIndex: 100,
           overflow: "hidden",
+          // opacity: 0.1,
+          // background: "green",
         }}
       >
         <animated.div

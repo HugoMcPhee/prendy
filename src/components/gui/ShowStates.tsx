@@ -8,11 +8,11 @@ export function get_ShowStates<StoreHelpers extends PrendyStoreHelpers>(storeHel
   type Props = {};
 
   return function ShowStates(_props: Props) {
-    const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage } = useStore(
+    const { slateZoom, slateZoomGoal, slatePos, slatePosGoal, slateZoomIsMoving, debugMessage } = useStore(
       (state) => state.global.main,
       {
         type: "global",
-        prop: ["planeZoom", "planeZoomGoal", "planePos", "planePosGoal", "planeZoomIsMoving", "debugMessage"],
+        prop: ["slateZoom", "slateZoomGoal", "slatePos", "slatePosGoal", "slateZoomIsMoving", "debugMessage"],
       }
     );
 
@@ -35,15 +35,15 @@ export function get_ShowStates<StoreHelpers extends PrendyStoreHelpers>(storeHel
       >
         <div style={{ color: "rgb(81, 164, 123)" }}>{`${debugMessage}`}</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>_</div>
-        <div style={{ color: "rgb(81, 164, 123)" }}>{`${planeZoomIsMoving}`}</div>
-        <div style={{ color: "rgb(81, 164, 123)" }}>{planeZoom}</div>
-        <div style={{ color: "rgb(81, 164, 123)" }}>{planeZoomGoal}</div>
+        <div style={{ color: "rgb(81, 164, 123)" }}>{`${slateZoomIsMoving}`}</div>
+        <div style={{ color: "rgb(81, 164, 123)" }}>{slateZoom}</div>
+        <div style={{ color: "rgb(81, 164, 123)" }}>{slateZoomGoal}</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>_</div>
         <div style={{ color: "rgb(81, 164, 123)" }}>
-          {planePos.x} {planePos.y}
+          {slatePos.x} {slatePos.y}
         </div>
         <div style={{ color: "rgb(81, 164, 123)" }}>
-          {planePosGoal.x} {planePosGoal.y}
+          {slatePosGoal.x} {slatePosGoal.y}
         </div>
       </div>
     );

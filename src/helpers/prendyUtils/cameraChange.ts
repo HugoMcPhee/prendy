@@ -1,13 +1,4 @@
-import {
-  AbstractMesh,
-  Camera,
-  Effect,
-  FxaaPostProcess,
-  PBRMaterial,
-  PostProcess,
-  Scene,
-  ShaderStore,
-} from "@babylonjs/core";
+import { AbstractMesh, Effect, FxaaPostProcess, PBRMaterial, PostProcess, Scene, ShaderStore } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
 import {
@@ -20,7 +11,6 @@ import {
 } from "../../declarations";
 import { DefaultCameraRefs } from "../../stores/places";
 import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
@@ -48,9 +38,7 @@ export function get_cameraChangeUtils<
   function getSafeCamName(cam: AnyCameraName): AnyCameraName;
   function getSafeCamName(cam: null): null;
   function getSafeCamName(cam: any): any {
-    if (cam === null) {
-      return null;
-    }
+    if (cam === null) return null;
 
     const { nowPlaceName } = getGlobalState();
 
@@ -83,23 +71,16 @@ export function get_cameraChangeUtils<
     const safePlace = nowPlaceName;
     const { segmentNames, segmentTimesByCamera } = placeInfoByName[safePlace];
 
-    // if the camera isn't in the nowPlace, then use the first camera for the nowPlace
     const safeCam = getSafeCamName(cam);
 
     if (nowPlaceName !== place) {
       console.warn("tried to getSafeSegment name for not current place", place);
     }
-    // if (segmentTimesByCamera[cam]) {
-    // segmentTimesByCamera[cam]
-    // }
 
     const camSegmentNames = Object.keys(segmentTimesByCamera?.[safeCam as keyof typeof segmentTimesByCamera] ?? {});
 
-    // const camSegmentNames = [] as any;
-
     // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
     const foundRuleSegmentName = useStorySegmentRules ? getSegmentFromStoryRules(safePlace, safeCam) : undefined;
-    // const foundRuleSegmentName = undefined;
 
     return chooseClosestBeforeItemInArray({
       fullArray: segmentNames,
@@ -110,12 +91,8 @@ export function get_cameraChangeUtils<
 
   // Updates both video textures and probe textures for the new cameras
   function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
-    const { nowPlaceName, goalCamNameWhenVidPlays } = getState().global.main;
+    const { nowPlaceName } = getState().global.main;
     const scene = globalRefs.scene as Scene;
-
-    console.log("====================", newCameraName);
-    console.log("newCameraName", newCameraName);
-    console.log("nowPlaceName", nowPlaceName);
 
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
@@ -158,7 +135,7 @@ export function get_cameraChangeUtils<
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
         "depthy",
-        ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+        ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
         scene.activeCamera,
@@ -177,7 +154,7 @@ export function get_cameraChangeUtils<
       //   globalRefs.backdropPostProcess = new PostProcess(
       //     "backdropAndDepthShader",
       //     "translatedFxaa",
-      //     null, // ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+      //     null, // ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
       //     null, //["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
       //     1,
       //     globalRefs.scene.activeCamera,
@@ -200,20 +177,20 @@ export function get_cameraChangeUtils<
       // // const appliedProcess = postProcess.apply();
 
       globalRefs.backdropPostProcess.onApply = (effect) => {
-        const { planePos, planePosGoal, planeZoom } = getState().global.main;
+        const { slatePos, slatePosGoal, slateZoom } = getState().global.main;
         if (!globalRefs.backdropPostProcessEffect) {
           globalRefs.backdropPostProcessEffect = effect;
           console.log("reapplying");
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "planePos",
-            planePosGoal.x,
-            planePosGoal.y
+            "slatePos",
+            slatePosGoal.x,
+            slatePosGoal.y
           );
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
             "stretchSceneAmount",
-            planeZoom,
-            planeZoom
+            slateZoom,
+            slateZoom
           );
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
@@ -238,8 +215,8 @@ export function get_cameraChangeUtils<
           globalRefs.stretchSceneSize.y
         );
 
-        // const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
-        // const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
+        // const positionChanged = diffInfo.propsChangedBool.global.main.slatePos;
+        // const zoomChanged = diffInfo.propsChangedBool.global.main.slateZoom;
         const positionChanged = true;
         const zoomChanged = true;
 
@@ -248,9 +225,9 @@ export function get_cameraChangeUtils<
           const stretchVideoSize = globalRefs.stretchVideoSize;
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "planePos",
-            planePos.x * stretchVideoSize.x,
-            planePos.y * stretchVideoSize.y
+            "slatePos",
+            slatePos.x * stretchVideoSize.x,
+            slatePos.y * stretchVideoSize.y
           );
         }
         updateVideoTexture();
@@ -318,14 +295,12 @@ export function get_cameraChangeUtils<
 
   function applyProbeToAllDollMaterials() {
     const { nowPlaceName, modelNamesLoaded } = getState().global.main;
-
-    const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
-    const newCamName = goalCamNameWhenVidPlays ?? nowCamName;
+    const { nowCamName } = getState().global.main;
 
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    const newCamRef = camsRefs[newCamName];
+    const newCamRef = camsRefs[nowCamName];
 
     if (scene === null) return;
 

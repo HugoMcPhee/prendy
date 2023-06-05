@@ -50,9 +50,9 @@ export const prendyStepNames = [
   "collisionReaction",
   "story", // might need to set things for the next frame, so it can respond, OR have story stuff run in different flows ")"
   "storyReaction", // if playerMovingPaused was set in or before story, this is where it can be reacted to before dollAnimation
-  "planePosition",
-  "planePositionDontGoOverEdges",
-  "planePositionStartMovers",
+  "slatePosition",
+  "slatePositionDontGoOverEdges",
+  "slatePositionStartMovers",
   "dollAnimation",
   "dollAnimation2",
   "dollAnimationStartMovers",

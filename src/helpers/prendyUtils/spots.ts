@@ -1,12 +1,11 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { PlaceName, SpotNameByPlace } from "../../declarations";
 import { Vector3 } from "@babylonjs/core";
+import { PlaceName, SpotNameByPlace } from "../../declarations";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function get_spotStoryUtils<
   StoreHelpers extends PrendyStoreHelpers,
   A_PlaceName extends PlaceName = PlaceName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
-  // SpotName extends string,
 >(storeHelpers: StoreHelpers) {
   const { getRefs } = storeHelpers;
 

@@ -1,4 +1,4 @@
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
+import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function get_speechBubblesUtils<
   StoreHelpers extends PrendyStoreHelpers,
@@ -12,16 +12,8 @@ export function get_speechBubblesUtils<
     const { typingSpeed } = getState().speechBubbles[speechBubbleName];
 
     let typingDelay = typingSpeed;
-
-    if (isSpecialLetter(letter)) {
-      // typingDelay = typingSpeed * 20;
-      typingDelay = typingSpeed * 5;
-    }
-
-    if (isWhitespace(letter)) {
-      // typingDelay = typingSpeed * 5;
-      typingDelay = typingSpeed;
-    }
+    if (isSpecialLetter(letter)) typingDelay = typingSpeed * 5;
+    if (isWhitespace(letter)) typingDelay = typingSpeed;
 
     return typingDelay;
   }

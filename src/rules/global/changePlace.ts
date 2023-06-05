@@ -1,14 +1,14 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { AnyCameraName, PrendyAssets, PrendyOptions, DollName, PlaceName } from "../../declarations";
+import { AnyCameraName, DollName, PlaceName, PrendyAssets } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
-import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
-import { PrendyStoreHelpers, PlaceholderPrendyStores, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
+import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
+import { PlaceholderPrendyStores, PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
 export function get_globalChangePlaceRules<
   StoreHelpers extends PrendyStoreHelpers,
@@ -33,10 +33,7 @@ export function get_globalChangePlaceRules<
     prendyAssets
   );
 
-  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils<StoreHelpers, PrendyOptions>(
-    storeHelpers,
-    prendyStartOptions
-  );
+  const { focusSlateOnFocusedDoll } = get_slateUtils<StoreHelpers, PrendyOptions>(storeHelpers, prendyStartOptions);
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
   const { setDollToSpot } = get_dollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
@@ -50,17 +47,11 @@ export function get_globalChangePlaceRules<
 
     const newSpotName = goalSpotName || spotNames[0];
 
-    setDollToSpot({
-      doll: dollName as DollName,
-      place: nowPlaceName,
-      spot: newSpotName,
-    });
+    setDollToSpot({ doll: dollName as DollName, place: nowPlaceName, spot: newSpotName });
   }
 
   function whenAllVideosLoadedForPlace() {
     const { nowPlaceName } = getState().global.main;
-    const { nowCamName } = getState().global.main;
-
     globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
 
     const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
@@ -138,7 +129,7 @@ export function get_globalChangePlaceRules<
             readyToSwapPlace: false,
           });
 
-          const { nowCamName, goalCamWhenNextPlaceLoads } = getState().places[goalPlaceName];
+          const { nowCamName, goalCamWhenNextPlaceLoads } = getState().global.main;
 
           setState({
             global: { main: { nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName } },
@@ -198,13 +189,12 @@ export function get_globalChangePlaceRules<
               setGlobalState({ isLoadingBetweenPlaces: false });
 
               onNextTick(() => {
-                const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
-                const newCamName = goalCamNameWhenVidPlays ?? nowCamName;
+                const { nowCamName } = getState().global.main;
 
                 updateNowStuffWhenSliceChanged();
                 whenAllVideosLoadedForPlace();
-                updateTexturesForNowCamera(newCamName, true);
-                focusScenePlaneOnFocusedDoll(); // focus on the player
+                updateTexturesForNowCamera(nowCamName, true);
+                focusSlateOnFocusedDoll(); // focus on the player
 
                 // Start fading in the scene
                 setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });

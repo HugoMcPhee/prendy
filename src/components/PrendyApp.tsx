@@ -88,7 +88,7 @@ export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendySto
             }}
           >
             <LoadingModels>{children}</LoadingModels>
-            {/*  scene plane stuff */}
+            {/*  slate stuff */}
             <targetCamera
               onCreated={(item) => {
                 item.detachControl();

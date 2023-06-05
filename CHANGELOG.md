@@ -17,6 +17,8 @@ v0.9.6
 - renamed safeVids to stateVids and sectionVids to sliceVids, and reanmed wanted/next state properties to goal
 - fix jump button not handling holding on andorid and ios
 - changed nowCamName to be global instead of per place
+- change 'scene plane' to 'slate
+- fixes pressing pickups and jump on touchscreens without also pressign the joystick
 
 v0.9.5
 
@@ -146,7 +148,7 @@ v0.5.2
 
 - uses only one scene!
 - doesn't dispose and recreate render target related stuff on camera changes
-- tries to freeze meshes and the scenePlane material if possible
+- tries to freeze meshes and the slate material if possible
 - runs react-spring in the same concep requestAnimationFrame
 - prevents setting doll mesh position if position didn't change
 - concep update that runs onNextTick at the end of the same frame

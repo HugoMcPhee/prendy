@@ -8,9 +8,7 @@ type NamedStyles<T> = { [P in keyof T]: CSSProperties };
 //   styles: T | NamedStyles<T>
 // ): T;
 
-export function makeStyles<T extends NamedStyles<T> | NamedStyles<any>>(
-  theStyles: T | NamedStyles<T>
-): T {
+export function makeStyles<T extends NamedStyles<T> | NamedStyles<any>>(theStyles: T | NamedStyles<T>): T {
   return theStyles as T;
 }
 
@@ -29,13 +27,13 @@ function yOptionToFlexOption(y: YOption) {
   if (y === "bottom") return "flex-end";
 }
 
-type AndLayoutOptions = {
+type AddLayoutOptions = {
   x: XOption;
   y: YOption;
   way?: WayOption;
 };
 
-export function andLayout(options: AndLayoutOptions | "center") {
+export function addLayout(options: AddLayoutOptions | "center") {
   if (options === "center") {
     return {
       display: "flex",
@@ -66,7 +64,7 @@ export function andLayout(options: AndLayoutOptions | "center") {
 
 type StyleNumber = number | string;
 
-type AndFixedOptions = {
+type AddFixedOptions = {
   x?: StyleNumber;
   y?: StyleNumber;
   top?: StyleNumber;
@@ -76,12 +74,10 @@ type AndFixedOptions = {
 };
 
 function numberToPixels(styleNumber?: StyleNumber) {
-  return typeof styleNumber === "number"
-    ? styleNumber.toString() + "px"
-    : styleNumber;
+  return typeof styleNumber === "number" ? styleNumber.toString() + "px" : styleNumber;
 }
 
-export function andFixed(options: AndFixedOptions = {}) {
+export function addFixed(options: AddFixedOptions = {}) {
   const { x, y, top, bottom, left, right } = options;
 
   const chosenStuff = {

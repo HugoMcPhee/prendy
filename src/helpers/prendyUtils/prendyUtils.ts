@@ -1,4 +1,3 @@
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
 import {
   AnyCameraName,
   AnySegmentName,
@@ -8,6 +7,7 @@ import {
   PlaceName,
   SpotNameByPlace,
 } from "../../declarations";
+import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_characterStoryUtils } from "./characters";
 import { get_dollStoryUtils } from "./dolls";
 import { get_sceneStoryUtils } from "./scene";

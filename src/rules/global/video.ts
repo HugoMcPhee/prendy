@@ -60,13 +60,13 @@ export function get_globalVideoRules<
         let new_goalSegmentNameAtLoop = goalSegmentNameAtLoop;
         let new_goalCamNameAtLoop = goalCamNameAtLoop;
 
-        let decided_goalCamName = goalCamName;
-        let decided_goalSegmentName = goalSegmentName;
-        let decided_wantToLoop = videoIsOutsideOfCurrentLoop;
+        let new_goalCamName = goalCamName;
+        let new_goalSegmentName = goalSegmentName;
+        let new_wantToLoop = videoIsOutsideOfCurrentLoop;
 
-        let decided_shouldKeepTime = true;
+        let new_shouldKeepTime = true;
 
-        let decided_goalSlice: VidSlice | null = null;
+        let new_goalSlice: VidSlice | null = null;
 
         const alreadyWaitingForASliceToChange = goalSegmentNameWhenVidPlays || goalCamNameWhenVidPlays;
 
@@ -100,65 +100,64 @@ export function get_globalVideoRules<
 
         if (videoIsOutsideOfCurrentLoop && (goalCamNameAtLoop || goalSegmentNameAtLoop)) {
           // it should now go to a new slice from the goal segment or cam at loop
-          decided_goalCamName = goalCamName || goalCamNameAtLoop;
-          decided_goalSegmentName = goalSegmentName || goalSegmentNameAtLoop;
+          new_goalCamName = goalCamName || goalCamNameAtLoop;
+          new_goalSegmentName = goalSegmentName || goalSegmentNameAtLoop;
 
           new_goalCamNameAtLoop = null;
           new_goalSegmentNameAtLoop = null;
         }
 
-        if (decided_goalSegmentName || decided_goalCamName) {
+        if (new_goalSegmentName || new_goalCamName) {
           // it'll definately be a goalSlice next
 
           // set the other value if its undefined
-          decided_goalCamName = decided_goalCamName || nowCamName;
-          decided_goalSegmentName = decided_goalSegmentName || nowSegmentName;
+          new_goalCamName = new_goalCamName || nowCamName;
+          new_goalSegmentName = new_goalSegmentName || nowSegmentName;
 
           // make sure its a safe segment
 
           // TODO retype intital state to have segments as strings
-          decided_goalSegmentName = getSafeSegmentName({
-            cam: decided_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
+          new_goalSegmentName = getSafeSegmentName({
+            cam: new_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
             place: nowPlaceName as PlaceName,
-            segment: decided_goalSegmentName as SegmentNameByPlace[PlaceName] & AnySegmentName,
+            segment: new_goalSegmentName as SegmentNameByPlace[PlaceName] & AnySegmentName,
             useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
           });
 
           // if either the decided segment or camera is different to the now segment and camera
-          if (!(decided_goalCamName === nowCamName && decided_goalSegmentName === nowSegmentName)) {
-            decided_goalSlice = getSliceForPlace(
+          if (!(new_goalCamName === nowCamName && new_goalSegmentName === nowSegmentName)) {
+            new_goalSlice = getSliceForPlace(
               nowPlaceName as PlaceName,
-              decided_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
-              decided_goalSegmentName! as SegmentNameByPlace[PlaceName] // decided_goalSegmentName should always be decided here
+              new_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
+              new_goalSegmentName! as SegmentNameByPlace[PlaceName] // new_goalSegmentName should always be decided here
             );
-            decided_wantToLoop = false;
+            new_wantToLoop = false;
           }
         }
 
         // if changing segments, don't keep the duration of the currently playing slice (which is good for changing cameras and keeping the same loop at different angles)
-        if (decided_goalSegmentName !== nowSegmentName) {
-          decided_shouldKeepTime = false;
+        if (new_goalSegmentName !== nowSegmentName) {
+          new_shouldKeepTime = false;
         }
 
-        if (videoIsOutsideOfCurrentLoop && !decided_goalCamName && !decided_goalSegmentName) {
+        if (videoIsOutsideOfCurrentLoop && !new_goalCamName && !new_goalSegmentName) {
           // it'll definately be a wantToLoop
-
-          decided_wantToLoop = true;
-          decided_goalSlice = null;
+          new_wantToLoop = true;
+          new_goalSlice = null;
         }
 
-        // set State for the global and place state, and also the sliceState
+        // set State for global and sliceVids
 
         const somethingChanged =
           goalSegmentName !== null ||
           new_goalSegmentNameAtLoop !== goalSegmentNameAtLoop ||
-          decided_goalSegmentName !== goalSegmentNameWhenVidPlays ||
+          new_goalSegmentName !== goalSegmentNameWhenVidPlays ||
           goalCamName !== null ||
           new_goalCamNameAtLoop !== goalCamNameAtLoop ||
-          decided_goalCamName !== goalCamNameWhenVidPlays ||
-          decided_goalSlice !== goalSlice ||
-          decided_wantToLoop !== wantToLoop ||
-          decided_shouldKeepTime !== switchSlice_keepProgress;
+          new_goalCamName !== goalCamNameWhenVidPlays ||
+          new_goalSlice !== goalSlice ||
+          new_wantToLoop !== wantToLoop ||
+          new_shouldKeepTime !== switchSlice_keepProgress;
 
         if (!somethingChanged) return;
 
@@ -167,18 +166,17 @@ export function get_globalVideoRules<
             main: {
               goalSegmentName: null,
               goalSegmentNameAtLoop: new_goalSegmentNameAtLoop,
-              // wantToLoop: false,
-              goalSegmentNameWhenVidPlays: decided_goalSegmentName,
+              goalSegmentNameWhenVidPlays: new_goalSegmentName,
               goalCamName: null,
               goalCamNameAtLoop: new_goalCamNameAtLoop,
-              goalCamNameWhenVidPlays: decided_goalCamName,
+              goalCamNameWhenVidPlays: new_goalCamName,
             },
           },
           sliceVids: {
             [nowPlaceName]: {
-              goalSlice: decided_goalSlice,
-              wantToLoop: decided_wantToLoop,
-              switchSlice_keepProgress: decided_shouldKeepTime,
+              goalSlice: new_goalSlice,
+              wantToLoop: new_wantToLoop,
+              switchSlice_keepProgress: new_shouldKeepTime,
             },
           },
         });

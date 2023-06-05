@@ -5,7 +5,7 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
 import { AnyAnimationName, DollName, ModelName, PrendyAssets, PrendyOptions } from "../declarations";
-import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import { getDefaultInRangeFunction, get_dollUtils, InRangeForDoll } from "../helpers/prendyUtils/dolls";
@@ -115,7 +115,7 @@ export function get_dollRules<
   const { modelInfoByName, dollNames } = prendyAssets;
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
     get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
   const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
 
@@ -427,7 +427,7 @@ export function get_dollRules<
       step: "checkCollisions",
     }),
     // should be a  dynamic rule ?
-    updateDollScreenPositionWhenScenePlaneMoves: effect({
+    updateDollScreenPositionWhenSlateMoves: effect({
       run() {
         const { playerCharacter } = getState().global.main;
         const { dollName } = getState().characters[playerCharacter];
@@ -437,8 +437,8 @@ export function get_dollRules<
         forEach(dollNames, (dollName) => updateDollScreenPosition({ dollName: dollName, instant: false }));
       },
       // this happens before rendering because its in "derive" instead of "subscribe"
-      check: { type: "global", prop: ["planePos", "planeZoom"] },
-      step: "planePosition",
+      check: { type: "global", prop: ["slatePos", "slateZoom"] },
+      step: "slatePosition",
       atStepEnd: true,
     }),
   }));

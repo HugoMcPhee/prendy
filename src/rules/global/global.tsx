@@ -1,8 +1,8 @@
 import { PrendyAssets, PrendyOptions } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
+import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_globalChangePlaceRules } from "./changePlace";
 import { get_globalGeneralRules } from "./general";
-import { get_globalScenePlaneRules } from "./scenePlane";
+import { get_globalSlateRules as get_globalSceneSlateRules } from "./slate";
 import { get_globalVideoRules } from "./video";
 
 export function get_startAllGlobalRules<
@@ -23,18 +23,18 @@ export function get_startAllGlobalRules<
     prendyAssets
   );
   const globalGeneralRules = get_globalGeneralRules(storeHelpers);
-  const globalScenePlaneRules = get_globalScenePlaneRules(storeHelpers, prendyStartOptions);
+  const globalSlateRules = get_globalSceneSlateRules(storeHelpers, prendyStartOptions);
 
   return function startAllGlobalRules() {
     globalVideoRules.startAll();
     globalChangePlaceRules.startAll();
-    globalScenePlaneRules.startAll();
+    globalSlateRules.startAll();
     globalGeneralRules.startAll();
 
     return function stopAllGlobalRules() {
       globalVideoRules.stopAll();
       globalChangePlaceRules.stopAll();
-      globalScenePlaneRules.stopAll();
+      globalSlateRules.stopAll();
       globalGeneralRules.stopAll();
     };
   };

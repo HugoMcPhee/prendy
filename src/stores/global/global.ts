@@ -76,8 +76,6 @@ export default function global<
     goalSegmentNameAtLoop: null as MaybeSegmentName,
     goalSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowSegmentName
     goalSegmentWhenGoalPlaceLoads: null as MaybeSegmentName,
-    wantToLoop: false, // this gets set by story stuff and game logic, then global rules figure out what to send to sliceVids
-    //
     // changing places
     modelNamesLoaded: [] as A_ModelName[],
     newPlaceModelLoaded: false,
@@ -92,14 +90,14 @@ export default function global<
     focusedDoll: prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll ?? ("walker" as A_DollName),
     focusedDollIsInView: false,
     //
-    // scene plane
-    ...mover2dState("planePos"),
-    ...moverState("planeZoom", {
+    // slate
+    ...mover2dState("slatePos"),
+    ...moverState("slateZoom", {
       value: prendyStartOptions.zoomLevels.default,
       valueGoal: prendyStartOptions.zoomLevels.default,
       // springStopSpeed: 0.001, // NOTE not used in mover yet
     }), // (like scale)
-    planePosMoveConfigName: "default", // todo move to mover2dState()
+    slatePosMoveConfigName: "default", // todo move to mover2dState()
     //
     // interacting
     timeScreenResized: Date.now(),
@@ -133,8 +131,8 @@ export default function global<
     stretchVideoGoalSize: { x: 1, y: 1 },
     stretchSceneSize: { x: 1, y: 1 },
     //
-    ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
-    ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
+    ...mover2dRefs("slatePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
+    ...moverRefs("slateZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
     //
     sounds: makeAutomaticSoundStartRefs(),
     music: makeAutomaticMusicStartRefs(),
@@ -143,9 +141,6 @@ export default function global<
       compress: null as null | DynamicsCompressorNode,
       extraGain: null as null | GainNode,
     },
-    //
-    isHoveringPickupButton: false, // FIXME this won't work on touchscreens
-    // isHoveringVirtualStickArea: true,
     //
     solidParticleSystems: {} as Record<string, SolidParticleSystem>,
     //

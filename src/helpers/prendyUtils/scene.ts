@@ -1,5 +1,5 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../declarations";
+import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
 export function get_sceneStoryUtils<
@@ -62,7 +62,6 @@ export function get_sceneStoryUtils<
     startItemEffect({
       name: ruleName,
       run: ({ newValue: newNowCamName }) => {
-        // if (newNowCamName !== checkingCamName) return;
         if (newNowCamName === initialNowCamName) return;
         stopEffect(ruleName);
         callback();

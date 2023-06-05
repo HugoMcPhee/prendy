@@ -13,7 +13,7 @@ import {
   PrendyOptions,
   SpotNameByPlace,
 } from "../../declarations";
-import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_slateUtils } from "../babylonjs/slate";
 import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_spotStoryUtils } from "./spots";
 import { makeMoverStateMaker, moverMultiRefs } from "repond-movers";
@@ -139,10 +139,11 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
   const { getRefs, getState, setState } = storeHelpers;
   const { dollNames, modelInfoByName } = prendyAssets;
 
-  const { convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane } = get_scenePlaneUtils(
-    storeHelpers,
-    prendyStartOptions
-  );
+  const {
+    convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen,
+    getPositionOnSlate: getPositionOnSlate,
+    checkPointIsInsideSlate: checkPointIsInsideSlate,
+  } = get_slateUtils(storeHelpers, prendyStartOptions);
 
   // type RepondState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof RepondState["dolls"];
@@ -204,8 +205,7 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     const placesRefs = getRefs().places;
     const globalState = getState().global.main;
     const { nowPlaceName } = globalState;
-    const { nowCamName, goalCamNameWhenVidPlays } = getState().global.main;
-    const newCamName = goalCamNameWhenVidPlays || nowCamName;
+    const { nowCamName } = getState().global.main;
 
     const placeRefs = placesRefs[nowPlaceName];
 
@@ -213,7 +213,7 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
       theMaterial.enableSpecularAntiAliasing = true;
       theMaterial.roughness = 0.95;
       theMaterial.environmentIntensity = 2;
-      theMaterial.reflectionTexture = placeRefs.camsRefs[newCamName].probeTexture;
+      theMaterial.reflectionTexture = placeRefs.camsRefs[nowCamName].probeTexture;
       // theMaterial.enableSpecularAntiAliasing = false;
       // theMaterial.cameraToneMappingEnabled = true;
       // theMaterial.metallic = 0.25;
@@ -304,17 +304,17 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
 
     const { meshRef } = getRefs().dolls[dollName];
     if (!meshRef) return;
-    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView, planeZoom } = getState().global.main;
-    const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
+    const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom } = getState().global.main;
+    const characterPointOnSlate = getPositionOnSlate(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
 
-    const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
-      pointOnPlane: characterPointOnPlane,
-      planePos: instant ? planePosGoal : planePos,
-      planeZoom,
+    const characterPointOnScreen = convertPointOnSlateToPointOnScreen({
+      pointOnSlate: characterPointOnSlate,
+      slatePos: instant ? slatePosGoal : slatePos,
+      slateZoom,
     });
 
     const newFocusedDollIsInView =
-      dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
+      dollName === focusedDoll ? checkPointIsInsideSlate(characterPointOnSlate) : focusedDollIsInView;
 
     setState({
       dolls: { [dollName]: { positionOnScreen: characterPointOnScreen } },

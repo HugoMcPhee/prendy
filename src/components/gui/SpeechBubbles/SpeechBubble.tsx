@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { animated, interpolate, useSpring } from "react-spring";
 import { sizeFromRef } from "chootils/dist/elements";
 import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { getScreenSize, get_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
+import { getScreenSize, get_slateUtils } from "../../../helpers/babylonjs/slate";
 import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
 import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
@@ -177,8 +177,8 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
       positionSpeechBubbleToCharacter,
       [
         { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
-        { type: ["global"], name: "main", prop: ["planePos"] },
-        { type: ["global"], name: "main", prop: ["planeZoom"] },
+        { type: ["global"], name: "main", prop: ["slatePos"] },
+        { type: ["global"], name: "main", prop: ["slateZoom"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },
         { type: ["global"], name: "main", prop: ["nowCamName"] },
       ],

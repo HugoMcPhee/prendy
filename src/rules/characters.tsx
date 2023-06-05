@@ -2,7 +2,7 @@ import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { samePoints, defaultPosition } from "chootils/dist/points2d";
 
@@ -14,7 +14,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
 
   const refs = getRefs();
 
@@ -121,7 +121,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
           }
 
           if (dollName === focusedDoll) {
-            focusScenePlaneOnFocusedDoll();
+            focusSlateOnFocusedDoll();
           }
         },
         check: { type: "dolls", prop: "position", name: dollName },

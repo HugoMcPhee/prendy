@@ -1,9 +1,9 @@
 import { breakableForEach } from "chootils/dist/loops";
+import { PrendyStoreHelpers } from "../../declarations";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { clearTimeoutSafe } from "../../helpers/utils";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { setGlobalState } = get_globalUtils(storeHelpers);
 

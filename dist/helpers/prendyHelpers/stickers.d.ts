@@ -1,5 +1,5 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_stickerStoryHelpers<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
+import { PrendyStoreHelpers } from "../../declarations";
+export declare function get_stickerStoryHelpers(storeHelpers: PrendyStoreHelpers): {
     moveSticker: (x: number, y: number) => void;
     showSticker: () => void;
     hideSticker: () => void;

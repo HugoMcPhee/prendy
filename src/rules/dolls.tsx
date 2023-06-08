@@ -4,12 +4,19 @@ import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
-import { AnyAnimationName, DollName, ModelName, PrendyAssets, PrendyOptions } from "../declarations";
-import { get_slateUtils } from "../helpers/babylonjs/slate";
+import {
+  AnyAnimationName,
+  DollName,
+  ModelName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
+} from "../declarations";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
+import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
-import { getDefaultInRangeFunction, get_dollUtils, InRangeForDoll } from "../helpers/prendyUtils/dolls";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { InRangeForDoll, getDefaultInRangeFunction, get_dollUtils } from "../helpers/prendyUtils/dolls";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -30,11 +37,8 @@ export const rangeOptionsQuick = {
   see: rangeOptions.see * rangeOptions.see,
 } as const;
 
-export function get_dollDynamicRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
-  storeHelpers: StoreHelpers,
+export function get_dollDynamicRules(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyStores: PrendyStores,
   prendyAssets: PrendyAssets
@@ -80,10 +84,11 @@ export function get_dollDynamicRules<
 // FIXME
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
 
-export function startDynamicDollRulesForInitialState<
-  StoreHelpers extends PrendyStoreHelpers,
-  DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>
->(storeHelpers: StoreHelpers, dollDynamicRules: DollDynamicRules, dollNames: readonly DollName[]) {
+export function startDynamicDollRulesForInitialState<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(
+  storeHelpers: PrendyStoreHelpers,
+  dollDynamicRules: DollDynamicRules,
+  dollNames: readonly DollName[]
+) {
   const { getState } = storeHelpers;
 
   forEach(dollNames, (dollName) => {
@@ -101,14 +106,10 @@ export function startDynamicDollRulesForInitialState<
   };
 }
 
-export function get_dollRules<
-  DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
+export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(
   prendyStartOptions: PrendyOptions,
   dollDynamicRules: DollDynamicRules,
-  storeHelpers: StoreHelpers,
+  storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
   prendyAssets: PrendyAssets
 ) {

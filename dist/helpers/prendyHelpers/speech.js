@@ -12,9 +12,8 @@ const showSpeechRefs = {
     aSpeechIsShowing: false,
     originalZoomAmount: 1,
 };
-const showMiniBubbleRefs = {
-    closeTimeout: null, // TODO might need to have it per character if other characts have mini bubbles
-};
+// TODO might need to have it per character if other characts have mini bubbles
+const showMiniBubbleRefs = { closeTimeout: null };
 export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, _characterNames) {
     const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
@@ -25,7 +24,7 @@ export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
     const MIN_AUTO_SPEECH_TIME = 1500;
     async function showSpeech(text, options) {
         return new Promise((resolve, _reject) => {
-            const { planeZoom: prevPlaneZoom } = getGlobalState();
+            const { slateZoom: prevSlateZoom } = getGlobalState();
             const playerCharacter = getGlobalState().playerCharacter;
             const { time, // time = 2600,
             showOnce = false, character = playerCharacter, zoomAmount = SPEECH_ZOOM_AMOUNT, returnToZoomBeforeConversation = false, stylesBySpecialText, } = options !== null && options !== void 0 ? options : {};
@@ -39,13 +38,9 @@ export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
             function handlePressButton() {
                 const speechBubbleState = getState().speechBubbles[character];
                 const { typingFinished, goalText } = speechBubbleState;
+                // typing done!
                 if (!typingFinished) {
-                    // typeing done!
-                    setState({
-                        speechBubbles: {
-                            [character]: { visibleLetterAmount: length(goalText) },
-                        },
-                    });
+                    setState({ speechBubbles: { [character]: { visibleLetterAmount: length(goalText) } } });
                     // reading done!
                 }
                 else
@@ -63,25 +58,14 @@ export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
             clearTimeoutSafe(showSpeechRefs.closeTimeouts[character]);
             clearTimeoutSafe(showSpeechRefs.zoomTimeout);
             if (!showSpeechRefs.aSpeechIsShowing) {
-                showSpeechRefs.originalZoomAmount = prevPlaneZoom;
+                showSpeechRefs.originalZoomAmount = prevSlateZoom;
                 showSpeechRefs.aSpeechIsShowing = true;
             }
-            const newPlaneZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyStartOptions.zoomLevels.max);
+            const newSlateZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyStartOptions.zoomLevels.max);
             onNextTick(() => {
                 setState({
-                    speechBubbles: {
-                        [character]: {
-                            isVisible: true,
-                            goalText: text,
-                            stylesBySpecialText,
-                        },
-                    },
-                    global: {
-                        main: {
-                            focusedDoll: dollName,
-                            planeZoomGoal: newPlaneZoom + Math.random() * 0.001,
-                        },
-                    },
+                    speechBubbles: { [character]: { isVisible: true, goalText: text, stylesBySpecialText } },
+                    global: { main: { focusedDoll: dollName, slateZoomGoal: newSlateZoom + Math.random() * 0.001 } },
                 });
             });
             showSpeechRefs.shownTextBools[text] = true;
@@ -95,7 +79,7 @@ export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
                 // NOTE safer to use the setState((state)=> {}) callback to check the current focused doll
                 setGlobalState({
                     focusedDoll: isFocusedOnTalkingCharacter ? playerDollName : currentFocusedDoll,
-                    planeZoomGoal: returnToZoomBeforeConversation
+                    slateZoomGoal: returnToZoomBeforeConversation
                         ? showSpeechRefs.originalZoomAmount
                         : prendyStartOptions.zoomLevels.default,
                 });

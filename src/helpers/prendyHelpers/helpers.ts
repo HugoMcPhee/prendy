@@ -1,31 +1,16 @@
 import {
-  AnimationNameByModel,
-  AnyAnimationName,
-  AnyCameraName,
-  AnySegmentName,
-  PrendyAssets,
-  PrendyOptions,
-  CameraNameByPlace,
   CharacterName,
-  CharacterOptions,
-  DollName,
-  DollOptions,
-  MeshNameByModel,
   ModelInfoByName,
-  ModelName,
   MusicFiles,
   MusicName,
-  PickupName,
   PlaceInfoByName,
-  PlaceName,
-  SegmentNameByPlace,
-  SpotNameByPlace,
-  WallNameByPlace,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
   SoundFiles,
   SoundName,
-  BoneNameByModel,
 } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
 import { get_characterStoryHelpers } from "./characters";
 import { get_dollStoryHelpers } from "./dolls";
 import { get_playerStoryHelpers } from "./players";
@@ -38,196 +23,33 @@ import { get_stickerStoryHelpers } from "./stickers";
 
 // function doThis
 
-export function makePrendyStoryHelpers<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_CharacterOptions extends CharacterOptions = CharacterOptions,
-  A_DollName extends DollName = DollName,
-  A_DollOptions extends DollOptions = DollOptions,
-  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
-  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
-  A_ModelName extends ModelName = ModelName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
-  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_PickupName extends PickupName = PickupName,
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
-  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
-  A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
-  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace,
-  A_MusicFiles extends MusicFiles = MusicFiles,
-  A_MusicName extends MusicName = MusicName,
-  A_SoundFiles extends SoundFiles = SoundFiles,
-  A_SoundName extends SoundName = SoundName,
-  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel
->(
-  storeHelpers: StoreHelpers,
+export function makePrendyStoryHelpers(
+  storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
+  prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
-  const modelInfoByName = prendyAssets.modelInfoByName as A_ModelInfoByName;
-  const characterNames = prendyAssets.characterNames as A_CharacterName[];
-  const placeInfoByName = prendyAssets.placeInfoByName as A_PlaceInfoByName;
-  const musicNames = prendyAssets.musicNames as A_MusicName[];
-  const musicFiles = prendyAssets.musicFiles as A_MusicFiles;
-  const soundNames = prendyAssets.soundNames as A_SoundName[];
-  const soundFiles = prendyAssets.soundFiles as A_SoundFiles;
-
-  const {
-    lookAtEachother,
-    lookAtOtherCharacter,
-    moveCharacterAt2DAngle,
-    setCharAnimation,
-    setCharPosition,
-    setCharRotationY,
-    springAddToCharRotationY,
-    springCharRotation,
-  } = get_characterStoryHelpers<
-    StoreHelpers,
-    PrendyStores,
-    A_AnimationNameByModel,
-    A_PrendyOptions,
-    A_CharacterName,
-    A_CharacterOptions,
-    A_DollName,
-    A_DollOptions,
-    A_ModelInfoByName
-  >(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames);
-
-  const {
-    focusOnDoll,
-    hideDoll,
-    moveDollAt2DAngle,
-    lookAtOtherDoll,
-    setDollAnimation,
-    setDollPosition,
-    setDollRotation,
-    setDollRotationY,
-    setDollToSpot,
-    springAddToDollRotationY,
-    springDollRotationY,
-    pushDollRotationY,
-    springDollToSpot,
-    dollLooksAtSpot,
-    toggleDollMeshes,
-    getDollBonePosition,
-  } = get_dollStoryHelpers<
-    StoreHelpers,
-    PrendyStores,
-    A_AnimationNameByModel,
-    A_PrendyOptions,
-    A_CharacterName,
-    A_CharacterOptions,
-    A_DollName,
-    A_DollOptions,
-    A_MeshNameByModel,
-    A_ModelInfoByName,
-    A_ModelName,
-    A_PlaceName,
-    A_SpotNameByPlace,
-    A_BoneNameByModel
-  >(storeHelpers, prendyStartOptions, modelInfoByName);
-
-  const { enableMovement, isHolding, setPlayerAnimations, takePickup } = get_playerStoryHelpers<
-    StoreHelpers,
-    PrendyStores,
-    A_AnyAnimationName,
-    A_PrendyOptions,
-    A_CharacterName,
-    A_ModelInfoByName,
-    A_PickupName
-  >(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames);
-
-  // NOTE maybe return in categores like players.enableMovement()
-  const { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView } = get_sceneStoryHelpers<
-    StoreHelpers,
-    A_AnyCameraName,
-    A_AnySegmentName,
-    A_CameraNameByPlace,
-    A_CharacterName,
-    A_PlaceInfoByName,
-    A_PlaceName,
-    A_SegmentNameByPlace,
-    A_SpotNameByPlace,
-    A_WallNameByPlace
-  >(storeHelpers, placeInfoByName, characterNames);
-
-  const { playNewMusic, stopAllMusic, playSound, stopSound, stopAllSounds } = get_soundStoryHelpers<
-    StoreHelpers,
-    A_MusicFiles,
-    A_MusicName,
-    A_SoundFiles,
-    A_SoundName
-  >(storeHelpers, musicNames, musicFiles, soundNames, soundFiles);
-
-  const { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } = get_speechStoryHelpers<
-    StoreHelpers,
-    PrendyStores,
-    A_PrendyOptions,
-    A_CharacterName
-  >(storeHelpers, prendyStores, prendyStartOptions, characterNames);
-
-  const { hideSticker, moveSticker, showSticker } = get_stickerStoryHelpers(storeHelpers);
+  const modelInfoByName = prendyAssets.modelInfoByName as ModelInfoByName;
+  const characterNames = prendyAssets.characterNames as CharacterName[];
+  const placeInfoByName = prendyAssets.placeInfoByName as PlaceInfoByName;
+  const musicNames = prendyAssets.musicNames as MusicName[];
+  const musicFiles = prendyAssets.musicFiles as MusicFiles;
+  const soundNames = prendyAssets.soundNames as SoundName[];
+  const soundFiles = prendyAssets.soundFiles as SoundFiles;
 
   return {
-    // characters
-    lookAtEachother,
-    lookAtOtherCharacter,
-    moveCharacterAt2DAngle,
-    setCharAnimation,
-    setCharPosition,
-    setCharRotationY,
-    springAddToCharRotationY,
-    springCharRotation,
-    // dolls
-    focusOnDoll,
-    hideDoll,
-    moveDollAt2DAngle,
-    lookAtOtherDoll,
-    setDollAnimation,
-    setDollPosition,
-    setDollRotation,
-    setDollRotationY,
-    setDollToSpot,
-    springAddToDollRotationY,
-    springDollRotationY,
-    pushDollRotationY,
-    springDollToSpot,
-    dollLooksAtSpot,
-    toggleDollMeshes,
-    getDollBonePosition,
-    //players
-    enableMovement,
-    isHolding,
-    setPlayerAnimations,
-    takePickup,
-    // scene
-    goToNewPlace,
-    hideWallIf,
-    lookAtSpot,
-    showStoryView,
-    setCamera,
-    setSegment,
-    // sound
-    playNewMusic,
-    stopAllMusic,
-    playSound,
-    stopSound,
-    stopAllSounds,
-    // speech
-    hideMiniBubble,
-    showAlarmText,
-    showMiniBubble,
-    showSpeech,
-    // stickers
-    hideSticker,
-    moveSticker,
-    showSticker,
+    characters: get_characterStoryHelpers(
+      storeHelpers,
+      prendyStores,
+      prendyStartOptions,
+      modelInfoByName,
+      characterNames
+    ),
+    dolls: get_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName),
+    players: get_playerStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames),
+    scene: get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames),
+    sound: get_soundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles),
+    speech: get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, characterNames),
+    stickers: get_stickerStoryHelpers(storeHelpers),
   };
 }

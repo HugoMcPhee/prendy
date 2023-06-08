@@ -1,7 +1,7 @@
-import { PrendyAssets, PrendyOptions, ModelInfoByName } from "../../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
-export declare function get_usePlace<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_ModelInfoByName extends ModelInfoByName = ModelInfoByName>(storeHelpers: StoreHelpers, prendyStartOptions: A_PrendyOptions, prendyAssets: PrendyAssets): <T_PlaceName extends string>(placeName: T_PlaceName) => {
+import { Mesh } from "@babylonjs/core";
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../../declarations";
+export declare function get_usePlace(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): <T_PlaceName extends string>(placeName: T_PlaceName) => {
     container: import("@babylonjs/core").AssetContainer;
-    meshes: Record<any, import("@babylonjs/core").Mesh>;
+    meshes: Record<any, Mesh>;
     cameras: Record<any, import("@babylonjs/core").Camera>;
 };

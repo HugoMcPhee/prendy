@@ -1,7 +1,7 @@
 // import React from "react";
 import { AssetsManager, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { get_sectionVidUtils } from "../../prendyUtils/sectionVids";
+import { get_sliceVidUtils } from "../../prendyUtils/sliceVids";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 export function testAppendVideo(theVideo, id, elementTag = "app") {
     var _a;
@@ -14,27 +14,15 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
 export function get_usePlaceUtils(storeHelpers, prendyOptions, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { doWhenSectionVidPlayingAsync, getSectionForPlace } = get_sectionVidUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
     const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
     const placesRefs = getRefs().places;
-    async function loadVideoBlob(filepath) {
-        const result = await fetch(filepath);
-        const videoBlob = await result.blob();
-        return videoBlob;
-    }
     async function loadNowVideosForPlace() {
-        const { nowPlaceName, nowSegmentName, wantedSegmentName } = getState().global.main;
-        const { nowCamName, wantedCamName } = getState().places[nowPlaceName];
-        const wantedSection = getSectionForPlace(nowPlaceName, (wantedCamName !== null && wantedCamName !== void 0 ? wantedCamName : nowCamName), (wantedSegmentName !== null && wantedSegmentName !== void 0 ? wantedSegmentName : nowSegmentName));
-        setState({
-            sectionVids: {
-                [nowPlaceName]: {
-                    wantToLoad: true,
-                    nowSection: wantedSection,
-                },
-            },
-        });
-        await doWhenSectionVidPlayingAsync(nowPlaceName);
+        const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
+        const { nowCamName, goalCamName } = getState().global.main;
+        const goalSlice = getSliceForPlace(nowPlaceName, (goalCamName !== null && goalCamName !== void 0 ? goalCamName : nowCamName), (goalSegmentName !== null && goalSegmentName !== void 0 ? goalSegmentName : nowSegmentName));
+        setState({ sliceVids: { [nowPlaceName]: { wantToLoad: true, nowSlice: goalSlice } } });
+        await doWhenSliceVidPlayingAsync(nowPlaceName);
         return true;
     }
     async function loadProbeImagesForPlace(placeName) {
@@ -56,7 +44,7 @@ export function get_usePlaceUtils(storeHelpers, prendyOptions, prendyAssets) {
         return assetsManager.loadAsync();
     }
     function makeCameraFromModel(theCamera, scene) {
-        const newCamera = new TargetCamera("camera1", theCamera.globalPosition, scene);
+        const newCamera = new TargetCamera(theCamera.name + "_made", theCamera.globalPosition, scene);
         newCamera.rotationQuaternion = theCamera.absoluteRotation;
         newCamera.fov = theCamera.fov;
         // should have a visual min maxZ and depth min max Z
@@ -65,7 +53,6 @@ export function get_usePlaceUtils(storeHelpers, prendyOptions, prendyAssets) {
         return newCamera;
     }
     return {
-        loadVideoBlob,
         testAppendVideo,
         loadNowVideosForPlace,
         loadProbeImagesForPlace,

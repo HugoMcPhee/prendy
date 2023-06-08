@@ -9,12 +9,12 @@ export declare function makeStyles<T extends NamedStyles<T> | NamedStyles<any>>(
 declare type XOption = "left" | "center" | "right";
 declare type YOption = "top" | "center" | "bottom";
 declare type WayOption = "right" | "down";
-declare type AndLayoutOptions = {
+declare type AddLayoutOptions = {
     x: XOption;
     y: YOption;
     way?: WayOption;
 };
-export declare function andLayout(options: AndLayoutOptions | "center"): {
+export declare function addLayout(options: AddLayoutOptions | "center"): {
     display: string;
     flexDirection: "column";
     alignItems: string | undefined;
@@ -26,7 +26,7 @@ export declare function andLayout(options: AndLayoutOptions | "center"): {
     alignItems: string | undefined;
 };
 declare type StyleNumber = number | string;
-declare type AndFixedOptions = {
+declare type AddFixedOptions = {
     x?: StyleNumber;
     y?: StyleNumber;
     top?: StyleNumber;
@@ -34,7 +34,7 @@ declare type AndFixedOptions = {
     left?: StyleNumber;
     right?: StyleNumber;
 };
-export declare function andFixed(options?: AndFixedOptions): {
+export declare function addFixed(options?: AddFixedOptions): {
     position: "absolute";
     top: string | undefined;
     left: string | undefined;

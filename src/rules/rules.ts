@@ -1,4 +1,4 @@
-import { PrendyAssets, PrendyOptions } from "../declarations";
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../declarations";
 import loadGoogleFonts from "../helpers/loadGoogleFonts";
 import {
   get_characterDynamicRules,
@@ -10,15 +10,16 @@ import { get_startAllGlobalRules } from "./global/global";
 import { get_keyboardConnectRules } from "./keyboards";
 import { get_modelRules } from "./models";
 import { get_playerRules } from "./players";
-import { get_safeVidRules } from "./stateVids";
 import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { get_safeVidRules } from "./stateVids";
 
-export function makeStartPrendyRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(storeHelpers: StoreHelpers, prendyStores: PrendyStores, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets) {
+export function makeStartPrendyRules(
+  storeHelpers: PrendyStoreHelpers,
+  prendyStores: PrendyStores,
+  PRENDY_OPTIONS: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { dollNames, characterNames } = prendyAssets;
 
   // making rules
@@ -44,7 +45,6 @@ export function makeStartPrendyRules<
   const characterRules = get_characterRules(storeHelpers, prendyAssets);
 
   const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState<
-    StoreHelpers,
     ReturnType<typeof get_characterDynamicRules>
   >(characterDynamicRules, characterNames, storeHelpers);
 
@@ -63,7 +63,6 @@ export function makeStartPrendyRules<
     /*dolls*/
     dollRules.startAll();
     const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState<
-      StoreHelpers,
       ReturnType<typeof get_dollDynamicRules>
     >(storeHelpers, dollDynamicRules as ReturnType<typeof get_dollDynamicRules>, dollNames);
     /**/

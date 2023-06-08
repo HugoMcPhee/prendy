@@ -1,10 +1,10 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
-import { vector3ToPoint3d } from "../babylonjs/vectors";
 import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
+import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
+import { vector3ToPoint3d } from "../babylonjs/vectors";
 export function get_dollStoryHelpers(storeHelpers, 
 // prendyStores: PrendyStores,
 prendyStartOptions, modelInfoByName) {
@@ -59,7 +59,6 @@ prendyStartOptions, modelInfoByName) {
     }
     function springAddToDollRotationY(dollName, addedRotation, useShortestAngle = false) {
         setState((state) => {
-            state.useShortestAngle;
             const currentAngle = state.dolls[dollName].rotationYGoal;
             let newAngle = currentAngle + addedRotation;
             if (useShortestAngle) {
@@ -82,7 +81,7 @@ prendyStartOptions, modelInfoByName) {
     function focusOnDoll(dollName, zoom) {
         setGlobalState({
             focusedDoll: dollName,
-            planeZoomGoal: zoom !== undefined ? Math.min(zoom, prendyStartOptions.zoomLevels.max) : prendyStartOptions.zoomLevels.default,
+            slateZoomGoal: zoom !== undefined ? Math.min(zoom, prendyStartOptions.zoomLevels.max) : prendyStartOptions.zoomLevels.default,
         });
     }
     function setDollToSpot({ place, spot, doll: dollName, dontSetRotationState, }) {
@@ -119,9 +118,7 @@ prendyStartOptions, modelInfoByName) {
         const { positionIsMoving, positionMoveMode } = dollState;
         if (!positionIsMoving || positionMoveMode !== "push") {
             setState({
-                dolls: {
-                    [dollName]: { positionIsMoving: true, positionMoveMode: "push" },
-                },
+                dolls: { [dollName]: { positionIsMoving: true, positionMoveMode: "push" } },
             });
         }
         let newVelocity = getVectorFromSpeedAndAngle(speed, angle);
@@ -197,8 +194,6 @@ prendyStartOptions, modelInfoByName) {
     }
     return {
         setDollPosition,
-        // springDollPosition,
-        // slideDollPosition,
         setDollRotation,
         setDollRotationY,
         springDollRotationY,
@@ -214,5 +209,7 @@ prendyStartOptions, modelInfoByName) {
         hideDoll,
         toggleDollMeshes,
         getDollBonePosition,
+        // springDollPosition,
+        // slideDollPosition,
     };
 }

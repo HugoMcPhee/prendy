@@ -1,224 +1,244 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PickupName, PlaceInfoByName, PlaceName, StoryPartName, TriggerNameByPlace } from "../../declarations";
-export declare function get_getUsefulStoryStuff<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): () => {
-    storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-    storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-    globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-    chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-    storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-    nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-    nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-    placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-    nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-    placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-    placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-    camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-    camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
+import { CharacterName, DollName, PlaceInfoByName, PrendyStoreHelpers } from "../../declarations";
+export declare function get_getUsefulStoryStuff(storeHelpers: PrendyStoreHelpers): () => {
+    storyState: Record<any, any>;
+    storyRefs: Record<any, any>;
+    globalState: Record<any, any>;
+    chapterName: any;
+    storyPart: any;
+    nowSegmentName: any;
+    nowPlaceName: any;
+    nowCamName: any;
+    placesRefs: Record<any, Record<any, any>>;
+    placeRefs: Record<any, any>;
+    camsRefs: any;
+    camRefs: any;
 };
-export declare function get_setStoryState<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): (newState: Partial<ReturnType<StoreHelpers["getState"]>["story"]["main"]>) => void;
-export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreHelpers, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_StoryPartName extends StoryPartName = StoryPartName, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace>(storeHelpers: StoreHelpers, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[], dollNames: readonly A_DollName[]): {
-    makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>) => {
+export declare function get_setStoryState(storeHelpers: PrendyStoreHelpers): (newState: Partial<Record<any, any>>) => void;
+export declare function makeAllStoryRuleMakers(storeHelpers: PrendyStoreHelpers, placeInfoByName: PlaceInfoByName, characterNames: readonly CharacterName[], dollNames: readonly DollName[]): {
+    makeCamChangeRules: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: (usefulStuff: {
+                storyState: Record<any, any>;
+                storyRefs: Record<any, any>;
+                globalState: Record<any, any>;
+                chapterName: any;
+                storyPart: any;
+                nowSegmentName: any;
+                nowPlaceName: any;
+                nowCamName: any;
+                placesRefs: Record<any, Record<any, any>>;
+                placeRefs: Record<any, any>;
+                camsRefs: any;
+                camRefs: any;
+            }) => void;
+        }>;
+    }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeCamLeaveRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_TriggerName in A_CameraNameByPlace[P_PlaceName]]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>) => {
+    makeCamLeaveRules: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: (usefulStuff: {
+                storyState: Record<any, any>;
+                storyRefs: Record<any, any>;
+                globalState: Record<any, any>;
+                chapterName: any;
+                storyPart: any;
+                nowSegmentName: any;
+                nowPlaceName: any;
+                nowCamName: any;
+                placesRefs: Record<any, Record<any, any>>;
+                placeRefs: Record<any, any>;
+                camsRefs: any;
+                camRefs: any;
+            }) => void;
+        }>;
+    }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeCamSegmentRules: (callBacksObject: Partial<{ [P_PlaceName_1 in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"]]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => keyof A_PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"][P_CamName]; }>; }>) => boolean;
-    makeOnInteractAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_2 in A_PlaceName]: Partial<{ [P_TriggerName_1 in A_TriggerNameByPlace[P_PlaceName_2]]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>, characterName?: A_CharacterName) => () => void;
-    makeOnInteractToTalk: (callBacksObject: Partial<{ [P_DollName in A_DollName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>, distanceType?: "touch" | "talk", characterName?: A_CharacterName) => () => void;
-    makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_3 in A_PlaceName]: Partial<{ [P_TriggerName_2 in A_TriggerNameByPlace[P_PlaceName_3]]: Partial<{ [P_PickupName in A_PickupName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>; }>, characterName?: A_CharacterName) => <T_PickupName extends A_PickupName>(pickupName: T_PickupName) => false | undefined;
-    makeOnUsePickupGenerally: (callBacksObject: Partial<{ [P_PickupName_1 in A_PickupName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>) => <T_PickupName_1 extends A_PickupName>(pickupName: T_PickupName_1) => void;
-    makeOnUsePickupToTalk: (callBacksObject: Partial<{ [P_DollName_1 in A_DollName]: Partial<{ [P_PickupName_2 in A_PickupName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>, characterName?: A_CharacterName) => <T_PickupName_2 extends A_PickupName>(pickupName: T_PickupName_2) => false | undefined;
+    makeCamSegmentRules: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: (usefulStuff: {
+                storyState: Record<any, any>;
+                storyRefs: Record<any, any>;
+                globalState: Record<any, any>;
+                chapterName: any;
+                storyPart: any;
+                nowSegmentName: any;
+                nowPlaceName: any;
+                nowCamName: any;
+                placesRefs: Record<any, Record<any, any>>;
+                placeRefs: Record<any, any>;
+                camsRefs: any;
+                camRefs: any;
+            }) => string;
+        }>;
+    }>) => boolean;
+    makeOnInteractAtTrigger: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: (usefulStuff: {
+                storyState: Record<any, any>;
+                storyRefs: Record<any, any>;
+                globalState: Record<any, any>;
+                chapterName: any;
+                storyPart: any;
+                nowSegmentName: any;
+                nowPlaceName: any;
+                nowCamName: any;
+                placesRefs: Record<any, Record<any, any>>;
+                placeRefs: Record<any, any>;
+                camsRefs: any;
+                camRefs: any;
+            }) => void;
+        }>;
+    }>, characterName?: CharacterName) => () => void;
+    makeOnInteractToTalk: (callBacksObject: Partial<{
+        [x: string]: (usefulStuff: {
+            storyState: Record<any, any>;
+            storyRefs: Record<any, any>;
+            globalState: Record<any, any>;
+            chapterName: any;
+            storyPart: any;
+            nowSegmentName: any;
+            nowPlaceName: any;
+            nowCamName: any;
+            placesRefs: Record<any, Record<any, any>>;
+            placeRefs: Record<any, any>;
+            camsRefs: any;
+            camRefs: any;
+        }) => void;
+    }>, distanceType?: "touch" | "talk", characterName?: CharacterName) => () => void;
+    makeOnUsePickupAtTrigger: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: Partial<{
+                [x: string]: (usefulStuff: {
+                    storyState: Record<any, any>;
+                    storyRefs: Record<any, any>;
+                    globalState: Record<any, any>;
+                    chapterName: any;
+                    storyPart: any;
+                    nowSegmentName: any;
+                    nowPlaceName: any;
+                    nowCamName: any;
+                    placesRefs: Record<any, Record<any, any>>;
+                    placeRefs: Record<any, any>;
+                    camsRefs: any;
+                    camRefs: any;
+                }) => void;
+            }>;
+        }>;
+    }>, characterName?: CharacterName) => <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+    makeOnUsePickupGenerally: (callBacksObject: Partial<{
+        [x: string]: (usefulStuff: {
+            storyState: Record<any, any>;
+            storyRefs: Record<any, any>;
+            globalState: Record<any, any>;
+            chapterName: any;
+            storyPart: any;
+            nowSegmentName: any;
+            nowPlaceName: any;
+            nowCamName: any;
+            placesRefs: Record<any, Record<any, any>>;
+            placeRefs: Record<any, any>;
+            camsRefs: any;
+            camRefs: any;
+        }) => void;
+    }>) => <T_PickupName_1 extends string>(pickupName: T_PickupName_1) => void;
+    makeOnUsePickupToTalk: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: (usefulStuff: {
+                storyState: Record<any, any>;
+                storyRefs: Record<any, any>;
+                globalState: Record<any, any>;
+                chapterName: any;
+                storyPart: any;
+                nowSegmentName: any;
+                nowPlaceName: any;
+                nowCamName: any;
+                placesRefs: Record<any, Record<any, any>>;
+                placeRefs: Record<any, any>;
+                camsRefs: any;
+                camRefs: any;
+            }) => void;
+        }>;
+    }>, characterName?: CharacterName) => <T_PickupName_2 extends string>(pickupName: T_PickupName_2) => false | undefined;
     makePlaceLoadRules: (atStartOfEachPlace: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void, callBacksObject: Partial<{ [P_PlaceName_4 in A_PlaceName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>) => {
+        storyState: Record<any, any>;
+        storyRefs: Record<any, any>;
+        globalState: Record<any, any>;
+        chapterName: any;
+        storyPart: any;
+        nowSegmentName: any;
+        nowPlaceName: any;
+        nowCamName: any;
+        placesRefs: Record<any, Record<any, any>>;
+        placeRefs: Record<any, any>;
+        camsRefs: any;
+        camRefs: any;
+    }) => void, callBacksObject: Partial<{
+        [x: string]: (usefulStuff: {
+            storyState: Record<any, any>;
+            storyRefs: Record<any, any>;
+            globalState: Record<any, any>;
+            chapterName: any;
+            storyPart: any;
+            nowSegmentName: any;
+            nowPlaceName: any;
+            nowCamName: any;
+            placesRefs: Record<any, Record<any, any>>;
+            placeRefs: Record<any, any>;
+            camsRefs: any;
+            camRefs: any;
+        }) => void;
+    }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makePlaceNotLoadedRules: (callBacksObject: Partial<{ [P_PlaceName_4 in A_PlaceName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>) => {
+    makePlaceNotLoadedRules: (callBacksObject: Partial<{
+        [x: string]: (usefulStuff: {
+            storyState: Record<any, any>;
+            storyRefs: Record<any, any>;
+            globalState: Record<any, any>;
+            chapterName: any;
+            storyPart: any;
+            nowSegmentName: any;
+            nowPlaceName: any;
+            nowCamName: any;
+            placesRefs: Record<any, Record<any, any>>;
+            placeRefs: Record<any, any>;
+            camsRefs: any;
+            camRefs: any;
+        }) => void;
+    }>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeStoryPartRules: (callBacksObject: Partial<Record<A_StoryPartName, (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
+    makeStoryPartRules: (callBacksObject: Partial<Record<string, (usefulStuff: {
+        storyState: Record<any, any>;
+        storyRefs: Record<any, any>;
+        globalState: Record<any, any>;
+        chapterName: any;
+        storyPart: any;
+        nowSegmentName: any;
+        nowPlaceName: any;
+        nowCamName: any;
+        placesRefs: Record<any, Record<any, any>>;
+        placeRefs: Record<any, any>;
+        camsRefs: any;
+        camRefs: any;
     }) => void>>) => {
         stopAll: (...args: any) => any;
         startAll: (...args: any) => any;
@@ -226,22 +246,23 @@ export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreH
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeTouchRules: (callBacksObject: Partial<{ [P_DollName_2 in A_DollName]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>, options?: {
-        characterName?: A_CharacterName;
+    makeTouchRules: (callBacksObject: Partial<{
+        [x: string]: (usefulStuff: {
+            storyState: Record<any, any>;
+            storyRefs: Record<any, any>;
+            globalState: Record<any, any>;
+            chapterName: any;
+            storyPart: any;
+            nowSegmentName: any;
+            nowPlaceName: any;
+            nowCamName: any;
+            placesRefs: Record<any, Record<any, any>>;
+            placeRefs: Record<any, any>;
+            camsRefs: any;
+            camRefs: any;
+        }) => void;
+    }>, options?: {
+        characterName?: CharacterName;
         distanceType?: "touch" | "talk" | "see";
         whenLeave?: boolean;
     }) => {
@@ -251,21 +272,26 @@ export declare function makeAllStoryRuleMakers<StoreHelpers extends PrendyStoreH
         stop: (...args: any) => any;
         ruleNames: any[];
     };
-    makeTriggerRules: (callBacksObject: Partial<{ [P_CharacterName in A_CharacterName]: Partial<{ [P_PlaceName_5 in A_PlaceName]: Partial<{ [P_TriggerName_3 in A_TriggerNameByPlace[P_PlaceName_5]]: (usefulStuff: {
-        storyState: ReturnType<StoreHelpers["getState"]>["story"]["main"];
-        storyRefs: ReturnType<StoreHelpers["getRefs"]>["story"]["main"];
-        globalState: ReturnType<StoreHelpers["getState"]>["global"]["main"];
-        chapterName: ReturnType<StoreHelpers["getState"]>["story"]["main"]["chapterName"];
-        storyPart: ReturnType<StoreHelpers["getState"]>["story"]["main"]["storyPart"];
-        nowSegmentName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<StoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
-        placeState: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]];
-        nowCamName: ReturnType<StoreHelpers["getState"]>["places"][keyof ReturnType<StoreHelpers["getState"]>["places"]]["nowCamName"];
-        placesRefs: ReturnType<StoreHelpers["getRefs"]>["places"];
-        placeRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]];
-        camsRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<StoreHelpers["getRefs"]>["places"][keyof ReturnType<StoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>; }>, options?: {
+    makeTriggerRules: (callBacksObject: Partial<{
+        [x: string]: Partial<{
+            [x: string]: Partial<{
+                [x: string]: (usefulStuff: {
+                    storyState: Record<any, any>;
+                    storyRefs: Record<any, any>;
+                    globalState: Record<any, any>;
+                    chapterName: any;
+                    storyPart: any;
+                    nowSegmentName: any;
+                    nowPlaceName: any;
+                    nowCamName: any;
+                    placesRefs: Record<any, Record<any, any>>;
+                    placeRefs: Record<any, any>;
+                    camsRefs: any;
+                    camRefs: any;
+                }) => void;
+            }>;
+        }>;
+    }>, options?: {
         whenLeave?: boolean;
     }) => {
         stopAll: (...args: any) => any;

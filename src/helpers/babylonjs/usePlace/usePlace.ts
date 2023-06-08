@@ -1,27 +1,25 @@
-import { Mesh, Sound, Vector3 } from "@babylonjs/core";
-import { useEffect } from "react";
+import { Mesh, Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
+import { useEffect } from "react";
 import {
   AnyCameraName,
+  PlaceName,
   PrendyAssets,
   PrendyOptions,
-  ModelInfoByName,
-  PlaceName,
+  PrendyStoreHelpers,
   SoundName,
 } from "../../../declarations";
 import { get_globalUtils } from "../../prendyUtils/global";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
-import { get_useModelFile } from "../useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { get_useModelFile } from "../useModelFile";
 import { get_usePlaceUtils } from "./utils";
 
-export function get_usePlace<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
->(storeHelpers: StoreHelpers, prendyStartOptions: A_PrendyOptions, prendyAssets: PrendyAssets) {
+export function get_usePlace(
+  storeHelpers: PrendyStoreHelpers,
+  prendyStartOptions: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, soundFiles } = prendyAssets;
 

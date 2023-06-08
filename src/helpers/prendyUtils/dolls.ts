@@ -1,7 +1,7 @@
-import { AbstractMesh, AnimationGroup, Bone, Effect, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, AnimationGroup, Bone, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { Point2D, subtractPoints } from "chootils/dist/points2d";
+import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
@@ -11,35 +11,28 @@ import {
   PlaceName,
   PrendyAssets,
   PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
   SpotNameByPlace,
 } from "../../declarations";
 import { get_slateUtils } from "../babylonjs/slate";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_spotStoryUtils } from "./spots";
-import { makeMoverStateMaker, moverMultiRefs } from "repond-movers";
-import { MeshNameByModel } from "../../declarations";
 
-export function get_dollStoryUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(storeHelpers: StoreHelpers) {
+export function get_dollStoryUtils(storeHelpers: PrendyStoreHelpers) {
   const { getState } = storeHelpers;
   const { getSpotPosition } = get_spotStoryUtils(storeHelpers);
 
   type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
-  type ModelNameFromDoll<T_DollName extends A_DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
+  type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
 
-  function getModelNameFromDoll<T_DollName extends A_DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
+  function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
     return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;
   }
 
-  function get2DAngleFromDollToSpot<T_Place extends A_PlaceName>(
-    dollA: A_DollName,
+  function get2DAngleFromDollToSpot<T_Place extends PlaceName>(
+    dollA: DollName,
     place: T_Place,
-    spot: A_SpotNameByPlace[T_Place]
+    spot: SpotNameByPlace[T_Place]
   ) {
     const spotPosition = getSpotPosition(place, spot);
 
@@ -51,7 +44,7 @@ export function get_dollStoryUtils<
     return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D)).angle;
   }
 
-  function get2DAngleBetweenDolls(dollA: A_DollName, dollB: A_DollName) {
+  function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName) {
     if (!dollA || !dollB) return 0;
 
     const dollAPos = getState().dolls[dollA].position;
@@ -130,8 +123,8 @@ export function enableCollisions(theMesh: AbstractMesh) {
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(
-  storeHelpers: StoreHelpers,
+export function get_dollUtils(
+  storeHelpers: PrendyStoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -151,7 +144,7 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
 
-  type StartState_Dolls = PrendyStores["dolls"]["startStates"] & ReturnType<StoreHelpers["getState"]>["dolls"];
+  type StartState_Dolls = PrendyStores["dolls"]["startStates"] & ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
 
   type ModelNameFromDoll<T_DollName extends DollName> = StartState_Dolls[T_DollName]["modelName"];
 

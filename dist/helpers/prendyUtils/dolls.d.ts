@@ -1,13 +1,12 @@
 import { AbstractMesh, PBRMaterial } from "@babylonjs/core";
-import { DollName, PlaceName, PrendyAssets, PrendyOptions, SpotNameByPlace } from "../../declarations";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_dollStoryUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores, A_DollName extends DollName = DollName, A_PlaceName extends PlaceName = PlaceName, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace>(storeHelpers: StoreHelpers): {
-    getModelNameFromDoll: <T_DollName extends A_DollName>(dollName: T_DollName) => NonNullable<NonNullable<PrendyStores["dolls"]["startStates"]>[T_DollName]>["modelName"];
-    get2DAngleFromDollToSpot: <T_Place extends A_PlaceName>(dollA: A_DollName, place: T_Place, spot: A_SpotNameByPlace[T_Place]) => number;
-    get2DAngleBetweenDolls: (dollA: A_DollName, dollB: A_DollName) => number;
+import { DollName, PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores, SpotNameByPlace } from "../../declarations";
+export declare function get_dollStoryUtils(storeHelpers: PrendyStoreHelpers): {
+    getModelNameFromDoll: <T_DollName extends string>(dollName: T_DollName) => any;
+    get2DAngleFromDollToSpot: <T_Place extends string>(dollA: DollName, place: T_Place, spot: string) => number;
+    get2DAngleBetweenDolls: (dollA: DollName, dollB: DollName) => number;
 };
 export declare function enableCollisions(theMesh: AbstractMesh): void;
-export declare function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(storeHelpers: StoreHelpers, _prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+export declare function get_dollUtils(storeHelpers: PrendyStoreHelpers, _prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
     setDollAnimWeight: <T_DollName extends string, T_NewWeights extends Record<string, number>>(dollName: T_DollName, newWeights: Partial<T_NewWeights>) => void;
     getQuickDistanceBetweenDolls: (dollA: DollName, dollB: DollName) => number;
     inRangesAreTheSame: (inRangePropA: InRangeForAllDolls, inRangePropB: InRangeForAllDolls) => boolean;

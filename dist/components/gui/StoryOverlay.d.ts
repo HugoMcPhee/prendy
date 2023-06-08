@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_StoryOverlay<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): (_props: {}) => JSX.Element;
+import { PrendyStoreHelpers } from "../../declarations";
+export declare function get_StoryOverlay(storeHelpers: PrendyStoreHelpers): (_props: {}) => JSX.Element;

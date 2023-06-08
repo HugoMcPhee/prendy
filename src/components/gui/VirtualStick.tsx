@@ -1,13 +1,13 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import {
   getSpeedAndAngleFromVector,
   getVectorFromSpeedAndAngle,
   getVectorSpeed,
 } from "chootils/dist/speedAngleDistance2d";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
+import { PrendyStoreHelpers } from "../../declarations";
 
-export function get_VirtualStick<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_VirtualStick(storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState, setState } = storeHelpers;
 
   const globalRefs = getRefs().global.main;

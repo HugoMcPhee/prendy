@@ -2,7 +2,7 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { getScreenSize } from "../../helpers/babylonjs/scenePlane";
+import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
@@ -105,15 +105,12 @@ export function get_MiniBubble(storeHelpers) {
             });
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
-        useStoreEffect(() => {
-            positionMiniBubbleToCharacter();
-        }, [
+        useStoreEffect(positionMiniBubbleToCharacter, [
             { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
-            { type: ["global"], name: "main", prop: ["planePos"] },
-            { type: ["global"], name: "main", prop: ["planeZoom"] },
+            { type: ["global"], name: "main", prop: ["slatePos"] },
+            { type: ["global"], name: "main", prop: ["slateZoom"] },
+            { type: ["global"], name: "main", prop: ["nowCamName"] },
             { type: ["story"], name: "main", prop: ["storyPart"] },
-            { type: ["places"], name: nowPlaceName, prop: ["nowCamName"] },
-            { type: ["places"], prop: ["nowCamName"] },
         ], [nowPlaceName]);
         const styles = useMemo(() => ({
             container: {

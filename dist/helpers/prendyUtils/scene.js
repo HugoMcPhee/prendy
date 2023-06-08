@@ -35,7 +35,7 @@ export function get_sceneStoryUtils(storeHelpers) {
     // WARNING This might mess up if the place changes while the cam change was waiting
     checkingCamName, callback) {
         const { nowPlaceName } = getState().global.main;
-        const initialNowCamName = getState().places[nowPlaceName].nowCamName;
+        const initialNowCamName = getState().global.main.nowCamName;
         if (checkingCamName === initialNowCamName) {
             callback();
             return null;
@@ -43,16 +43,13 @@ export function get_sceneStoryUtils(storeHelpers) {
         const ruleName = "doWhenNowSegmentChanges" + Math.random();
         startItemEffect({
             name: ruleName,
-            run: ({ newValue: newNowCamName, itemName }) => {
-                if (itemName !== nowPlaceName)
-                    return;
-                // if (newNowCamName !== checkingCamName) return;
+            run: ({ newValue: newNowCamName }) => {
                 if (newNowCamName === initialNowCamName)
                     return;
                 stopEffect(ruleName);
                 callback();
             },
-            check: { type: "places", prop: "nowCamName" },
+            check: { type: "global", prop: "nowCamName" },
             step: "cameraChange",
             atStepEnd: true,
         });

@@ -1,9 +1,9 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../declarations";
 
-export function get_LoadingOverlay<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_LoadingOverlay(storeHelpers: PrendyStoreHelpers) {
   const { useStoreItemPropsEffect, setState } = storeHelpers;
 
   type Props = {};

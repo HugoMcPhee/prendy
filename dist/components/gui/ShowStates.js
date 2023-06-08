@@ -3,9 +3,9 @@ import React from "react";
 export function get_ShowStates(storeHelpers) {
     const { useStore } = storeHelpers;
     return function ShowStates(_props) {
-        const { planeZoom, planeZoomGoal, planePos, planePosGoal, planeZoomIsMoving, debugMessage } = useStore((state) => state.global.main, {
+        const { slateZoom, slateZoomGoal, slatePos, slatePosGoal, slateZoomIsMoving, debugMessage } = useStore((state) => state.global.main, {
             type: "global",
-            prop: ["planeZoom", "planeZoomGoal", "planePos", "planePosGoal", "planeZoomIsMoving", "debugMessage"],
+            prop: ["slateZoom", "slateZoomGoal", "slatePos", "slatePosGoal", "slateZoomIsMoving", "debugMessage"],
         });
         return (React.createElement("div", { id: "show-states", style: {
                 pointerEvents: "none",
@@ -20,17 +20,17 @@ export function get_ShowStates(storeHelpers) {
             } },
             React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, `${debugMessage}`),
             React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, "_"),
-            React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, `${planeZoomIsMoving}`),
-            React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, planeZoom),
-            React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, planeZoomGoal),
+            React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, `${slateZoomIsMoving}`),
+            React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, slateZoom),
+            React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, slateZoomGoal),
             React.createElement("div", { style: { color: "rgb(81, 164, 123)" } }, "_"),
             React.createElement("div", { style: { color: "rgb(81, 164, 123)" } },
-                planePos.x,
+                slatePos.x,
                 " ",
-                planePos.y),
+                slatePos.y),
             React.createElement("div", { style: { color: "rgb(81, 164, 123)" } },
-                planePosGoal.x,
+                slatePosGoal.x,
                 " ",
-                planePosGoal.y)));
+                slatePosGoal.y)));
     };
 }

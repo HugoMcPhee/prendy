@@ -1,5 +1,5 @@
 // @refresh-reset
-import React, { useEffect } from "react";
+import React from "react";
 import { get_PickupButton } from "./PickupButton";
 export function get_Pickups(storeHelpers, pickupsInfo) {
     const { getRefs, useStore } = storeHelpers;
@@ -7,18 +7,11 @@ export function get_Pickups(storeHelpers, pickupsInfo) {
     const PickupButton = get_PickupButton(storeHelpers, pickupsInfo);
     return function Pickups(_props) {
         // const buttonsHolderRef = useRef<StackPanel>(null);
-        // On hover could disablejoystick event from working>
         const { heldPickups } = useStore(({ global: { main } }) => main, {
             type: "global",
             name: "main",
             prop: ["heldPickups"],
         });
-        useEffect(() => {
-            if (heldPickups.length === 0) {
-                globalRefs.isHoveringPickupButton = false;
-                // the hover out never happened when removing a last pickup
-            }
-        }, [heldPickups.length]);
         return (React.createElement("div", { id: "pickups", style: {
                 pointerEvents: "none",
                 zIndex: 1000,
@@ -30,11 +23,7 @@ export function get_Pickups(storeHelpers, pickupsInfo) {
                 width: "100%",
                 overflow: "hidden",
             } },
-            React.createElement("div", { onMouseEnter: () => {
-                    globalRefs.isHoveringPickupButton = true;
-                }, onMouseLeave: () => {
-                    globalRefs.isHoveringPickupButton = false;
-                }, 
+            React.createElement("div", { 
                 //thickness={0}
                 style: {
                     zIndex: 1000,

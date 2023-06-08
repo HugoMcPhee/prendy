@@ -3,6 +3,8 @@ import {
   DollOptionsPlaceholder,
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
+  PrendyStoreHelpersUntyped,
+  PrendyStoresUntyped,
 } from "./stores/typedStoreHelpers";
 
 export default "default";
@@ -48,7 +50,22 @@ export interface AssetsTypesUntyped {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CustomAssetsTypes {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CustomStoreHelpers {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CustomPrendyStores {}
+
 export interface FinalAssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {}
+export interface FinalStoreHelpersType
+  extends Omit<PrendyStoreHelpersUntyped, keyof CustomStoreHelpers>,
+    CustomStoreHelpers {}
+export interface FinalPrendyStoresType
+  extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>,
+    CustomPrendyStores {}
+
+export type PrendyStoreHelpers = FinalStoreHelpersType;
+export type PrendyStores = FinalPrendyStoresType;
 
 export type PrendyOptions = FinalAssetsTypes["PrendyOptions"];
 export type PlaceInfoByName = FinalAssetsTypes["PlaceInfoByName"];

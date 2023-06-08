@@ -11,14 +11,12 @@ import {
   TransformNode,
 } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
-import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
-export function get_useModelFile<StoreHelpers extends PrendyStoreHelpers>(
-  // storeHelpers: StoreHelpers
+export function get_useModelFile(
+  // storeHelpers: PrendyStoreHelpers
   getScene: () => Scene | null
 ) {
   // const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);

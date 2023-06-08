@@ -19,6 +19,8 @@ v0.9.6
 - changed nowCamName to be global instead of per place
 - change 'scene plane' to 'slate
 - fixes pressing pickups and jump on touchscreens without also pressign the joystick
+- removed unneeded generic types, and replaced with reliable declaration merging
+- simplified getting prendy helpers into one function
 
 v0.9.5
 

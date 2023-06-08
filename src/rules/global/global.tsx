@@ -1,15 +1,11 @@
-import { PrendyAssets, PrendyOptions } from "../../declarations";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
 import { get_globalChangePlaceRules } from "./changePlace";
 import { get_globalGeneralRules } from "./general";
 import { get_globalSlateRules as get_globalSceneSlateRules } from "./slate";
 import { get_globalVideoRules } from "./video";
 
-export function get_startAllGlobalRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
-  storeHelpers: StoreHelpers,
+export function get_startAllGlobalRules(
+  storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets

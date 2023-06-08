@@ -1,6 +1,14 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { AnyCameraName, DollName, PlaceName, PrendyAssets } from "../../declarations";
+import {
+  AnyCameraName,
+  DollName,
+  PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
+} from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
@@ -8,14 +16,9 @@ import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
-import { PlaceholderPrendyStores, PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function get_globalChangePlaceRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  PrendyOptions extends PrendyOptionsUntyped
->(
-  storeHelpers: StoreHelpers,
+export function get_globalChangePlaceRules(
+  storeHelpers: PrendyStoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -33,7 +36,7 @@ export function get_globalChangePlaceRules<
     prendyAssets
   );
 
-  const { focusSlateOnFocusedDoll } = get_slateUtils<StoreHelpers, PrendyOptions>(storeHelpers, prendyStartOptions);
+  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
   const { setDollToSpot } = get_dollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);

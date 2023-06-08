@@ -1,11 +1,10 @@
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-import { AnyAnimationName, PrendyOptions, CharacterName, ModelInfoByName, PickupName } from "../../declarations";
-export declare function get_playerStoryHelpers<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores, A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_CharacterName extends CharacterName = CharacterName, A_ModelInfoByName extends ModelInfoByName = ModelInfoByName, A_PickupName extends PickupName = PickupName>(storeHelpers: StoreHelpers, prendyStores: PrendyStores, prendyStartOptions: A_PrendyOptions, modelInfoByName: A_ModelInfoByName, characterNames: readonly A_CharacterName[]): {
+import { AnyAnimationName, CharacterName, ModelInfoByName, PickupName, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
+export declare function get_playerStoryHelpers(storeHelpers: PrendyStoreHelpers, prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, modelInfoByName: ModelInfoByName, characterNames: readonly CharacterName[]): {
     enableMovement: (canMove?: boolean, revertDelay?: number) => Promise<void>;
-    isHolding: (pickupName: A_PickupName) => any;
-    takePickup: (pickup: A_PickupName, toHolding?: boolean) => void;
+    isHolding: (pickupName: PickupName) => any;
+    takePickup: (pickup: PickupName, toHolding?: boolean) => void;
     setPlayerAnimations: (newAnimationNames: {
-        walking: A_AnyAnimationName;
-        idle: A_AnyAnimationName;
+        walking: AnyAnimationName;
+        idle: AnyAnimationName;
     }) => void;
 };

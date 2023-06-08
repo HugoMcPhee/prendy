@@ -1,18 +1,19 @@
-import { AnyTriggerName, PrendyAssets } from "../declarations";
 import { breakableForEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import {
-  PrendyOptions,
+  AnyTriggerName,
   CameraNameByPlace,
   CharacterName,
   PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
   SegmentNameByPlace,
   SpotNameByPlace,
 } from "../declarations";
 import { get_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 
-export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_Player(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -29,7 +30,7 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
   type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
   const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-  const { goToNewPlace } = get_sceneStoryHelpers<StoreHelpers>(storeHelpers, placeInfoByName, characterNames);
+  const { goToNewPlace } = get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
 
   type Props = {};
 

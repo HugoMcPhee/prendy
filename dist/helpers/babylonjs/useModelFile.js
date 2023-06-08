@@ -4,7 +4,7 @@ import { keyBy } from "chootils/dist/arrays";
 import { useEffect } from "react";
 import usePromise from "react-promise-suspense";
 export function get_useModelFile(
-// storeHelpers: StoreHelpers
+// storeHelpers: PrendyStoreHelpers
 getScene) {
     // const { getScene } = makeGetSceneOrEngineUtils(storeHelpers);
     return function useModelFile(modelFile) {

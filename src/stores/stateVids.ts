@@ -28,15 +28,12 @@ export type VidState =
 
 export const abLetters = ["a", "b"] as const;
 
-export default function stateVids<
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PlaceName extends PlaceName = PlaceName
->(prendyAssets: A_PrendyAssets) {
+export default function stateVids(prendyAssets: PrendyAssets) {
   const { placeNames, placeInfoByName } = prendyAssets;
 
   function vidNameToPlaceName(vidName: string) {
     // return vidName.match(/.*?(?=\_|$)/i)![0] as PlaceName;
-    // return vidName.match(/.*?(?=_|$)/i)![0] as A_PlaceName; // only works with one/first underscore
+    // return vidName.match(/.*?(?=_|$)/i)![0] as PlaceName; // only works with one/first underscore
 
     // Jon - https://stackoverflow.com/questions/11134004/regex-that-will-match-the-last-occurrence-of-dot-in-a-string
     const lastUnderscoreIndex = vidName.lastIndexOf("_");

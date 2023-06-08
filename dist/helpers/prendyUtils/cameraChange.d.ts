@@ -1,6 +1,5 @@
-import { AnyCameraName, PrendyAssets } from "../../declarations";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+import { AnyCameraName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+export declare function get_cameraChangeUtils(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets): {
     getSafeCamName: {
         (cam: AnyCameraName): AnyCameraName;
         (cam: null): null;
@@ -12,5 +11,5 @@ export declare function get_cameraChangeUtils<StoreHelpers extends PrendyStoreHe
         useStorySegmentRules?: boolean | undefined;
     }) => any;
     updateTexturesForNowCamera: (newCameraName: AnyCameraName, didChangePlace?: boolean) => void;
-    updateNowStuffWhenSectionChanged: () => void;
+    updateNowStuffWhenSliceChanged: () => void;
 };

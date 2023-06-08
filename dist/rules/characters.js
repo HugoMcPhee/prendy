@@ -1,10 +1,10 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
+import { get_slateUtils } from "../helpers/babylonjs/slate";
 export function get_characterDynamicRules(storeHelpers, prendyStartOptions, prendyAssets) {
     const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
     return makeDynamicRules(({ itemEffect, effect }) => ({
@@ -27,6 +27,9 @@ export function get_characterDynamicRules(storeHelpers, prendyStartOptions, pren
                 const characterState = getState().characters[characterName];
                 // --------------------------
                 // check cam cubes
+                // TODO only check for the player character?
+                // const { playerCharacter } = getState().global.main;
+                // if (charName !== playerCharacter) return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
                 let newAtTheseCamCubes = {};
                 const currentAtCamCubes = characterState.atCamCubes;
                 let atCamCubesHasChanged = false;
@@ -77,7 +80,7 @@ export function get_characterDynamicRules(storeHelpers, prendyStartOptions, pren
                     });
                 }
                 if (dollName === focusedDoll) {
-                    focusScenePlaneOnFocusedDoll();
+                    focusSlateOnFocusedDoll();
                 }
             },
             check: { type: "dolls", prop: "position", name: dollName },
@@ -140,16 +143,11 @@ export function get_characterRules(storeHelpers, prendyAssets) {
                 if (charName !== playerCharacter)
                     return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
                 const { nowPlaceName } = getState().global.main;
-                const { nowCamName } = getState().places[nowPlaceName];
+                const { nowCamName } = getState().global.main;
                 const cameraNames = placeInfoByName[nowPlaceName].cameraNames;
                 forEach(cameraNames, (loopedCameraName) => {
                     if (loopedCameraName !== nowCamName && newAtCamCubes[loopedCameraName] && !prevAtCamCubes[loopedCameraName]) {
-                        setState({
-                            places: {
-                                // [nowPlaceName]: { nowCamName: loopedCameraName },
-                                [nowPlaceName]: { wantedCamName: loopedCameraName },
-                            },
-                        });
+                        setState({ global: { main: { goalCamName: loopedCameraName } } });
                     }
                 });
             },

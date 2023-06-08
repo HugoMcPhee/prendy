@@ -9,20 +9,21 @@ const defaultCamRefs = () => ({
     isTriggerable: true,
 });
 // export
-export default function places(prendyAssets) {
+export default function places(prendyAssets, prendyStartOptions) {
     const { placeInfoByName } = prendyAssets;
     const placeNames = prendyAssets.placeNames;
     // State
-    const state = (placeName) => {
-        var _a, _b, _c;
-        return {
-            wantedCamWhenNextPlaceLoads: null,
-            nextCamNameWhenVidPlays: null,
-            wantedCamNameAtLoop: null,
-            wantedCamName: null,
-            nowCamName: (_c = (_b = (_a = placeInfoByName === null || placeInfoByName === void 0 ? void 0 : placeInfoByName[placeName]) === null || _a === void 0 ? void 0 : _a.cameraNames) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : "testItemCamName", // if state() is called with a random itemName
-        };
-    };
+    const state = (placeName) => ({
+        testState: 0,
+        // goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
+        // goalCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
+        // goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
+        // goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
+        // nowCamName:
+        //   ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+        //     ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as AnyCameraName)) ??
+        //   ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
+    });
     // Refs
     function refs(placeName) {
         const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
@@ -72,9 +73,9 @@ export default function places(prendyAssets) {
     });
     /*
   
-    as <A_PlaceName extends A_PlaceName>(
-    itemName: A_PlaceName | string
-  ) => PlaceRefs<A_PlaceName>
+    as <PlaceName extends PlaceName>(
+    itemName: PlaceName | string
+  ) => PlaceRefs<PlaceName>
   
   */
     return {

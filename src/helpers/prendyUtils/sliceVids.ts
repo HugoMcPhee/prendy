@@ -1,14 +1,19 @@
-import { AnyCameraName, CameraNameByPlace, PlaceName, PrendyAssets, SegmentNameByPlace } from "../../declarations";
+import {
+  AnyCameraName,
+  CameraNameByPlace,
+  PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  SegmentNameByPlace,
+} from "../../declarations";
 import { SliceVidState, VidSlice } from "../../stores/sliceVids";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 import { get_cameraChangeUtils } from "./cameraChange";
 import { get_globalUtils } from "./global";
 
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
-export function get_getSliceVidVideo<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
-  storeHelpers: StoreHelpers
-) {
+export function get_getSliceVidVideo(storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState } = storeHelpers;
 
   return function getSliceVidVideo(itemName: PlaceName) {
@@ -21,8 +26,8 @@ export function get_getSliceVidVideo<StoreHelpers extends PrendyStoreHelpers, Pl
   };
 }
 
-export function get_sliceVidUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
-  storeHelpers: StoreHelpers,
+export function get_sliceVidUtils(
+  storeHelpers: PrendyStoreHelpers,
   prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -30,7 +35,7 @@ export function get_sliceVidUtils<StoreHelpers extends PrendyStoreHelpers, Prend
   const { placeInfoByName } = prendyAssets;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
-  const getSliceVidVideo = get_getSliceVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
   const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
 
   // temporary rule, that gets removed when it finishes

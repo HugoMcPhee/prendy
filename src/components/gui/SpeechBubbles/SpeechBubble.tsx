@@ -1,11 +1,10 @@
 // @refresh-reset
+import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { sizeFromRef } from "chootils/dist/elements";
+import { CharacterName, PrendyOptions, PrendyStoreHelpers, SpeechVidFiles } from "../../../declarations";
+import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { getScreenSize, get_slateUtils } from "../../../helpers/babylonjs/slate";
-import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
@@ -13,8 +12,8 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_SpeechBubble(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
@@ -22,7 +21,7 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
 
   const globalRefs = getRefs().global.main;
 
-  type GetState = StoreHelpers["getState"];
+  type GetState = PrendyStoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
 

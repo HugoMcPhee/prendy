@@ -1,5 +1,5 @@
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-export declare function get_keyboardConnectRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
+import { PrendyStoreHelpers } from "../declarations";
+export declare function get_keyboardConnectRules(storeHelpers: PrendyStoreHelpers): {
     startAll: () => void;
     stopAll: () => void;
 };

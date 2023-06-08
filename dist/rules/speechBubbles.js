@@ -1,5 +1,5 @@
-import { substring, length, toArray, indexOf } from "stringz";
 import { forEach } from "chootils/dist/loops";
+import { indexOf, length, substring, toArray } from "stringz";
 import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
 let zIndexCounter = 100;
 /*

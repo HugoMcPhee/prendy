@@ -1,15 +1,11 @@
-import { RenderTargetTexture } from "@babylonjs/core";
 import delay from "delay";
 import { makeRunMovers } from "repond-movers";
+import { PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
 
-export function get_globalSlateRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions) {
+export function get_globalSlateRules(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions) {
   const { focusSlateOnFocusedDoll, getSlatePositionNotOverEdges, getShaderTransformStuff } = get_slateUtils(
     storeHelpers,
     prendyOptions

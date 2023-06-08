@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_AlarmText<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): (_props: {}) => JSX.Element | null;
+import { PrendyStoreHelpers } from "../../declarations";
+export declare function get_AlarmText(storeHelpers: PrendyStoreHelpers): (_props: {}) => JSX.Element | null;

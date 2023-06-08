@@ -1,4 +1,4 @@
-import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder } from "./stores/typedStoreHelpers";
+import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyStoreHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
 declare const _default: "default";
 export default _default;
 export interface AssetsTypesUntyped {
@@ -40,8 +40,18 @@ export interface AssetsTypesUntyped {
 }
 export interface CustomAssetsTypes {
 }
+export interface CustomStoreHelpers {
+}
+export interface CustomPrendyStores {
+}
 export interface FinalAssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {
 }
+export interface FinalStoreHelpersType extends Omit<PrendyStoreHelpersUntyped, keyof CustomStoreHelpers>, CustomStoreHelpers {
+}
+export interface FinalPrendyStoresType extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {
+}
+export declare type PrendyStoreHelpers = FinalStoreHelpersType;
+export declare type PrendyStores = FinalPrendyStoresType;
 export declare type PrendyOptions = FinalAssetsTypes["PrendyOptions"];
 export declare type PlaceInfoByName = FinalAssetsTypes["PlaceInfoByName"];
 export declare type ModelInfoByName = FinalAssetsTypes["ModelInfoByName"];

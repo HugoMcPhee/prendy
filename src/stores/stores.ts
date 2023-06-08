@@ -79,82 +79,18 @@ export type StepName = (typeof prendyStepNames)[number];
 // Record<PlaceName, Something> to Record<string, Something>
 // it keeps the types generic , which is good since the types are updated from each project (declaration merging)
 
-export function makePrendyStores<
-  A_CharacterName extends CharacterName = CharacterName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
-  A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
-  A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
-  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace,
-  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_DollName extends DollName = DollName,
-  A_ModelName extends ModelName = ModelName,
-  A_PickupName extends PickupName = PickupName,
-  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
-  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_AnySpotName extends AnySpotName = AnySpotName,
-  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
-  A_DollOptions extends DollOptions = DollOptions,
-  A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel,
-  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
-  A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
-  A_CharacterOptions extends CharacterOptions = CharacterOptions
->(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
+export function makePrendyStores(prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   return {
     keyboards: keyboards(),
-    miniBubbles: miniBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
-    global: global<
-      A_PrendyAssets,
-      A_PrendyOptions,
-      A_AnySegmentName,
-      A_AnyCameraName,
-      A_CharacterName,
-      A_DollName,
-      A_ModelName,
-      A_PickupName,
-      A_PlaceInfoByName,
-      A_PlaceName
-    >(prendyStartOptions, prendyAssets),
-    models: models<A_PrendyAssets, A_ModelName>(prendyAssets),
-    dolls: dolls<
-      A_AnimationNameByModel,
-      A_AnyAnimationName,
-      A_AnySpotName,
-      A_PrendyAssets,
-      A_BoneNameByModel,
-      A_DollName,
-      A_DollOptions,
-      A_MaterialNameByModel,
-      A_MeshNameByModel,
-      A_ModelName
-    >(prendyAssets),
-    characters: characters<
-      A_CharacterName,
-      A_DollName,
-      A_AnyTriggerName,
-      A_AnyCameraName,
-      A_CharacterOptions,
-      A_PrendyAssets
-    >(prendyAssets),
-    players: players<A_AnyAnimationName, A_PrendyOptions>(prendyStartOptions),
-    speechBubbles: speechBubbles<A_PrendyAssets, A_CharacterName>(prendyAssets),
-    places: places<
-      A_PrendyOptions,
-      A_PlaceName,
-      A_AnyCameraName,
-      A_PrendyAssets,
-      A_CameraNameByPlace,
-      A_SoundspotNameByPlace,
-      A_SpotNameByPlace,
-      A_TriggerNameByPlace,
-      A_WallNameByPlace
-    >(prendyAssets, prendyStartOptions),
-    stateVids: stateVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
-    sliceVids: sliceVids<A_PrendyAssets, A_PlaceName>(prendyAssets),
+    miniBubbles: miniBubbles(prendyAssets),
+    global: global(prendyStartOptions, prendyAssets),
+    models: models(prendyAssets),
+    dolls: dolls(prendyAssets),
+    characters: characters(prendyAssets),
+    players: players(prendyStartOptions),
+    speechBubbles: speechBubbles(prendyAssets),
+    places: places(prendyAssets, prendyStartOptions),
+    stateVids: stateVids(prendyAssets),
+    sliceVids: sliceVids(prendyAssets),
   };
 }

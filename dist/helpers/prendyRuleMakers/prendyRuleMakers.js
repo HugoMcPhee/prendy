@@ -9,9 +9,7 @@ export function get_getUsefulStoryStuff(storeHelpers) {
         const globalState = getState().global.main;
         const { chapterName, storyPart } = storyState;
         const { nowPlaceName, nowSegmentName } = globalState;
-        const allPlacesState = getState().places;
-        const placeState = allPlacesState[nowPlaceName];
-        const { nowCamName } = placeState;
+        const { nowCamName } = globalState;
         const placesRefs = getRefs().places;
         const placeRefs = placesRefs[nowPlaceName];
         const { camsRefs } = placesRefs[nowPlaceName];
@@ -24,7 +22,6 @@ export function get_getUsefulStoryStuff(storeHelpers) {
             storyPart: storyPart,
             nowSegmentName: nowSegmentName,
             nowPlaceName: nowPlaceName,
-            placeState: placeState,
             nowCamName: nowCamName,
             placesRefs: placesRefs,
             placeRefs: placeRefs,
@@ -52,7 +49,7 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                     const { nowPlaceName } = usefulStoryStuff;
                     (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[nowCamName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
                 },
-                check: { prop: "nowCamName", type: "places" },
+                check: { prop: "nowCamName", type: "global" },
                 step: "cameraChange",
                 atStepEnd: true,
             }),
@@ -67,7 +64,7 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
                     const { nowPlaceName } = usefulStoryStuff;
                     (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[prevCamName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
                 },
-                check: { prop: "nowCamName", type: "places" },
+                check: { prop: "nowCamName", type: "global" },
                 step: "cameraChange",
                 atStepEnd: true,
             }),

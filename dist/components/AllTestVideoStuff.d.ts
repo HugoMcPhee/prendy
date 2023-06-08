@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-export declare function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(storeHelpers: StoreHelpers, placeNames: readonly PlaceName[]): () => JSX.Element;
+import { PlaceName, PrendyStoreHelpers } from "../declarations";
+export declare function get_AllTestVideoStuff(storeHelpers: PrendyStoreHelpers, placeNames: readonly PlaceName[]): () => JSX.Element;

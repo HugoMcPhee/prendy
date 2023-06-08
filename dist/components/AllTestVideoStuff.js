@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { andLayout } from "../helpers/styles";
+import { addLayout } from "../helpers/styles";
 export function get_AllTestVideoStuff(storeHelpers, placeNames) {
     const { useStore, useStoreItemPropsEffect } = storeHelpers;
     function TestVideos({ placeName }) {
@@ -16,8 +16,8 @@ export function get_AllTestVideoStuff(storeHelpers, placeNames) {
             }
         }, []);
         // show one vid at a time
-        useStoreItemPropsEffect({ type: "sectionVids", name: placeName }, {
-            safeVidId_playing() {
+        useStoreItemPropsEffect({ type: "sliceVids", name: placeName }, {
+            stateVidId_playing() {
                 // vidLetter_play({ newValue }) {
                 // if (!newValue) return;
                 // const playingVidId = getLetterVidId("house", newValue);
@@ -31,7 +31,7 @@ export function get_AllTestVideoStuff(storeHelpers, placeNames) {
                 //     newValue === "b" ? "block" : "none";
                 // }
             },
-            sectionVidState({ newValue }) {
+            sliceVidState({ newValue }) {
                 const isLoaded = newValue !== "unloaded";
                 if (mainRef.current) {
                     mainRef.current.style.display = isLoaded ? "block" : "none";
@@ -39,37 +39,37 @@ export function get_AllTestVideoStuff(storeHelpers, placeNames) {
             },
         });
         return (React.createElement("div", { ref: mainRef },
-            React.createElement("div", { ref: vidContainerRefA, style: { ...andLayout("center") }, id: `${placeName}_a` },
+            React.createElement("div", { ref: vidContainerRefA, style: { ...addLayout("center") }, id: `${placeName}_a` },
                 "A",
-                React.createElement("div", { style: { ...andLayout("center") }, id: `${placeName}_a_color` }),
-                React.createElement("div", { style: { ...andLayout("center") }, id: `${placeName}_a_depth` })),
-            React.createElement("div", { ref: vidContainerRefB, style: { ...andLayout("center") }, id: `${placeName}_b` },
+                React.createElement("div", { style: { ...addLayout("center") }, id: `${placeName}_a_color` }),
+                React.createElement("div", { style: { ...addLayout("center") }, id: `${placeName}_a_depth` })),
+            React.createElement("div", { ref: vidContainerRefB, style: { ...addLayout("center") }, id: `${placeName}_b` },
                 "B",
-                React.createElement("div", { style: { ...andLayout("center") }, id: `${placeName}_b_color` }),
-                React.createElement("div", { style: { ...andLayout("center") }, id: `${placeName}_b_depth` }))));
+                React.createElement("div", { style: { ...addLayout("center") }, id: `${placeName}_b_color` }),
+                React.createElement("div", { style: { ...addLayout("center") }, id: `${placeName}_b_depth` }))));
     }
     function TestVideoState({ placeName }) {
-        const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, {
-            type: "sectionVids",
-            prop: ["sectionVidState"],
+        const sliceVidState = useStore((state) => state.sliceVids[placeName].sliceVidState, {
+            type: "sliceVids",
+            prop: ["sliceVidState"],
             name: placeName,
         });
-        const { safeVidId_waiting, safeVidId_playing } = useStore((state) => state.sectionVids[placeName], {
-            type: "sectionVids",
-            prop: ["safeVidId_waiting", "safeVidId_playing"],
+        const { stateVidId_waiting, stateVidId_playing } = useStore((state) => state.sliceVids[placeName], {
+            type: "sliceVids",
+            prop: ["stateVidId_waiting", "stateVidId_playing"],
             name: placeName,
         });
         return (React.createElement("div", { style: {
-                display: sectionVidState === "unloaded" ? "none" : "block",
+                display: sliceVidState === "unloaded" ? "none" : "block",
                 width: 100,
             } },
-            React.createElement("div", null, sectionVidState),
-            React.createElement("div", null, `▶ ${safeVidId_playing}`),
-            React.createElement("div", null, `➰ ${safeVidId_waiting}`)));
+            React.createElement("div", null, sliceVidState),
+            React.createElement("div", null, `▶ ${stateVidId_playing}`),
+            React.createElement("div", null, `➰ ${stateVidId_waiting}`)));
     }
     return function AllTestVideoStuff() {
         return (React.createElement(React.Fragment, null,
-            placeNames.map((placeName) => (React.createElement("div", { style: { ...andLayout({ x: "center", y: "center", way: "right" }) } },
+            placeNames.map((placeName) => (React.createElement("div", { style: { ...addLayout({ x: "center", y: "center", way: "right" }) } },
                 React.createElement(TestVideos, { placeName: placeName }),
                 React.createElement(TestVideoState, { placeName: placeName })))),
             " "));

@@ -3,14 +3,10 @@ export function get_speechBubblesUtils(storeHelpers, prendyStores) {
     function getTypingDelayForLetter(letter, speechBubbleName) {
         const { typingSpeed } = getState().speechBubbles[speechBubbleName];
         let typingDelay = typingSpeed;
-        if (isSpecialLetter(letter)) {
-            // typingDelay = typingSpeed * 20;
+        if (isSpecialLetter(letter))
             typingDelay = typingSpeed * 5;
-        }
-        if (isWhitespace(letter)) {
-            // typingDelay = typingSpeed * 5;
+        if (isWhitespace(letter))
             typingDelay = typingSpeed;
-        }
         return typingDelay;
     }
     function getTypingDelayForText(text, speechBubbleName) {

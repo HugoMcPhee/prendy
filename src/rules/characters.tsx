@@ -1,13 +1,18 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
+import {
+  AnyCameraName,
+  AnyTriggerName,
+  CharacterName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+} from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { samePoints, defaultPosition } from "chootils/dist/points2d";
 
-export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_characterDynamicRules(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -160,9 +165,12 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 // TODO add addOrRemovd rules for characters
 
 export function get_startDynamicCharacterRulesForInitialState<
-  StoreHelpers extends PrendyStoreHelpers,
   CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>
->(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], storeHelpers: StoreHelpers) {
+>(
+  characterDynamicRules: CharacterDynamicRules,
+  characterNames: readonly CharacterName[],
+  storeHelpers: PrendyStoreHelpers
+) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
     forEach(characterNames, (characterName) => {
@@ -180,10 +188,7 @@ export function get_startDynamicCharacterRulesForInitialState<
   };
 }
 
-export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_characterRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
   const { makeRules, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 

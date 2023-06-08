@@ -1,6 +1,6 @@
 import { Engine, Scene } from "@babylonjs/core";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_getSceneOrEngineUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
+import { PrendyStoreHelpers } from "../../declarations";
+export declare function get_getSceneOrEngineUtils(storeHelpers: PrendyStoreHelpers): {
     getScene: () => Scene | null;
     getEngine: () => Engine | null;
 };

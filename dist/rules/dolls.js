@@ -3,8 +3,8 @@ import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
-import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
+import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import { getDefaultInRangeFunction, get_dollUtils } from "../helpers/prendyUtils/dolls";
 // const dollDynamicRules = makeDynamicRules({
@@ -34,7 +34,7 @@ export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendySto
             check: { type: "models", name: modelName, prop: "isLoaded", becomes: true },
             atStepEnd: true,
         })),
-        // When the plaec and all characters are loaded
+        // When the place and all characters are loaded
         whenWholePlaceFinishesLoading: itemEffect(({ dollName, modelName }) => ({
             run() {
                 const dollRefs = getRefs().dolls[dollName];
@@ -43,21 +43,6 @@ export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendySto
                     forEach(modelRefs.materialRefs, (materialRef) => setupLightMaterial(materialRef));
                 }
                 setupLightMaterial(modelRefs.materialRef);
-                if (dollRefs.meshRef) {
-                    // dollRefs.meshRef.material = modelRefs.materialRef;
-                }
-                // forEach(modelNamesLoaded, (modelName) => {
-                //   const modelRefs = getRefs().models[modelName];
-                //   setupLightMaterial(modelRefs.materialRef);
-                // });
-                // forEach(dollNames, (dollName) => {
-                //   const dollRefs = getRefs().dolls[dollName];
-                //   const { modelName } = getState().dolls[dollName];
-                //   const modelRefs = getRefs().models[modelName];
-                //
-                //   dollRefs.materialRef = modelRefs.materialRef;
-                // });
-                // setupLightMaterial(dollRefs.materialRef);
             },
             name: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
             check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },
@@ -87,7 +72,7 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
 export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
     const { modelInfoByName, dollNames } = prendyAssets;
     const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-    const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
     const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
@@ -365,7 +350,7 @@ export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers
             step: "checkCollisions",
         }),
         // should be a  dynamic rule ?
-        updateDollScreenPositionWhenScenePlaneMoves: effect({
+        updateDollScreenPositionWhenSlateMoves: effect({
             run() {
                 const { playerCharacter } = getState().global.main;
                 const { dollName } = getState().characters[playerCharacter];
@@ -375,8 +360,8 @@ export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                 forEach(dollNames, (dollName) => updateDollScreenPosition({ dollName: dollName, instant: false }));
             },
             // this happens before rendering because its in "derive" instead of "subscribe"
-            check: { type: "global", prop: ["planePos", "planeZoom"] },
-            step: "planePosition",
+            check: { type: "global", prop: ["slatePos", "slateZoom"] },
+            step: "slatePosition",
             atStepEnd: true,
         }),
     }));

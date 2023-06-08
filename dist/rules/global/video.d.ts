@@ -1,6 +1,5 @@
-import { PrendyAssets, PrendyOptions } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-export declare function get_globalVideoRules<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(storeHelpers: StoreHelpers, _prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
+export declare function get_globalVideoRules(storeHelpers: PrendyStoreHelpers, _prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

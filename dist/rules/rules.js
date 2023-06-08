@@ -5,14 +5,13 @@ import { get_startAllGlobalRules } from "./global/global";
 import { get_keyboardConnectRules } from "./keyboards";
 import { get_modelRules } from "./models";
 import { get_playerRules } from "./players";
-import { get_safeVidRules } from "./safeVids";
-import { get_sectionVidRules } from "./sectionVids";
+import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
+import { get_safeVidRules } from "./stateVids";
 export function makeStartPrendyRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets) {
     const { dollNames, characterNames } = prendyAssets;
     // making rules
     const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-    // const pointerConnectRules = get_pointersConnectRules(storeHelpers);
     const startAllGlobalRules = get_startAllGlobalRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
     const modelRules = get_modelRules(storeHelpers, prendyAssets);
     const playerRules = get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
@@ -20,7 +19,7 @@ export function makeStartPrendyRules(storeHelpers, prendyStores, PRENDY_OPTIONS,
     const dollRules = get_dollRules(PRENDY_OPTIONS, dollDynamicRules, storeHelpers, prendyStores, prendyAssets);
     const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
     const safeVidRules = get_safeVidRules(storeHelpers);
-    const safeSectionVidRules = get_sectionVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
+    const safeSliceVidRules = get_sliceVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
     const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
     const characterRules = get_characterRules(storeHelpers, prendyAssets);
     const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers);
@@ -42,7 +41,7 @@ export function makeStartPrendyRules(storeHelpers, prendyStores, PRENDY_OPTIONS,
         playerRules.startAll();
         speechBubbleRules.startAll();
         safeVidRules.startAll();
-        safeSectionVidRules.startAll();
+        safeSliceVidRules.startAll();
         return function stopPrendyMainRules() {
             keyboardConnectRules.stopAll();
             // pointerConnectRules.stopAll();
@@ -59,7 +58,7 @@ export function makeStartPrendyRules(storeHelpers, prendyStores, PRENDY_OPTIONS,
             playerRules.stopAll();
             speechBubbleRules.stopAll();
             safeVidRules.stopAll();
-            safeSectionVidRules.stopAll();
+            safeSliceVidRules.stopAll();
         };
     }
     let didDoOneTimeStartStuff = false;

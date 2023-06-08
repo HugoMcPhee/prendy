@@ -1,23 +1,21 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
-import { VidSlice } from "../../stores/sliceVids";
-import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import {
   AnyCameraName,
   AnySegmentName,
-  PrendyAssets,
-  PrendyOptions,
   CameraNameByPlace,
   PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
   SegmentNameByPlace,
 } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
+import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
+import { VidSlice } from "../../stores/sliceVids";
 
-export function get_globalVideoRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
-  storeHelpers: StoreHelpers,
+export function get_globalVideoRules(
+  storeHelpers: PrendyStoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets

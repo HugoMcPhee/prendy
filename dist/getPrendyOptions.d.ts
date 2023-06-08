@@ -7,13 +7,12 @@ declare type ToNewOption<T_PlaceName extends PlaceName> = {
         toSegment?: SegmentNameByPlace[P_PlaceName];
     };
 }[Exclude<PlaceName, T_PlaceName>];
-declare type DoorsInfo<A_PlaceName extends PlaceName = PlaceName> = Partial<{
-    [P_PlaceName in A_PlaceName]: Partial<{
+declare type DoorsInfo = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
         [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: ToNewOption<P_PlaceName>;
     }>;
 }>;
-export declare function getPrendyOptions<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place], // NOTE could limit to the chosen segment,
-A_Place extends PlaceName = PlaceName>(options: {
+export declare function getPrendyOptions<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(options: {
     place: T_Place;
     segment: SegmentNameByPlace[T_Place];
     camera: T_Cam;
@@ -30,7 +29,7 @@ A_Place extends PlaceName = PlaceName>(options: {
     walkSpeed: number;
     animationSpeed: number;
     headHeightOffset: number;
-    doorsInfo?: DoorsInfo<A_Place>;
+    doorsInfo?: DoorsInfo;
     modelNamesByPlace: ModelNamesByPlaceLoose;
     hasInteracting?: boolean;
     hasJumping?: boolean;
@@ -51,9 +50,11 @@ A_Place extends PlaceName = PlaceName>(options: {
     walkSpeed: number;
     animationSpeed: number;
     headHeightOffset: number;
-    doorsInfo?: Partial<{ [P_PlaceName in A_Place]: Partial<{
-        [x: string]: ToNewOption<P_PlaceName>;
-    }>; }> | undefined;
+    doorsInfo?: Partial<{
+        [x: string]: Partial<{
+            [x: string]: never;
+        }>;
+    }> | undefined;
     modelNamesByPlace: ModelNamesByPlaceLoose;
     hasInteracting?: boolean | undefined;
     hasJumping?: boolean | undefined;

@@ -1,13 +1,13 @@
-import { StoreHelperTypes } from "repond";
 import { minMaxRange } from "chootils/dist/numbers";
-import { SliceVidState } from "../stores/sliceVids";
-import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
-import { PrendyAssets, PlaceName } from "../declarations";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
+import { StoreHelperTypes } from "repond";
+import { PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../declarations";
 import { BEFORE_LOOP_PADDING, get_sliceVidUtils } from "../helpers/prendyUtils/sliceVids";
+import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
+import { SliceVidState } from "../stores/sliceVids";
+import { PrendyStoreHelpersUntyped } from "../stores/typedStoreHelpers";
 
-export function get_sliceVidRules<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
-  storeHelpers: StoreHelpers,
+export function get_sliceVidRules(
+  storeHelpers: PrendyStoreHelpers,
   prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -15,10 +15,11 @@ export function get_sliceVidRules<StoreHelpers extends PrendyStoreHelpers, Prend
 
   const { getState, makeRules, setState } = storeHelpers;
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> & keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
+  type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]> &
+    keyof ReturnType<PrendyStoreHelpersUntyped["getRefs"]>;
   type HelperType<T extends ItemType> = StoreHelperTypes<
-    PrendyStoreHelpers["getState"],
-    PrendyStoreHelpers["getRefs"],
+    PrendyStoreHelpersUntyped["getState"],
+    PrendyStoreHelpersUntyped["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];

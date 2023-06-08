@@ -3,10 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { defaultPosition } from "chootils/dist/points2d";
 import { PrendyAssets, CharacterName, FontName, SpeechVidName } from "../declarations";
 
-export default function speechBubbles<
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_CharacterName extends CharacterName = CharacterName
->(prendyAssets: A_PrendyAssets) {
+export default function speechBubbles(prendyAssets: PrendyAssets) {
   const { characterNames, characterOptions, fontNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(
@@ -44,7 +41,7 @@ export default function speechBubbles<
   //   [K_CharacterName in CharacterName]: ReturnType<typeof state>;
   // };
   type SpeechBubbleStartStates = {
-    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
   };
 
   function makeAutmaticCharacterSpeechbubbleStartStates() {

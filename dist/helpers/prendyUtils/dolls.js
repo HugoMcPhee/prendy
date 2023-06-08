@@ -4,7 +4,7 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
-import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
+import { get_slateUtils } from "../babylonjs/slate";
 import { get_spotStoryUtils } from "./spots";
 export function get_dollStoryUtils(storeHelpers) {
     const { getState } = storeHelpers;
@@ -94,7 +94,7 @@ export function enableCollisions(theMesh) {
 export function get_dollUtils(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
     const { getRefs, getState, setState } = storeHelpers;
     const { dollNames, modelInfoByName } = prendyAssets;
-    const { convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+    const { convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen, getPositionOnSlate: getPositionOnSlate, checkPointIsInsideSlate: checkPointIsInsideSlate, } = get_slateUtils(storeHelpers, prendyStartOptions);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
             dolls: {
@@ -132,7 +132,7 @@ export function get_dollUtils(storeHelpers, _prendyStores, prendyStartOptions, p
         const placesRefs = getRefs().places;
         const globalState = getState().global.main;
         const { nowPlaceName } = globalState;
-        const { nowCamName } = getState().places[nowPlaceName];
+        const { nowCamName } = getState().global.main;
         const placeRefs = placesRefs[nowPlaceName];
         if (theMaterial) {
             theMaterial.enableSpecularAntiAliasing = true;
@@ -199,14 +199,14 @@ export function get_dollUtils(storeHelpers, _prendyStores, prendyStartOptions, p
         const { meshRef } = getRefs().dolls[dollName];
         if (!meshRef)
             return;
-        const { planePos, planePosGoal, focusedDoll, focusedDollIsInView, planeZoom } = getState().global.main;
-        const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
-        const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
-            pointOnPlane: characterPointOnPlane,
-            planePos: instant ? planePosGoal : planePos,
-            planeZoom,
+        const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom } = getState().global.main;
+        const characterPointOnSlate = getPositionOnSlate(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
+        const characterPointOnScreen = convertPointOnSlateToPointOnScreen({
+            pointOnSlate: characterPointOnSlate,
+            slatePos: instant ? slatePosGoal : slatePos,
+            slateZoom,
         });
-        const newFocusedDollIsInView = dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
+        const newFocusedDollIsInView = dollName === focusedDoll ? checkPointIsInsideSlate(characterPointOnSlate) : focusedDollIsInView;
         setState({
             dolls: { [dollName]: { positionOnScreen: characterPointOnScreen } },
             global: { main: { focusedDollIsInView: newFocusedDollIsInView } },

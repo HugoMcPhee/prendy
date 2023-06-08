@@ -1,4 +1,3 @@
 /// <reference types="react" />
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { PrendyAssets, PrendyOptions } from "../../declarations";
-export declare function get_ScreenGui<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets): (_: {}) => JSX.Element;
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+export declare function get_ScreenGui(storeHelpers: PrendyStoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets): (_: {}) => JSX.Element;

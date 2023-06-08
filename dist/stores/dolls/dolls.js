@@ -13,8 +13,7 @@ export default function dolls(prendyAssets) {
         return {
             modelName: safeModelName,
             //  New room
-            // nextSpotName: null as null | AnySpotName, // when going to new place, start at this spot
-            nextSpotName: null,
+            goalSpotName: null,
             //  Movers
             ...mover3dState("position", {
                 value: HIDDEN_POSITION,

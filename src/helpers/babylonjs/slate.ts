@@ -1,9 +1,9 @@
 import { AbstractMesh, Camera, Matrix, Vector3 } from "@babylonjs/core";
 import { shortenDecimals } from "chootils/dist/numbers";
-import { copyPoint, defaultPosition, Point2D } from "chootils/dist/points2d";
+import { Point2D, copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 import { get_globalUtils } from "../prendyUtils/global";
 import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
@@ -13,10 +13,7 @@ export function getScreenSize() {
 
 export const slateSize = { x: 1280, y: 720 };
 
-export function get_slateUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
-  storeHelpers: StoreHelpers,
-  prendyStartOptions: PrendyOptions
-) {
+export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions) {
   const { getRefs, getState, onNextTick } = storeHelpers;
 
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);

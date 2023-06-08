@@ -1,9 +1,15 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
+import {
+  CameraNameByPlace,
+  PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  SegmentNameByPlace,
+} from "../../../declarations";
 import { get_sliceVidUtils } from "../../prendyUtils/sliceVids";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import { PrendyAssets, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../../declarations";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 
 export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
@@ -14,8 +20,8 @@ export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementT
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function get_usePlaceUtils<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
-  storeHelpers: StoreHelpers,
+export function get_usePlaceUtils(
+  storeHelpers: PrendyStoreHelpers,
   prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {

@@ -1,9 +1,9 @@
 // @refresh-reset
+import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { sizeFromRef } from "chootils/dist/elements";
+import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { getScreenSize } from "../../../helpers/babylonjs/scenePlane";
 // import "./SpeechBubble.css";
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
@@ -126,19 +126,12 @@ export function get_SpeechBubble(storeHelpers, prendyStartOptions, speechVidFile
             });
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
-        useStoreEffect(() => {
-            positionSpeechBubbleToCharacter();
-        }, [
-            {
-                type: ["dolls"],
-                name: forCharacter,
-                prop: ["positionOnScreen"],
-            },
-            { type: ["global"], name: "main", prop: ["planePos"] },
-            { type: ["global"], name: "main", prop: ["planeZoom"] },
+        useStoreEffect(positionSpeechBubbleToCharacter, [
+            { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
+            { type: ["global"], name: "main", prop: ["slatePos"] },
+            { type: ["global"], name: "main", prop: ["slateZoom"] },
             { type: ["story"], name: "main", prop: ["storyPart"] },
-            { type: ["places"], name: nowPlaceName, prop: ["nowCamName"] },
-            { type: ["places"], prop: ["nowCamName"] },
+            { type: ["global"], name: "main", prop: ["nowCamName"] },
         ], [nowPlaceName]);
         const styles = useMemo(() => ({
             hiddenGoalText: {

@@ -23,7 +23,7 @@ function yOptionToFlexOption(y) {
     if (y === "bottom")
         return "flex-end";
 }
-export function andLayout(options) {
+export function addLayout(options) {
     if (options === "center") {
         return {
             display: "flex",
@@ -49,11 +49,9 @@ export function andLayout(options) {
     };
 }
 function numberToPixels(styleNumber) {
-    return typeof styleNumber === "number"
-        ? styleNumber.toString() + "px"
-        : styleNumber;
+    return typeof styleNumber === "number" ? styleNumber.toString() + "px" : styleNumber;
 }
-export function andFixed(options = {}) {
+export function addFixed(options = {}) {
     var _a, _b;
     const { x, y, top, bottom, left, right } = options;
     const chosenStuff = {

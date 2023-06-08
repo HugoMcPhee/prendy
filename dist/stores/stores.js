@@ -6,13 +6,13 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import safeVids from "./safeVids";
-import sectionVids from "./sectionVids";
+import stateVids from "./stateVids";
+import sliceVids from "./sliceVids";
 import speechBubbles from "./speechBubbles";
 export const prendyStepNames = [
     // updating internal video states
-    "safeVidStateUpdates",
-    "sectionVidStateUpdates",
+    "stateVidStateUpdates",
+    "sliceVidStateUpdates",
     // game stuff
     "respondToNewPlace",
     "cameraChange",
@@ -23,9 +23,9 @@ export const prendyStepNames = [
     "collisionReaction",
     "story",
     "storyReaction",
-    "planePosition",
-    "planePositionDontGoOverEdges",
-    "planePositionStartMovers",
+    "slatePosition",
+    "slatePositionDontGoOverEdges",
+    "slatePositionStartMovers",
     "dollAnimation",
     "dollAnimation2",
     "dollAnimationStartMovers",
@@ -33,10 +33,10 @@ export const prendyStepNames = [
     "loadNewPlaceModels",
     "loadNewPlace",
     // deciding and changing for next videos
-    // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSection" , so mvoed to the last flow as a quick probably temporary fix
-    "chooseVideoSection",
-    "sectionVidWantsToPlay",
-    "sectionVidWantsToPlay2",
+    // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "chooseVideoSlice" , so mvoed to the last flow as a quick probably temporary fix
+    "chooseVideoSlice",
+    "sliceVidWantsToPlay",
+    "sliceVidWantsToPlay2",
     "safeVidWantsToPlay",
     // drawing to the screen
     "default",
@@ -52,15 +52,14 @@ export function makePrendyStores(prendyStartOptions, prendyAssets) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(prendyAssets),
-        // pointers: pointers(),
         global: global(prendyStartOptions, prendyAssets),
         models: models(prendyAssets),
         dolls: dolls(prendyAssets),
         characters: characters(prendyAssets),
         players: players(prendyStartOptions),
         speechBubbles: speechBubbles(prendyAssets),
-        places: places(prendyAssets),
-        safeVids: safeVids(prendyAssets),
-        sectionVids: sectionVids(prendyAssets),
+        places: places(prendyAssets, prendyStartOptions),
+        stateVids: stateVids(prendyAssets),
+        sliceVids: sliceVids(prendyAssets),
     };
 }

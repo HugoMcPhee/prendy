@@ -1,34 +1,36 @@
 import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
-import { AnimationNameByModel, AnyAnimationName, AnySpotName, BoneNameByModel, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
-export default function dolls<A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_AnySpotName extends AnySpotName = AnySpotName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_BoneNameByModel extends BoneNameByModel = BoneNameByModel, A_DollName extends DollName = DollName, A_DollOptions extends DollOptions = DollOptions, A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_ModelName extends ModelName = ModelName>(prendyAssets: A_PrendyAssets): {
-    startStates: { [K_DollName in A_DollName]: {
-        nowAnimation: A_AnyAnimationName;
-        animationLoops: boolean;
-        inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
-        animWeights: Record<string, number>;
-        animWeightsGoal: Record<string, number>;
-        animWeightsIsMoving: boolean;
-        animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
-        animWeightsMoveConfigName: string;
-        animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        positionOnScreen: import("chootils/dist/points2d").Point2D;
-        rotationY: number;
-        rotationYGoal: number;
-        rotationYIsMoving: boolean;
-        rotationYMoveMode: import("repond-movers/dist/types").MoveMode;
-        rotationYMoveConfigName: string;
-        rotationYMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        position: import("chootils/dist/points3d").Point3D;
-        positionGoal: import("chootils/dist/points3d").Point3D;
-        positionIsMoving: boolean;
-        positionMoveMode: import("repond-movers/dist/types").MoveMode;
-        positionMoveConfigName: string;
-        positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        modelName: NonNullable<A_DollOptions[K_DollName]["model"]>;
-        nextSpotName: A_AnySpotName | null;
-    }; };
-    state: <T_DollName extends string, T_ModelName extends A_ModelName>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
-        nowAnimation: A_AnyAnimationName;
+import { AnimationNameByModel, BoneNameByModel, MaterialNameByModel, MeshNameByModel, PrendyAssets } from "../../declarations";
+export default function dolls(prendyAssets: PrendyAssets): {
+    startStates: {
+        [x: string]: {
+            nowAnimation: string;
+            animationLoops: boolean;
+            inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
+            animWeights: Record<string, number>;
+            animWeightsGoal: Record<string, number>;
+            animWeightsIsMoving: boolean;
+            animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
+            animWeightsMoveConfigName: string;
+            animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+            positionOnScreen: import("chootils/dist/points2d").Point2D;
+            rotationY: number;
+            rotationYGoal: number;
+            rotationYIsMoving: boolean;
+            rotationYMoveMode: import("repond-movers/dist/types").MoveMode;
+            rotationYMoveConfigName: string;
+            rotationYMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+            position: import("chootils/dist/points3d").Point3D;
+            positionGoal: import("chootils/dist/points3d").Point3D;
+            positionIsMoving: boolean;
+            positionMoveMode: import("repond-movers/dist/types").MoveMode;
+            positionMoveConfigName: string;
+            positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+            modelName: any;
+            goalSpotName: string | null;
+        };
+    };
+    state: <T_DollName extends string, T_ModelName extends string>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
+        nowAnimation: string;
         animationLoops: boolean;
         inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         animWeights: Record<string, number>;
@@ -51,10 +53,10 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<T_ModelName>;
-        nextSpotName: A_AnySpotName | null;
+        goalSpotName: string | null;
     };
-    refs: <T_DollName_1 extends A_DollName, T_ModelName_1 extends A_ModelName>(dollName: T_DollName_1, itemState: {
-        nowAnimation: A_AnyAnimationName;
+    refs: <T_DollName_1 extends string, T_ModelName_1 extends string>(dollName: T_DollName_1, itemState: {
+        nowAnimation: string;
         animationLoops: boolean;
         inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         animWeights: Record<string, number>;
@@ -77,7 +79,7 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<T_ModelName_1>;
-        nextSpotName: A_AnySpotName | null;
+        goalSpotName: string | null;
     }) => {
         animWeightsMoverRefs: {
             stateNames: {
@@ -126,13 +128,13 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         meshRef: AbstractMesh | null;
         otherMeshes: Record<string, AbstractMesh | null>;
         entriesRef: InstantiatedEntries | null;
-        aniGroupsRef: Record<A_AnimationNameByModel[T_ModelName_1], AnimationGroup> | null;
+        aniGroupsRef: Record<string, AnimationGroup> | null;
         assetRefs: {
-            meshes: Record<"__root__" | A_MeshNameByModel[T_ModelName_1], AbstractMesh>;
+            meshes: Record<string, AbstractMesh>;
             skeleton: Skeleton;
-            bones: Record<A_BoneNameByModel[T_ModelName_1], Bone>;
-            aniGroups: Record<A_AnimationNameByModel[T_ModelName_1], AnimationGroup>;
-            materials: Record<A_MaterialNameByModel[T_ModelName_1], Material>;
+            bones: Record<string, Bone>;
+            aniGroups: Record<string, AnimationGroup>;
+            materials: Record<string, Material>;
         } | null;
         groundRef: AbstractMesh | null;
         checkCollisions: boolean;

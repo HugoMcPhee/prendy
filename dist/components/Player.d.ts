@@ -1,4 +1,2 @@
-import { PrendyAssets } from "../declarations";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { PrendyOptions } from "../declarations";
-export declare function get_Player<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): (_props: {}) => null;
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../declarations";
+export declare function get_Player(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): (_props: {}) => null;

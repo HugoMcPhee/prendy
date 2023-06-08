@@ -1,21 +1,22 @@
 import { Ray, RayHelper, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
+import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { clearTimeoutSafe } from "../helpers/utils";
-import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 const downRay = new Ray(Vector3.Zero(), Vector3.Zero());
 const downRayHelper = new RayHelper(downRay);
 const downRayDirection = new Vector3(0, -1, 0);
-const downRayRelativeOrigin = new Vector3(0, 1, 0);
-const RAY_FORWARD_DIST = 0.25;
-const forwardRay = new Ray(Vector3.Zero(), Vector3.Zero());
-const forwardRayHelper = new RayHelper(forwardRay);
-const forwardRayDirection = downRayDirection;
-const forwardRayRelativeOrigin = new Vector3(
+const downRayRelativeOrigin = new Vector3(0, 3, 0);
+// Forward ray is actually a down ray but slightly infront of the player
+const RAY_FRONT_DIST = 0.25;
+const frontRay = new Ray(Vector3.Zero(), Vector3.Zero());
+const frontRayHelper = new RayHelper(frontRay);
+const frontRayDirection = downRayDirection;
+const frontRayRelativeOrigin = new Vector3(
 // dollPosRefs.velocity.x * 0.1,
-0, 3, RAY_FORWARD_DIST
+0, 3, RAY_FRONT_DIST
 // dollPosRefs.velocity.z * 0.1
 );
 export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
@@ -264,7 +265,7 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
             // itemState: playerState,
             // itemRefs: playerRefs,
             frameDuration, }) {
-                var _a, _b, _c;
+                var _a, _b, _c, _d, _e, _f, _g, _h;
                 // console.log(parseInt(frameDuration));
                 // return false;
                 // NOTE should be a dynamic rule for each player listening to frame
@@ -290,6 +291,9 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 let newIsMoving = dollState.positionIsMoving;
                 let newPositionMoveMode = dollState.positionMoveMode;
                 let newIsJumping = isJumping;
+                const { 
+                // angle: newInputAngle,
+                speed: dollSpeed, } = getSpeedAndAngleFromVector({ x: (_c = (_b = meshRef === null || meshRef === void 0 ? void 0 : meshRef.velocity) === null || _b === void 0 ? void 0 : _b.x) !== null && _c !== void 0 ? _c : 0, y: (_e = (_d = meshRef === null || meshRef === void 0 ? void 0 : meshRef.velocity) === null || _d === void 0 ? void 0 : _d.z) !== null && _e !== void 0 ? _e : 0 });
                 // dollPosRefs.velocity.y -=
                 //   (gravityValue * frameDuration) / 160;
                 // const isGoinDownOrStill = dollPosRefs.velocity.y < 0;
@@ -297,122 +301,68 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 //   dollPosRefs.velocity.y < 100000000;
                 const isGoingDownOrStill = dollPosRefs.velocity.y <= 0;
                 // if (isGoinDownOrStill ) {
+                let slopeUnderPlayer = 0;
                 let slope = 0;
-                // if (!newIsOnGround) {
+                let isAboveDownSlope = false;
+                let isAboveUpSlope = false;
+                let isAboveASlope = false;
                 if (isGoingDownOrStill) {
-                    // console.log("falling");
-                    // fall faster than going up
-                    // check if they've reached the gr  ound
                     downRayHelper.attachToMesh(
                     /*mesh*/ meshRef, 
                     /*direction*/ downRayDirection, 
                     /*relativeOrigin*/ downRayRelativeOrigin, // used to be (0, -1, 0), when the character model origins were higher,but now the character orig should be at the bottom
-                    /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
+                    // /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
+                    /*length*/ 10 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
                     );
                     const centerPick = scene.pickWithRay(downRay, (mesh) => {
                         return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
                     }, true);
-                    // if (centerPick) newIsOnGround = centerPick.hit;
                     if (centerPick) {
-                        if (centerPick.hit) {
-                            // console.log(centerPick.distance);
-                            // console.log("centerPick.distance", centerPick.distance);
-                            // a bigger distance's needed when going down a steep slope, < 1.075 was too small for a ~35 slop?
-                            // if (centerPick.distance < 1.125) {
-                            if (centerPick.distance < 1.15) {
-                                newIsOnGround = true;
-                            }
-                            else {
-                                newIsOnGround = false;
-                            }
+                        let distance = 1000000;
+                        if (centerPick.pickedPoint && meshRef.position) {
+                            const pickedPointY = (_f = centerPick.pickedPoint) === null || _f === void 0 ? void 0 : _f.y;
+                            const meshYPosition = meshRef.position.y;
+                            distance = Math.abs(pickedPointY - meshYPosition);
                         }
-                        // console.log("hit ground", pick.hit);
-                        const isWalkng = Math.abs(dollPosRefs.velocity.x) > 0.1 || Math.abs(dollPosRefs.velocity.z) > 0.1;
-                        if (isWalkng) {
-                            // console.log(
-                            //   "is moving",
-                            //   dollPosRefs.velocity.x,
-                            //   dollPosRefs.velocity.z
-                            // );
+                        const isWalking = Math.abs(dollPosRefs.velocity.x) > 0.1 || Math.abs(dollPosRefs.velocity.z) > 0.1;
+                        if (isWalking) {
                             const RAY_FORWARD_DIST = 0.25;
-                            forwardRayHelper.attachToMesh(
-                            /*mesh*/ meshRef, forwardRayDirection, forwardRayRelativeOrigin, 
-                            /*length*/ 6);
-                            const forwardPick = scene.pickWithRay(forwardRay, (mesh) => {
-                                return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
-                            }, true);
-                            if (forwardPick) {
-                                if (forwardPick.hit) {
-                                    const heightDiff = (((_b = forwardPick === null || forwardPick === void 0 ? void 0 : forwardPick.pickedPoint) === null || _b === void 0 ? void 0 : _b.y) || 0) - (((_c = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _c === void 0 ? void 0 : _c.y) || 0);
-                                    // in degrees I think
-                                    // negative is down
-                                    slope = getVectorAngle({
-                                        x: RAY_FORWARD_DIST,
-                                        y: heightDiff,
-                                    });
-                                    // console.log(heightDiff);
-                                    // console.log(slope);
-                                }
-                                // console.log("hit ground", pick.hit);
+                            frontRayHelper.attachToMesh(/*mesh*/ meshRef, frontRayDirection, frontRayRelativeOrigin, /*length*/ 10);
+                            const frontPick = scene.pickWithRay(frontRay, (mesh) => floorNames.includes(mesh.name) || wallNames.includes(mesh.name), true);
+                            if (frontPick === null || frontPick === void 0 ? void 0 : frontPick.hit) {
+                                const heightDiff = (((_g = frontPick === null || frontPick === void 0 ? void 0 : frontPick.pickedPoint) === null || _g === void 0 ? void 0 : _g.y) || 0) - (((_h = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _h === void 0 ? void 0 : _h.y) || 0);
+                                // In degrees, negative is down
+                                slopeUnderPlayer = getVectorAngle({
+                                    x: RAY_FORWARD_DIST,
+                                    y: heightDiff,
+                                });
                             }
                         }
+                        slope = slopeUnderPlayer;
+                        // maybe put in prendy assets options
+                        const SLOPE_LIMIT = 45;
+                        isAboveDownSlope = slope < -1 && slope > -SLOPE_LIMIT;
+                        isAboveUpSlope = slope > 1 && slope < SLOPE_LIMIT;
+                        isAboveASlope = isAboveDownSlope || isAboveUpSlope;
+                        newIsOnGround = distance < 0.21;
                     }
                 }
-                // else if (dollPosRefs.velocity.y > 0) {
-                //   // console.log("going up");
-                // }
-                // }
-                // }
-                // maybe prendy art
-                const SLOPE_LIMIT = 45;
-                const isWalkingDownSlope = slope < -1 && slope > -SLOPE_LIMIT;
-                const isWalkingUpSlope = slope > 1 && slope < SLOPE_LIMIT;
-                const isWalkingOnSlope = isWalkingDownSlope || isWalkingUpSlope;
-                // console.log("slope", slope);
-                // if (isWalkingDownSlope) console.log("isWalkingDownSlope");
-                // if (isWalkingUpSlope) console.log("isWalkingUpSlope");
-                // isWalkingOnSlope
-                // console.log("newIsOnGround", newIsOnGround);
-                // const downSlopeDamp = Math.max(Math.abs(slope) * 5 + 1, 1);
-                const safeSlopeDivider = Math.max(Math.abs(slope) * 0.2, 1);
-                // const slopeFallSpeed = (gravityValue / downSlopeDamp) * frameDuration;
+                const safeSlopeDivider = Math.max(Math.abs(slope) * 0.7, 1);
                 const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
+                if (isAboveDownSlope && newIsOnGround) {
+                    dollPosRefs.velocity.y = -slopeFallSpeed * 4; // need to multiply by player walk speed
+                }
                 if (newIsOnGround) {
-                    if (isWalkingDownSlope) {
-                        // console.log(slopeFallSpeed);
-                        dollPosRefs.velocity.y = -slopeFallSpeed;
-                    }
-                    else {
+                    if (!isAboveDownSlope) {
                         dollPosRefs.velocity.y = Math.max(0, dollPosRefs.velocity.y);
-                        if (dollPosRefs.velocity.y !== 0) {
-                            newIsMoving = true;
-                        }
                     }
                 }
                 else {
-                    {
-                        // console.log(slope);
-                        if (!isWalkingOnSlope) {
-                            console.log("FALLING", "isOnGround", isOnGround);
-                            newIsMoving = true;
-                            // is falling
-                            dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
-                        }
-                        if (isWalkingDownSlope) {
-                            // console.log(slopeFallSpeed);
-                            dollPosRefs.velocity.y = -slopeFallSpeed;
-                            if (dollPosRefs.velocity.y !== 0) {
-                                newIsMoving = true;
-                            }
-                        }
-                        if (isWalkingUpSlope) {
-                            dollPosRefs.velocity.y = Math.max(0, dollPosRefs.velocity.y);
-                            if (dollPosRefs.velocity.y !== 0) {
-                                newIsMoving = true;
-                            }
-                        }
-                    }
+                    // is falling
+                    dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
                 }
+                if (dollPosRefs.velocity.y !== 0)
+                    newIsMoving = true;
                 // if (!playerMovingPaused) newPositionMoveMode = "push";
                 newPositionMoveMode = "push";
                 setState({
@@ -443,6 +393,7 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                         setState({ players: { main: { canJump: false } } });
                     }
                     else {
+                        // allow jumping for a short time after leaving the ground
                         playerRefs.canJumpTimeout = setTimeout(() => {
                             setState({ players: { main: { canJump: false } } });
                         }, LEAVE_GROUND_CANT_JUMP_DELAY);
@@ -484,7 +435,7 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 }));
             },
             step: "cameraChange",
-            check: { type: "places", prop: "nowCamName" },
+            check: { type: "global", prop: "nowCamName" },
         }),
         whenPlayerMovementPausedChanges: itemEffect({
             run({ newValue: playerMovingPaused }) {

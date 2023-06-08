@@ -1,21 +1,20 @@
-import { Camera, Color3, Color4, ScenePerformancePriority, TargetCamera, Vector3 } from "@babylonjs/core";
+import { Camera, Color3, Color4, ScenePerformancePriority, Vector3 } from "@babylonjs/core";
 import { toRadians } from "chootils/dist/speedAngleDistance";
-import React, { ReactNode, useCallback, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
-import { PrendyAssets, PrendyOptions } from "../declarations";
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../declarations";
 import loadStyles from "../helpers/loadStyles";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { get_ScreenGui } from "./gui/ScreenGui";
 import { get_LoadingModels } from "./LoadingModels";
+import { get_ScreenGui } from "./gui/ScreenGui";
 // import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 loadStyles();
 
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
-export function makePrendyApp<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(
-  storeHelpers: StoreHelpers,
+export function makePrendyApp(
+  storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets

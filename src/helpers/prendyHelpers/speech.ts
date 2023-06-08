@@ -1,11 +1,10 @@
 import delay from "delay";
 import { CSSProperties } from "react";
 import { length } from "stringz";
+import { CharacterName, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_speechBubblesUtils } from "../../helpers/prendyUtils/speechBubbles";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
-import { PrendyOptions, CharacterName } from "../../declarations";
 import { clearTimeoutSafe } from "../utils";
 
 type ATimeout = ReturnType<typeof setTimeout> | undefined;
@@ -23,16 +22,11 @@ const showSpeechRefs = {
 // TODO might need to have it per character if other characts have mini bubbles
 const showMiniBubbleRefs = { closeTimeout: null as ReturnType<typeof setTimeout> | null };
 
-export function get_speechStoryHelpers<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_CharacterName extends CharacterName = CharacterName
->(
-  storeHelpers: StoreHelpers,
+export function get_speechStoryHelpers(
+  storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  _characterNames: readonly A_CharacterName[]
+  prendyStartOptions: PrendyOptions,
+  _characterNames: readonly CharacterName[]
 ) {
   const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
 
@@ -52,7 +46,7 @@ export function get_speechStoryHelpers<
     options?: {
       time?: number;
       showOnce?: boolean;
-      character?: SpeechBubbleName & A_CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
+      character?: SpeechBubbleName & CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
       zoomAmount?: number;
       lookAtPlayer?: boolean;
       returnToZoomBeforeConversation?: boolean; // remembers the previous zoom instead of going to the default when the convo ends
@@ -62,7 +56,7 @@ export function get_speechStoryHelpers<
   ) {
     return new Promise<void>((resolve, _reject) => {
       const { slateZoom: prevSlateZoom } = getGlobalState();
-      const playerCharacter = getGlobalState().playerCharacter as A_CharacterName;
+      const playerCharacter = getGlobalState().playerCharacter as CharacterName;
       const {
         time, // time = 2600,
         showOnce = false,

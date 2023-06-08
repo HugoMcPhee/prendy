@@ -1,7 +1,6 @@
 import delay from "delay";
-import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { get_characterStoryUtils, get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
-import { get_characterStoryUtils } from "../../helpers/prendyUtils/characters";
 import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
 export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
     const { getRefs, getState, onNextTick, setState } = storeHelpers;
@@ -10,22 +9,22 @@ export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNa
     const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
     const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
     async function changeSegmentAtLoop(_place, newSegmentName) {
-        // NOTE WARNING This will probably break if wantedSegmentNameAtLoop changes from somewhere else!!!
-        // to fix: could listen to changes to wantedSegmentNameAtLoop
+        // NOTE WARNING This will probably break if goalSegmentNameAtLoop changes from somewhere else!!!
+        // to fix: could listen to changes to goalSegmentNameAtLoop
         // might be fixed now that doWhenNowSegmentChanges listens to any change, instead of waiting for the expected segment name
         // FIXME this can not work? (the async resolve part)
         return new Promise((resolve, _reject) => {
             onNextTick(() => {
                 setGlobalState((state) => {
-                    const { wantedSegmentNameAtLoop } = state;
-                    if (wantedSegmentNameAtLoop) {
-                        // TEMP resolve straight away if there's already a wantedSegmentNameAtLoop
-                        console.error("there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync");
+                    const { goalSegmentNameAtLoop } = state;
+                    if (goalSegmentNameAtLoop) {
+                        // TEMP resolve straight away if there's already a goalSegmentNameAtLoop
+                        console.error("there was already a goalSegmentNameAtLoop when running changeSegmentAtLoopAsync");
                         resolve();
                         return {};
                     }
                     doWhenNowSegmentChanges(newSegmentName, () => resolve());
-                    return { wantedSegmentNameAtLoop: newSegmentName };
+                    return { goalSegmentNameAtLoop: newSegmentName };
                 });
             });
         });
@@ -33,21 +32,17 @@ export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNa
     async function changeCameraAtLoop(_place, newCamName) {
         return new Promise((resolve, _reject) => {
             setState((state) => {
-                const { nowPlaceName } = state.global.main;
-                const { wantedCamNameAtLoop } = state.places[nowPlaceName];
-                if (wantedCamNameAtLoop) {
-                    // TEMP resolve straight away if there's already a wantedCamNameAtLoop
-                    console.error("there was already a wantedSegmentNameAtLoop when running changeSegmentAtLoopAsync");
+                const { goalCamNameAtLoop } = state.global.main;
+                if (goalCamNameAtLoop) {
+                    // TEMP resolve straight away if there's already a goalCamNameAtLoop
+                    console.error("there was already a goalSegmentNameAtLoop when running changeSegmentAtLoopAsync");
                     resolve();
                     return {};
                 }
                 doWhenNowCamChanges(newCamName, () => resolve());
                 return {
-                    places: {
-                        [nowPlaceName]: {
-                            wantedCamNameAtLoop: newCamName,
-                        }, // AnyCameraName needed if there's only 1 place
-                    },
+                    // AnyCameraName needed if there's only 1 place
+                    global: { main: { goalCamNameAtLoop: newCamName } },
                 };
             });
         });
@@ -83,7 +78,7 @@ export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNa
             //     resolve();
             //     return;
             //   }
-            //   setGlobalState({ wantedSegmentName: segmentName }, () => resolve());
+            //   setGlobalState({ goalSegmentName: segmentName }, () => resolve());
             // } else if (whenToRun === "at loop") {
             changeSegmentAtLoop(_placeName, segmentName).finally(() => resolve());
             // }
@@ -93,17 +88,14 @@ export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNa
         return new Promise((resolve, _reject) => {
             if (whenToRun === "now") {
                 const { nowPlaceName } = getState().global.main;
-                const { nowCamName } = getState().places[nowPlaceName];
+                const { nowCamName } = getState().global.main;
                 // already on that camera
                 if (nowCamName === cameraName) {
                     resolve();
                     return;
                 }
-                setState({
-                    places: {
-                        [nowPlaceName]: { wantedCamName: cameraName }, // AnyCameraName needed if there's only 1 place
-                    },
-                }, () => resolve());
+                // AnyCameraName needed if there's only 1 place
+                setState({ global: { main: { goalCamName: cameraName } } }, () => resolve());
             }
             else if (whenToRun === "at loop") {
                 changeCameraAtLoop(_placeName, cameraName).finally(() => resolve());
@@ -114,34 +106,31 @@ export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNa
         var _a;
         let { toSpot, toPlace, toCam, toSegment } = toOption;
         const { dollName } = (_a = getCharDollStuff(charName)) !== null && _a !== void 0 ? _a : {};
+        console.log("toOption");
+        console.log(toOption);
         if (!dollName)
             return;
         onNextTick(() => {
             setState((state) => {
-                const newPlaceNowCamName = state.places[toPlace].nowCamName;
+                const newPlaceDefaultCamName = placeInfoByName[toPlace].cameraNames[0];
                 const nowSegmentName = state.global.main.nowSegmentName;
                 const placeInfo = placeInfoByName[toPlace];
                 toSpot = toSpot !== null && toSpot !== void 0 ? toSpot : placeInfo.spotNames[0];
                 toCam = toCam !== null && toCam !== void 0 ? toCam : placeInfo.cameraNames[0]; // types as a cam for the chosen place
                 toSegment = toSegment !== null && toSegment !== void 0 ? toSegment : placeInfo.segmentNames[0];
                 const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
-                if (foundRuleSegmentName) {
+                if (foundRuleSegmentName)
                     toSegment = foundRuleSegmentName;
-                }
+                console.log("toCam", toCam);
                 return {
                     global: {
                         main: {
-                            nextPlaceName: toPlace,
-                            wantedSegmentWhenNextPlaceLoads: toSegment || nowSegmentName,
+                            goalPlaceName: toPlace,
+                            goalSegmentWhenGoalPlaceLoads: toSegment || nowSegmentName,
+                            goalCamWhenNextPlaceLoads: toCam || newPlaceDefaultCamName,
                         },
                     },
-                    // Note might need to check , if the place rules reacts to nowCamName changing, but maybe shouldnt while changing place
-                    places: {
-                        [toPlace]: {
-                            wantedCamWhenNextPlaceLoads: toCam || newPlaceNowCamName,
-                        },
-                    },
-                    dolls: { [dollName]: { nextSpotName: toSpot } },
+                    dolls: { [dollName]: { goalSpotName: toSpot } },
                 };
             });
         });

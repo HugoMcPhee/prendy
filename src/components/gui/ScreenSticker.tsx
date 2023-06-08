@@ -1,10 +1,10 @@
 // @refresh-reset
+import { getRandomInt } from "chootils/dist/numbers";
 import React, { CSSProperties } from "react";
 import { animated, useSpring } from "react-spring";
-import { getRandomInt } from "chootils/dist/numbers";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../declarations";
 
-export function get_ScreenSticker<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_ScreenSticker(storeHelpers: PrendyStoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};

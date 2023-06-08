@@ -140,11 +140,12 @@ const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-// NOTE Change these to typeof to have known types while making prendys library
-export type PlaceholderPrendyStores = typeof placeholderPrendyStores;
-export type PrendyStoreHelpers = typeof storeHelpers;
+// NOTE Use these to typeof to have known types while making prendys library
+export type PrendyStoresUntypedType_ = typeof placeholderPrendyStores;
+export type PrendyStoreHelpersUntypedType_ = typeof storeHelpers;
 
-export type PlaceholderPrendyStores_ = Record<
+// NOTE use these two when using prendys library
+export type PrendyStoresUntypedType = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -152,7 +153,7 @@ export type PlaceholderPrendyStores_ = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type PrendyStoreHelpers_ = {
+export type PrendyStoreHelpersUntypedType = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -191,10 +192,13 @@ export type PrendyStoreHelpers_ = {
   useStoreItemPropsEffect: (...args: any) => any;
 };
 
-type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
+export interface PrendyStoresUntyped extends PrendyStoresUntypedType {}
+export interface PrendyStoreHelpersUntyped extends PrendyStoreHelpersUntypedType {}
+
+type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
 type HelperType<T extends ItemType> = StoreHelperTypes<
-  PrendyStoreHelpers["getState"],
-  PrendyStoreHelpers["getRefs"],
+  PrendyStoreHelpersUntyped["getState"],
+  PrendyStoreHelpersUntyped["getRefs"],
   T
 >;
 export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];

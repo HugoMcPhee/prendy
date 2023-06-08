@@ -1,6 +1,6 @@
 import { CharacterName, PrendyAssets } from "../declarations";
 import { Point2D } from "chootils/dist/points2d";
-export default function miniBubbles<A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CharacterName extends CharacterName = CharacterName>(prendyAssets: A_PrendyAssets): {
+export default function miniBubbles(prendyAssets: PrendyAssets): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
         character?: CharacterName;
     }) => {
@@ -15,20 +15,22 @@ export default function miniBubbles<A_PrendyAssets extends PrendyAssets = Prendy
         textRef: any;
         videoRef: HTMLVideoElement | null;
     };
-    startStates: { [K_CharacterName in A_CharacterName]: {
-        isVisible: boolean;
-        isFullyHidden: boolean;
-        text: string;
-        forCharacter: string | null;
-        position: Point2D;
-    }; };
+    startStates: {
+        [x: string]: {
+            isVisible: boolean;
+            isFullyHidden: boolean;
+            text: string;
+            forCharacter: string | null;
+            position: Point2D;
+        };
+    };
 };
-export declare type Store_MiniBubbles<T_ItemName extends string, A_CharacterName> = {
+export declare type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
     state: () => {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: A_CharacterName;
+        forCharacter: CharacterName;
         position: Point2D;
     };
     refs: () => {
@@ -40,7 +42,7 @@ export declare type Store_MiniBubbles<T_ItemName extends string, A_CharacterName
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: A_CharacterName;
+        forCharacter: CharacterName;
         position: Point2D;
     }>;
 };

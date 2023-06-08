@@ -5,7 +5,7 @@ const shaders = {
     attribute vec2 position;
     
     // Parameters
-    uniform vec2 planePos;
+    uniform vec2 slatePos;
     uniform vec2 stretchSceneAmount;
     uniform vec2 stretchVideoAmount;
 
@@ -48,7 +48,7 @@ const shaders = {
 
 
 
-      vec2 trans_position = planePos;  
+      vec2 trans_position = slatePos;  
       vec2 trans_scale = stretchSceneAmount;  
       float rotation = 0.0;   // degrees
       float r = rotation/180.0*3.14159; // radians
@@ -116,7 +116,7 @@ varying vec2 vUVbackdrop;
 // uniform sampler2D textureSampler;
 
 // Parameters
-// uniform vec2 planePos;
+// uniform vec2 slatePos;
 // uniform vec2 stretchSceneAmount;
 // uniform vec2 stretchVideoAmount;
 

@@ -1,30 +1,18 @@
-import { clearTimeoutSafe } from "../../helpers/utils";
 import { breakableForEach } from "chootils/dist/loops";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
-// let canRender = true;
-// setTimeout(() => {
-//   canRender = false;
-// }, 20000);
+import { clearTimeoutSafe } from "../../helpers/utils";
 export function get_globalGeneralRules(storeHelpers) {
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
     const { setGlobalState } = get_globalUtils(storeHelpers);
     return makeRules(({ effect }) => ({
         whenAnythingChangesForRendering: effect({
             run() {
-                var _a, _b;
                 const globalRefs = getRefs().global.main;
-                // const frameTick = getState().global.main.frameTick;
+                const scene = globalRefs.scene;
                 // Renders the scene manually
-                // console.log("frameTick", frameTick);
-                if ((_a = globalRefs.scene) === null || _a === void 0 ? void 0 : _a.activeCamera) {
-                    // forEach((globalRefs.scene as Scene)?.skeletons ?? [], (skeleton) => {
-                    //   skeleton.prepare();
-                    // });
-                    (_b = globalRefs.scene) === null || _b === void 0 ? void 0 : _b.render(false, false);
-                }
+                if (scene === null || scene === void 0 ? void 0 : scene.activeCamera)
+                    scene === null || scene === void 0 ? void 0 : scene.render(false, false);
                 // runs in a callback to set before the new repond frame
-                // setState({}, () => setState({ global: { main: { frameTick: Date.now() } } }));
-                // onNextTick(() => setState({ global: { main: { frameTick: Date.now() } } }));
                 onNextTick(() => setState({ global: { main: { frameTick: getState().global.main.frameTick + 1 } } }));
             },
             check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
@@ -45,9 +33,7 @@ export function get_globalGeneralRules(storeHelpers) {
                     }
                 });
                 const globalRefs = getRefs().global.main;
-                setState({
-                    global: { main: { aSpeechBubbleIsShowing: aBubbleIsShowing } },
-                });
+                setState({ global: { main: { aSpeechBubbleIsShowing: aBubbleIsShowing } } });
                 if (aBubbleIsShowing) {
                     clearTimeoutSafe(globalRefs.aConvoIsHappening_timeout);
                     setGlobalState({ aConvoIsHappening: true });

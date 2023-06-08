@@ -1,46 +1,54 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import get_globalStoreUtils from "./globalStoreUtils";
 export default function global(prendyStartOptions, prendyAssets) {
-    const { musicNames, soundNames } = prendyAssets;
+    const { musicNames, soundNames, placeInfoByName } = prendyAssets;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
+    const placeName = prendyStartOptions.place;
     // State
     const state = () => {
-        var _a;
+        var _a, _b, _c, _d;
         return ({
-            // segments and section video
-            wantedSegmentWhenNextPlaceLoads: null,
-            nextSegmentNameWhenVidPlays: null,
-            wantedSegmentNameAtLoop: null,
-            wantedSegmentName: null,
-            nowSegmentName: prendyStartOptions.segment,
-            wantToLoop: false,
-            // TODO? move nowCamName etc to here, since never change cam for non-now place
-            //
-            // changing places
-            modelNamesLoaded: [],
-            newPlaceLoaded: false,
-            isLoadingBetweenPlaces: true,
-            nowPlaceName: prendyStartOptions.place,
+            // place
+            nowPlaceName: placeName,
+            goalPlaceName: null,
             readyToSwapPlace: false,
-            nextPlaceName: null,
+            isLoadingBetweenPlaces: true,
             loadingOverlayToggled: true,
             loadingOverlayFullyShowing: true,
+            // cameras
+            goalCamWhenNextPlaceLoads: null,
+            goalCamNameWhenVidPlays: null,
+            goalCamNameAtLoop: null,
+            goalCamName: null,
+            nowCamName: (_c = ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+                ((_b = (_a = placeInfoByName === null || placeInfoByName === void 0 ? void 0 : placeInfoByName[placeName]) === null || _a === void 0 ? void 0 : _a.cameraNames) === null || _b === void 0 ? void 0 : _b[0]))) !== null && _c !== void 0 ? _c : "testItemCamName",
+            // segments and slice video
+            nowSegmentName: prendyStartOptions.segment,
+            goalSegmentName: null,
+            goalSegmentNameAtLoop: null,
+            goalSegmentNameWhenVidPlays: null,
+            goalSegmentWhenGoalPlaceLoads: null,
+            // changing places
+            modelNamesLoaded: [],
+            newPlaceModelLoaded: false,
+            newPlaceVideosLoaded: false,
+            newPlaceProbesLoaded: false,
             //
             // player
             playerCharacter: prendyStartOptions.playerCharacter,
             gravityValue: 5,
             playerMovingPaused: false,
-            focusedDoll: (_a = prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll) !== null && _a !== void 0 ? _a : "walker",
+            focusedDoll: (_d = prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll) !== null && _d !== void 0 ? _d : "walker",
             focusedDollIsInView: false,
             //
-            // scene plane
-            ...mover2dState("planePos"),
-            ...moverState("planeZoom", {
+            // slate
+            ...mover2dState("slatePos"),
+            ...moverState("slateZoom", {
                 value: prendyStartOptions.zoomLevels.default,
                 valueGoal: prendyStartOptions.zoomLevels.default,
                 // springStopSpeed: 0.001, // NOTE not used in mover yet
             }),
-            planePosMoveConfigName: "default",
+            slatePosMoveConfigName: "default",
             //
             // interacting
             timeScreenResized: Date.now(),
@@ -75,8 +83,8 @@ export default function global(prendyStartOptions, prendyAssets) {
         stretchVideoGoalSize: { x: 1, y: 1 },
         stretchSceneSize: { x: 1, y: 1 },
         //
-        ...mover2dRefs("planePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
-        ...moverRefs("planeZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
+        ...mover2dRefs("slatePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
+        ...moverRefs("slateZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
         //
         sounds: makeAutomaticSoundStartRefs(),
         music: makeAutomaticMusicStartRefs(),
@@ -85,9 +93,6 @@ export default function global(prendyStartOptions, prendyAssets) {
             compress: null,
             extraGain: null,
         },
-        //
-        isHoveringPickupButton: false,
-        isHoveringVirtualStickArea: true,
         //
         solidParticleSystems: {},
         //

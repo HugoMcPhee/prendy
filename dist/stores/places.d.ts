@@ -1,5 +1,5 @@
 import { AbstractMesh, CubeTexture, Sound, TargetCamera, Vector3 } from "@babylonjs/core";
-import { AnyCameraName, PrendyAssets, CameraNameByPlace, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../declarations";
+import { PrendyAssets, PlaceName, PrendyOptions } from "../declarations";
 declare const defaultCamRefs: () => {
     camera: TargetCamera | null;
     camCubeMeshes: AbstractMesh[];
@@ -7,32 +7,40 @@ declare const defaultCamRefs: () => {
     isTriggerable: boolean;
 };
 export declare type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
-export default function places<A_PlaceName extends PlaceName = PlaceName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(prendyAssets: A_PrendyAssets): {
-    startStates: { [P_PlaceName in A_PlaceName]: {
-        wantedCamNameAtLoop: A_CameraNameByPlace[P_PlaceName] | null;
-        wantedCamName: A_CameraNameByPlace[P_PlaceName] | null;
-        nowCamName: A_CameraNameByPlace[P_PlaceName];
-    }; };
-    state: <K_PlaceName extends A_PlaceName>(itemName: string | K_PlaceName) => {
-        wantedCamWhenNextPlaceLoads: A_CameraNameByPlace[A_PlaceName] | null;
-        nextCamNameWhenVidPlays: A_CameraNameByPlace[A_PlaceName] | null;
-        wantedCamNameAtLoop: A_CameraNameByPlace[A_PlaceName] | null;
-        wantedCamName: A_CameraNameByPlace[A_PlaceName] | null;
-        nowCamName: A_AnyCameraName;
+export default function places(prendyAssets: PrendyAssets, prendyStartOptions: PrendyOptions): {
+    startStates: {
+        [x: string]: {
+            testState: number;
+        };
     };
-    refs: <K_PlaceName_1 extends A_PlaceName>(itemName: K_PlaceName_1 & string) => {
+    state: <K_PlaceName extends string>(itemName: string | K_PlaceName) => {
+        testState: number;
+    };
+    refs: <K_PlaceName_1 extends string>(itemName: K_PlaceName_1 & string) => {
         rootMesh: null | AbstractMesh;
-        spotPositions: { [P_SpotName in A_SpotNameByPlace[A_PlaceName]]: Vector3; };
-        spotRotations: { [P_SpotName_1 in A_SpotNameByPlace[A_PlaceName]]: Vector3; };
-        soundspotSounds: { [P_SoundName in A_SoundspotNameByPlace[A_PlaceName]]: Sound | null; };
-        triggerMeshes: { [P_TriggerName in A_TriggerNameByPlace[A_PlaceName]]: AbstractMesh | null; };
-        wallMeshes: { [P_TriggerName_1 in A_WallNameByPlace[A_PlaceName]]: AbstractMesh | null; };
-        camsRefs: { [P_CameraName in A_CameraNameByPlace[A_PlaceName]]: {
-            camera: TargetCamera | null;
-            camCubeMeshes: AbstractMesh[];
-            probeTexture: CubeTexture | null;
-            isTriggerable: boolean;
-        }; };
+        spotPositions: {
+            [x: string]: Vector3;
+        };
+        spotRotations: {
+            [x: string]: Vector3;
+        };
+        soundspotSounds: {
+            [x: string]: Sound | null;
+        };
+        triggerMeshes: {
+            [x: string]: AbstractMesh | null;
+        };
+        wallMeshes: {
+            [x: string]: AbstractMesh | null;
+        };
+        camsRefs: {
+            [x: string]: {
+                camera: TargetCamera | null;
+                camCubeMeshes: AbstractMesh[];
+                probeTexture: CubeTexture | null;
+                isTriggerable: boolean;
+            };
+        };
     };
 };
 export {};

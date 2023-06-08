@@ -10,9 +10,8 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import pointers from "./pointers";
-import safeVids from "./safeVids";
-import sectionVids from "./sectionVids";
+import stateVids from "./stateVids";
+import sliceVids from "./sliceVids";
 import speechBubbles from "./speechBubbles";
 const TEST_START_OPTIONS = getPrendyOptions({
     // place: "cave",
@@ -91,16 +90,15 @@ const testArtStuff = {
 const placeholderPrendyStores = {
     keyboards: keyboards(),
     miniBubbles: miniBubbles(testArtStuff),
-    pointers: pointers(),
     global: global(TEST_START_OPTIONS, testArtStuff),
     models: models(testArtStuff),
     dolls: dolls(testArtStuff),
     characters: characters(testArtStuff),
     players: players(TEST_START_OPTIONS),
     speechBubbles: speechBubbles(testArtStuff),
-    places: places(testArtStuff),
-    safeVids: safeVids(testArtStuff),
-    sectionVids: sectionVids(testArtStuff),
+    places: places(testArtStuff, TEST_START_OPTIONS),
+    stateVids: stateVids(testArtStuff),
+    sliceVids: sliceVids(testArtStuff),
     //
     story: story_fake(),
 };

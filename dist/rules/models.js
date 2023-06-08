@@ -1,7 +1,7 @@
 import { SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
-// handle laoding here ??
+// handle loading here ??
 export function get_modelRules(storeHelpers, prendyAssets) {
     const { makeRules, setState, getRefs } = storeHelpers;
     const { modelInfoByName } = prendyAssets;
@@ -34,7 +34,6 @@ export function get_modelRules(storeHelpers, prendyAssets) {
         }),
         whenIsLoaded: itemEffect({
             run({ itemName: modelName }) {
-                // console.log(modelName, " loaded");
                 setState((state) => {
                     // if (state.global.main.modelNamesLoaded.includes(modelName)) return {};
                     return {

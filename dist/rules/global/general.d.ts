@@ -1,5 +1,5 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-export declare function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers): {
+import { PrendyStoreHelpers } from "../../declarations";
+export declare function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

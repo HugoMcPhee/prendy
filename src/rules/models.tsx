@@ -1,15 +1,11 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { PrendyAssets, ModelName } from "../declarations";
+import { ModelName, PrendyAssets, PrendyStoreHelpers } from "../declarations";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
 // handle loading here ??
 
-export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_modelRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
 

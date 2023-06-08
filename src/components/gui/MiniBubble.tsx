@@ -2,10 +2,10 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { CharacterName } from "../../declarations";
+import { CharacterName, PrendyStoreHelpers } from "../../declarations";
 import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
 
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
@@ -15,12 +15,12 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
   const { useStoreEffect, useStore, getState } = storeHelpers;
 
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
-  type GetState = StoreHelpers["getState"];
+  type GetState = PrendyStoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType] & Record<any, any>;
 

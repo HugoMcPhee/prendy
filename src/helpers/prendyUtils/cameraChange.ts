@@ -7,19 +7,22 @@ import {
   CameraNameByPlace,
   PlaceName,
   PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
   SegmentNameByPlace,
 } from "../../declarations";
 import { DefaultCameraRefs } from "../../stores/places";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyOptionsUntyped, PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
 import { get_getSliceVidVideo } from "./sliceVids";
 
-export function get_cameraChangeUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
+export function get_cameraChangeUtils(
+  storeHelpers: PrendyStoreHelpers,
+  prendyOptions: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, dollNames } = prendyAssets;
 
@@ -27,7 +30,7 @@ export function get_cameraChangeUtils<
   const placesRefs = getRefs().places;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
-  const getSliceVidVideo = get_getSliceVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
   const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
   /*

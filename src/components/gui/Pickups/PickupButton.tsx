@@ -1,12 +1,8 @@
 // @refresh-reset
-import React, { EventHandler, PointerEventHandler, SyntheticEvent, useRef, useState } from "react";
-import { PrendyStoreHelpers, PickupsInfoPlaceholder } from "../../../stores/typedStoreHelpers";
+import React, { useRef, useState } from "react";
+import { PickupName, PickupsInfo, PrendyStoreHelpers } from "../../../declarations";
 
-export function get_PickupButton<
-  StoreHelpers extends PrendyStoreHelpers,
-  PickupName extends string,
-  PickupsInfo extends PickupsInfoPlaceholder<PickupName>
->(storeHelpers: StoreHelpers, pickupsInfo: PickupsInfo) {
+export function get_PickupButton(storeHelpers: PrendyStoreHelpers, pickupsInfo: PickupsInfo) {
   const { getRefs } = storeHelpers;
 
   type Props = { name: PickupName };

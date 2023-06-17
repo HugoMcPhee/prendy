@@ -3,7 +3,7 @@ import { PrendyStoreHelpers } from "../declarations";
 import { makeVideoElementFromPath } from "../helpers/prendyUtils/stateVids";
 import { VidState } from "../stores/stateVids";
 import { PrendyStoreHelpersUntyped } from "../stores/typedStoreHelpers";
-// import { testAppendVideo } from "../../utils/babylonjs/usePlace/utils";
+// import { testAppendVideo } from "../helpers/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
@@ -40,8 +40,7 @@ export function get_safeVidRules(storeHelpers: PrendyStoreHelpers) {
           function onLoad() {
             itemRefs.videoElement?.removeEventListener("loadedmetadata", onLoad);
             // uncomment to test videos
-            // itemRefs.videoElement &&
-            // testAppendVideo(itemRefs.videoElement, itemName, itemName);
+            // itemRefs.videoElement && testAppendVideo(itemRefs.videoElement, itemName, itemName);
           }
           // NOTE canplay doesn't work on safari?
           itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);

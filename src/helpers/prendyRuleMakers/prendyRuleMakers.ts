@@ -89,7 +89,7 @@ export function makeAllStoryRuleMakers(
   characterNames: readonly CharacterName[],
   dollNames: readonly DollName[]
 ) {
-  const { getRefs, getState, makeRules, startItemEffect, stopEffect, onNextTick } = storeHelpers;
+  const { getRefs, getState, setState, makeRules, startItemEffect, stopEffect, onNextTick } = storeHelpers;
 
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
@@ -161,12 +161,71 @@ export function makeAllStoryRuleMakers(
     }>;
   }>;
 
-  //  This sets an options object in global refs that gets checked when changing segment
   function makeCamSegmentRules(callBacksObject: CamSegmentRulesOptions) {
-    setTimeout(() => {
-      getRefs().global.main.camSegmentRulesOptions = callBacksObject as CamSegmentRulesOptionsUntyped;
-    }, 0);
-    return true;
+    return {
+      startAll() {
+        // This sets an options object in global refs that gets checked when changing segment,
+        // so no rules are actually started here, but it uses the same format as the other rule makers
+        getRefs().global.main.camSegmentRulesOptions = callBacksObject as CamSegmentRulesOptionsUntyped;
+      },
+      stopAll() {
+        /* nothing to stop */
+      },
+    };
+  }
+
+  function makePickupsRules({
+    onUsePickupAtTrigger,
+    onUsePickupToTalk,
+    onUsePickupGenerally,
+  }: {
+    onUsePickupAtTrigger: ReturnType<typeof makeOnUsePickupAtTrigger>;
+    onUsePickupToTalk: ReturnType<typeof makeOnUsePickupToTalk>;
+    onUsePickupGenerally: ReturnType<typeof makeOnUsePickupGenerally>;
+  }) {
+    const onPickupButtonClick = (pickupName: PickupName) => {
+      setState({ players: { main: { interactButtonPressTime: Date.now() } } });
+      const didUsePickupAtTrigger = onUsePickupAtTrigger(pickupName);
+      const didUsePickupWithDoll = onUsePickupToTalk(pickupName);
+
+      // NOTE the top two functions can return true if they ran,
+      // and if neither returned true, it runs the general one
+      if (!didUsePickupAtTrigger && !didUsePickupWithDoll) {
+        onUsePickupGenerally(pickupName);
+      }
+    };
+
+    return {
+      startAll() {
+        // This sets an onClick callback in global refs that gets called when clicking the pickup button,
+        // so no rules are actually started here, but it uses the same format as the other rule makers
+        getRefs().global.main.onPickupButtonClick = onPickupButtonClick;
+      },
+      stopAll() {
+        /* nothing to stop */
+      },
+    };
+  }
+
+  function makeInteractButtonRules({
+    onInteractAtTrigger,
+    onInteractAtTalk,
+  }: {
+    onInteractAtTrigger: ReturnType<typeof makeOnInteractAtTrigger>;
+    onInteractAtTalk: ReturnType<typeof makeOnInteractToTalk>;
+  }) {
+    const interactButtonRules = makeRules(({ itemEffect, effect }) => ({
+      whenInteractButtonClicked: itemEffect({
+        run() {
+          onInteractAtTrigger();
+          onInteractAtTalk();
+        },
+        check: { prop: "interactButtonPressTime", type: "players" },
+        // atStepEnd: true,
+        step: "story", // story insead of input, so virtual stick animations dont overwrite the story click ones
+      }),
+    }));
+    return interactButtonRules;
   }
 
   // --------------------------------------------------
@@ -551,9 +610,11 @@ export function makeAllStoryRuleMakers(
     makeCamSegmentRules,
     makeOnInteractAtTrigger,
     makeOnInteractToTalk,
+    makeInteractButtonRules,
     makeOnUsePickupAtTrigger,
     makeOnUsePickupGenerally,
     makeOnUsePickupToTalk,
+    makePickupsRules,
     makePlaceLoadRules,
     makePlaceNotLoadedRules,
     makeStoryPartRules,

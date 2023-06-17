@@ -21,6 +21,7 @@ v0.9.6
 - fixes pressing pickups and jump on touchscreens without also pressign the joystick
 - removed unneeded generic types, and replaced with reliable declaration merging
 - simplified getting prendy helpers into one function
+- simplified initialisaing everything with makePrendyApp
 
 v0.9.5
 

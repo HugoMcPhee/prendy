@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../declarations";
 import loadGoogleFonts from "../helpers/loadGoogleFonts";
 import {
@@ -14,7 +15,7 @@ import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { get_safeVidRules } from "./stateVids";
 
-export function makeStartPrendyRules(
+export function makeStartPrendyMainRules(
   storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
   PRENDY_OPTIONS: PrendyOptions,
@@ -93,15 +94,66 @@ export function makeStartPrendyRules(
 
   let didDoOneTimeStartStuff = false;
 
-  return function startPrendyRules(fontNames: readonly string[]) {
+  return function startPrendyRules() {
     const stopPrendyMainRules = startPrendyMainRules();
     if (!didDoOneTimeStartStuff) {
-      loadGoogleFonts(fontNames); // Auto-import fonts from google fonts :)
+      loadGoogleFonts(prendyAssets.fontNames); // Auto-import fonts from google fonts :)
       didDoOneTimeStartStuff = true;
     }
 
     return function stopPrendyRules() {
       stopPrendyMainRules();
     };
+  };
+}
+
+// TODO move this to repond
+export type SubscribableRules = Record<any, any> & { startAll: () => void; stopAll: () => void };
+
+// TODO move this to repond
+// Takes a list of rules and returns a new function that runs startAll for each, and returns a function that runs stopAll for each
+// NOTE it doesn't preoprly merge rules, just runs them all
+export function rulesToSubscriber(rules: SubscribableRules[]) {
+  return () => {
+    rules.forEach((rule) => rule.startAll());
+    return () => rules.forEach((rule) => rule.stopAll());
+  };
+}
+
+// Takes a list of subscribers and returns a new combined subscriber
+export function combineSubscribers(subscribers: (() => () => void)[]) {
+  return () => {
+    const unsubscribers = subscribers.map((subscriber) => subscriber());
+    return () => unsubscribers.forEach((unsubscriber) => unsubscriber());
+  };
+}
+
+export type MakeStartRulesOptions = {
+  customRules: SubscribableRules[];
+  storeHelpers: PrendyStoreHelpers;
+  stores: PrendyStores;
+  prendyOptions: PrendyOptions;
+  prendyAssets: PrendyAssets;
+};
+
+export function makeStartPrendyRules({
+  customRules,
+  prendyOptions,
+  prendyAssets,
+  stores,
+  storeHelpers,
+}: MakeStartRulesOptions) {
+  const startPrendyMainRules = makeStartPrendyMainRules(storeHelpers, stores, prendyOptions, prendyAssets);
+  const startPrendyStoryRules = rulesToSubscriber(customRules);
+  const startRules = combineSubscribers([startPrendyMainRules, startPrendyStoryRules]);
+
+  return startRules;
+}
+
+export function makeStartAndStopRules(options: MakeStartRulesOptions) {
+  const startRules = makeStartPrendyRules(options);
+  return function StartAndStopRules() {
+    useEffect(startRules);
+    return null;
   };
 }

@@ -31,7 +31,11 @@ export function get_LoadingModels(
       <Suspense fallback={<sphere name="sphere1" diameter={2} segments={16} position={new Vector3(0, 1, 0)} />}>
         <Player />
         <Place name={nowPlaceName} key={nowPlaceName} />
-        {/* <AllSmells /> */}
+        {/* 
+        Adds custom parts here, like minigames or particles
+        <AllSmellPaticles />
+        <TakeKeyMinigame />
+         */}
         {children}
       </Suspense>
     );

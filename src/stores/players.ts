@@ -12,7 +12,7 @@ export default function players(prendyStartOptions: PrendyOptions) {
     lastSafeInputAngle: 0 as number | null,
     inputVelocity: { x: 0, y: 0 } as Point2D,
     isJumping: false,
-    isOnGround: false,
+    isOnGround: true,
     canJump: true,
     interactButtonPressTime: Date.now(),
     jumpButtonPressTime: Date.now(),

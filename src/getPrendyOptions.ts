@@ -25,7 +25,7 @@ type DoorsInfo = Partial<{
   }>;
 }>;
 
-export function getPrendyOptions<
+export function makePrendyOptions<
   T_Place extends PlaceName,
   T_Cam extends CameraNameByPlace[T_Place] // NOTE could limit to the chosen segment,
 >(options: {

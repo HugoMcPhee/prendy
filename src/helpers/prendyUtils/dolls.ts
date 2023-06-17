@@ -227,10 +227,20 @@ export function get_dollUtils(
     if (!modelRefs.container) return;
 
     const namePrefix = `clone_${dollName}_${modelName}_`;
+    // console.log("namePrefix", namePrefix);
 
-    let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, {
-      doNotInstantiate: true,
-    });
+    let entries = modelRefs.container.instantiateModelsToScene(
+      (sourceName) => {
+        const naeName = `${namePrefix}${sourceName}`;
+        console.log(`${namePrefix}${sourceName}`);
+
+        return `${namePrefix}${sourceName}`;
+      },
+      false,
+      {
+        doNotInstantiate: true,
+      }
+    );
     dollRefs.entriesRef = entries;
 
     const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];

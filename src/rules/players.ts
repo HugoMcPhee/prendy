@@ -419,7 +419,7 @@ export function get_playerRules(
             isAboveUpSlope = slope > 1 && slope < SLOPE_LIMIT;
             isAboveASlope = isAboveDownSlope || isAboveUpSlope;
 
-            newIsOnGround = distance < 0.21;
+            newIsOnGround = distance < 0.1; // 0.21
           }
         }
 

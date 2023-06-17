@@ -2,7 +2,7 @@ import { PrendyAssets } from "../declarations";
 import { StoreHelperTypes } from "repond";
 import { createStoreHelpers } from "repond";
 import { prendyStepNames } from "./stores";
-import { getPrendyOptions } from "../getPrendyOptions";
+import { makePrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../helpers/prendyRuleMakers/fakeStoryStore";
 import characters from "./characters";
 import dolls from "./dolls/dolls";
@@ -16,7 +16,7 @@ import stateVids from "./stateVids";
 import sliceVids from "./sliceVids";
 import speechBubbles from "./speechBubbles";
 
-const TEST_START_OPTIONS = getPrendyOptions({
+const TEST_START_OPTIONS = makePrendyOptions({
   // place: "cave",
   // segment: "start",
   // camera: "View_Camera",

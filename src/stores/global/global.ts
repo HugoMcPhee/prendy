@@ -19,7 +19,7 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
   const { musicNames, soundNames, placeInfoByName } = prendyAssets;
 
   type MaybeSegmentName = null | AnySegmentName;
-  type MaybeCam = null | PlaceName;
+  type MaybeCam = null | AnyCameraName;
 
   type SegmentNameFromCameraAndPlace<
     T_Place extends keyof PlaceInfoByName,

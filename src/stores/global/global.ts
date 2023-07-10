@@ -14,6 +14,80 @@ import {
 } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import get_globalStoreUtils from "./globalStoreUtils";
+import { Point2D } from "chootils/dist/points2d";
+import { Point3D } from "chootils/dist/points3d";
+import { InRangeForDoll } from "../../helpers/prendyUtils/dolls";
+
+// save it to global
+export type PrendySaveState = {
+  global: {
+    nowCamName: string;
+    nowPlaceName: string;
+    nowSegmentName: string;
+    heldPickups: string[];
+    storyOverlayToggled: boolean;
+    alarmTextIsVisible: boolean;
+    alarmText: string;
+    aSpeechBubbleIsShowing: boolean;
+    aConvoIsHappening: boolean;
+  };
+  dolls: Record<
+    string,
+    {
+      position: Point3D;
+      rotationY: number;
+      isVisible: boolean;
+      collisionsEnabled: boolean; // setting isVisible also affects collisions
+      toggledMeshes: Record<string, boolean>;
+      inRange: Record<string, InRangeForDoll>;
+    }
+  >;
+  characters: Record<
+    string,
+    {
+      hasLeftFirstTrigger: boolean;
+    }
+  >;
+  player: {
+    animationNames: {
+      walking: string;
+      idle: string;
+    };
+  };
+  // (scraps) walkSpeed (move to state?)
+  miniBubbles: Record<
+    string,
+    {
+      isVisible: boolean;
+      text: string;
+      // forCharacter
+    }
+  >;
+  speechBubbles: Record<
+    string,
+    {
+      isVisible: boolean;
+      goalText: string;
+      // text?
+      // visibleLetterAmount?
+      nowVideoName: string;
+      font: string;
+      stylesBySpecialText: {
+        [key: string]: {
+          color: string;
+          fontSize: string;
+          fontWeight: string;
+          fontStyle: string;
+          textDecoration: string;
+        };
+      };
+      forCharacter: CharacterName;
+      typingFinished: boolean;
+    }
+  >;
+  // (whole state)
+  storyState: Record<any, any>;
+};
 
 export default function global(prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets) {
   const { musicNames, soundNames, placeInfoByName } = prendyAssets;
@@ -104,6 +178,9 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
     frameTick: 0,
     //
     debugMessage: "",
+    //
+    latestSave: null as null | PrendySaveState,
+    latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
   });
   // Refs
   const refs = () => ({

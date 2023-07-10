@@ -9,7 +9,15 @@ TODO
 - doorsInfo type doesn't autocomplete place name
 - maybe update makeTriggerRules to be by character name, and it skips for characters without rules
 
-v0.9.6
+v 0.9.9
+
+- added saving and loading
+- uses new repond rule maker helpers like makeRuleMaker
+- added helpers to wait for place to load
+- types for toggledMeshes and animationWeights are typed per dolls now
+- fixing walking over two floors ontop of eachother
+
+v0.9.8
 
 - updated to use repond and updated packages
 - more predictable logic for loading and playing videos
@@ -22,6 +30,10 @@ v0.9.6
 - removed unneeded generic types, and replaced with reliable declaration merging
 - simplified getting prendy helpers into one function
 - simplified initialisaing everything with makePrendyApp
+
+v0.9.7
+
+v0.9.6
 
 v0.9.5
 

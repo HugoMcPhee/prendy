@@ -42,6 +42,7 @@ export const prendyStepNames = [
   "sliceVidStateUpdates",
   // game stuff
   "respondToNewPlace", // TODO Maybe use this for when a place loads, and the other "loadNewPlace" for starting to load a place?
+  "respondToNewPlaceStory",
   "cameraChange", // meant for checking stuff like nowCamName and nowSegmentName changed by listening to sliceVidStateUpdates
   "input", // input updates position
   "editPosition", // editMovement" ,?
@@ -71,7 +72,7 @@ export const prendyStepNames = [
   "overlay", // = painting extra scenes to show ontop of everything
 ] as const;
 
-export type StepName = (typeof prendyStepNames)[number];
+export type PrendyStepName = (typeof prendyStepNames)[number];
 
 // NOTE the generic types are used to prevent the typescript compiler widneing
 // [K_CharacterName in CharacterName] to [x: string]

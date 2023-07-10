@@ -14,6 +14,8 @@ import {
 import { get_characterStoryUtils, get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
+import { Point3D } from "chootils/dist/points3d";
+import { get_spotStoryUtils } from "../prendyUtils/spots";
 
 export function get_sceneStoryHelpers(
   storeHelpers: PrendyStoreHelpers,
@@ -27,7 +29,8 @@ export function get_sceneStoryHelpers(
 
   type ToPlaceOption<T_PlaceName extends PlaceName> = {
     toPlace: T_PlaceName;
-    toSpot: SpotNameByPlace[T_PlaceName];
+    toSpot?: SpotNameByPlace[T_PlaceName];
+    toPositon?: Point3D;
     // NOTE might be able to make this auto if the first spot is inside a cam collider?
     toCam?: CameraNameByPlace[T_PlaceName];
     toSegment?: SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
@@ -37,6 +40,7 @@ export function get_sceneStoryHelpers(
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
   const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
   const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
 
   async function changeSegmentAtLoop<
     T_Place extends PlaceName,
@@ -170,7 +174,8 @@ export function get_sceneStoryHelpers(
     toOption: ToPlaceOption<T_PlaceName>,
     charName: CharacterName = characterNames[0]
   ) {
-    let { toSpot, toPlace, toCam, toSegment } = toOption;
+    // NOTE could include waitForPlaceFullyLoaded here so it can be awaited
+    let { toSpot, toPlace, toPositon, toCam, toSegment } = toOption;
     const { dollName } = getCharDollStuff(charName) ?? {};
     console.log("toOption");
     console.log(toOption);
@@ -183,14 +188,14 @@ export function get_sceneStoryHelpers(
         const nowSegmentName = state.global.main.nowSegmentName;
 
         const placeInfo = placeInfoByName[toPlace];
-        toSpot = toSpot ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
+        // toSpot = toSpot ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
+        toSpot = toSpot; // ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
+        toPositon = toPositon;
         toCam = toCam ?? (placeInfo.cameraNames[0] as NonNullable<typeof toCam>); // types as a cam for the chosen place
         toSegment = toSegment ?? (placeInfo.segmentNames[0] as SegmentNameByPlace[T_PlaceName]);
 
         const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
         if (foundRuleSegmentName) toSegment = foundRuleSegmentName;
-
-        console.log("toCam", toCam);
 
         return {
           global: {
@@ -200,7 +205,7 @@ export function get_sceneStoryHelpers(
               goalCamWhenNextPlaceLoads: toCam || newPlaceDefaultCamName,
             },
           },
-          dolls: { [dollName]: { goalSpotName: toSpot } },
+          dolls: { [dollName]: { goalPositionAtNewPlace: toPositon, goalSpotNameAtNewPlace: toSpot } },
         };
       });
     });

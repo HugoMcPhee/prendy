@@ -141,11 +141,11 @@ const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // NOTE Use these to typeof to have known types while making prendys library
-export type PrendyStoresUntypedType_ = typeof placeholderPrendyStores;
-export type PrendyStoreHelpersUntypedType_ = typeof storeHelpers;
+export type PrendyStoresUntypedType = typeof placeholderPrendyStores;
+export type PrendyStoreHelpersUntypedType = typeof storeHelpers;
 
 // NOTE use these two when using prendys library
-export type PrendyStoresUntypedType = Record<
+export type PrendyStoresUntypedType_ = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -153,7 +153,7 @@ export type PrendyStoresUntypedType = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type PrendyStoreHelpersUntypedType = {
+export type PrendyStoreHelpersUntypedType_ = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -180,6 +180,9 @@ export type PrendyStoreHelpersUntypedType = {
     stop: (...args: any) => any;
     ruleNames: any[];
   };
+  makeRuleMaker: (...args: any) => any;
+  makeNestedRuleMaker: (...args: any) => any;
+  makeNestedLeaveRuleMaker: (...args: any) => any;
   onNextTick: (...args: any) => any;
   addItem: (...args: any) => any;
   removeItem: (...args: any) => any;

@@ -313,7 +313,7 @@ export function get_playerRules(
         const dollPosRefs = dollRefs.positionMoverRefs;
         const { isJumping, isOnGround, inputVelocity } = getState().players.main;
 
-        // if (!dollRefs.checkCollisions) return;
+        // if (!dollRefs.canCollide) return;
 
         // const { scene } = globalRefs;
         const { meshRef } = dollRefs;
@@ -367,13 +367,14 @@ export function get_playerRules(
             // /*length*/ 2 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
             /*length*/ 10 // 0.25 meant the bird in eggventure couldn't climb the ~45degree pan, 0.3 meant the player couldn't climb the cave in rodont
           );
+          // For stacked floors, I think it's picking the bottom floor, which is bad
 
           const centerPick = scene.pickWithRay(
             downRay,
             (mesh) => {
               return floorNames.includes(mesh.name) || wallNames.includes(mesh.name);
             },
-            true
+            false // if true, then it can pick the bottom  of overlapping floors, which is bad
           );
 
           if (centerPick) {

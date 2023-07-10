@@ -116,7 +116,7 @@ export function enableCollisions(theMesh: AbstractMesh) {
   // Enable collision detection on player
   theMesh.ellipsoid = new Vector3(0.6, 1.2, 0.6);
   theMesh.ellipsoidOffset = new Vector3(0, 1.2, 0);
-  theMesh.showBoundingBox = true;
+  // theMesh.showBoundingBox = true;
   theMesh.checkCollisions = true;
   theMesh.collisionGroup = 11;
   theMesh.useOctreeForCollisions = true;
@@ -232,7 +232,6 @@ export function get_dollUtils(
     let entries = modelRefs.container.instantiateModelsToScene(
       (sourceName) => {
         const naeName = `${namePrefix}${sourceName}`;
-        console.log(`${namePrefix}${sourceName}`);
 
         return `${namePrefix}${sourceName}`;
       },
@@ -300,6 +299,7 @@ export function get_dollUtils(
     dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
 
     enableCollisions(dollRefs.meshRef);
+    dollRefs.meshRef.setEnabled(dollState.isVisible);
   }
 
   function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {

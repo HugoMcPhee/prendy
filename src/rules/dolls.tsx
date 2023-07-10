@@ -7,6 +7,8 @@ import { makeRunMovers } from "repond-movers";
 import {
   AnyAnimationName,
   DollName,
+  DollOptions,
+  MeshNameByModel,
   ModelName,
   PrendyAssets,
   PrendyOptions,
@@ -16,7 +18,12 @@ import {
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
-import { InRangeForDoll, getDefaultInRangeFunction, get_dollUtils } from "../helpers/prendyUtils/dolls";
+import {
+  InRangeForDoll,
+  getDefaultInRangeFunction,
+  get_dollStoryUtils,
+  get_dollUtils,
+} from "../helpers/prendyUtils/dolls";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -49,7 +56,7 @@ export function get_dollDynamicRules(
     prendyStartOptions,
     prendyAssets
   );
-  const { getRefs, makeDynamicRules } = storeHelpers;
+  const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
 
   return makeDynamicRules(({ itemEffect, effect }) => ({
     waitForModelToLoad: itemEffect(({ dollName, modelName }: { dollName: DollName; modelName: ModelName }) => ({
@@ -72,10 +79,27 @@ export function get_dollDynamicRules(
           }
 
           setupLightMaterial(modelRefs.materialRef);
+
+          // using modelNamesByPlace, set the doll state to invisible if it's not in the current place
+          // TODO
+          if (dollName === "shoes") {
+            console.log("= = = = = = = = = whenWholePlaceFinishesLoading", dollName);
+          }
+          const { nowPlaceName } = getState().global.main;
+          // const { modelName } = getState().dolls[dollName];
+          const { modelNamesByPlace } = prendyStartOptions;
+          const modelNamesForPlace = modelNamesByPlace[nowPlaceName];
+          const isInPlace = modelNamesForPlace.includes(modelName);
+          if (!isInPlace) {
+            setState({ dolls: { [dollName]: { isVisible: false } } });
+          } else {
+            setState({ dolls: { [dollName]: { isVisible: true } } });
+          }
         },
         name: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
         check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },
         atStepEnd: true,
+        step: "respondToNewPlace",
       })
     ),
   }));
@@ -119,6 +143,10 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
   const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
   const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
+  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
+
+  type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
+  type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
   return makeRules(({ itemEffect, effect }) => ({
     // --------------------------------
@@ -288,22 +316,13 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
     // ___________________________________
     // position
     whenPositionChangesToEdit: itemEffect({
-      run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
+      run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName, itemState }) {
         if (!itemRefs.meshRef) return;
 
-        // if (samePoints3d(newPosition, prevPosition)) console.log("was same");
-        // console.log("whenPositionChangesToEdit");
-
-        // if (dollName === "key") {
-        //   console.log("sdkfksfdlfsdkkfsdlkfsd");
-        //
-        //   console.log("itemRefs.checkCollisions", itemRefs.checkCollisions);
-        //   if (!itemRefs.checkCollisions) {
-        //     itemRefs.meshRef.setAbsolutePosition(point3dToVector3(newPosition));
-        //   }
-        // }
-
-        if (itemRefs.checkCollisions) {
+        if (itemRefs.canGoThroughWalls) {
+          console.log("not checking collisions and setting position", dollName);
+          itemRefs.meshRef.setAbsolutePosition(point3dToVector3(newPosition));
+        } else {
           const { editedPosition, positionWasEdited, collidedPosOffset } = setGlobalPositionWithCollisions(
             itemRefs.meshRef,
             newPosition
@@ -330,17 +349,6 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
               },
             }));
           }
-        } else {
-          // if (dollName === "key") {
-          //   console.log("sdkfksfdlfsdkkfsdlkfsd");
-          //
-          //   console.log("itemRefs.checkCollisions", itemRefs.checkCollisions);
-          // if (!itemRefs.checkCollisions) {
-          console.log("not checking collisions and setting position", dollName);
-
-          itemRefs.meshRef.setAbsolutePosition(point3dToVector3(newPosition));
-          // }
-          // }
         }
 
         updateDollScreenPosition({
@@ -374,8 +382,8 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
           // if (!diffInfo.propsChangedBool.dolls[dollName].position) return;
           // if position changed
 
-          const dollRef = getRefs().dolls[dollName];
-          if (!dollRef.checkCollisions) return; // stop checking more if checkCollisions is false
+          const dollState = getState().dolls[dollName];
+          if (!dollState.isVisible) return; // stop checking more if isVisible is false
 
           newQuickDistancesMap[dollName] = {}; //
           // newDollsState[dollName] = { inRange: defaultInRange() };
@@ -383,8 +391,8 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
 
           // get quick distances to each other doll
           forEach(dollNames, (otherDollName) => {
-            const otherDollRef = getRefs().dolls[otherDollName];
-            if (!otherDollRef.checkCollisions) return;
+            const otherDollState = getState().dolls[otherDollName];
+            if (!otherDollState.isVisible) return;
 
             let quickDistance = 100000000;
 
@@ -440,6 +448,47 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
       // this happens before rendering because its in "derive" instead of "subscribe"
       check: { type: "global", prop: ["slatePos", "slateZoom"] },
       step: "slatePosition",
+      atStepEnd: true,
+    }),
+    whenToggledMeshesChanges: itemEffect({
+      run({ newValue: toggledMeshes, itemName: dollName, itemRefs }) {
+        const { otherMeshes } = itemRefs;
+        if (!otherMeshes) return;
+
+        const modelName = getModelNameFromDoll(dollName);
+        const modelInfo = modelInfoByName[modelName as unknown as ModelName];
+        const typedMeshNames = modelInfo.meshNames as unknown as MeshNamesFromDoll<typeof dollName>[];
+
+        forEach(typedMeshNames, (meshName) => {
+          const newToggle = toggledMeshes[meshName];
+          const theMesh = otherMeshes[meshName];
+
+          if (theMesh && newToggle !== undefined) theMesh.setEnabled(newToggle);
+        });
+      },
+      check: { type: "dolls", prop: "toggledMeshes" },
+      step: "default",
+      atStepEnd: true,
+    }),
+    whenIsVisibleChanges: itemEffect({
+      run({ newValue: isVisible, itemName: dollName, itemRefs: dollRefs }) {
+        const modelName = getModelNameFromDoll(dollName);
+        const modelInfo = modelInfoByName[modelName as unknown as ModelName];
+
+        if (!dollRefs.meshRef) return console.warn("isVisible change: no mesh ref for", dollName);
+        if (dollName === "shoes") {
+          console.log("shoes isVisible change", isVisible);
+        }
+        if (isVisible) {
+          dollRefs.meshRef.setEnabled(true);
+          // dollRefs.canCollide = true;
+        } else {
+          dollRefs.meshRef.setEnabled(false); // setEnabled also toggles mesh collisions
+          // dollRefs.canCollide = false;
+        }
+      },
+      check: { type: "dolls", prop: "isVisible" },
+      step: "default",
       atStepEnd: true,
     }),
   }));

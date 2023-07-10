@@ -21,6 +21,16 @@ export default function get_dollStoreUtils(prendyAssets: PrendyAssets) {
     return makeMoverStateMaker(() => editedInitialState);
   }
 
+  function makeToggledMeshesState<T_ModelName extends ModelName>(modelName: T_ModelName) {
+    const modelInfo = modelInfoByName[modelName];
+    const { meshNames } = modelInfo;
+    const meshesEnabled = {} as Record<any, any>;
+    forEach(meshNames, (meshName) => (meshesEnabled[meshName] = true));
+
+    // return meshesEnabled as Record<MeshNameByModel[T_ModelName], boolean>;
+    return meshesEnabled as Record<MeshNameByModel[T_ModelName], boolean>;
+  }
+
   function modelMoverRefs<T_ModelName extends ModelName, T_MoverName extends string>(
     modelName: T_ModelName,
     moverName: T_MoverName
@@ -66,6 +76,7 @@ export default function get_dollStoreUtils(prendyAssets: PrendyAssets) {
 
   return {
     makeModelAnimWeightsMoverState,
+    makeToggledMeshesState,
     modelMoverRefs,
     modelOtherMeshesRefs,
     defaultInRangeForDoll,

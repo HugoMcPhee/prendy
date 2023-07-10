@@ -38,6 +38,7 @@ export function makeStartPrendyMainRules(
     prendyStores,
     prendyAssets
   );
+
   const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = get_safeVidRules(storeHelpers);
   const safeSliceVidRules = get_sliceVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);

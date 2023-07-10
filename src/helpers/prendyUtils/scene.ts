@@ -51,7 +51,7 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
       callback();
       return null;
     }
-    const ruleName = "doWhenNowSegmentChanges" + Math.random();
+    const ruleName = "doWhenNowCamChanges" + Math.random();
     startItemEffect({
       name: ruleName,
       run: ({ newValue: newNowCamName }) => {
@@ -66,9 +66,82 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
     return ruleName;
   }
 
+  function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: () => void) {
+    const { nowPlaceName } = getState().global.main;
+
+    const initialNowPlaceName = getState().global.main.nowPlaceName;
+    if (checkingPlaceName === initialNowPlaceName) {
+      callback();
+      return null;
+    }
+    const ruleName = "doWhenNowPlaceChanges" + Math.random();
+    startItemEffect({
+      name: ruleName,
+      run: ({ newValue: newNowCamName }) => {
+        if (newNowCamName === initialNowPlaceName) return;
+        stopEffect(ruleName);
+        callback();
+      },
+      check: { type: "global", prop: "nowPlaceName" },
+      step: "default",
+      atStepEnd: true,
+    });
+    return ruleName;
+  }
+
+  function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: () => void) {
+    const { nowPlaceName } = getState().global.main;
+
+    const initialNowPlaceName = getState().global.main.nowPlaceName;
+    const initialIsLoadingBetweenPlaces = getState().global.main.initialIsLoadingBetweenPlaces;
+    if (checkingPlaceName === initialNowPlaceName && initialIsLoadingBetweenPlaces === false) {
+      callback();
+      return null;
+    }
+    const ruleName = "doWhenPlaceFullyLoaded" + Math.random();
+    startItemEffect({
+      name: ruleName,
+      run: ({ newValue: isLoadingBetweenPlaces }) => {
+        const nowPlaceName = getState().global.main.nowPlaceName;
+
+        if (isLoadingBetweenPlaces === true || nowPlaceName !== checkingPlaceName) return;
+        stopEffect(ruleName);
+        callback();
+      },
+      check: { type: "global", prop: "isLoadingBetweenPlaces" },
+      step: "default",
+      atStepEnd: true,
+    });
+    return ruleName;
+  }
+
+  async function waitForPlaceFullyLoaded(checkingPlaceName: PlaceName) {
+    return new Promise<void>((resolve) => {
+      doWhenPlaceFullyLoaded(checkingPlaceName, resolve);
+    });
+  }
+
+  async function waitForNowPlaceToChange(checkingPlaceName: PlaceName) {
+    return new Promise<void>((resolve) => {
+      doWhenNowPlaceChanges(checkingPlaceName, resolve);
+    });
+  }
+
+  async function waitForNowCamToChange(checkingCamName: AnyCameraName) {
+    return new Promise<void>((resolve) => {
+      doWhenNowCamChanges(checkingCamName, resolve);
+    });
+  }
+
+  const waitForNextTick = () => new Promise((resolve) => storeHelpers.onNextTick(resolve));
+
   return {
     getSegmentFromStoryRules,
     doWhenNowSegmentChanges,
     doWhenNowCamChanges,
+    waitForNowPlaceToChange,
+    waitForPlaceFullyLoaded,
+    waitForNowCamToChange,
+    waitForNextTick,
   };
 }

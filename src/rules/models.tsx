@@ -28,6 +28,7 @@ export function get_modelRules(storeHelpers: PrendyStoreHelpers, prendyAssets: P
     modelRef.container = container;
     modelRef.materialRef = container.materials[0] ? (container.materials[0] as PBRMaterial) : null;
     modelRef.materialRefs = container.materials as PBRMaterial[];
+
     setState({ models: { [modelName]: { isLoaded: true } } });
 
     // maybe ideally type the AssetContainer based on modelInfoByName :) ?

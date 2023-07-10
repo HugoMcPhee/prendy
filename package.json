@@ -1,6 +1,6 @@
 {
   "name": "prendy",
-  "version": "0.9.5",
+  "version": "0.9.9",
   "description": "prerendered backdrop games with babylonjs and pietem",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -23,10 +23,10 @@
   "author": "Hugo McPhee",
   "license": "MIT",
   "devDependencies": {
-    "@babylonjs/core": "6.5.0",
-    "@babylonjs/gui": "6.5.0",
-    "@babylonjs/inspector": "6.5.0",
-    "@babylonjs/loaders": "6.5.0",
+    "@babylonjs/core": "6.8.0",
+    "@babylonjs/gui": "6.8.0",
+    "@babylonjs/inspector": "6.8.0",
+    "@babylonjs/loaders": "6.8.0",
     "@types/react": "^18.0.15",
     "chootils": "^0.3.8",
     "delay": "^5.0.0",

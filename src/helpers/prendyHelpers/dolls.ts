@@ -51,15 +51,17 @@ export function get_dollStoryHelpers(
   // --------------------------------------------------------------
 
   function setDollPosition(dollName: DollName, newPositon: Vector3) {
+    console.log("setDollPosition", dollName);
+
     const dollRefs = getRefs().dolls[dollName];
     if (!dollRefs.meshRef) return console.warn("NO MESH REF", dollName);
 
-    const prevCollisionsEnabled = dollRefs.checkCollisions;
-    dollRefs.checkCollisions = false;
+    // const prevCollisionsEnabled = dollRefs.canCollide;
+    dollRefs.canGoThroughWalls = true;
 
     setState({ dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } }, () => {
-      // dollRefs.checkCollisions = prevCollisionsEnabled;
-      dollRefs.checkCollisions = true;
+      dollRefs.canGoThroughWalls = false;
+      setState({ dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } });
     });
   }
 
@@ -104,7 +106,7 @@ export function get_dollStoryHelpers(
       dolls: {
         [dollName]: {
           rotationY: newRotationY,
-          // rotationYGoal: newRotationY,
+          // rotationYGoal: newRotationY, // NOTE setting both can make the goal rotate multiple times, it might not be finding the shortest angle
         },
       },
     });
@@ -247,18 +249,7 @@ export function get_dollStoryHelpers(
   }
 
   function hideDoll(dollName: DollName, shouldHide: boolean = true) {
-    // IDEA add doll state isHidden, and auto set isVisible/isEnabled with a doll rule
-
-    const dollRefs = getRefs().dolls[dollName];
-    if (!dollRefs.meshRef) return console.warn("no mesh ref for", dollName);
-
-    if (shouldHide) {
-      dollRefs.meshRef.setEnabled(false); // setEnabled also toggles mesh collisions
-      dollRefs.checkCollisions = false;
-    } else {
-      dollRefs.meshRef.setEnabled(true);
-      dollRefs.checkCollisions = true;
-    }
+    setState({ dolls: { [dollName]: { isVisible: !shouldHide } } }, () => {});
   }
 
   function toggleDollMeshes<T_DollName extends DollName>(
@@ -269,17 +260,23 @@ export function get_dollStoryHelpers(
 
     // const { left_shoe, right_shoe, long_teeth } = otherMeshes;
 
-    const otherMeshes = getRefs().dolls[dollName].otherMeshes;
-    const modelName = getModelNameFromDoll(dollName);
-    const modelInfo = modelInfoByName[modelName as unknown as ModelName];
-    const typedMeshNames = modelInfo.meshNames as unknown as MeshNamesFromDoll<T_DollName>[];
+    // const otherMeshes = getRefs().dolls[dollName].otherMeshes;
+    // const modelName = getModelNameFromDoll(dollName);
+    // const modelInfo = modelInfoByName[modelName as unknown as ModelName];
+    // const typedMeshNames = modelInfo.meshNames as unknown as MeshNamesFromDoll<T_DollName>[];
 
-    forEach(typedMeshNames, (meshName) => {
-      const newToggle = toggledMeshes[meshName];
-      const theMesh = otherMeshes[meshName];
+    // TODO move this into a rule listening to toggledMeshes state
+    // forEach(typedMeshNames, (meshName) => {
+    //   const newToggle = toggledMeshes[meshName];
+    //   const theMesh = otherMeshes[meshName];
 
-      if (theMesh && newToggle !== undefined) theMesh.setEnabled(newToggle!);
-    });
+    //   if (theMesh && newToggle !== undefined) theMesh.setEnabled(newToggle!);
+    // });
+
+    // NOTE could update to set properties in a loop to avoid spreading
+    setState((state) => ({
+      dolls: { [dollName]: { toggledMeshes: { ...(state.dolls[dollName].toggledMeshes as any), ...toggledMeshes } } },
+    }));
   }
 
   function getDollBonePosition<T_ModelName extends ModelName>({
@@ -298,7 +295,7 @@ export function get_dollStoryHelpers(
 
     if (dollRefs.meshRef) {
       dollRefs.meshRef.scaling = new Vector3(1.95, 1.95, -1.95);
-      dollRefs.checkCollisions = false;
+      // dollRefs.canCollide = true;
     }
 
     if (dollBone && dollRefs.meshRef) {

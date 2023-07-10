@@ -12,7 +12,6 @@ import {
   SegmentNameByPlace,
 } from "../../declarations";
 import { DefaultCameraRefs } from "../../stores/places";
-import { PrendyOptionsUntyped, PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
@@ -129,6 +128,11 @@ export function get_cameraChangeUtils(
     }
 
     if (scene.activeCamera && !globalRefs.backdropPostProcess) {
+      // const shaderStore = ShaderStore.GetShadersStore();
+      // shaderStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
+      // shaderStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
+      // console.log("shaderStore", shaderStore);
+      // console.log("ShaderStore.ShadersStore", ShaderStore.ShadersStore);
       ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
       ShaderStore.ShadersStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
 

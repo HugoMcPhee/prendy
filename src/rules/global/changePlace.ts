@@ -16,6 +16,9 @@ import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
+import { Point3D } from "chootils/dist/points3d";
+import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
+import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
 
 export function get_globalChangePlaceRules(
   storeHelpers: PrendyStoreHelpers,
@@ -39,18 +42,37 @@ export function get_globalChangePlaceRules(
   const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-  const { setDollToSpot } = get_dollStoryHelpers(storeHelpers, prendyStartOptions, prendyAssets.modelInfoByName);
+  const { setDollToSpot, setDollPosition, setDollRotation } = get_dollStoryHelpers(
+    storeHelpers,
+    prendyStartOptions,
+    prendyAssets.modelInfoByName
+  );
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
 
   function setPlayerPositionForNewPlace() {
     const { nowPlaceName, playerCharacter } = getState().global.main;
     const { dollName } = getCharDollStuff(playerCharacter);
     const placeInfo = placeInfoByName[nowPlaceName];
     const { spotNames } = placeInfo;
-    const { goalSpotName } = getState().dolls[dollName as string];
+    const { goalSpotNameAtNewPlace, goalPositionAtNewPlace, goalRotationAtNewPlace } =
+      getState().dolls[dollName as string];
 
-    const newSpotName = goalSpotName || spotNames[0];
+    let newPosition = goalPositionAtNewPlace ? point3dToVector3(goalPositionAtNewPlace) : undefined;
+    let newRotation = goalRotationAtNewPlace ? point3dToVector3(goalRotationAtNewPlace) : undefined;
 
-    setDollToSpot({ doll: dollName as DollName, place: nowPlaceName, spot: newSpotName });
+    if (!newPosition || goalSpotNameAtNewPlace) {
+      const newSpotName = goalSpotNameAtNewPlace ?? spotNames[0];
+
+      newPosition = getSpotPosition(nowPlaceName, newSpotName);
+      newRotation = getSpotRotation(nowPlaceName, newSpotName);
+    }
+
+    if (newPosition) setDollPosition(dollName, newPosition);
+    if (newRotation) setDollRotation(dollName, newRotation);
+
+    setState({ dolls: { [dollName as string]: { goalSpotNameAtNewPlace: null } } });
+
+    // setDollToSpot({ doll: dollName as DollName, place: nowPlaceName, spot: newSpotName });
   }
 
   function whenAllVideosLoadedForPlace() {
@@ -75,10 +97,32 @@ export function get_globalChangePlaceRules(
   return makeRules(({ itemEffect }) => ({
     whenPlaceNameChanges: itemEffect({
       run({ newValue: goalPlaceName, itemState: globalState }) {
-        if (goalPlaceName === null || globalState.loadingOverlayFullyShowing) return;
+        // remove goalPlaceName if it's the same as nowPlaceName
+        const isNowPlace = goalPlaceName === globalState.nowPlaceName;
+        if (isNowPlace) setState({ global: { main: { goalPlaceName: null } } });
+
+        if (goalPlaceName === null || globalState.loadingOverlayFullyShowing || isNowPlace) return;
         setState({ global: { main: { loadingOverlayToggled: true } } });
       },
       check: { type: "global", prop: "goalPlaceName" },
+      step: "loadNewPlace",
+    }),
+    whenSegmentNameChanges: itemEffect({
+      run({ newValue: goalSegmentName, itemState: globalState }) {
+        // remove goalSegmentName if it's the same as nowSegmentName
+        const isNowSegment = goalSegmentName === globalState.nowSegmentName;
+        if (isNowSegment) setState({ global: { main: { goalSegmentName: null } } });
+      },
+      check: { type: "global", prop: "goalSegmentName" },
+      step: "loadNewPlace",
+    }),
+    whenGoalCamNameChanges: itemEffect({
+      run({ newValue: goalCamName, itemState: globalState }) {
+        // remove goalCamName if it's the same as nowCamName
+        const isNowSegment = goalCamName === globalState.nowCamName;
+        if (isNowSegment) setState({ global: { main: { goalCamName: null } } });
+      },
+      check: { type: "global", prop: "goalCamName" },
       step: "loadNewPlace",
     }),
     whenOverlayFadedOut: itemEffect({

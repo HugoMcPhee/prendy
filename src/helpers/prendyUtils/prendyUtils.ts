@@ -1,4 +1,5 @@
 import { PrendyStoreHelpers, PrendyStores } from "../../declarations";
+import { get_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 import { get_characterStoryUtils } from "./characters";
 import { get_dollStoryUtils } from "./dolls";
 import { get_sceneStoryUtils } from "./scene";
@@ -7,9 +8,17 @@ import { get_spotStoryUtils } from "./spots";
 export function makePrendyStoryUtils(storeHelpers: PrendyStoreHelpers, _prendyStores: PrendyStores) {
   const { get2DAngleBetweenCharacters, get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
   const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
-  const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
+  const {
+    doWhenNowCamChanges,
+    doWhenNowSegmentChanges,
+    getSegmentFromStoryRules,
+    waitForNowPlaceToChange,
+    waitForPlaceFullyLoaded,
+    waitForNowCamToChange,
+    waitForNextTick,
+  } = get_sceneStoryUtils(storeHelpers);
   const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
-
+  const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
   return {
     // characters
     get2DAngleBetweenCharacters,
@@ -22,6 +31,11 @@ export function makePrendyStoryUtils(storeHelpers: PrendyStoreHelpers, _prendySt
     doWhenNowCamChanges,
     doWhenNowSegmentChanges,
     getSegmentFromStoryRules,
+    waitForNowPlaceToChange,
+    waitForPlaceFullyLoaded,
+    waitForNowCamToChange,
+    waitForNextTick,
+    getUsefulStoryStuff,
     // spots
     getSpotPosition,
     getSpotRotation,

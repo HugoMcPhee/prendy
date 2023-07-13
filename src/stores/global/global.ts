@@ -37,9 +37,17 @@ export type PrendySaveState = {
       position: Point3D;
       rotationY: number;
       isVisible: boolean;
-      collisionsEnabled: boolean; // setting isVisible also affects collisions
+      // collisionsEnabled: boolean; // setting isVisible also affects collisions
       toggledMeshes: Record<string, boolean>;
       inRange: Record<string, InRangeForDoll>;
+      nowAnimation: string;
+      // animWeightsGoal: Record<string, number>; // maybe not needed, since loading reacts to animation name
+    }
+  >;
+  places: Record<
+    string,
+    {
+      toggledWalls: Record<string, boolean>;
     }
   >;
   characters: Record<

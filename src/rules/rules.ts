@@ -14,6 +14,8 @@ import { get_playerRules } from "./players";
 import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { get_safeVidRules } from "./stateVids";
+import { definiedPrendyRules } from "..";
+import { get_placeRules } from "./places";
 
 export function makeStartPrendyMainRules(
   storeHelpers: PrendyStoreHelpers,
@@ -38,6 +40,8 @@ export function makeStartPrendyMainRules(
     prendyStores,
     prendyAssets
   );
+  const placeRules = get_placeRules(PRENDY_OPTIONS, storeHelpers, prendyStores, prendyAssets);
+  definiedPrendyRules.dolls = dollRules;
 
   const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = get_safeVidRules(storeHelpers);
@@ -53,6 +57,8 @@ export function makeStartPrendyMainRules(
   // ----------------------------------------------
   // starting and stopping rules
 
+  // TODO use the rule combiner here
+
   function startPrendyMainRules() {
     keyboardConnectRules.startAll();
     // pointerConnectRules.startAll();
@@ -64,6 +70,8 @@ export function makeStartPrendyMainRules(
     const stopDynamicCharacterRulesForInitialState = startDynamicCharacterRulesForInitialState();
     /*dolls*/
     dollRules.startAll();
+    /*places*/
+    placeRules.startAll();
     const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState<
       ReturnType<typeof get_dollDynamicRules>
     >(storeHelpers, dollDynamicRules as ReturnType<typeof get_dollDynamicRules>, dollNames);
@@ -85,6 +93,8 @@ export function makeStartPrendyMainRules(
       /*dolls*/
       dollRules.stopAll();
       stopDynamicDollRulesForInitialState();
+      /*places*/
+      placeRules.stopAll();
       /**/
       playerRules.stopAll();
       speechBubbleRules.stopAll();

@@ -57,7 +57,7 @@ export default function dolls(prendyAssets: PrendyAssets) {
       ...makeModelAnimWeightsMoverState<T_ModelName>(safeModelName as T_ModelName)("animWeights"),
       toggledMeshes: makeToggledMeshesState<T_ModelName>(safeModelName as T_ModelName),
       nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName], // NOTE AnimationNameFromDoll might work here?
-      animationLoops: true,
+      animationLoops: true, // currently unused
       //
       inRange: defaultInRange(),
       //

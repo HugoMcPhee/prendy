@@ -16,6 +16,7 @@ v 0.9.9
 - added helpers to wait for place to load
 - types for toggledMeshes and animationWeights are typed per dolls now
 - fixing walking over two floors ontop of eachother
+- added toggledWalls to toggle walls on and off in state, so it works with saving
 
 v0.9.8
 

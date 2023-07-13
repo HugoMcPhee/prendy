@@ -18,6 +18,7 @@ import { PrendySaveState } from "./stores/global/global";
 import { point3dToVector3, vector3ToPoint3d } from "./helpers/babylonjs/vectors";
 import { Vector3 } from "@babylonjs/core";
 import delay from "delay";
+import { get_dollRules } from "./rules/dolls";
 export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
@@ -29,6 +30,10 @@ export { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMak
 export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { makeStartPrendyRules, makeStartPrendyMainRules, makeStartAndStopRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
+
+export const definiedPrendyRules = {
+  dolls: null as null | ReturnType<typeof get_dollRules>,
+};
 
 export function makeOtherUsefulPrendyUtils(storeHelpers: PrendyStoreHelpers) {
   const setStoryState = get_setStoryState(storeHelpers);
@@ -84,6 +89,16 @@ export function makePrendyHelpers(
             // collisionsEnabled: doll.collisionsEnabled,
             toggledMeshes: doll.toggledMeshes,
             inRange: doll.inRange,
+            nowAnimation: doll.nowAnimation,
+            // animWeightsGoal: doll.animWeightsGoal,
+          },
+        ])
+      ),
+      places: Object.fromEntries(
+        Object.entries(storeState.places).map(([placeName, place]) => [
+          placeName,
+          {
+            toggledWalls: place.toggledWalls,
           },
         ])
       ),
@@ -202,6 +217,16 @@ export function makePrendyHelpers(
                 isVisible: doll.isVisible,
                 // collisionsEnabled: doll.collisionsEnabled,
                 inRange: doll.inRange,
+                nowAnimation: doll.nowAnimation,
+                // animWeightsGoal: doll.animWeightsGoal,
+              },
+            ])
+          ),
+          places: Object.fromEntries(
+            Object.entries(savedState.places).map(([placeName, place]) => [
+              placeName,
+              {
+                toggledWalls: place.toggledWalls,
               },
             ])
           ),

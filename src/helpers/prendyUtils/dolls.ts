@@ -300,6 +300,10 @@ export function get_dollUtils(
 
     enableCollisions(dollRefs.meshRef);
     dollRefs.meshRef.setEnabled(dollState.isVisible);
+
+    // Once the models loaded, update the animation based on the dolls state
+    // console.log("Running animations for doll after it loaded!", dollName, dollState.nowAnimation);
+    // definiedPrendyRules.dolls?.run("whenNowAnimationChanged");
   }
 
   function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {

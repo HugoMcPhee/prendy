@@ -231,6 +231,7 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
           // }
           if (!aniRef) {
             console.warn("tried to use undefined animation", aniName);
+            return;
           }
           if (aniRef && aniRef?.speedRatio !== prendyStartOptions.animationSpeed) {
             aniRef.speedRatio = prendyStartOptions.animationSpeed;
@@ -320,7 +321,7 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
         if (!itemRefs.meshRef) return;
 
         if (itemRefs.canGoThroughWalls) {
-          console.log("not checking collisions and setting position", dollName);
+          // console.log("not checking collisions and setting position", dollName);
           itemRefs.meshRef.setAbsolutePosition(point3dToVector3(newPosition));
         } else {
           const { editedPosition, positionWasEdited, collidedPosOffset } = setGlobalPositionWithCollisions(

@@ -113,10 +113,12 @@ export function get_sceneStoryHelpers(
     wallName: T_Wall,
     isDisabled: boolean
   ) {
-    const placeRefs = getRefs().places[placeName];
-    const wallMesh = placeRefs.wallMeshes[wallName];
-
-    if (wallMesh) wallMesh.checkCollisions = !isDisabled;
+    // NOTE could update to set properties in a loop to avoid spreading
+    setState((state) => ({
+      places: {
+        [placeName]: { toggledWalls: { ...(state.places[placeName].toggledWalls as any), [wallName]: !isDisabled } },
+      },
+    }));
   }
 
   async function showStoryView(isVisible: boolean = true) {

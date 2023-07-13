@@ -44,14 +44,14 @@ export default function places(prendyAssets: PrendyAssets, prendyStartOptions: P
     [P_TriggerName in TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
   };
   type WallMeshes<T_PlaceName extends PlaceName> = {
-    [P_TriggerName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
+    [P_WallName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
   };
   type CameraRefs<T_PlaceName extends PlaceName> = {
     [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
   };
 
   type PlaceState<K_PlaceName extends PlaceName> = {
-    testState: number;
+    toggledWalls: Record<K_PlaceName, boolean>;
     // goalCamWhenNextPlaceLoads: MaybeCam<K_PlaceName>;
     // goalCamNameWhenVidPlays: MaybeCam<K_PlaceName>;
     // goalCamNameAtLoop: MaybeCam<K_PlaceName>;
@@ -59,9 +59,19 @@ export default function places(prendyAssets: PrendyAssets, prendyStartOptions: P
     // nowCamName: CameraNameByPlace[K_PlaceName];
   };
 
+  function makeToggledWallsState<K_PlaceName extends PlaceName>(placeName: K_PlaceName) {
+    const placeInfo = placeInfoByName[placeName];
+    const { wallNames } = placeInfo;
+    const wallsEnabled = {} as Record<any, any>;
+    forEach(wallNames, (wallName) => (wallsEnabled[wallName] = true));
+
+    return wallsEnabled as Record<WallNameByPlace[K_PlaceName], boolean>;
+  }
+
   // State
   const state = <K_PlaceName extends PlaceName>(placeName: K_PlaceName) => ({
-    testState: 0,
+    toggledWalls: makeToggledWallsState(placeName),
+    // testState: 0,
     // goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
     // goalCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
     // goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
@@ -128,15 +138,26 @@ export default function places(prendyAssets: PrendyAssets, prendyStartOptions: P
   };
 
   type StartStates = {
-    [P_PlaceName in PlaceName]: PlaceState<P_PlaceName>;
+    [K_PlaceName in PlaceName]: ReturnType<typeof state<K_PlaceName>>;
   };
+
+  function makeAutmaticPlaceStartStates() {
+    const partialDollStates = {} as Partial<StartStates>;
+    forEach(placeNames, (placeName) => {
+      partialDollStates[placeName] = state(placeName);
+    });
+    return partialDollStates as StartStates;
+  }
 
   // const startStates: InitialItemsState<typeof state> = {
   const startRefs: Partial<StartRefs> = {};
   forEach(placeNames, (placeName) => {
     startRefs[placeName] = refs(placeName);
   });
-  const startStates: Partial<StartStates> = {};
+  const startStates = {
+    // Automatically make place states
+    ...makeAutmaticPlaceStartStates(),
+  };
 
   forEach(placeNames, (placeName) => {
     (startStates[placeName] as any) = state(placeName);

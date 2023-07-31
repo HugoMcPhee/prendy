@@ -287,7 +287,8 @@ export function makeAllStoryRuleMakers(
 
         const callBackToRun = callBacksObject[dollName];
         const isInTalkRange = inRange[dollName][distanceType];
-        if (dollName !== charDollName && isInTalkRange && dollState.isVisible) {
+        // && dollState.isVisible
+        if (dollName !== charDollName && isInTalkRange) {
           callBackToRun?.(usefulStoryStuff);
           return true; // break
         }
@@ -651,21 +652,27 @@ export function makeAllStoryRuleMakers(
     return makeRules(({ itemEffect }) => ({
       whenInRangeChangesToCheckTouch: itemEffect({
         run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, itemState: dollState }) {
+          // NOTE FIXME this runs like 3 times when it should run once?
+          // console.log("whenInRangeChangesToCheckTouch", changedDollName, { inRange, prevInRange });
+
           const { dollName: charDollName } = getCharDollStuff(charName as CharacterName) ?? {};
           // at the moment runs for every doll instead of just the main character,
           // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
-          if (!charDollName || changedDollName !== charDollName || !dollState.isVisible) return;
+          if (!charDollName || changedDollName !== charDollName) return;
+          // || !dollState.isVisible
 
           const usefulStoryStuff = getUsefulStoryStuff();
 
           forEach(dollNames, (dollName) => {
             const otherDollState = getState().dolls[dollName];
 
-            if (!otherDollState.isVisible) return;
+            // if (!otherDollState.isVisible) return;
 
             const justEntered = inRange[dollName][distanceType] && !prevInRange[dollName][distanceType];
             const justLeft = !inRange[dollName][distanceType] && prevInRange[dollName][distanceType];
+            // if (justEntered || justLeft) {
             // console.warn(dollName, { justEntered, justLeft });
+            // }
 
             const whatToRun = callBacksObject[dollName];
             if (dollName !== charDollName) {

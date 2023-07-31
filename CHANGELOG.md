@@ -17,6 +17,7 @@ v 0.9.9
 - types for toggledMeshes and animationWeights are typed per dolls now
 - fixing walking over two floors ontop of eachother
 - added toggledWalls to toggle walls on and off in state, so it works with saving
+- fixed doll inRange not updating when a doll becomes invisible
 
 v0.9.8
 

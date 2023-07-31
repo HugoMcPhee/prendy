@@ -24,6 +24,7 @@ import {
   get_dollStoryUtils,
   get_dollUtils,
 } from "../helpers/prendyUtils/dolls";
+import { cloneObjectWithJson } from "repond/src/utils";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -141,7 +142,7 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
     get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
   const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
-  const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
+  const { makeRules, getPreviousState, getState, setState, getRefs, onNextTick } = storeHelpers;
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
   const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
 
@@ -374,6 +375,7 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
         const newQuickDistancesMap = {} as Partial<Record<DollName, Partial<Record<DollName, number>>>>;
         // {  rabbit : { cricket: 50, rabbit: 1000 }
         //    cricket : { cricket: 1000, rabbit: 50 }}
+        let somethingChanged = false;
         const newDollsState = {} as Partial<Record<DollName, Partial<{ inRange: InRangeProperty }>>>;
         const tempNewDollsState = {} as Partial<Record<DollName, Partial<{ inRange: InRangeProperty }>>>;
 
@@ -426,16 +428,70 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
               )
             ) {
               newDollsState[dollName] = tempNewDollState;
+              somethingChanged = true;
             }
           }
         });
 
-        setState({ dolls: newDollsState as Record<any, any> });
+        if (somethingChanged) {
+          console.log("newDollsState");
+          console.log(newDollsState);
+          setState({ dolls: newDollsState as Record<any, any> });
+        }
       },
-      check: { type: "dolls", prop: ["position"] },
+      check: { type: "dolls", prop: ["position", "isVisible"] },
       atStepEnd: true,
       step: "checkCollisions",
     }),
+    whenHidingUpdateInRange: itemEffect({
+      run({ newValue: newIsVisible, itemName: dollName }) {
+        // return early if it didn't just hide
+        if (newIsVisible) return;
+
+        const defaultInRange = getDefaultInRangeFunction(dollNames);
+
+        type InRangeProperty = ReturnType<typeof defaultInRange>;
+
+        const tempNewAllDollsState = {} as Partial<Record<DollName, Partial<{ inRange: InRangeProperty }>>>;
+        const newAllDollsState = {} as Partial<Record<DollName, Partial<{ inRange: InRangeProperty }>>>;
+
+        // set all inRange to false for the doll that went invisible
+        tempNewAllDollsState[dollName] = { inRange: defaultInRange() };
+
+        forEach(dollNames, (otherDollName) => {
+          if (otherDollName === dollName) return;
+
+          const otherDollState = getState().dolls[otherDollName];
+          tempNewAllDollsState[otherDollName] = { inRange: cloneObjectWithJson(otherDollState.inRange) };
+
+          // set the doll that became invisible to not in range for each other doll
+          tempNewAllDollsState[otherDollName]!.inRange![dollName].touch = false;
+          tempNewAllDollsState[otherDollName]!.inRange![dollName].talk = false;
+          tempNewAllDollsState[otherDollName]!.inRange![dollName].see = false;
+
+          const tempNewDollState = tempNewAllDollsState[otherDollName];
+          if (tempNewDollState?.inRange) {
+            if (
+              !inRangesAreTheSame(
+                tempNewDollState.inRange,
+                otherDollState.inRange as Record<DollName, InRangeForDoll> // FIXME DeepReadonlyObjects
+              )
+            ) {
+              newAllDollsState[otherDollName] = tempNewDollState;
+            }
+          }
+        });
+
+        // do it on next ticket , because the step that reacts to inRange changing is already done
+        onNextTick(() => {
+          setState({ dolls: newAllDollsState as Record<any, any> });
+        });
+      },
+      check: { type: "dolls", prop: "isVisible" },
+      // atStepEnd: true,
+      // step: "positionReaction",
+    }),
+    // when doll isVisibleChanges, check in range
     // should be a  dynamic rule ?
     updateDollScreenPositionWhenSlateMoves: effect({
       run() {

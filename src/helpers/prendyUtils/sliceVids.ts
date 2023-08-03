@@ -86,12 +86,11 @@ export function get_sliceVidUtils(
     segment: SegmentNameByPlace[T_PlaceName]
   ) {
     const { nowPlaceName: safePlace } = getGlobalState();
-    const safeCam = getSafeCamName(camName as any) as AnyCameraName | null;
+    const safeCam = getSafeCamName(camName);
 
     if (place !== safePlace) console.warn("tried to getSliceForPlace with non current place", place);
 
-    // FIXME any type
-    const safeSegmentName = getSafeSegmentName({ segment, cam: safeCam as any, place: safePlace });
+    const safeSegmentName = getSafeSegmentName({ segment, cam: safeCam, place: safePlace });
 
     // NOTE  might be a way to avoid using any but is internal so okay for now
     const placeSegmentTimesByCamera = placeInfoByName[safePlace].segmentTimesByCamera as any;
@@ -105,19 +104,16 @@ export function get_sliceVidUtils(
     return { time: newTime, duration: newDuration };
   }
 
-  // Runs on changes to tick, in the checkVideoLoop flow
-  function checkForVideoLoop(placeName: PlaceName) {
-    // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
+  function checkIfVideoUnloading(placeName: PlaceName) {
     const itemState = getState().sliceVids[placeName];
     const { nowSlice, sliceVidState } = itemState;
-    const backdropVid = getSliceVidVideo(placeName);
 
-    if (sliceVidState === "unloaded" || sliceVidState === "waitingForUnload") return false;
+    return sliceVidState === "unloaded" || sliceVidState === "waitingForUnload";
+  }
 
-    const currentTime = backdropVid?.currentTime ?? 0;
-    const endTime = getSliceEndTime(nowSlice);
-    const isAtOrAfterEndOfLoop = currentTime >= endTime;
-    const isBeforeStartOfLoop = currentTime < nowSlice.time; // if the current time is before the video slices start time
+  function checkIfVideoAlreadyChanging(placeName: PlaceName) {
+    const itemState = getState().sliceVids[placeName];
+    const { sliceVidState } = itemState;
 
     const isAlreadyLoopingOrChangingSlice =
       sliceVidState === "beforeDoLoop" ||
@@ -125,7 +121,26 @@ export function get_sliceVidUtils(
       sliceVidState === "waitingForDoLoop" ||
       sliceVidState === "waitingForChangeSlice";
 
-    const shouldLoop = (isAtOrAfterEndOfLoop || isBeforeStartOfLoop) && !isAlreadyLoopingOrChangingSlice;
+    return isAlreadyLoopingOrChangingSlice;
+  }
+
+  // Runs on changes to tick, in the checkVideoLoop flow
+  function checkForVideoLoop(placeName: PlaceName) {
+    // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
+    const itemState = getState().sliceVids[placeName];
+    const { nowSlice, sliceVidState } = itemState;
+    const backdropVid = getSliceVidVideo(placeName);
+
+    if (checkIfVideoUnloading(placeName)) return false;
+
+    const currentTime = backdropVid?.currentTime ?? 0;
+    const endTime = getSliceEndTime(nowSlice);
+    const isAtOrAfterEndOfLoop = currentTime >= endTime;
+    const isBeforeStartOfLoop = currentTime < nowSlice.time; // if the current time is before the video slices start time
+
+    // const isAlreadyLoopingOrChangingSlice = checkIfVideoAlreadyChanging(placeName);
+
+    const shouldLoop = isAtOrAfterEndOfLoop || isBeforeStartOfLoop;
     return shouldLoop;
   }
 
@@ -137,5 +152,7 @@ export function get_sliceVidUtils(
     getSliceEndTime,
     getSliceForPlace,
     checkForVideoLoop,
+    checkIfVideoUnloading,
+    checkIfVideoAlreadyChanging,
   };
 }

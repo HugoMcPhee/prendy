@@ -20,13 +20,13 @@ export function get_globalVideoRules(
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
-  const { getRefs, getState, makeRules, setState } = storeHelpers;
+  const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
 
-  const {
-    getSliceForPlace: getSliceForPlace,
-    getSliceVidVideo: getSliceVidVideo,
-    checkForVideoLoop,
-  } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
+  const { getSliceForPlace, getSliceVidVideo, checkForVideoLoop, checkIfVideoAlreadyChanging } = get_sliceVidUtils(
+    storeHelpers,
+    prendyStartOptions,
+    prendyAssets
+  );
   const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
     storeHelpers,
     prendyStartOptions,
@@ -47,10 +47,9 @@ export function get_globalVideoRules(
         } = getState().global.main;
 
         const { goalCamNameWhenVidPlays, goalCamNameAtLoop, goalCamName, nowCamName } = getState().global.main;
-
         const { sliceVidState, goalSlice, wantToLoop, switchSlice_keepProgress } = getState().sliceVids[nowPlaceName];
-
         const videoIsOutsideOfCurrentLoop = checkForVideoLoop(nowPlaceName as PlaceName);
+        const videoIsAlreadyChanging = checkIfVideoAlreadyChanging(nowPlaceName);
 
         // do all the deciding slice logic in here!
 
@@ -60,7 +59,7 @@ export function get_globalVideoRules(
 
         let new_goalCamName = goalCamName;
         let new_goalSegmentName = goalSegmentName;
-        let new_wantToLoop = videoIsOutsideOfCurrentLoop;
+        let new_wantToLoop = videoIsOutsideOfCurrentLoop && !videoIsAlreadyChanging;
 
         let new_shouldKeepTime = true;
 

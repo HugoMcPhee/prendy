@@ -203,7 +203,7 @@ export function get_VirtualStick(storeHelpers: PrendyStoreHelpers) {
           height: "100vh",
           zIndex: 100,
           overflow: "hidden",
-          // opacity: 0.1,
+          opacity: 0.1,
           // background: "green",
         }}
       >

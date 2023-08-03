@@ -42,8 +42,9 @@ export function get_safeVidRules(storeHelpers: PrendyStoreHelpers) {
             // uncomment to test videos
             // itemRefs.videoElement && testAppendVideo(itemRefs.videoElement, itemName, itemName);
           }
-          // NOTE canplay doesn't work on safari?
+
           itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);
+
           // manual alternative for preload / autoplay, make sure the video is loaded and has played like 1 frame
           itemRefs.videoElement?.play().finally(() => {
             if (autoplay) {

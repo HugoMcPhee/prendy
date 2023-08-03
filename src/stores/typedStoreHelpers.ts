@@ -29,7 +29,7 @@ const TEST_START_OPTIONS = makePrendyOptions({
   zoomLevels: { default: 1.1, max: 2 },
   walkSpeed: 10,
   animationSpeed: 1,
-  headHeightOffset: -0.5,
+  headHeightOffsets: { walker: 2.75 },
   doorsInfo: {
     street: {
       // test_trigger: {
@@ -277,7 +277,7 @@ export type PrendyOptionsUntyped = {
   };
   walkSpeed: number;
   animationSpeed: number; // 1.75 for rodont
-  headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
+  headHeightOffsets: Record<string, number>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<Record<string, Partial<Record<string, ToNewOptionUntyped>>>>;
   modelNamesByPlace: Record<string, string[]>;
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)
@@ -316,8 +316,8 @@ export type PrendyOptionsGeneric<
     max: number;
   };
   walkSpeed: number;
-  animationSpeed: number; // 1.75 for rodont
-  headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
+  animationSpeed: number;
+  headHeightOffsets: Record<string, number>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<
     Record<PlaceName, Partial<Record<string, ToPlaceOption<AnyCameraName, AnySegmentName, PlaceName, AnySpotName>>>>
   >;

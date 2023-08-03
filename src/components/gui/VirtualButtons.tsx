@@ -37,8 +37,12 @@ export function get_VirtualButtons(storeHelpers: PrendyStoreHelpers, PRENDY_OPTI
           pointerEvents: disabled ? ("none" as const) : ("all" as const),
           border: "none",
           marginTop: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         },
         text: {
+          fontSize: "50px",
           filter: "grayscale(100%) contrast(0%) brightness(1.5)",
         },
       }),
@@ -92,7 +96,7 @@ export function get_VirtualButtons(storeHelpers: PrendyStoreHelpers, PRENDY_OPTI
     // ❔👋❓💭⏩🗣️💡
 
     const spring = useSpring({
-      opacity: canShowVirtualButtons ? 1 : 0,
+      opacity: canShowVirtualButtons ? 0.25 : 0,
       // config: { tension: 300 },
     });
 
@@ -137,7 +141,14 @@ export function get_VirtualButtons(storeHelpers: PrendyStoreHelpers, PRENDY_OPTI
           >
             {/* making rounded triangles - Knod -
             https://codepen.io/knod/pen/KzRYye */}
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              className="svg-triangle"
+              viewBox="0 0 100 100"
+              width="84"
+              height="84"
+            >
               <path
                 d="M 50,35 70,70 30,70 z"
                 style={{
@@ -159,7 +170,7 @@ export function get_VirtualButtons(storeHelpers: PrendyStoreHelpers, PRENDY_OPTI
             }
             disabled={!canShowVirtualButtons}
           >
-            👆
+            ⚪
           </VirtualButton>
         )}
       </animated.div>

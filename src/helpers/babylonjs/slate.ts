@@ -3,7 +3,7 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { Point2D, copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-import { PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { ModelName, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 import { get_globalUtils } from "../prendyUtils/global";
 import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
@@ -58,7 +58,7 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
     return theProjectionMatrix;
   }
 
-  function getPositionOnSlate(theMesh: AbstractMesh) {
+  function getPositionOnSlate(theMesh: AbstractMesh, modelName: ModelName) {
     // This is a position on the slate itself
 
     const { nowPlaceName, nowCamName } = getState().global.main;
@@ -67,8 +67,8 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
     const nowCam = placeRefs.camsRefs[nowCamName]?.camera;
     if (!nowCam) return new Vector3();
 
-    // FIXME Temporary value to use the characters head position instead of center position
-    const Y_OFFSET = prendyStartOptions.headHeightOffset;
+    // Use the characters head position instead of center position (for speech bubbles)
+    const Y_OFFSET = prendyStartOptions.headHeightOffsets[modelName] ?? 2; // default to 2, just above the model
 
     return Vector3.Project(
       new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z),
@@ -114,9 +114,17 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
     return newSlatePos;
   }
 
-  function updateSlatePositionToFocusOnMesh({ meshRef, instant }: { meshRef: AbstractMesh; instant?: boolean }) {
+  function updateSlatePositionToFocusOnMesh({
+    meshRef,
+    instant,
+    model,
+  }: {
+    meshRef: AbstractMesh;
+    instant?: boolean;
+    model: ModelName;
+  }) {
     function updateSlatePos() {
-      const characterPointOnSlate = getPositionOnSlate(meshRef);
+      const characterPointOnSlate = getPositionOnSlate(meshRef, model);
 
       const newSlatePos = getSlatePositionNotOverEdges({
         x: characterPointOnSlate.x / slateSize.x - 0.5,
@@ -139,8 +147,11 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
   function focusSlateOnFocusedDoll(instant?: "instant") {
     const { focusedDoll } = getState().global.main;
     const { meshRef } = getRefs().dolls[focusedDoll];
+
+    const model = getState().dolls[focusedDoll].modelName;
+
     if (!meshRef) return;
-    updateSlatePositionToFocusOnMesh({ meshRef: meshRef, instant: !!instant });
+    updateSlatePositionToFocusOnMesh({ meshRef: meshRef, instant: !!instant, model });
   }
 
   function getViewSize() {
@@ -337,7 +348,7 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
     getSlatePositionNotOverEdges,
     getViewSize,
     convertPointOnSlateToPointOnScreen,
-    checkPointIsInsideSlate: checkPointIsInsideSlate,
+    checkPointIsInsideSlate,
     getShaderTransformStuff,
   };
 }

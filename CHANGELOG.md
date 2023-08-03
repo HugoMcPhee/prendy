@@ -1,13 +1,18 @@
 TODO
 
+new things
+
+- center text for speech bubbles if its very short (like a single emoji)
+- add save load and clear save buttons to the top of the screen , and only reveal when tapping near the top
+- maybe put those in a pause menu, that only appears when tapping near the top
+- maybe support invisible controls, like inside
+
+fixes
+
 - fix particles not showing (some small particles show in atleast the first alley in smelldog)
-- fix jump arrow svg not showing, and interact emoji in ios
-- fix android jump button moving vrtual stick
-- fix virtual buttons being cutoff on android and ios
-- makeAllStoryRuleMakers with BACKDROP_ART ?
-- setCamera type not limited to place
-- doorsInfo type doesn't autocomplete place name
-- maybe update makeTriggerRules to be by character name, and it skips for characters without rules
+- (ios) large fonts can have overflow cut off
+- video can play through a bit extra on ios (only when first loading?)
+- (ios) videos can play a little bit extra to the next part when going to new camera (since looping's pausedwhen changing cameras?) (maybe check with slow cpu)
 
 v 0.9.9
 
@@ -15,9 +20,13 @@ v 0.9.9
 - uses new repond rule maker helpers like makeRuleMaker
 - added helpers to wait for place to load
 - types for toggledMeshes and animationWeights are typed per dolls now
-- fixing walking over two floors ontop of eachother
+- fixing walking over two floors ontop of eachother (raycast could hit the floor below)
 - added toggledWalls to toggle walls on and off in state, so it works with saving
 - fixed doll inRange not updating when a doll becomes invisible
+- allows setting speech bubble height (head y offsets) per character (model)
+- slanted speech bubbles, and added line height
+- nicer style for GUI buttons, and more faded gui
+- fixed sometimes video looping to other slice every frame
 
 v0.9.8
 

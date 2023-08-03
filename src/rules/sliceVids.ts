@@ -24,11 +24,11 @@ export function get_sliceVidRules(
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
-  const {
-    doWhenSliceVidPlaying: doWhenSliceVidPlaying,
-    getSliceEndTime: getSliceEndTime,
-    getSliceVidVideo: getSliceVidVideo,
-  } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
+  const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo } = get_sliceVidUtils(
+    storeHelpers,
+    prendyOptions,
+    prendyAssets
+  );
 
   const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = get_safeVidUtils(storeHelpers);
 
@@ -112,7 +112,7 @@ export function get_sliceVidRules(
 
               // check if the new seek time is too close to the end so it would loop
               // for example   newSeekTime: 2.017258  newEndTime: 2.0333300000000003  caused a big quick loop
-              if (newEndTime - newSeekTime < 0.2) {
+              if (newEndTime - newSeekTime < 0.05) {
                 console.warn("was close to looping while changing slice");
                 newSeekTime = newStartTime;
               }
@@ -164,7 +164,7 @@ export function get_sliceVidRules(
       },
       check: { type: "sliceVids", prop: "sliceVidState" },
       step: "sliceVidWantsToPlay",
-      atStepEnd: true,
+      // atStepEnd: true,
     }),
 
     // Wjhen goals change
@@ -203,7 +203,7 @@ export function get_sliceVidRules(
       step: "sliceVidWantsToPlay",
     }),
     whenWantToLoop: itemEffect({
-      run({ itemName, itemState: { sliceVidState } }) {
+      run({ itemName, itemState: { sliceVidState }, frameDuration }) {
         if (sliceVidState === "beforeLoad" || sliceVidState === "unloaded") return;
         setState({ sliceVids: { [itemName]: { sliceVidState: "beforeDoLoop", wantToLoop: false } } });
       },
@@ -255,7 +255,7 @@ export function get_sliceVidRules(
       },
       check: { type: "sliceVids", prop: "stateVidId_waiting" },
       step: "sliceVidWantsToPlay2",
-      atStepEnd: true,
+      // atStepEnd: true,
     }),
   }));
 }

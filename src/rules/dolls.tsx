@@ -82,10 +82,7 @@ export function get_dollDynamicRules(
           setupLightMaterial(modelRefs.materialRef);
 
           // using modelNamesByPlace, set the doll state to invisible if it's not in the current place
-          // TODO
-          if (dollName === "shoes") {
-            console.log("= = = = = = = = = whenWholePlaceFinishesLoading", dollName);
-          }
+
           const { nowPlaceName } = getState().global.main;
           // const { modelName } = getState().dolls[dollName];
           const { modelNamesByPlace } = prendyStartOptions;
@@ -108,6 +105,7 @@ export function get_dollDynamicRules(
 
 // FIXME
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
+// NOTE rules can be manually triggered atleast, but the rule might not know an item was added
 
 export function startDynamicDollRulesForInitialState<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(
   storeHelpers: PrendyStoreHelpers,
@@ -409,8 +407,7 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
               quickDistance = getQuickDistanceBetweenDolls(dollName, otherDollName);
             }
 
-            // FIXME type?
-            (newQuickDistancesMap as any)[dollName]![otherDollName] = quickDistance;
+            newQuickDistancesMap[dollName]![otherDollName] = quickDistance;
 
             tempNewDollsState[dollName]!.inRange![otherDollName].touch = quickDistance < rangeOptionsQuick.touch;
             tempNewDollsState[dollName]!.inRange![otherDollName].talk = quickDistance < rangeOptionsQuick.talk;
@@ -434,8 +431,6 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
         });
 
         if (somethingChanged) {
-          console.log("newDollsState");
-          console.log(newDollsState);
           setState({ dolls: newDollsState as Record<any, any> });
         }
       },

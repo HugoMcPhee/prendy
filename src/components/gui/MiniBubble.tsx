@@ -56,6 +56,10 @@ export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
       prop: ["nowPlaceName", "aConvoIsHappening"],
     });
 
+    const randomRotation = useMemo(() => {
+      return Math.random() * 10 - 5;
+    }, [text, isVisible]);
+
     const editedIsVisible = isVisible && !aConvoIsHappening;
 
     const [theSpring, theSpringApi] = useSpring(
@@ -64,6 +68,7 @@ export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
         position: [0, 0],
         opacity: editedIsVisible ? 1 : 0,
         scale: editedIsVisible ? 1 : 0.1,
+        rotation: randomRotation,
         config: { tension: 400, friction: 50 },
         onChange() {
           positionMiniBubbleToCharacter();
@@ -187,8 +192,8 @@ export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
             opacity: 1,
             borderRadius: 5,
             borderWidth: 1,
-            transform: `translate(0px, -15px) rotate(45deg) scale(0.8) `,
-            backgroundColor: "white",
+            transform: `translate(0px, -15px) rotate(45deg) scale(0.6) `,
+            backgroundColor: "#fafafa",
           },
         } as const),
       []
@@ -208,8 +213,9 @@ export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
               [
                 theSpring.position.to((x, y) => `translate(${x}px , ${y}px)`),
                 theSpring.scale.to((scale) => `scale(${scale})`),
+                theSpring.rotation.to((rotation) => `rotate(${rotation}deg)`),
               ],
-              (translate, scale) => `${translate} ${scale}`
+              (translate, scale, rotate) => `${translate} ${scale} ${rotate}`
             ),
             display: "flex",
             alignItems: "center",
@@ -223,10 +229,9 @@ export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
             key={`textRectangle`}
             id={`textRectangle`}
             style={{
-              backgroundColor: "white",
-              // backgroundColor: "rgb(245, 142, 198)",
+              backgroundColor: "#fafafa",
               width: "70px",
-              borderRadius: "15px",
+              borderRadius: "150px",
               borderWidth: "1px",
               paddingBottom: "5px",
               zIndex: 100,

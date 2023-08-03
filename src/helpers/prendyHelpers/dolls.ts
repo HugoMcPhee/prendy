@@ -51,8 +51,6 @@ export function get_dollStoryHelpers(
   // --------------------------------------------------------------
 
   function setDollPosition(dollName: DollName, newPositon: Vector3) {
-    console.log("setDollPosition", dollName);
-
     const dollRefs = getRefs().dolls[dollName];
     if (!dollRefs.meshRef) return console.warn("NO MESH REF", dollName);
 

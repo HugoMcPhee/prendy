@@ -310,9 +310,10 @@ export function get_dollUtils(
     // Update screen positions :)
 
     const { meshRef } = getRefs().dolls[dollName];
-    if (!meshRef) return;
+    const modelName = getState().dolls[dollName].modelName;
+    if (!meshRef || !modelName) return;
     const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom } = getState().global.main;
-    const characterPointOnSlate = getPositionOnSlate(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
+    const characterPointOnSlate = getPositionOnSlate(meshRef, modelName);
 
     const characterPointOnScreen = convertPointOnSlateToPointOnScreen({
       pointOnSlate: characterPointOnSlate,

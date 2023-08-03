@@ -31,7 +31,6 @@ export function get_placeRules(
 
         const placeInfo = placeInfoByName[placeName as unknown as PlaceName];
         const typedWallNames = placeInfo.wallNames as unknown as WallNameFromPlace<typeof placeName>[];
-        console.log("whenToggledWallsChanges", { placeName, toggledWalls, typedWallNames });
 
         forEach(typedWallNames, (wallName) => {
           const newToggle = toggledWalls[wallName];

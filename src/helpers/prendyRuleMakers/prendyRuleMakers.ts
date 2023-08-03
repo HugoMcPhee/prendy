@@ -272,9 +272,7 @@ export function makeAllStoryRuleMakers(
   ) {
     const onClickInteractButton = () => {
       const usefulStoryStuff = getUsefulStoryStuff();
-
       const { aConvoIsHappening, playerMovingPaused } = usefulStoryStuff.globalState;
-      console.log("playerMovingPaused", playerMovingPaused, "aConvoIsHappening", aConvoIsHappening);
 
       if (aConvoIsHappening || playerMovingPaused) return;
 
@@ -472,164 +470,6 @@ export function makeAllStoryRuleMakers(
   }
 
   // --------------------------------------------------
-  //
-  // makeStoryPartRules
-
-  // Replaced with makeRuleMaker for each project
-  // const makeStoryPartRules = makeRuleMaker("story", "main", "storyPart");
-  // could have chapterName > storyPart too with  makeNestedRuleMaker
-
-  // --------------------------------------------------
-  //
-  // makeRuleMaker
-
-  // type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
-  // type StoreName = keyof AllState;
-
-  // function makeRuleMaker<
-  //   T_StoreName extends StoreName,
-  //   T_StoreItemName extends keyof AllState[T_StoreName] & string,
-  //   T_PropertyName extends keyof AllState[T_StoreName][T_StoreItemName] & string,
-  //   T_StepName extends PrendyStepName
-  // >(storeName: T_StoreName, storeItemName: T_StoreItemName, storyProperty: T_PropertyName, stepName?: T_StepName) {
-  //   type StoreState = AllState[T_StoreName][T_StoreItemName];
-
-  //   type PropertyValue = StoreState[T_PropertyName];
-  //   type RulesOptions = Partial<Record<PropertyValue, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
-  //   const ruleName = `customRuleFor_${storeName}_${storyProperty}${Math.random()}`;
-  //   function newRuleMaker(callBacksObject: RulesOptions) {
-  //     return makeRules(({ effect }) => ({
-  //       whenPropertyChanges: effect({
-  //         run(_diffInfo) {
-  //           const usefulStoryStuff = getUsefulStoryStuff();
-  //           const latestValue = getState()[storeName][storeItemName][storyProperty] as PropertyValue;
-
-  //           callBacksObject[latestValue]?.(usefulStoryStuff);
-  //         },
-  //         check: {
-  //           prop: [storyProperty],
-  //           name: storeItemName,
-  //           type: storeName,
-  //         },
-  //         step: stepName ?? "story",
-  //         atStepEnd: true,
-  //         name: ruleName,
-  //       }),
-  //     }));
-  //   }
-
-  //   return newRuleMaker;
-  // }
-
-  // makeNestedRuleMaker, similar to makeRuleMaker but accepts parameters for two store properties (can be from different stores) , and the callback fires when properties of both stores change
-  // function makeNestedRuleMaker<
-  //   T_StoreName1 extends StoreName,
-  //   T_StoreItemName1 extends keyof AllState[T_StoreName1] & string,
-  //   T_PropertyName1 extends keyof AllState[T_StoreName1][T_StoreItemName1] & string,
-  //   T_StoreName2 extends StoreName,
-  //   T_StoreItemName2 extends keyof AllState[T_StoreName2] & string,
-  //   T_PropertyName2 extends keyof AllState[T_StoreName2][T_StoreItemName2] & string,
-  //   T_StepName extends PrendyStepName
-  // >(
-  //   storeInfo1: [T_StoreName1, T_StoreItemName1, T_PropertyName1],
-  //   storeInfo2: [T_StoreName2, T_StoreItemName2, T_PropertyName2],
-  //   stepName?: T_StepName
-  // ) {
-  //   const [storeName1, storeItemName1, storyProperty1] = storeInfo1;
-  //   const [storeName2, storeItemName2, storyProperty2] = storeInfo2;
-
-  //   type StoreState1 = AllState[T_StoreName1][T_StoreItemName1];
-  //   type StoreState2 = AllState[T_StoreName2][T_StoreItemName2];
-
-  //   type PropertyValue1 = StoreState1[T_PropertyName1];
-  //   type PropertyValue2 = StoreState2[T_PropertyName2];
-  //   type RulesOptions = Partial<
-  //     Record<
-  //       PropertyValue1,
-  //       Partial<Record<PropertyValue2, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>
-  //     >
-  //   >;
-  //   const ruleName = `customRuleFor_${storeName1}_${storyProperty1}_${storeName2}_${storyProperty2}${Math.random()}`;
-  //   function newRuleMaker(callBacksObject: RulesOptions) {
-  //     return makeRules(({ effect }) => ({
-  //       whenPropertyChanges: effect({
-  //         run(_diffInfo) {
-  //           const usefulStoryStuff = getUsefulStoryStuff();
-  //           const latestValue1 = getState()[storeName1][storeItemName1][storyProperty1] as PropertyValue1;
-  //           const latestValue2 = getState()[storeName2][storeItemName2][storyProperty2] as PropertyValue2;
-
-  //           callBacksObject[latestValue1]?.[latestValue2]?.(usefulStoryStuff);
-  //         },
-  //         check: [
-  //           { prop: [storyProperty1], name: storeItemName1, type: storeName1 },
-  //           { prop: [storyProperty2], name: storeItemName2, type: storeName2 },
-  //         ],
-  //         step: stepName ?? "story",
-  //         atStepEnd: true,
-  //         name: ruleName,
-  //       }),
-  //     }));
-  //   }
-
-  //   return newRuleMaker;
-  // }
-
-  // makeNestedLeaveRuleMaker, the same as makeNestedRuleMaker , but the callback fires when the properties of both stores become NOT the specified values, but were previously
-  // function makeNestedLeaveRuleMaker<
-  //   T_StoreName1 extends StoreName,
-  //   T_StoreItemName1 extends keyof AllState[T_StoreName1] & string,
-  //   T_PropertyName1 extends keyof AllState[T_StoreName1][T_StoreItemName1] & string,
-  //   T_StoreName2 extends StoreName,
-  //   T_StoreItemName2 extends keyof AllState[T_StoreName2] & string,
-  //   T_PropertyName2 extends keyof AllState[T_StoreName2][T_StoreItemName2] & string,
-  //   T_StepName extends PrendyStepName
-  // >(
-  //   storeInfo1: [T_StoreName1, T_StoreItemName1, T_PropertyName1],
-  //   storeInfo2: [T_StoreName2, T_StoreItemName2, T_PropertyName2],
-  //   stepName?: T_StepName
-  // ) {
-  //   const [storeName1, storeItemName1, storyProperty1] = storeInfo1;
-  //   const [storeName2, storeItemName2, storyProperty2] = storeInfo2;
-
-  //   type StoreState1 = AllState[T_StoreName1][T_StoreItemName1];
-  //   type StoreState2 = AllState[T_StoreName2][T_StoreItemName2];
-
-  //   type PropertyValue1 = StoreState1[T_PropertyName1];
-  //   type PropertyValue2 = StoreState2[T_PropertyName2];
-  //   type RulesOptions = Partial<
-  //     Record<
-  //       PropertyValue1,
-  //       Partial<Record<PropertyValue2, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>
-  //     >
-  //   >;
-  //   const ruleName = `customLeaveRuleFor_${storeName1}_${storyProperty1}_${storeName2}_${storyProperty2}${Math.random()}`;
-  //   function newRuleMaker(callBacksObject: RulesOptions) {
-  //     return makeRules(({ effect }) => ({
-  //       whenPropertyChanges: effect({
-  //         run(_diffInfo) {
-  //           const usefulStoryStuff = getUsefulStoryStuff();
-  //           const latestValue1 = getState()[storeName1][storeItemName1][storyProperty1] as PropertyValue1;
-  //           const latestValue2 = getState()[storeName2][storeItemName2][storyProperty2] as PropertyValue2;
-  //           const prevValue1 = getPreviousState()[storeName1][storeItemName1][storyProperty1] as PropertyValue1;
-  //           const prevValue2 = getPreviousState()[storeName2][storeItemName2][storyProperty2] as PropertyValue2;
-
-  //           callBacksObject[prevValue1]?.[prevValue2]?.(usefulStoryStuff);
-  //         },
-  //         check: [
-  //           { prop: [storyProperty1], name: storeItemName1, type: storeName1 },
-  //           { prop: [storyProperty2], name: storeItemName2, type: storeName2 },
-  //         ],
-  //         step: stepName ?? "story",
-  //         atStepEnd: true,
-  //         name: ruleName,
-  //       }),
-  //     }));
-  //   }
-
-  //   return newRuleMaker;
-  // }
-
-  // --------------------------------------------------
   // makeTouchRules
   // doll touch rules
 
@@ -652,10 +492,8 @@ export function makeAllStoryRuleMakers(
     return makeRules(({ itemEffect }) => ({
       whenInRangeChangesToCheckTouch: itemEffect({
         run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, itemState: dollState }) {
-          // NOTE FIXME this runs like 3 times when it should run once?
-          // console.log("whenInRangeChangesToCheckTouch", changedDollName, { inRange, prevInRange });
-
           const { dollName: charDollName } = getCharDollStuff(charName as CharacterName) ?? {};
+
           // at the moment runs for every doll instead of just the main character,
           // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
           if (!charDollName || changedDollName !== charDollName) return;
@@ -670,9 +508,6 @@ export function makeAllStoryRuleMakers(
 
             const justEntered = inRange[dollName][distanceType] && !prevInRange[dollName][distanceType];
             const justLeft = !inRange[dollName][distanceType] && prevInRange[dollName][distanceType];
-            // if (justEntered || justLeft) {
-            // console.warn(dollName, { justEntered, justLeft });
-            // }
 
             const whatToRun = callBacksObject[dollName];
             if (dollName !== charDollName) {
@@ -686,6 +521,7 @@ export function makeAllStoryRuleMakers(
         },
         name: `inRangeStoryRules_${charName}_${distanceType}_${whenLeave}`,
         step: "collisionReaction",
+        atStepEnd: true,
       }),
     }));
   }
@@ -715,6 +551,9 @@ export function makeAllStoryRuleMakers(
     // const { playerCharacter } = getState().global.main;
     // const charName = characterName || playerCharacter;
 
+    const charactersWithTriggers = Object.keys(callBacksObject) as CharacterName[];
+    console.log("charactersWithTriggers", charactersWithTriggers);
+
     return makeRules(({ itemEffect }) => ({
       whenAtTriggersChanges: itemEffect({
         run({ newValue: atTriggers, previousValue: prevAtTriggers, itemName: characterName }) {
@@ -739,6 +578,7 @@ export function makeAllStoryRuleMakers(
         check: {
           prop: ["atTriggers"],
           type: "characters",
+          name: charactersWithTriggers,
         },
         step: "collisionReaction",
       }),

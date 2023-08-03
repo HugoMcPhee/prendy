@@ -82,6 +82,10 @@ export function get_SpeechBubble(
 
     const videoIsPlaying = !!nowVideoName;
 
+    const randomRotation = useMemo(() => {
+      return Math.random() * 6 - 3;
+    }, [goalText, isVisible]);
+
     const [theSpring, theSpringApi] = useSpring(() => {
       let height = 0;
       if (videoIsPlaying) {
@@ -95,12 +99,13 @@ export function get_SpeechBubble(
         position: [0, 0],
         opacity: isVisible ? 1 : 0,
         scale: isVisible ? 1 : 0.1,
+        rotation: randomRotation,
         config: { tension: 400, friction: 50 },
         onChange() {
           positionSpeechBubbleToCharacter();
         },
       };
-    }, [isVisible, videoIsPlaying]);
+    }, [isVisible, videoIsPlaying, randomRotation]);
 
     useEffect(() => {
       const newMeasuredHeight = sizeFromRef(refs.theTextHolder.current).height;
@@ -195,6 +200,7 @@ export function get_SpeechBubble(
             // color: "rgb(197, 217, 61)",
             // opacity: 0,
             fontSize: "30px",
+            lineHeight: "40px",
             padding: videoIsPlaying ? "0" : "15px",
             fontFamily: font,
             // textAlign: "center",
@@ -212,7 +218,7 @@ export function get_SpeechBubble(
             borderRadius: 5,
             borderWidth: 1,
             transform: `translate(0px, -15px) rotate(45deg) scale(0.8) `,
-            backgroundColor: "white",
+            backgroundColor: "#fafafa",
           },
         } as const),
       [font, videoIsPlaying]
@@ -236,6 +242,7 @@ export function get_SpeechBubble(
           textAlign: "center",
           verticalAlign: "middle", // to center emojis with text?
           fontSize: "30px",
+          lineHeight: "40px",
           color: "rgb(68, 68, 68)",
         } as const),
       [zIndex]
@@ -255,8 +262,9 @@ export function get_SpeechBubble(
               [
                 theSpring.position.to((x, y) => `translate(${x}px , ${y}px)`),
                 theSpring.scale.to((scale) => `scale(${scale})`),
+                theSpring.rotation.to((rotation) => `rotate(${rotation}deg)`),
               ],
-              (translate, scale) => `${translate} ${scale}`
+              (translate, scale, rotate) => `${translate} ${scale} ${rotate}`
             ),
             display: "flex",
             alignItems: "center",
@@ -270,7 +278,7 @@ export function get_SpeechBubble(
             key={`textRectangle`}
             id={`textRectangle`}
             style={{
-              backgroundColor: "white",
+              backgroundColor: "#fafafa",
               width: `${BUBBLE_WIDTH}px`,
               borderRadius: "40px",
               borderWidth: "1px",

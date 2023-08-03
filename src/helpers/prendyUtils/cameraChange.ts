@@ -187,7 +187,6 @@ export function get_cameraChangeUtils(
         const { slatePos, slatePosGoal, slateZoom } = getState().global.main;
         if (!globalRefs.backdropPostProcessEffect) {
           globalRefs.backdropPostProcessEffect = effect;
-          console.log("reapplying");
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
             "slatePos",
@@ -203,8 +202,6 @@ export function get_cameraChangeUtils(
 
           // setState({ global: { main: { timeScreenResized: Date.now() } } });
           setTimeout(() => {
-            console.log("resizing");
-
             setState({ global: { main: { timeScreenResized: Date.now() } } });
           }, 10);
 

@@ -162,6 +162,7 @@ export function get_characterDynamicRules(
 
 // FIXME
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
+// NOTE rules can be manually triggered atleast, but the rule might not know an item was added
 // TODO add addOrRemovd rules for characters
 
 export function get_startDynamicCharacterRulesForInitialState<

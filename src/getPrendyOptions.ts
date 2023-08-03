@@ -2,6 +2,7 @@ import {
   AnyAnimationName,
   CameraNameByPlace,
   CharacterName,
+  ModelName,
   ModelNamesByPlaceLoose,
   PickupName,
   PlaceName,
@@ -40,8 +41,8 @@ export function makePrendyOptions<
     max: number;
   };
   walkSpeed: number;
-  animationSpeed: number; // 1.75 for rodont
-  headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
+  animationSpeed: number;
+  headHeightOffsets: Partial<Record<ModelName, number>>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: DoorsInfo;
   modelNamesByPlace: ModelNamesByPlaceLoose; // NOTE Could include chapter too so it can load models later (like fly in eggventure)
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)

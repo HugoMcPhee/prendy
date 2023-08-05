@@ -24,7 +24,7 @@ import {
   get_dollStoryUtils,
   get_dollUtils,
 } from "../helpers/prendyUtils/dolls";
-import { cloneObjectWithJson } from "repond/src/utils";
+import { cloneObjectWithJson } from "repond/dist/utils";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll

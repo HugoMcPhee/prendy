@@ -55,6 +55,7 @@ export default function stateVids(prendyAssets: PrendyAssets) {
     autoplay: false, // maybe doesn't work well with stackvids beofre (cause they both woudn't play)
     //
     // isControlledExternally: true, // to wait for vidState to be updated externally before playing etc,
+    doneSeekingTime: null as null | number, // when this changes, it’s finished seeking
   });
 
   const refs = () => ({

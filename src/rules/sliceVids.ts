@@ -6,6 +6,10 @@ import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 import { SliceVidState } from "../stores/sliceVids";
 import { PrendyStoreHelpersUntyped } from "../stores/typedStoreHelpers";
 
+function numbersAreClose(a: number, b: number, range: number) {
+  return Math.abs(a - b) < range;
+}
+
 export function get_sliceVidRules(
   storeHelpers: PrendyStoreHelpers,
   prendyOptions: PrendyOptions,
@@ -24,13 +28,14 @@ export function get_sliceVidRules(
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
-  const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo } = get_sliceVidUtils(
+  const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo } = get_sliceVidUtils(
     storeHelpers,
     prendyOptions,
     prendyAssets
   );
 
-  const { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady } = get_safeVidUtils(storeHelpers);
+  const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } =
+    get_safeVidUtils(storeHelpers);
 
   return makeRules(({ itemEffect }) => ({
     rulesForSettingNewVideoStates: itemEffect({
@@ -39,7 +44,7 @@ export function get_sliceVidRules(
           setState({ sliceVids: { [itemName]: newState } });
         const setVidState = (sliceVidState: SliceVidState) => setItemState({ sliceVidState });
 
-        const { stateVidId_playing, stateVidId_waiting } = itemState;
+        const { stateVidId_playing, stateVidId_waiting, nowSlice } = itemState;
         if (!stateVidId_playing || !stateVidId_waiting) return;
 
         // before load
@@ -55,7 +60,7 @@ export function get_sliceVidRules(
             },
           });
 
-          doWhenSafeVidStateReady(
+          doWhenStateVidStateReady(
             stateVidId_playing,
             "play",
             () => {
@@ -84,7 +89,7 @@ export function get_sliceVidRules(
             },
           });
 
-          doWhenSafeVidStateReady(stateVidId_playing, "unloaded", () => setVidState("unloaded"));
+          doWhenStateVidStateReady(stateVidId_playing, "unloaded", () => setVidState("unloaded"));
         }
 
         // before change slice
@@ -93,7 +98,7 @@ export function get_sliceVidRules(
 
           if (!goalSlice) return;
 
-          let newSeekTime = goalSlice.time;
+          let newSeekTime = goalSlice.time + BEFORE_LOOP_PADDING; // BEFORE_LOOP_PADDING needed to prevent showing part of the previous frame on ios
           const newEndTime = getSliceEndTime(goalSlice);
 
           if (switchSlice_keepProgress) {
@@ -104,7 +109,7 @@ export function get_sliceVidRules(
               const nowSliceStartTime = nowSlice.time;
               let elapsedTime = backdropVidElement.currentTime - nowSliceStartTime;
 
-              const newStartTime = goalSlice.time; // + BEFORE_LOOP_PADDING; // maybe padding avoids flicker of the previous frame
+              const newStartTime = goalSlice.time + BEFORE_LOOP_PADDING; // maybe padding avoids flicker of the previous frame
 
               newSeekTime = goalSlice.time + elapsedTime;
               // make sure the new seek time isn't before or after the slice time
@@ -127,39 +132,67 @@ export function get_sliceVidRules(
                 goalSlice: null,
               },
             },
+            // set the goal seek time for the waiting background vid
             stateVids: { [stateVidId_waiting]: { goalSeekTime: newSeekTime } },
           });
 
-          doWhenSafeVidPlayOrPause(
-            stateVidId_waiting,
-            () => {
-              // when the time seeked,
-              setState({
-                sliceVids: {
-                  [itemName]: {
-                    nowSliceSeekedTime: Date.now(),
-                    stateVidId_playing: stateVidId_waiting,
-                    stateVidId_waiting: stateVidId_playing,
-                  },
+          // once the seek for the background waiting vid is finished, then swap to show the background wwaiting vid
+          doWhenStateVidStateSeeked(stateVidId_waiting, () => {
+            setState({
+              sliceVids: {
+                [itemName]: {
+                  nowSliceSeekedTime: Date.now(),
+                  stateVidId_playing: stateVidId_waiting,
+                  stateVidId_waiting: stateVidId_playing,
                 },
-              });
-            },
-            false /* checkInitial */
-          );
+              },
+            });
+          });
         }
 
         // before do loop
         if (vidState === "beforeDoLoop") {
           // swap the playing and nextLoop vids
-          setState({
-            sliceVids: {
-              [itemName]: {
-                sliceVidState: "waitingForDoLoop",
-                stateVidId_playing: stateVidId_waiting,
-                stateVidId_waiting: stateVidId_playing,
+
+          // FIXME try to make sure the aiting vid is at the start of the looping slice before changing!
+
+          // it assumes the waiting vid is at the start of the looping slice
+
+          // cehck the current seek time of the waiting vid
+          const waitingVidElement = getSliceVidWaitingVideo(itemName as PlaceName);
+          // if (!waitingVidElement) return;
+          // console.log("waitingVid time", waitingVidElement?.currentTime);
+          // console.log("nowSlice time", nowSlice.time);
+
+          function swapPlayingAndWaitingVids() {
+            setState({
+              sliceVids: {
+                [itemName]: {
+                  sliceVidState: "waitingForDoLoop",
+                  stateVidId_playing: stateVidId_waiting,
+                  stateVidId_waiting: stateVidId_playing,
+                },
               },
-            },
-          });
+            });
+          }
+
+          const waitingVidIsAtStartOfSlice = numbersAreClose(
+            waitingVidElement?.currentTime ?? 0,
+            nowSlice.time,
+            BEFORE_LOOP_PADDING * 1.5
+          );
+
+          if (waitingVidIsAtStartOfSlice) {
+            // if the waiting vid is at the start of the slice, then swap the playing and waiting vids
+            swapPlayingAndWaitingVids();
+          } else {
+            console.log("waiting vid is not at start of slice, seeking to start of slice");
+            console.log(waitingVidElement?.currentTime, nowSlice.time);
+
+            // otherwise, seek the waiting vid to the start of the slice, then swap the playing and waiting vids
+            setState({ stateVids: { [stateVidId_waiting]: { goalSeekTime: nowSlice.time + BEFORE_LOOP_PADDING } } }); // BEFORE_LOOP_PADDING needed to prevent showing part of the previous frame on ios
+            doWhenStateVidStateSeeked(stateVidId_waiting, swapPlayingAndWaitingVids);
+          }
         }
       },
       check: { type: "sliceVids", prop: "sliceVidState" },
@@ -216,7 +249,9 @@ export function get_sliceVidRules(
         if (!stateVidId_playing) return;
         setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
 
-        doWhenSafeVidStateReady(
+        // it doesn't seek here, just sets the video to play
+
+        doWhenStateVidStateReady(
           stateVidId_playing,
           "play",
           () => {
@@ -230,7 +265,7 @@ export function get_sliceVidRules(
       },
       check: { type: "sliceVids", prop: "stateVidId_playing" },
       step: "sliceVidWantsToPlay2",
-      atStepEnd: true,
+      // atStepEnd: true,
     }),
 
     whenWaitVidChanges: itemEffect({
@@ -242,12 +277,17 @@ export function get_sliceVidRules(
 
         // when it finished pausing, set the time to the correct time
         // (it might already be paused, and pause might not be needed)
-        doWhenSafeVidStateReady(
+
+        // This sets the new background video to be at the start of the looping slice
+
+        // check it's not already at the correct time
+
+        doWhenStateVidStateReady(
           stateVidId_waiting,
           "pause",
           () => {
             setState({
-              stateVids: { [stateVidId_waiting]: { goalSeekTime: nowSlice.time + BEFORE_LOOP_PADDING } },
+              stateVids: { [stateVidId_waiting]: { goalSeekTime: nowSlice.time + BEFORE_LOOP_PADDING } }, // BEFORE_LOOP_PADDING needed to prevent showing part of the previous frame on ios
             });
           }
           //  false /*  check initial */

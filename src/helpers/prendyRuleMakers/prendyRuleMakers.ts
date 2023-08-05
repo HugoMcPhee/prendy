@@ -173,7 +173,6 @@ export function makeAllStoryRuleMakers(
     onUsePickupGenerally: ReturnType<typeof makeOnUsePickupGenerally>;
   }) {
     const onPickupButtonClick = (pickupName: PickupName) => {
-      setState({ players: { main: { interactButtonPressTime: Date.now() } } });
       const didUsePickupAtTrigger = onUsePickupAtTrigger(pickupName);
       const didUsePickupWithDoll = onUsePickupToTalk(pickupName);
 

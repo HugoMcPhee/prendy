@@ -63,7 +63,7 @@ export function get_safeVidRules(storeHelpers: PrendyStoreHelpers) {
             // note only works on safari is the video was already loaded / played one frame?
             function onSeeked() {
               const newState = getState().stateVids[itemName];
-              setVidState(newState.playType);
+              setState({ stateVids: { [itemName]: { vidState: newState.playType, doneSeekingTime: Date.now() } } });
               itemRefs.videoElement?.removeEventListener("seeked", onSeeked); // stop listening to when the video's seeked
             }
             itemRefs.videoElement.addEventListener("seeked", onSeeked); // start listening to when the video's seeked

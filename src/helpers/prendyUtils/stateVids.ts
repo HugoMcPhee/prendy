@@ -31,7 +31,22 @@ export function get_safeVidUtils(storeHelpers: PrendyStoreHelpers) {
     return ruleName;
   }
 
-  function doWhenSafeVidStateReady(
+  function doWhenStateVidStateSeeked(stateVidId: string, callback: () => void) {
+    const ruleName = "doWhenStateVidStateSeeked" + Math.random();
+    startItemEffect({
+      name: ruleName,
+      run: ({ newValue: newVidState }) => {
+        stopEffect(ruleName);
+        callback();
+      },
+      check: { type: "stateVids", prop: "doneSeekingTime", name: stateVidId },
+      atStepEnd: true,
+      step: "stateVidStateUpdates",
+    });
+    return ruleName;
+  }
+
+  function doWhenStateVidStateReady(
     stateVidId: string,
     vidStateToCheck: VidState,
     callback: () => void,
@@ -40,7 +55,7 @@ export function get_safeVidUtils(storeHelpers: PrendyStoreHelpers) {
     return doWhenStateVidStateChanges(stateVidId, (newState) => newState === vidStateToCheck, callback, checkInitial);
   }
 
-  function doWhenSafeVidPlayOrPause(stateVidId: string, callback: () => void, checkInitial: boolean = true) {
+  function doWhenStateVidPlayOrPause(stateVidId: string, callback: () => void, checkInitial: boolean = true) {
     return doWhenStateVidStateChanges(
       stateVidId,
       (newState) => newState === "play" || newState === "pause",
@@ -49,7 +64,7 @@ export function get_safeVidUtils(storeHelpers: PrendyStoreHelpers) {
     );
   }
 
-  return { doWhenSafeVidPlayOrPause, doWhenSafeVidStateReady };
+  return { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked };
 }
 
 export function makeVideoElementFromPath(filepath: string) {

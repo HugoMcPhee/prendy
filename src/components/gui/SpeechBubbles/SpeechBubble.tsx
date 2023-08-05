@@ -189,6 +189,8 @@ export function get_SpeechBubble(
       [nowPlaceName]
     );
 
+    // const textIsVeryShort = goalText.length < 10;
+
     const styles = useMemo(
       () =>
         ({
@@ -201,13 +203,14 @@ export function get_SpeechBubble(
             // opacity: 0,
             fontSize: "30px",
             lineHeight: "40px",
-            padding: videoIsPlaying ? "0" : "15px",
+            padding: videoIsPlaying ? "15px" : "15px",
             fontFamily: font,
             // textAlign: "center",
             // verticalAlign: "middle", // to center emojis with text?
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start",
+            justifyContent: "center",
+            // justifyContent: textIsVeryShort ? "center" : "flex-start",
             flexDirection: "row",
             flexWrap: "wrap",
           },

@@ -26,6 +26,19 @@ export function get_getSliceVidVideo(storeHelpers: PrendyStoreHelpers) {
   };
 }
 
+export function get_getSliceVidWaitingVideo(storeHelpers: PrendyStoreHelpers) {
+  const { getRefs, getState } = storeHelpers;
+
+  return function getSliceVidWaitingVideo(itemName: PlaceName) {
+    const sliceVidState = getState().sliceVids[itemName];
+    const { stateVidId_waiting } = sliceVidState;
+    if (!stateVidId_waiting) return;
+
+    const backdropVidRefs = getRefs().stateVids[stateVidId_waiting];
+    return backdropVidRefs.videoElement;
+  };
+}
+
 export function get_sliceVidUtils(
   storeHelpers: PrendyStoreHelpers,
   prendyOptions: PrendyOptions,
@@ -36,6 +49,7 @@ export function get_sliceVidUtils(
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
   const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
+  const getSliceVidWaitingVideo = get_getSliceVidWaitingVideo(storeHelpers);
   const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
 
   // temporary rule, that gets removed when it finishes
@@ -146,6 +160,7 @@ export function get_sliceVidUtils(
 
   return {
     getSliceVidVideo,
+    getSliceVidWaitingVideo,
     doWhenSliceVidPlayingAsync,
     doWhenSliceVidStateChanges,
     doWhenSliceVidPlaying,

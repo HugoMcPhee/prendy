@@ -10,6 +10,7 @@ import {
   PrendyStores,
   SegmentNameByPlace,
 } from "../../declarations";
+import { get_speechStoryHelpers } from "../../helpers/prendyHelpers/speech";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { VidSlice } from "../../stores/sliceVids";
@@ -22,11 +23,13 @@ export function get_globalVideoRules(
 ) {
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
 
-  const { getSliceForPlace, getSliceVidVideo, checkForVideoLoop, checkIfVideoAlreadyChanging } = get_sliceVidUtils(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
-  );
+  const {
+    getSliceForPlace,
+    getSliceVidVideo,
+    getSliceVidWaitingVideo,
+    checkForVideoLoop,
+    checkIfVideoAlreadyChanging,
+  } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
   const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
     storeHelpers,
     prendyStartOptions,
@@ -231,6 +234,71 @@ export function get_globalVideoRules(
       check: { type: "sliceVids", prop: "newPlayingVidStartedTime" },
       step: "cameraChange",
       atStepEnd: true,
+    }),
+    whenReturnedFromBackground: itemEffect({
+      run({ newValue: appBecameVisibleTime }) {
+        console.log("appBecameVisibleTime", appBecameVisibleTime);
+
+        // if any state vids should be playing (in state) then play the video
+        const { nowPlaceName } = getState().global.main;
+        const globalRefs = getRefs().global.main;
+
+        const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
+        const backdropVidElementWaiting = getSliceVidWaitingVideo(nowPlaceName as PlaceName);
+        if (!backdropVidElement || !backdropVidElementWaiting) return;
+
+        // check the vidState of the now playing slice vid
+        const sliceVidState = getState().sliceVids[nowPlaceName];
+        const { stateVidId_playing } = sliceVidState;
+
+        if (!stateVidId_playing) return;
+
+        // check if the state video for stateVidId_playing should be playing
+        const stateVidState = getState().stateVids[stateVidId_playing];
+
+        // check if the video element is currently playing
+        const isPlaying = !backdropVidElement.paused;
+        const isPlayingWait = !backdropVidElementWaiting.paused;
+
+        const logText = ["isPlaying", isPlaying, "isPlayingWait", isPlayingWait, sliceVidState.sliceVidState].join(" ");
+        const { showAlarmText } = get_speechStoryHelpers(storeHelpers, _prendyStores, prendyStartOptions, ["example"]);
+        // (stateVidState.vidState === "play" || stateVidState.vidState === "beforePlay")
+        if (!isPlaying) {
+          // TODO handle returning from sleep on iOS
+          // showAlarmText(logText, 2000);
+          // setState({ stateVids: { [stateVidId_playing]: { wantToPause: true } } });
+          // backdropVidElement.play();
+          // backdropVidElementWaiting.play();
+          // const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } =
+          //   get_safeVidUtils(storeHelpers);
+          // doWhenStateVidStateReady(
+          //   stateVidId_playing,
+          //   "pause",
+          //   () => {
+          //     setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
+          //   }
+          //   //  false /*  check initial */
+          // );
+        }
+
+        // if the state vid should be playing, play the video
+        if (stateVidState.vidState === "play") {
+          // globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
+          // backdropVidElement.play();
+          // setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
+        }
+
+        // const { nowPlaceName } = getState().global.main;
+        // const globalRefs = getRefs().global.main;
+
+        // const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
+        // if (!backdropVidElement) return;
+
+        // globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
+      },
+      check: { type: "global", prop: "appBecameVisibleTime" },
+      // step: "cameraChange",
+      // atStepEnd: true,
     }),
   }));
 }

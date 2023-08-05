@@ -54,6 +54,12 @@ export function makeStartPrendyMainRules(
     ReturnType<typeof get_characterDynamicRules>
   >(characterDynamicRules, characterNames, storeHelpers);
 
+  function updateAppVisibility(event: Event) {
+    if (document.visibilityState === "visible") {
+      storeHelpers.setState({ global: { main: { appBecameVisibleTime: Date.now() } } });
+    }
+  }
+
   // ----------------------------------------------
   // starting and stopping rules
 
@@ -61,6 +67,9 @@ export function makeStartPrendyMainRules(
 
   function startPrendyMainRules() {
     keyboardConnectRules.startAll();
+
+    document.addEventListener("visibilitychange", updateAppVisibility);
+
     // pointerConnectRules.startAll();
     // keyboardRules.startAll(); // NOTE does nothing
     const stopAllGlobalRules = startAllGlobalRules();
@@ -83,6 +92,9 @@ export function makeStartPrendyMainRules(
 
     return function stopPrendyMainRules() {
       keyboardConnectRules.stopAll();
+
+      document.removeEventListener("visibilitychange", updateAppVisibility);
+
       // pointerConnectRules.stopAll();
       // keyboardRules.stopAll();
       stopAllGlobalRules();

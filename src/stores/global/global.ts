@@ -189,6 +189,8 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
     //
     latestSave: null as null | PrendySaveState,
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
+    //
+    appBecameVisibleTime: Date.now(),
   });
   // Refs
   const refs = () => ({

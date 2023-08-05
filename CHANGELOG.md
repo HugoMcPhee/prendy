@@ -2,7 +2,6 @@ TODO
 
 new things
 
-- center text for speech bubbles if its very short (like a single emoji)
 - add save load and clear save buttons to the top of the screen , and only reveal when tapping near the top
 - maybe put those in a pause menu, that only appears when tapping near the top
 - maybe support invisible controls, like inside
@@ -12,7 +11,7 @@ fixes
 - fix particles not showing (some small particles show in atleast the first alley in smelldog)
 - (ios) large fonts can have overflow cut off
 - video can play through a bit extra on ios (only when first loading?)
-- (ios) videos can play a little bit extra to the next part when going to new camera (since looping's pausedwhen changing cameras?) (maybe check with slow cpu)
+- (ios) support returning from sleep, video pauses and doesn't play again
 
 v 0.9.9
 
@@ -27,6 +26,10 @@ v 0.9.9
 - slanted speech bubbles, and added line height
 - nicer style for GUI buttons, and more faded gui
 - fixed sometimes video looping to other slice every frame
+- fixed interact button being pressed when tapping pickup
+- fixed video issue when returning to tab (and maybe another seek issue)
+- centered speech bubble text
+- added listener for when the app is fcused
 
 v0.9.8
 

@@ -1,15 +1,11 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { PrendyAssets, ModelName } from "../declarations";
+import { ModelName, PrendyAssets, PrendyStoreHelpers } from "../declarations";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 
-// handle laoding here ??
+// handle loading here ??
 
-export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_modelRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
 
@@ -32,6 +28,7 @@ export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
     modelRef.container = container;
     modelRef.materialRef = container.materials[0] ? (container.materials[0] as PBRMaterial) : null;
     modelRef.materialRefs = container.materials as PBRMaterial[];
+
     setState({ models: { [modelName]: { isLoaded: true } } });
 
     // maybe ideally type the AssetContainer based on modelInfoByName :) ?
@@ -49,8 +46,6 @@ export function get_modelRules<StoreHelpers extends PrendyStoreHelpers>(
     }),
     whenIsLoaded: itemEffect({
       run({ itemName: modelName }) {
-        // console.log(modelName, " loaded");
-
         setState((state) => {
           // if (state.global.main.modelNamesLoaded.includes(modelName)) return {};
 

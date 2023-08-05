@@ -1,13 +1,4 @@
-import {
-  AbstractMesh,
-  Camera,
-  Effect,
-  FxaaPostProcess,
-  PBRMaterial,
-  PostProcess,
-  Scene,
-  ShaderStore,
-} from "@babylonjs/core";
+import { AbstractMesh, Effect, FxaaPostProcess, PBRMaterial, PostProcess, Scene, ShaderStore } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
 import {
@@ -16,20 +7,21 @@ import {
   CameraNameByPlace,
   PlaceName,
   PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
   SegmentNameByPlace,
 } from "../../declarations";
 import { DefaultCameraRefs } from "../../stores/places";
-import { PrendyOptionsUntyped, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { get_scenePlaneUtils } from "../babylonjs/scenePlane";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
-import { get_getSectionVidVideo } from "./sectionVids";
+import { get_getSliceVidVideo } from "./sliceVids";
 
-export function get_cameraChangeUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyOptions extends PrendyOptionsUntyped
->(storeHelpers: StoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets) {
+export function get_cameraChangeUtils(
+  storeHelpers: PrendyStoreHelpers,
+  prendyOptions: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, dollNames } = prendyAssets;
 
@@ -37,7 +29,7 @@ export function get_cameraChangeUtils<
   const placesRefs = getRefs().places;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
-  const getSectionVidVideo = get_getSectionVidVideo<StoreHelpers, PlaceName>(storeHelpers);
+  const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
   const { getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
 
   /*
@@ -48,9 +40,7 @@ export function get_cameraChangeUtils<
   function getSafeCamName(cam: AnyCameraName): AnyCameraName;
   function getSafeCamName(cam: null): null;
   function getSafeCamName(cam: any): any {
-    if (cam === null) {
-      return null;
-    }
+    if (cam === null) return null;
 
     const { nowPlaceName } = getGlobalState();
 
@@ -83,23 +73,16 @@ export function get_cameraChangeUtils<
     const safePlace = nowPlaceName;
     const { segmentNames, segmentTimesByCamera } = placeInfoByName[safePlace];
 
-    // if the camera isn't in the nowPlace, then use the first camera for the nowPlace
     const safeCam = getSafeCamName(cam);
 
     if (nowPlaceName !== place) {
       console.warn("tried to getSafeSegment name for not current place", place);
     }
-    // if (segmentTimesByCamera[cam]) {
-    // segmentTimesByCamera[cam]
-    // }
 
     const camSegmentNames = Object.keys(segmentTimesByCamera?.[safeCam as keyof typeof segmentTimesByCamera] ?? {});
 
-    // const camSegmentNames = [] as any;
-
     // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
     const foundRuleSegmentName = useStorySegmentRules ? getSegmentFromStoryRules(safePlace, safeCam) : undefined;
-    // const foundRuleSegmentName = undefined;
 
     return chooseClosestBeforeItemInArray({
       fullArray: segmentNames,
@@ -108,51 +91,34 @@ export function get_cameraChangeUtils<
     });
   }
 
+  // Updates both video textures and probe textures for the new cameras
   function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
-    console.log("updateTexturesForNowCamera");
-
     const { nowPlaceName } = getState().global.main;
     const scene = globalRefs.scene as Scene;
+
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
     const newCamRef = camsRefs[newCameraName];
 
     if (scene === null) return;
     if (!newCamRef.camera) return;
+    // if (!scene.activeCamera) return;
 
     // Render target
-    if (globalRefs.backdropPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.backdropPostProcess);
-    }
-    if (globalRefs.fxaaPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).detachPostProcess(globalRefs.fxaaPostProcess);
-    }
+    if (globalRefs.backdropPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.backdropPostProcess);
+    if (globalRefs.fxaaPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.fxaaPostProcess);
 
-    globalRefs.scene.activeCamera = newCamRef.camera;
+    scene.activeCamera = newCamRef.camera;
 
-    if (globalRefs.backdropPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.backdropPostProcess);
-    }
-    if (globalRefs.fxaaPostProcess) {
-      (globalRefs.scene.activeCamera as Camera).attachPostProcess(globalRefs.fxaaPostProcess);
-    }
+    if (globalRefs.backdropPostProcess) scene.activeCamera?.attachPostProcess(globalRefs.backdropPostProcess);
+    if (globalRefs.fxaaPostProcess) scene.activeCamera?.attachPostProcess(globalRefs.fxaaPostProcess);
 
-    // console.log("newCamRef.camera");
-    // newCamRef.camera.maxZ = 1000;
-    // console.log(newCamRef.camera.maxZ);
+    if (!globalRefs.depthRenderer) globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
 
-    if (!globalRefs.depthRenderer) {
-      console.log("making new depth renderer");
+    // @ts-ignore
+    globalRefs.depthRenderer._camera = newCamRef.camera;
 
-      globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
-    }
-
-    (globalRefs.depthRenderer as any)._camera = newCamRef.camera;
-
-    if (!globalRefs.depthRenderTarget) {
-      globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
-      // globalRefs.depthRenderTarget?.resize({ width: 1280, height: 720 });
-    }
+    if (!globalRefs.depthRenderTarget) globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
 
     globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
 
@@ -161,7 +127,12 @@ export function get_cameraChangeUtils<
       addMeshesToRenderLists(newCamRef);
     }
 
-    if (globalRefs.scene.activeCamera && !globalRefs.backdropPostProcess) {
+    if (scene.activeCamera && !globalRefs.backdropPostProcess) {
+      // const shaderStore = ShaderStore.GetShadersStore();
+      // shaderStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
+      // shaderStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
+      // console.log("shaderStore", shaderStore);
+      // console.log("ShaderStore.ShadersStore", ShaderStore.ShadersStore);
       ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
       ShaderStore.ShadersStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
 
@@ -171,10 +142,10 @@ export function get_cameraChangeUtils<
       globalRefs.backdropPostProcess = new PostProcess(
         "backdropAndDepthShader",
         "depthy",
-        ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+        ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
         ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
         1,
-        globalRefs.scene.activeCamera,
+        scene.activeCamera,
         // globalRefs.activeCamera
         // Texture.NEAREST_SAMPLINGMODE // sampling
         // globalRefs.scene.engine // engine,
@@ -190,7 +161,7 @@ export function get_cameraChangeUtils<
       //   globalRefs.backdropPostProcess = new PostProcess(
       //     "backdropAndDepthShader",
       //     "translatedFxaa",
-      //     null, // ["planePos", "stretchSceneAmount", "stretchVideoAmount"],
+      //     null, // ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
       //     null, //["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
       //     1,
       //     globalRefs.scene.activeCamera,
@@ -213,27 +184,24 @@ export function get_cameraChangeUtils<
       // // const appliedProcess = postProcess.apply();
 
       globalRefs.backdropPostProcess.onApply = (effect) => {
-        const { planePos, planePosGoal, planeZoom } = getState().global.main;
+        const { slatePos, slatePosGoal, slateZoom } = getState().global.main;
         if (!globalRefs.backdropPostProcessEffect) {
           globalRefs.backdropPostProcessEffect = effect;
-          console.log("reapplying");
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "planePos",
-            planePosGoal.x,
-            planePosGoal.y
+            "slatePos",
+            slatePosGoal.x,
+            slatePosGoal.y
           );
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
             "stretchSceneAmount",
-            planeZoom,
-            planeZoom
+            slateZoom,
+            slateZoom
           );
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
           // setState({ global: { main: { timeScreenResized: Date.now() } } });
           setTimeout(() => {
-            console.log("resizing");
-
             setState({ global: { main: { timeScreenResized: Date.now() } } });
           }, 10);
 
@@ -251,8 +219,8 @@ export function get_cameraChangeUtils<
           globalRefs.stretchSceneSize.y
         );
 
-        // const positionChanged = diffInfo.propsChangedBool.global.main.planePos;
-        // const zoomChanged = diffInfo.propsChangedBool.global.main.planeZoom;
+        // const positionChanged = diffInfo.propsChangedBool.global.main.slatePos;
+        // const zoomChanged = diffInfo.propsChangedBool.global.main.slateZoom;
         const positionChanged = true;
         const zoomChanged = true;
 
@@ -261,17 +229,17 @@ export function get_cameraChangeUtils<
           const stretchVideoSize = globalRefs.stretchVideoSize;
 
           (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-            "planePos",
-            planePos.x * stretchVideoSize.x,
-            planePos.y * stretchVideoSize.y
+            "slatePos",
+            slatePos.x * stretchVideoSize.x,
+            slatePos.y * stretchVideoSize.y
           );
         }
         updateVideoTexture();
       };
     }
 
-    if (globalRefs.scene.activeCamera && !globalRefs.fxaaPostProcess) {
-      globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
+    if (scene.activeCamera && !globalRefs.fxaaPostProcess) {
+      globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, scene.activeCamera);
     }
 
     if (didChangePlace) {
@@ -288,7 +256,7 @@ export function get_cameraChangeUtils<
 
     // scene.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
 
-    globalRefs.depthRenderTarget.renderList = [];
+    if (globalRefs.depthRenderTarget) globalRefs.depthRenderTarget.renderList = [];
 
     forEach(dollNames, (dollName) => {
       const dollMeshes = getRefs().dolls[dollName].otherMeshes;
@@ -296,12 +264,10 @@ export function get_cameraChangeUtils<
       const dollMeshNames = Object.keys(dollMeshes);
 
       forEach(dollMeshNames, (meshName) => {
-        const loopedMesh = dollMeshes[meshName] as AbstractMesh;
-
-        if (loopedMesh) {
-          loopedMesh.isInFrustum = () => true;
-          // loopedMesh.alwaysSelectAsActiveMesh = true;
-          globalRefs.depthRenderTarget?.renderList?.push(loopedMesh);
+        const dollMesh = dollMeshes[meshName] as AbstractMesh;
+        if (dollMesh) {
+          dollMesh.isInFrustum = () => true;
+          globalRefs.depthRenderTarget?.renderList?.push(dollMesh);
         }
       });
     });
@@ -313,12 +279,13 @@ export function get_cameraChangeUtils<
       (particleSystem as any)._camera = newCamRef.camera;
     });
 
-    (scene as any)._skipEvaluateActiveMeshesCompletely = true;
+    // @ts-ignore
+    scene._skipEvaluateActiveMeshesCompletely = true;
   }
 
   function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
     if (globalRefs.backdropVideoTex) {
-      const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
+      const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
       if (backdropVidElement) globalRefs.backdropVideoTex.updateVid(backdropVidElement);
     }
 
@@ -326,32 +293,29 @@ export function get_cameraChangeUtils<
   }
 
   function updateVideoTexture() {
-    // if (Math.random() > 0.7) {
     globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
-    // }
     globalRefs?.backdropPostProcessEffect?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
   }
 
   function applyProbeToAllDollMaterials() {
     const { nowPlaceName, modelNamesLoaded } = getState().global.main;
-
-    const placeState = getState().places[nowPlaceName];
+    const { nowCamName } = getState().global.main;
 
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    // const newCamRef = camsRefs[placeState.nowCamName];
+    const newCamRef = camsRefs[nowCamName];
 
     if (scene === null) return;
 
     forEach(modelNamesLoaded, (modelName: any & string) => {
       const modelRefs = getRefs().models[modelName];
 
-      if (modelRefs.materialRef && camsRefs[placeState.nowCamName].probeTexture) {
-        modelRefs.materialRef.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
+      if (modelRefs.materialRef && newCamRef.probeTexture) {
+        modelRefs.materialRef.reflectionTexture = newCamRef.probeTexture;
       }
     });
-    //
+
     // // looks like the dolls material doesn't automatically update with the models material
     // // so setting it here works :)
     forEach(dollNames, (dollName) => {
@@ -360,71 +324,64 @@ export function get_cameraChangeUtils<
       const modelRefs = getRefs().models[modelName];
 
       if (dollRefs.meshRef) {
-        // (modelRefs.materialRef as PBRMaterial).isReadyForSubMesh = () => false;
         dollRefs.meshRef.material = modelRefs.materialRef;
-        dollRefs.meshRef.material.freeze();
+        dollRefs.meshRef.material?.freeze();
       }
     });
   }
 
   function applyProbeToAllParticleMaterials() {
     const { nowPlaceName } = getState().global.main;
-
-    const placeState = getState().places[nowPlaceName];
-
+    const { nowCamName } = getState().global.main;
     const { scene } = globalRefs;
     const placeRef = placesRefs[nowPlaceName];
     const { camsRefs } = placeRef;
-    // const newCamRef = camsRefs[placeState.nowCamName];
-
+    const newCamRef = camsRefs[nowCamName];
     if (scene === null) return;
 
     const particleSystemNames = Object.keys(globalRefs.solidParticleSystems);
     particleSystemNames.forEach((particleSystemName) => {
       const particleSystem = globalRefs.solidParticleSystems[particleSystemName];
       const material = particleSystem.mesh.material;
-      if (material && material instanceof PBRMaterial && camsRefs[placeState.nowCamName].probeTexture) {
-        material.reflectionTexture = camsRefs[placeState.nowCamName].probeTexture;
+      if (material && material instanceof PBRMaterial && newCamRef.probeTexture) {
+        material.reflectionTexture = newCamRef.probeTexture;
       }
 
       globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
     });
   }
 
-  // note adding to section vids cause its easier to follow for now? even though its not seperated
-  function updateNowStuffWhenSectionChanged() {
-    const { nowPlaceName, nextSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
-    const { nextCamNameWhenVidPlays, nowCamName } = getState().places[nowPlaceName];
+  // note adding to slice vids cause its easier to follow for now? even though it's not seperated
+  function updateNowStuffWhenSliceChanged() {
+    // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
 
-    const waitingForASectionToChange = nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
+    const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
+    const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
 
-    // if no segment or camera was waiting for the sectionVid to change, return early
-    if (!waitingForASectionToChange) return;
+    const waitingForASliceToChange = goalSegmentNameWhenVidPlays || goalCamNameWhenVidPlays;
 
-    const nextCamNameWhenVidPlaysSafe = nextCamNameWhenVidPlays
-      ? getSafeCamName(nextCamNameWhenVidPlays as AnyCameraName)
+    // if no segment or camera was waiting for the sliceVid to change, return early
+    if (!waitingForASliceToChange) return;
+
+    const goalCamNameWhenVidPlaysSafe = goalCamNameWhenVidPlays
+      ? getSafeCamName(goalCamNameWhenVidPlays as AnyCameraName)
       : null;
-    const nextSegmentNameWhenVidPlaysSafe = nextSegmentNameWhenVidPlays
+    const goalSegmentNameWhenVidPlaysSafe = goalSegmentNameWhenVidPlays
       ? getSafeSegmentName({
-          cam: (nextCamNameWhenVidPlaysSafe ?? nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
+          cam: (goalCamNameWhenVidPlaysSafe ?? nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
           place: nowPlaceName as PlaceName,
-          segment: nextSegmentNameWhenVidPlays as SegmentNameByPlace[PlaceName],
+          segment: goalSegmentNameWhenVidPlays as SegmentNameByPlace[PlaceName],
           useStorySegmentRules: true,
         })
       : null;
-    // if (sectionVidState === "play") {
 
     setState({
       global: {
         main: {
-          nowSegmentName: nextSegmentNameWhenVidPlaysSafe || nowSegmentName,
-          nextSegmentNameWhenVidPlays: null,
-        },
-      },
-      places: {
-        [nowPlaceName]: {
-          nowCamName: nextCamNameWhenVidPlaysSafe || nowCamName,
-          nextCamNameWhenVidPlays: null,
+          nowSegmentName: goalSegmentNameWhenVidPlaysSafe || nowSegmentName,
+          goalSegmentNameWhenVidPlays: null,
+          nowCamName: goalCamNameWhenVidPlaysSafe || nowCamName,
+          goalCamNameWhenVidPlays: null,
         },
       },
     });
@@ -435,6 +392,6 @@ export function get_cameraChangeUtils<
     getSafeCamName,
     getSafeSegmentName,
     updateTexturesForNowCamera,
-    updateNowStuffWhenSectionChanged,
+    updateNowStuffWhenSliceChanged,
   };
 }

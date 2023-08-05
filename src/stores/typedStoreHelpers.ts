@@ -1,8 +1,8 @@
 import { PrendyAssets } from "../declarations";
-import { StoreHelperTypes } from "pietem";
-import { createStoreHelpers } from "pietem";
+import { StoreHelperTypes } from "repond";
+import { createStoreHelpers } from "repond";
 import { prendyStepNames } from "./stores";
-import { getPrendyOptions } from "../getPrendyOptions";
+import { makePrendyOptions } from "../getPrendyOptions";
 import { story_fake } from "../helpers/prendyRuleMakers/fakeStoryStore";
 import characters from "./characters";
 import dolls from "./dolls/dolls";
@@ -12,12 +12,11 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import pointers from "./pointers";
-import safeVids from "./safeVids";
-import sectionVids from "./sectionVids";
+import stateVids from "./stateVids";
+import sliceVids from "./sliceVids";
 import speechBubbles from "./speechBubbles";
 
-const TEST_START_OPTIONS = getPrendyOptions({
+const TEST_START_OPTIONS = makePrendyOptions({
   // place: "cave",
   // segment: "start",
   // camera: "View_Camera",
@@ -30,7 +29,7 @@ const TEST_START_OPTIONS = getPrendyOptions({
   zoomLevels: { default: 1.1, max: 2 },
   walkSpeed: 10,
   animationSpeed: 1,
-  headHeightOffset: -0.5,
+  headHeightOffsets: { walker: 2.75 },
   doorsInfo: {
     street: {
       // test_trigger: {
@@ -119,16 +118,15 @@ export type DollOptionsPlaceholder<DollName extends string, ModelName extends st
 const placeholderPrendyStores = {
   keyboards: keyboards(),
   miniBubbles: miniBubbles(testArtStuff),
-  pointers: pointers(),
   global: global(TEST_START_OPTIONS as any, testArtStuff),
   models: models(testArtStuff),
   dolls: dolls(testArtStuff),
   characters: characters(testArtStuff),
   players: players(TEST_START_OPTIONS as any),
-  speechBubbles: speechBubbles(testArtStuff),
-  places: places(testArtStuff),
-  safeVids: safeVids(testArtStuff),
-  sectionVids: sectionVids(testArtStuff),
+  speechBubbles: speechBubbles(testArtStuff as any) as any, // NOTE as any cause it hits the typescript imit with speechBubbles
+  places: places(testArtStuff, TEST_START_OPTIONS as any),
+  stateVids: stateVids(testArtStuff),
+  sliceVids: sliceVids(testArtStuff),
   //
   story: story_fake<any, any>(),
 };
@@ -142,11 +140,12 @@ const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-// NOTE Change these to typeof  to have known types while making prendys library
-// export type PlaceholderPrendyStores = typeof placeholderPrendyStores;
-// export type PrendyStoreHelpers = typeof storeHelpers;
+// NOTE Use these to typeof to have known types while making prendys library
+export type PrendyStoresUntypedType = typeof placeholderPrendyStores;
+export type PrendyStoreHelpersUntypedType = typeof storeHelpers;
 
-export type PlaceholderPrendyStores = Record<
+// NOTE use these two when using prendys library
+export type PrendyStoresUntypedType_ = Record<
   any,
   {
     state: (itemName: any) => any;
@@ -154,7 +153,7 @@ export type PlaceholderPrendyStores = Record<
     startStates?: Record<any, any>;
   }
 >;
-export type PrendyStoreHelpers = {
+export type PrendyStoreHelpersUntypedType_ = {
   getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
   getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -181,6 +180,9 @@ export type PrendyStoreHelpers = {
     stop: (...args: any) => any;
     ruleNames: any[];
   };
+  makeRuleMaker: (...args: any) => any;
+  makeNestedRuleMaker: (...args: any) => any;
+  makeNestedLeaveRuleMaker: (...args: any) => any;
   onNextTick: (...args: any) => any;
   addItem: (...args: any) => any;
   removeItem: (...args: any) => any;
@@ -193,10 +195,13 @@ export type PrendyStoreHelpers = {
   useStoreItemPropsEffect: (...args: any) => any;
 };
 
-type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
+export interface PrendyStoresUntyped extends PrendyStoresUntypedType {}
+export interface PrendyStoreHelpersUntyped extends PrendyStoreHelpersUntypedType {}
+
+type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
 type HelperType<T extends ItemType> = StoreHelperTypes<
-  PrendyStoreHelpers["getState"],
-  PrendyStoreHelpers["getRefs"],
+  PrendyStoreHelpersUntyped["getState"],
+  PrendyStoreHelpersUntyped["getRefs"],
   T
 >;
 export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
@@ -272,7 +277,7 @@ export type PrendyOptionsUntyped = {
   };
   walkSpeed: number;
   animationSpeed: number; // 1.75 for rodont
-  headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
+  headHeightOffsets: Record<string, number>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<Record<string, Partial<Record<string, ToNewOptionUntyped>>>>;
   modelNamesByPlace: Record<string, string[]>;
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)
@@ -311,8 +316,8 @@ export type PrendyOptionsGeneric<
     max: number;
   };
   walkSpeed: number;
-  animationSpeed: number; // 1.75 for rodont
-  headHeightOffset: number; // 1.75 for rodont TODO update this to headHeightOffetsByModel, and maybe eventually move to being automatic by finding a bone with"neck" in its name
+  animationSpeed: number;
+  headHeightOffsets: Record<string, number>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<
     Record<PlaceName, Partial<Record<string, ToPlaceOption<AnyCameraName, AnySegmentName, PlaceName, AnySpotName>>>>
   >;

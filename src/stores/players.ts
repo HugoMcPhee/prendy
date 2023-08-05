@@ -1,13 +1,10 @@
 import { AnyAnimationName, PrendyOptions } from "../declarations";
 import { Point2D } from "chootils/dist/points2d";
 
-export default function players<
-  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions
->(prendyStartOptions: A_PrendyOptions) {
+export default function players(prendyStartOptions: PrendyOptions) {
   type PlayerAnimationNames = {
-    walking: A_AnyAnimationName;
-    idle: A_AnyAnimationName;
+    walking: AnyAnimationName;
+    idle: AnyAnimationName;
   };
 
   const state = () => ({
@@ -15,7 +12,7 @@ export default function players<
     lastSafeInputAngle: 0 as number | null,
     inputVelocity: { x: 0, y: 0 } as Point2D,
     isJumping: false,
-    isOnGround: false,
+    isOnGround: true,
     canJump: true,
     interactButtonPressTime: Date.now(),
     jumpButtonPressTime: Date.now(),

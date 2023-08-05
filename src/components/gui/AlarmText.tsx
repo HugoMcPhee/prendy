@@ -1,8 +1,8 @@
 // @refresh-reset
 import React from "react";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpers } from "../../declarations";
 
-export function get_AlarmText<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_AlarmText(storeHelpers: PrendyStoreHelpers) {
   const { useStore } = storeHelpers;
 
   type Props = {};

@@ -1,244 +1,215 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
-import { VidSection } from "../../stores/sectionVids";
-import { get_sectionVidUtils } from "../../helpers/prendyUtils/sectionVids";
 import {
   AnyCameraName,
   AnySegmentName,
-  PrendyAssets,
-  PrendyOptions,
   CameraNameByPlace,
   PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
   SegmentNameByPlace,
 } from "../../declarations";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../stores/typedStoreHelpers";
+import { get_speechStoryHelpers } from "../../helpers/prendyHelpers/speech";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
+import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
+import { VidSlice } from "../../stores/sliceVids";
 
-export function get_globalVideoRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(
-  storeHelpers: StoreHelpers,
+export function get_globalVideoRules(
+  storeHelpers: PrendyStoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
-  const { getRefs, getState, makeRules, setState } = storeHelpers;
+  const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
 
-  const { getSectionForPlace, getSectionVidVideo, checkForVideoLoop } = get_sectionVidUtils(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
-  );
-  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSectionChanged } = get_cameraChangeUtils(
+  const {
+    getSliceForPlace,
+    getSliceVidVideo,
+    getSliceVidWaitingVideo,
+    checkForVideoLoop,
+    checkIfVideoAlreadyChanging,
+  } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
+  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
     storeHelpers,
     prendyStartOptions,
     prendyAssets
   );
 
   return makeRules(({ itemEffect, effect }) => ({
-    whenWantToChooseVideoSection: effect({
+    whenWantToChooseVideoSlice: effect({
       run() {
         const {
           nowPlaceName,
           nowSegmentName,
-          wantedSegmentName,
-          wantedSegmentNameAtLoop,
-          nextSegmentNameWhenVidPlays,
-          nextPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets wantedSegmentName and wantedCamName also sets nextPlaceName
+          goalSegmentName,
+          goalSegmentNameAtLoop,
+          goalSegmentNameWhenVidPlays,
+          goalPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets goalSegmentName and goalCamName also sets goalPlaceName
           isLoadingBetweenPlaces,
         } = getState().global.main;
 
-        const { nextCamNameWhenVidPlays, wantedCamNameAtLoop, wantedCamName, nowCamName } =
-          getState().places[nowPlaceName];
-
-        const { sectionVidState, wantedSection, wantToLoop, switchSection_keepProgress } =
-          getState().sectionVids[nowPlaceName];
-
+        const { goalCamNameWhenVidPlays, goalCamNameAtLoop, goalCamName, nowCamName } = getState().global.main;
+        const { sliceVidState, goalSlice, wantToLoop, switchSlice_keepProgress } = getState().sliceVids[nowPlaceName];
         const videoIsOutsideOfCurrentLoop = checkForVideoLoop(nowPlaceName as PlaceName);
+        const videoIsAlreadyChanging = checkIfVideoAlreadyChanging(nowPlaceName);
 
-        // do all the deciding section logic in here!
+        // do all the deciding slice logic in here!
 
-        // all other wanted valeus get cleared each time
-        let new_wantedSegmentNameAtLoop = wantedSegmentNameAtLoop;
-        let new_wantedCamNameAtLoop = wantedCamNameAtLoop;
+        // all other goal values get cleared each time
+        let new_goalSegmentNameAtLoop = goalSegmentNameAtLoop;
+        let new_goalCamNameAtLoop = goalCamNameAtLoop;
 
-        let decided_wantedCamName = wantedCamName;
-        let decided_wantedSegmentName = wantedSegmentName;
-        let decided_wantToLoop = videoIsOutsideOfCurrentLoop;
+        let new_goalCamName = goalCamName;
+        let new_goalSegmentName = goalSegmentName;
+        let new_wantToLoop = videoIsOutsideOfCurrentLoop && !videoIsAlreadyChanging;
 
-        let decided_shouldKeepTime = true;
+        let new_shouldKeepTime = true;
 
-        let decided_wantedSection: VidSection | null = null;
+        let new_goalSlice: VidSlice | null = null;
 
-        const alreadyWaitingForASectionToChange = nextSegmentNameWhenVidPlays || nextCamNameWhenVidPlays;
+        const alreadyWaitingForASliceToChange = goalSegmentNameWhenVidPlays || goalCamNameWhenVidPlays;
 
-        // if there's a nextPlaceName, so its starting to load the next-place
-        if (nextPlaceName) {
+        // if there's a goalPlaceName, so its starting to load the next-place
+        if (goalPlaceName) {
           // NOTE , might still want to loop the videos when it's loading a new place ?
           // but it should fade out so hopefully don't need to, it might just show a little bit of the next part of the video while fading , but it can be fixed here if wanted
 
-          if (alreadyWaitingForASectionToChange) {
+          if (alreadyWaitingForASliceToChange) {
             setState({
               global: {
                 main: {
-                  // wantedSegmentName: null,
-                  wantedSegmentNameAtLoop: null,
-                  // wantToLoop: false,
-                  nextSegmentNameWhenVidPlays: null,
+                  goalSegmentNameAtLoop: null,
+                  goalSegmentNameWhenVidPlays: null,
+                  goalCamNameAtLoop: null,
+                  goalCamNameWhenVidPlays: null,
                 },
               },
-              places: {
-                [nowPlaceName]: {
-                  // wantedCamName: null,
-                  wantedCamNameAtLoop: null,
-                  nextCamNameWhenVidPlays: null,
-                },
-              },
-              sectionVids: {
-                [nowPlaceName]: {
-                  wantedSection: null,
-                  wantToLoop: false,
-                  // switchSection_keepProgress: decided_shouldKeepTime,
-                },
-              },
+              sliceVids: { [nowPlaceName]: { goalSlice: null, wantToLoop: false } },
             });
           }
 
           return;
         }
 
-        if (sectionVidState === "waitingForLoad" || isLoadingBetweenPlaces) return;
+        if (sliceVidState === "waitingForLoad" || isLoadingBetweenPlaces) return;
 
-        // right now it skips this if its waiting for a section change
-        // this wanted stuff should be checked every frame, then it will update when it's ready!
-        if (alreadyWaitingForASectionToChange) return;
+        // right now it skips this if its waiting for a slice change
+        // this goal stuff should be checked every frame, then it will update when it's ready!
+        if (alreadyWaitingForASliceToChange) return;
 
-        if (videoIsOutsideOfCurrentLoop && (wantedCamNameAtLoop || wantedSegmentNameAtLoop)) {
-          // it should now go to a new section from thw wanted segment or cam at loop
-          decided_wantedCamName = wantedCamName || wantedCamNameAtLoop;
-          decided_wantedSegmentName = wantedSegmentName || wantedSegmentNameAtLoop;
+        if (videoIsOutsideOfCurrentLoop && (goalCamNameAtLoop || goalSegmentNameAtLoop)) {
+          // it should now go to a new slice from the goal segment or cam at loop
+          new_goalCamName = goalCamName || goalCamNameAtLoop;
+          new_goalSegmentName = goalSegmentName || goalSegmentNameAtLoop;
 
-          new_wantedCamNameAtLoop = null;
-          new_wantedSegmentNameAtLoop = null;
+          new_goalCamNameAtLoop = null;
+          new_goalSegmentNameAtLoop = null;
         }
 
-        if (decided_wantedSegmentName || decided_wantedCamName) {
-          // it'll definately be a wantedSection next
+        if (new_goalSegmentName || new_goalCamName) {
+          // it'll definately be a goalSlice next
 
           // set the other value if its undefined
-          decided_wantedCamName = decided_wantedCamName || nowCamName;
-          decided_wantedSegmentName = decided_wantedSegmentName || nowSegmentName;
+          new_goalCamName = new_goalCamName || nowCamName;
+          new_goalSegmentName = new_goalSegmentName || nowSegmentName;
 
           // make sure its a safe segment
 
           // TODO retype intital state to have segments as strings
-          decided_wantedSegmentName = getSafeSegmentName({
-            cam: decided_wantedCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
+          new_goalSegmentName = getSafeSegmentName({
+            cam: new_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
             place: nowPlaceName as PlaceName,
-            segment: decided_wantedSegmentName as SegmentNameByPlace[PlaceName] & AnySegmentName,
+            segment: new_goalSegmentName as SegmentNameByPlace[PlaceName] & AnySegmentName,
             useStorySegmentRules: true, // NOTE this could mess with things when manually chaning segment
           });
 
           // if either the decided segment or camera is different to the now segment and camera
-          if (!(decided_wantedCamName === nowCamName && decided_wantedSegmentName === nowSegmentName)) {
-            decided_wantedSection = getSectionForPlace(
+          if (!(new_goalCamName === nowCamName && new_goalSegmentName === nowSegmentName)) {
+            new_goalSlice = getSliceForPlace(
               nowPlaceName as PlaceName,
-              decided_wantedCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
-              decided_wantedSegmentName! as SegmentNameByPlace[PlaceName] // decided_wantedSegmentName should always be decided here
+              new_goalCamName as CameraNameByPlace[PlaceName] & AnyCameraName,
+              new_goalSegmentName! as SegmentNameByPlace[PlaceName] // new_goalSegmentName should always be decided here
             );
-            decided_wantToLoop = false;
+            new_wantToLoop = false;
           }
         }
 
-        // if changing segments, don't keep the duration of the currently playing section (which is good for changing cameras and keeping the same loop at different angles)
-        if (decided_wantedSegmentName !== nowSegmentName) {
-          decided_shouldKeepTime = false;
+        // if changing segments, don't keep the duration of the currently playing slice (which is good for changing cameras and keeping the same loop at different angles)
+        if (new_goalSegmentName !== nowSegmentName) {
+          new_shouldKeepTime = false;
         }
 
-        if (videoIsOutsideOfCurrentLoop && !decided_wantedCamName && !decided_wantedSegmentName) {
+        if (videoIsOutsideOfCurrentLoop && !new_goalCamName && !new_goalSegmentName) {
           // it'll definately be a wantToLoop
-
-          decided_wantToLoop = true;
-          decided_wantedSection = null;
+          new_wantToLoop = true;
+          new_goalSlice = null;
         }
 
-        // set State for the global and place state, and also the sectionState
+        // set State for global and sliceVids
 
         const somethingChanged =
-          wantedSegmentName !== null ||
-          new_wantedSegmentNameAtLoop !== wantedSegmentNameAtLoop ||
-          decided_wantedSegmentName !== nextSegmentNameWhenVidPlays ||
-          wantedCamName !== null ||
-          new_wantedCamNameAtLoop !== wantedCamNameAtLoop ||
-          decided_wantedCamName !== nextCamNameWhenVidPlays ||
-          decided_wantedSection !== wantedSection ||
-          decided_wantToLoop !== wantToLoop ||
-          decided_shouldKeepTime !== switchSection_keepProgress;
+          goalSegmentName !== null ||
+          new_goalSegmentNameAtLoop !== goalSegmentNameAtLoop ||
+          new_goalSegmentName !== goalSegmentNameWhenVidPlays ||
+          goalCamName !== null ||
+          new_goalCamNameAtLoop !== goalCamNameAtLoop ||
+          new_goalCamName !== goalCamNameWhenVidPlays ||
+          new_goalSlice !== goalSlice ||
+          new_wantToLoop !== wantToLoop ||
+          new_shouldKeepTime !== switchSlice_keepProgress;
 
         if (!somethingChanged) return;
 
         setState({
           global: {
             main: {
-              wantedSegmentName: null,
-              wantedSegmentNameAtLoop: new_wantedSegmentNameAtLoop,
-              // wantToLoop: false,
-              nextSegmentNameWhenVidPlays: decided_wantedSegmentName,
+              goalSegmentName: null,
+              goalSegmentNameAtLoop: new_goalSegmentNameAtLoop,
+              goalSegmentNameWhenVidPlays: new_goalSegmentName,
+              goalCamName: null,
+              goalCamNameAtLoop: new_goalCamNameAtLoop,
+              goalCamNameWhenVidPlays: new_goalCamName,
             },
           },
-          places: {
+          sliceVids: {
             [nowPlaceName]: {
-              wantedCamName: null,
-              wantedCamNameAtLoop: new_wantedCamNameAtLoop,
-              nextCamNameWhenVidPlays: decided_wantedCamName,
-            },
-          },
-          sectionVids: {
-            [nowPlaceName]: {
-              wantedSection: decided_wantedSection,
-              wantToLoop: decided_wantToLoop,
-              switchSection_keepProgress: decided_shouldKeepTime,
+              goalSlice: new_goalSlice,
+              wantToLoop: new_wantToLoop,
+              switchSlice_keepProgress: new_shouldKeepTime,
             },
           },
         });
       },
-      // check every frame so it can handle wanted things that didnt get set yet because there was already a waiting section vid!
+      // check every frame so it can handle goal things that didnt get set yet because there was already a waiting slice vid!
       check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
-      step: "chooseVideoSection",
+      step: "chooseVideoSlice",
       // atStepEnd: true, // NOTE changed this recently
     }),
-    whenSectionVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
-      run() {
-        updateNowStuffWhenSectionChanged();
-      },
-      check: { type: "sectionVids", prop: ["newplayingVidStartedTime"] },
-      step: "sectionVidStateUpdates",
+    whenSliceVidChangedAndWantToUpdateNowCamAndSegment: itemEffect({
+      run: () => updateNowStuffWhenSliceChanged(),
+      check: { type: "sliceVids", prop: ["newPlayingVidStartedTime"] },
+      step: "sliceVidStateUpdates",
       atStepEnd: true,
     }),
-
-    //
-
-    // previous stuff
-
     // note no setState's done in here so its running on subscribe
     whenNowCameraChanges: effect({
       run(diffInfo) {
         const globalState = getState().global.main;
-        const { nowPlaceName, nextPlaceName } = globalState;
-        if (nextPlaceName !== null) return;
+        const { goalPlaceName } = globalState;
+        if (goalPlaceName !== null) return;
 
-        const { nowCamName } = getState().places[nowPlaceName];
+        const { nowCamName } = getState().global.main;
         const globalChangedBools = diffInfo.propsChangedBool.global.main;
-        const placeChangedBools = diffInfo.propsChangedBool.places[nowPlaceName];
 
         const placeChanged = globalChangedBools?.nowPlaceName;
-        const cameraChanged = placeChangedBools?.nowCamName;
+        const cameraChanged = globalChangedBools?.nowCamName;
 
         if (!cameraChanged && !placeChanged) return;
         // if the place or camera changed
         updateTexturesForNowCamera(nowCamName as AnyCameraName);
       },
-      check: { prop: ["nowCamName"], type: ["places"] },
+      check: { prop: ["nowCamName"], type: ["global"] },
       step: "cameraChange",
       atStepEnd: true,
     }),
@@ -250,19 +221,84 @@ export function get_globalVideoRules<
     // it might be okay to run when nowCamName changed (since it always swaps the video between a-b vid_wait to vid_play
     whenPlayingVidElementsChanged: itemEffect({
       run({ itemName: videoPlaceName }) {
-        // so video texture updates for looping vids (and when section changes)
+        // so video texture updates for looping vids (and when slice changes)
         const { nowPlaceName } = getState().global.main;
         const globalRefs = getRefs().global.main;
         if (videoPlaceName !== nowPlaceName) return;
 
-        const backdropVidElement = getSectionVidVideo(nowPlaceName as PlaceName);
+        const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
         if (!backdropVidElement) return;
 
         globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
       },
-      check: { type: "sectionVids", prop: "newplayingVidStartedTime" },
+      check: { type: "sliceVids", prop: "newPlayingVidStartedTime" },
       step: "cameraChange",
       atStepEnd: true,
+    }),
+    whenReturnedFromBackground: itemEffect({
+      run({ newValue: appBecameVisibleTime }) {
+        console.log("appBecameVisibleTime", appBecameVisibleTime);
+
+        // if any state vids should be playing (in state) then play the video
+        const { nowPlaceName } = getState().global.main;
+        const globalRefs = getRefs().global.main;
+
+        const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
+        const backdropVidElementWaiting = getSliceVidWaitingVideo(nowPlaceName as PlaceName);
+        if (!backdropVidElement || !backdropVidElementWaiting) return;
+
+        // check the vidState of the now playing slice vid
+        const sliceVidState = getState().sliceVids[nowPlaceName];
+        const { stateVidId_playing } = sliceVidState;
+
+        if (!stateVidId_playing) return;
+
+        // check if the state video for stateVidId_playing should be playing
+        const stateVidState = getState().stateVids[stateVidId_playing];
+
+        // check if the video element is currently playing
+        const isPlaying = !backdropVidElement.paused;
+        const isPlayingWait = !backdropVidElementWaiting.paused;
+
+        const logText = ["isPlaying", isPlaying, "isPlayingWait", isPlayingWait, sliceVidState.sliceVidState].join(" ");
+        const { showAlarmText } = get_speechStoryHelpers(storeHelpers, _prendyStores, prendyStartOptions, ["example"]);
+        // (stateVidState.vidState === "play" || stateVidState.vidState === "beforePlay")
+        if (!isPlaying) {
+          // TODO handle returning from sleep on iOS
+          // showAlarmText(logText, 2000);
+          // setState({ stateVids: { [stateVidId_playing]: { wantToPause: true } } });
+          // backdropVidElement.play();
+          // backdropVidElementWaiting.play();
+          // const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } =
+          //   get_safeVidUtils(storeHelpers);
+          // doWhenStateVidStateReady(
+          //   stateVidId_playing,
+          //   "pause",
+          //   () => {
+          //     setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
+          //   }
+          //   //  false /*  check initial */
+          // );
+        }
+
+        // if the state vid should be playing, play the video
+        if (stateVidState.vidState === "play") {
+          // globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
+          // backdropVidElement.play();
+          // setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
+        }
+
+        // const { nowPlaceName } = getState().global.main;
+        // const globalRefs = getRefs().global.main;
+
+        // const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
+        // if (!backdropVidElement) return;
+
+        // globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
+      },
+      check: { type: "global", prop: "appBecameVisibleTime" },
+      // step: "cameraChange",
+      // atStepEnd: true,
     }),
   }));
 }

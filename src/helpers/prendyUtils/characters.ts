@@ -1,26 +1,15 @@
-import { subtractPoints } from "chootils/dist/points2d";
-import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { CharacterName, PlaceName, SpotNameByPlace } from "../../declarations";
-import { get_spotStoryUtils } from "./spots";
-import { get_dollStoryUtils } from "./dolls";
 import { AbstractMesh } from "@babylonjs/core";
+import { CharacterName, PlaceName, PrendyStoreHelpers, SpotNameByPlace } from "../../declarations";
+import { get_dollStoryUtils } from "./dolls";
 
-export function get_characterStoryUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(storeHelpers: StoreHelpers) {
+export function get_characterStoryUtils(storeHelpers: PrendyStoreHelpers) {
   const { getState } = storeHelpers;
-
-  // const { getSpotPosition } = makeSpotStoryUtils(storeHelpers);
   const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
 
-  function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
-    character: A_CharacterName,
+  function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
+    character: CharacterName,
     place: T_Place,
-    spot: A_SpotNameByPlace[T_Place]
+    spot: SpotNameByPlace[T_Place]
   ) {
     const charactersState = getState().characters;
     const dollA = charactersState[character].dollName;
@@ -28,8 +17,7 @@ export function get_characterStoryUtils<
     return get2DAngleFromDollToSpot(dollA, place, spot);
   }
 
-  // TODO use get2DAngleBetweenDolls from makeDollStoryUtils
-  function get2DAngleBetweenCharacters(charA: A_CharacterName, charB: A_CharacterName) {
+  function get2DAngleBetweenCharacters(charA: CharacterName, charB: CharacterName) {
     const charactersState = getState().characters;
     const dollA = charactersState[charA].dollName;
     const dollB = charactersState[charB].dollName;
@@ -42,22 +30,14 @@ export function get_characterStoryUtils<
   return { get2DAngleFromCharacterToSpot, get2DAngleBetweenCharacters };
 }
 
-export function get_getCharDollStuff<
-  StoreHelpers extends PrendyStoreHelpers,
-  A_CharacterName extends CharacterName = CharacterName
->(storeHelpers: StoreHelpers) {
+export function get_getCharDollStuff(storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState } = storeHelpers;
 
   // NOTE could have character start options as a type to get accurate return types
-  type DollStates = ReturnType<StoreHelpers["getState"]>["dolls"];
-  type DollRefs = ReturnType<StoreHelpers["getRefs"]>["dolls"];
+  type DollStates = ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
+  type DollRefs = ReturnType<PrendyStoreHelpers["getRefs"]>["dolls"];
 
-  return function getCharDollStuff<T_CharacterName extends A_CharacterName>(charName: T_CharacterName) {
-    if (!getState().characters[charName]) {
-      console.log("charName", charName);
-      console.log(getState().characters);
-    }
-
+  return function getCharDollStuff<T_CharacterName extends CharacterName>(charName: T_CharacterName) {
     const { dollName } = getState().characters[charName];
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];

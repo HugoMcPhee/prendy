@@ -1,6 +1,6 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
+import { makeMoverStateMaker, moverMultiRefs } from "repond-movers";
 import { AnimationNameByModel, DollName, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
 import { defaultInRangeForDoll, InRangeForDoll } from "../../helpers/prendyUtils/dolls";
 
@@ -19,6 +19,16 @@ export default function get_dollStoreUtils(prendyAssets: PrendyAssets) {
     const editedInitialState = _initialState as Record<AnimationNameByModel[T_ModelName], number>;
 
     return makeMoverStateMaker(() => editedInitialState);
+  }
+
+  function makeToggledMeshesState<T_ModelName extends ModelName>(modelName: T_ModelName) {
+    const modelInfo = modelInfoByName[modelName];
+    const { meshNames } = modelInfo;
+    const meshesEnabled = {} as Record<any, any>;
+    forEach(meshNames, (meshName) => (meshesEnabled[meshName] = true));
+
+    // return meshesEnabled as Record<MeshNameByModel[T_ModelName], boolean>;
+    return meshesEnabled as Record<MeshNameByModel[T_ModelName], boolean>;
   }
 
   function modelMoverRefs<T_ModelName extends ModelName, T_MoverName extends string>(
@@ -66,6 +76,7 @@ export default function get_dollStoreUtils(prendyAssets: PrendyAssets) {
 
   return {
     makeModelAnimWeightsMoverState,
+    makeToggledMeshesState,
     modelMoverRefs,
     modelOtherMeshesRefs,
     defaultInRangeForDoll,

@@ -1,12 +1,8 @@
 // @refresh-reset
-import React, { useState } from "react";
-import { PrendyStoreHelpers, PickupsInfoPlaceholder } from "../../../stores/typedStoreHelpers";
+import React, { useRef, useState } from "react";
+import { PickupName, PickupsInfo, PrendyStoreHelpers } from "../../../declarations";
 
-export function get_PickupButton<
-  StoreHelpers extends PrendyStoreHelpers,
-  PickupName extends string,
-  PickupsInfo extends PickupsInfoPlaceholder<PickupName>
->(storeHelpers: StoreHelpers, pickupsInfo: PickupsInfo) {
+export function get_PickupButton(storeHelpers: PrendyStoreHelpers, pickupsInfo: PickupsInfo) {
   const { getRefs } = storeHelpers;
 
   type Props = { name: PickupName };
@@ -18,12 +14,22 @@ export function get_PickupButton<
 
     const [isPressed, setIsPressed] = useState(false);
 
+    const { current: localRefs } = useRef({ canButtonActivate: false });
+
+    const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => setIsPressed(true);
+    const handlePointerUp = (event: React.PointerEvent<HTMLButtonElement>) => setIsPressed(false);
+
     return (
       <button
-        onClick={() => globalRefs.onPickupButtonClick?.(name)}
-        onMouseDown={() => setIsPressed(true)}
-        onMouseUp={() => setIsPressed(false)}
-        onMouseLeave={() => setIsPressed(false)}
+        // onPointerUpCapture={() => globalRefs.onPickupButtonClick?.(name)}
+        onPointerDown={handlePointerDown}
+        onPointerUp={(event) => {
+          globalRefs.onPickupButtonClick?.(name);
+          handlePointerUp(event);
+        }}
+        onPointerCancel={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+        onPointerOut={handlePointerUp}
         style={{
           pointerEvents: "auto",
           zIndex: 10000,
@@ -41,6 +47,7 @@ export function get_PickupButton<
         <img
           src={pickupInfo.image}
           alt={name}
+          draggable={false}
           // width={50}
           // height={50}
           style={{

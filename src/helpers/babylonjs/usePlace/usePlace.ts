@@ -1,27 +1,25 @@
-import { Sound, Vector3 } from "@babylonjs/core";
-import { useEffect } from "react";
+import { Mesh, Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
+import { useEffect } from "react";
 import {
   AnyCameraName,
+  PlaceName,
   PrendyAssets,
   PrendyOptions,
-  ModelInfoByName,
-  PlaceName,
+  PrendyStoreHelpers,
   SoundName,
 } from "../../../declarations";
 import { get_globalUtils } from "../../prendyUtils/global";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../../../stores/typedStoreHelpers";
-import { get_useModelFile } from "../useModelFile";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { get_useModelFile } from "../useModelFile";
 import { get_usePlaceUtils } from "./utils";
 
-export function get_usePlace<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName
->(storeHelpers: StoreHelpers, prendyStartOptions: A_PrendyOptions, prendyAssets: PrendyAssets) {
+export function get_usePlace(
+  storeHelpers: PrendyStoreHelpers,
+  prendyStartOptions: PrendyOptions,
+  prendyAssets: PrendyAssets
+) {
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, soundFiles } = prendyAssets;
 
@@ -39,15 +37,16 @@ export function get_usePlace<
 
   return function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
     const placeInfo = placeInfoByName[placeName];
+    const { modelFile, cameraNames, floorNames, triggerNames, spotNames, soundspotNames, wallNames } = placeInfo;
     const placeRefs = placesRefs[placeName];
     const scene = getScene();
 
-    const { modelFile, cameraNames, floorNames, triggerNames, spotNames, soundspotNames, wallNames } = placeInfo;
-
     const { container, meshes, cameras, transformNodes } = useModelFile<any>(modelFile);
 
+    // this runs after useModelFile finished
     useEffect(() => {
-      // this runs after useModelFile finished
+      setGlobalState({ newPlaceModelLoaded: true });
+
       if (!scene) return;
 
       forEach(cameraNames, (cameraName) => {
@@ -55,6 +54,7 @@ export function get_usePlace<
         camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
       });
 
+      // Load any models for this place that weren't already loaded
       const { modelNamesLoaded } = getState().global.main;
       forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
         if (!modelNamesLoaded.includes(modelName)) {
@@ -62,36 +62,29 @@ export function get_usePlace<
         }
       });
 
-      // loadProbeImagesForPlace(placeName);
-      Promise.all([loadNowVideosForPlace(), loadProbeImagesForPlace(placeName)])
-        .then(() => {
-          // When a new place is loading, only set newPlaceLoaded,
-          // so 'whenAllVideosLoadedForPlace' can run when both the characters and place loaded
-          setGlobalState({ newPlaceLoaded: true });
-        })
-        .catch((error) => {
-          console.warn("something went wrong loading videos and probes");
-          console.warn(error);
-        });
+      loadNowVideosForPlace()
+        .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
+        .catch((error) => console.warn("error loading videos", error));
+
+      loadProbeImagesForPlace(placeName)
+        .then(() => setGlobalState({ newPlaceProbesLoaded: true }))
+        .catch((error) => console.warn("error loading probes", error));
 
       placeRefs.rootMesh = meshes["__root__"];
 
-      forEach(floorNames, (name) => {
-        meshes[name].checkCollisions = true;
-        meshes[name].collisionGroup = 11;
-        meshes[name].useOctreeForCollisions = true;
-        meshes[name].isVisible = false;
-        meshes[name].freezeWorldMatrix();
-        meshes[name].doNotSyncBoundingInfo = true;
-      });
+      function setupWallOrFloor(mesh: Mesh) {
+        mesh.checkCollisions = true;
+        mesh.collisionGroup = 11;
+        mesh.useOctreeForCollisions = true;
+        mesh.isVisible = false;
+        mesh.freezeWorldMatrix();
+        mesh.doNotSyncBoundingInfo = true;
+      }
+
+      forEach(floorNames, (name) => setupWallOrFloor(meshes[name]));
 
       forEach(wallNames, (name) => {
-        meshes[name].checkCollisions = true;
-        meshes[name].collisionGroup = 11;
-        meshes[name].useOctreeForCollisions = true;
-        meshes[name].isVisible = false;
-        meshes[name].freezeWorldMatrix();
-        meshes[name].doNotSyncBoundingInfo = true;
+        setupWallOrFloor(meshes[name]);
         placeRefs.wallMeshes[name] = meshes[name];
       });
 

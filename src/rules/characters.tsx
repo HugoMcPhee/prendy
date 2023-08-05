@@ -1,20 +1,25 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { AnyCameraName, AnyTriggerName, PrendyAssets, PrendyOptions, CharacterName } from "../declarations";
+import {
+  AnyCameraName,
+  AnyTriggerName,
+  CharacterName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+} from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { get_scenePlaneUtils } from "../helpers/babylonjs/scenePlane";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { samePoints, defaultPosition } from "chootils/dist/points2d";
+import { get_slateUtils } from "../helpers/babylonjs/slate";
 
-export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_characterDynamicRules(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { focusScenePlaneOnFocusedDoll } = get_scenePlaneUtils(storeHelpers, prendyStartOptions);
+  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
 
   const refs = getRefs();
 
@@ -52,6 +57,10 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 
           // --------------------------
           // check cam cubes
+          // TODO only check for the player character?
+          // const { playerCharacter } = getState().global.main;
+          // if (charName !== playerCharacter) return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
+
           let newAtTheseCamCubes = {} as Partial<
             // Record<AnyCameraName, boolean>
             Record<string, boolean>
@@ -91,7 +100,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 
           // --------------------------
           // check triggers
-          let newAtTheseTriggers = {} as Record<typeof triggerNames[number], boolean>;
+          let newAtTheseTriggers = {} as Record<(typeof triggerNames)[number], boolean>;
           const currentAtTriggers = characterState.atTriggers;
           let atTriggersHasChanged = false;
           forEach(triggerNames, (loopedTriggerName) => {
@@ -117,7 +126,7 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
           }
 
           if (dollName === focusedDoll) {
-            focusScenePlaneOnFocusedDoll();
+            focusSlateOnFocusedDoll();
           }
         },
         check: { type: "dolls", prop: "position", name: dollName },
@@ -152,13 +161,17 @@ export function get_characterDynamicRules<StoreHelpers extends PrendyStoreHelper
 }
 
 // FIXME
-// maybe allow pietem to run 'addedOrRemoved' rules for initialState?
+// maybe allow repond to run 'addedOrRemoved' rules for initialState?
+// NOTE rules can be manually triggered atleast, but the rule might not know an item was added
 // TODO add addOrRemovd rules for characters
 
 export function get_startDynamicCharacterRulesForInitialState<
-  StoreHelpers extends PrendyStoreHelpers,
   CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>
->(characterDynamicRules: CharacterDynamicRules, characterNames: readonly CharacterName[], storeHelpers: StoreHelpers) {
+>(
+  characterDynamicRules: CharacterDynamicRules,
+  characterNames: readonly CharacterName[],
+  storeHelpers: PrendyStoreHelpers
+) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
     forEach(characterNames, (characterName) => {
@@ -176,10 +189,7 @@ export function get_startDynamicCharacterRulesForInitialState<
   };
 }
 
-export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
-  prendyAssets: PrendyAssets
-) {
+export function get_characterRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
   const { makeRules, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
@@ -191,17 +201,12 @@ export function get_characterRules<StoreHelpers extends PrendyStoreHelpers>(
         if (charName !== playerCharacter) return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)
 
         const { nowPlaceName } = getState().global.main;
-        const { nowCamName } = getState().places[nowPlaceName];
+        const { nowCamName } = getState().global.main;
         const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
 
         forEach(cameraNames, (loopedCameraName) => {
           if (loopedCameraName !== nowCamName && newAtCamCubes[loopedCameraName] && !prevAtCamCubes[loopedCameraName]) {
-            setState({
-              places: {
-                // [nowPlaceName]: { nowCamName: loopedCameraName },
-                [nowPlaceName]: { wantedCamName: loopedCameraName },
-              },
-            });
+            setState({ global: { main: { goalCamName: loopedCameraName } } });
           }
         });
       },

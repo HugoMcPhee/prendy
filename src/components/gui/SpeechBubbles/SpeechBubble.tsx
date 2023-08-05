@@ -1,11 +1,10 @@
 // @refresh-reset
+import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { sizeFromRef } from "chootils/dist/elements";
+import { CharacterName, PrendyOptions, PrendyStoreHelpers, SpeechVidFiles } from "../../../declarations";
+import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { getScreenSize, get_scenePlaneUtils } from "../../../helpers/babylonjs/scenePlane";
-import { PrendyStoreHelpers } from "../../../stores/typedStoreHelpers";
-import { CharacterName, PrendyOptions, SpeechVidFiles } from "../../../declarations";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
@@ -13,8 +12,8 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_SpeechBubble(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
@@ -22,7 +21,7 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
 
   const globalRefs = getRefs().global.main;
 
-  type GetState = StoreHelpers["getState"];
+  type GetState = PrendyStoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
 
@@ -83,6 +82,10 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
 
     const videoIsPlaying = !!nowVideoName;
 
+    const randomRotation = useMemo(() => {
+      return Math.random() * 6 - 3;
+    }, [goalText, isVisible]);
+
     const [theSpring, theSpringApi] = useSpring(() => {
       let height = 0;
       if (videoIsPlaying) {
@@ -96,12 +99,13 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
         position: [0, 0],
         opacity: isVisible ? 1 : 0,
         scale: isVisible ? 1 : 0.1,
+        rotation: randomRotation,
         config: { tension: 400, friction: 50 },
         onChange() {
           positionSpeechBubbleToCharacter();
         },
       };
-    }, [isVisible, videoIsPlaying]);
+    }, [isVisible, videoIsPlaying, randomRotation]);
 
     useEffect(() => {
       const newMeasuredHeight = sizeFromRef(refs.theTextHolder.current).height;
@@ -174,23 +178,18 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
     }, []);
 
     useStoreEffect(
-      () => {
-        positionSpeechBubbleToCharacter();
-      },
+      positionSpeechBubbleToCharacter,
       [
-        {
-          type: ["dolls"],
-          name: forCharacter,
-          prop: ["positionOnScreen"],
-        },
-        { type: ["global"], name: "main", prop: ["planePos"] },
-        { type: ["global"], name: "main", prop: ["planeZoom"] },
+        { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
+        { type: ["global"], name: "main", prop: ["slatePos"] },
+        { type: ["global"], name: "main", prop: ["slateZoom"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },
-        { type: ["places"], name: nowPlaceName, prop: ["nowCamName"] },
-        { type: ["places"], prop: ["nowCamName"] },
+        { type: ["global"], name: "main", prop: ["nowCamName"] },
       ],
       [nowPlaceName]
     );
+
+    // const textIsVeryShort = goalText.length < 10;
 
     const styles = useMemo(
       () =>
@@ -203,13 +202,15 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
             // color: "rgb(197, 217, 61)",
             // opacity: 0,
             fontSize: "30px",
-            padding: videoIsPlaying ? "0" : "15px",
+            lineHeight: "40px",
+            padding: videoIsPlaying ? "15px" : "15px",
             fontFamily: font,
             // textAlign: "center",
             // verticalAlign: "middle", // to center emojis with text?
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start",
+            justifyContent: "center",
+            // justifyContent: textIsVeryShort ? "center" : "flex-start",
             flexDirection: "row",
             flexWrap: "wrap",
           },
@@ -220,7 +221,7 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
             borderRadius: 5,
             borderWidth: 1,
             transform: `translate(0px, -15px) rotate(45deg) scale(0.8) `,
-            backgroundColor: "white",
+            backgroundColor: "#fafafa",
           },
         } as const),
       [font, videoIsPlaying]
@@ -244,6 +245,7 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
           textAlign: "center",
           verticalAlign: "middle", // to center emojis with text?
           fontSize: "30px",
+          lineHeight: "40px",
           color: "rgb(68, 68, 68)",
         } as const),
       [zIndex]
@@ -263,8 +265,9 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
               [
                 theSpring.position.to((x, y) => `translate(${x}px , ${y}px)`),
                 theSpring.scale.to((scale) => `scale(${scale})`),
+                theSpring.rotation.to((rotation) => `rotate(${rotation}deg)`),
               ],
-              (translate, scale) => `${translate} ${scale}`
+              (translate, scale, rotate) => `${translate} ${scale} ${rotate}`
             ),
             display: "flex",
             alignItems: "center",
@@ -278,7 +281,7 @@ export function get_SpeechBubble<StoreHelpers extends PrendyStoreHelpers>(
             key={`textRectangle`}
             id={`textRectangle`}
             style={{
-              backgroundColor: "white",
+              backgroundColor: "#fafafa",
               width: `${BUBBLE_WIDTH}px`,
               borderRadius: "40px",
               borderWidth: "1px",

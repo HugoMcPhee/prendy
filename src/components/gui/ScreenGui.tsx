@@ -1,7 +1,7 @@
 // @refresh-reset
 import React, { Fragment } from "react";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { PrendyAssets, PrendyOptions, PickupName, PickupsInfo } from "../../declarations";
+import { PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
+import { PrendyAssets, PrendyOptions, PickupName, PickupsInfo, PrendyStoreHelpers } from "../../declarations";
 import { get_AlarmText } from "./AlarmText";
 import { get_LoadingOverlay } from "./LoadingOverlay";
 import { get_MiniBubble } from "./MiniBubble";
@@ -13,8 +13,8 @@ import { get_VirtualButtons } from "./VirtualButtons";
 import { get_VirtualStick } from "./VirtualStick";
 // import { get_ShowStates } from "./ShowStates";
 
-export function get_ScreenGui<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_ScreenGui(
+  storeHelpers: PrendyStoreHelpers,
   PRENDY_OPTIONS: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -23,7 +23,7 @@ export function get_ScreenGui<StoreHelpers extends PrendyStoreHelpers>(
   const AlarmText = get_AlarmText(storeHelpers);
   const LoadingOverlay = get_LoadingOverlay(storeHelpers);
   const MiniBubble = get_MiniBubble(storeHelpers);
-  const Pickups = get_Pickups<StoreHelpers, PickupName, PickupsInfo>(storeHelpers, pickupsInfo);
+  const Pickups = get_Pickups(storeHelpers, pickupsInfo);
   const ScreenSticker = get_ScreenSticker(storeHelpers);
   const SpeechBubble = get_SpeechBubble(storeHelpers, PRENDY_OPTIONS, speechVidFiles);
   const StoryOverlay = get_StoryOverlay(storeHelpers);

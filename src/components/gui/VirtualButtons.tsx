@@ -1,11 +1,6 @@
-import { PrendyStoreHelpers, PrendyOptionsUntyped } from "../../stores/typedStoreHelpers";
-import {
-  getSpeedAndAngleFromVector,
-  getVectorFromSpeedAndAngle,
-  getVectorSpeed,
-} from "chootils/dist/speedAngleDistance2d";
-import React, { useCallback, useEffect, useRef, useState, useMemo, ReactNode } from "react";
+import React, { ReactNode, useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
+import { PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 
 type VirtualButtonProps = {
   children: ReactNode;
@@ -15,10 +10,7 @@ type VirtualButtonProps = {
   disabled: boolean;
 };
 
-export function get_VirtualButtons<StoreHelpers extends PrendyStoreHelpers, PrendyOptions extends PrendyOptionsUntyped>(
-  storeHelpers: StoreHelpers,
-  PRENDY_OPTIONS: PrendyOptions
-) {
+export function get_VirtualButtons(storeHelpers: PrendyStoreHelpers, PRENDY_OPTIONS: PrendyOptions) {
   const { getRefs, getState, setState, useStore } = storeHelpers;
   const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
 
@@ -45,8 +37,12 @@ export function get_VirtualButtons<StoreHelpers extends PrendyStoreHelpers, Pren
           pointerEvents: disabled ? ("none" as const) : ("all" as const),
           border: "none",
           marginTop: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         },
         text: {
+          fontSize: "50px",
           filter: "grayscale(100%) contrast(0%) brightness(1.5)",
         },
       }),
@@ -100,7 +96,7 @@ export function get_VirtualButtons<StoreHelpers extends PrendyStoreHelpers, Pren
     // ❔👋❓💭⏩🗣️💡
 
     const spring = useSpring({
-      opacity: canShowVirtualButtons ? 1 : 0,
+      opacity: canShowVirtualButtons ? 0.25 : 0,
       // config: { tension: 300 },
     });
 
@@ -145,7 +141,14 @@ export function get_VirtualButtons<StoreHelpers extends PrendyStoreHelpers, Pren
           >
             {/* making rounded triangles - Knod -
             https://codepen.io/knod/pen/KzRYye */}
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" className="svg-triangle" viewBox="0 0 100 100">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              className="svg-triangle"
+              viewBox="0 0 100 100"
+              width="84"
+              height="84"
+            >
               <path
                 d="M 50,35 70,70 30,70 z"
                 style={{
@@ -167,7 +170,7 @@ export function get_VirtualButtons<StoreHelpers extends PrendyStoreHelpers, Pren
             }
             disabled={!canShowVirtualButtons}
           >
-            👆
+            ⚪
           </VirtualButton>
         )}
       </animated.div>

@@ -1,15 +1,9 @@
-import { RenderTargetTexture, Scene } from "@babylonjs/core";
-import { clearTimeoutSafe } from "../../helpers/utils";
-import { breakableForEach, forEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { breakableForEach } from "chootils/dist/loops";
+import { PrendyStoreHelpers } from "../../declarations";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { clearTimeoutSafe } from "../../helpers/utils";
 
-// let canRender = true;
-// setTimeout(() => {
-//   canRender = false;
-// }, 20000);
-
-export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { setGlobalState } = get_globalUtils(storeHelpers);
 
@@ -17,20 +11,10 @@ export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
     whenAnythingChangesForRendering: effect({
       run() {
         const globalRefs = getRefs().global.main;
-        // const frameTick = getState().global.main.frameTick;
+        const scene = globalRefs.scene;
         // Renders the scene manually
-        // console.log("frameTick", frameTick);
-
-        if ((globalRefs.scene as Scene)?.activeCamera) {
-          // forEach((globalRefs.scene as Scene)?.skeletons ?? [], (skeleton) => {
-          //   skeleton.prepare();
-          // });
-          (globalRefs.scene as Scene)?.render(false, false);
-        }
-
-        // runs in a callback to set before the new pietem frame
-        // setState({}, () => setState({ global: { main: { frameTick: Date.now() } } }));
-        // onNextTick(() => setState({ global: { main: { frameTick: Date.now() } } }));
+        if (scene?.activeCamera) scene?.render(false, false);
+        // runs in a callback to set before the new repond frame
         onNextTick(() => setState({ global: { main: { frameTick: getState().global.main.frameTick + 1 } } }));
       },
       check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
@@ -40,7 +24,6 @@ export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
     whenASpeechBubbleShowsOrHides: effect({
       run(_diffInfo) {
         const speechBubblesState = getState().speechBubbles;
-
         let aBubbleIsShowing = false;
 
         // possibly ideally cached
@@ -55,9 +38,8 @@ export function get_globalGeneralRules<StoreHelpers extends PrendyStoreHelpers>(
         });
         const globalRefs = getRefs().global.main;
 
-        setState({
-          global: { main: { aSpeechBubbleIsShowing: aBubbleIsShowing } },
-        });
+        setState({ global: { main: { aSpeechBubbleIsShowing: aBubbleIsShowing } } });
+
         if (aBubbleIsShowing) {
           clearTimeoutSafe(globalRefs.aConvoIsHappening_timeout);
           setGlobalState({ aConvoIsHappening: true });

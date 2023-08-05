@@ -2,10 +2,7 @@ import { CharacterName, PrendyAssets } from "../declarations";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
 
-export default function miniBubbles<
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_CharacterName extends CharacterName = CharacterName
->(prendyAssets: A_PrendyAssets) {
+export default function miniBubbles(prendyAssets: PrendyAssets) {
   const { characterNames, characterOptions } = prendyAssets;
 
   const state = <T_ItemName extends string>(
@@ -15,7 +12,7 @@ export default function miniBubbles<
     isVisible: false,
     isFullyHidden: true,
     text: "❕",
-    forCharacter: options?.character ?? ("walker" as A_CharacterName | null),
+    forCharacter: options?.character ?? ("walker" as CharacterName | null),
     position: defaultPosition(),
   });
 
@@ -26,7 +23,7 @@ export default function miniBubbles<
   });
 
   type MiniBubbleStartStates = {
-    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
   };
 
   function makeAutmaticCharacterMinibubbleStartStates() {
@@ -55,12 +52,12 @@ export default function miniBubbles<
   return { state, refs, startStates };
 }
 
-export type Store_MiniBubbles<T_ItemName extends string, A_CharacterName> = {
+export type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
   state: () => {
     isVisible: boolean;
     isFullyHidden: boolean;
     text: string;
-    forCharacter: A_CharacterName;
+    forCharacter: CharacterName;
     position: Point2D;
   };
   refs: () => {
@@ -74,7 +71,7 @@ export type Store_MiniBubbles<T_ItemName extends string, A_CharacterName> = {
       isVisible: boolean;
       isFullyHidden: boolean;
       text: string;
-      forCharacter: A_CharacterName;
+      forCharacter: CharacterName;
       position: Point2D;
     }
   >;

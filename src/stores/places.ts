@@ -9,6 +9,7 @@ import {
   SpotNameByPlace,
   TriggerNameByPlace,
   WallNameByPlace,
+  PrendyOptions,
 } from "../declarations";
 
 const defaultCamRefs = () => ({
@@ -24,60 +25,63 @@ export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 
 // export
 
-export default function places<
-  A_PlaceName extends PlaceName = PlaceName,
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
-  A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
-  A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
-  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(prendyAssets: A_PrendyAssets) {
+export default function places(prendyAssets: PrendyAssets, prendyStartOptions: PrendyOptions) {
   const { placeInfoByName } = prendyAssets;
-  const placeNames = prendyAssets.placeNames as A_PlaceName[];
+  const placeNames = prendyAssets.placeNames as PlaceName[];
 
-  type MaybeCam<T_PlaceName extends A_PlaceName> = null | A_CameraNameByPlace[T_PlaceName];
+  type MaybeCam<T_PlaceName extends PlaceName> = null | CameraNameByPlace[T_PlaceName];
 
-  type SpotPositions<T_PlaceName extends A_PlaceName> = {
-    [P_SpotName in A_SpotNameByPlace[T_PlaceName]]: Vector3;
+  type SpotPositions<T_PlaceName extends PlaceName> = {
+    [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
   };
-  type SpotRotations<T_PlaceName extends A_PlaceName> = {
-    [P_SpotName in A_SpotNameByPlace[T_PlaceName]]: Vector3;
+  type SpotRotations<T_PlaceName extends PlaceName> = {
+    [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
   };
-  type SoundspotSounds<T_PlaceName extends A_PlaceName> = {
-    [P_SoundName in A_SoundspotNameByPlace[T_PlaceName]]: Sound | null;
+  type SoundspotSounds<T_PlaceName extends PlaceName> = {
+    [P_SoundName in SoundspotNameByPlace[T_PlaceName]]: Sound | null;
   };
-  type TriggerMeshes<T_PlaceName extends A_PlaceName> = {
-    [P_TriggerName in A_TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
+  type TriggerMeshes<T_PlaceName extends PlaceName> = {
+    [P_TriggerName in TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
   };
-  type WallMeshes<T_PlaceName extends A_PlaceName> = {
-    [P_TriggerName in A_WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
+  type WallMeshes<T_PlaceName extends PlaceName> = {
+    [P_WallName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
   };
-  type CameraRefs<T_PlaceName extends A_PlaceName> = {
-    [P_CameraName in A_CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
+  type CameraRefs<T_PlaceName extends PlaceName> = {
+    [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
   };
 
-  type PlaceState<K_PlaceName extends A_PlaceName> = {
-    wantedCamNameAtLoop: MaybeCam<K_PlaceName>;
-    wantedCamName: MaybeCam<K_PlaceName>;
-    nowCamName: A_CameraNameByPlace[K_PlaceName];
+  type PlaceState<K_PlaceName extends PlaceName> = {
+    toggledWalls: Record<K_PlaceName, boolean>;
+    // goalCamWhenNextPlaceLoads: MaybeCam<K_PlaceName>;
+    // goalCamNameWhenVidPlays: MaybeCam<K_PlaceName>;
+    // goalCamNameAtLoop: MaybeCam<K_PlaceName>;
+    // goalCamName: MaybeCam<K_PlaceName>;
+    // nowCamName: CameraNameByPlace[K_PlaceName];
   };
+
+  function makeToggledWallsState<K_PlaceName extends PlaceName>(placeName: K_PlaceName) {
+    const placeInfo = placeInfoByName[placeName];
+    const { wallNames } = placeInfo;
+    const wallsEnabled = {} as Record<any, any>;
+    forEach(wallNames, (wallName) => (wallsEnabled[wallName] = true));
+
+    return wallsEnabled as Record<WallNameByPlace[K_PlaceName], boolean>;
+  }
 
   // State
-  const state = <K_PlaceName extends A_PlaceName>(placeName: K_PlaceName) => {
-    return {
-      wantedCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
-      nextCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the section vid has finished changing, this is used as the new nowCamName
-      wantedCamNameAtLoop: null as MaybeCam<K_PlaceName>,
-      wantedCamName: null as MaybeCam<K_PlaceName>,
-      nowCamName:
-        ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName) ??
-        ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
-    };
-  };
-
-  type PlaceRefs<K_PlaceName extends A_PlaceName> = {
+  const state = <K_PlaceName extends PlaceName>(placeName: K_PlaceName) => ({
+    toggledWalls: makeToggledWallsState(placeName),
+    // testState: 0,
+    // goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
+    // goalCamNameWhenVidPlays: null as MaybeCam<K_PlaceName>, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
+    // goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
+    // goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
+    // nowCamName:
+    //   ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+    //     ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as AnyCameraName)) ??
+    //   ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
+  });
+  type PlaceRefs<K_PlaceName extends PlaceName> = {
     rootMesh: null | AbstractMesh;
     spotPositions: SpotPositions<K_PlaceName>;
     spotRotations: SpotRotations<K_PlaceName>;
@@ -88,7 +92,7 @@ export default function places<
   };
 
   // Refs
-  function refs<K_PlaceName extends A_PlaceName>(placeName: K_PlaceName): PlaceRefs<K_PlaceName> {
+  function refs<K_PlaceName extends PlaceName>(placeName: K_PlaceName): PlaceRefs<K_PlaceName> {
     const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
 
     const spotPositions: Partial<SpotPositions<K_PlaceName>> = {};
@@ -130,19 +134,30 @@ export default function places<
   }
 
   type StartRefs = {
-    [P_PlaceName in A_PlaceName]: PlaceRefs<P_PlaceName>;
+    [P_PlaceName in PlaceName]: PlaceRefs<P_PlaceName>;
   };
 
   type StartStates = {
-    [P_PlaceName in A_PlaceName]: PlaceState<P_PlaceName>;
+    [K_PlaceName in PlaceName]: ReturnType<typeof state<K_PlaceName>>;
   };
+
+  function makeAutmaticPlaceStartStates() {
+    const partialDollStates = {} as Partial<StartStates>;
+    forEach(placeNames, (placeName) => {
+      partialDollStates[placeName] = state(placeName);
+    });
+    return partialDollStates as StartStates;
+  }
 
   // const startStates: InitialItemsState<typeof state> = {
   const startRefs: Partial<StartRefs> = {};
   forEach(placeNames, (placeName) => {
     startRefs[placeName] = refs(placeName);
   });
-  const startStates: Partial<StartStates> = {};
+  const startStates = {
+    // Automatically make place states
+    ...makeAutmaticPlaceStartStates(),
+  };
 
   forEach(placeNames, (placeName) => {
     (startStates[placeName] as any) = state(placeName);
@@ -150,15 +165,15 @@ export default function places<
 
   /*
 
-  as <A_PlaceName extends A_PlaceName>(
-  itemName: A_PlaceName | string
-) => PlaceRefs<A_PlaceName>
+  as <PlaceName extends PlaceName>(
+  itemName: PlaceName | string
+) => PlaceRefs<PlaceName>
 
 */
 
   return {
     startStates: startStates as StartStates,
-    state: state as <K_PlaceName extends A_PlaceName>(itemName: K_PlaceName | string) => ReturnType<typeof state>,
-    refs: refs as <K_PlaceName extends A_PlaceName>(itemName: K_PlaceName & string) => PlaceRefs<A_PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
+    state: state as <K_PlaceName extends PlaceName>(itemName: K_PlaceName | string) => ReturnType<typeof state>,
+    refs: refs as <K_PlaceName extends PlaceName>(itemName: K_PlaceName & string) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
   };
 }

@@ -1,7 +1,7 @@
-import { AbstractMesh, AnimationGroup, Bone, Effect, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, AnimationGroup, Bone, Material, Mesh, PBRMaterial, Vector3 } from "@babylonjs/core";
 import { keyBy } from "chootils/dist/arrays";
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { Point2D, subtractPoints } from "chootils/dist/points2d";
+import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import {
@@ -11,35 +11,28 @@ import {
   PlaceName,
   PrendyAssets,
   PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
   SpotNameByPlace,
 } from "../../declarations";
-import { get_scenePlaneUtils } from "../../helpers/babylonjs/scenePlane";
-import { PlaceholderPrendyStores, PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { get_slateUtils } from "../babylonjs/slate";
 import { get_spotStoryUtils } from "./spots";
-import { makeMoverStateMaker, moverMultiRefs } from "pietem-movers";
-import { MeshNameByModel } from "../../declarations";
 
-export function get_dollStoryUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores,
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(storeHelpers: StoreHelpers) {
+export function get_dollStoryUtils(storeHelpers: PrendyStoreHelpers) {
   const { getState } = storeHelpers;
   const { getSpotPosition } = get_spotStoryUtils(storeHelpers);
 
   type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
-  type ModelNameFromDoll<T_DollName extends A_DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
+  type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
 
-  function getModelNameFromDoll<T_DollName extends A_DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
+  function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
     return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;
   }
 
-  function get2DAngleFromDollToSpot<T_Place extends A_PlaceName>(
-    dollA: A_DollName,
+  function get2DAngleFromDollToSpot<T_Place extends PlaceName>(
+    dollA: DollName,
     place: T_Place,
-    spot: A_SpotNameByPlace[T_Place]
+    spot: SpotNameByPlace[T_Place]
   ) {
     const spotPosition = getSpotPosition(place, spot);
 
@@ -51,7 +44,7 @@ export function get_dollStoryUtils<
     return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D)).angle;
   }
 
-  function get2DAngleBetweenDolls(dollA: A_DollName, dollB: A_DollName) {
+  function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName) {
     if (!dollA || !dollB) return 0;
 
     const dollAPos = getState().dolls[dollA].position;
@@ -123,15 +116,15 @@ export function enableCollisions(theMesh: AbstractMesh) {
   // Enable collision detection on player
   theMesh.ellipsoid = new Vector3(0.6, 1.2, 0.6);
   theMesh.ellipsoidOffset = new Vector3(0, 1.2, 0);
-  theMesh.showBoundingBox = true;
+  // theMesh.showBoundingBox = true;
   theMesh.checkCollisions = true;
   theMesh.collisionGroup = 11;
   theMesh.useOctreeForCollisions = true;
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendyStores extends PlaceholderPrendyStores>(
-  storeHelpers: StoreHelpers,
+export function get_dollUtils(
+  storeHelpers: PrendyStoreHelpers,
   _prendyStores: PrendyStores,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
@@ -139,18 +132,19 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
   const { getRefs, getState, setState } = storeHelpers;
   const { dollNames, modelInfoByName } = prendyAssets;
 
-  const { convertPointOnPlaneToPointOnScreen, getPositionOnPlane, checkPointIsInsidePlane } = get_scenePlaneUtils(
-    storeHelpers,
-    prendyStartOptions
-  );
+  const {
+    convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen,
+    getPositionOnSlate: getPositionOnSlate,
+    checkPointIsInsideSlate: checkPointIsInsideSlate,
+  } = get_slateUtils(storeHelpers, prendyStartOptions);
 
-  // type PietemState = ReturnType<StoreHelpers["getState"]>;
-  // type DollName = keyof PietemState["dolls"];
+  // type RepondState = ReturnType<StoreHelpers["getState"]>;
+  // type DollName = keyof RepondState["dolls"];
   // type DollName = keyof typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
 
-  type StartState_Dolls = PrendyStores["dolls"]["startStates"] & ReturnType<StoreHelpers["getState"]>["dolls"];
+  type StartState_Dolls = PrendyStores["dolls"]["startStates"] & ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
 
   type ModelNameFromDoll<T_DollName extends DollName> = StartState_Dolls[T_DollName]["modelName"];
 
@@ -204,8 +198,10 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     const placesRefs = getRefs().places;
     const globalState = getState().global.main;
     const { nowPlaceName } = globalState;
-    const { nowCamName } = getState().places[nowPlaceName];
+    const { nowCamName } = getState().global.main;
+
     const placeRefs = placesRefs[nowPlaceName];
+
     if (theMaterial) {
       theMaterial.enableSpecularAntiAliasing = true;
       theMaterial.roughness = 0.95;
@@ -231,18 +227,27 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     if (!modelRefs.container) return;
 
     const namePrefix = `clone_${dollName}_${modelName}_`;
+    // console.log("namePrefix", namePrefix);
 
-    let entries = modelRefs.container.instantiateModelsToScene((sourceName) => `${namePrefix}${sourceName}`, false, {
-      doNotInstantiate: true,
-    });
+    let entries = modelRefs.container.instantiateModelsToScene(
+      (sourceName) => {
+        const naeName = `${namePrefix}${sourceName}`;
+
+        return `${namePrefix}${sourceName}`;
+      },
+      false,
+      {
+        doNotInstantiate: true,
+      }
+    );
     dollRefs.entriesRef = entries;
 
     const { meshNames, boneNames, animationNames, materialNames } = modelInfoByName[modelName];
 
-    type T_Mesh = typeof meshNames[number];
-    type T_BoneName = typeof boneNames[number];
-    type T_AnimationName = typeof animationNames[number];
-    type T_MaterialName = typeof materialNames[number];
+    type T_Mesh = (typeof meshNames)[number];
+    type T_BoneName = (typeof boneNames)[number];
+    type T_AnimationName = (typeof animationNames)[number];
+    type T_MaterialName = (typeof materialNames)[number];
 
     const rootNode = entries.rootNodes[0];
 
@@ -294,24 +299,30 @@ export function get_dollUtils<StoreHelpers extends PrendyStoreHelpers, PrendySto
     dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
 
     enableCollisions(dollRefs.meshRef);
+    dollRefs.meshRef.setEnabled(dollState.isVisible);
+
+    // Once the models loaded, update the animation based on the dolls state
+    // console.log("Running animations for doll after it loaded!", dollName, dollState.nowAnimation);
+    // definiedPrendyRules.dolls?.run("whenNowAnimationChanged");
   }
 
   function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {
     // Update screen positions :)
 
     const { meshRef } = getRefs().dolls[dollName];
-    if (!meshRef) return;
-    const { planePos, planePosGoal, focusedDoll, focusedDollIsInView, planeZoom } = getState().global.main;
-    const characterPointOnPlane = getPositionOnPlane(meshRef); // todo update to use a modelName too so it can know the headHeightOffset for each model?
+    const modelName = getState().dolls[dollName].modelName;
+    if (!meshRef || !modelName) return;
+    const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom } = getState().global.main;
+    const characterPointOnSlate = getPositionOnSlate(meshRef, modelName);
 
-    const characterPointOnScreen = convertPointOnPlaneToPointOnScreen({
-      pointOnPlane: characterPointOnPlane,
-      planePos: instant ? planePosGoal : planePos,
-      planeZoom,
+    const characterPointOnScreen = convertPointOnSlateToPointOnScreen({
+      pointOnSlate: characterPointOnSlate,
+      slatePos: instant ? slatePosGoal : slatePos,
+      slateZoom,
     });
 
     const newFocusedDollIsInView =
-      dollName === focusedDoll ? checkPointIsInsidePlane(characterPointOnPlane) : focusedDollIsInView;
+      dollName === focusedDoll ? checkPointIsInsideSlate(characterPointOnSlate) : focusedDollIsInView;
 
     setState({
       dolls: { [dollName]: { positionOnScreen: characterPointOnScreen } },

@@ -1,11 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
-import { andLayout } from "../helpers/styles";
+import { PlaceName, PrendyStoreHelpers } from "../declarations";
+import { addLayout } from "../helpers/styles";
 
-export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, PlaceName extends string>(
-  storeHelpers: StoreHelpers,
-  placeNames: readonly PlaceName[]
-) {
+export function get_AllTestVideoStuff(storeHelpers: PrendyStoreHelpers, placeNames: readonly PlaceName[]) {
   const { useStore, useStoreItemPropsEffect } = storeHelpers;
 
   function TestVideos({ placeName }: { placeName: PlaceName }) {
@@ -26,9 +23,9 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
 
     // show one vid at a time
     useStoreItemPropsEffect(
-      { type: "sectionVids", name: placeName },
+      { type: "sliceVids", name: placeName },
       {
-        safeVidId_playing() {
+        stateVidId_playing() {
           // vidLetter_play({ newValue }) {
           // if (!newValue) return;
           // const playingVidId = getLetterVidId("house", newValue);
@@ -42,7 +39,7 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
           //     newValue === "b" ? "block" : "none";
           // }
         },
-        sectionVidState({ newValue }) {
+        sliceVidState({ newValue }) {
           const isLoaded = newValue !== "unloaded";
           if (mainRef.current) {
             mainRef.current.style.display = isLoaded ? "block" : "none";
@@ -53,43 +50,43 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
 
     return (
       <div ref={mainRef}>
-        <div ref={vidContainerRefA} style={{ ...andLayout("center") }} id={`${placeName}_a`}>
+        <div ref={vidContainerRefA} style={{ ...addLayout("center") }} id={`${placeName}_a`}>
           A
-          <div style={{ ...andLayout("center") }} id={`${placeName}_a_color`} />
-          <div style={{ ...andLayout("center") }} id={`${placeName}_a_depth`} />
+          <div style={{ ...addLayout("center") }} id={`${placeName}_a_color`} />
+          <div style={{ ...addLayout("center") }} id={`${placeName}_a_depth`} />
         </div>
-        <div ref={vidContainerRefB} style={{ ...andLayout("center") }} id={`${placeName}_b`}>
+        <div ref={vidContainerRefB} style={{ ...addLayout("center") }} id={`${placeName}_b`}>
           B
-          <div style={{ ...andLayout("center") }} id={`${placeName}_b_color`} />
-          <div style={{ ...andLayout("center") }} id={`${placeName}_b_depth`} />
+          <div style={{ ...addLayout("center") }} id={`${placeName}_b_color`} />
+          <div style={{ ...addLayout("center") }} id={`${placeName}_b_depth`} />
         </div>
       </div>
     );
   }
 
   function TestVideoState({ placeName }: { placeName: PlaceName }) {
-    const sectionVidState = useStore((state) => state.sectionVids[placeName].sectionVidState, {
-      type: "sectionVids",
-      prop: ["sectionVidState"],
+    const sliceVidState = useStore((state) => state.sliceVids[placeName].sliceVidState, {
+      type: "sliceVids",
+      prop: ["sliceVidState"],
       name: placeName,
     });
-    const { safeVidId_waiting, safeVidId_playing } = useStore((state) => state.sectionVids[placeName], {
-      type: "sectionVids",
-      prop: ["safeVidId_waiting", "safeVidId_playing"],
+    const { stateVidId_waiting, stateVidId_playing } = useStore((state) => state.sliceVids[placeName], {
+      type: "sliceVids",
+      prop: ["stateVidId_waiting", "stateVidId_playing"],
       name: placeName,
     });
 
     return (
       <div
         style={{
-          display: sectionVidState === "unloaded" ? "none" : "block",
+          display: sliceVidState === "unloaded" ? "none" : "block",
           width: 100,
         }}
       >
-        <div>{sectionVidState}</div>
-        <div>{`▶ ${safeVidId_playing}`}</div>
-        <div>{`➰ ${safeVidId_waiting}`}</div>
-        {/* <div>{`⏭ ${vidLetter_nextSection}`}</div> */}
+        <div>{sliceVidState}</div>
+        <div>{`▶ ${stateVidId_playing}`}</div>
+        <div>{`➰ ${stateVidId_waiting}`}</div>
+        {/* <div>{`⏭ ${vidLetter_goalSlice}`}</div> */}
       </div>
     );
   }
@@ -98,7 +95,7 @@ export function get_AllTestVideoStuff<StoreHelpers extends PrendyStoreHelpers, P
     return (
       <>
         {placeNames.map((placeName) => (
-          <div style={{ ...andLayout({ x: "center", y: "center", way: "right" }) }}>
+          <div style={{ ...addLayout({ x: "center", y: "center", way: "right" }) }}>
             <TestVideos placeName={placeName} />
             <TestVideoState placeName={placeName} />
           </div>

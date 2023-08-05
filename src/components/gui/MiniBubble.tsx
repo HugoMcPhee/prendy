@@ -2,10 +2,10 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { CharacterName } from "../../declarations";
-import { getScreenSize } from "../../helpers/babylonjs/scenePlane";
+import { CharacterName, PrendyStoreHelpers } from "../../declarations";
+import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
+import { PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
 
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
@@ -15,12 +15,12 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
   const { useStoreEffect, useStore, getState } = storeHelpers;
 
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
-  type GetState = StoreHelpers["getState"];
+  type GetState = PrendyStoreHelpers["getState"];
   type ItemType = keyof ReturnType<GetState>;
   type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType] & Record<any, any>;
 
@@ -56,6 +56,10 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
       prop: ["nowPlaceName", "aConvoIsHappening"],
     });
 
+    const randomRotation = useMemo(() => {
+      return Math.random() * 10 - 5;
+    }, [text, isVisible]);
+
     const editedIsVisible = isVisible && !aConvoIsHappening;
 
     const [theSpring, theSpringApi] = useSpring(
@@ -64,6 +68,7 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
         position: [0, 0],
         opacity: editedIsVisible ? 1 : 0,
         scale: editedIsVisible ? 1 : 0.1,
+        rotation: randomRotation,
         config: { tension: 400, friction: 50 },
         onChange() {
           positionMiniBubbleToCharacter();
@@ -143,16 +148,13 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
     }, []);
 
     useStoreEffect(
-      () => {
-        positionMiniBubbleToCharacter();
-      },
+      positionMiniBubbleToCharacter,
       [
         { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
-        { type: ["global"], name: "main", prop: ["planePos"] },
-        { type: ["global"], name: "main", prop: ["planeZoom"] },
+        { type: ["global"], name: "main", prop: ["slatePos"] },
+        { type: ["global"], name: "main", prop: ["slateZoom"] },
+        { type: ["global"], name: "main", prop: ["nowCamName"] },
         { type: ["story"], name: "main", prop: ["storyPart"] },
-        { type: ["places"], name: nowPlaceName, prop: ["nowCamName"] },
-        { type: ["places"], prop: ["nowCamName"] },
       ],
       [nowPlaceName]
     );
@@ -190,8 +192,8 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
             opacity: 1,
             borderRadius: 5,
             borderWidth: 1,
-            transform: `translate(0px, -15px) rotate(45deg) scale(0.8) `,
-            backgroundColor: "white",
+            transform: `translate(0px, -15px) rotate(45deg) scale(0.6) `,
+            backgroundColor: "#fafafa",
           },
         } as const),
       []
@@ -211,8 +213,9 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
               [
                 theSpring.position.to((x, y) => `translate(${x}px , ${y}px)`),
                 theSpring.scale.to((scale) => `scale(${scale})`),
+                theSpring.rotation.to((rotation) => `rotate(${rotation}deg)`),
               ],
-              (translate, scale) => `${translate} ${scale}`
+              (translate, scale, rotate) => `${translate} ${scale} ${rotate}`
             ),
             display: "flex",
             alignItems: "center",
@@ -226,10 +229,9 @@ export function get_MiniBubble<StoreHelpers extends PrendyStoreHelpers>(storeHel
             key={`textRectangle`}
             id={`textRectangle`}
             style={{
-              backgroundColor: "white",
-              // backgroundColor: "rgb(245, 142, 198)",
+              backgroundColor: "#fafafa",
               width: "70px",
-              borderRadius: "15px",
+              borderRadius: "150px",
               borderWidth: "1px",
               paddingBottom: "5px",
               zIndex: 100,

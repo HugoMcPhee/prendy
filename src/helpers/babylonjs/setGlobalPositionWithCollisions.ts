@@ -1,19 +1,16 @@
 import { AbstractMesh, Vector3 } from "@babylonjs/core";
-// import { useSpring } from "@react-spring/core";
-import { Point3D, pointIsZero, subtractPointsSafer, subtractPoints, pointBasicallyZero } from "chootils/dist/points3d";
+import { Point3D, pointBasicallyZero, pointIsZero, subtractPoints, subtractPointsSafer } from "chootils/dist/points3d";
 import { vector3ToPoint3d } from "./vectors";
 
 const reusablePosition = new Vector3(0, 0, 0);
 
 export function setGlobalPositionWithCollisions(theMesh: AbstractMesh, newMeshPos: Point3D) {
-  // const currentMeshPosition = theMesh.absolutePosition.clone();
   const currentMeshPosition = vector3ToPoint3d(theMesh.absolutePosition);
 
   let collidedMeshPos = currentMeshPosition;
   let positionWasEdited = false;
 
   const movementAmount = subtractPoints(newMeshPos, currentMeshPosition);
-  // const movementAmount = newMeshPos.subtract(currentMeshPosition);
 
   const positionDidChange = !pointIsZero(movementAmount);
   let collidedPosOffset: Point3D = { x: 0, y: 0, z: 0 };
@@ -26,13 +23,7 @@ export function setGlobalPositionWithCollisions(theMesh: AbstractMesh, newMeshPo
 
     collidedMeshPos = vector3ToPoint3d(theMesh.absolutePosition);
     collidedPosOffset = subtractPointsSafer(newMeshPos, collidedMeshPos);
-    // positionWasEdited = !pointIsZero(collidedPosOffset);
     positionWasEdited = !pointBasicallyZero(collidedPosOffset, 0.001);
-
-    if (positionWasEdited) {
-      // console.log("collidedPosOffset", collidedPosOffset);
-      // console.log("positionWasEdited", positionWasEdited);
-    }
   }
 
   return {

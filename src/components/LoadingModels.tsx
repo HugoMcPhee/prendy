@@ -1,14 +1,13 @@
 import { Vector3 } from "@babylonjs/core";
 import React, { ReactNode, Suspense } from "react";
-import { PlaceName, PrendyAssets, PrendyOptions } from "../declarations";
+import { PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../declarations";
 import { get_usePlace } from "../helpers/babylonjs/usePlace/usePlace";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import { get_Player } from "./Player";
 
 type Props = { children?: ReactNode };
 
-export function get_LoadingModels<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_LoadingModels(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -32,7 +31,11 @@ export function get_LoadingModels<StoreHelpers extends PrendyStoreHelpers>(
       <Suspense fallback={<sphere name="sphere1" diameter={2} segments={16} position={new Vector3(0, 1, 0)} />}>
         <Player />
         <Place name={nowPlaceName} key={nowPlaceName} />
-        {/* <AllSmells /> */}
+        {/* 
+        Adds custom parts here, like minigames or particles
+        <AllSmellPaticles />
+        <TakeKeyMinigame />
+         */}
         {children}
       </Suspense>
     );

@@ -1,33 +1,16 @@
-// import { getState, ItemState, setState } from "stores";
+import { PrendyStoreHelpers } from "../../declarations";
 
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-
-import { Sound } from "@babylonjs/core";
-import { forEach } from "chootils/dist/loops";
-
-// type GlobalItemState = ItemState<"global">;
-// type PartialGlobalState = Partial<GlobalItemState>;
-
-export function get_globalUtils<StoreHelpers extends PrendyStoreHelpers>(storeHelpers: StoreHelpers) {
+export function get_globalUtils(storeHelpers: PrendyStoreHelpers) {
   const { getState, setState } = storeHelpers;
 
-  type AllState = ReturnType<StoreHelpers["getState"]>;
-
-  // type GlobalItemState = AllState["global"]["main"];
-
-  // type PartialGlobalState = Partial<GlobalItemState>;
+  type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
 
   function setGlobalState<
     GlobalItemState extends AllState["global"]["main"] & Record<any, any>,
     PartialGlobalState extends Partial<GlobalItemState>
   >(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: () => void) {
     if (typeof newState === "function") {
-      setState(
-        (state) => ({
-          global: { main: newState(state.global.main as GlobalItemState) },
-        }),
-        callback
-      );
+      setState((state) => ({ global: { main: newState(state.global.main as GlobalItemState) } }), callback);
     } else {
       setState({ global: { main: newState } }, callback);
     }

@@ -1,18 +1,19 @@
-import { AnyTriggerName, PrendyAssets } from "../declarations";
 import { breakableForEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../stores/typedStoreHelpers";
 import {
-  PrendyOptions,
+  AnyTriggerName,
   CameraNameByPlace,
   CharacterName,
   PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
   SegmentNameByPlace,
   SpotNameByPlace,
 } from "../declarations";
 import { get_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 
-export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
-  storeHelpers: StoreHelpers,
+export function get_Player(
+  storeHelpers: PrendyStoreHelpers,
   prendyStartOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
@@ -29,7 +30,7 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
   type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
   const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-  const { goToNewPlace } = get_sceneStoryHelpers<StoreHelpers>(storeHelpers, placeInfoByName, characterNames);
+  const { goToNewPlace } = get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
 
   type Props = {};
 
@@ -45,17 +46,13 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
       { type: "characters", name: charName },
       {
         atTriggers({ newValue: atTriggers }) {
+          // if atTriggers changes, respond here
+
           const { nowPlaceName } = getState().global.main;
           const { hasLeftFirstTrigger } = getState().characters[charName];
 
-          // -------------------------------------------------------------------------------
-          // Other story Triggers
-          // if (atTriggers.)
-          // -------------------------------------------------------------------------------
-
-          // starting on a trigger
+          // When starting on a trigger, mark when they have left the first trigger
           if (!hasLeftFirstTrigger) {
-            // previousValue
             let hasAnyCollision = false;
             breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
               if (atTriggers[triggerName]) {
@@ -64,12 +61,13 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
               }
             });
             if (!hasAnyCollision) {
-              setState({
-                characters: { [charName]: { hasLeftFirstTrigger: true } },
-              });
+              setState({ characters: { [charName]: { hasLeftFirstTrigger: true } } });
             }
           } else {
-            // going to new places at door triggers
+            // If has left the first trigger
+            // Check for going to new places at door triggers
+
+            // TODO move to a rule
             breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
               if (atTriggers[triggerName]) {
                 const toOption = (prendyStartOptions.doorsInfo as DoorsInfoLoose)[nowPlaceName as PlaceName]?.[
@@ -77,7 +75,6 @@ export function get_Player<StoreHelpers extends PrendyStoreHelpers>(
                 ];
                 if (toOption) {
                   goToNewPlace(toOption, charName as CharacterName);
-
                   return true; // break
                 }
               }

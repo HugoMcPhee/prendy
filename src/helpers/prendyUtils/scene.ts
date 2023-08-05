@@ -1,20 +1,13 @@
-import { PrendyStoreHelpers } from "../../stores/typedStoreHelpers";
-import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../declarations";
+import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName, PrendyStoreHelpers } from "../../declarations";
 import { get_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
-export function get_sceneStoryUtils<
-  StoreHelpers extends PrendyStoreHelpers,
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
-  A_PlaceName extends PlaceName = PlaceName
->(storeHelpers: StoreHelpers) {
+export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
 
   const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
   const globalRefs = getRefs().global.main;
 
-  function getSegmentFromStoryRules<T_Place extends A_PlaceName, T_Cam extends A_CameraNameByPlace[T_Place]>(
+  function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(
     place: T_Place,
     cam: T_Cam
   ) {
@@ -23,7 +16,7 @@ export function get_sceneStoryUtils<
     return foundRuleSegmentName;
   }
 
-  function doWhenNowSegmentChanges(checkingSegmentName: A_AnySegmentName, callback: () => void) {
+  function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, callback: () => void) {
     const initialNowSegmentName = getState().global.main.nowSegmentName;
     if (checkingSegmentName === initialNowSegmentName) {
       callback();
@@ -48,37 +41,107 @@ export function get_sceneStoryUtils<
 
   function doWhenNowCamChanges(
     // WARNING This might mess up if the place changes while the cam change was waiting
-    checkingCamName: A_AnyCameraName,
+    checkingCamName: AnyCameraName,
     callback: () => void
   ) {
     const { nowPlaceName } = getState().global.main;
 
-    const initialNowCamName = getState().places[nowPlaceName].nowCamName;
+    const initialNowCamName = getState().global.main.nowCamName;
     if (checkingCamName === initialNowCamName) {
       callback();
       return null;
     }
-    const ruleName = "doWhenNowSegmentChanges" + Math.random();
+    const ruleName = "doWhenNowCamChanges" + Math.random();
     startItemEffect({
       name: ruleName,
-      run: ({ newValue: newNowCamName, itemName }) => {
-        if (itemName !== nowPlaceName) return;
-
-        // if (newNowCamName !== checkingCamName) return;
+      run: ({ newValue: newNowCamName }) => {
         if (newNowCamName === initialNowCamName) return;
         stopEffect(ruleName);
         callback();
       },
-      check: { type: "places", prop: "nowCamName" },
+      check: { type: "global", prop: "nowCamName" },
       step: "cameraChange",
       atStepEnd: true,
     });
     return ruleName;
   }
 
+  function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: () => void) {
+    const { nowPlaceName } = getState().global.main;
+
+    const initialNowPlaceName = getState().global.main.nowPlaceName;
+    if (checkingPlaceName === initialNowPlaceName) {
+      callback();
+      return null;
+    }
+    const ruleName = "doWhenNowPlaceChanges" + Math.random();
+    startItemEffect({
+      name: ruleName,
+      run: ({ newValue: newNowCamName }) => {
+        if (newNowCamName === initialNowPlaceName) return;
+        stopEffect(ruleName);
+        callback();
+      },
+      check: { type: "global", prop: "nowPlaceName" },
+      step: "default",
+      atStepEnd: true,
+    });
+    return ruleName;
+  }
+
+  function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: () => void) {
+    const { nowPlaceName } = getState().global.main;
+
+    const initialNowPlaceName = getState().global.main.nowPlaceName;
+    const initialIsLoadingBetweenPlaces = getState().global.main.initialIsLoadingBetweenPlaces;
+    if (checkingPlaceName === initialNowPlaceName && initialIsLoadingBetweenPlaces === false) {
+      callback();
+      return null;
+    }
+    const ruleName = "doWhenPlaceFullyLoaded" + Math.random();
+    startItemEffect({
+      name: ruleName,
+      run: ({ newValue: isLoadingBetweenPlaces }) => {
+        const nowPlaceName = getState().global.main.nowPlaceName;
+
+        if (isLoadingBetweenPlaces === true || nowPlaceName !== checkingPlaceName) return;
+        stopEffect(ruleName);
+        callback();
+      },
+      check: { type: "global", prop: "isLoadingBetweenPlaces" },
+      step: "default",
+      atStepEnd: true,
+    });
+    return ruleName;
+  }
+
+  async function waitForPlaceFullyLoaded(checkingPlaceName: PlaceName) {
+    return new Promise<void>((resolve) => {
+      doWhenPlaceFullyLoaded(checkingPlaceName, resolve);
+    });
+  }
+
+  async function waitForNowPlaceToChange(checkingPlaceName: PlaceName) {
+    return new Promise<void>((resolve) => {
+      doWhenNowPlaceChanges(checkingPlaceName, resolve);
+    });
+  }
+
+  async function waitForNowCamToChange(checkingCamName: AnyCameraName) {
+    return new Promise<void>((resolve) => {
+      doWhenNowCamChanges(checkingCamName, resolve);
+    });
+  }
+
+  const waitForNextTick = () => new Promise((resolve) => storeHelpers.onNextTick(resolve));
+
   return {
     getSegmentFromStoryRules,
     doWhenNowSegmentChanges,
     doWhenNowCamChanges,
+    waitForNowPlaceToChange,
+    waitForPlaceFullyLoaded,
+    waitForNowCamToChange,
+    waitForNextTick,
   };
 }

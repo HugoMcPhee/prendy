@@ -1,9 +1,10 @@
-import { substring, length, toArray, indexOf } from "stringz";
 import { forEach } from "chootils/dist/loops";
-import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
 import { CSSProperties } from "react";
-import { PrendyStoreHelpers, PlaceholderPrendyStores } from "../stores/typedStoreHelpers";
-import { StoreHelperTypes } from "pietem";
+import { StoreHelperTypes } from "repond";
+import { indexOf, length, substring, toArray } from "stringz";
+import { PrendyStoreHelpers, PrendyStores } from "../declarations";
+import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
+import { PrendyStoreHelpersUntyped } from "../stores/typedStoreHelpers";
 
 let zIndexCounter = 100;
 /*
@@ -13,20 +14,17 @@ When characters position changes
   bubble position to character
 */
 
-export function get_speechBubbleRules<
-  StoreHelpers extends PrendyStoreHelpers,
-  PrendyStores extends PlaceholderPrendyStores
->(storeHelpers: StoreHelpers, prendyStores: PrendyStores) {
+export function get_speechBubbleRules(storeHelpers: PrendyStoreHelpers, prendyStores: PrendyStores) {
   const { makeRules, setState, getRefs } = storeHelpers;
 
   // AllItemsState,
   // ItemRefs,
   // ItemState,
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
+  type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
   type HelperType<T extends ItemType> = StoreHelperTypes<
-    PrendyStoreHelpers["getState"],
-    PrendyStoreHelpers["getRefs"],
+    PrendyStoreHelpersUntyped["getState"],
+    PrendyStoreHelpersUntyped["getRefs"],
     T
   >;
   type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];

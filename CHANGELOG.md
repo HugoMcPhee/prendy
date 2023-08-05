@@ -1,18 +1,59 @@
 TODO
 
+new things
+
+- add save load and clear save buttons to the top of the screen , and only reveal when tapping near the top
+- maybe put those in a pause menu, that only appears when tapping near the top
+- maybe support invisible controls, like inside
+
+fixes
+
 - fix particles not showing (some small particles show in atleast the first alley in smelldog)
-- fix jump arrow svg not showing, and interact emoji in ios
+- (ios) large fonts can have overflow cut off
+- video can play through a bit extra on ios (only when first loading?)
+- (ios) support returning from sleep, video pauses and doesn't play again
+
+v 0.9.9
+
+- added saving and loading
+- uses new repond rule maker helpers like makeRuleMaker
+- added helpers to wait for place to load
+- types for toggledMeshes and animationWeights are typed per dolls now
+- fixing walking over two floors ontop of eachother (raycast could hit the floor below)
+- added toggledWalls to toggle walls on and off in state, so it works with saving
+- fixed doll inRange not updating when a doll becomes invisible
+- allows setting speech bubble height (head y offsets) per character (model)
+- slanted speech bubbles, and added line height
+- nicer style for GUI buttons, and more faded gui
+- fixed sometimes video looping to other slice every frame
+- fixed interact button being pressed when tapping pickup
+- fixed video issue when returning to tab (and maybe another seek issue)
+- centered speech bubble text
+- added listener for when the app is fcused
+
+v0.9.8
+
+- updated to use repond and updated packages
+- more predictable logic for loading and playing videos
+- better walking on slopes and jumping
+- renamed safeVids to stateVids and sectionVids to sliceVids, and reanmed wanted/next state properties to goal
 - fix jump button not handling holding on andorid and ios
-- fix android jump button moving vrtual stick
-- fix virtual buttons being cutoff on android and ios
-- makeAllStoryRuleMakers with BACKDROP_ART ?
-- setCamera type not limited to place
-- doorsInfo type doesn't autocomplete place name
-- maybe update makeTriggerRules to be by character name, and it skips for characters withut rules
+- changed nowCamName to be global instead of per place
+- change 'scene plane' to 'slate
+- fixes pressing pickups and jump on touchscreens without also pressign the joystick
+- removed unneeded generic types, and replaced with reliable declaration merging
+- simplified getting prendy helpers into one function
+- simplified initialisaing everything with makePrendyApp
+
+v0.9.7
+
+v0.9.6
+
+v0.9.5
 
 v0.9.3
 
-- lots of perforamnce improvements
+- lots of performance improvements
 - changed from using a plane object showing the scene, to panning and zooming in a post process shader
 
 v0.9.2
@@ -136,7 +177,7 @@ v0.5.2
 
 - uses only one scene!
 - doesn't dispose and recreate render target related stuff on camera changes
-- tries to freeze meshes and the scenePlane material if possible
+- tries to freeze meshes and the slate material if possible
 - runs react-spring in the same concep requestAnimationFrame
 - prevents setting doll mesh position if position didn't change
 - concep update that runs onNextTick at the end of the same frame

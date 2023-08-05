@@ -19,7 +19,13 @@
     "type": "git",
     "url": "git+https://github.com/HugoMcPhee/prendy.git"
   },
-  "keywords": [],
+  "keywords": [
+    "prerendered",
+    "game",
+    "babylonjs",
+    "repond",
+    "adventure"
+  ],
   "author": "Hugo McPhee",
   "license": "MIT",
   "devDependencies": {

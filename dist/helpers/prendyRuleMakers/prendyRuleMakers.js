@@ -1,0 +1,349 @@
+import { breakableForEach, forEach } from "chootils/dist/loops";
+import { get_getCharDollStuff } from "../prendyUtils/characters";
+// export each of the rule makers stuff from here :)
+export function get_getUsefulStoryStuff(storeHelpers) {
+    const { getRefs, getState } = storeHelpers;
+    return function getUsefulStoryStuff() {
+        const storyState = getState().story.main;
+        const storyRefs = getRefs().story.main;
+        const globalState = getState().global.main;
+        const { nowPlaceName, nowSegmentName } = globalState;
+        const { nowCamName } = globalState;
+        const placesRefs = getRefs().places;
+        const placeRefs = placesRefs[nowPlaceName];
+        const { camsRefs } = placesRefs[nowPlaceName];
+        const camRefs = camsRefs[nowCamName];
+        return {
+            storyState,
+            storyRefs,
+            globalState,
+            nowSegmentName: nowSegmentName,
+            nowPlaceName: nowPlaceName,
+            nowCamName: nowCamName,
+            placesRefs: placesRefs,
+            placeRefs: placeRefs,
+            camsRefs: camsRefs,
+            camRefs: camRefs,
+        };
+    };
+}
+export function get_setStoryState(storeHelpers) {
+    const { setState } = storeHelpers;
+    return function setStoryState(newState) {
+        setState({ story: { main: newState } });
+    };
+}
+export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterNames, dollNames) {
+    const { getRefs, getState, getPreviousState, setState, makeRules, startItemEffect, stopEffect, onNextTick, makeNestedRuleMaker, makeNestedLeaveRuleMaker, } = storeHelpers;
+    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+    const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
+    // --------------------------------------------------
+    //
+    // makeCamChangeRules
+    const makeCamChangeRules = makeNestedRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
+    const makeCamLeaveRules = makeNestedLeaveRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
+    function makeCamSegmentRules(callBacksObject) {
+        return {
+            startAll() {
+                // This sets an options object in global refs that gets checked when changing segment,
+                // so no rules are actually started here, but it uses the same format as the other rule makers
+                getRefs().global.main.camSegmentRulesOptions = callBacksObject;
+            },
+            stopAll() {
+                /* nothing to stop */
+            },
+        };
+    }
+    function makePickupsRules({ onUsePickupAtTrigger, onUsePickupToTalk, onUsePickupGenerally, }) {
+        const onPickupButtonClick = (pickupName) => {
+            const didUsePickupAtTrigger = onUsePickupAtTrigger(pickupName);
+            const didUsePickupWithDoll = onUsePickupToTalk(pickupName);
+            console.log("didUsePickupAtTrigger", didUsePickupAtTrigger);
+            console.log("didUsePickupWithDoll", didUsePickupWithDoll);
+            // NOTE the top two functions can return true if they ran,
+            // and if neither returned true, it runs the general one
+            if (!didUsePickupAtTrigger && !didUsePickupWithDoll) {
+                onUsePickupGenerally(pickupName);
+            }
+        };
+        return {
+            startAll() {
+                // This sets an onClick callback in global refs that gets called when clicking the pickup button,
+                // so no rules are actually started here, but it uses the same format as the other rule makers
+                getRefs().global.main.onPickupButtonClick = onPickupButtonClick;
+            },
+            stopAll() {
+                /* nothing to stop */
+            },
+        };
+    }
+    function makeInteractButtonRules({ onInteractAtTrigger, onInteractAtTalk, }) {
+        const interactButtonRules = makeRules(({ itemEffect, effect }) => ({
+            whenInteractButtonClicked: itemEffect({
+                run() {
+                    onInteractAtTrigger();
+                    onInteractAtTalk();
+                },
+                check: { prop: "interactButtonPressTime", type: "players" },
+                // atStepEnd: true,
+                step: "story", // story insead of input, so virtual stick animations dont overwrite the story click ones
+            }),
+        }));
+        return interactButtonRules;
+    }
+    // the returned function when the interact buttons clicked
+    function makeOnInteractAtTrigger(callBacksObject, characterName = characterNames[0]) {
+        const onClickInteractButton = () => {
+            const usefulStoryStuff = getUsefulStoryStuff();
+            const { aConvoIsHappening, nowPlaceName, playerMovingPaused } = usefulStoryStuff.globalState;
+            if (aConvoIsHappening || playerMovingPaused)
+                return;
+            const { atTriggers } = getState().characters[characterName];
+            const triggerNames = placeInfoByName[nowPlaceName].triggerNames;
+            // NOTE Could b breakable if only checking one trigger
+            forEach(triggerNames, (triggerName) => {
+                var _a, _b;
+                if (atTriggers[triggerName]) {
+                    // removing types to fix issue
+                    (_b = (_a = callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
+                }
+            });
+        };
+        return onClickInteractButton;
+    }
+    // the returned function gets run when interact button's clicked
+    function makeOnInteractToTalk(callBacksObject, distanceType = "talk", characterName = characterNames[0]) {
+        const onClickInteractButton = () => {
+            var _a;
+            const usefulStoryStuff = getUsefulStoryStuff();
+            const { aConvoIsHappening, playerMovingPaused } = usefulStoryStuff.globalState;
+            if (aConvoIsHappening || playerMovingPaused)
+                return;
+            const { dollState, dollRefs: charDollRefs, dollName: charDollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};
+            if (!dollState)
+                return;
+            const { inRange } = dollState;
+            breakableForEach(dollNames, (dollName) => {
+                const dollState = getState().dolls[dollName];
+                const callBackToRun = callBacksObject[dollName];
+                const isInTalkRange = inRange[dollName][distanceType];
+                // && dollState.isVisible
+                if (dollName !== charDollName && isInTalkRange) {
+                    callBackToRun === null || callBackToRun === void 0 ? void 0 : callBackToRun(usefulStoryStuff);
+                    return true; // break
+                }
+            });
+        };
+        return onClickInteractButton;
+    }
+    // the returned function gets run onClick in the pickup picture button gui
+    function makeOnUsePickupAtTrigger(callBacksObject, characterName = characterNames[0]) {
+        const onClickPickupButton = (pickupName) => {
+            let didInteractWithSomething = false;
+            const usefulStoryStuff = getUsefulStoryStuff();
+            const { aConvoIsHappening, nowPlaceName } = usefulStoryStuff.globalState;
+            const { atTriggers } = getState().characters[characterName];
+            console.log("makeOnUsePickupAtTrigger, aConvoIsHappening", aConvoIsHappening);
+            if (aConvoIsHappening)
+                return;
+            const triggerNames = placeInfoByName[nowPlaceName].triggerNames;
+            // NOTE Could b breakable if only checking one trigger
+            forEach(triggerNames, (triggerName) => {
+                var _a, _b;
+                if (atTriggers[triggerName]) {
+                    const whatToDo = (_b = (_a = callBacksObject === null || callBacksObject === void 0 ? void 0 : callBacksObject[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName]) === null || _b === void 0 ? void 0 : _b[pickupName];
+                    if (whatToDo) {
+                        whatToDo(usefulStoryStuff);
+                        didInteractWithSomething = true;
+                    }
+                }
+            });
+            return didInteractWithSomething;
+        };
+        return onClickPickupButton;
+    }
+    // the returned function gets run onClick in the pickup picture button gui
+    function makeOnUsePickupGenerally(callBacksObject) {
+        const onClickPickupButton = (pickupName) => {
+            var _a;
+            const usefulStoryStuff = getUsefulStoryStuff();
+            const { aConvoIsHappening } = usefulStoryStuff.globalState;
+            if (aConvoIsHappening)
+                return;
+            // NOTE this should only run if an item wasn't just used with a trigger or a doll
+            (_a = callBacksObject === null || callBacksObject === void 0 ? void 0 : callBacksObject[pickupName]) === null || _a === void 0 ? void 0 : _a.call(callBacksObject, usefulStoryStuff);
+        };
+        return onClickPickupButton;
+    }
+    // the returned function gets run onClick in the pickup picture button gui
+    function makeOnUsePickupToTalk(callBacksObject, characterName = characterNames[0]) {
+        const onClickPickupButton = (pickupName) => {
+            var _a;
+            let didInteractWithSomething = false;
+            const usefulStoryStuff = getUsefulStoryStuff();
+            const { aConvoIsHappening } = usefulStoryStuff.globalState;
+            if (aConvoIsHappening)
+                return;
+            const { dollState, dollName: charDollName } = (_a = getCharDollStuff(characterName)) !== null && _a !== void 0 ? _a : {};
+            if (!dollState)
+                return;
+            const { inRange } = dollState;
+            breakableForEach(dollNames, (dollName) => {
+                var _a;
+                const whatToDo = (_a = callBacksObject[dollName]) === null || _a === void 0 ? void 0 : _a[pickupName];
+                const isInTalkRange = inRange[dollName].talk;
+                if (dollName !== charDollName && isInTalkRange) {
+                    if (whatToDo) {
+                        whatToDo(usefulStoryStuff);
+                        didInteractWithSomething = true;
+                    }
+                    return true; // break
+                }
+            });
+            return didInteractWithSomething;
+        };
+        return onClickPickupButton;
+    }
+    function makePlaceLoadRules(atStartOfEachPlace, callBacksObject) {
+        return makeRules(({ itemEffect }) => ({
+            whenPlaceFinishedLoading: itemEffect({
+                run() {
+                    var _a, _b;
+                    // onNextTick(() => {
+                    const usefulStoryStuff = getUsefulStoryStuff();
+                    const { nowPlaceName } = usefulStoryStuff;
+                    atStartOfEachPlace === null || atStartOfEachPlace === void 0 ? void 0 : atStartOfEachPlace(usefulStoryStuff);
+                    (_b = (_a = callBacksObject)[nowPlaceName]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
+                    // });
+                },
+                check: {
+                    type: "global",
+                    prop: ["isLoadingBetweenPlaces"],
+                    becomes: false,
+                },
+                // step: "respondToNewPlace",
+                step: "respondToNewPlaceStory",
+                atStepEnd: true,
+            }),
+        }));
+    }
+    function makePlaceUnloadRules(callBacksObject) {
+        return makeRules(({ itemEffect }) => ({
+            whenPlaceFinishedUnloading: itemEffect({
+                run({ previousValue: prevPlace, newValue: newPlace }) {
+                    let ruleName = startItemEffect({
+                        run() {
+                            var _a, _b;
+                            stopEffect(ruleName);
+                            // console.log("unload rules for", prevPlace);
+                            const usefulStoryStuff = getUsefulStoryStuff();
+                            (_b = (_a = callBacksObject)[prevPlace]) === null || _b === void 0 ? void 0 : _b.call(_a, usefulStoryStuff);
+                        },
+                        check: {
+                            type: "global",
+                            prop: ["isLoadingBetweenPlaces"],
+                            becomes: false,
+                        },
+                        atStepEnd: true,
+                        step: "input",
+                    });
+                },
+                check: { type: "global", prop: ["nowPlaceName"] },
+                step: "story",
+                atStepEnd: true,
+            }),
+        }));
+    }
+    function makeTouchRules(callBacksObject, options) {
+        const { characterName, distanceType = "touch", whenLeave = false } = options !== null && options !== void 0 ? options : {};
+        const { playerCharacter } = getState().global.main;
+        const charName = characterName || playerCharacter;
+        return makeRules(({ itemEffect }) => ({
+            whenInRangeChangesToCheckTouch: itemEffect({
+                run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, itemState: dollState }) {
+                    var _a;
+                    const { dollName: charDollName } = (_a = getCharDollStuff(charName)) !== null && _a !== void 0 ? _a : {};
+                    // at the moment runs for every doll instead of just the main character,
+                    // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
+                    if (!charDollName || changedDollName !== charDollName)
+                        return;
+                    // || !dollState.isVisible
+                    const usefulStoryStuff = getUsefulStoryStuff();
+                    forEach(dollNames, (dollName) => {
+                        const otherDollState = getState().dolls[dollName];
+                        // if (!otherDollState.isVisible) return;
+                        const justEntered = inRange[dollName][distanceType] && !prevInRange[dollName][distanceType];
+                        const justLeft = !inRange[dollName][distanceType] && prevInRange[dollName][distanceType];
+                        const whatToRun = callBacksObject[dollName];
+                        if (dollName !== charDollName) {
+                            if ((whenLeave && justLeft) || (!whenLeave && justEntered))
+                                whatToRun === null || whatToRun === void 0 ? void 0 : whatToRun(usefulStoryStuff);
+                        }
+                    });
+                },
+                check: {
+                    prop: ["inRange"],
+                    type: "dolls",
+                },
+                name: `inRangeStoryRules_${charName}_${distanceType}_${whenLeave}`,
+                step: "collisionReaction",
+                atStepEnd: true,
+            }),
+        }));
+    }
+    function makeTriggerRules(callBacksObject, options) {
+        // TODO make dynamic rule?
+        // this won't update the playerCharacter at the moment
+        const { whenLeave = false } = options !== null && options !== void 0 ? options : {};
+        // const { playerCharacter } = getState().global.main;
+        // const charName = characterName || playerCharacter;
+        const charactersWithTriggers = Object.keys(callBacksObject);
+        console.log("charactersWithTriggers", charactersWithTriggers);
+        return makeRules(({ itemEffect }) => ({
+            whenAtTriggersChanges: itemEffect({
+                run({ newValue: atTriggers, previousValue: prevAtTriggers, itemName: characterName }) {
+                    const usefulStoryStuff = getUsefulStoryStuff();
+                    const { nowPlaceName } = usefulStoryStuff;
+                    if (!callBacksObject[characterName]) {
+                        return;
+                    }
+                    const triggerNames = placeInfoByName[nowPlaceName].triggerNames;
+                    forEach(triggerNames, (triggerName) => {
+                        var _a, _b, _c;
+                        const justEntered = atTriggers[triggerName] && !prevAtTriggers[triggerName];
+                        const justLeft = !atTriggers[triggerName] && prevAtTriggers[triggerName];
+                        if ((whenLeave && justLeft) || (!whenLeave && justEntered)) {
+                            (_c = (_b = (_a = callBacksObject[characterName]) === null || _a === void 0 ? void 0 : _a[nowPlaceName]) === null || _b === void 0 ? void 0 : _b[triggerName]) === null || _c === void 0 ? void 0 : _c.call(_b, usefulStoryStuff);
+                        }
+                    });
+                },
+                check: {
+                    prop: ["atTriggers"],
+                    type: "characters",
+                    name: charactersWithTriggers,
+                },
+                step: "collisionReaction",
+            }),
+        }));
+    }
+    return {
+        makeCamChangeRules,
+        makeCamLeaveRules,
+        makeCamSegmentRules,
+        makeOnInteractAtTrigger,
+        makeOnInteractToTalk,
+        makeInteractButtonRules,
+        makeOnUsePickupAtTrigger,
+        makeOnUsePickupGenerally,
+        makeOnUsePickupToTalk,
+        makePickupsRules,
+        makePlaceLoadRules,
+        makePlaceUnloadRules,
+        // makeStoryPartRules,
+        makeTouchRules,
+        makeTriggerRules,
+        // makeRuleMaker,
+        // makeNestedRuleMaker,
+        // makeNestedLeaveRuleMaker,
+    };
+}

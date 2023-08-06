@@ -35,7 +35,7 @@ v 0.9.9
 - fixed interact button being pressed when tapping pickup
 - fixed video issue when returning to tab (and maybe another seek issue)
 - centered speech bubble text
-- added listener for when the app is fcused
+- added listener for when the app is focused
 
 v0.9.8
 

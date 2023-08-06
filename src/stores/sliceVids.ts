@@ -34,7 +34,10 @@ export type VidLetter = "a" | "b";
 
 export type VidSlice = { time: number; duration: number };
 
-export default function sliceVids(prendyAssets: PrendyAssets) {
+export default function sliceVids<
+  A_PlaceName extends PlaceName = PlaceName,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets
+>(prendyAssets: A_PrendyAssets) {
   const { placeNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
@@ -62,11 +65,11 @@ export default function sliceVids(prendyAssets: PrendyAssets) {
 
   function makeStartStatesForPlaces() {
     // enable autocompleted names and properties , (when using name directly)
-    const newStartStates = {} as Record<PlaceName, ReturnType<typeof state>>;
+    const newStartStates = {} as Record<A_PlaceName, ReturnType<typeof state>>;
     // enable autocompleted properties when using a variable for name
     // const newStartStates = {} as InitialItemsState<typeof state>;
 
-    forEach(placeNames, (placeName) => (newStartStates[placeName] = state(placeName)));
+    forEach(placeNames as A_PlaceName[], (placeName) => (newStartStates[placeName] = state(placeName)));
     return newStartStates;
   }
 

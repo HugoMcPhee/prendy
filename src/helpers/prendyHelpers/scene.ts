@@ -4,9 +4,11 @@ import {
   AnySegmentName,
   CameraNameByPlace,
   CharacterName,
+  DollName,
   PlaceInfoByName,
   PlaceName,
   PrendyStoreHelpers,
+  PrendyStores,
   SegmentNameByPlace,
   SpotNameByPlace,
   WallNameByPlace,
@@ -17,34 +19,58 @@ import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
 import { Point3D } from "chootils/dist/points3d";
 import { get_spotStoryUtils } from "../prendyUtils/spots";
 
-export function get_sceneStoryHelpers(
-  storeHelpers: PrendyStoreHelpers,
-  placeInfoByName: PlaceInfoByName,
-  characterNames: readonly CharacterName[]
-) {
+export function get_sceneStoryHelpers<
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_DollName extends DollName = DollName,
+  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
+  A_PrendyStores extends PrendyStores = PrendyStores,
+  A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
+  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
+>(storeHelpers: A_PrendyStoreHelpers, placeInfoByName: A_PlaceInfoByName, characterNames: readonly A_CharacterName[]) {
   const { getRefs, getState, onNextTick, setState } = storeHelpers;
 
-  type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-    keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+  type CameraNameFromPlace<T_Place extends keyof A_PlaceInfoByName> =
+    keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
 
-  type ToPlaceOption<T_PlaceName extends PlaceName> = {
+  type ToPlaceOption<T_PlaceName extends A_PlaceName> = {
     toPlace: T_PlaceName;
-    toSpot?: SpotNameByPlace[T_PlaceName];
+    toSpot?: A_SpotNameByPlace[T_PlaceName];
     toPositon?: Point3D;
     // NOTE might be able to make this auto if the first spot is inside a cam collider?
-    toCam?: CameraNameByPlace[T_PlaceName];
-    toSegment?: SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
+    toCam?: A_CameraNameByPlace[T_PlaceName];
+    toSegment?: A_SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-  const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);
-  const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils(storeHelpers);
-  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
+  const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils<
+    A_CharacterName,
+    A_DollName,
+    A_PlaceName,
+    A_PrendyStoreHelpers,
+    A_PrendyStores,
+    A_SpotNameByPlace
+  >(storeHelpers);
+  const { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } = get_sceneStoryUtils<
+    A_AnyCameraName,
+    A_AnySegmentName,
+    A_CameraNameByPlace,
+    A_PlaceName,
+    A_PrendyStoreHelpers
+  >(storeHelpers);
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<A_PlaceName, A_PrendyStoreHelpers, A_SpotNameByPlace>(
+    storeHelpers
+  );
 
   async function changeSegmentAtLoop<
-    T_Place extends PlaceName,
-    T_Segment extends AnySegmentName // NOTE & might mes with the tye here
+    T_Place extends A_PlaceName,
+    T_Segment extends A_AnySegmentName // NOTE & might mes with the tye here
   >(_place: T_Place, newSegmentName: T_Segment) {
     // NOTE WARNING This will probably break if goalSegmentNameAtLoop changes from somewhere else!!!
     // to fix: could listen to changes to goalSegmentNameAtLoop
@@ -71,8 +97,8 @@ export function get_sceneStoryHelpers(
 
   async function changeCameraAtLoop<
     // WARNING This might mess up if the place changes while the cam change was waiting
-    T_Place extends PlaceName,
-    T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName // NOTE new & type
+    T_Place extends A_PlaceName,
+    T_Cam extends CameraNameFromPlace<T_Place> & A_AnyCameraName // NOTE new & type
   >(_place: T_Place, newCamName: T_Cam) {
     return new Promise<void>((resolve, _reject) => {
       setState((state) => {
@@ -94,13 +120,13 @@ export function get_sceneStoryHelpers(
     });
   }
 
-  function lookAtSpot<T_Place extends PlaceName>(
+  function lookAtSpot<T_Place extends A_PlaceName>(
     place: T_Place,
-    spot: SpotNameByPlace[T_Place],
-    character?: CharacterName
+    spot: A_SpotNameByPlace[T_Place],
+    character?: A_CharacterName
   ) {
     const { playerCharacter } = getState().global.main;
-    const editedCharacter = character ?? (playerCharacter as CharacterName);
+    const editedCharacter = character ?? (playerCharacter as A_CharacterName);
     const charDollStuff = getCharDollStuff(editedCharacter);
     const { dollName } = charDollStuff;
 
@@ -108,7 +134,7 @@ export function get_sceneStoryHelpers(
     setState({ dolls: { [dollName]: { rotationYGoal: angle } } });
   }
 
-  function hideWallIf<T_Place extends PlaceName, T_Wall extends WallNameByPlace[T_Place]>(
+  function hideWallIf<T_Place extends A_PlaceName, T_Wall extends A_WallNameByPlace[T_Place]>(
     placeName: T_Place,
     wallName: T_Wall,
     isDisabled: boolean
@@ -127,7 +153,7 @@ export function get_sceneStoryHelpers(
     await delay(GUESSED_FADE_TIME);
   }
 
-  function setSegment<T_Place extends PlaceName, T_Segment extends SegmentNameByPlace[T_Place]>(
+  function setSegment<T_Place extends A_PlaceName, T_Segment extends A_SegmentNameByPlace[T_Place]>(
     _placeName: T_Place,
     segmentName: T_Segment
     // whenToRun: "now" | "at loop" = "at loop"
@@ -150,8 +176,8 @@ export function get_sceneStoryHelpers(
   }
 
   function setCamera<
-    T_Place extends PlaceName,
-    T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName // NOTE & Type
+    T_Place extends A_PlaceName,
+    T_Cam extends CameraNameFromPlace<T_Place> & A_AnyCameraName // NOTE & Type
   >(_placeName: T_Place, cameraName: T_Cam, whenToRun: "now" | "at loop" = "now") {
     return new Promise<void>((resolve, _reject) => {
       if (whenToRun === "now") {
@@ -172,9 +198,9 @@ export function get_sceneStoryHelpers(
     });
   }
 
-  function goToNewPlace<T_PlaceName extends PlaceName>(
+  function goToNewPlace<T_PlaceName extends A_PlaceName>(
     toOption: ToPlaceOption<T_PlaceName>,
-    charName: CharacterName = characterNames[0]
+    charName: A_CharacterName = characterNames[0]
   ) {
     // NOTE could include waitForPlaceFullyLoaded here so it can be awaited
     let { toSpot, toPlace, toPositon, toCam, toSegment } = toOption;
@@ -194,7 +220,7 @@ export function get_sceneStoryHelpers(
         toSpot = toSpot; // ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
         toPositon = toPositon;
         toCam = toCam ?? (placeInfo.cameraNames[0] as NonNullable<typeof toCam>); // types as a cam for the chosen place
-        toSegment = toSegment ?? (placeInfo.segmentNames[0] as SegmentNameByPlace[T_PlaceName]);
+        toSegment = toSegment ?? (placeInfo.segmentNames[0] as A_SegmentNameByPlace[T_PlaceName]);
 
         const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
         if (foundRuleSegmentName) toSegment = foundRuleSegmentName;

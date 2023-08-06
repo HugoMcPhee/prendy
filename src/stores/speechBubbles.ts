@@ -3,12 +3,17 @@ import { forEach } from "chootils/dist/loops";
 import { defaultPosition } from "chootils/dist/points2d";
 import { PrendyAssets, CharacterName, FontName, SpeechVidName } from "../declarations";
 
-export default function speechBubbles(prendyAssets: PrendyAssets) {
+export default function speechBubbles<
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_FontName extends FontName = FontName,
+  A_SpeechVidName extends SpeechVidName = SpeechVidName
+>(prendyAssets: A_PrendyAssets) {
   const { characterNames, characterOptions, fontNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,
-    options?: { font?: FontName; character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
+    options?: { font?: A_FontName; character?: A_CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,
     isFullyHidden: true,
@@ -18,11 +23,11 @@ export default function speechBubbles(prendyAssets: PrendyAssets) {
     stylesBySpecialText: {} as Record<string, CSSProperties>, // { "golden banana": { color: "yellow" } } // style snippets of text
     _specialTextByLetterIndex: {} as Record<number, string>, // { 0: "golden banana", 1:"golden banana" , 2:"golden banana"}
     _goalTextWordLetterArrays: [[]] as string[][],
-    forCharacter: (options?.character ?? "walker") as CharacterName | null,
+    forCharacter: (options?.character ?? "walker") as A_CharacterName | null,
     position: defaultPosition(),
     typingFinished: true,
-    nowVideoName: null as null | SpeechVidName,
-    font: options?.font ?? (fontNames[0] as FontName),
+    nowVideoName: null as null | A_SpeechVidName,
+    font: options?.font ?? (fontNames[0] as A_FontName),
     // shouldStartRemovoing: false, // (so it can fade out)
     // shouldRemove: false, // (after it’s faded out)
     zIndex: 0,
@@ -41,12 +46,12 @@ export default function speechBubbles(prendyAssets: PrendyAssets) {
   //   [K_CharacterName in CharacterName]: ReturnType<typeof state>;
   // };
   type SpeechBubbleStartStates = {
-    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
   };
 
   function makeAutmaticCharacterSpeechbubbleStartStates() {
     const partialStates = {} as Partial<SpeechBubbleStartStates>;
-    forEach(characterNames, (characterName) => {
+    forEach(characterNames as A_CharacterName[], (characterName) => {
       partialStates[characterName] = state(characterName, {
         character: characterName,
         font: characterOptions[characterName].font,

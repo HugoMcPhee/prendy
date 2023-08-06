@@ -8,6 +8,7 @@ import {
   PrendyOptions,
   PrendyStoreHelpers,
   PrendyStores,
+  SpotNameByPlace,
 } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
@@ -20,11 +21,19 @@ import { Point3D } from "chootils/dist/points3d";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
 
-export function get_globalChangePlaceRules(
-  storeHelpers: PrendyStoreHelpers,
-  _prendyStores: PrendyStores,
-  prendyStartOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_globalChangePlaceRules<
+  A_DollName extends DollName = DollName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
+  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
+  A_PrendyStores extends PrendyStores = PrendyStores,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
+>(
+  storeHelpers: A_PrendyStoreHelpers,
+  _prendyStores: A_PrendyStores,
+  prendyStartOptions: A_PrendyOptions,
+  prendyAssets: A_PrendyAssets
 ) {
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
@@ -47,7 +56,9 @@ export function get_globalChangePlaceRules(
     prendyStartOptions,
     prendyAssets.modelInfoByName
   );
-  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<A_PlaceName, A_PrendyStoreHelpers, A_SpotNameByPlace>(
+    storeHelpers
+  );
 
   function setPlayerPositionForNewPlace() {
     const { nowPlaceName, playerCharacter } = getState().global.main;
@@ -67,8 +78,8 @@ export function get_globalChangePlaceRules(
       newRotation = getSpotRotation(nowPlaceName, newSpotName);
     }
 
-    if (newPosition) setDollPosition(dollName, newPosition);
-    if (newRotation) setDollRotation(dollName, newRotation);
+    if (newPosition) setDollPosition(dollName as A_DollName, newPosition);
+    if (newRotation) setDollRotation(dollName as A_DollName, newRotation);
 
     setState({ dolls: { [dollName as string]: { goalSpotNameAtNewPlace: null } } });
 

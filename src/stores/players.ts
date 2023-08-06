@@ -1,10 +1,13 @@
 import { AnyAnimationName, PrendyOptions } from "../declarations";
 import { Point2D } from "chootils/dist/points2d";
 
-export default function players(prendyStartOptions: PrendyOptions) {
+export default function players<
+  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions
+>(prendyStartOptions: A_PrendyOptions) {
   type PlayerAnimationNames = {
-    walking: AnyAnimationName;
-    idle: AnyAnimationName;
+    walking: A_AnyAnimationName;
+    idle: A_AnyAnimationName;
   };
 
   const state = () => ({

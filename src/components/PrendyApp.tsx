@@ -7,11 +7,44 @@ import loadStyles from "../helpers/loadStyles";
 import { MakeStartRulesOptions, makeStartAndStopRules } from "../rules/rules";
 import { get_LoadingModels } from "./LoadingModels";
 import { get_ScreenGui } from "./gui/ScreenGui";
+import {
+  AnyCameraName,
+  AnySegmentName,
+  AnyTriggerName,
+  CameraNameByPlace,
+  CharacterName,
+  DollName,
+  PlaceInfoByName,
+  PlaceName,
+  PrendyAssets,
+  PrendyOptions,
+  PrendyStoreHelpers,
+  PrendyStores,
+  SegmentNameByPlace,
+  SpotNameByPlace,
+  WallNameByPlace,
+} from "../declarations";
 // import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
-export function makePrendyApp(options: MakeStartRulesOptions) {
+export function makePrendyApp<
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_DollName extends DollName = DollName,
+  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
+  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
+  A_PrendyStores extends PrendyStores = PrendyStores,
+  A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
+  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
+  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
+>(options: MakeStartRulesOptions<A_PrendyStoreHelpers, A_PrendyStores, A_PrendyOptions, A_PrendyAssets>) {
   const { storeHelpers, prendyOptions, prendyAssets } = options;
 
   loadStyles();
@@ -21,8 +54,32 @@ export function makePrendyApp(options: MakeStartRulesOptions) {
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
   const ScreenGuiDom = get_ScreenGui(storeHelpers, prendyOptions, prendyAssets);
-  const LoadingModels = get_LoadingModels(storeHelpers, prendyOptions, prendyAssets);
-  const StartAndStopRules = makeStartAndStopRules(options);
+  const LoadingModels = get_LoadingModels<
+    A_AnyCameraName,
+    A_AnySegmentName,
+    A_AnyTriggerName,
+    A_CameraNameByPlace,
+    A_CharacterName,
+    A_DollName,
+    A_PlaceInfoByName,
+    A_PlaceName,
+    A_PrendyAssets,
+    A_PrendyOptions,
+    A_PrendyStoreHelpers,
+    A_PrendyStores,
+    A_SegmentNameByPlace,
+    A_SpotNameByPlace,
+    A_WallNameByPlace
+  >(storeHelpers, prendyOptions, prendyAssets);
+  const StartAndStopRules = makeStartAndStopRules<
+    A_DollName,
+    A_PlaceName,
+    A_PrendyAssets,
+    A_PrendyOptions,
+    A_PrendyStoreHelpers,
+    A_PrendyStores,
+    A_SpotNameByPlace
+  >(options);
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);
 

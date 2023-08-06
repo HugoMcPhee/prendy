@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
-import { CharacterName, PrendyAssets, PrendyOptions } from "../../declarations";
+import { AnyCameraName, AnySegmentName, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName, PrendyAssets, PrendyOptions } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { Point2D } from "chootils/dist/points2d";
 import { Point3D } from "chootils/dist/points3d";
@@ -55,18 +55,18 @@ export declare type PrendySaveState = {
                 textDecoration: string;
             };
         };
-        forCharacter: CharacterName;
+        forCharacter: string;
         typingFinished: boolean;
     }>;
     storyState: Record<any, any>;
 };
-export default function global(prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+export default function global<A_AnyCameraName extends AnyCameraName = AnyCameraName, A_AnySegmentName extends AnySegmentName = AnySegmentName, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): {
     startStates: {
         main: {
             slatePosMoveConfigName: string;
             timeScreenResized: number;
             interactButtonPressTime: number;
-            heldPickups: string[];
+            heldPickups: A_PickupName[];
             storyOverlayToggled: boolean;
             alarmTextIsVisible: boolean;
             alarmText: string;
@@ -88,27 +88,27 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
             slatePosIsMoving: boolean;
             slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
             slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-            nowPlaceName: string;
-            goalPlaceName: string | null;
+            nowPlaceName: A_PlaceName;
+            goalPlaceName: A_PlaceName | null;
             readyToSwapPlace: boolean;
             isLoadingBetweenPlaces: boolean;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
-            goalCamWhenNextPlaceLoads: string | null;
-            goalCamNameWhenVidPlays: string | null;
-            goalCamNameAtLoop: string | null;
-            goalCamName: string | null;
+            goalCamWhenNextPlaceLoads: A_AnyCameraName | null;
+            goalCamNameWhenVidPlays: A_AnyCameraName | null;
+            goalCamNameAtLoop: A_AnyCameraName | null;
+            goalCamName: A_AnyCameraName | null;
             nowCamName: string;
-            nowSegmentName: string;
-            goalSegmentName: string | null;
-            goalSegmentNameAtLoop: string | null;
-            goalSegmentNameWhenVidPlays: string | null;
-            goalSegmentWhenGoalPlaceLoads: string | null;
-            modelNamesLoaded: string[];
+            nowSegmentName: A_AnySegmentName;
+            goalSegmentName: A_AnySegmentName | null;
+            goalSegmentNameAtLoop: A_AnySegmentName | null;
+            goalSegmentNameWhenVidPlays: A_AnySegmentName | null;
+            goalSegmentWhenGoalPlaceLoads: A_AnySegmentName | null;
+            modelNamesLoaded: A_ModelName[];
             newPlaceModelLoaded: boolean;
             newPlaceVideosLoaded: boolean;
             newPlaceProbesLoaded: boolean;
-            playerCharacter: string;
+            playerCharacter: A_CharacterName;
             gravityValue: number;
             playerMovingPaused: boolean;
             focusedDoll: any;
@@ -119,7 +119,7 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
         slatePosMoveConfigName: string;
         timeScreenResized: number;
         interactButtonPressTime: number;
-        heldPickups: string[];
+        heldPickups: A_PickupName[];
         storyOverlayToggled: boolean;
         alarmTextIsVisible: boolean;
         alarmText: string;
@@ -141,27 +141,27 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
         slatePosIsMoving: boolean;
         slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
         slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        nowPlaceName: string;
-        goalPlaceName: string | null;
+        nowPlaceName: A_PlaceName;
+        goalPlaceName: A_PlaceName | null;
         readyToSwapPlace: boolean;
         isLoadingBetweenPlaces: boolean;
         loadingOverlayToggled: boolean;
         loadingOverlayFullyShowing: boolean;
-        goalCamWhenNextPlaceLoads: string | null;
-        goalCamNameWhenVidPlays: string | null;
-        goalCamNameAtLoop: string | null;
-        goalCamName: string | null;
+        goalCamWhenNextPlaceLoads: A_AnyCameraName | null;
+        goalCamNameWhenVidPlays: A_AnyCameraName | null;
+        goalCamNameAtLoop: A_AnyCameraName | null;
+        goalCamName: A_AnyCameraName | null;
         nowCamName: string;
-        nowSegmentName: string;
-        goalSegmentName: string | null;
-        goalSegmentNameAtLoop: string | null;
-        goalSegmentNameWhenVidPlays: string | null;
-        goalSegmentWhenGoalPlaceLoads: string | null;
-        modelNamesLoaded: string[];
+        nowSegmentName: A_AnySegmentName;
+        goalSegmentName: A_AnySegmentName | null;
+        goalSegmentNameAtLoop: A_AnySegmentName | null;
+        goalSegmentNameWhenVidPlays: A_AnySegmentName | null;
+        goalSegmentWhenGoalPlaceLoads: A_AnySegmentName | null;
+        modelNamesLoaded: A_ModelName[];
         newPlaceModelLoaded: boolean;
         newPlaceVideosLoaded: boolean;
         newPlaceProbesLoaded: boolean;
-        playerCharacter: string;
+        playerCharacter: A_CharacterName;
         gravityValue: number;
         playerMovingPaused: boolean;
         focusedDoll: any;
@@ -182,11 +182,7 @@ export default function global(prendyStartOptions: PrendyOptions, prendyAssets: 
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
         aConvoIsHappening_timeout: NodeJS.Timeout | null;
-        camSegmentRulesOptions: Partial<{
-            [x: string]: Partial<{
-                [x: string]: (usefulStuff: Record<any, any>) => string;
-            }>;
-        }> | null;
+        camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         slateZoomMoverRefs: {
             velocity: number;

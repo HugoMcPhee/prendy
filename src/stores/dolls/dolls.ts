@@ -18,7 +18,17 @@ import get_dollStoreUtils from "./dollStoreUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 
-export default function dolls(prendyAssets: PrendyAssets) {
+export default function dolls<
+  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
+  A_AnySpotName extends AnySpotName = AnySpotName,
+  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
+  A_DollName extends DollName = DollName,
+  A_DollOptions extends DollOptions = DollOptions,
+  A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel,
+  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
+  A_ModelName extends ModelName = ModelName,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets
+>(prendyAssets: A_PrendyAssets) {
   const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyAssets;
 
   const {
@@ -31,7 +41,7 @@ export default function dolls(prendyAssets: PrendyAssets) {
 
   const defaultModelName = modelNames[0];
 
-  const state = <T_DollName extends string, T_ModelName extends ModelName>(
+  const state = <T_DollName extends string, T_ModelName extends A_ModelName>(
     _dollName: T_DollName,
     modelName?: T_ModelName
   ) => {
@@ -42,7 +52,7 @@ export default function dolls(prendyAssets: PrendyAssets) {
     return {
       modelName: safeModelName as NonNullable<T_ModelName>, // to reference in refs aswell
       //  New room
-      goalSpotNameAtNewPlace: null as null | AnySpotName, // when going to new place, start at this spot
+      goalSpotNameAtNewPlace: null as null | A_AnySpotName, // when going to new place, start at this spot
       goalPositionAtNewPlace: null as null | Point3D, // when going to new place, start at this spot
       //  Movers
       ...mover3dState("position", {
@@ -56,7 +66,7 @@ export default function dolls(prendyAssets: PrendyAssets) {
       // animation Weights mover
       ...makeModelAnimWeightsMoverState<T_ModelName>(safeModelName as T_ModelName)("animWeights"),
       toggledMeshes: makeToggledMeshesState<T_ModelName>(safeModelName as T_ModelName),
-      nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName], // NOTE AnimationNameFromDoll might work here?
+      nowAnimation: animationNames[0] as A_AnimationNameByModel[T_ModelName], // NOTE AnimationNameFromDoll might work here?
       animationLoops: true, // currently unused
       //
       inRange: defaultInRange(),
@@ -65,17 +75,17 @@ export default function dolls(prendyAssets: PrendyAssets) {
     };
   };
 
-  type DollAssetRefs<T_ModelName extends ModelName> = {
-    meshes: Record<MeshNameByModel[T_ModelName] | "__root__", AbstractMesh>;
+  type DollAssetRefs<T_ModelName extends A_ModelName> = {
+    meshes: Record<A_MeshNameByModel[T_ModelName] | "__root__", AbstractMesh>;
     skeleton: Skeleton;
-    bones: Record<BoneNameByModel[T_ModelName], Bone>;
-    aniGroups: Record<AnimationNameByModel[T_ModelName], AnimationGroup>;
-    materials: Record<MaterialNameByModel[T_ModelName], Material>;
+    bones: Record<A_BoneNameByModel[T_ModelName], Bone>;
+    aniGroups: Record<A_AnimationNameByModel[T_ModelName], AnimationGroup>;
+    materials: Record<A_MaterialNameByModel[T_ModelName], Material>;
   };
 
-  const refs = <T_DollName extends DollName, T_ModelName extends ModelName>(
+  const refs = <T_DollName extends A_DollName, T_ModelName extends A_ModelName>(
     dollName: T_DollName,
-    itemState: ReturnType<typeof state<T_DollName, DollOptions[T_DollName]["model"]>>
+    itemState: ReturnType<typeof state<T_DollName, A_DollOptions[T_DollName]["model"]>>
   ) => {
     const modelName = itemState.modelName;
 
@@ -84,7 +94,7 @@ export default function dolls(prendyAssets: PrendyAssets) {
       meshRef: null as null | AbstractMesh,
       otherMeshes: modelOtherMeshesRefs(modelName),
       entriesRef: null as null | InstantiatedEntries,
-      aniGroupsRef: null as null | Record<AnimationNameByModel[T_ModelName], AnimationGroup>,
+      aniGroupsRef: null as null | Record<A_AnimationNameByModel[T_ModelName], AnimationGroup>,
       assetRefs: null as null | DollAssetRefs<T_ModelName>,
       groundRef: null as null | AbstractMesh,
       canGoThroughWalls: false,
@@ -112,12 +122,12 @@ export default function dolls(prendyAssets: PrendyAssets) {
   // };
 
   type DollStartStates = {
-    [K_DollName in DollName]: ReturnType<typeof state<K_DollName, DollOptions[K_DollName]["model"]>>;
+    [K_DollName in A_DollName]: ReturnType<typeof state<K_DollName, A_DollOptions[K_DollName]["model"]>>;
   };
 
   function makeAutmaticModelDollStartStates() {
     const partialDollStates = {} as Partial<DollStartStates>;
-    forEach(dollNames, (dollName) => {
+    forEach(dollNames as A_DollName[], (dollName) => {
       partialDollStates[dollName] = state(dollName, dollOptions[dollName].model);
     });
     return partialDollStates as DollStartStates;

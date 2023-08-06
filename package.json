@@ -1,6 +1,6 @@
 {
   "name": "prendy",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "prerendered backdrop games with babylonjs and pietem",
   "_main": "src/index.ts",
   "_types": "src/index.ts",
@@ -21,10 +21,15 @@
   },
   "keywords": [
     "prerendered",
+    "backdrop",
     "game",
     "babylonjs",
     "repond",
-    "adventure"
+    "adventure",
+    "ps1",
+    "resident evil",
+    "boku no natsumi",
+    "millennium kitchen"
   ],
   "author": "Hugo McPhee",
   "license": "MIT",

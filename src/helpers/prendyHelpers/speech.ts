@@ -22,11 +22,16 @@ const showSpeechRefs = {
 // TODO might need to have it per character if other characts have mini bubbles
 const showMiniBubbleRefs = { closeTimeout: null as ReturnType<typeof setTimeout> | null };
 
-export function get_speechStoryHelpers(
-  storeHelpers: PrendyStoreHelpers,
-  prendyStores: PrendyStores,
-  prendyStartOptions: PrendyOptions,
-  _characterNames: readonly CharacterName[]
+export function get_speechStoryHelpers<
+  A_CharacterName extends CharacterName = CharacterName,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
+  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
+  A_PrendyStores extends PrendyStores = PrendyStores
+>(
+  storeHelpers: A_PrendyStoreHelpers,
+  prendyStores: A_PrendyStores,
+  prendyStartOptions: A_PrendyOptions,
+  _characterNames: readonly A_CharacterName[]
 ) {
   const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
 
@@ -35,7 +40,7 @@ export function get_speechStoryHelpers(
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { getTypingDelayForText } = get_speechBubblesUtils(storeHelpers, prendyStores);
 
-  type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
+  type SpeechBubbleName = keyof A_PrendyStores["speechBubbles"]["startStates"];
 
   const SPEECH_ZOOM_AMOUNT = 1.2;
   const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
@@ -46,7 +51,7 @@ export function get_speechStoryHelpers(
     options?: {
       time?: number;
       showOnce?: boolean;
-      character?: SpeechBubbleName & CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
+      character?: SpeechBubbleName & A_CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
       zoomAmount?: number;
       lookAtPlayer?: boolean;
       returnToZoomBeforeConversation?: boolean; // remembers the previous zoom instead of going to the default when the convo ends
@@ -56,7 +61,7 @@ export function get_speechStoryHelpers(
   ) {
     return new Promise<void>((resolve, _reject) => {
       const { slateZoom: prevSlateZoom } = getGlobalState();
-      const playerCharacter = getGlobalState().playerCharacter as CharacterName;
+      const playerCharacter = getGlobalState().playerCharacter as A_CharacterName;
       const {
         time, // time = 2600,
         showOnce = false,

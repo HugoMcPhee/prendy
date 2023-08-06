@@ -1,13 +1,19 @@
 import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName, PrendyStoreHelpers } from "../../declarations";
 import { get_getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
-export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
+export function get_sceneStoryUtils<
+  A_AnyCameraName extends AnyCameraName = AnyCameraName,
+  A_AnySegmentName extends AnySegmentName = AnySegmentName,
+  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
+  A_PlaceName extends PlaceName = PlaceName,
+  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers
+>(storeHelpers: A_PrendyStoreHelpers) {
   const { getRefs, getState, startItemEffect, stopEffect } = storeHelpers;
 
   const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
   const globalRefs = getRefs().global.main;
 
-  function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(
+  function getSegmentFromStoryRules<T_Place extends A_PlaceName, T_Cam extends A_CameraNameByPlace[T_Place]>(
     place: T_Place,
     cam: T_Cam
   ) {
@@ -16,7 +22,7 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
     return foundRuleSegmentName;
   }
 
-  function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, callback: () => void) {
+  function doWhenNowSegmentChanges(checkingSegmentName: A_AnySegmentName, callback: () => void) {
     const initialNowSegmentName = getState().global.main.nowSegmentName;
     if (checkingSegmentName === initialNowSegmentName) {
       callback();
@@ -41,7 +47,7 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
 
   function doWhenNowCamChanges(
     // WARNING This might mess up if the place changes while the cam change was waiting
-    checkingCamName: AnyCameraName,
+    checkingCamName: A_AnyCameraName,
     callback: () => void
   ) {
     const { nowPlaceName } = getState().global.main;
@@ -66,7 +72,7 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
     return ruleName;
   }
 
-  function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: () => void) {
+  function doWhenNowPlaceChanges(checkingPlaceName: A_PlaceName, callback: () => void) {
     const { nowPlaceName } = getState().global.main;
 
     const initialNowPlaceName = getState().global.main.nowPlaceName;
@@ -89,7 +95,7 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
     return ruleName;
   }
 
-  function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: () => void) {
+  function doWhenPlaceFullyLoaded(checkingPlaceName: A_PlaceName, callback: () => void) {
     const { nowPlaceName } = getState().global.main;
 
     const initialNowPlaceName = getState().global.main.nowPlaceName;
@@ -115,19 +121,19 @@ export function get_sceneStoryUtils(storeHelpers: PrendyStoreHelpers) {
     return ruleName;
   }
 
-  async function waitForPlaceFullyLoaded(checkingPlaceName: PlaceName) {
+  async function waitForPlaceFullyLoaded(checkingPlaceName: A_PlaceName) {
     return new Promise<void>((resolve) => {
       doWhenPlaceFullyLoaded(checkingPlaceName, resolve);
     });
   }
 
-  async function waitForNowPlaceToChange(checkingPlaceName: PlaceName) {
+  async function waitForNowPlaceToChange(checkingPlaceName: A_PlaceName) {
     return new Promise<void>((resolve) => {
       doWhenNowPlaceChanges(checkingPlaceName, resolve);
     });
   }
 
-  async function waitForNowCamToChange(checkingCamName: AnyCameraName) {
+  async function waitForNowCamToChange(checkingCamName: A_AnyCameraName) {
     return new Promise<void>((resolve) => {
       doWhenNowCamChanges(checkingCamName, resolve);
     });

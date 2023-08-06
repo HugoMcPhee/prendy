@@ -115,27 +115,27 @@ export type DollOptionsPlaceholder<DollName extends string, ModelName extends st
   }
 >;
 
-const placeholderPrendyStores = {
-  keyboards: keyboards(),
-  miniBubbles: miniBubbles(testArtStuff),
-  global: global(TEST_START_OPTIONS as any, testArtStuff),
-  models: models(testArtStuff),
-  dolls: dolls(testArtStuff),
-  characters: characters(testArtStuff),
-  players: players(TEST_START_OPTIONS as any),
-  speechBubbles: speechBubbles(testArtStuff as any) as any, // NOTE as any cause it hits the typescript imit with speechBubbles
-  places: places(testArtStuff, TEST_START_OPTIONS as any),
-  stateVids: stateVids(testArtStuff),
-  sliceVids: sliceVids(testArtStuff),
-  //
-  story: story_fake<any, any>(),
-};
+// const placeholderPrendyStores = {
+//   keyboards: keyboards(),
+//   miniBubbles: miniBubbles(testArtStuff),
+//   global: global(TEST_START_OPTIONS as any, testArtStuff),
+//   models: models(testArtStuff),
+//   dolls: dolls(testArtStuff),
+//   characters: characters(testArtStuff),
+//   players: players(TEST_START_OPTIONS as any),
+//   speechBubbles: speechBubbles(testArtStuff as any) as any, // NOTE as any cause it hits the typescript imit with speechBubbles
+//   places: places(testArtStuff, TEST_START_OPTIONS as any),
+//   stateVids: stateVids(testArtStuff),
+//   sliceVids: sliceVids(testArtStuff),
+//   //
+//   story: story_fake<any, any>(),
+// };
 
 // const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyStores, {
-const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
-  stepNames: prendyStepNames,
-  dontSetMeta: true,
-});
+// const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
+//   stepNames: prendyStepNames,
+//   dontSetMeta: true,
+// });
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

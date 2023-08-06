@@ -11,20 +11,28 @@ import {
 } from "../../declarations";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 
-export function get_playerStoryHelpers(
-  storeHelpers: PrendyStoreHelpers,
-  prendyStores: PrendyStores,
-  prendyStartOptions: PrendyOptions,
-  modelInfoByName: ModelInfoByName,
-  characterNames: readonly CharacterName[]
+export function get_playerStoryHelpers<
+  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
+  A_CharacterName extends CharacterName = CharacterName,
+  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
+  A_PickupName extends PickupName = PickupName,
+  A_PrendyOptions extends PrendyOptions = PrendyOptions,
+  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
+  A_PrendyStores extends PrendyStores = PrendyStores
+>(
+  storeHelpers: A_PrendyStoreHelpers,
+  prendyStores: A_PrendyStores,
+  prendyStartOptions: A_PrendyOptions,
+  modelInfoByName: A_ModelInfoByName,
+  characterNames: readonly A_CharacterName[]
 ) {
   const { getState, setState } = storeHelpers;
 
   const { setGlobalState } = get_globalUtils(storeHelpers);
 
   type PlayerAnimationNames = {
-    walking: AnyAnimationName;
-    idle: AnyAnimationName;
+    walking: A_AnyAnimationName;
+    idle: A_AnyAnimationName;
   };
 
   async function enableMovement(canMove: boolean = true, revertDelay?: number) {
@@ -35,12 +43,12 @@ export function get_playerStoryHelpers(
     }
   }
 
-  function isHolding(pickupName: PickupName) {
+  function isHolding(pickupName: A_PickupName) {
     const { heldPickups } = getState().global.main;
     return heldPickups.includes(pickupName);
   }
 
-  function takePickup(pickup: PickupName, toHolding: boolean = true) {
+  function takePickup(pickup: A_PickupName, toHolding: boolean = true) {
     setGlobalState((state) => ({
       heldPickups: toHolding
         ? addItemToUniqueArray(state.heldPickups, pickup)

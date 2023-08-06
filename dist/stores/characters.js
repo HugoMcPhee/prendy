@@ -3,7 +3,7 @@ export default function characters(prendyAssets) {
     const { characterNames, dollNames, characterOptions } = prendyAssets;
     const state = (_characterName, dollName) => {
         return {
-            dollName: dollName !== null && dollName !== void 0 ? dollName : dollNames[0],
+            dollName: (dollName !== null && dollName !== void 0 ? dollName : dollNames[0]),
             // Colliders
             atTriggers: {},
             atCamCubes: {},

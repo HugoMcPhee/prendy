@@ -1,11 +1,11 @@
-import { PrendyAssets } from "../declarations";
+import { PrendyAssets, PlaceName } from "../declarations";
 export declare type SliceVidState = "beforeDoLoop" | "waitingForDoLoop" | "beforeChangeSlice" | "waitingForChangeSlice" | "play" | "pause" | "beforeUnload" | "waitingForUnload" | "unloaded" | "beforeLoad" | "waitingForLoad";
 export declare type VidLetter = "a" | "b";
 export declare type VidSlice = {
     time: number;
     duration: number;
 };
-export default function sliceVids(prendyAssets: PrendyAssets): {
+export default function sliceVids<A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets>(prendyAssets: A_PrendyAssets): {
     state: <T_ItemName extends string>(itemName: T_ItemName) => {
         stateVidId_playing: string | null;
         stateVidId_waiting: string | null;
@@ -25,7 +25,7 @@ export default function sliceVids(prendyAssets: PrendyAssets): {
     refs: () => {
         waitingForPlayToDoLoopRuleName: string | null;
     };
-    startStates: Record<string, {
+    startStates: Record<A_PlaceName, {
         stateVidId_playing: string | null;
         stateVidId_waiting: string | null;
         sliceVidState: SliceVidState;

@@ -2,17 +2,20 @@ import { CharacterName, PrendyAssets } from "../declarations";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
 
-export default function miniBubbles(prendyAssets: PrendyAssets) {
+export default function miniBubbles<
+  A_CharacterName extends CharacterName = CharacterName,
+  A_PrendyAssets extends PrendyAssets = PrendyAssets
+>(prendyAssets: A_PrendyAssets) {
   const { characterNames, characterOptions } = prendyAssets;
 
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,
-    options?: { character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
+    options?: { character?: A_CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,
     isFullyHidden: true,
     text: "❕",
-    forCharacter: options?.character ?? ("walker" as CharacterName | null),
+    forCharacter: options?.character ?? ("walker" as A_CharacterName | null),
     position: defaultPosition(),
   });
 
@@ -23,12 +26,12 @@ export default function miniBubbles(prendyAssets: PrendyAssets) {
   });
 
   type MiniBubbleStartStates = {
-    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
   };
 
   function makeAutmaticCharacterMinibubbleStartStates() {
     const partialStates = {} as Partial<MiniBubbleStartStates>;
-    forEach(characterNames, (characterName) => {
+    forEach(characterNames as A_CharacterName[], (characterName) => {
       partialStates[characterName] = state(characterName, {
         character: characterName,
       });
@@ -52,27 +55,27 @@ export default function miniBubbles(prendyAssets: PrendyAssets) {
   return { state, refs, startStates };
 }
 
-export type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
-  state: () => {
-    isVisible: boolean;
-    isFullyHidden: boolean;
-    text: string;
-    forCharacter: CharacterName;
-    position: Point2D;
-  };
-  refs: () => {
-    bubbleRef: null | any;
-    textRef: null | any;
-    videoRef: null | HTMLVideoElement;
-  };
-  startStates: Record<
-    T_ItemName,
-    {
-      isVisible: boolean;
-      isFullyHidden: boolean;
-      text: string;
-      forCharacter: CharacterName;
-      position: Point2D;
-    }
-  >;
-};
+// export type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {
+//   state: () => {
+//     isVisible: boolean;
+//     isFullyHidden: boolean;
+//     text: string;
+//     forCharacter: CharacterName;
+//     position: Point2D;
+//   };
+//   refs: () => {
+//     bubbleRef: null | any;
+//     textRef: null | any;
+//     videoRef: null | HTMLVideoElement;
+//   };
+//   startStates: Record<
+//     T_ItemName,
+//     {
+//       isVisible: boolean;
+//       isFullyHidden: boolean;
+//       text: string;
+//       forCharacter: CharacterName;
+//       position: Point2D;
+//     }
+//   >;
+// };

@@ -1,18 +1,4 @@
-import { createStoreHelpers } from "repond";
-import { prendyStepNames } from "./stores";
 import { makePrendyOptions } from "../getPrendyOptions";
-import { story_fake } from "../helpers/prendyRuleMakers/fakeStoryStore";
-import characters from "./characters";
-import dolls from "./dolls/dolls";
-import global from "./global/global";
-import keyboards from "./keyboards";
-import miniBubbles from "./miniBubbles";
-import models from "./models";
-import places from "./places";
-import players from "./players";
-import stateVids from "./stateVids";
-import sliceVids from "./sliceVids";
-import speechBubbles from "./speechBubbles";
 const TEST_START_OPTIONS = makePrendyOptions({
     // place: "cave",
     // segment: "start",
@@ -87,23 +73,3 @@ const testArtStuff = {
         characterB: { doll: "dollB", font: "fontA" },
     },
 };
-const placeholderPrendyStores = {
-    keyboards: keyboards(),
-    miniBubbles: miniBubbles(testArtStuff),
-    global: global(TEST_START_OPTIONS, testArtStuff),
-    models: models(testArtStuff),
-    dolls: dolls(testArtStuff),
-    characters: characters(testArtStuff),
-    players: players(TEST_START_OPTIONS),
-    speechBubbles: speechBubbles(testArtStuff),
-    places: places(testArtStuff, TEST_START_OPTIONS),
-    stateVids: stateVids(testArtStuff),
-    sliceVids: sliceVids(testArtStuff),
-    //
-    story: story_fake(),
-};
-// const storeHelpers = _createStoreHelpers_ForTypes(placeholderPrendyStores, {
-const storeHelpers = createStoreHelpers(placeholderPrendyStores, {
-    stepNames: prendyStepNames,
-    dontSetMeta: true,
-});

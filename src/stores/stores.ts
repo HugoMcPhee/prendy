@@ -23,6 +23,8 @@ import {
   SpotNameByPlace,
   TriggerNameByPlace,
   WallNameByPlace,
+  FontName,
+  SpeechVidName,
 } from "../declarations";
 import characters from "./characters";
 import dolls from "./dolls/dolls";
@@ -93,6 +95,7 @@ export function makePrendyStores<
   A_CharacterOptions extends CharacterOptions = CharacterOptions,
   A_DollName extends DollName = DollName,
   A_DollOptions extends DollOptions = DollOptions,
+  A_FontName extends FontName = FontName,
   A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel,
   A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
   A_ModelName extends ModelName = ModelName,
@@ -102,6 +105,7 @@ export function makePrendyStores<
   A_PrendyAssets extends PrendyAssets = PrendyAssets,
   A_PrendyOptions extends PrendyOptions = PrendyOptions,
   A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace,
+  A_SpeechVidName extends SpeechVidName = SpeechVidName,
   A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
   A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
   A_WallNameByPlace extends WallNameByPlace = WallNameByPlace

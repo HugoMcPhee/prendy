@@ -1,5 +1,5 @@
 import { AnyAnimationName, CameraNameByPlace, CharacterName, ModelName, ModelNamesByPlaceLoose, PickupName, PlaceName, SegmentNameByPlace, SpotNameByPlace, TriggerNameByPlace } from "./declarations";
-declare type ToNewOption<T_PlaceName extends PlaceName> = {
+type ToNewOption<T_PlaceName extends PlaceName> = {
     [P_PlaceName in Exclude<PlaceName, T_PlaceName>]: {
         toPlace: P_PlaceName;
         toSpot: SpotNameByPlace[P_PlaceName];
@@ -7,7 +7,7 @@ declare type ToNewOption<T_PlaceName extends PlaceName> = {
         toSegment?: SegmentNameByPlace[P_PlaceName];
     };
 }[Exclude<PlaceName, T_PlaceName>];
-declare type DoorsInfo = Partial<{
+type DoorsInfo = Partial<{
     [P_PlaceName in PlaceName]: Partial<{
         [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: ToNewOption<P_PlaceName>;
     }>;

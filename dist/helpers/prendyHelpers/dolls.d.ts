@@ -10,13 +10,13 @@ export declare function get_dollStoryHelpers<A_AnimationNameByModel extends Anim
     lookAtOtherDoll: (dollA: A_DollName, dollB: A_DollName) => void;
     setDollAnimation: <T_Doll extends A_DollName>(doll: T_Doll, animation: A_AnimationNameByModel[A_DollOptions[T_Doll]["model"]]) => void;
     focusOnDoll: <T_Doll_1 extends A_DollName>(dollName: T_Doll_1, zoom?: number) => void;
-    setDollToSpot: <T_PlaceName extends A_PlaceName>({ place, spot, doll, dontSetRotationState, }: {
+    setDollToSpot: <T_PlaceName extends A_PlaceName>({ place, spot, doll: dollName, dontSetRotationState, }: {
         place: T_PlaceName;
         spot: A_SpotNameByPlace[T_PlaceName];
         doll: A_DollName;
         dontSetRotationState?: boolean | undefined;
     }) => void;
-    springDollToSpot: <T_PlaceName_1 extends A_PlaceName>({ place, spot, doll, }: {
+    springDollToSpot: <T_PlaceName_1 extends A_PlaceName>({ place, spot, doll: dollName, }: {
         place: T_PlaceName_1;
         spot: A_SpotNameByPlace[T_PlaceName_1];
         doll: A_DollName;

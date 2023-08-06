@@ -1,9 +1,9 @@
 /// <reference types="node" />
 /// <reference types="react" />
-import { AnimationNameByModel, AnyAnimationName, AnyCameraName, AnySegmentName, AnySpotName, AnyTriggerName, PrendyAssets, PrendyOptions, BoneNameByModel, CameraNameByPlace, CharacterName, CharacterOptions, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PickupName, PlaceInfoByName, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace } from "../declarations";
+import { AnimationNameByModel, AnyAnimationName, AnyCameraName, AnySegmentName, AnySpotName, AnyTriggerName, PrendyAssets, PrendyOptions, BoneNameByModel, CameraNameByPlace, CharacterName, CharacterOptions, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PickupName, PlaceInfoByName, PlaceName, SoundspotNameByPlace, SpotNameByPlace, TriggerNameByPlace, WallNameByPlace, FontName, SpeechVidName } from "../declarations";
 export declare const prendyStepNames: readonly ["stateVidStateUpdates", "sliceVidStateUpdates", "respondToNewPlace", "respondToNewPlaceStory", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "slatePosition", "slatePositionDontGoOverEdges", "slatePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSlice", "sliceVidWantsToPlay", "sliceVidWantsToPlay2", "safeVidWantsToPlay", "default", "rendering", "overlay"];
-export declare type PrendyStepName = (typeof prendyStepNames)[number];
-export declare function makePrendyStores<A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_AnySegmentName extends AnySegmentName = AnySegmentName, A_AnySpotName extends AnySpotName = AnySpotName, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_BoneNameByModel extends BoneNameByModel = BoneNameByModel, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_CharacterOptions extends CharacterOptions = CharacterOptions, A_DollName extends DollName = DollName, A_DollOptions extends DollOptions = DollOptions, A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): {
+export type PrendyStepName = (typeof prendyStepNames)[number];
+export declare function makePrendyStores<A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_AnyCameraName extends AnyCameraName = AnyCameraName, A_AnySegmentName extends AnySegmentName = AnySegmentName, A_AnySpotName extends AnySpotName = AnySpotName, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_BoneNameByModel extends BoneNameByModel = BoneNameByModel, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_CharacterOptions extends CharacterOptions = CharacterOptions, A_DollName extends DollName = DollName, A_DollOptions extends DollOptions = DollOptions, A_FontName extends FontName = FontName, A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpeechVidName extends SpeechVidName = SpeechVidName, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): {
     keyboards: {
         startStates: {
             main: {
@@ -474,7 +474,7 @@ export declare function makePrendyStores<A_AnimationNameByModel extends Animatio
     };
     speechBubbles: {
         state: <T_ItemName_1 extends string>(_itemName: T_ItemName_1, options?: {
-            font?: any;
+            font?: A_FontName | undefined;
             character?: A_CharacterName | undefined;
         } | undefined) => {
             isVisible: boolean;
@@ -488,7 +488,7 @@ export declare function makePrendyStores<A_AnimationNameByModel extends Animatio
             forCharacter: A_CharacterName | null;
             position: import("chootils/dist/points2d").Point2D;
             typingFinished: boolean;
-            nowVideoName: any;
+            nowVideoName: A_SpeechVidName | null;
             font: A_FontName;
             zIndex: number;
         };
@@ -510,7 +510,7 @@ export declare function makePrendyStores<A_AnimationNameByModel extends Animatio
             forCharacter: A_CharacterName | null;
             position: import("chootils/dist/points2d").Point2D;
             typingFinished: boolean;
-            nowVideoName: any;
+            nowVideoName: A_SpeechVidName | null;
             font: A_FontName;
             zIndex: number;
         }; };

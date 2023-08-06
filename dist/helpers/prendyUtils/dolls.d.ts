@@ -20,7 +20,7 @@ export declare function get_dollUtils<A_AnimationNameByModel extends AnimationNa
         instant?: boolean | undefined;
     }) => void;
 };
-export declare type InRangeForDoll = {
+export type InRangeForDoll = {
     touch: boolean;
     talk: boolean;
     see: boolean;

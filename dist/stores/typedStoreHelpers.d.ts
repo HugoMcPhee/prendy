@@ -1,17 +1,17 @@
 import { StoreHelperTypes } from "repond";
-export declare type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
+export type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
     doll: any;
     font: any;
 }>;
-export declare type DollOptionsPlaceholder<DollName extends string, ModelName extends string> = Record<DollName, {
+export type DollOptionsPlaceholder<DollName extends string, ModelName extends string> = Record<DollName, {
     model: any;
 }>;
-export declare type PrendyStoresUntypedType = Record<any, {
+export type PrendyStoresUntypedType = Record<any, {
     state: (itemName: any) => any;
     refs: (itemName: any, type: any) => any;
     startStates?: Record<any, any>;
 }>;
-export declare type PrendyStoreHelpersUntypedType = {
+export type PrendyStoreHelpersUntypedType = {
     getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
@@ -50,12 +50,12 @@ export interface PrendyStoresUntyped extends PrendyStoresUntypedType {
 }
 export interface PrendyStoreHelpersUntyped extends PrendyStoreHelpersUntypedType {
 }
-declare type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
-declare type HelperType<T extends ItemType> = StoreHelperTypes<PrendyStoreHelpersUntyped["getState"], PrendyStoreHelpersUntyped["getRefs"], T>;
-export declare type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-export declare type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-export declare type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
-export declare type PlaceInfoByNamePlaceholder<PlaceName extends string> = Record<PlaceName, {
+type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
+type HelperType<T extends ItemType> = StoreHelperTypes<PrendyStoreHelpersUntyped["getState"], PrendyStoreHelpersUntyped["getRefs"], T>;
+export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
+export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
+export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
+export type PlaceInfoByNamePlaceholder<PlaceName extends string> = Record<PlaceName, {
     modelFile: string;
     videoFiles: {
         backdrop: string;
@@ -71,7 +71,7 @@ export declare type PlaceInfoByNamePlaceholder<PlaceName extends string> = Recor
     probesByCamera: Record<string, string>;
     segmentTimesByCamera: Record<string, Record<string, number>>;
 }>;
-export declare type ModelInfoByNamePlaceholder<ModelName extends string> = Record<ModelName, {
+export type ModelInfoByNamePlaceholder<ModelName extends string> = Record<ModelName, {
     modelFile: string;
     animationNames: readonly string[];
     boneNames: readonly string[];
@@ -79,21 +79,21 @@ export declare type ModelInfoByNamePlaceholder<ModelName extends string> = Recor
     materialNames: readonly string[];
     skeletonName: string;
 }>;
-export declare type PickupsInfoPlaceholder<PickupName extends string> = Record<PickupName, {
+export type PickupsInfoPlaceholder<PickupName extends string> = Record<PickupName, {
     name: string;
     hint: string;
     image: string;
 }>;
-export declare type DeepWriteable<T> = {
+export type DeepWriteable<T> = {
     -readonly [P in keyof T]: DeepWriteable<T[P]>;
 };
-declare type ToNewOptionUntyped = {
+type ToNewOptionUntyped = {
     toPlace: string;
     toSpot: string;
     toCam?: string;
     toSegment?: string;
 };
-export declare type PrendyOptionsUntyped = {
+export type PrendyOptionsUntyped = {
     place: string;
     segment: string;
     camera: string;
@@ -115,13 +115,13 @@ export declare type PrendyOptionsUntyped = {
     hasInteracting?: boolean;
     hasJumping?: boolean;
 };
-declare type ToPlaceOption<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, AnySpotName extends string> = {
+type ToPlaceOption<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, AnySpotName extends string> = {
     toPlace: PlaceName;
     toSpot: AnySpotName;
     toCam?: AnyCameraName;
     toSegment?: AnySegmentName;
 };
-export declare type PrendyOptionsGeneric<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, CharacterName extends string, PickupName extends string, ModelName extends string, AnySpotName extends string> = {
+export type PrendyOptionsGeneric<AnyCameraName extends string, AnySegmentName extends string, PlaceName extends string, CharacterName extends string, PickupName extends string, ModelName extends string, AnySpotName extends string> = {
     place: PlaceName;
     segment: AnySegmentName;
     camera: AnyCameraName;

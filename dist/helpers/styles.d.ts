@@ -1,15 +1,15 @@
 import { CSSProperties } from "react";
-declare type NamedStyles<T> = {
+type NamedStyles<T> = {
     [P in keyof T]: CSSProperties;
 };
 /**
  * Creates a StyleSheet style reference from the given object.
  */
 export declare function makeStyles<T extends NamedStyles<T> | NamedStyles<any>>(theStyles: T | NamedStyles<T>): T;
-declare type XOption = "left" | "center" | "right";
-declare type YOption = "top" | "center" | "bottom";
-declare type WayOption = "right" | "down";
-declare type AddLayoutOptions = {
+type XOption = "left" | "center" | "right";
+type YOption = "top" | "center" | "bottom";
+type WayOption = "right" | "down";
+type AddLayoutOptions = {
     x: XOption;
     y: YOption;
     way?: WayOption;
@@ -25,8 +25,8 @@ export declare function addLayout(options: AddLayoutOptions | "center"): {
     justifyContent: string | undefined;
     alignItems: string | undefined;
 };
-declare type StyleNumber = number | string;
-declare type AddFixedOptions = {
+type StyleNumber = number | string;
+type AddFixedOptions = {
     x?: StyleNumber;
     y?: StyleNumber;
     top?: StyleNumber;

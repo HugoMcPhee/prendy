@@ -6,7 +6,7 @@ declare const defaultCamRefs: () => {
     probeTexture: CubeTexture | null;
     isTriggerable: boolean;
 };
-export declare type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
+export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 export default function places<A_AnyCameraName extends AnyCameraName = AnyCameraName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_SoundspotNameByPlace extends SoundspotNameByPlace = SoundspotNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(prendyAssets: A_PrendyAssets, prendyStartOptions: A_PrendyOptions): {
     startStates: { [K_PlaceName in A_PlaceName]: {
         toggledWalls: Record<A_WallNameByPlace[K_PlaceName], boolean>;

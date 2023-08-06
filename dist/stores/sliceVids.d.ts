@@ -1,7 +1,7 @@
 import { PrendyAssets, PlaceName } from "../declarations";
-export declare type SliceVidState = "beforeDoLoop" | "waitingForDoLoop" | "beforeChangeSlice" | "waitingForChangeSlice" | "play" | "pause" | "beforeUnload" | "waitingForUnload" | "unloaded" | "beforeLoad" | "waitingForLoad";
-export declare type VidLetter = "a" | "b";
-export declare type VidSlice = {
+export type SliceVidState = "beforeDoLoop" | "waitingForDoLoop" | "beforeChangeSlice" | "waitingForChangeSlice" | "play" | "pause" | "beforeUnload" | "waitingForUnload" | "unloaded" | "beforeLoad" | "waitingForLoad";
+export type VidLetter = "a" | "b";
+export type VidSlice = {
     time: number;
     duration: number;
 };

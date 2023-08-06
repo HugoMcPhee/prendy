@@ -5,7 +5,7 @@ import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { Point2D } from "chootils/dist/points2d";
 import { Point3D } from "chootils/dist/points3d";
 import { InRangeForDoll } from "../../helpers/prendyUtils/dolls";
-export declare type PrendySaveState = {
+export type PrendySaveState = {
     global: {
         nowCamName: string;
         nowPlaceName: string;

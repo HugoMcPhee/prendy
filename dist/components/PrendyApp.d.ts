@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { MakeStartRulesOptions } from "../rules/rules";
 import { AnyCameraName, AnySegmentName, AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PlaceInfoByName, PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores, SegmentNameByPlace, SpotNameByPlace, WallNameByPlace } from "../declarations";
-declare type Props = {
+type Props = {
     children?: ReactNode;
     extraScenes?: ReactNode;
 };

@@ -16,6 +16,8 @@ fixes
 v 0.9.10
 
 - fixed types not working with compiled .d.ts files
+- updated better type for character.dollName
+- updated to typescript 5.1.6
 
 v 0.9.9
 

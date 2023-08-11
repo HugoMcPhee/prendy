@@ -129,9 +129,7 @@ export declare function makePrendyHelpers<A_AnimationNameByModel extends Animati
         };
     };
     rules: {
-        makeCamChangeRules: any;
-        makeCamLeaveRules: any;
-        makeCamSegmentRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: {
+        makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<Record<keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"], (usefulStuff: {
             storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
             storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
             globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
@@ -142,11 +140,51 @@ export declare function makePrendyHelpers<A_AnimationNameByModel extends Animati
             placeRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]];
             camsRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"];
             camRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-        }) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }>) => {
+        }) => void>>; }>) => {
+            start: (ruleName: "whenPropertyChanges") => void;
+            stop: (ruleName: "whenPropertyChanges") => void;
+            startAll: () => void;
+            stopAll: () => void;
+            ruleNames: "whenPropertyChanges"[];
+            run: (ruleName: "whenPropertyChanges") => void;
+            runAll: () => void;
+        };
+        makeCamLeaveRules: (callBacksObject: Partial<{ [P_PlaceName in A_PlaceName]: Partial<Record<keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"], (usefulStuff: {
+            storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
+            storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
+            globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
+            nowSegmentName: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
+            nowPlaceName: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
+            nowCamName: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"]["nowCamName"];
+            placesRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"];
+            placeRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]];
+            camsRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"];
+            camRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"]];
+        }) => void>>; }>) => {
+            start: (ruleName: "whenPropertyChanges") => void;
+            stop: (ruleName: "whenPropertyChanges") => void;
+            startAll: () => void;
+            stopAll: () => void;
+            ruleNames: "whenPropertyChanges"[];
+            run: (ruleName: "whenPropertyChanges") => void;
+            runAll: () => void;
+        };
+        makeCamSegmentRules: (callBacksObject: Partial<{ [P_PlaceName_1 in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"]]: (usefulStuff: {
+            storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
+            storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
+            globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
+            nowSegmentName: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"]["nowSegmentName"];
+            nowPlaceName: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"]["nowPlaceName"];
+            nowCamName: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"]["nowCamName"];
+            placesRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"];
+            placeRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]];
+            camsRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"];
+            camRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"]];
+        }) => keyof A_PlaceInfoByName[P_PlaceName_1]["segmentTimesByCamera"][P_CamName]; }>; }>) => {
             startAll(): void;
             stopAll(): void;
         };
-        makeOnInteractAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_1 in A_PlaceName]: Partial<{ [P_TriggerName in A_TriggerNameByPlace[P_PlaceName_1]]: (usefulStuff: {
+        makeOnInteractAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_2 in A_PlaceName]: Partial<{ [P_TriggerName in A_TriggerNameByPlace[P_PlaceName_2]]: (usefulStuff: {
             storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
             storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
             globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
@@ -180,7 +218,7 @@ export declare function makePrendyHelpers<A_AnimationNameByModel extends Animati
             stop: (...args: any) => any;
             ruleNames: any[];
         };
-        makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_2 in A_PlaceName]: Partial<{ [P_TriggerName_1 in A_TriggerNameByPlace[P_PlaceName_2]]: Partial<{ [P_PickupName in A_PickupName]: (usefulStuff: {
+        makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_3 in A_PlaceName]: Partial<{ [P_TriggerName_1 in A_TriggerNameByPlace[P_PlaceName_3]]: Partial<{ [P_PickupName in A_PickupName]: (usefulStuff: {
             storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
             storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
             globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
@@ -235,7 +273,7 @@ export declare function makePrendyHelpers<A_AnimationNameByModel extends Animati
             placeRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]];
             camsRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"];
             camRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"][keyof ReturnType<A_PrendyStoreHelpers["getRefs"]>["places"]]["camsRefs"]];
-        }) => void, callBacksObject: Partial<{ [P_PlaceName_3 in A_PlaceName]: (usefulStuff: {
+        }) => void, callBacksObject: Partial<{ [P_PlaceName_4 in A_PlaceName]: (usefulStuff: {
             storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
             storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
             globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
@@ -253,7 +291,7 @@ export declare function makePrendyHelpers<A_AnimationNameByModel extends Animati
             stop: (...args: any) => any;
             ruleNames: any[];
         };
-        makePlaceUnloadRules: (callBacksObject: Partial<{ [P_PlaceName_3 in A_PlaceName]: (usefulStuff: {
+        makePlaceUnloadRules: (callBacksObject: Partial<{ [P_PlaceName_4 in A_PlaceName]: (usefulStuff: {
             storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
             storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
             globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
@@ -293,7 +331,7 @@ export declare function makePrendyHelpers<A_AnimationNameByModel extends Animati
             stop: (...args: any) => any;
             ruleNames: any[];
         };
-        makeTriggerRules: (callBacksObject: Partial<{ [P_CharacterName in A_CharacterName]: Partial<{ [P_PlaceName_4 in A_PlaceName]: Partial<{ [P_TriggerName_2 in A_TriggerNameByPlace[P_PlaceName_4]]: (usefulStuff: {
+        makeTriggerRules: (callBacksObject: Partial<{ [P_CharacterName in A_CharacterName]: Partial<{ [P_PlaceName_5 in A_PlaceName]: Partial<{ [P_TriggerName_2 in A_TriggerNameByPlace[P_PlaceName_5]]: (usefulStuff: {
             storyState: ReturnType<A_PrendyStoreHelpers["getState"]>["story"]["main"];
             storyRefs: ReturnType<A_PrendyStoreHelpers["getRefs"]>["story"]["main"];
             globalState: ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];

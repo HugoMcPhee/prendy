@@ -37,9 +37,6 @@ export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterN
     const { getRefs, getState, getPreviousState, setState, makeRules, startItemEffect, stopEffect, onNextTick, makeNestedRuleMaker, makeNestedLeaveRuleMaker, } = storeHelpers;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
-    // --------------------------------------------------
-    //
-    // makeCamChangeRules
     const makeCamChangeRules = makeNestedRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
     const makeCamLeaveRules = makeNestedLeaveRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
     function makeCamSegmentRules(callBacksObject) {

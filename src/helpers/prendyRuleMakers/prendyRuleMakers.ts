@@ -11,9 +11,8 @@ import {
   StoryPartName,
   TriggerNameByPlace,
 } from "../../declarations";
-import { PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
 import { get_getCharDollStuff } from "../prendyUtils/characters";
-import { PrendyStepName } from "../../stores/stores";
+import { StoreHelperTypes } from "repond";
 
 // export each of the rule makers stuff from here :)
 
@@ -139,20 +138,53 @@ export function makeAllStoryRuleMakers<
 
   // --------------------------------------------------
   //
-  // makeCamChangeRules
+  //` makeCamChangeRules
+
+  type T_ItemType = keyof ReturnType<typeof getState>;
+
+  // type HelperType<T extends T_ItemType> = StoreHelperTypes<typeof getState, typeof getRefs, T>;
+
+  // type AllItemsState<T extends T_ItemType> = HelperType<T>["AllItemsState"];
+  type AllItemsState = ReturnType<typeof getState>;
+  // type ItemState<T extends T_ItemType> = HelperType<T>["ItemState"];
+  // type ItemRefs<T extends T_ItemType> = HelperType<T>["ItemRefs"];
+
+  // Manually typing cause the generic fucntion type isnt kept from repond,
+  // maybe it would work if passing a generic type all the way down for PrendyStoreHelpers,
+  // or a new custom base level type (like A_CameraName) but it seems like a lot of passed generic types
+  // so trying to manually copy some types from repond
+  // NOTE ended up not reading from getState becuase that wasn't preserved too, so uses
+  // A_PlaceName and A_CameraNameByPlace directly
+
+  type CamChangeRules = (
+    callBacksObject: Partial<{
+      [P_PlaceName in A_PlaceName]: Partial<
+        Record<CameraNameFromPlace<P_PlaceName>, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>
+      >;
+    }>
+  ) => {
+    start: (ruleName: "whenPropertyChanges") => void;
+    stop: (ruleName: "whenPropertyChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPropertyChanges"[];
+    run: (ruleName: "whenPropertyChanges") => void;
+    runAll: () => void;
+  };
+
   const makeCamChangeRules = makeNestedRuleMaker(
     ["global", "main", "nowPlaceName"],
     ["global", "main", "nowCamName"],
     "cameraChange",
     getUsefulStoryStuff
-  );
+  ) as CamChangeRules;
 
   const makeCamLeaveRules = makeNestedLeaveRuleMaker(
     ["global", "main", "nowPlaceName"],
     ["global", "main", "nowCamName"],
     "cameraChange",
     getUsefulStoryStuff
-  );
+  ) as CamChangeRules;
 
   // --------------------------------------------------
   //

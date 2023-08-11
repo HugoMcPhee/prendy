@@ -5,7 +5,6 @@ import { animated, interpolate, useSpring } from "react-spring";
 import { CharacterName, PrendyStoreHelpers } from "../../declarations";
 import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
 
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code

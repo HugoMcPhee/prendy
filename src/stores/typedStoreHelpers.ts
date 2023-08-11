@@ -1,20 +1,5 @@
 import { PrendyAssets } from "../declarations";
-import { StoreHelperTypes } from "repond";
-import { createStoreHelpers } from "repond";
-import { prendyStepNames } from "./stores";
 import { makePrendyOptions } from "../getPrendyOptions";
-import { story_fake } from "../helpers/prendyRuleMakers/fakeStoryStore";
-import characters from "./characters";
-import dolls from "./dolls/dolls";
-import global from "./global/global";
-import keyboards from "./keyboards";
-import miniBubbles from "./miniBubbles";
-import models from "./models";
-import places from "./places";
-import players from "./players";
-import stateVids from "./stateVids";
-import sliceVids from "./sliceVids";
-import speechBubbles from "./speechBubbles";
 
 const TEST_START_OPTIONS = makePrendyOptions({
   // place: "cave",
@@ -163,50 +148,52 @@ export type PrendyStoreHelpersUntypedType = {
       | ((state: Record<any, Record<any, Record<any, any | any[]>>>) => any),
     callback?: (nextFrameDuration: number) => any
   ) => void;
-  startItemEffect: (...args: any) => any;
-  startEffect: (...args: any) => any;
-  stopEffect: (...args: any) => any;
+  startItemEffect: AnyFunction;
+  startEffect: AnyFunction;
+  stopEffect: AnyFunction;
   makeRules: (...args: any) => {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
+    stopAll: AnyFunction;
+    startAll: AnyFunction;
+    start: AnyFunction;
+    stop: AnyFunction;
     ruleNames: any[];
   };
   makeDynamicRules: (...args: any) => {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
+    stopAll: AnyFunction;
+    startAll: AnyFunction;
+    start: AnyFunction;
+    stop: AnyFunction;
     ruleNames: any[];
   };
-  makeRuleMaker: (...args: any) => any;
-  makeNestedRuleMaker: (...args: any) => any;
-  makeNestedLeaveRuleMaker: (...args: any) => any;
-  onNextTick: (...args: any) => any;
-  addItem: (...args: any) => any;
-  removeItem: (...args: any) => any;
+  makeRuleMaker: AnyFunction;
+  makeNestedRuleMaker: AnyFunction;
+  makeNestedLeaveRuleMaker: AnyFunction;
+  onNextTick: AnyFunction;
+  addItem: AnyFunction;
+  removeItem: AnyFunction;
 
-  getItem: (...args: any) => any;
-  useStore: (...args: any) => any;
-  useStoreItem: (...args: any) => any;
-  useStoreEffect: (...args: any) => any;
-  useStoreItemEffect: (...args: any) => any;
-  useStoreItemPropsEffect: (...args: any) => any;
+  getItem: AnyFunction;
+  useStore: AnyFunction;
+  useStoreItem: AnyFunction;
+  useStoreEffect: AnyFunction;
+  useStoreItemEffect: AnyFunction;
+  useStoreItemPropsEffect: AnyFunction;
 };
+
+type AnyFunction = (...args: any) => any;
 
 export interface PrendyStoresUntyped extends PrendyStoresUntypedType {}
 export interface PrendyStoreHelpersUntyped extends PrendyStoreHelpersUntypedType {}
 
-type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
-type HelperType<T extends ItemType> = StoreHelperTypes<
-  PrendyStoreHelpersUntyped["getState"],
-  PrendyStoreHelpersUntyped["getRefs"],
-  T
->;
-export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
+// type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
+// type HelperType<T extends ItemType> = StoreHelperTypes<
+//   PrendyStoreHelpersUntyped["getState"],
+//   PrendyStoreHelpersUntyped["getRefs"],
+//   T
+// >;
+// export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
+// export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
+// export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
 export type PlaceInfoByNamePlaceholder<
   PlaceName extends string

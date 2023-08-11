@@ -4,7 +4,6 @@ import { PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../d
 import { BEFORE_LOOP_PADDING, get_sliceVidUtils } from "../helpers/prendyUtils/sliceVids";
 import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 import { SliceVidState } from "../stores/sliceVids";
-import { PrendyStoreHelpersUntyped } from "../stores/typedStoreHelpers";
 
 function numbersAreClose(a: number, b: number, range: number) {
   return Math.abs(a - b) < range;
@@ -19,11 +18,10 @@ export function get_sliceVidRules(
 
   const { getState, makeRules, setState } = storeHelpers;
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]> &
-    keyof ReturnType<PrendyStoreHelpersUntyped["getRefs"]>;
+  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> & keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
   type HelperType<T extends ItemType> = StoreHelperTypes<
-    PrendyStoreHelpersUntyped["getState"],
-    PrendyStoreHelpersUntyped["getRefs"],
+    PrendyStoreHelpers["getState"],
+    PrendyStoreHelpers["getRefs"],
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];

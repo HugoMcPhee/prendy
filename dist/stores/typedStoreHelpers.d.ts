@@ -1,4 +1,3 @@
-import { StoreHelperTypes } from "repond";
 export type CharacterOptionsPlaceholder<CharacterName extends string, DollName extends string, FontName extends string> = Record<CharacterName, {
     doll: any;
     font: any;
@@ -16,45 +15,41 @@ export type PrendyStoreHelpersUntypedType = {
     getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
     getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
     setState: (newState: Record<any, Record<any, Record<any, any | any[]>>> | ((state: Record<any, Record<any, Record<any, any | any[]>>>) => any), callback?: (nextFrameDuration: number) => any) => void;
-    startItemEffect: (...args: any) => any;
-    startEffect: (...args: any) => any;
-    stopEffect: (...args: any) => any;
+    startItemEffect: AnyFunction;
+    startEffect: AnyFunction;
+    stopEffect: AnyFunction;
     makeRules: (...args: any) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
+        stopAll: AnyFunction;
+        startAll: AnyFunction;
+        start: AnyFunction;
+        stop: AnyFunction;
         ruleNames: any[];
     };
     makeDynamicRules: (...args: any) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
+        stopAll: AnyFunction;
+        startAll: AnyFunction;
+        start: AnyFunction;
+        stop: AnyFunction;
         ruleNames: any[];
     };
-    makeRuleMaker: (...args: any) => any;
-    makeNestedRuleMaker: (...args: any) => any;
-    makeNestedLeaveRuleMaker: (...args: any) => any;
-    onNextTick: (...args: any) => any;
-    addItem: (...args: any) => any;
-    removeItem: (...args: any) => any;
-    getItem: (...args: any) => any;
-    useStore: (...args: any) => any;
-    useStoreItem: (...args: any) => any;
-    useStoreEffect: (...args: any) => any;
-    useStoreItemEffect: (...args: any) => any;
-    useStoreItemPropsEffect: (...args: any) => any;
+    makeRuleMaker: AnyFunction;
+    makeNestedRuleMaker: AnyFunction;
+    makeNestedLeaveRuleMaker: AnyFunction;
+    onNextTick: AnyFunction;
+    addItem: AnyFunction;
+    removeItem: AnyFunction;
+    getItem: AnyFunction;
+    useStore: AnyFunction;
+    useStoreItem: AnyFunction;
+    useStoreEffect: AnyFunction;
+    useStoreItemEffect: AnyFunction;
+    useStoreItemPropsEffect: AnyFunction;
 };
+type AnyFunction = (...args: any) => any;
 export interface PrendyStoresUntyped extends PrendyStoresUntypedType {
 }
 export interface PrendyStoreHelpersUntyped extends PrendyStoreHelpersUntypedType {
 }
-type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
-type HelperType<T extends ItemType> = StoreHelperTypes<PrendyStoreHelpersUntyped["getState"], PrendyStoreHelpersUntyped["getRefs"], T>;
-export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 export type PlaceInfoByNamePlaceholder<PlaceName extends string> = Record<PlaceName, {
     modelFile: string;
     videoFiles: {

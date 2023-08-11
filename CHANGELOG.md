@@ -13,6 +13,10 @@ fixes
 - video can play through a bit extra on ios (only when first loading?)
 - (ios) support returning from sleep, video pauses and doesn't play again
 
+v 0.9.11
+
+- fixed compiled types for makeCamChangeRules makeCamLeaveRules
+
 v 0.9.10
 
 - fixed types not working with compiled .d.ts files

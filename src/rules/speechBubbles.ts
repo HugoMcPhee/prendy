@@ -4,7 +4,6 @@ import { StoreHelperTypes } from "repond";
 import { indexOf, length, substring, toArray } from "stringz";
 import { PrendyStoreHelpers, PrendyStores } from "../declarations";
 import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
-import { PrendyStoreHelpersUntyped } from "../stores/typedStoreHelpers";
 
 let zIndexCounter = 100;
 /*
@@ -21,10 +20,10 @@ export function get_speechBubbleRules(storeHelpers: PrendyStoreHelpers, prendySt
   // ItemRefs,
   // ItemState,
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
+  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
   type HelperType<T extends ItemType> = StoreHelperTypes<
-    PrendyStoreHelpersUntyped["getState"],
-    PrendyStoreHelpersUntyped["getRefs"],
+    PrendyStoreHelpers["getState"],
+    PrendyStoreHelpers["getRefs"],
     T
   >;
   type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];

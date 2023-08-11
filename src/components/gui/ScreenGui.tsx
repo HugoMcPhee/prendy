@@ -1,7 +1,6 @@
 // @refresh-reset
 import React, { Fragment } from "react";
-import { PrendyStoreHelpersUntyped } from "../../stores/typedStoreHelpers";
-import { PrendyAssets, PrendyOptions, PickupName, PickupsInfo, PrendyStoreHelpers } from "../../declarations";
+import { PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 import { get_AlarmText } from "./AlarmText";
 import { get_LoadingOverlay } from "./LoadingOverlay";
 import { get_MiniBubble } from "./MiniBubble";

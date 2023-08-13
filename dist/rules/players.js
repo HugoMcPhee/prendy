@@ -300,6 +300,7 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 // const isGoinDownOrStill =
                 //   dollPosRefs.velocity.y < 100000000;
                 const isGoingDownOrStill = dollPosRefs.velocity.y <= 0;
+                // console.log("dollPosRefs.velocity.y", dollPosRefs.velocity.y);
                 // if (isGoinDownOrStill ) {
                 let slopeUnderPlayer = 0;
                 let slope = 0;
@@ -357,6 +358,15 @@ export function get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
                 if (newIsOnGround) {
                     if (!isAboveDownSlope) {
                         dollPosRefs.velocity.y = Math.max(0, dollPosRefs.velocity.y);
+                    }
+                    if (!isAboveUpSlope) {
+                        // this stops the y velocity from being kept after doing a springDollToSpot
+                        dollPosRefs.velocity.y = Math.min(0, dollPosRefs.velocity.y);
+                        // before it would keep a small y up velocity, but still record isOnGround as true
+                        // may be a better way to cleat the y velocity after a springDollToSpot ends
+                        // wait this might break walking up slopes
+                        // it happened in hug-report when hugging the statue
+                        // maybe its also combined with disabling movement
                     }
                 }
                 else {

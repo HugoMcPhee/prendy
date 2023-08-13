@@ -13,6 +13,10 @@ fixes
 - video can play through a bit extra on ios (only when first loading?)
 - (ios) support returning from sleep, video pauses and doesn't play again
 
+v 0.9.12
+
+- small fix for player velocity going up after springDollToSpot, y up velocity gets cleared in the parts check isOnGround, there might be a better way to clear the y velocity from springDollToSpot, or update isOnGround when moving up to be false
+
 v 0.9.11
 
 - fixed compiled types for makeCamChangeRules makeCamLeaveRules

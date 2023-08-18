@@ -13,13 +13,13 @@ import { get_slateUtils } from "../helpers/babylonjs/slate";
 
 export function get_characterDynamicRules(
   storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
+  prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
+  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
 
   const refs = getRefs();
 

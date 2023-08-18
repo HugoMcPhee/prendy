@@ -9,7 +9,7 @@ export declare const slateSize: {
     x: number;
     y: number;
 };
-export declare function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions): {
+export declare function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions): {
     getPositionOnSlate: (theMesh: AbstractMesh, modelName: ModelName) => Vector3;
     focusSlateOnFocusedDoll: (instant?: "instant") => void;
     getSlatePositionNotOverEdges: (slatePos: Point2D, useGoal?: boolean) => Point2D;

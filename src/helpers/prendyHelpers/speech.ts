@@ -1,7 +1,7 @@
 import delay from "delay";
 import { CSSProperties } from "react";
 import { length } from "stringz";
-import { CharacterName, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_speechBubblesUtils } from "../../helpers/prendyUtils/speechBubbles";
@@ -22,17 +22,14 @@ const showSpeechRefs = {
 // TODO might need to have it per character if other characts have mini bubbles
 const showMiniBubbleRefs = { closeTimeout: null as ReturnType<typeof setTimeout> | null };
 
-export function get_speechStoryHelpers<
-  A_CharacterName extends CharacterName = CharacterName,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  prendyStores: A_PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  _characterNames: readonly A_CharacterName[]
+export function get_speechStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyStores: T_MyTypes["Stores"],
+  prendyOptions: T_MyTypes["Main"]["PrendyOptions"]
 ) {
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type PrendyStores = T_MyTypes["Stores"];
+
   const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
 
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
@@ -40,7 +37,7 @@ export function get_speechStoryHelpers<
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { getTypingDelayForText } = get_speechBubblesUtils(storeHelpers, prendyStores);
 
-  type SpeechBubbleName = keyof A_PrendyStores["speechBubbles"]["startStates"];
+  type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
 
   const SPEECH_ZOOM_AMOUNT = 1.2;
   const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time
@@ -51,7 +48,7 @@ export function get_speechStoryHelpers<
     options?: {
       time?: number;
       showOnce?: boolean;
-      character?: SpeechBubbleName & A_CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
+      character?: SpeechBubbleName & CharacterName; // NOTE SpeechBubble names and CharacterNames match at the moment
       zoomAmount?: number;
       lookAtPlayer?: boolean;
       returnToZoomBeforeConversation?: boolean; // remembers the previous zoom instead of going to the default when the convo ends
@@ -61,7 +58,7 @@ export function get_speechStoryHelpers<
   ) {
     return new Promise<void>((resolve, _reject) => {
       const { slateZoom: prevSlateZoom } = getGlobalState();
-      const playerCharacter = getGlobalState().playerCharacter as A_CharacterName;
+      const playerCharacter = getGlobalState().playerCharacter as CharacterName;
       const {
         time, // time = 2600,
         showOnce = false,
@@ -108,7 +105,7 @@ export function get_speechStoryHelpers<
         showSpeechRefs.aSpeechIsShowing = true;
       }
 
-      const newSlateZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyStartOptions.zoomLevels.max);
+      const newSlateZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyOptions.zoomLevels.max);
       onNextTick(() => {
         setState({
           speechBubbles: { [character]: { isVisible: true, goalText: text, stylesBySpecialText } },
@@ -132,7 +129,7 @@ export function get_speechStoryHelpers<
           focusedDoll: isFocusedOnTalkingCharacter ? playerDollName : currentFocusedDoll,
           slateZoomGoal: returnToZoomBeforeConversation
             ? showSpeechRefs.originalZoomAmount
-            : prendyStartOptions.zoomLevels.default,
+            : prendyOptions.zoomLevels.default,
         });
       }
 

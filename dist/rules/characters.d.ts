@@ -1,5 +1,5 @@
 import { CharacterName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../declarations";
-export declare function get_characterDynamicRules(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+export declare function get_characterDynamicRules(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

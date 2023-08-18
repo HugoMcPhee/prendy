@@ -3,11 +3,11 @@ import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
+import { cloneObjectWithJson } from "repond/dist/utils";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import { getDefaultInRangeFunction, get_dollStoryUtils, get_dollUtils, } from "../helpers/prendyUtils/dolls";
-import { cloneObjectWithJson } from "repond/dist/utils";
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
 // });
@@ -23,8 +23,8 @@ export const rangeOptionsQuick = {
     talk: rangeOptions.talk * rangeOptions.talk,
     see: rangeOptions.see * rangeOptions.see,
 };
-export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendyStores, prendyAssets) {
-    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+export function get_dollDynamicRules(storeHelpers, prendyOptions, prendyStores, prendyAssets) {
+    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(storeHelpers, prendyOptions, prendyAssets);
     const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
     return makeDynamicRules(({ itemEffect, effect }) => ({
         waitForModelToLoad: itemEffect(({ dollName, modelName }) => ({
@@ -47,7 +47,7 @@ export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendySto
                 // using modelNamesByPlace, set the doll state to invisible if it's not in the current place
                 const { nowPlaceName } = getState().global.main;
                 // const { modelName } = getState().dolls[dollName];
-                const { modelNamesByPlace } = prendyStartOptions;
+                const { modelNamesByPlace } = prendyOptions;
                 const modelNamesForPlace = modelNamesByPlace[nowPlaceName];
                 const isInPlace = modelNamesForPlace.includes(modelName);
                 if (!isInPlace) {
@@ -84,10 +84,10 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
         });
     };
 }
-export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
+export function get_dollRules(prendyOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
     const { modelInfoByName, dollNames } = prendyAssets;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-    const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
     const { makeRules, getPreviousState, getState, setState, getRefs, onNextTick } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
     const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
@@ -174,8 +174,8 @@ export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                         console.warn("tried to use undefined animation", aniName);
                         return;
                     }
-                    if (aniRef && (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyStartOptions.animationSpeed) {
-                        aniRef.speedRatio = prendyStartOptions.animationSpeed;
+                    if (aniRef && (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyOptions.animationSpeed) {
+                        aniRef.speedRatio = prendyOptions.animationSpeed;
                     }
                     const animWeight = animWeights[aniName];
                     const animIsStopped = animWeight < 0.003;

@@ -1,21 +1,18 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { MusicFiles, MusicName, PrendyStoreHelpers, SoundFiles, SoundName } from "../../declarations";
+import { MusicFiles, MusicName, MyTypes, PrendyStoreHelpers, SoundFiles, SoundName } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../babylonjs/getSceneOrEngineUtils";
 
-export function get_soundStoryHelpers<
-  A_MusicFiles extends MusicFiles = MusicFiles,
-  A_MusicName extends MusicName = MusicName,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_SoundFiles extends SoundFiles = SoundFiles,
-  A_SoundName extends SoundName = SoundName
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  musicNames: readonly A_MusicName[],
-  musicFiles: A_MusicFiles,
-  soundNames: readonly A_SoundName[],
-  soundFiles: A_SoundFiles
+export function get_soundStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"],
+  musicNames: readonly T_MyTypes["Main"]["MusicName"][],
+  musicFiles: T_MyTypes["Main"]["MusicFiles"],
+  soundNames: readonly T_MyTypes["Main"]["SoundName"][],
+  soundFiles: T_MyTypes["Main"]["SoundFiles"]
 ) {
+  type MusicName = T_MyTypes["Main"]["MusicName"];
+  type SoundName = T_MyTypes["Main"]["SoundName"];
+
   const { getRefs } = storeHelpers;
   const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 
@@ -24,7 +21,7 @@ export function get_soundStoryHelpers<
   // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
 
   // Auto load music and play it, and stop other music if it's already playing
-  function playSound(soundName: A_SoundName, options?: { loop?: boolean }) {
+  function playSound(soundName: SoundName, options?: { loop?: boolean }) {
     const scene = getScene();
     if (!scene) return;
 
@@ -45,7 +42,7 @@ export function get_soundStoryHelpers<
     });
   }
 
-  function stopSound(soundName: A_SoundName) {
+  function stopSound(soundName: SoundName) {
     const foundSound = globalRefs.sounds[soundName];
 
     foundSound?.stop();
@@ -56,7 +53,7 @@ export function get_soundStoryHelpers<
   }
 
   // Auto load music and play it, and stop other music if it's already playing
-  function playNewMusic(newMusicName: A_MusicName) {
+  function playNewMusic(newMusicName: MusicName) {
     const scene = getScene();
     if (!scene) return;
 

@@ -9,7 +9,7 @@ export function getScreenSize() {
     return { x: window.innerWidth, y: window.innerHeight };
 }
 export const slateSize = { x: 1280, y: 720 };
-export function get_slateUtils(storeHelpers, prendyStartOptions) {
+export function get_slateUtils(storeHelpers, prendyOptions) {
     const { getRefs, getState, onNextTick } = storeHelpers;
     const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
     const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);
@@ -41,7 +41,7 @@ export function get_slateUtils(storeHelpers, prendyStartOptions) {
         if (!nowCam)
             return new Vector3();
         // Use the characters head position instead of center position (for speech bubbles)
-        const Y_OFFSET = (_b = prendyStartOptions.headHeightOffsets[modelName]) !== null && _b !== void 0 ? _b : 2; // default to 2, just above the model
+        const Y_OFFSET = (_b = prendyOptions.headHeightOffsets[modelName]) !== null && _b !== void 0 ? _b : 2; // default to 2, just above the model
         return Vector3.Project(new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z), Matrix.Identity(), nowCam
             .getViewMatrix()
             // .multiply(currentCamera.getProjectionMatrix()),
@@ -192,7 +192,7 @@ export function get_slateUtils(storeHelpers, prendyStartOptions) {
     }
     function getShaderTransformStuff() {
         const { slateZoom, slateZoomGoal } = getState().global.main;
-        // const slateZoom = prendyStartOptions.zoomLevels.default;
+        // const slateZoom = prendyOptions.zoomLevels.default;
         // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;

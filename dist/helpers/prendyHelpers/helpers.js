@@ -7,7 +7,7 @@ import { get_speechStoryHelpers } from "./speech";
 import { get_stickerStoryHelpers } from "./stickers";
 // importing each of the helpers
 // function doThis
-export function makePrendyStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, prendyAssets) {
+export function makePrendyStoryHelpers(storeHelpers, prendyStores, prendyOptions, prendyAssets) {
     const modelInfoByName = prendyAssets.modelInfoByName;
     const characterNames = prendyAssets.characterNames;
     const placeInfoByName = prendyAssets.placeInfoByName;
@@ -16,12 +16,12 @@ export function makePrendyStoryHelpers(storeHelpers, prendyStores, prendyStartOp
     const soundNames = prendyAssets.soundNames;
     const soundFiles = prendyAssets.soundFiles;
     return {
-        characters: get_characterStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames),
-        dolls: get_dollStoryHelpers(storeHelpers, prendyStartOptions, modelInfoByName),
-        players: get_playerStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, modelInfoByName, characterNames),
+        characters: get_characterStoryHelpers(storeHelpers, prendyStores, prendyOptions, modelInfoByName, characterNames),
+        dolls: get_dollStoryHelpers(storeHelpers, prendyOptions, modelInfoByName),
+        players: get_playerStoryHelpers(storeHelpers),
         scene: get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames),
         sound: get_soundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles),
-        speech: get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, characterNames),
+        speech: get_speechStoryHelpers(storeHelpers, prendyStores, prendyOptions),
         stickers: get_stickerStoryHelpers(storeHelpers),
     };
 }

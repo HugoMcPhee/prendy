@@ -1,30 +1,17 @@
 import { AbstractMesh } from "@babylonjs/core";
-import {
-  CharacterName,
-  DollName,
-  PlaceName,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SpotNameByPlace,
-} from "../../declarations";
+import { CharacterName, MyTypes, PrendyStoreHelpers } from "../../declarations";
 import { get_dollStoryUtils } from "./dolls";
 
-export function get_characterStoryUtils<
-  A_CharacterName extends CharacterName = CharacterName,
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(storeHelpers: A_PrendyStoreHelpers) {
+export function get_characterStoryUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type A_CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type A_DollName = T_MyTypes["Main"]["DollName"];
+  type A_PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type A_PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type A_PrendyStores = T_MyTypes["Stores"];
+  type A_SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+
   const { getState } = storeHelpers;
-  const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<
-    A_DollName,
-    A_PlaceName,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SpotNameByPlace
-  >(storeHelpers);
+  const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<T_MyTypes>(storeHelpers);
 
   function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
     character: A_CharacterName,

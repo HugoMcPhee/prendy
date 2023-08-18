@@ -1,6 +1,6 @@
 import { forEach } from "chootils/dist/loops";
 import { InitialItemsState } from "repond";
-import { PrendyAssets } from "../declarations";
+import { MyTypes, PrendyAssets } from "../declarations";
 
 /*
 A wrapped way to play/pause/seek videos using repond state
@@ -28,7 +28,7 @@ export type VidState =
 
 export const abLetters = ["a", "b"] as const;
 
-export default function stateVids<A_PrendyAssets extends PrendyAssets = PrendyAssets>(prendyAssets: A_PrendyAssets) {
+export default function stateVids<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   const { placeNames, placeInfoByName } = prendyAssets;
 
   function vidNameToPlaceName(vidName: string) {

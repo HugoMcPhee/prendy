@@ -1,38 +1,18 @@
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import delay from "delay";
-import {
-  AnyAnimationName,
-  CharacterName,
-  ModelInfoByName,
-  PickupName,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 
-export function get_playerStoryHelpers<
-  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
-  A_PickupName extends PickupName = PickupName,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  prendyStores: A_PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  modelInfoByName: A_ModelInfoByName,
-  characterNames: readonly A_CharacterName[]
-) {
-  const { getState, setState } = storeHelpers;
+export function get_playerStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type AnyAnimationName = T_MyTypes["Main"]["AnyAnimationName"];
+  type PickupName = T_MyTypes["Main"]["PickupName"];
 
-  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const { getState, setState } = storeHelpers;
+  const { setGlobalState } = get_globalUtils<T_MyTypes>(storeHelpers);
 
   type PlayerAnimationNames = {
-    walking: A_AnyAnimationName;
-    idle: A_AnyAnimationName;
+    walking: AnyAnimationName;
+    idle: AnyAnimationName;
   };
 
   async function enableMovement(canMove: boolean = true, revertDelay?: number) {
@@ -43,12 +23,12 @@ export function get_playerStoryHelpers<
     }
   }
 
-  function isHolding(pickupName: A_PickupName) {
+  function isHolding(pickupName: PickupName) {
     const { heldPickups } = getState().global.main;
     return heldPickups.includes(pickupName);
   }
 
-  function takePickup(pickup: A_PickupName, toHolding: boolean = true) {
+  function takePickup(pickup: PickupName, toHolding: boolean = true) {
     setGlobalState((state) => ({
       heldPickups: toHolding
         ? addItemToUniqueArray(state.heldPickups, pickup)

@@ -1,10 +1,10 @@
 import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skeleton } from "@babylonjs/core";
 import { Point3D } from "chootils/dist/points3d";
-import { AnimationNameByModel, AnySpotName, BoneNameByModel, DollName, DollOptions, MaterialNameByModel, MeshNameByModel, ModelName, PrendyAssets } from "../../declarations";
-export default function dolls<A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel, A_AnySpotName extends AnySpotName = AnySpotName, A_BoneNameByModel extends BoneNameByModel = BoneNameByModel, A_DollName extends DollName = DollName, A_DollOptions extends DollOptions = DollOptions, A_MaterialNameByModel extends MaterialNameByModel = MaterialNameByModel, A_MeshNameByModel extends MeshNameByModel = MeshNameByModel, A_ModelName extends ModelName = ModelName, A_PrendyAssets extends PrendyAssets = PrendyAssets>(prendyAssets: A_PrendyAssets): {
-    startStates: { [K_DollName in A_DollName]: {
+import { MyTypes } from "../../declarations";
+export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
+    startStates: { [K_DollName in T_MyTypes["Main"]["DollName"]]: {
         toggledMeshes: Record<string, boolean>;
-        nowAnimation: A_AnimationNameByModel[A_DollOptions[K_DollName]["model"]];
+        nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]];
         animationLoops: boolean;
         inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         isVisible: boolean;
@@ -27,13 +27,13 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         positionMoveMode: import("repond-movers/dist/types").MoveMode;
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        modelName: NonNullable<A_DollOptions[K_DollName]["model"]>;
-        goalSpotNameAtNewPlace: A_AnySpotName | null;
+        modelName: NonNullable<T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]>;
+        goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
         goalPositionAtNewPlace: Point3D | null;
     }; };
-    state: <T_DollName extends string, T_ModelName extends A_ModelName>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
+    state: <T_DollName extends string, T_ModelName extends T_MyTypes["Main"]["ModelName"]>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
         toggledMeshes: Record<string, boolean>;
-        nowAnimation: A_AnimationNameByModel[T_ModelName];
+        nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName];
         animationLoops: boolean;
         inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         isVisible: boolean;
@@ -57,12 +57,12 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<T_ModelName>;
-        goalSpotNameAtNewPlace: A_AnySpotName | null;
+        goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
         goalPositionAtNewPlace: Point3D | null;
     };
-    refs: <T_DollName_1 extends A_DollName, T_ModelName_1 extends A_ModelName>(dollName: T_DollName_1, itemState: {
+    refs: <T_DollName_1 extends T_MyTypes["Main"]["DollName"], T_ModelName_1 extends T_MyTypes["Main"]["ModelName"]>(dollName: T_DollName_1, itemState: {
         toggledMeshes: Record<string, boolean>;
-        nowAnimation: A_AnimationNameByModel[A_DollOptions[T_DollName_1]["model"]];
+        nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]];
         animationLoops: boolean;
         inRange: Record<string, import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         isVisible: boolean;
@@ -85,8 +85,8 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         positionMoveMode: import("repond-movers/dist/types").MoveMode;
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        modelName: NonNullable<A_DollOptions[T_DollName_1]["model"]>;
-        goalSpotNameAtNewPlace: A_AnySpotName | null;
+        modelName: NonNullable<T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]>;
+        goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
         goalPositionAtNewPlace: Point3D | null;
     }) => {
         animWeightsMoverRefs: {
@@ -136,13 +136,13 @@ export default function dolls<A_AnimationNameByModel extends AnimationNameByMode
         meshRef: AbstractMesh | null;
         otherMeshes: Record<string, AbstractMesh | null>;
         entriesRef: InstantiatedEntries | null;
-        aniGroupsRef: Record<A_AnimationNameByModel[T_ModelName_1], AnimationGroup> | null;
+        aniGroupsRef: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_1], AnimationGroup> | null;
         assetRefs: {
-            meshes: Record<"__root__" | A_MeshNameByModel[T_ModelName_1], AbstractMesh>;
+            meshes: Record<"__root__" | T_MyTypes["Main"]["MeshNameByModel"][T_ModelName_1], AbstractMesh>;
             skeleton: Skeleton;
-            bones: Record<A_BoneNameByModel[T_ModelName_1], Bone>;
-            aniGroups: Record<A_AnimationNameByModel[T_ModelName_1], AnimationGroup>;
-            materials: Record<A_MaterialNameByModel[T_ModelName_1], Material>;
+            bones: Record<T_MyTypes["Main"]["BoneNameByModel"][T_ModelName_1], Bone>;
+            aniGroups: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_1], AnimationGroup>;
+            materials: Record<T_MyTypes["Main"]["MaterialNameByModel"][T_ModelName_1], Material>;
         } | null;
         groundRef: AbstractMesh | null;
         canGoThroughWalls: boolean;

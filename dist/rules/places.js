@@ -1,5 +1,5 @@
 import { forEach } from "chootils/dist/loops";
-export function get_placeRules(prendyStartOptions, storeHelpers, prendyStores, prendyAssets) {
+export function get_placeRules(prendyOptions, storeHelpers, prendyStores, prendyAssets) {
     const { placeInfoByName } = prendyAssets;
     const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
     return makeRules(({ itemEffect, effect }) => ({

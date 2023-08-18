@@ -1,16 +1,16 @@
 import { useEffect } from "react";
+import { definiedPrendyRules } from "..";
 import loadGoogleFonts from "../helpers/loadGoogleFonts";
 import { get_characterDynamicRules, get_characterRules, get_startDynamicCharacterRulesForInitialState, } from "./characters";
 import { get_dollDynamicRules, get_dollRules, startDynamicDollRulesForInitialState } from "./dolls";
 import { get_startAllGlobalRules } from "./global/global";
 import { get_keyboardConnectRules } from "./keyboards";
 import { get_modelRules } from "./models";
+import { get_placeRules } from "./places";
 import { get_playerRules } from "./players";
 import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { get_safeVidRules } from "./stateVids";
-import { definiedPrendyRules } from "..";
-import { get_placeRules } from "./places";
 export function makeStartPrendyMainRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets) {
     const { dollNames, characterNames } = prendyAssets;
     // making rules

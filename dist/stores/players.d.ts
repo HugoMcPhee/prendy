@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import { AnyAnimationName, PrendyOptions } from "../declarations";
 import { Point2D } from "chootils/dist/points2d";
-export default function players<A_AnyAnimationName extends AnyAnimationName = AnyAnimationName, A_PrendyOptions extends PrendyOptions = PrendyOptions>(prendyStartOptions: A_PrendyOptions): {
+import { MyTypes } from "../declarations";
+export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyOptions: T_MyTypes["Main"]["PrendyOptions"]): {
     startStates: {
         main: {
             lastSafeInputAngle: number | null;
@@ -17,8 +17,8 @@ export default function players<A_AnyAnimationName extends AnyAnimationName = An
             virtualControlsReleaseTime: number;
             canShowVirtualButtons: boolean;
             animationNames: {
-                walking: A_AnyAnimationName;
-                idle: A_AnyAnimationName;
+                walking: T_MyTypes["Main"]["AnyAnimationName"];
+                idle: T_MyTypes["Main"]["AnyAnimationName"];
             };
         };
     };
@@ -36,8 +36,8 @@ export default function players<A_AnyAnimationName extends AnyAnimationName = An
         virtualControlsReleaseTime: number;
         canShowVirtualButtons: boolean;
         animationNames: {
-            walking: A_AnyAnimationName;
-            idle: A_AnyAnimationName;
+            walking: T_MyTypes["Main"]["AnyAnimationName"];
+            idle: T_MyTypes["Main"]["AnyAnimationName"];
         };
     };
     refs: () => {

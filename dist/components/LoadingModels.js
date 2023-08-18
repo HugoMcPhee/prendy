@@ -2,10 +2,10 @@ import { Vector3 } from "@babylonjs/core";
 import React, { Suspense } from "react";
 import { get_usePlace } from "../helpers/babylonjs/usePlace/usePlace";
 import { get_Player } from "./Player";
-export function get_LoadingModels(storeHelpers, prendyStartOptions, prendyAssets) {
+export function get_LoadingModels(storeHelpers, prendyOptions, prendyAssets) {
     const { useStore } = storeHelpers;
-    const Player = get_Player(storeHelpers, prendyStartOptions, prendyAssets);
-    const usePlace = get_usePlace(storeHelpers, prendyStartOptions, prendyAssets);
+    const Player = get_Player(storeHelpers, prendyOptions, prendyAssets);
+    const usePlace = get_usePlace(storeHelpers, prendyOptions, prendyAssets);
     function Place({ name }) {
         usePlace(name);
         return null;

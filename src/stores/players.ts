@@ -1,13 +1,14 @@
-import { AnyAnimationName, PrendyOptions } from "../declarations";
 import { Point2D } from "chootils/dist/points2d";
+import { MyTypes } from "../declarations";
 
-export default function players<
-  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions
->(prendyStartOptions: A_PrendyOptions) {
+export default function players<T_MyTypes extends MyTypes = MyTypes>(
+  prendyOptions: T_MyTypes["Main"]["PrendyOptions"]
+) {
+  type AnyAnimationName = T_MyTypes["Main"]["AnyAnimationName"];
+
   type PlayerAnimationNames = {
-    walking: A_AnyAnimationName;
-    idle: A_AnyAnimationName;
+    walking: AnyAnimationName;
+    idle: AnyAnimationName;
   };
 
   const state = () => ({
@@ -29,13 +30,13 @@ export default function players<
     //
 
     animationNames: {
-      walking: prendyStartOptions.playerAnimations.walking,
-      idle: prendyStartOptions.playerAnimations.idle,
+      walking: prendyOptions.playerAnimations.walking,
+      idle: prendyOptions.playerAnimations.idle,
     } as PlayerAnimationNames, // maybe typed somehow, from player character?
   });
 
   const refs = () => ({
-    walkSpeed: prendyStartOptions.walkSpeed,
+    walkSpeed: prendyOptions.walkSpeed,
     canJumpTimeout: null as null | ReturnType<typeof setTimeout>,
     canShowVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
     canHideVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,

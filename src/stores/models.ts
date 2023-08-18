@@ -1,14 +1,13 @@
 import { AssetContainer, PBRMaterial } from "@babylonjs/core";
-import { PrendyAssets, ModelName } from "../declarations";
 import { forEach } from "chootils/dist/loops";
+import { MyTypes } from "../declarations";
 
-export default function models<
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_ModelName extends ModelName = ModelName
->(prendyAssets: A_PrendyAssets) {
-  const modelNames = prendyAssets.modelNames as A_ModelName[];
+export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
+  type ModelName = T_MyTypes["Main"]["ModelName"];
 
-  const state = <T_ModelName extends A_ModelName>(_modelName: T_ModelName) => {
+  const modelNames = prendyAssets.modelNames as ModelName[];
+
+  const state = <T_ModelName extends ModelName>(_modelName: T_ModelName) => {
     return {
       wantToLoad: false,
       isLoading: false,
@@ -16,23 +15,23 @@ export default function models<
     };
   };
 
-  const refs = <T_ModelName extends A_ModelName>(_modelName: T_ModelName) => ({
+  const refs = <T_ModelName extends ModelName>(_modelName: T_ModelName) => ({
     // originalMeshRef: null,
     container: null as null | AssetContainer,
     materialRef: null as null | PBRMaterial,
     materialRefs: null as null | PBRMaterial[],
   });
 
-  class FuncTypeWrapper<T_ModelName extends A_ModelName> {
+  class FuncTypeWrapper<T_ModelName extends ModelName> {
     // wrapped has no explicit return type so we can infer it
     wrapped(modelName: T_ModelName) {
       return state<T_ModelName>(modelName);
     }
   }
-  type StateType<T extends A_ModelName> = ReturnType<FuncTypeWrapper<T>["wrapped"]>;
+  type StateType<T extends ModelName> = ReturnType<FuncTypeWrapper<T>["wrapped"]>;
 
   type ModelStartStates = {
-    [K_ModelName in A_ModelName]: StateType<K_ModelName>;
+    [K_ModelName in ModelName]: StateType<K_ModelName>;
   };
 
   function makeAutmaticModelStartStates() {

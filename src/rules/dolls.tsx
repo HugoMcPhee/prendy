@@ -4,6 +4,7 @@ import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
+import { cloneObjectWithJson } from "repond/dist/utils";
 import {
   AnyAnimationName,
   DollName,
@@ -24,7 +25,6 @@ import {
   get_dollStoryUtils,
   get_dollUtils,
 } from "../helpers/prendyUtils/dolls";
-import { cloneObjectWithJson } from "repond/dist/utils";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -47,16 +47,11 @@ export const rangeOptionsQuick = {
 
 export function get_dollDynamicRules(
   storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
+  prendyOptions: PrendyOptions,
   prendyStores: PrendyStores,
   prendyAssets: PrendyAssets
 ) {
-  const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(
-    storeHelpers,
-    prendyStores,
-    prendyStartOptions,
-    prendyAssets
-  );
+  const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(storeHelpers, prendyOptions, prendyAssets);
   const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
 
   return makeDynamicRules(({ itemEffect, effect }) => ({
@@ -85,7 +80,7 @@ export function get_dollDynamicRules(
 
           const { nowPlaceName } = getState().global.main;
           // const { modelName } = getState().dolls[dollName];
-          const { modelNamesByPlace } = prendyStartOptions;
+          const { modelNamesByPlace } = prendyOptions;
           const modelNamesForPlace = modelNamesByPlace[nowPlaceName];
           const isInPlace = modelNamesForPlace.includes(modelName);
           if (!isInPlace) {
@@ -130,7 +125,7 @@ export function startDynamicDollRulesForInitialState<DollDynamicRules extends Re
 }
 
 export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(
-  prendyStartOptions: PrendyOptions,
+  prendyOptions: PrendyOptions,
   dollDynamicRules: DollDynamicRules,
   storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
@@ -138,8 +133,8 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
 ) {
   const { modelInfoByName, dollNames } = prendyAssets;
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
-    get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
+    get_dollUtils(storeHelpers, prendyOptions, prendyAssets);
+  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
   const { makeRules, getPreviousState, getState, setState, getRefs, onNextTick } = storeHelpers;
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
   const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
@@ -232,8 +227,8 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
             console.warn("tried to use undefined animation", aniName);
             return;
           }
-          if (aniRef && aniRef?.speedRatio !== prendyStartOptions.animationSpeed) {
-            aniRef.speedRatio = prendyStartOptions.animationSpeed;
+          if (aniRef && aniRef?.speedRatio !== prendyOptions.animationSpeed) {
+            aniRef.speedRatio = prendyOptions.animationSpeed;
           }
 
           const animWeight = animWeights[aniName];

@@ -17,7 +17,7 @@ import { get_usePlaceUtils } from "./utils";
 
 export function get_usePlace(
   storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
+  prendyOptions: PrendyOptions,
   prendyAssets: PrendyAssets
 ) {
   const { getRefs, getState, setState } = storeHelpers;
@@ -29,7 +29,7 @@ export function get_usePlace(
 
   const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(
     storeHelpers,
-    prendyStartOptions,
+    prendyOptions,
     prendyAssets
   );
 
@@ -56,7 +56,7 @@ export function get_usePlace(
 
       // Load any models for this place that weren't already loaded
       const { modelNamesLoaded } = getState().global.main;
-      forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
+      forEach(prendyOptions.modelNamesByPlace[placeName], (modelName) => {
         if (!modelNamesLoaded.includes(modelName)) {
           setState({ models: { [modelName]: { wantToLoad: true } } });
         }

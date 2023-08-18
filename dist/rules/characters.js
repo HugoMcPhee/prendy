@@ -1,10 +1,10 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
-export function get_characterDynamicRules(storeHelpers, prendyStartOptions, prendyAssets) {
+export function get_characterDynamicRules(storeHelpers, prendyOptions, prendyAssets) {
     const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
+    const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
     const refs = getRefs();
     const placesRefs = refs.places;
     return makeDynamicRules(({ itemEffect, effect }) => ({

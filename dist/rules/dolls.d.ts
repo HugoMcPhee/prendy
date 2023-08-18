@@ -4,7 +4,7 @@ export declare const rangeOptionsQuick: {
     readonly talk: number;
     readonly see: number;
 };
-export declare function get_dollDynamicRules(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions, prendyStores: PrendyStores, prendyAssets: PrendyAssets): {
+export declare function get_dollDynamicRules(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions, prendyStores: PrendyStores, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;
@@ -12,7 +12,7 @@ export declare function get_dollDynamicRules(storeHelpers: PrendyStoreHelpers, p
     ruleNames: any[];
 };
 export declare function startDynamicDollRulesForInitialState<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(storeHelpers: PrendyStoreHelpers, dollDynamicRules: DollDynamicRules, dollNames: readonly DollName[]): () => void;
-export declare function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(prendyStartOptions: PrendyOptions, dollDynamicRules: DollDynamicRules, storeHelpers: PrendyStoreHelpers, prendyStores: PrendyStores, prendyAssets: PrendyAssets): {
+export declare function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(prendyOptions: PrendyOptions, dollDynamicRules: DollDynamicRules, storeHelpers: PrendyStoreHelpers, prendyStores: PrendyStores, prendyAssets: PrendyAssets): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

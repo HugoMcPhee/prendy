@@ -6,9 +6,9 @@ import miniBubbles from "./miniBubbles";
 import models from "./models";
 import places from "./places";
 import players from "./players";
-import stateVids from "./stateVids";
 import sliceVids from "./sliceVids";
 import speechBubbles from "./speechBubbles";
+import stateVids from "./stateVids";
 export const prendyStepNames = [
     // updating internal video states
     "stateVidStateUpdates",
@@ -44,22 +44,17 @@ export const prendyStepNames = [
     "rendering",
     "overlay", // = painting extra scenes to show ontop of everything
 ];
-// NOTE the generic types are used to prevent the typescript compiler widneing
-// [K_CharacterName in CharacterName] to [x: string]
-// or
-// Record<PlaceName, Something> to Record<string, Something>
-// it keeps the types generic , which is good since the types are updated from each project (declaration merging)
-export function makePrendyStores(prendyStartOptions, prendyAssets) {
+export function makePrendyStores(prendyOptions, prendyAssets) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(prendyAssets),
-        global: global(prendyStartOptions, prendyAssets),
+        global: global(prendyOptions, prendyAssets),
         models: models(prendyAssets),
         dolls: dolls(prendyAssets),
         characters: characters(prendyAssets),
-        players: players(prendyStartOptions),
+        players: players(prendyOptions),
         speechBubbles: speechBubbles(prendyAssets),
-        places: places(prendyAssets, prendyStartOptions),
+        places: places(prendyAssets, prendyOptions),
         stateVids: stateVids(prendyAssets),
         sliceVids: sliceVids(prendyAssets),
     };

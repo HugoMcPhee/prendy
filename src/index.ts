@@ -1,47 +1,13 @@
 import "@babylonjs/loaders";
-import {
-  AnimationNameByModel,
-  AnyAnimationName,
-  AnyCameraName,
-  AnySegmentName,
-  AnyTriggerName,
-  BoneNameByModel,
-  CameraNameByPlace,
-  CharacterName,
-  CharacterOptions,
-  DollName,
-  DollOptions,
-  MeshNameByModel,
-  ModelInfoByName,
-  ModelName,
-  MusicFiles,
-  MusicName,
-  PickupName,
-  PlaceInfoByName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SegmentNameByPlace,
-  SoundFiles,
-  SoundName,
-  SpotNameByPlace,
-  StoryPartName,
-  TriggerNameByPlace,
-  WallNameByPlace,
-} from "./declarations";
+import { MyTypes } from "./declarations";
 import { get_getSceneOrEngineUtils } from "./helpers/babylonjs/getSceneOrEngineUtils";
+import { point3dToVector3 } from "./helpers/babylonjs/vectors";
 import { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 import { get_setStoryState, makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 import { get_globalUtils } from "./helpers/prendyUtils/global";
 import { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
-import { Point2D } from "chootils/dist/points2d";
-import { PrendySaveState } from "./stores/global/global";
-import { point3dToVector3, vector3ToPoint3d } from "./helpers/babylonjs/vectors";
-import { Vector3 } from "@babylonjs/core";
-import delay from "delay";
 import { get_dollRules } from "./rules/dolls";
+import { PrendySaveState } from "./stores/global/global";
 export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
@@ -51,120 +17,45 @@ export { point3dToVector3, vector3ToPoint3d, vector3ToSafePoint3d } from "./help
 export { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 export { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
-export { makeStartPrendyRules, makeStartPrendyMainRules, makeStartAndStopRules } from "./rules/rules";
+export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
 
 export const definiedPrendyRules = {
   dolls: null as null | ReturnType<typeof get_dollRules>,
 };
 
-export function makeOtherUsefulPrendyUtils<A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers>(
-  storeHelpers: A_PrendyStoreHelpers
+export function makeOtherUsefulPrendyUtils<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
-  const setStoryState = get_setStoryState<A_PrendyStoreHelpers>(storeHelpers);
-  const { getGlobalState, setGlobalState } = get_globalUtils<A_PrendyStoreHelpers>(storeHelpers);
+  const setStoryState = get_setStoryState<T_MyTypes>(storeHelpers);
+  const { getGlobalState, setGlobalState } = get_globalUtils<T_MyTypes>(storeHelpers);
   const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
 
   return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
 }
 
-export function makePrendyHelpers<
-  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_AnyAnimationName extends AnyAnimationName = AnyAnimationName,
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
-  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
-  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_CharacterOptions extends CharacterOptions = CharacterOptions,
-  A_DollName extends DollName = DollName,
-  A_DollOptions extends DollOptions = DollOptions,
-  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
-  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
-  A_ModelName extends ModelName = ModelName,
-  A_MusicFiles extends MusicFiles = MusicFiles,
-  A_MusicName extends MusicName = MusicName,
-  A_PickupName extends PickupName = PickupName,
-  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
-  A_SoundFiles extends SoundFiles = SoundFiles,
-  A_SoundName extends SoundName = SoundName,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
-  A_StoryPartName extends StoryPartName = StoryPartName,
-  A_TriggerNameByPlace extends TriggerNameByPlace = TriggerNameByPlace,
-  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  prendyStores: A_PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  prendyAssets: A_PrendyAssets
+export function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyStores: T_MyTypes["Stores"],
+  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
+  prendyAssets: T_MyTypes["Assets"]
 ) {
-  const prendyStoryHelpers = makePrendyStoryHelpers<
-    A_AnimationNameByModel,
-    A_AnyAnimationName,
-    A_AnyCameraName,
-    A_AnySegmentName,
-    A_BoneNameByModel,
-    A_CameraNameByPlace,
-    A_CharacterName,
-    A_CharacterOptions,
-    A_DollName,
-    A_DollOptions,
-    A_MeshNameByModel,
-    A_ModelInfoByName,
-    A_ModelName,
-    A_MusicFiles,
-    A_MusicName,
-    A_PickupName,
-    A_PlaceInfoByName,
-    A_PlaceName,
-    A_PrendyAssets,
-    A_PrendyOptions,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SegmentNameByPlace,
-    A_SoundFiles,
-    A_SoundName,
-    A_SpotNameByPlace,
-    A_WallNameByPlace
-  >(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-  const allStoryRuleMakers = makeAllStoryRuleMakers<
-    A_AnyTriggerName,
-    A_CameraNameByPlace,
-    A_CharacterName,
-    A_DollName,
-    A_PickupName,
-    A_PlaceInfoByName,
-    A_PlaceName,
-    A_PrendyStoreHelpers,
-    A_StoryPartName,
-    A_TriggerNameByPlace
-  >(
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+
+  const prendyStoryHelpers = makePrendyStoryHelpers<T_MyTypes>(storeHelpers, prendyStores, prendyOptions, prendyAssets);
+
+  const allStoryRuleMakers = makeAllStoryRuleMakers<T_MyTypes>(
     storeHelpers,
-    prendyAssets.placeInfoByName as A_PlaceInfoByName,
-    prendyAssets.characterNames as A_CharacterName[],
-    prendyAssets.dollNames as A_DollName[]
+    prendyAssets.placeInfoByName,
+    prendyAssets.characterNames,
+    prendyAssets.dollNames
   );
 
   const otherPrendyUtils = {
-    ...makePrendyStoryUtils<
-      A_AnyCameraName,
-      A_AnySegmentName,
-      A_CameraNameByPlace,
-      A_CharacterName,
-      A_DollName,
-      A_PlaceName,
-      A_PrendyStoreHelpers,
-      A_PrendyStores,
-      A_SpotNameByPlace
-    >(storeHelpers, prendyStores),
-    ...makeOtherUsefulPrendyUtils<A_PrendyStoreHelpers>(storeHelpers),
+    ...makePrendyStoryUtils<T_MyTypes>(storeHelpers, prendyStores),
+    ...makeOtherUsefulPrendyUtils<T_MyTypes>(storeHelpers),
   };
 
   const { setGlobalState, getGlobalState } = otherPrendyUtils;
@@ -277,24 +168,24 @@ export function makePrendyHelpers<
     const placeWillChange = savedState.global.nowPlaceName !== getGlobalState().nowPlaceName;
     if (placeWillChange) {
       prendyStoryHelpers.scene.goToNewPlace({
-        toPlace: savedState.global.nowPlaceName as A_PlaceName,
-        toSegment: savedState.global.nowSegmentName as A_SegmentNameByPlace[A_PlaceName],
-        toCam: savedState.global.nowCamName as A_CameraNameByPlace[A_PlaceName],
+        toPlace: savedState.global.nowPlaceName as PlaceName,
+        toSegment: savedState.global.nowSegmentName as SegmentNameByPlace[PlaceName],
+        toCam: savedState.global.nowCamName as CameraNameByPlace[PlaceName],
       });
-      await otherPrendyUtils.waitForPlaceFullyLoaded(savedState.global.nowPlaceName as A_PlaceName);
+      await otherPrendyUtils.waitForPlaceFullyLoaded(savedState.global.nowPlaceName);
     } else {
       if (camWillChange && !placeWillChange) {
         storeHelpers.setState({
           global: { main: { goalCamName: savedState.global.nowCamName } },
         });
-        await otherPrendyUtils.waitForNowCamToChange(savedState.global.nowCamName as A_AnyCameraName);
+        await otherPrendyUtils.waitForNowCamToChange(savedState.global.nowCamName);
       }
     }
 
     // Set the doll positions manually, since setting the state will check for collisions
     Object.entries(savedState.dolls).forEach(([dollName, doll]) => {
-      prendyStoryHelpers.dolls.setDollPosition(dollName as A_DollName, point3dToVector3(doll.position));
-      prendyStoryHelpers.dolls.springDollRotationY(dollName as A_DollName, doll.rotationY);
+      prendyStoryHelpers.dolls.setDollPosition(dollName, point3dToVector3(doll.position));
+      prendyStoryHelpers.dolls.springDollRotationY(dollName, doll.rotationY);
     });
 
     // Set the store state to the saved state

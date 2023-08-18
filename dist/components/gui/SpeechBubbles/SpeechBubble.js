@@ -9,7 +9,7 @@ const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
-export function get_SpeechBubble(storeHelpers, prendyStartOptions, speechVidFiles) {
+export function get_SpeechBubble(storeHelpers, prendyOptions, speechVidFiles) {
     const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
     const globalRefs = getRefs().global.main;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);

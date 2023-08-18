@@ -14,7 +14,7 @@ const TRIANGLE_SIZE = 25;
 
 export function get_SpeechBubble(
   storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
+  prendyOptions: PrendyOptions,
   speechVidFiles: SpeechVidFiles
 ) {
   const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;

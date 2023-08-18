@@ -1,11 +1,10 @@
 import { Vector3 } from "@babylonjs/core";
-import { PlaceName, PrendyStoreHelpers, SpotNameByPlace } from "../../declarations";
+import { MyTypes } from "../../declarations";
 
-export function get_spotStoryUtils<
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(storeHelpers: A_PrendyStoreHelpers) {
+export function get_spotStoryUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type A_PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type A_SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+
   const { getRefs } = storeHelpers;
 
   function getSpotPosition<T_Place extends A_PlaceName>(place: T_Place, spot: A_SpotNameByPlace[T_Place]) {

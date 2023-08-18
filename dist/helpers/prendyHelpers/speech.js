@@ -14,7 +14,7 @@ const showSpeechRefs = {
 };
 // TODO might need to have it per character if other characts have mini bubbles
 const showMiniBubbleRefs = { closeTimeout: null };
-export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, _characterNames) {
+export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyOptions) {
     const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
@@ -61,7 +61,7 @@ export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
                 showSpeechRefs.originalZoomAmount = prevSlateZoom;
                 showSpeechRefs.aSpeechIsShowing = true;
             }
-            const newSlateZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyStartOptions.zoomLevels.max);
+            const newSlateZoom = Math.min(showSpeechRefs.originalZoomAmount * zoomAmount, prendyOptions.zoomLevels.max);
             onNextTick(() => {
                 setState({
                     speechBubbles: { [character]: { isVisible: true, goalText: text, stylesBySpecialText } },
@@ -81,7 +81,7 @@ export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyStartOp
                     focusedDoll: isFocusedOnTalkingCharacter ? playerDollName : currentFocusedDoll,
                     slateZoomGoal: returnToZoomBeforeConversation
                         ? showSpeechRefs.originalZoomAmount
-                        : prendyStartOptions.zoomLevels.default,
+                        : prendyOptions.zoomLevels.default,
                 });
             }
             function whenWaitingDone() {

@@ -12,6 +12,11 @@ fixes
 - (ios) large fonts can have overflow cut off
 - video can play through a bit extra on ios (only when first loading?)
 - (ios) support returning from sleep, video pauses and doesn't play again
+- video is blank white in iphone, but works on ipad
+
+v 0.9.13
+
+- Cleaned up types to use a single MyTypes type
 
 v 0.9.12
 

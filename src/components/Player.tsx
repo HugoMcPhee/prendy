@@ -1,67 +1,38 @@
 import { breakableForEach } from "chootils/dist/loops";
-import {
-  AnyCameraName,
-  AnySegmentName,
-  AnyTriggerName,
-  CameraNameByPlace,
-  CharacterName,
-  DollName,
-  PlaceInfoByName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SegmentNameByPlace,
-  SpotNameByPlace,
-  WallNameByPlace,
-} from "../declarations";
+import { MyTypes } from "../declarations";
 import { get_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 
-export function get_Player<
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_AnyTriggerName extends AnyTriggerName = AnyTriggerName,
-  A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_DollName extends DollName = DollName,
-  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace,
-  A_WallNameByPlace extends WallNameByPlace = WallNameByPlace
->(storeHelpers: A_PrendyStoreHelpers, prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
+export function get_Player<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
+  prendyAssets: T_MyTypes["Assets"]
+) {
+  type AnyTriggerName = T_MyTypes["Main"]["AnyTriggerName"];
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type PlaceInfoByName = T_MyTypes["Main"]["PlaceInfoByName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+  type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+
   const { placeInfoByName, characterNames } = prendyAssets;
 
-  type ToPlaceOption<T_PlaceName extends A_PlaceName> = {
+  type ToPlaceOption<T_PlaceName extends PlaceName> = {
     toPlace: T_PlaceName;
-    toSpot: A_SpotNameByPlace[T_PlaceName];
+    toSpot: SpotNameByPlace[T_PlaceName];
     // NOTE might be able to make this auto if the first spot is inside a cam collider?
-    toCam?: A_CameraNameByPlace[T_PlaceName];
-    toSegment?: A_SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
+    toCam?: CameraNameByPlace[T_PlaceName];
+    toSegment?: SegmentNameByPlace[T_PlaceName]; // could use nicer type like SegmentNameFromCamAndPlace,  or a new SegmentNameFromPlace?
   };
 
-  type DoorsInfoLoose = Partial<Record<A_PlaceName, Partial<Record<string, ToPlaceOption<A_PlaceName>>>>>;
+  type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
   const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-  const { goToNewPlace } = get_sceneStoryHelpers<
-    A_AnyCameraName,
-    A_AnySegmentName,
-    A_CameraNameByPlace,
-    A_CharacterName,
-    A_DollName,
-    A_PlaceInfoByName,
-    A_PlaceName,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SegmentNameByPlace,
-    A_SpotNameByPlace,
-    A_WallNameByPlace
-  >(storeHelpers, placeInfoByName as A_PlaceInfoByName, characterNames as A_CharacterName[]);
+  const { goToNewPlace } = get_sceneStoryHelpers<T_MyTypes>(
+    storeHelpers,
+    placeInfoByName as PlaceInfoByName,
+    characterNames as CharacterName[]
+  );
 
   type Props = {};
 
@@ -85,7 +56,7 @@ export function get_Player<
           // When starting on a trigger, mark when they have left the first trigger
           if (!hasLeftFirstTrigger) {
             let hasAnyCollision = false;
-            breakableForEach(placeInfoByName[nowPlaceName].triggerNames as A_AnyTriggerName[], (triggerName) => {
+            breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
               if (atTriggers[triggerName]) {
                 hasAnyCollision = true;
                 return true;
@@ -99,13 +70,11 @@ export function get_Player<
             // Check for going to new places at door triggers
 
             // TODO move to a rule
-            breakableForEach(placeInfoByName[nowPlaceName].triggerNames as A_AnyTriggerName[], (triggerName) => {
+            breakableForEach(placeInfoByName[nowPlaceName].triggerNames as AnyTriggerName[], (triggerName) => {
               if (atTriggers[triggerName]) {
-                const toOption = (prendyStartOptions.doorsInfo as DoorsInfoLoose)[nowPlaceName as A_PlaceName]?.[
-                  triggerName
-                ];
+                const toOption = (prendyOptions.doorsInfo as DoorsInfoLoose)[nowPlaceName as PlaceName]?.[triggerName];
                 if (toOption) {
-                  goToNewPlace(toOption, charName as A_CharacterName);
+                  goToNewPlace(toOption, charName as CharacterName);
                   return true; // break
                 }
               }

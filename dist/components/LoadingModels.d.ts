@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { AnyCameraName, AnySegmentName, AnyTriggerName, CameraNameByPlace, CharacterName, DollName, PlaceInfoByName, PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores, SegmentNameByPlace, SpotNameByPlace, WallNameByPlace } from "../declarations";
+import { MyTypes } from "../declarations";
 type Props = {
     children?: ReactNode;
 };
-export declare function get_LoadingModels<A_AnyCameraName extends AnyCameraName = AnyCameraName, A_AnySegmentName extends AnySegmentName = AnySegmentName, A_AnyTriggerName extends AnyTriggerName = AnyTriggerName, A_CameraNameByPlace extends CameraNameByPlace = CameraNameByPlace, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers, A_PrendyStores extends PrendyStores = PrendyStores, A_SegmentNameByPlace extends SegmentNameByPlace = SegmentNameByPlace, A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace, A_WallNameByPlace extends WallNameByPlace = WallNameByPlace>(storeHelpers: A_PrendyStoreHelpers, prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): ({ children }: Props) => JSX.Element;
+export declare function get_LoadingModels<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], prendyOptions: T_MyTypes["Main"]["PrendyOptions"], prendyAssets: T_MyTypes["Assets"]): ({ children }: Props) => JSX.Element;
 export {};

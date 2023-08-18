@@ -1,21 +1,20 @@
-import { CharacterName, PrendyAssets } from "../declarations";
+import { AssetsTypes, PrendyAssets, MyTypes } from "../declarations";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
 
-export default function miniBubbles<
-  A_CharacterName extends CharacterName = CharacterName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets
->(prendyAssets: A_PrendyAssets) {
+export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+
   const { characterNames, characterOptions } = prendyAssets;
 
   const state = <T_ItemName extends string>(
     _itemName: T_ItemName,
-    options?: { character?: A_CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
+    options?: { character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,
     isFullyHidden: true,
     text: "❕",
-    forCharacter: options?.character ?? ("walker" as A_CharacterName | null),
+    forCharacter: options?.character ?? ("walker" as CharacterName | null),
     position: defaultPosition(),
   });
 
@@ -26,12 +25,12 @@ export default function miniBubbles<
   });
 
   type MiniBubbleStartStates = {
-    [K_CharacterName in A_CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
   };
 
   function makeAutmaticCharacterMinibubbleStartStates() {
     const partialStates = {} as Partial<MiniBubbleStartStates>;
-    forEach(characterNames as A_CharacterName[], (characterName) => {
+    forEach(characterNames as CharacterName[], (characterName) => {
       partialStates[characterName] = state(characterName, {
         character: characterName,
       });

@@ -11,7 +11,7 @@ import {
 } from "../declarations";
 
 export function get_placeRules(
-  prendyStartOptions: PrendyOptions,
+  prendyOptions: PrendyOptions,
   storeHelpers: PrendyStoreHelpers,
   prendyStores: PrendyStores,
   prendyAssets: PrendyAssets

@@ -1,9 +1,9 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import get_globalStoreUtils from "./globalStoreUtils";
-export default function global(prendyStartOptions, prendyAssets) {
+export default function global(prendyOptions, prendyAssets) {
     const { musicNames, soundNames, placeInfoByName } = prendyAssets;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
-    const placeName = prendyStartOptions.place;
+    const placeName = prendyOptions.place;
     // State
     const state = () => {
         var _a, _b, _c, _d;
@@ -20,10 +20,10 @@ export default function global(prendyStartOptions, prendyAssets) {
             goalCamNameWhenVidPlays: null,
             goalCamNameAtLoop: null,
             goalCamName: null,
-            nowCamName: (_c = ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+            nowCamName: (_c = ((prendyOptions.place === placeName ? prendyOptions.camera : "") ||
                 ((_b = (_a = placeInfoByName === null || placeInfoByName === void 0 ? void 0 : placeInfoByName[placeName]) === null || _a === void 0 ? void 0 : _a.cameraNames) === null || _b === void 0 ? void 0 : _b[0]))) !== null && _c !== void 0 ? _c : "testItemCamName",
             // segments and slice video
-            nowSegmentName: prendyStartOptions.segment,
+            nowSegmentName: prendyOptions.segment,
             goalSegmentName: null,
             goalSegmentNameAtLoop: null,
             goalSegmentNameWhenVidPlays: null,
@@ -35,17 +35,17 @@ export default function global(prendyStartOptions, prendyAssets) {
             newPlaceProbesLoaded: false,
             //
             // player
-            playerCharacter: prendyStartOptions.playerCharacter,
+            playerCharacter: prendyOptions.playerCharacter,
             gravityValue: 5,
             playerMovingPaused: false,
-            focusedDoll: (_d = prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll) !== null && _d !== void 0 ? _d : "walker",
+            focusedDoll: (_d = prendyAssets.characterOptions[prendyOptions.playerCharacter].doll) !== null && _d !== void 0 ? _d : "walker",
             focusedDollIsInView: false,
             //
             // slate
             ...mover2dState("slatePos"),
             ...moverState("slateZoom", {
-                value: prendyStartOptions.zoomLevels.default,
-                valueGoal: prendyStartOptions.zoomLevels.default,
+                value: prendyOptions.zoomLevels.default,
+                valueGoal: prendyOptions.zoomLevels.default,
                 // springStopSpeed: 0.001, // NOTE not used in mover yet
             }),
             slatePosMoveConfigName: "default",
@@ -54,7 +54,7 @@ export default function global(prendyStartOptions, prendyAssets) {
             timeScreenResized: Date.now(),
             interactButtonPressTime: 0,
             // story
-            heldPickups: prendyStartOptions.heldPickups,
+            heldPickups: prendyOptions.heldPickups,
             storyOverlayToggled: false,
             alarmTextIsVisible: false,
             alarmText: "⚠ wobble detected ⚠",

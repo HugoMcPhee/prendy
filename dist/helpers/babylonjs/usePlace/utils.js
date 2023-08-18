@@ -11,10 +11,10 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
     // theVideo.preload = "auto";
     (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
 }
-export function get_usePlaceUtils(storeHelpers, prendyOptions, prendyAssets) {
+export function get_usePlaceUtils(prendyAssets, storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
-    const { placeInfoByName } = prendyAssets;
-    const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { placeInfoByName, prendyOptions } = prendyAssets;
+    const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(prendyAssets, storeHelpers);
     const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
     const placesRefs = getRefs().places;
     async function loadNowVideosForPlace() {

@@ -1,7 +1,8 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { get_getSceneOrEngineUtils } from "../babylonjs/getSceneOrEngineUtils";
-export function get_soundStoryHelpers(storeHelpers, musicNames, musicFiles, soundNames, soundFiles) {
+export function get_soundStoryHelpers(prendyAssets, storeHelpers) {
+    const { musicNames, musicFiles, soundNames, soundFiles } = prendyAssets;
     const { getRefs } = storeHelpers;
     const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
     const globalRefs = getRefs().global.main;

@@ -6,7 +6,7 @@ export declare function get_dollStoryUtils<T_MyTypes extends MyTypes = MyTypes>(
     get2DAngleBetweenDolls: (dollA: T_MyTypes["Main"]["DollName"], dollB: T_MyTypes["Main"]["DollName"]) => number;
 };
 export declare function enableCollisions(theMesh: AbstractMesh): void;
-export declare function get_dollUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], prendyOptions: T_MyTypes["Main"]["PrendyOptions"], prendyAssets: T_MyTypes["Assets"]): {
+export declare function get_dollUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     setDollAnimWeight: <T_DollName extends T_MyTypes["Main"]["DollName"], T_NewWeights extends Record<T_MyTypes["Main"]["AnimationNameByModel"][(T_MyTypes["Stores"]["dolls"]["startStates"] & ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["dolls"])[T_DollName]["modelName"]], number>>(dollName: T_DollName, newWeights: Partial<T_NewWeights>) => void;
     getQuickDistanceBetweenDolls: (dollA: T_MyTypes["Main"]["DollName"], dollB: T_MyTypes["Main"]["DollName"]) => number;
     inRangesAreTheSame: (inRangePropA: Record<T_MyTypes["Main"]["DollName"], InRangeForDoll>, inRangePropB: Record<T_MyTypes["Main"]["DollName"], InRangeForDoll>) => boolean;

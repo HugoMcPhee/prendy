@@ -5,16 +5,15 @@ import { get_globalSlateRules as get_globalSceneSlateRules } from "./slate";
 import { get_globalVideoRules } from "./video";
 
 export function get_startAllGlobalRules<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyAssets: T_MyTypes["Assets"],
   prendyStores: T_MyTypes["Stores"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   // making rules
-  const globalVideoRules = get_globalVideoRules(storeHelpers, prendyStores, prendyOptions, prendyAssets);
-  const globalChangePlaceRules = get_globalChangePlaceRules<T_MyTypes>(storeHelpers, prendyOptions, prendyAssets);
+  const globalVideoRules = get_globalVideoRules(prendyAssets, prendyStores, storeHelpers);
+  const globalChangePlaceRules = get_globalChangePlaceRules<T_MyTypes>(prendyAssets, storeHelpers);
   const globalGeneralRules = get_globalGeneralRules(storeHelpers);
-  const globalSlateRules = get_globalSceneSlateRules(storeHelpers, prendyOptions);
+  const globalSlateRules = get_globalSceneSlateRules(prendyAssets, storeHelpers);
 
   return function startAllGlobalRules() {
     globalVideoRules.startAll();

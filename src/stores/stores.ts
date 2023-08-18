@@ -49,20 +49,17 @@ export const prendyStepNames = [
 
 export type PrendyStepName = (typeof prendyStepNames)[number];
 
-export function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
-) {
+export function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   return {
     keyboards: keyboards(),
     miniBubbles: miniBubbles<T_MyTypes>(prendyAssets),
-    global: global<T_MyTypes>(prendyOptions, prendyAssets),
+    global: global<T_MyTypes>(prendyAssets),
     models: models<T_MyTypes>(prendyAssets),
     dolls: dolls<T_MyTypes>(prendyAssets),
     characters: characters<T_MyTypes>(prendyAssets),
-    players: players<T_MyTypes>(prendyOptions),
+    players: players<T_MyTypes>(prendyAssets),
     speechBubbles: speechBubbles<T_MyTypes>(prendyAssets),
-    places: places<T_MyTypes>(prendyAssets, prendyOptions),
+    places: places<T_MyTypes>(prendyAssets),
     stateVids: stateVids<T_MyTypes>(prendyAssets),
     sliceVids: sliceVids<T_MyTypes>(prendyAssets),
   };

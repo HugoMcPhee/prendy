@@ -5,7 +5,7 @@ import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngine
 
 // handle loading here ??
 
-export function get_modelRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
+export function get_modelRules(prendyAssets: PrendyAssets, storeHelpers: PrendyStoreHelpers) {
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
 

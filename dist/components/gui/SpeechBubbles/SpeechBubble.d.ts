@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { PrendyOptions, PrendyStoreHelpers, SpeechVidFiles } from "../../../declarations";
-export declare function get_SpeechBubble(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions, speechVidFiles: SpeechVidFiles): ({ name }: {
-    name: any;
+import { MyTypes } from "../../../declarations";
+export declare function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): ({ name }: {
+    name: keyof ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["speechBubbles"] & string;
 }) => JSX.Element;

@@ -5,22 +5,14 @@ import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_dollStoryHelpers } from "./dolls";
 
 export function get_characterStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  prendyStores: T_MyTypes["Stores"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  modelInfoByName: T_MyTypes["Main"]["ModelInfoByName"],
-  characterNames: readonly T_MyTypes["Main"]["CharacterName"][]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
   type CharacterName = T_MyTypes["Main"]["CharacterName"];
   type CharacterOptions = T_MyTypes["Main"]["CharacterOptions"];
   type DollName = T_MyTypes["Main"]["DollName"];
   type DollOptions = T_MyTypes["Main"]["DollOptions"];
-  type ModelInfoByName = T_MyTypes["Main"]["ModelInfoByName"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
-  type PrendyStores = T_MyTypes["Stores"];
-  type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
 
   type DollNameFromCharacter<T_CharacterName extends CharacterName> = CharacterOptions[T_CharacterName]["doll"];
 
@@ -33,10 +25,10 @@ export function get_characterStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
   type AnimationNameFromCharacter<T_CharacterName extends CharacterName> =
     AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
+  const { modelInfoByName, characterNames } = prendyAssets;
+
   const { getGlobalState } = get_globalUtils(storeHelpers);
-
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-
   const { get2DAngleBetweenCharacters } = get_characterStoryUtils<T_MyTypes>(storeHelpers);
 
   const {
@@ -46,7 +38,7 @@ export function get_characterStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
     setDollRotationY,
     springAddToDollRotationY,
     springDollRotationY,
-  } = get_dollStoryHelpers(storeHelpers, prendyOptions, modelInfoByName);
+  } = get_dollStoryHelpers(prendyAssets, storeHelpers);
 
   function setCharAnimation<T_Character extends CharacterName>(
     character: T_Character,

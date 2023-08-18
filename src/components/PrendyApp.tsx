@@ -13,7 +13,8 @@ import { get_ScreenGui } from "./gui/ScreenGui";
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
 export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(options: MakeStartRulesOptions<T_MyTypes>) {
-  const { storeHelpers, prendyOptions, prendyAssets } = options;
+  const { storeHelpers, prendyAssets } = options;
+  const { prendyOptions } = prendyAssets;
 
   loadStyles();
 
@@ -21,8 +22,8 @@ export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(options: Make
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
-  const ScreenGuiDom = get_ScreenGui(storeHelpers, prendyOptions, prendyAssets);
-  const LoadingModels = get_LoadingModels<T_MyTypes>(storeHelpers, prendyOptions, prendyAssets);
+  const ScreenGuiDom = get_ScreenGui(prendyAssets, storeHelpers);
+  const LoadingModels = get_LoadingModels<T_MyTypes>(prendyAssets, storeHelpers);
   const StartAndStopRules = makeStartAndStopRules<T_MyTypes>(options);
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);

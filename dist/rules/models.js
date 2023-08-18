@@ -2,7 +2,7 @@ import { SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 // handle loading here ??
-export function get_modelRules(storeHelpers, prendyAssets) {
+export function get_modelRules(prendyAssets, storeHelpers) {
     const { makeRules, setState, getRefs } = storeHelpers;
     const { modelInfoByName } = prendyAssets;
     const { getScene } = get_getSceneOrEngineUtils(storeHelpers);

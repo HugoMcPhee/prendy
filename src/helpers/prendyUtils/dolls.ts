@@ -119,9 +119,8 @@ export function enableCollisions(theMesh: AbstractMesh) {
 }
 
 export function get_dollUtils<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
   type DollName = T_MyTypes["Main"]["DollName"];
@@ -136,7 +135,7 @@ export function get_dollUtils<T_MyTypes extends MyTypes = MyTypes>(
     convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen,
     getPositionOnSlate: getPositionOnSlate,
     checkPointIsInsideSlate: checkPointIsInsideSlate,
-  } = get_slateUtils(storeHelpers, prendyOptions);
+  } = get_slateUtils(prendyAssets, storeHelpers);
 
   // type RepondState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof RepondState["dolls"];

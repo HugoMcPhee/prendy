@@ -119,6 +119,7 @@ export type PrendyAssets = {
   musicFiles: MusicFiles;
   soundFiles: SoundFiles;
   speechVidFiles: SpeechVidFiles;
+  prendyOptions: PrendyOptions;
 };
 
 // NOTE generic types are used to prevent the typescript compiler simplifying types

@@ -85,10 +85,7 @@ export type PrendySaveState = {
   storyState: Record<any, any>;
 };
 
-export default function global<T_MyTypes extends MyTypes = MyTypes>(
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
-) {
+export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
   type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
   type CharacterName = T_MyTypes["Main"]["CharacterName"];
@@ -97,9 +94,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(
   type PickupName = T_MyTypes["Main"]["PickupName"];
   type PlaceInfoByName = T_MyTypes["Main"]["PlaceInfoByName"];
   type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type PrendyOptions = T_MyTypes["Main"]["PrendyOptions"];
 
-  const { musicNames, soundNames, placeInfoByName } = prendyAssets;
+  const { musicNames, soundNames, placeInfoByName, prendyOptions } = prendyAssets;
 
   type MaybeSegmentName = null | AnySegmentName;
   type MaybeCam = null | AnyCameraName;

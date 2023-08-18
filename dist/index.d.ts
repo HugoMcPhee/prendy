@@ -28,7 +28,7 @@ export declare function makeOtherUsefulPrendyUtils<T_MyTypes extends MyTypes = M
     getScene: () => import("@babylonjs/core").Scene | null;
     getEngine: () => import("@babylonjs/core").Engine | null;
 };
-export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], prendyStores: T_MyTypes["Stores"], prendyOptions: T_MyTypes["Main"]["PrendyOptions"], prendyAssets: T_MyTypes["Assets"]): {
+export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], prendyStores: T_MyTypes["Stores"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     story: {
         characters: {
             setCharAnimation: <T_Character extends T_MyTypes["Main"]["CharacterName"]>(character: T_Character, animation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_MyTypes["Main"]["CharacterOptions"][T_Character]["doll"]]["model"]]) => void;

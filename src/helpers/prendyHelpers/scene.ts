@@ -7,9 +7,8 @@ import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
 import { get_spotStoryUtils } from "../prendyUtils/spots";
 
 export function get_sceneStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  placeInfoByName: T_MyTypes["Main"]["PlaceInfoByName"],
-  characterNames: readonly T_MyTypes["Main"]["CharacterName"][]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
   type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
@@ -22,6 +21,7 @@ export function get_sceneStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
   type WallNameByPlace = T_MyTypes["Main"]["WallNameByPlace"];
 
   const { getRefs, getState, onNextTick, setState } = storeHelpers;
+  const { placeInfoByName, characterNames } = prendyAssets;
 
   type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
     keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];

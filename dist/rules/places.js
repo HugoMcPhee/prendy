@@ -1,7 +1,7 @@
 import { forEach } from "chootils/dist/loops";
-export function get_placeRules(prendyOptions, storeHelpers, prendyStores, prendyAssets) {
+export function get_placeRules(prendyAssets, storeHelpers) {
     const { placeInfoByName } = prendyAssets;
-    const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
+    const { makeRules } = storeHelpers;
     return makeRules(({ itemEffect, effect }) => ({
         whenToggledWallsChanges: itemEffect({
             run({ newValue: toggledWalls, itemName: placeName, itemRefs }) {

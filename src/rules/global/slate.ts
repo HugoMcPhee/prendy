@@ -1,14 +1,17 @@
 import delay from "delay";
 import { makeRunMovers } from "repond-movers";
-import { PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 
-export function get_globalSlateRules(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions) {
+export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
   const { focusSlateOnFocusedDoll, getSlatePositionNotOverEdges, getShaderTransformStuff } = get_slateUtils(
-    storeHelpers,
-    prendyOptions
+    prendyAssets,
+    storeHelpers
   );
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState } = storeHelpers;

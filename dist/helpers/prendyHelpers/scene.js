@@ -3,8 +3,9 @@ import { get_characterStoryUtils, get_getCharDollStuff } from "../../helpers/pre
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sceneStoryUtils } from "../../helpers/prendyUtils/scene";
 import { get_spotStoryUtils } from "../prendyUtils/spots";
-export function get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames) {
+export function get_sceneStoryHelpers(prendyAssets, storeHelpers) {
     const { getRefs, getState, onNextTick, setState } = storeHelpers;
+    const { placeInfoByName, characterNames } = prendyAssets;
     const { setGlobalState } = get_globalUtils(storeHelpers);
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     const { get2DAngleFromCharacterToSpot } = get_characterStoryUtils(storeHelpers);

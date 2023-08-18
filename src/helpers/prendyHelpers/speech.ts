@@ -23,14 +23,15 @@ const showSpeechRefs = {
 const showMiniBubbleRefs = { closeTimeout: null as ReturnType<typeof setTimeout> | null };
 
 export function get_speechStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyAssets: T_MyTypes["Assets"],
   prendyStores: T_MyTypes["Stores"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"]
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type CharacterName = T_MyTypes["Main"]["CharacterName"];
   type PrendyStores = T_MyTypes["Stores"];
 
   const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
+  const { prendyOptions } = prendyAssets;
 
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 

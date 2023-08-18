@@ -23,13 +23,13 @@ export function get_getSliceVidWaitingVideo(storeHelpers) {
         return backdropVidRefs.videoElement;
     };
 }
-export function get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets) {
+export function get_sliceVidUtils(prendyAssets, storeHelpers) {
     const { getState, startItemEffect, stopEffect } = storeHelpers;
-    const { placeInfoByName } = prendyAssets;
+    const { placeInfoByName, prendyOptions } = prendyAssets;
     const { getGlobalState } = get_globalUtils(storeHelpers);
     const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
     const getSliceVidWaitingVideo = get_getSliceVidWaitingVideo(storeHelpers);
-    const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(prendyAssets, storeHelpers);
     // temporary rule, that gets removed when it finishes
     function doWhenSliceVidStateChanges(sliceVidId, checkShouldRun, callback) {
         const initialVidState = getState().sliceVids[sliceVidId].sliceVidState;

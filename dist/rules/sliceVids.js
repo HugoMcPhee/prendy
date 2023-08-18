@@ -4,16 +4,17 @@ import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 function numbersAreClose(a, b, range) {
     return Math.abs(a - b) < range;
 }
-export function get_sliceVidRules(storeHelpers, prendyOptions, prendyAssets) {
+export function get_sliceVidRules(prendyAssets, storeHelpers) {
     // safe Slice Stack Vid Rules
     const { getState, makeRules, setState } = storeHelpers;
-    const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
+    const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo } = get_sliceVidUtils(prendyAssets, storeHelpers);
     const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } = get_safeVidUtils(storeHelpers);
     return makeRules(({ itemEffect }) => ({
         rulesForSettingNewVideoStates: itemEffect({
             run({ newValue: vidState, itemName, itemState }) {
                 var _a;
                 const setItemState = (newState) => setState({ sliceVids: { [itemName]: newState } });
+                // NOTE TODO FIXME? any type while no stores are connected
                 const setVidState = (sliceVidState) => setItemState({ sliceVidState });
                 const { stateVidId_playing, stateVidId_waiting, nowSlice } = itemState;
                 if (!stateVidId_playing || !stateVidId_waiting)

@@ -1,7 +1,7 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import get_globalStoreUtils from "./globalStoreUtils";
-export default function global(prendyOptions, prendyAssets) {
-    const { musicNames, soundNames, placeInfoByName } = prendyAssets;
+export default function global(prendyAssets) {
+    const { musicNames, soundNames, placeInfoByName, prendyOptions } = prendyAssets;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
     const placeName = prendyOptions.place;
     // State

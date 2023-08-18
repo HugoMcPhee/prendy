@@ -1,6 +1,7 @@
 import {
   AnyCameraName,
   CameraNameByPlace,
+  MyTypes,
   PlaceName,
   PrendyAssets,
   PrendyOptions,
@@ -39,18 +40,17 @@ export function get_getSliceVidWaitingVideo(storeHelpers: PrendyStoreHelpers) {
   };
 }
 
-export function get_sliceVidUtils(
-  storeHelpers: PrendyStoreHelpers,
-  prendyOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_sliceVidUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
-  const { placeInfoByName } = prendyAssets;
+  const { placeInfoByName, prendyOptions } = prendyAssets;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
   const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
   const getSliceVidWaitingVideo = get_getSliceVidWaitingVideo(storeHelpers);
-  const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
+  const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(prendyAssets, storeHelpers);
 
   // temporary rule, that gets removed when it finishes
   function doWhenSliceVidStateChanges(

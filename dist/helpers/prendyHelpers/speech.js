@@ -14,8 +14,9 @@ const showSpeechRefs = {
 };
 // TODO might need to have it per character if other characts have mini bubbles
 const showMiniBubbleRefs = { closeTimeout: null };
-export function get_speechStoryHelpers(storeHelpers, prendyStores, prendyOptions) {
+export function get_speechStoryHelpers(prendyAssets, prendyStores, storeHelpers) {
     const { getState, onNextTick, setState, startItemEffect, stopEffect } = storeHelpers;
+    const { prendyOptions } = prendyAssets;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
     const { getTypingDelayForText } = get_speechBubblesUtils(storeHelpers, prendyStores);

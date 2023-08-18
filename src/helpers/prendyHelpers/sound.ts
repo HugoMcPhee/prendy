@@ -4,15 +4,13 @@ import { MusicFiles, MusicName, MyTypes, PrendyStoreHelpers, SoundFiles, SoundNa
 import { get_getSceneOrEngineUtils } from "../babylonjs/getSceneOrEngineUtils";
 
 export function get_soundStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  musicNames: readonly T_MyTypes["Main"]["MusicName"][],
-  musicFiles: T_MyTypes["Main"]["MusicFiles"],
-  soundNames: readonly T_MyTypes["Main"]["SoundName"][],
-  soundFiles: T_MyTypes["Main"]["SoundFiles"]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type MusicName = T_MyTypes["Main"]["MusicName"];
   type SoundName = T_MyTypes["Main"]["SoundName"];
 
+  const { musicNames, musicFiles, soundNames, soundFiles } = prendyAssets;
   const { getRefs } = storeHelpers;
   const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 

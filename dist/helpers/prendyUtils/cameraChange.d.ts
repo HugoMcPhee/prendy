@@ -1,15 +1,15 @@
-import { AnyCameraName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
-export declare function get_cameraChangeUtils(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+import { MyTypes } from "../../declarations";
+export declare function get_cameraChangeUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     getSafeCamName: {
-        (cam: AnyCameraName): AnyCameraName;
+        (cam: T_MyTypes["Main"]["AnyCameraName"]): T_MyTypes["Main"]["AnyCameraName"];
         (cam: null): null;
     };
-    getSafeSegmentName: <T_PlaceName extends string, T_CameraName extends string, T_SegmentName extends string>({ cam, place, segment, useStorySegmentRules, }: {
+    getSafeSegmentName: <T_PlaceName extends T_MyTypes["Main"]["PlaceName"], T_CameraName extends T_MyTypes["Main"]["AnyCameraName"], T_SegmentName extends T_MyTypes["Main"]["AnySegmentName"]>({ cam, place, segment, useStorySegmentRules, }: {
         place: T_PlaceName;
         cam: T_CameraName;
         segment: T_SegmentName;
         useStorySegmentRules?: boolean | undefined;
     }) => any;
-    updateTexturesForNowCamera: (newCameraName: AnyCameraName, didChangePlace?: boolean) => void;
+    updateTexturesForNowCamera: (newCameraName: T_MyTypes["Main"]["AnyCameraName"], didChangePlace?: boolean) => void;
     updateNowStuffWhenSliceChanged: () => void;
 };

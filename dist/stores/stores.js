@@ -44,17 +44,17 @@ export const prendyStepNames = [
     "rendering",
     "overlay", // = painting extra scenes to show ontop of everything
 ];
-export function makePrendyStores(prendyOptions, prendyAssets) {
+export function makePrendyStores(prendyAssets) {
     return {
         keyboards: keyboards(),
         miniBubbles: miniBubbles(prendyAssets),
-        global: global(prendyOptions, prendyAssets),
+        global: global(prendyAssets),
         models: models(prendyAssets),
         dolls: dolls(prendyAssets),
         characters: characters(prendyAssets),
-        players: players(prendyOptions),
+        players: players(prendyAssets),
         speechBubbles: speechBubbles(prendyAssets),
-        places: places(prendyAssets, prendyOptions),
+        places: places(prendyAssets),
         stateVids: stateVids(prendyAssets),
         sliceVids: sliceVids(prendyAssets),
     };

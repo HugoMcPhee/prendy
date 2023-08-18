@@ -1,32 +1,14 @@
 import { Space, Vector3 } from "@babylonjs/core";
-import { forEach } from "chootils/dist/loops";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import {
-  AnimationNameByModel,
-  BoneNameByModel,
-  CharacterName,
-  CharacterOptions,
-  DollName,
-  DollOptions,
-  MeshNameByModel,
-  ModelInfoByName,
-  ModelName,
-  MyTypes,
-  PlaceName,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SpotNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 import { vector3ToPoint3d } from "../babylonjs/vectors";
 
 export function get_dollStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  modelInfoByName: T_MyTypes["Main"]["ModelInfoByName"]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
   type BoneNameByModel = T_MyTypes["Main"]["BoneNameByModel"];
@@ -40,6 +22,7 @@ export function get_dollStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
   type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
 
   const { getRefs, getState, setState } = storeHelpers;
+  const { prendyOptions } = prendyAssets;
 
   type DollNameFromCharacter<T_CharacterName extends CharacterName> = CharacterOptions[T_CharacterName]["doll"];
 

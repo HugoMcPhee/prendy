@@ -35,16 +35,15 @@ export function makeOtherUsefulPrendyUtils<T_MyTypes extends MyTypes = MyTypes>(
 }
 
 export function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyAssets: T_MyTypes["Assets"],
   prendyStores: T_MyTypes["Stores"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
   type PlaceName = T_MyTypes["Main"]["PlaceName"];
   type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
 
-  const prendyStoryHelpers = makePrendyStoryHelpers<T_MyTypes>(storeHelpers, prendyStores, prendyOptions, prendyAssets);
+  const prendyStoryHelpers = makePrendyStoryHelpers<T_MyTypes>(prendyAssets, prendyStores, storeHelpers);
 
   const allStoryRuleMakers = makeAllStoryRuleMakers<T_MyTypes>(
     storeHelpers,

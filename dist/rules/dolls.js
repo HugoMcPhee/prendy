@@ -23,10 +23,11 @@ export const rangeOptionsQuick = {
     talk: rangeOptions.talk * rangeOptions.talk,
     see: rangeOptions.see * rangeOptions.see,
 };
-export function get_dollDynamicRules(storeHelpers, prendyOptions, prendyStores, prendyAssets) {
-    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(storeHelpers, prendyOptions, prendyAssets);
+export function get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers) {
+    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
     const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
-    return makeDynamicRules(({ itemEffect, effect }) => ({
+    const { prendyOptions } = prendyAssets;
+    return makeDynamicRules(({ itemEffect }) => ({
         waitForModelToLoad: itemEffect(({ dollName, modelName }) => ({
             run() {
                 saveModelStuffToDoll({ dollName, modelName });
@@ -38,7 +39,6 @@ export function get_dollDynamicRules(storeHelpers, prendyOptions, prendyStores, 
         // When the place and all characters are loaded
         whenWholePlaceFinishesLoading: itemEffect(({ dollName, modelName }) => ({
             run() {
-                const dollRefs = getRefs().dolls[dollName];
                 const modelRefs = getRefs().models[modelName];
                 if (modelRefs.materialRefs) {
                     forEach(modelRefs.materialRefs, (materialRef) => setupLightMaterial(materialRef));
@@ -84,13 +84,13 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
         });
     };
 }
-export function get_dollRules(prendyOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
-    const { modelInfoByName, dollNames } = prendyAssets;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(storeHelpers, prendyOptions, prendyAssets);
-    const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs, onNextTick } = storeHelpers;
+export function get_dollRules(dollDynamicRules, prendyAssets, storeHelpers) {
+    const { modelInfoByName, dollNames, prendyOptions } = prendyAssets;
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(prendyAssets, storeHelpers);
+    const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
+    const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
-    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
+    const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         // --------------------------------
         // loading model stuff
@@ -254,7 +254,7 @@ export function get_dollRules(prendyOptions, dollDynamicRules, storeHelpers, pre
         // ___________________________________
         // position
         whenPositionChangesToEdit: itemEffect({
-            run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName, itemState }) {
+            run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
                 if (!itemRefs.meshRef)
                     return;
                 if (itemRefs.canGoThroughWalls) {
@@ -425,8 +425,6 @@ export function get_dollRules(prendyOptions, dollDynamicRules, storeHelpers, pre
         }),
         whenIsVisibleChanges: itemEffect({
             run({ newValue: isVisible, itemName: dollName, itemRefs: dollRefs }) {
-                const modelName = getModelNameFromDoll(dollName);
-                const modelInfo = modelInfoByName[modelName];
                 if (!dollRefs.meshRef)
                     return console.warn("isVisible change: no mesh ref for", dollName);
                 if (dollName === "shoes") {

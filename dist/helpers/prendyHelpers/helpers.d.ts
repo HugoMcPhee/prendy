@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import { MyTypes } from "../../declarations";
-export declare function makePrendyStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], prendyStores: T_MyTypes["Stores"], prendyOptions: T_MyTypes["Main"]["PrendyOptions"], prendyAssets: T_MyTypes["Assets"]): {
+export declare function makePrendyStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], prendyStores: T_MyTypes["Stores"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     characters: {
         setCharAnimation: <T_Character extends T_MyTypes["Main"]["CharacterName"]>(character: T_Character, animation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_MyTypes["Main"]["CharacterOptions"][T_Character]["doll"]]["model"]]) => void;
         setCharPosition: (charName: T_MyTypes["Main"]["CharacterName"], newPosition: import("@babylonjs/core").Vector3) => void;

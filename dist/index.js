@@ -25,8 +25,8 @@ export function makeOtherUsefulPrendyUtils(storeHelpers) {
     const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
     return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
 }
-export function makePrendyHelpers(storeHelpers, prendyStores, prendyOptions, prendyAssets) {
-    const prendyStoryHelpers = makePrendyStoryHelpers(storeHelpers, prendyStores, prendyOptions, prendyAssets);
+export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
+    const prendyStoryHelpers = makePrendyStoryHelpers(prendyAssets, prendyStores, storeHelpers);
     const allStoryRuleMakers = makeAllStoryRuleMakers(storeHelpers, prendyAssets.placeInfoByName, prendyAssets.characterNames, prendyAssets.dollNames);
     const otherPrendyUtils = {
         ...makePrendyStoryUtils(storeHelpers, prendyStores),

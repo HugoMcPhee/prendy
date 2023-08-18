@@ -17,6 +17,7 @@ fixes
 v 0.9.13
 
 - Cleaned up types to use a single MyTypes type
+- added prendyOptions to prendyAssets so there's less options to pass around
 
 v 0.9.12
 

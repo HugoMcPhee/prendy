@@ -1,6 +1,6 @@
 import { Point3D } from "chootils/dist/points3d";
 import { MyTypes } from "../../declarations";
-export declare function get_sceneStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], placeInfoByName: T_MyTypes["Main"]["PlaceInfoByName"], characterNames: readonly T_MyTypes["Main"]["CharacterName"][]): {
+export declare function get_sceneStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     lookAtSpot: <T_Place extends T_MyTypes["Main"]["PlaceName"]>(place: T_Place, spot: T_MyTypes["Main"]["SpotNameByPlace"][T_Place], character?: T_MyTypes["Main"]["CharacterName"] | undefined) => void;
     hideWallIf: <T_Place_1 extends T_MyTypes["Main"]["PlaceName"], T_Wall extends T_MyTypes["Main"]["WallNameByPlace"][T_Place_1]>(placeName: T_Place_1, wallName: T_Wall, isDisabled: boolean) => void;
     showStoryView: (isVisible?: boolean) => Promise<void>;

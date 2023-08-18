@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { Point2D } from "chootils/dist/points2d";
 import { MyTypes } from "../declarations";
-export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyOptions: T_MyTypes["Main"]["PrendyOptions"]): {
+export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     startStates: {
         main: {
             lastSafeInputAngle: number | null;

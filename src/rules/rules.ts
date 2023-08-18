@@ -20,7 +20,6 @@ import { get_safeVidRules } from "./stateVids";
 export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
   storeHelpers: T_MyTypes["StoreHelpers"],
   prendyStores: T_MyTypes["Stores"],
-  PRENDY_OPTIONS: T_MyTypes["Main"]["PrendyOptions"],
   prendyAssets: T_MyTypes["Assets"]
 ) {
   const { dollNames, characterNames } = prendyAssets;
@@ -28,32 +27,25 @@ export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
   // making rules
 
   const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-  const startAllGlobalRules = get_startAllGlobalRules<T_MyTypes>(
-    storeHelpers,
-    prendyStores,
-    PRENDY_OPTIONS,
-    prendyAssets
-  );
+  const startAllGlobalRules = get_startAllGlobalRules<T_MyTypes>(prendyAssets, prendyStores, storeHelpers);
 
-  const modelRules = get_modelRules(storeHelpers, prendyAssets);
-  const playerRules = get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-  const dollDynamicRules = get_dollDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyStores, prendyAssets);
+  const modelRules = get_modelRules(prendyAssets, storeHelpers);
+  const playerRules = get_playerRules(prendyAssets, storeHelpers);
+  const dollDynamicRules = get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers);
   const dollRules = get_dollRules(
-    PRENDY_OPTIONS,
     dollDynamicRules as ReturnType<typeof get_dollDynamicRules>,
-    storeHelpers,
-    prendyStores,
-    prendyAssets
+    prendyAssets,
+    storeHelpers
   );
-  const placeRules = get_placeRules(PRENDY_OPTIONS, storeHelpers, prendyStores, prendyAssets);
+  const placeRules = get_placeRules(prendyAssets, storeHelpers);
   definiedPrendyRules.dolls = dollRules;
 
   const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = get_safeVidRules(storeHelpers);
-  const safeSliceVidRules = get_sliceVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
+  const safeSliceVidRules = get_sliceVidRules(prendyAssets, storeHelpers);
 
-  const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-  const characterRules = get_characterRules(storeHelpers, prendyAssets);
+  const characterDynamicRules = get_characterDynamicRules(prendyAssets, storeHelpers);
+  const characterRules = get_characterRules(prendyAssets, storeHelpers);
 
   const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState<
     ReturnType<typeof get_characterDynamicRules>
@@ -160,18 +152,16 @@ export type MakeStartRulesOptions<T_MyTypes extends MyTypes = MyTypes> = {
   customRules: SubscribableRules[];
   storeHelpers: T_MyTypes["StoreHelpers"];
   stores: T_MyTypes["Stores"];
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"];
   prendyAssets: T_MyTypes["Assets"];
 };
 
 export function makeStartPrendyRules<T_MyTypes extends MyTypes = MyTypes>({
   customRules,
-  prendyOptions,
   prendyAssets,
   stores,
   storeHelpers,
 }: MakeStartRulesOptions<T_MyTypes>) {
-  const startPrendyMainRules = makeStartPrendyMainRules<T_MyTypes>(storeHelpers, stores, prendyOptions, prendyAssets);
+  const startPrendyMainRules = makeStartPrendyMainRules<T_MyTypes>(storeHelpers, stores, prendyAssets);
   const startPrendyStoryRules = rulesToSubscriber(customRules);
   const startRules = combineSubscribers([startPrendyMainRules, startPrendyStoryRules]);
 

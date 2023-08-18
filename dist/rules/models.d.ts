@@ -1,5 +1,5 @@
 import { PrendyAssets, PrendyStoreHelpers } from "../declarations";
-export declare function get_modelRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets): {
+export declare function get_modelRules(prendyAssets: PrendyAssets, storeHelpers: PrendyStoreHelpers): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

@@ -1,9 +1,9 @@
-import { CameraNameByPlace, PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers, SegmentNameByPlace } from "../../declarations";
+import { CameraNameByPlace, MyTypes, PlaceName, PrendyStoreHelpers, SegmentNameByPlace } from "../../declarations";
 import { SliceVidState, VidSlice } from "../../stores/sliceVids";
 export declare const BEFORE_LOOP_PADDING = 0.05;
 export declare function get_getSliceVidVideo(storeHelpers: PrendyStoreHelpers): (itemName: PlaceName) => any;
 export declare function get_getSliceVidWaitingVideo(storeHelpers: PrendyStoreHelpers): (itemName: PlaceName) => any;
-export declare function get_sliceVidUtils(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+export declare function get_sliceVidUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     getSliceVidVideo: (itemName: string) => any;
     getSliceVidWaitingVideo: (itemName: string) => any;
     doWhenSliceVidPlayingAsync: (sliceVidId: PlaceName) => Promise<void>;

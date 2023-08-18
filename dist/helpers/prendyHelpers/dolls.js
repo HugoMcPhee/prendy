@@ -4,8 +4,9 @@ import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 import { vector3ToPoint3d } from "../babylonjs/vectors";
-export function get_dollStoryHelpers(storeHelpers, prendyOptions, modelInfoByName) {
+export function get_dollStoryHelpers(prendyAssets, storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
+    const { prendyOptions } = prendyAssets;
     const { setGlobalState } = get_globalUtils(storeHelpers);
     const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
     const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(storeHelpers);

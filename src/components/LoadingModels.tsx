@@ -7,15 +7,14 @@ import { get_Player } from "./Player";
 type Props = { children?: ReactNode };
 
 export function get_LoadingModels<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type PlaceName = T_MyTypes["Main"]["PlaceName"];
 
   const { useStore } = storeHelpers;
-  const Player = get_Player<T_MyTypes>(storeHelpers, prendyOptions, prendyAssets);
-  const usePlace = get_usePlace(storeHelpers, prendyOptions, prendyAssets);
+  const Player = get_Player<T_MyTypes>(prendyAssets, storeHelpers);
+  const usePlace = get_usePlace(prendyAssets, storeHelpers);
 
   function Place({ name }: { name: PlaceName }) {
     usePlace(name);

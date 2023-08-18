@@ -8,7 +8,7 @@ const defaultCamRefs = () => ({
     //
     isTriggerable: true,
 });
-export default function places(prendyAssets, prendyOptions) {
+export default function places(prendyAssets) {
     const { placeInfoByName } = prendyAssets;
     const placeNames = prendyAssets.placeNames;
     function makeToggledWallsState(placeName) {

@@ -7,7 +7,7 @@ declare const defaultCamRefs: () => {
     isTriggerable: boolean;
 };
 export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
-export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], prendyOptions: T_MyTypes["Main"]["PrendyOptions"]): {
+export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     startStates: { [K_PlaceName in T_MyTypes["Main"]["PlaceName"]]: {
         toggledWalls: Record<T_MyTypes["Main"]["WallNameByPlace"][K_PlaceName], boolean>;
     }; };

@@ -1,6 +1,6 @@
 import { AbstractMesh, CubeTexture, Sound, TargetCamera, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { AssetsTypes, MyTypes, PrendyAssets } from "../declarations";
+import { MyTypes } from "../declarations";
 
 const defaultCamRefs = () => ({
   camera: null as null | TargetCamera,
@@ -13,14 +13,9 @@ const defaultCamRefs = () => ({
 
 export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 
-export default function places<T_MyTypes extends MyTypes = MyTypes>(
-  prendyAssets: T_MyTypes["Assets"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"]
-) {
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
   type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type PrendyOptions = T_MyTypes["Main"]["PrendyOptions"];
   type SoundspotNameByPlace = T_MyTypes["Main"]["SoundspotNameByPlace"];
   type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
   type TriggerNameByPlace = T_MyTypes["Main"]["TriggerNameByPlace"];
@@ -28,8 +23,6 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(
 
   const { placeInfoByName } = prendyAssets;
   const placeNames = prendyAssets.placeNames as PlaceName[];
-
-  type MaybeCam<T_PlaceName extends PlaceName> = null | CameraNameByPlace[T_PlaceName];
 
   type SpotPositions<T_PlaceName extends PlaceName> = {
     [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
@@ -48,15 +41,6 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(
   };
   type CameraRefs<T_PlaceName extends PlaceName> = {
     [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
-  };
-
-  type PlaceState<K_PlaceName extends PlaceName> = {
-    toggledWalls: Record<K_PlaceName, boolean>;
-    // goalCamWhenNextPlaceLoads: MaybeCam<K_PlaceName>;
-    // goalCamNameWhenVidPlays: MaybeCam<K_PlaceName>;
-    // goalCamNameAtLoop: MaybeCam<K_PlaceName>;
-    // goalCamName: MaybeCam<K_PlaceName>;
-    // nowCamName: CameraNameByPlace[K_PlaceName];
   };
 
   function makeToggledWallsState<K_PlaceName extends PlaceName>(placeName: K_PlaceName) {

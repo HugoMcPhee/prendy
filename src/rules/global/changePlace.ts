@@ -12,33 +12,27 @@ import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 
 export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type DollName = T_MyTypes["Main"]["DollName"];
 
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-  const { placeInfoByName } = prendyAssets;
+  const { placeInfoByName, prendyOptions } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
-  const { getSliceVidVideo: getSliceVidVideo } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
+  const { getSliceVidVideo: getSliceVidVideo } = get_sliceVidUtils(prendyAssets, storeHelpers);
 
   const { updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
-    storeHelpers,
-    prendyOptions,
-    prendyAssets
+    prendyAssets,
+    storeHelpers
   );
 
-  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
+  const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-  const { setDollPosition, setDollRotation } = get_dollStoryHelpers(
-    storeHelpers,
-    prendyOptions,
-    prendyAssets.modelInfoByName
-  );
+  const { setDollPosition, setDollRotation } = get_dollStoryHelpers(prendyAssets, storeHelpers);
   const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<T_MyTypes>(storeHelpers);
 
   function setPlayerPositionForNewPlace() {

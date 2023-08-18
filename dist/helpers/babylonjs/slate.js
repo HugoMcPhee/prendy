@@ -9,8 +9,9 @@ export function getScreenSize() {
     return { x: window.innerWidth, y: window.innerHeight };
 }
 export const slateSize = { x: 1280, y: 720 };
-export function get_slateUtils(storeHelpers, prendyOptions) {
+export function get_slateUtils(prendyAssets, storeHelpers) {
     const { getRefs, getState, onNextTick } = storeHelpers;
+    const { prendyOptions } = prendyAssets;
     const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
     const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);
     const globalRefs = getRefs().global.main;

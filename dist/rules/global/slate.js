@@ -3,8 +3,8 @@ import { makeRunMovers } from "repond-movers";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
-export function get_globalSlateRules(storeHelpers, prendyOptions) {
-    const { focusSlateOnFocusedDoll, getSlatePositionNotOverEdges, getShaderTransformStuff } = get_slateUtils(storeHelpers, prendyOptions);
+export function get_globalSlateRules(prendyAssets, storeHelpers) {
+    const { focusSlateOnFocusedDoll, getSlatePositionNotOverEdges, getShaderTransformStuff } = get_slateUtils(prendyAssets, storeHelpers);
     const { setGlobalState } = get_globalUtils(storeHelpers);
     const { makeRules, getRefs, getState } = storeHelpers;
     const { runMover, runMover2d } = makeRunMovers(storeHelpers);

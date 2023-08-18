@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
-export declare function get_ScreenGui(storeHelpers: PrendyStoreHelpers, PRENDY_OPTIONS: PrendyOptions, prendyAssets: PrendyAssets): (_: {}) => JSX.Element;
+import { MyTypes } from "../../declarations";
+export declare function get_ScreenGui<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): (_: {}) => JSX.Element;

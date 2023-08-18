@@ -1,31 +1,26 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import {
-  AnyCameraName,
-  AnyTriggerName,
-  CharacterName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-} from "../declarations";
+import { MyTypes } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
 
-export function get_characterDynamicRules(
-  storeHelpers: PrendyStoreHelpers,
-  prendyOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_characterDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type AnyTriggerName = T_MyTypes["Main"]["AnyTriggerName"];
+
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyOptions);
+  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
 
   const refs = getRefs();
 
   const placesRefs = refs.places;
 
-  return makeDynamicRules(({ itemEffect, effect }) => ({
+  return makeDynamicRules(({ effect }) => ({
     whenPositionChanges: effect(
       ({
         characterName,
@@ -35,7 +30,7 @@ export function get_characterDynamicRules(
         dollName: string | any; // DollName
       }) => ({
         // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-        run({ itemRefs, newValue, previousValue }) {
+        run({ itemRefs }) {
           // console.log("prevItemState", other);
 
           // TODO
@@ -166,11 +161,12 @@ export function get_characterDynamicRules(
 // TODO add addOrRemovd rules for characters
 
 export function get_startDynamicCharacterRulesForInitialState<
-  CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>
+  CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>,
+  T_MyTypes extends MyTypes = MyTypes
 >(
   characterDynamicRules: CharacterDynamicRules,
-  characterNames: readonly CharacterName[],
-  storeHelpers: PrendyStoreHelpers
+  characterNames: readonly T_MyTypes["Main"]["CharacterName"][],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
@@ -189,11 +185,16 @@ export function get_startDynamicCharacterRulesForInitialState<
   };
 }
 
-export function get_characterRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
+export function get_characterRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+
   const { makeRules, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
-  return makeRules(({ itemEffect, effect }) => ({
+  return makeRules(({ itemEffect }) => ({
     whenAtCamCubes: itemEffect({
       run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
         const { playerCharacter } = getState().global.main;

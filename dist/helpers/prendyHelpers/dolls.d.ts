@@ -1,6 +1,6 @@
 import { Vector3 } from "@babylonjs/core";
 import { MyTypes } from "../../declarations";
-export declare function get_dollStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], prendyOptions: T_MyTypes["Main"]["PrendyOptions"], modelInfoByName: T_MyTypes["Main"]["ModelInfoByName"]): {
+export declare function get_dollStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     setDollPosition: (dollName: T_MyTypes["Main"]["DollName"], newPositon: Vector3) => void;
     setDollRotation: (dollName: T_MyTypes["Main"]["DollName"], newRotation: Vector3) => void;
     setDollRotationY: (dollName: T_MyTypes["Main"]["DollName"], newRotationY: number) => void;

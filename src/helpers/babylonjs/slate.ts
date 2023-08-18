@@ -3,7 +3,7 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { Point2D, copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-import { ModelName, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { ModelName, MyTypes, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
 import { get_globalUtils } from "../prendyUtils/global";
 import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
@@ -13,8 +13,12 @@ export function getScreenSize() {
 
 export const slateSize = { x: 1280, y: 720 };
 
-export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyOptions: PrendyOptions) {
+export function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
   const { getRefs, getState, onNextTick } = storeHelpers;
+  const { prendyOptions } = prendyAssets;
 
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);

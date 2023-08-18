@@ -10,17 +10,17 @@ import { get_StoryOverlay } from "./StoryOverlay";
 import { get_VirtualButtons } from "./VirtualButtons";
 import { get_VirtualStick } from "./VirtualStick";
 // import { get_ShowStates } from "./ShowStates";
-export function get_ScreenGui(storeHelpers, PRENDY_OPTIONS, prendyAssets) {
-    const { pickupsInfo, speechVidFiles, characterNames } = prendyAssets;
+export function get_ScreenGui(prendyAssets, storeHelpers) {
+    const { pickupsInfo, characterNames } = prendyAssets;
     const AlarmText = get_AlarmText(storeHelpers);
     const LoadingOverlay = get_LoadingOverlay(storeHelpers);
     const MiniBubble = get_MiniBubble(storeHelpers);
     const Pickups = get_Pickups(storeHelpers, pickupsInfo);
     const ScreenSticker = get_ScreenSticker(storeHelpers);
-    const SpeechBubble = get_SpeechBubble(storeHelpers, PRENDY_OPTIONS, speechVidFiles);
+    const SpeechBubble = get_SpeechBubble(prendyAssets, storeHelpers);
     const StoryOverlay = get_StoryOverlay(storeHelpers);
     const VirtualStick = get_VirtualStick(storeHelpers);
-    const VirtualButtons = get_VirtualButtons(storeHelpers, PRENDY_OPTIONS);
+    const VirtualButtons = get_VirtualButtons(prendyAssets, storeHelpers);
     return function ScreenGui(_) {
         return (React.createElement("div", { style: {
                 pointerEvents: "none",

@@ -1,4 +1,5 @@
-export default function players(prendyOptions) {
+export default function players(prendyAssets) {
+    const { prendyOptions } = prendyAssets;
     const state = () => ({
         // player input stuff
         lastSafeInputAngle: 0,

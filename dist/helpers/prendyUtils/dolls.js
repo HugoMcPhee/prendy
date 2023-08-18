@@ -91,10 +91,10 @@ export function enableCollisions(theMesh) {
     theMesh.useOctreeForCollisions = true;
     theMesh.rotationQuaternion = null; // allow euler rotation again
 }
-export function get_dollUtils(storeHelpers, prendyOptions, prendyAssets) {
+export function get_dollUtils(prendyAssets, storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
     const { dollNames, modelInfoByName } = prendyAssets;
-    const { convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen, getPositionOnSlate: getPositionOnSlate, checkPointIsInsideSlate: checkPointIsInsideSlate, } = get_slateUtils(storeHelpers, prendyOptions);
+    const { convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen, getPositionOnSlate: getPositionOnSlate, checkPointIsInsideSlate: checkPointIsInsideSlate, } = get_slateUtils(prendyAssets, storeHelpers);
     function setDollAnimWeight(dollName, newWeights) {
         setState({
             dolls: {

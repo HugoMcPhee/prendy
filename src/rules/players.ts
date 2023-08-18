@@ -26,13 +26,9 @@ const frontRayRelativeOrigin = new Vector3(
   // dollPosRefs.velocity.z * 0.1
 );
 
-export function get_playerRules(
-  storeHelpers: PrendyStoreHelpers,
-  PRENDY_OPTIONS: PrendyOptions,
-  prendyAssets: PrendyAssets
-) {
+export function get_playerRules(prendyAssets: PrendyAssets, storeHelpers: PrendyStoreHelpers) {
   const { getRefs, getState, makeRules, setState } = storeHelpers;
-  const { placeInfoByName } = prendyAssets;
+  const { placeInfoByName, prendyOptions } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
@@ -90,7 +86,7 @@ export function get_playerRules(
     }),
     whenJumpKeyPressed: itemEffect({
       run() {
-        if (!PRENDY_OPTIONS.hasJumping) return;
+        if (!prendyOptions.hasJumping) return;
         setState({ players: { main: { jumpButtonPressTime: Date.now() } } });
       },
       step: "input",
@@ -98,7 +94,7 @@ export function get_playerRules(
     }),
     whenJumpKeyReleased: itemEffect({
       run() {
-        if (!PRENDY_OPTIONS.hasJumping) return;
+        if (!prendyOptions.hasJumping) return;
         setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
       },
       step: "input",

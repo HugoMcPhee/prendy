@@ -3,9 +3,8 @@ import { MyTypes } from "../declarations";
 import { get_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
 
 export function get_Player<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  prendyOptions: T_MyTypes["Main"]["PrendyOptions"],
-  prendyAssets: T_MyTypes["Assets"]
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type AnyTriggerName = T_MyTypes["Main"]["AnyTriggerName"];
   type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
@@ -15,7 +14,7 @@ export function get_Player<T_MyTypes extends MyTypes = MyTypes>(
   type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
   type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
 
-  const { placeInfoByName, characterNames } = prendyAssets;
+  const { placeInfoByName, characterNames, prendyOptions } = prendyAssets;
 
   type ToPlaceOption<T_PlaceName extends PlaceName> = {
     toPlace: T_PlaceName;
@@ -28,11 +27,7 @@ export function get_Player<T_MyTypes extends MyTypes = MyTypes>(
   type DoorsInfoLoose = Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<PlaceName>>>>>;
 
   const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-  const { goToNewPlace } = get_sceneStoryHelpers<T_MyTypes>(
-    storeHelpers,
-    placeInfoByName as PlaceInfoByName,
-    characterNames as CharacterName[]
-  );
+  const { goToNewPlace } = get_sceneStoryHelpers<T_MyTypes>(prendyAssets, storeHelpers);
 
   type Props = {};
 

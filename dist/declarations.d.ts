@@ -101,6 +101,7 @@ export type PrendyAssets = {
     musicFiles: MusicFiles;
     soundFiles: SoundFiles;
     speechVidFiles: SpeechVidFiles;
+    prendyOptions: PrendyOptions;
 };
 export type MyTypes = {
     Main: AssetsTypes;

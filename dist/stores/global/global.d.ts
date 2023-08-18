@@ -59,7 +59,7 @@ export type PrendySaveState = {
     }>;
     storyState: Record<any, any>;
 };
-export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyOptions: T_MyTypes["Main"]["PrendyOptions"], prendyAssets: T_MyTypes["Assets"]): {
+export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     startStates: {
         main: {
             slatePosMoveConfigName: string;

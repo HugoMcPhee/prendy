@@ -5,7 +5,7 @@ import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
 import { get_getSliceVidVideo } from "./sliceVids";
-export function get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets) {
+export function get_cameraChangeUtils(prendyAssets, storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
     const { placeInfoByName, dollNames } = prendyAssets;
     const globalRefs = getRefs().global.main;
@@ -34,7 +34,9 @@ export function get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets)
         }
         const camSegmentNames = Object.keys((_a = segmentTimesByCamera === null || segmentTimesByCamera === void 0 ? void 0 : segmentTimesByCamera[safeCam]) !== null && _a !== void 0 ? _a : {});
         // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
-        const foundRuleSegmentName = useStorySegmentRules ? getSegmentFromStoryRules(safePlace, safeCam) : undefined;
+        const foundRuleSegmentName = useStorySegmentRules
+            ? getSegmentFromStoryRules(safePlace, safeCam)
+            : undefined;
         return chooseClosestBeforeItemInArray({
             fullArray: segmentNames,
             goalItem: foundRuleSegmentName !== null && foundRuleSegmentName !== void 0 ? foundRuleSegmentName : segment,

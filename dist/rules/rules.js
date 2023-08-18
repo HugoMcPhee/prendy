@@ -11,22 +11,22 @@ import { get_playerRules } from "./players";
 import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { get_safeVidRules } from "./stateVids";
-export function makeStartPrendyMainRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets) {
+export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAssets) {
     const { dollNames, characterNames } = prendyAssets;
     // making rules
     const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-    const startAllGlobalRules = get_startAllGlobalRules(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
-    const modelRules = get_modelRules(storeHelpers, prendyAssets);
-    const playerRules = get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-    const dollDynamicRules = get_dollDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyStores, prendyAssets);
-    const dollRules = get_dollRules(PRENDY_OPTIONS, dollDynamicRules, storeHelpers, prendyStores, prendyAssets);
-    const placeRules = get_placeRules(PRENDY_OPTIONS, storeHelpers, prendyStores, prendyAssets);
+    const startAllGlobalRules = get_startAllGlobalRules(prendyAssets, prendyStores, storeHelpers);
+    const modelRules = get_modelRules(prendyAssets, storeHelpers);
+    const playerRules = get_playerRules(prendyAssets, storeHelpers);
+    const dollDynamicRules = get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers);
+    const dollRules = get_dollRules(dollDynamicRules, prendyAssets, storeHelpers);
+    const placeRules = get_placeRules(prendyAssets, storeHelpers);
     definiedPrendyRules.dolls = dollRules;
     const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
     const safeVidRules = get_safeVidRules(storeHelpers);
-    const safeSliceVidRules = get_sliceVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-    const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-    const characterRules = get_characterRules(storeHelpers, prendyAssets);
+    const safeSliceVidRules = get_sliceVidRules(prendyAssets, storeHelpers);
+    const characterDynamicRules = get_characterDynamicRules(prendyAssets, storeHelpers);
+    const characterRules = get_characterRules(prendyAssets, storeHelpers);
     const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers);
     function updateAppVisibility(event) {
         if (document.visibilityState === "visible") {
@@ -106,8 +106,8 @@ export function combineSubscribers(subscribers) {
         return () => unsubscribers.forEach((unsubscriber) => unsubscriber());
     };
 }
-export function makeStartPrendyRules({ customRules, prendyOptions, prendyAssets, stores, storeHelpers, }) {
-    const startPrendyMainRules = makeStartPrendyMainRules(storeHelpers, stores, prendyOptions, prendyAssets);
+export function makeStartPrendyRules({ customRules, prendyAssets, stores, storeHelpers, }) {
+    const startPrendyMainRules = makeStartPrendyMainRules(storeHelpers, stores, prendyAssets);
     const startPrendyStoryRules = rulesToSubscriber(customRules);
     const startRules = combineSubscribers([startPrendyMainRules, startPrendyStoryRules]);
     return startRules;

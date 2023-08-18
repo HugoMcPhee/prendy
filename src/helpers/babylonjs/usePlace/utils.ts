@@ -1,14 +1,7 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import {
-  CameraNameByPlace,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  SegmentNameByPlace,
-} from "../../../declarations";
+import { MyTypes } from "../../../declarations";
 import { get_sliceVidUtils } from "../../prendyUtils/sliceVids";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 
@@ -20,15 +13,18 @@ export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementT
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function get_usePlaceUtils(
-  storeHelpers: PrendyStoreHelpers,
-  prendyOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_usePlaceUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
-  const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName } = prendyAssets;
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
 
-  const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(storeHelpers, prendyOptions, prendyAssets);
+  const { getRefs, getState, setState } = storeHelpers;
+  const { placeInfoByName, prendyOptions } = prendyAssets;
+
+  const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(prendyAssets, storeHelpers);
 
   const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 

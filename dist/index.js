@@ -223,3 +223,8 @@ export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
         utils: { ...otherPrendyUtils, savePrendyState, loadPrendyState },
     };
 }
+export function getDefaultDollOptions(modelNames) {
+    const modelDollOptions = {};
+    modelNames.forEach((modelName) => (modelDollOptions[modelName] = { model: modelName }));
+    return modelDollOptions;
+}

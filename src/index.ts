@@ -284,3 +284,21 @@ export function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(
     utils: { ...otherPrendyUtils, savePrendyState, loadPrendyState },
   };
 }
+
+export function getDefaultDollOptions<T_ModelName extends string>(modelNames: readonly T_ModelName[]) {
+  type DollOption = { model: T_ModelName };
+  const modelDollOptions: Record<string, DollOption> = {};
+  modelNames.forEach((modelName) => (modelDollOptions[modelName] = { model: modelName }));
+  return modelDollOptions as { [K_ModelName in T_ModelName]: { model: K_ModelName } };
+}
+
+export type DollOptionLoose<T_ModelName extends string> = { model: T_ModelName };
+// export type DollOptionsLoose<T_ModelName extends string> = {
+//   [K_ModelName in T_ModelName]: DollOptionLoose<K_ModelName>;
+// };
+export type DollOptionsLoose<T_ModelName extends string> = Record<string, DollOptionLoose<T_ModelName>>;
+
+export type CharacterOptionLoose<T_DollName extends string, T_FontName extends string> = Record<
+  string,
+  { doll: T_DollName; font: T_FontName }
+>;

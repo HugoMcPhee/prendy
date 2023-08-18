@@ -387,3 +387,14 @@ export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(p
         get2DAngleBetweenCharacters: (charA: T_MyTypes["Main"]["CharacterName"], charB: T_MyTypes["Main"]["CharacterName"]) => number;
     };
 };
+export declare function getDefaultDollOptions<T_ModelName extends string>(modelNames: readonly T_ModelName[]): { [K_ModelName in T_ModelName]: {
+    model: K_ModelName;
+}; };
+export type DollOptionLoose<T_ModelName extends string> = {
+    model: T_ModelName;
+};
+export type DollOptionsLoose<T_ModelName extends string> = Record<string, DollOptionLoose<T_ModelName>>;
+export type CharacterOptionLoose<T_DollName extends string, T_FontName extends string> = Record<string, {
+    doll: T_DollName;
+    font: T_FontName;
+}>;

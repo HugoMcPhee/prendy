@@ -18,6 +18,7 @@ v 0.9.13
 
 - Cleaned up types to use a single MyTypes type
 - added prendyOptions to prendyAssets so there's less options to pass around
+- added helper and types for defining dolls and characters
 
 v 0.9.12
 

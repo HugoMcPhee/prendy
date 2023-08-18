@@ -1,16 +1,21 @@
 // @refresh-reset
 import React from "react";
-import { PickupName, PickupsInfo, PrendyStoreHelpers } from "../../../declarations";
+import { MyTypes } from "../../../declarations";
 import { get_PickupButton } from "./PickupButton";
 
-export function get_Pickups(storeHelpers: PrendyStoreHelpers, pickupsInfo: PickupsInfo) {
+export function get_Pickups<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type PickupName = T_MyTypes["Main"]["PickupName"];
+
   const { getRefs, useStore } = storeHelpers;
 
   const globalRefs = getRefs().global.main;
 
   type Props = {};
 
-  const PickupButton = get_PickupButton(storeHelpers, pickupsInfo);
+  const PickupButton = get_PickupButton(prendyAssets, storeHelpers);
 
   return function Pickups(_props: Props) {
     // const buttonsHolderRef = useRef<StackPanel>(null);

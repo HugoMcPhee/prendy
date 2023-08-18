@@ -1,6 +1,6 @@
 import delay from "delay";
 import { makeRunMovers } from "repond-movers";
-import { MyTypes, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";

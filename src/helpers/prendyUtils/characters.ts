@@ -1,22 +1,22 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { CharacterName, MyTypes, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_dollStoryUtils } from "./dolls";
 
 export function get_characterStoryUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
-  type A_CharacterName = T_MyTypes["Main"]["CharacterName"];
-  type A_DollName = T_MyTypes["Main"]["DollName"];
-  type A_PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type A_PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
-  type A_PrendyStores = T_MyTypes["Stores"];
-  type A_SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type PrendyStores = T_MyTypes["Stores"];
+  type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
 
   const { getState } = storeHelpers;
   const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<T_MyTypes>(storeHelpers);
 
-  function get2DAngleFromCharacterToSpot<T_Place extends A_PlaceName>(
-    character: A_CharacterName,
+  function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
+    character: CharacterName,
     place: T_Place,
-    spot: A_SpotNameByPlace[T_Place]
+    spot: SpotNameByPlace[T_Place]
   ) {
     const charactersState = getState().characters;
     const dollA = charactersState[character].dollName;
@@ -24,7 +24,7 @@ export function get_characterStoryUtils<T_MyTypes extends MyTypes = MyTypes>(sto
     return get2DAngleFromDollToSpot(dollA, place, spot);
   }
 
-  function get2DAngleBetweenCharacters(charA: A_CharacterName, charB: A_CharacterName) {
+  function get2DAngleBetweenCharacters(charA: CharacterName, charB: CharacterName) {
     const charactersState = getState().characters;
     const dollA = charactersState[charA].dollName;
     const dollB = charactersState[charB].dollName;
@@ -37,17 +37,17 @@ export function get_characterStoryUtils<T_MyTypes extends MyTypes = MyTypes>(sto
   return { get2DAngleFromCharacterToSpot, get2DAngleBetweenCharacters };
 }
 
-export function get_getCharDollStuff<
-  A_CharacterName extends CharacterName = CharacterName,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers
->(storeHelpers: A_PrendyStoreHelpers) {
+export function get_getCharDollStuff<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+
   const { getRefs, getState } = storeHelpers;
 
   // NOTE could have character start options as a type to get accurate return types
-  type DollStates = ReturnType<A_PrendyStoreHelpers["getState"]>["dolls"];
-  type DollRefs = ReturnType<A_PrendyStoreHelpers["getRefs"]>["dolls"];
+  type DollStates = ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
+  type DollRefs = ReturnType<PrendyStoreHelpers["getRefs"]>["dolls"];
 
-  return function getCharDollStuff<T_CharacterName extends A_CharacterName>(charName: T_CharacterName) {
+  return function getCharDollStuff<T_CharacterName extends CharacterName>(charName: T_CharacterName) {
     const { dollName } = getState().characters[charName];
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];

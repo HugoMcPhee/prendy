@@ -1,6 +1,6 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { AnyCameraName, MyTypes, PlaceName } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
@@ -16,6 +16,8 @@ export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
   storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
   type DollName = T_MyTypes["Main"]["DollName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
 
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { placeInfoByName, prendyOptions } = prendyAssets;

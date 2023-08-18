@@ -15,7 +15,7 @@ export function get_ScreenGui(prendyAssets, storeHelpers) {
     const AlarmText = get_AlarmText(storeHelpers);
     const LoadingOverlay = get_LoadingOverlay(storeHelpers);
     const MiniBubble = get_MiniBubble(storeHelpers);
-    const Pickups = get_Pickups(storeHelpers, pickupsInfo);
+    const Pickups = get_Pickups(prendyAssets, storeHelpers);
     const ScreenSticker = get_ScreenSticker(storeHelpers);
     const SpeechBubble = get_SpeechBubble(prendyAssets, storeHelpers);
     const StoryOverlay = get_StoryOverlay(storeHelpers);

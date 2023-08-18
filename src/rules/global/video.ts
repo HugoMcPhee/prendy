@@ -1,25 +1,21 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
-import {
-  AnyCameraName,
-  AnySegmentName,
-  CameraNameByPlace,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SegmentNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_speechStoryHelpers } from "../../helpers/prendyHelpers/speech";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { VidSlice } from "../../stores/sliceVids";
 
-export function get_globalVideoRules(
-  prendyAssets: PrendyAssets,
-  prendyStores: PrendyStores,
-  storeHelpers: PrendyStoreHelpers
+export function get_globalVideoRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  prendyStores: T_MyTypes["Stores"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
+
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
 
   const {

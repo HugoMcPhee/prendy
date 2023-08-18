@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { PickupsInfo, PrendyStoreHelpers } from "../../../declarations";
-export declare function get_Pickups(storeHelpers: PrendyStoreHelpers, pickupsInfo: PickupsInfo): (_props: {}) => JSX.Element;
+import { MyTypes } from "../../../declarations";
+export declare function get_Pickups<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): (_props: {}) => JSX.Element;

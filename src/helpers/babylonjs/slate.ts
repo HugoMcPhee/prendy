@@ -3,7 +3,7 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { Point2D, copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-import { ModelName, MyTypes, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_globalUtils } from "../prendyUtils/global";
 import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
@@ -17,6 +17,8 @@ export function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
   storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+
   const { getRefs, getState, onNextTick } = storeHelpers;
   const { prendyOptions } = prendyAssets;
 

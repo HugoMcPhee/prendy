@@ -1,6 +1,4 @@
-import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyStoreHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
-declare const _default: "default";
-export default _default;
+import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyOptionsUntyped, PrendyStoreHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
 export interface AssetsTypesUntyped {
     PrendyOptions: PrendyOptionsUntyped;
     PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
@@ -50,58 +48,23 @@ export interface PrendyStoreHelpers extends Omit<PrendyStoreHelpersUntyped, keyo
 }
 export interface PrendyStores extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {
 }
-export type PrendyOptions = AssetsTypes["PrendyOptions"];
-export type PlaceInfoByName = AssetsTypes["PlaceInfoByName"];
-export type ModelInfoByName = AssetsTypes["ModelInfoByName"];
-export type DollOptions = AssetsTypes["DollOptions"];
-export type CharacterOptions = AssetsTypes["CharacterOptions"];
-export type ModelName = AssetsTypes["ModelName"];
-export type DollName = AssetsTypes["DollName"];
-export type CharacterName = AssetsTypes["CharacterName"];
-export type AnyCameraName = AssetsTypes["AnyCameraName"];
-export type AnySegmentName = AssetsTypes["AnySegmentName"];
-export type AnySpotName = AssetsTypes["AnySpotName"];
-export type AnyTriggerName = AssetsTypes["AnyTriggerName"];
-export type PlaceName = AssetsTypes["PlaceName"];
-export type PickupName = AssetsTypes["PickupName"];
-export type AnyAnimationName = AssetsTypes["AnyAnimationName"];
-export type SoundName = AssetsTypes["SoundName"];
-export type MusicName = AssetsTypes["MusicName"];
-export type FontName = AssetsTypes["FontName"];
-export type SpeechVidName = AssetsTypes["SpeechVidName"];
-export type StoryPartName = AssetsTypes["StoryPartName"];
-export type CameraNameByPlace = AssetsTypes["CameraNameByPlace"];
-export type SoundspotNameByPlace = AssetsTypes["SoundspotNameByPlace"];
-export type SpotNameByPlace = AssetsTypes["SpotNameByPlace"];
-export type TriggerNameByPlace = AssetsTypes["TriggerNameByPlace"];
-export type WallNameByPlace = AssetsTypes["WallNameByPlace"];
-export type AnimationNameByModel = AssetsTypes["AnimationNameByModel"];
-export type BoneNameByModel = AssetsTypes["BoneNameByModel"];
-export type MaterialNameByModel = AssetsTypes["MaterialNameByModel"];
-export type MeshNameByModel = AssetsTypes["MeshNameByModel"];
-export type ModelNamesByPlaceLoose = AssetsTypes["ModelNamesByPlaceLoose"];
-export type SegmentNameByPlace = AssetsTypes["SegmentNameByPlace"];
-export type MusicFiles = AssetsTypes["MusicFiles"];
-export type SoundFiles = AssetsTypes["SoundFiles"];
-export type SpeechVidFiles = AssetsTypes["SpeechVidFiles"];
-export type PickupsInfo = AssetsTypes["PickupsInfo"];
 export type PrendyAssets = {
-    placeInfoByName: PlaceInfoByName;
-    modelInfoByName: ModelInfoByName;
-    dollOptions: DollOptions;
-    characterOptions: CharacterOptions;
-    placeNames: readonly PlaceName[];
-    modelNames: readonly ModelName[];
-    dollNames: readonly DollName[];
-    characterNames: readonly CharacterName[];
-    musicNames: readonly MusicName[];
-    soundNames: readonly SoundName[];
-    fontNames: readonly FontName[];
-    pickupsInfo: PickupsInfo;
-    musicFiles: MusicFiles;
-    soundFiles: SoundFiles;
-    speechVidFiles: SpeechVidFiles;
-    prendyOptions: PrendyOptions;
+    placeInfoByName: AssetsTypes["PlaceInfoByName"];
+    modelInfoByName: AssetsTypes["ModelInfoByName"];
+    dollOptions: AssetsTypes["DollOptions"];
+    characterOptions: AssetsTypes["CharacterOptions"];
+    placeNames: readonly AssetsTypes["PlaceName"][];
+    modelNames: readonly AssetsTypes["ModelName"][];
+    dollNames: readonly AssetsTypes["DollName"][];
+    characterNames: readonly AssetsTypes["CharacterName"][];
+    musicNames: readonly AssetsTypes["MusicName"][];
+    soundNames: readonly AssetsTypes["SoundName"][];
+    fontNames: readonly AssetsTypes["FontName"][];
+    pickupsInfo: AssetsTypes["PickupsInfo"];
+    musicFiles: AssetsTypes["MusicFiles"];
+    soundFiles: AssetsTypes["SoundFiles"];
+    speechVidFiles: AssetsTypes["SpeechVidFiles"];
+    prendyOptions: AssetsTypes["PrendyOptions"];
 };
 export type MyTypes = {
     Main: AssetsTypes;

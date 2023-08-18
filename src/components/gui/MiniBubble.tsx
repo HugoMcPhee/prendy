@@ -2,7 +2,7 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { CharacterName, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 
@@ -14,7 +14,10 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function get_MiniBubble(storeHelpers: PrendyStoreHelpers) {
+export function get_MiniBubble<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+
   const { useStoreEffect, useStore, getState } = storeHelpers;
 
   const getCharDollStuff = get_getCharDollStuff(storeHelpers);

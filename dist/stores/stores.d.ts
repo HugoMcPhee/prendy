@@ -264,13 +264,13 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
     };
     dolls: {
         startStates: { [K_DollName in T_MyTypes["Main"]["DollName"]]: {
-            toggledMeshes: Record<string, boolean>;
+            toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], boolean>;
             nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]];
             animationLoops: boolean;
-            inRange: Record<string, import("../helpers/prendyUtils/dolls").InRangeForDoll>;
+            inRange: Record<T_MyTypes["Main"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             isVisible: boolean;
-            animWeights: Record<string, number>;
-            animWeightsGoal: Record<string, number>;
+            animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], number>;
+            animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], number>;
             animWeightsIsMoving: boolean;
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
@@ -293,13 +293,13 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
         }; };
         state: <T_DollName extends string, T_ModelName_2 extends T_MyTypes["Main"]["ModelName"]>(_dollName: T_DollName, modelName?: T_ModelName_2 | undefined) => {
-            toggledMeshes: Record<string, boolean>;
+            toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_ModelName_2], boolean>;
             nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_2];
             animationLoops: boolean;
-            inRange: Record<string, import("../helpers/prendyUtils/dolls").InRangeForDoll>;
+            inRange: Record<T_MyTypes["Main"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             isVisible: boolean;
-            animWeights: Record<string, number>;
-            animWeightsGoal: Record<string, number>;
+            animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_2], number>;
+            animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_2], number>;
             animWeightsIsMoving: boolean;
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
@@ -322,13 +322,13 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
         };
         refs: <T_DollName_1 extends T_MyTypes["Main"]["DollName"], T_ModelName_3 extends T_MyTypes["Main"]["ModelName"]>(dollName: T_DollName_1, itemState: {
-            toggledMeshes: Record<string, boolean>;
+            toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], boolean>;
             nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]];
             animationLoops: boolean;
-            inRange: Record<string, import("../helpers/prendyUtils/dolls").InRangeForDoll>;
+            inRange: Record<T_MyTypes["Main"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             isVisible: boolean;
-            animWeights: Record<string, number>;
-            animWeightsGoal: Record<string, number>;
+            animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], number>;
+            animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], number>;
             animWeightsIsMoving: boolean;
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
@@ -395,7 +395,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
             };
             meshRef: import("@babylonjs/core").AbstractMesh | null;
-            otherMeshes: Record<string, import("@babylonjs/core").AbstractMesh | null>;
+            otherMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][NonNullable<T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]>], import("@babylonjs/core").AbstractMesh | null>;
             entriesRef: import("@babylonjs/core").InstantiatedEntries | null;
             aniGroupsRef: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_3], import("@babylonjs/core").AnimationGroup> | null;
             assetRefs: {

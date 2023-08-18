@@ -1,7 +1,7 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { CharacterName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../declarations";
+import { MyTypes } from "../declarations";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { clearTimeoutSafe } from "../helpers/utils";
@@ -26,7 +26,13 @@ const frontRayRelativeOrigin = new Vector3(
   // dollPosRefs.velocity.z * 0.1
 );
 
-export function get_playerRules(prendyAssets: PrendyAssets, storeHelpers: PrendyStoreHelpers) {
+export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+
   const { getRefs, getState, makeRules, setState } = storeHelpers;
   const { placeInfoByName, prendyOptions } = prendyAssets;
 

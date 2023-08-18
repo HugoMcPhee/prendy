@@ -3,19 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { defaultPosition as defaultPosition2d } from "chootils/dist/points2d";
 import { Point3D } from "chootils/dist/points3d";
 import { mover3dRefs, mover3dState, moverRefs, moverState } from "repond-movers";
-import {
-  AnimationNameByModel,
-  AnySpotName,
-  BoneNameByModel,
-  DollName,
-  DollOptions,
-  AssetsTypes,
-  MaterialNameByModel,
-  MeshNameByModel,
-  ModelName,
-  PrendyAssets,
-  MyTypes,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import get_dollStoreUtils from "./dollStoreUtils";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };

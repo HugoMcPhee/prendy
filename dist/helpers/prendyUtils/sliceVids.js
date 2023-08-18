@@ -25,7 +25,7 @@ export function get_getSliceVidWaitingVideo(storeHelpers) {
 }
 export function get_sliceVidUtils(prendyAssets, storeHelpers) {
     const { getState, startItemEffect, stopEffect } = storeHelpers;
-    const { placeInfoByName, prendyOptions } = prendyAssets;
+    const { placeInfoByName } = prendyAssets;
     const { getGlobalState } = get_globalUtils(storeHelpers);
     const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
     const getSliceVidWaitingVideo = get_getSliceVidWaitingVideo(storeHelpers);
@@ -79,7 +79,7 @@ export function get_sliceVidUtils(prendyAssets, storeHelpers) {
     }
     function checkIfVideoUnloading(placeName) {
         const itemState = getState().sliceVids[placeName];
-        const { nowSlice, sliceVidState } = itemState;
+        const { sliceVidState } = itemState;
         return sliceVidState === "unloaded" || sliceVidState === "waitingForUnload";
     }
     function checkIfVideoAlreadyChanging(placeName) {
@@ -96,7 +96,7 @@ export function get_sliceVidUtils(prendyAssets, storeHelpers) {
         var _a;
         // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
         const itemState = getState().sliceVids[placeName];
-        const { nowSlice, sliceVidState } = itemState;
+        const { nowSlice } = itemState;
         const backdropVid = getSliceVidVideo(placeName);
         if (checkIfVideoUnloading(placeName))
             return false;

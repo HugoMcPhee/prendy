@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { PrendyStoreHelpers } from "../../declarations";
-export declare function get_MiniBubble(storeHelpers: PrendyStoreHelpers): ({ name }: {
+import { MyTypes } from "../../declarations";
+export declare function get_MiniBubble<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]): ({ name }: {
     name: any;
 }) => JSX.Element;

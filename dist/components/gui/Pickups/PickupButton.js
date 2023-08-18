@@ -1,6 +1,7 @@
 // @refresh-reset
 import React, { useRef, useState } from "react";
-export function get_PickupButton(storeHelpers, pickupsInfo) {
+export function get_PickupButton(prendyAssets, storeHelpers) {
+    const { pickupsInfo } = prendyAssets;
     const { getRefs } = storeHelpers;
     const globalRefs = getRefs().global.main;
     return function PickupButton({ name }) {

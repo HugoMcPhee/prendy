@@ -1,10 +1,10 @@
 // @refresh-reset
 import React from "react";
 import { get_PickupButton } from "./PickupButton";
-export function get_Pickups(storeHelpers, pickupsInfo) {
+export function get_Pickups(prendyAssets, storeHelpers) {
     const { getRefs, useStore } = storeHelpers;
     const globalRefs = getRefs().global.main;
-    const PickupButton = get_PickupButton(storeHelpers, pickupsInfo);
+    const PickupButton = get_PickupButton(prendyAssets, storeHelpers);
     return function Pickups(_props) {
         // const buttonsHolderRef = useRef<StackPanel>(null);
         const { heldPickups } = useStore(({ global: { main } }) => main, {

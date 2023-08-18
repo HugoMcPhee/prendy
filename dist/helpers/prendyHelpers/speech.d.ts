@@ -1,10 +1,10 @@
 import { CSSProperties } from "react";
-import { CharacterName, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
-export declare function get_speechStoryHelpers<A_CharacterName extends CharacterName = CharacterName, A_PrendyOptions extends PrendyOptions = PrendyOptions, A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers, A_PrendyStores extends PrendyStores = PrendyStores>(storeHelpers: A_PrendyStoreHelpers, prendyStores: A_PrendyStores, prendyStartOptions: A_PrendyOptions, _characterNames: readonly A_CharacterName[]): {
+import { MyTypes } from "../../declarations";
+export declare function get_speechStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], prendyStores: T_MyTypes["Stores"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     showSpeech: (text: string, options?: {
         time?: number | undefined;
         showOnce?: boolean | undefined;
-        character?: (keyof A_PrendyStores["speechBubbles"]["startStates"] & A_CharacterName) | undefined;
+        character?: (keyof T_MyTypes["Stores"]["speechBubbles"]["startStates"] & T_MyTypes["Main"]["CharacterName"]) | undefined;
         zoomAmount?: number | undefined;
         lookAtPlayer?: boolean | undefined;
         returnToZoomBeforeConversation?: boolean | undefined;

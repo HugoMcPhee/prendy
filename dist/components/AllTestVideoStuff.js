@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { addLayout } from "../helpers/styles";
-export function get_AllTestVideoStuff(storeHelpers, placeNames) {
+export function get_AllTestVideoStuff(prendyAssets, storeHelpers) {
+    const { placeNames } = prendyAssets;
     const { useStore, useStoreItemPropsEffect } = storeHelpers;
     function TestVideos({ placeName }) {
         const mainRef = useRef(null);

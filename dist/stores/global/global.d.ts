@@ -1,9 +1,8 @@
 /// <reference types="node" />
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
-import { AnyCameraName, AnySegmentName, CharacterName, DollName, ModelName, PickupName, PlaceInfoByName, PlaceName, PrendyAssets, PrendyOptions } from "../../declarations";
-import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { Point2D } from "chootils/dist/points2d";
 import { Point3D } from "chootils/dist/points3d";
+import { MyTypes } from "../../declarations";
+import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { InRangeForDoll } from "../../helpers/prendyUtils/dolls";
 export type PrendySaveState = {
     global: {
@@ -60,13 +59,13 @@ export type PrendySaveState = {
     }>;
     storyState: Record<any, any>;
 };
-export default function global<A_AnyCameraName extends AnyCameraName = AnyCameraName, A_AnySegmentName extends AnySegmentName = AnySegmentName, A_CharacterName extends CharacterName = CharacterName, A_DollName extends DollName = DollName, A_ModelName extends ModelName = ModelName, A_PickupName extends PickupName = PickupName, A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName, A_PlaceName extends PlaceName = PlaceName, A_PrendyAssets extends PrendyAssets = PrendyAssets, A_PrendyOptions extends PrendyOptions = PrendyOptions>(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets): {
+export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     startStates: {
         main: {
             slatePosMoveConfigName: string;
             timeScreenResized: number;
             interactButtonPressTime: number;
-            heldPickups: A_PickupName[];
+            heldPickups: T_MyTypes["Main"]["PickupName"][];
             storyOverlayToggled: boolean;
             alarmTextIsVisible: boolean;
             alarmText: string;
@@ -83,32 +82,32 @@ export default function global<A_AnyCameraName extends AnyCameraName = AnyCamera
             slateZoomMoveMode: import("repond-movers/dist/types").MoveMode;
             slateZoomMoveConfigName: string;
             slateZoomMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-            slatePos: Point2D;
-            slatePosGoal: Point2D;
+            slatePos: import("chootils/dist/points2d").Point2D;
+            slatePosGoal: import("chootils/dist/points2d").Point2D;
             slatePosIsMoving: boolean;
             slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
             slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-            nowPlaceName: A_PlaceName;
-            goalPlaceName: A_PlaceName | null;
+            nowPlaceName: T_MyTypes["Main"]["PlaceName"];
+            goalPlaceName: T_MyTypes["Main"]["PlaceName"] | null;
             readyToSwapPlace: boolean;
             isLoadingBetweenPlaces: boolean;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
-            goalCamWhenNextPlaceLoads: A_AnyCameraName | null;
-            goalCamNameWhenVidPlays: A_AnyCameraName | null;
-            goalCamNameAtLoop: A_AnyCameraName | null;
-            goalCamName: A_AnyCameraName | null;
+            goalCamWhenNextPlaceLoads: T_MyTypes["Main"]["AnyCameraName"] | null;
+            goalCamNameWhenVidPlays: T_MyTypes["Main"]["AnyCameraName"] | null;
+            goalCamNameAtLoop: T_MyTypes["Main"]["AnyCameraName"] | null;
+            goalCamName: T_MyTypes["Main"]["AnyCameraName"] | null;
             nowCamName: string;
-            nowSegmentName: A_AnySegmentName;
-            goalSegmentName: A_AnySegmentName | null;
-            goalSegmentNameAtLoop: A_AnySegmentName | null;
-            goalSegmentNameWhenVidPlays: A_AnySegmentName | null;
-            goalSegmentWhenGoalPlaceLoads: A_AnySegmentName | null;
-            modelNamesLoaded: A_ModelName[];
+            nowSegmentName: T_MyTypes["Main"]["AnySegmentName"];
+            goalSegmentName: T_MyTypes["Main"]["AnySegmentName"] | null;
+            goalSegmentNameAtLoop: T_MyTypes["Main"]["AnySegmentName"] | null;
+            goalSegmentNameWhenVidPlays: T_MyTypes["Main"]["AnySegmentName"] | null;
+            goalSegmentWhenGoalPlaceLoads: T_MyTypes["Main"]["AnySegmentName"] | null;
+            modelNamesLoaded: T_MyTypes["Main"]["ModelName"][];
             newPlaceModelLoaded: boolean;
             newPlaceVideosLoaded: boolean;
             newPlaceProbesLoaded: boolean;
-            playerCharacter: A_CharacterName;
+            playerCharacter: T_MyTypes["Main"]["CharacterName"];
             gravityValue: number;
             playerMovingPaused: boolean;
             focusedDoll: any;
@@ -119,7 +118,7 @@ export default function global<A_AnyCameraName extends AnyCameraName = AnyCamera
         slatePosMoveConfigName: string;
         timeScreenResized: number;
         interactButtonPressTime: number;
-        heldPickups: A_PickupName[];
+        heldPickups: T_MyTypes["Main"]["PickupName"][];
         storyOverlayToggled: boolean;
         alarmTextIsVisible: boolean;
         alarmText: string;
@@ -136,32 +135,32 @@ export default function global<A_AnyCameraName extends AnyCameraName = AnyCamera
         slateZoomMoveMode: import("repond-movers/dist/types").MoveMode;
         slateZoomMoveConfigName: string;
         slateZoomMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        slatePos: Point2D;
-        slatePosGoal: Point2D;
+        slatePos: import("chootils/dist/points2d").Point2D;
+        slatePosGoal: import("chootils/dist/points2d").Point2D;
         slatePosIsMoving: boolean;
         slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
         slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        nowPlaceName: A_PlaceName;
-        goalPlaceName: A_PlaceName | null;
+        nowPlaceName: T_MyTypes["Main"]["PlaceName"];
+        goalPlaceName: T_MyTypes["Main"]["PlaceName"] | null;
         readyToSwapPlace: boolean;
         isLoadingBetweenPlaces: boolean;
         loadingOverlayToggled: boolean;
         loadingOverlayFullyShowing: boolean;
-        goalCamWhenNextPlaceLoads: A_AnyCameraName | null;
-        goalCamNameWhenVidPlays: A_AnyCameraName | null;
-        goalCamNameAtLoop: A_AnyCameraName | null;
-        goalCamName: A_AnyCameraName | null;
+        goalCamWhenNextPlaceLoads: T_MyTypes["Main"]["AnyCameraName"] | null;
+        goalCamNameWhenVidPlays: T_MyTypes["Main"]["AnyCameraName"] | null;
+        goalCamNameAtLoop: T_MyTypes["Main"]["AnyCameraName"] | null;
+        goalCamName: T_MyTypes["Main"]["AnyCameraName"] | null;
         nowCamName: string;
-        nowSegmentName: A_AnySegmentName;
-        goalSegmentName: A_AnySegmentName | null;
-        goalSegmentNameAtLoop: A_AnySegmentName | null;
-        goalSegmentNameWhenVidPlays: A_AnySegmentName | null;
-        goalSegmentWhenGoalPlaceLoads: A_AnySegmentName | null;
-        modelNamesLoaded: A_ModelName[];
+        nowSegmentName: T_MyTypes["Main"]["AnySegmentName"];
+        goalSegmentName: T_MyTypes["Main"]["AnySegmentName"] | null;
+        goalSegmentNameAtLoop: T_MyTypes["Main"]["AnySegmentName"] | null;
+        goalSegmentNameWhenVidPlays: T_MyTypes["Main"]["AnySegmentName"] | null;
+        goalSegmentWhenGoalPlaceLoads: T_MyTypes["Main"]["AnySegmentName"] | null;
+        modelNamesLoaded: T_MyTypes["Main"]["ModelName"][];
         newPlaceModelLoaded: boolean;
         newPlaceVideosLoaded: boolean;
         newPlaceProbesLoaded: boolean;
-        playerCharacter: A_CharacterName;
+        playerCharacter: T_MyTypes["Main"]["CharacterName"];
         gravityValue: number;
         playerMovingPaused: boolean;
         focusedDoll: any;
@@ -182,7 +181,7 @@ export default function global<A_AnyCameraName extends AnyCameraName = AnyCamera
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
         aConvoIsHappening_timeout: NodeJS.Timeout | null;
-        camSegmentRulesOptions: Partial<{ [P_PlaceName in A_PlaceName]: Partial<{ [P_CamName in keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof A_PlaceInfoByName[P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+        camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_CamName in keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         slateZoomMoverRefs: {
             velocity: number;
@@ -198,7 +197,7 @@ export default function global<A_AnyCameraName extends AnyCameraName = AnyCamera
             physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
         };
         slatePosMoverRefs: {
-            velocity: Point2D;
+            velocity: import("chootils/dist/points2d").Point2D;
             recentSpeeds: number[];
             averageSpeed: number;
             canRunOnSlow: boolean;

@@ -4,41 +4,30 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
-import {
-  AnimationNameByModel,
-  DollName,
-  ModelName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SpotNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_slateUtils } from "../babylonjs/slate";
 import { get_spotStoryUtils } from "./spots";
 
-export function get_dollStoryUtils<
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(storeHelpers: A_PrendyStoreHelpers) {
+export function get_dollStoryUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type PrendyStores = T_MyTypes["Stores"];
+  type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+
   const { getState } = storeHelpers;
-  const { getSpotPosition } = get_spotStoryUtils<A_PlaceName, A_PrendyStoreHelpers, A_SpotNameByPlace>(storeHelpers);
+  const { getSpotPosition } = get_spotStoryUtils<T_MyTypes>(storeHelpers);
 
-  type StartState_Dolls = NonNullable<A_PrendyStores["dolls"]["startStates"]>;
-  type ModelNameFromDoll<T_DollName extends A_DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
+  type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
+  type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
 
-  function getModelNameFromDoll<T_DollName extends A_DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
+  function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
     return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;
   }
 
-  function get2DAngleFromDollToSpot<T_Place extends A_PlaceName>(
-    dollA: A_DollName,
+  function get2DAngleFromDollToSpot<T_Place extends PlaceName>(
+    dollA: DollName,
     place: T_Place,
-    spot: A_SpotNameByPlace[T_Place]
+    spot: SpotNameByPlace[T_Place]
   ) {
     const spotPosition = getSpotPosition(place, spot);
 
@@ -50,7 +39,7 @@ export function get_dollStoryUtils<
     return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D)).angle;
   }
 
-  function get2DAngleBetweenDolls(dollA: A_DollName, dollB: A_DollName) {
+  function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName) {
     if (!dollA || !dollB) return 0;
 
     const dollAPos = getState().dolls[dollA].position;
@@ -129,20 +118,16 @@ export function enableCollisions(theMesh: AbstractMesh) {
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-export function get_dollUtils<
-  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_DollName extends DollName = DollName,
-  A_ModelName extends ModelName = ModelName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  _prendyStores: A_PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  prendyAssets: A_PrendyAssets
+export function get_dollUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type PrendyStores = T_MyTypes["Stores"];
+
   const { getRefs, getState, setState } = storeHelpers;
   const { dollNames, modelInfoByName } = prendyAssets;
 
@@ -150,7 +135,7 @@ export function get_dollUtils<
     convertPointOnSlateToPointOnScreen: convertPointOnSlateToPointOnScreen,
     getPositionOnSlate: getPositionOnSlate,
     checkPointIsInsideSlate: checkPointIsInsideSlate,
-  } = get_slateUtils(storeHelpers, prendyStartOptions);
+  } = get_slateUtils(prendyAssets, storeHelpers);
 
   // type RepondState = ReturnType<StoreHelpers["getState"]>;
   // type DollName = keyof RepondState["dolls"];
@@ -158,14 +143,13 @@ export function get_dollUtils<
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
   // type StartState_Dolls = typeof prendyStores.dolls.startStates;
 
-  type StartState_Dolls = A_PrendyStores["dolls"]["startStates"] &
-    ReturnType<A_PrendyStoreHelpers["getState"]>["dolls"];
+  type StartState_Dolls = PrendyStores["dolls"]["startStates"] & ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
 
-  type ModelNameFromDoll<T_DollName extends A_DollName> = StartState_Dolls[T_DollName]["modelName"];
+  type ModelNameFromDoll<T_DollName extends DollName> = StartState_Dolls[T_DollName]["modelName"];
 
   function setDollAnimWeight<
-    T_DollName extends A_DollName,
-    T_NewWeights extends Record<A_AnimationNameByModel[ModelNameFromDoll<T_DollName>], number>
+    T_DollName extends DollName,
+    T_NewWeights extends Record<AnimationNameByModel[ModelNameFromDoll<T_DollName>], number>
   >(dollName: T_DollName, newWeights: Partial<T_NewWeights>) {
     setState({
       dolls: {
@@ -179,7 +163,7 @@ export function get_dollUtils<
     });
   }
 
-  function getQuickDistanceBetweenDolls(dollA: A_DollName, dollB: A_DollName) {
+  function getQuickDistanceBetweenDolls(dollA: DollName, dollB: DollName) {
     const dollPositonA = getState().dolls[dollA].position;
     const dollPositonB = getState().dolls[dollB].position;
 
@@ -190,7 +174,7 @@ export function get_dollUtils<
   //   Record<DollName, Partial<{ inRange: InRangeProperty }>>
   // >;
 
-  const defaultInRange = getDefaultInRangeFunction<A_DollName>(dollNames as A_DollName[]);
+  const defaultInRange = getDefaultInRangeFunction<T_MyTypes>(dollNames as DollName[]);
   type InRangeProperty = ReturnType<typeof defaultInRange>;
 
   function inRangesAreTheSame(inRangePropA: InRangeProperty, inRangePropB: InRangeProperty) {
@@ -228,7 +212,7 @@ export function get_dollUtils<
     }
   }
 
-  function saveModelStuffToDoll<T_ModelName extends A_ModelName, T_DollName extends A_DollName>({
+  function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName extends DollName>({
     modelName,
     dollName,
   }: {
@@ -321,7 +305,7 @@ export function get_dollUtils<
     // definiedPrendyRules.dolls?.run("whenNowAnimationChanged");
   }
 
-  function updateDollScreenPosition({ dollName, instant }: { dollName: A_DollName; instant?: boolean }) {
+  function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {
     // Update screen positions :)
 
     const { meshRef } = getRefs().dolls[dollName];
@@ -372,8 +356,12 @@ export function defaultInRangeForDoll() {
   };
 }
 
-export function getDefaultInRangeFunction<A_DollName extends DollName = DollName>(dollNames: readonly A_DollName[]) {
-  type InRangeForAllDolls = Record<A_DollName, InRangeForDoll>;
+export function getDefaultInRangeFunction<T_MyTypes extends MyTypes = MyTypes>(
+  dollNames: readonly MyTypes["Main"]["DollName"][]
+) {
+  type DollName = T_MyTypes["Main"]["DollName"];
+
+  type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
   function defaultInRange() {
     const untypedInRangeObject = {} as Record<string, InRangeForDoll>;
 

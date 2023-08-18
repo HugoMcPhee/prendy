@@ -1,8 +1,14 @@
 // @refresh-reset
 import React, { useRef, useState } from "react";
-import { PickupName, PickupsInfo, PrendyStoreHelpers } from "../../../declarations";
+import { MyTypes } from "../../../declarations";
 
-export function get_PickupButton(storeHelpers: PrendyStoreHelpers, pickupsInfo: PickupsInfo) {
+export function get_PickupButton<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type PickupName = T_MyTypes["Main"]["PickupName"];
+
+  const { pickupsInfo } = prendyAssets;
   const { getRefs } = storeHelpers;
 
   type Props = { name: PickupName };

@@ -1,6 +1,6 @@
 // @refresh-reset
 import React, { Fragment } from "react";
-import { PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_AlarmText } from "./AlarmText";
 import { get_LoadingOverlay } from "./LoadingOverlay";
 import { get_MiniBubble } from "./MiniBubble";
@@ -12,22 +12,21 @@ import { get_VirtualButtons } from "./VirtualButtons";
 import { get_VirtualStick } from "./VirtualStick";
 // import { get_ShowStates } from "./ShowStates";
 
-export function get_ScreenGui(
-  storeHelpers: PrendyStoreHelpers,
-  PRENDY_OPTIONS: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_ScreenGui<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
-  const { pickupsInfo, speechVidFiles, characterNames } = prendyAssets;
+  const { pickupsInfo, characterNames } = prendyAssets;
 
   const AlarmText = get_AlarmText(storeHelpers);
   const LoadingOverlay = get_LoadingOverlay(storeHelpers);
   const MiniBubble = get_MiniBubble(storeHelpers);
-  const Pickups = get_Pickups(storeHelpers, pickupsInfo);
+  const Pickups = get_Pickups(prendyAssets, storeHelpers);
   const ScreenSticker = get_ScreenSticker(storeHelpers);
-  const SpeechBubble = get_SpeechBubble(storeHelpers, PRENDY_OPTIONS, speechVidFiles);
+  const SpeechBubble = get_SpeechBubble<T_MyTypes>(prendyAssets, storeHelpers);
   const StoryOverlay = get_StoryOverlay(storeHelpers);
   const VirtualStick = get_VirtualStick(storeHelpers);
-  const VirtualButtons = get_VirtualButtons(storeHelpers, PRENDY_OPTIONS);
+  const VirtualButtons = get_VirtualButtons<T_MyTypes>(prendyAssets, storeHelpers);
   // const ShowStates = get_ShowStates(storeHelpers);
 
   type Props = {};

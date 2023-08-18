@@ -1,11 +1,16 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { ModelName, PrendyAssets, PrendyStoreHelpers } from "../declarations";
+import { MyTypes } from "../declarations";
 import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
 
 // handle loading here ??
 
-export function get_modelRules(storeHelpers: PrendyStoreHelpers, prendyAssets: PrendyAssets) {
+export function get_modelRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
 

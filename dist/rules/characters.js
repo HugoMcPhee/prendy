@@ -1,16 +1,16 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
-export function get_characterDynamicRules(storeHelpers, prendyStartOptions, prendyAssets) {
+export function get_characterDynamicRules(prendyAssets, storeHelpers) {
     const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
+    const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
     const refs = getRefs();
     const placesRefs = refs.places;
-    return makeDynamicRules(({ itemEffect, effect }) => ({
+    return makeDynamicRules(({ effect }) => ({
         whenPositionChanges: effect(({ characterName, dollName, }) => ({
             // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-            run({ itemRefs, newValue, previousValue }) {
+            run({ itemRefs }) {
                 // console.log("prevItemState", other);
                 // TODO
                 // only update the collider stuff here
@@ -134,10 +134,10 @@ export function get_startDynamicCharacterRulesForInitialState(characterDynamicRu
         };
     };
 }
-export function get_characterRules(storeHelpers, prendyAssets) {
+export function get_characterRules(prendyAssets, storeHelpers) {
     const { makeRules, getState, setState } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
-    return makeRules(({ itemEffect, effect }) => ({
+    return makeRules(({ itemEffect }) => ({
         whenAtCamCubes: itemEffect({
             run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
                 const { playerCharacter } = getState().global.main;

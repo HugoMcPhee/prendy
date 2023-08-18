@@ -6,13 +6,13 @@ import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 import { get_useModelFile } from "../useModelFile";
 import { get_usePlaceUtils } from "./utils";
-export function get_usePlace(storeHelpers, prendyStartOptions, prendyAssets) {
+export function get_usePlace(prendyAssets, storeHelpers) {
     const { getRefs, getState, setState } = storeHelpers;
-    const { placeInfoByName, soundFiles } = prendyAssets;
+    const { placeInfoByName, soundFiles, prendyOptions } = prendyAssets;
     const { setGlobalState } = get_globalUtils(storeHelpers);
     const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
     const useModelFile = get_useModelFile(getScene);
-    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(storeHelpers, prendyStartOptions, prendyAssets);
+    const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(prendyAssets, storeHelpers);
     const placesRefs = getRefs().places;
     return function usePlace(placeName) {
         const placeInfo = placeInfoByName[placeName];
@@ -31,7 +31,7 @@ export function get_usePlace(storeHelpers, prendyStartOptions, prendyAssets) {
             });
             // Load any models for this place that weren't already loaded
             const { modelNamesLoaded } = getState().global.main;
-            forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
+            forEach(prendyOptions.modelNamesByPlace[placeName], (modelName) => {
                 if (!modelNamesLoaded.includes(modelName)) {
                     setState({ models: { [modelName]: { wantToLoad: true } } });
                 }

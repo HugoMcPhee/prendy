@@ -1,6 +1,4 @@
-import { PrendyOptionsUntyped, DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyStoreHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
-declare const _default: "default";
-export default _default;
+import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyOptionsUntyped, PrendyStoreHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
 export interface AssetsTypesUntyped {
     PrendyOptions: PrendyOptionsUntyped;
     PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
@@ -44,63 +42,33 @@ export interface CustomStoreHelpers {
 }
 export interface CustomPrendyStores {
 }
-export interface FinalAssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {
+export interface AssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {
 }
-export interface FinalStoreHelpersType extends Omit<PrendyStoreHelpersUntyped, keyof CustomStoreHelpers>, CustomStoreHelpers {
+export interface PrendyStoreHelpers extends Omit<PrendyStoreHelpersUntyped, keyof CustomStoreHelpers>, CustomStoreHelpers {
 }
-export interface FinalPrendyStoresType extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {
+export interface PrendyStores extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {
 }
-export type PrendyStoreHelpers = FinalStoreHelpersType;
-export type PrendyStores = FinalPrendyStoresType;
-export type PrendyOptions = FinalAssetsTypes["PrendyOptions"];
-export type PlaceInfoByName = FinalAssetsTypes["PlaceInfoByName"];
-export type ModelInfoByName = FinalAssetsTypes["ModelInfoByName"];
-export type DollOptions = FinalAssetsTypes["DollOptions"];
-export type CharacterOptions = FinalAssetsTypes["CharacterOptions"];
-export type ModelName = FinalAssetsTypes["ModelName"];
-export type DollName = FinalAssetsTypes["DollName"];
-export type CharacterName = FinalAssetsTypes["CharacterName"];
-export type AnyCameraName = FinalAssetsTypes["AnyCameraName"];
-export type AnySegmentName = FinalAssetsTypes["AnySegmentName"];
-export type AnySpotName = FinalAssetsTypes["AnySpotName"];
-export type AnyTriggerName = FinalAssetsTypes["AnyTriggerName"];
-export type PlaceName = FinalAssetsTypes["PlaceName"];
-export type PickupName = FinalAssetsTypes["PickupName"];
-export type AnyAnimationName = FinalAssetsTypes["AnyAnimationName"];
-export type SoundName = FinalAssetsTypes["SoundName"];
-export type MusicName = FinalAssetsTypes["MusicName"];
-export type FontName = FinalAssetsTypes["FontName"];
-export type SpeechVidName = FinalAssetsTypes["SpeechVidName"];
-export type StoryPartName = FinalAssetsTypes["StoryPartName"];
-export type CameraNameByPlace = FinalAssetsTypes["CameraNameByPlace"];
-export type SoundspotNameByPlace = FinalAssetsTypes["SoundspotNameByPlace"];
-export type SpotNameByPlace = FinalAssetsTypes["SpotNameByPlace"];
-export type TriggerNameByPlace = FinalAssetsTypes["TriggerNameByPlace"];
-export type WallNameByPlace = FinalAssetsTypes["WallNameByPlace"];
-export type AnimationNameByModel = FinalAssetsTypes["AnimationNameByModel"];
-export type BoneNameByModel = FinalAssetsTypes["BoneNameByModel"];
-export type MaterialNameByModel = FinalAssetsTypes["MaterialNameByModel"];
-export type MeshNameByModel = FinalAssetsTypes["MeshNameByModel"];
-export type ModelNamesByPlaceLoose = FinalAssetsTypes["ModelNamesByPlaceLoose"];
-export type SegmentNameByPlace = FinalAssetsTypes["SegmentNameByPlace"];
-export type MusicFiles = FinalAssetsTypes["MusicFiles"];
-export type SoundFiles = FinalAssetsTypes["SoundFiles"];
-export type SpeechVidFiles = FinalAssetsTypes["SpeechVidFiles"];
-export type PickupsInfo = FinalAssetsTypes["PickupsInfo"];
 export type PrendyAssets = {
-    placeInfoByName: PlaceInfoByName;
-    modelInfoByName: ModelInfoByName;
-    dollOptions: DollOptions;
-    characterOptions: CharacterOptions;
-    placeNames: readonly PlaceName[];
-    modelNames: readonly ModelName[];
-    dollNames: readonly DollName[];
-    characterNames: readonly CharacterName[];
-    musicNames: readonly MusicName[];
-    soundNames: readonly SoundName[];
-    fontNames: readonly FontName[];
-    pickupsInfo: PickupsInfo;
-    musicFiles: MusicFiles;
-    soundFiles: SoundFiles;
-    speechVidFiles: SpeechVidFiles;
+    placeInfoByName: AssetsTypes["PlaceInfoByName"];
+    modelInfoByName: AssetsTypes["ModelInfoByName"];
+    dollOptions: AssetsTypes["DollOptions"];
+    characterOptions: AssetsTypes["CharacterOptions"];
+    placeNames: readonly AssetsTypes["PlaceName"][];
+    modelNames: readonly AssetsTypes["ModelName"][];
+    dollNames: readonly AssetsTypes["DollName"][];
+    characterNames: readonly AssetsTypes["CharacterName"][];
+    musicNames: readonly AssetsTypes["MusicName"][];
+    soundNames: readonly AssetsTypes["SoundName"][];
+    fontNames: readonly AssetsTypes["FontName"][];
+    pickupsInfo: AssetsTypes["PickupsInfo"];
+    musicFiles: AssetsTypes["MusicFiles"];
+    soundFiles: AssetsTypes["SoundFiles"];
+    speechVidFiles: AssetsTypes["SpeechVidFiles"];
+    prendyOptions: AssetsTypes["PrendyOptions"];
+};
+export type MyTypes = {
+    Main: AssetsTypes;
+    StoreHelpers: PrendyStoreHelpers;
+    Stores: PrendyStores;
+    Assets: PrendyAssets;
 };

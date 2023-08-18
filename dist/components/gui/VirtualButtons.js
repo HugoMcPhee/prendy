@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
-export function get_VirtualButtons(storeHelpers, PRENDY_OPTIONS) {
+export function get_VirtualButtons(prendyAssets, storeHelpers) {
     const { getRefs, getState, setState, useStore } = storeHelpers;
-    const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
+    const { prendyOptions } = prendyAssets;
+    const { hasInteracting, hasJumping } = prendyOptions;
     const globalRefs = getRefs().global.main;
     const SIZES = {
         leftThumbContainer: 110,

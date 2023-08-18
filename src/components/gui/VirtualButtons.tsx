@@ -1,6 +1,6 @@
 import React, { ReactNode, useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
-import { PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 
 type VirtualButtonProps = {
   children: ReactNode;
@@ -10,9 +10,13 @@ type VirtualButtonProps = {
   disabled: boolean;
 };
 
-export function get_VirtualButtons(storeHelpers: PrendyStoreHelpers, PRENDY_OPTIONS: PrendyOptions) {
+export function get_VirtualButtons<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
   const { getRefs, getState, setState, useStore } = storeHelpers;
-  const { hasInteracting, hasJumping } = PRENDY_OPTIONS;
+  const { prendyOptions } = prendyAssets;
+  const { hasInteracting, hasJumping } = prendyOptions;
 
   const globalRefs = getRefs().global.main;
 

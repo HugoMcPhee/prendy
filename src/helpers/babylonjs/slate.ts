@@ -3,7 +3,7 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { Point2D, copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
-import { ModelName, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_globalUtils } from "../prendyUtils/global";
 import { get_getSceneOrEngineUtils } from "./getSceneOrEngineUtils";
 
@@ -13,8 +13,14 @@ export function getScreenSize() {
 
 export const slateSize = { x: 1280, y: 720 };
 
-export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions) {
+export function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+
   const { getRefs, getState, onNextTick } = storeHelpers;
+  const { prendyOptions } = prendyAssets;
 
   const { setGlobalState, getGlobalState } = get_globalUtils(storeHelpers);
   const { getEngine } = get_getSceneOrEngineUtils(storeHelpers);
@@ -68,7 +74,7 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
     if (!nowCam) return new Vector3();
 
     // Use the characters head position instead of center position (for speech bubbles)
-    const Y_OFFSET = prendyStartOptions.headHeightOffsets[modelName] ?? 2; // default to 2, just above the model
+    const Y_OFFSET = prendyOptions.headHeightOffsets[modelName] ?? 2; // default to 2, just above the model
 
     return Vector3.Project(
       new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z),
@@ -270,7 +276,7 @@ export function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOpti
 
   function getShaderTransformStuff() {
     const { slateZoom, slateZoomGoal } = getState().global.main;
-    // const slateZoom = prendyStartOptions.zoomLevels.default;
+    // const slateZoom = prendyOptions.zoomLevels.default;
 
     // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
     const screenWidth = window.innerWidth;

@@ -1,13 +1,6 @@
 import { useEffect } from "react";
-import {
-  DollName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SpotNameByPlace,
-} from "../declarations";
+import { definiedPrendyRules } from "..";
+import { MyTypes } from "../declarations";
 import loadGoogleFonts from "../helpers/loadGoogleFonts";
 import {
   get_characterDynamicRules,
@@ -18,61 +11,41 @@ import { get_dollDynamicRules, get_dollRules, startDynamicDollRulesForInitialSta
 import { get_startAllGlobalRules } from "./global/global";
 import { get_keyboardConnectRules } from "./keyboards";
 import { get_modelRules } from "./models";
+import { get_placeRules } from "./places";
 import { get_playerRules } from "./players";
 import { get_sliceVidRules } from "./sliceVids";
 import { get_speechBubbleRules } from "./speechBubbles";
 import { get_safeVidRules } from "./stateVids";
-import { definiedPrendyRules } from "..";
-import { get_placeRules } from "./places";
 
-export function makeStartPrendyMainRules<
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  prendyStores: A_PrendyStores,
-  PRENDY_OPTIONS: A_PrendyOptions,
-  prendyAssets: A_PrendyAssets
+export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"],
+  prendyStores: T_MyTypes["Stores"],
+  prendyAssets: T_MyTypes["Assets"]
 ) {
   const { dollNames, characterNames } = prendyAssets;
 
   // making rules
 
   const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-  const startAllGlobalRules = get_startAllGlobalRules<
-    A_DollName,
-    A_PlaceName,
-    A_PrendyAssets,
-    A_PrendyOptions,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SpotNameByPlace
-  >(storeHelpers, prendyStores, PRENDY_OPTIONS, prendyAssets);
+  const startAllGlobalRules = get_startAllGlobalRules<T_MyTypes>(prendyAssets, prendyStores, storeHelpers);
 
-  const modelRules = get_modelRules(storeHelpers, prendyAssets);
-  const playerRules = get_playerRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-  const dollDynamicRules = get_dollDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyStores, prendyAssets);
+  const modelRules = get_modelRules(prendyAssets, storeHelpers);
+  const playerRules = get_playerRules(prendyAssets, storeHelpers);
+  const dollDynamicRules = get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers);
   const dollRules = get_dollRules(
-    PRENDY_OPTIONS,
     dollDynamicRules as ReturnType<typeof get_dollDynamicRules>,
-    storeHelpers,
-    prendyStores,
-    prendyAssets
+    prendyAssets,
+    storeHelpers
   );
-  const placeRules = get_placeRules(PRENDY_OPTIONS, storeHelpers, prendyStores, prendyAssets);
+  const placeRules = get_placeRules(prendyAssets, storeHelpers);
   definiedPrendyRules.dolls = dollRules;
 
   const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
   const safeVidRules = get_safeVidRules(storeHelpers);
-  const safeSliceVidRules = get_sliceVidRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
+  const safeSliceVidRules = get_sliceVidRules(prendyAssets, storeHelpers);
 
-  const characterDynamicRules = get_characterDynamicRules(storeHelpers, PRENDY_OPTIONS, prendyAssets);
-  const characterRules = get_characterRules(storeHelpers, prendyAssets);
+  const characterDynamicRules = get_characterDynamicRules(prendyAssets, storeHelpers);
+  const characterRules = get_characterRules(prendyAssets, storeHelpers);
 
   const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState<
     ReturnType<typeof get_characterDynamicRules>
@@ -175,67 +148,28 @@ export function combineSubscribers(subscribers: (() => () => void)[]) {
   };
 }
 
-export type MakeStartRulesOptions<
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets
-> = {
+export type MakeStartRulesOptions<T_MyTypes extends MyTypes = MyTypes> = {
   customRules: SubscribableRules[];
-  storeHelpers: A_PrendyStoreHelpers;
-  stores: A_PrendyStores;
-  prendyOptions: A_PrendyOptions;
-  prendyAssets: A_PrendyAssets;
+  storeHelpers: T_MyTypes["StoreHelpers"];
+  stores: T_MyTypes["Stores"];
+  prendyAssets: T_MyTypes["Assets"];
 };
 
-export function makeStartPrendyRules<
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->({
+export function makeStartPrendyRules<T_MyTypes extends MyTypes = MyTypes>({
   customRules,
-  prendyOptions,
   prendyAssets,
   stores,
   storeHelpers,
-}: MakeStartRulesOptions<A_PrendyStoreHelpers, A_PrendyStores, A_PrendyOptions, A_PrendyAssets>) {
-  const startPrendyMainRules = makeStartPrendyMainRules<
-    A_DollName,
-    A_PlaceName,
-    A_PrendyAssets,
-    A_PrendyOptions,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SpotNameByPlace
-  >(storeHelpers, stores, prendyOptions, prendyAssets);
+}: MakeStartRulesOptions<T_MyTypes>) {
+  const startPrendyMainRules = makeStartPrendyMainRules<T_MyTypes>(storeHelpers, stores, prendyAssets);
   const startPrendyStoryRules = rulesToSubscriber(customRules);
   const startRules = combineSubscribers([startPrendyMainRules, startPrendyStoryRules]);
 
   return startRules;
 }
 
-export function makeStartAndStopRules<
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(options: MakeStartRulesOptions<A_PrendyStoreHelpers, A_PrendyStores, A_PrendyOptions, A_PrendyAssets>) {
-  const startRules = makeStartPrendyRules<
-    A_DollName,
-    A_PlaceName,
-    A_PrendyAssets,
-    A_PrendyOptions,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SpotNameByPlace
-  >(options);
+export function makeStartAndStopRules<T_MyTypes extends MyTypes = MyTypes>(options: MakeStartRulesOptions<T_MyTypes>) {
+  const startRules = makeStartPrendyRules<T_MyTypes>(options);
   return function StartAndStopRules() {
     useEffect(startRules);
     return null;

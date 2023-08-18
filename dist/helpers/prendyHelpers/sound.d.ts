@@ -1,10 +1,10 @@
-import { MusicFiles, MusicName, PrendyStoreHelpers, SoundFiles, SoundName } from "../../declarations";
-export declare function get_soundStoryHelpers<A_MusicFiles extends MusicFiles = MusicFiles, A_MusicName extends MusicName = MusicName, A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers, A_SoundFiles extends SoundFiles = SoundFiles, A_SoundName extends SoundName = SoundName>(storeHelpers: A_PrendyStoreHelpers, musicNames: readonly A_MusicName[], musicFiles: A_MusicFiles, soundNames: readonly A_SoundName[], soundFiles: A_SoundFiles): {
-    playNewMusic: (newMusicName: A_MusicName) => void;
+import { MyTypes } from "../../declarations";
+export declare function get_soundStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
+    playNewMusic: (newMusicName: T_MyTypes["Main"]["MusicName"]) => void;
     stopAllMusic: () => void;
-    playSound: (soundName: A_SoundName, options?: {
+    playSound: (soundName: T_MyTypes["Main"]["SoundName"], options?: {
         loop?: boolean;
     }) => void;
-    stopSound: (soundName: A_SoundName) => void;
+    stopSound: (soundName: T_MyTypes["Main"]["SoundName"]) => void;
     stopAllSounds: () => void;
 };

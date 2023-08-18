@@ -2,7 +2,7 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { CharacterName, PrendyOptions, PrendyStoreHelpers, SpeechVidFiles } from "../../../declarations";
+import { MyTypes } from "../../../declarations";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../../helpers/prendyUtils/characters";
 // import "./SpeechBubble.css";
@@ -12,11 +12,15 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-export function get_SpeechBubble(
-  storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
-  speechVidFiles: SpeechVidFiles
+export function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type SpeechVidFiles = T_MyTypes["Main"]["SpeechVidFiles"];
+
+  const { speechVidFiles } = prendyAssets;
   const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
 
   const globalRefs = getRefs().global.main;

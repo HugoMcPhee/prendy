@@ -1,27 +1,26 @@
 import { AbstractMesh, Effect, FxaaPostProcess, PBRMaterial, PostProcess, Scene, ShaderStore } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import {
-  AnyCameraName,
-  AnySegmentName,
-  CameraNameByPlace,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  SegmentNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { DefaultCameraRefs } from "../../stores/places";
 import shaders from "../shaders";
 import { get_globalUtils } from "./global";
 import { get_sceneStoryUtils } from "./scene";
 import { get_getSliceVidVideo } from "./sliceVids";
 
-export function get_cameraChangeUtils(
-  storeHelpers: PrendyStoreHelpers,
-  prendyOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_cameraChangeUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type PrendyAssets = T_MyTypes["Assets"];
+  type PrendyOptions = T_MyTypes["Main"]["PrendyOptions"];
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+
   const { getRefs, getState, setState } = storeHelpers;
   const { placeInfoByName, dollNames } = prendyAssets;
 
@@ -82,7 +81,9 @@ export function get_cameraChangeUtils(
     const camSegmentNames = Object.keys(segmentTimesByCamera?.[safeCam as keyof typeof segmentTimesByCamera] ?? {});
 
     // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
-    const foundRuleSegmentName = useStorySegmentRules ? getSegmentFromStoryRules(safePlace, safeCam) : undefined;
+    const foundRuleSegmentName = useStorySegmentRules
+      ? getSegmentFromStoryRules(safePlace, safeCam as CameraNameByPlace[typeof safePlace])
+      : undefined;
 
     return chooseClosestBeforeItemInArray({
       fullArray: segmentNames,

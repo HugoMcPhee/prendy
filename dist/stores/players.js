@@ -1,4 +1,5 @@
-export default function players(prendyStartOptions) {
+export default function players(prendyAssets) {
+    const { prendyOptions } = prendyAssets;
     const state = () => ({
         // player input stuff
         lastSafeInputAngle: 0,
@@ -16,12 +17,12 @@ export default function players(prendyStartOptions) {
         canShowVirtualButtons: false,
         //
         animationNames: {
-            walking: prendyStartOptions.playerAnimations.walking,
-            idle: prendyStartOptions.playerAnimations.idle,
+            walking: prendyOptions.playerAnimations.walking,
+            idle: prendyOptions.playerAnimations.idle,
         }, // maybe typed somehow, from player character?
     });
     const refs = () => ({
-        walkSpeed: prendyStartOptions.walkSpeed,
+        walkSpeed: prendyOptions.walkSpeed,
         canJumpTimeout: null,
         canShowVirtualButtonsTimeout: null,
         canHideVirtualButtonsTimeout: null,

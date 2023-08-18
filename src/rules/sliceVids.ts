@@ -1,6 +1,6 @@
 import { minMaxRange } from "chootils/dist/numbers";
 import { StoreHelperTypes } from "repond";
-import { PlaceName, PrendyAssets, PrendyOptions, PrendyStoreHelpers } from "../declarations";
+import { MyTypes } from "../declarations";
 import { BEFORE_LOOP_PADDING, get_sliceVidUtils } from "../helpers/prendyUtils/sliceVids";
 import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 import { SliceVidState } from "../stores/sliceVids";
@@ -9,11 +9,13 @@ function numbersAreClose(a: number, b: number, range: number) {
   return Math.abs(a - b) < range;
 }
 
-export function get_sliceVidRules(
-  storeHelpers: PrendyStoreHelpers,
-  prendyOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_sliceVidRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+
   // safe Slice Stack Vid Rules
 
   const { getState, makeRules, setState } = storeHelpers;
@@ -27,9 +29,8 @@ export function get_sliceVidRules(
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
   const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo } = get_sliceVidUtils(
-    storeHelpers,
-    prendyOptions,
-    prendyAssets
+    prendyAssets,
+    storeHelpers
   );
 
   const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } =
@@ -40,7 +41,8 @@ export function get_sliceVidRules(
       run({ newValue: vidState, itemName, itemState }) {
         const setItemState = (newState: Partial<ItemState<"sliceVids">>) =>
           setState({ sliceVids: { [itemName]: newState } });
-        const setVidState = (sliceVidState: SliceVidState) => setItemState({ sliceVidState });
+        // NOTE TODO FIXME? any type while no stores are connected
+        const setVidState = (sliceVidState: SliceVidState) => setItemState({ sliceVidState } as any);
 
         const { stateVidId_playing, stateVidId_waiting, nowSlice } = itemState;
         if (!stateVidId_playing || !stateVidId_waiting) return;

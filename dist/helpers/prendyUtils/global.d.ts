@@ -1,5 +1,5 @@
-import { PrendyStoreHelpers } from "../../declarations";
-export declare function get_globalUtils<A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers>(storeHelpers: A_PrendyStoreHelpers): {
-    setGlobalState: <GlobalItemState extends ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"] & Record<any, any>, PartialGlobalState extends Partial<GlobalItemState>>(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: () => void) => void;
-    getGlobalState: () => ReturnType<A_PrendyStoreHelpers["getState"]>["global"]["main"];
+import { MyTypes } from "../../declarations";
+export declare function get_globalUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]): {
+    setGlobalState: <GlobalItemState extends ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"] & Record<any, any>, PartialGlobalState extends Partial<GlobalItemState>>(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: () => void) => void;
+    getGlobalState: () => ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
 };

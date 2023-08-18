@@ -1,10 +1,10 @@
 import "@babylonjs/loaders";
 import { get_getSceneOrEngineUtils } from "./helpers/babylonjs/getSceneOrEngineUtils";
+import { point3dToVector3 } from "./helpers/babylonjs/vectors";
 import { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 import { get_setStoryState, makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 import { get_globalUtils } from "./helpers/prendyUtils/global";
 import { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
-import { point3dToVector3 } from "./helpers/babylonjs/vectors";
 export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
@@ -14,7 +14,7 @@ export { point3dToVector3, vector3ToPoint3d, vector3ToSafePoint3d } from "./help
 export { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 export { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
-export { makeStartPrendyRules, makeStartPrendyMainRules, makeStartAndStopRules } from "./rules/rules";
+export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
 export const definiedPrendyRules = {
     dolls: null,
@@ -25,8 +25,8 @@ export function makeOtherUsefulPrendyUtils(storeHelpers) {
     const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
     return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
 }
-export function makePrendyHelpers(storeHelpers, prendyStores, prendyStartOptions, prendyAssets) {
-    const prendyStoryHelpers = makePrendyStoryHelpers(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
+    const prendyStoryHelpers = makePrendyStoryHelpers(prendyAssets, prendyStores, storeHelpers);
     const allStoryRuleMakers = makeAllStoryRuleMakers(storeHelpers, prendyAssets.placeInfoByName, prendyAssets.characterNames, prendyAssets.dollNames);
     const otherPrendyUtils = {
         ...makePrendyStoryUtils(storeHelpers, prendyStores),
@@ -222,4 +222,9 @@ export function makePrendyHelpers(storeHelpers, prendyStores, prendyStartOptions
         rules: allStoryRuleMakers,
         utils: { ...otherPrendyUtils, savePrendyState, loadPrendyState },
     };
+}
+export function getDefaultDollOptions(modelNames) {
+    const modelDollOptions = {};
+    modelNames.forEach((modelName) => (modelDollOptions[modelName] = { model: modelName }));
+    return modelDollOptions;
 }

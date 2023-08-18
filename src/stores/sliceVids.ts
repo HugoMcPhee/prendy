@@ -1,5 +1,5 @@
-import { PrendyAssets, PlaceName } from "../declarations";
 import { forEach } from "chootils/dist/loops";
+import { MyTypes } from "../declarations";
 
 /*
 A way to loop and change "slices" of videos seamlessly 
@@ -34,10 +34,9 @@ export type VidLetter = "a" | "b";
 
 export type VidSlice = { time: number; duration: number };
 
-export default function sliceVids<
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets
->(prendyAssets: A_PrendyAssets) {
+export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+
   const { placeNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
@@ -65,11 +64,11 @@ export default function sliceVids<
 
   function makeStartStatesForPlaces() {
     // enable autocompleted names and properties , (when using name directly)
-    const newStartStates = {} as Record<A_PlaceName, ReturnType<typeof state>>;
+    const newStartStates = {} as Record<PlaceName, ReturnType<typeof state>>;
     // enable autocompleted properties when using a variable for name
     // const newStartStates = {} as InitialItemsState<typeof state>;
 
-    forEach(placeNames as A_PlaceName[], (placeName) => (newStartStates[placeName] = state(placeName)));
+    forEach(placeNames as PlaceName[], (placeName) => (newStartStates[placeName] = state(placeName)));
     return newStartStates;
   }
 

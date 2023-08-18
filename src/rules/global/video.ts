@@ -1,26 +1,21 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
-import {
-  AnyCameraName,
-  AnySegmentName,
-  CameraNameByPlace,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SegmentNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_speechStoryHelpers } from "../../helpers/prendyHelpers/speech";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { VidSlice } from "../../stores/sliceVids";
 
-export function get_globalVideoRules(
-  storeHelpers: PrendyStoreHelpers,
-  _prendyStores: PrendyStores,
-  prendyStartOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_globalVideoRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  prendyStores: T_MyTypes["Stores"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
+
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
 
   const {
@@ -29,11 +24,10 @@ export function get_globalVideoRules(
     getSliceVidWaitingVideo,
     checkForVideoLoop,
     checkIfVideoAlreadyChanging,
-  } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
+  } = get_sliceVidUtils(prendyAssets, storeHelpers);
   const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
+    prendyAssets,
+    storeHelpers
   );
 
   return makeRules(({ itemEffect, effect }) => ({
@@ -261,7 +255,7 @@ export function get_globalVideoRules(
         const isPlayingWait = !backdropVidElementWaiting.paused;
 
         const logText = ["isPlaying", isPlaying, "isPlayingWait", isPlayingWait, sliceVidState.sliceVidState].join(" ");
-        const { showAlarmText } = get_speechStoryHelpers(storeHelpers, _prendyStores, prendyStartOptions, ["example"]);
+        const { showAlarmText } = get_speechStoryHelpers(prendyAssets, prendyStores, storeHelpers);
         // (stateVidState.vidState === "play" || stateVidState.vidState === "beforePlay")
         if (!isPlaying) {
           // TODO handle returning from sleep on iOS

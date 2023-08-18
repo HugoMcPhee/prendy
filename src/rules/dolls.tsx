@@ -4,17 +4,8 @@ import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
-import {
-  AnyAnimationName,
-  DollName,
-  DollOptions,
-  MeshNameByModel,
-  ModelName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-} from "../declarations";
+import { cloneObjectWithJson } from "repond/dist/utils";
+import { MyTypes } from "../declarations";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
@@ -24,7 +15,6 @@ import {
   get_dollStoryUtils,
   get_dollUtils,
 } from "../helpers/prendyUtils/dolls";
-import { cloneObjectWithJson } from "repond/dist/utils";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -45,21 +35,19 @@ export const rangeOptionsQuick = {
   see: rangeOptions.see * rangeOptions.see,
 } as const;
 
-export function get_dollDynamicRules(
-  storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
-  prendyStores: PrendyStores,
-  prendyAssets: PrendyAssets
+export function get_dollDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  prendyStores: T_MyTypes["Stores"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
-  const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(
-    storeHelpers,
-    prendyStores,
-    prendyStartOptions,
-    prendyAssets
-  );
-  const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type ModelName = T_MyTypes["Main"]["ModelName"];
 
-  return makeDynamicRules(({ itemEffect, effect }) => ({
+  const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
+  const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
+  const { prendyOptions } = prendyAssets;
+
+  return makeDynamicRules(({ itemEffect }) => ({
     waitForModelToLoad: itemEffect(({ dollName, modelName }: { dollName: DollName; modelName: ModelName }) => ({
       run() {
         saveModelStuffToDoll({ dollName, modelName });
@@ -72,7 +60,6 @@ export function get_dollDynamicRules(
     whenWholePlaceFinishesLoading: itemEffect(
       ({ dollName, modelName }: { dollName: DollName; modelName: ModelName }) => ({
         run() {
-          const dollRefs = getRefs().dolls[dollName];
           const modelRefs = getRefs().models[modelName];
 
           if (modelRefs.materialRefs) {
@@ -85,7 +72,7 @@ export function get_dollDynamicRules(
 
           const { nowPlaceName } = getState().global.main;
           // const { modelName } = getState().dolls[dollName];
-          const { modelNamesByPlace } = prendyStartOptions;
+          const { modelNamesByPlace } = prendyOptions;
           const modelNamesForPlace = modelNamesByPlace[nowPlaceName];
           const isInPlace = modelNamesForPlace.includes(modelName);
           if (!isInPlace) {
@@ -107,10 +94,13 @@ export function get_dollDynamicRules(
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
 // NOTE rules can be manually triggered atleast, but the rule might not know an item was added
 
-export function startDynamicDollRulesForInitialState<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(
-  storeHelpers: PrendyStoreHelpers,
+export function startDynamicDollRulesForInitialState<
+  DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
+  T_MyTypes extends MyTypes = MyTypes
+>(
+  storeHelpers: T_MyTypes["StoreHelpers"],
   dollDynamicRules: DollDynamicRules,
-  dollNames: readonly DollName[]
+  dollNames: readonly T_MyTypes["Main"]["DollName"][]
 ) {
   const { getState } = storeHelpers;
 
@@ -129,20 +119,23 @@ export function startDynamicDollRulesForInitialState<DollDynamicRules extends Re
   };
 }
 
-export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>>(
-  prendyStartOptions: PrendyOptions,
-  dollDynamicRules: DollDynamicRules,
-  storeHelpers: PrendyStoreHelpers,
-  prendyStores: PrendyStores,
-  prendyAssets: PrendyAssets
-) {
-  const { modelInfoByName, dollNames } = prendyAssets;
+export function get_dollRules<
+  DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
+  T_MyTypes extends MyTypes = MyTypes
+>(dollDynamicRules: DollDynamicRules, prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type AnyAnimationName = T_MyTypes["Main"]["AnyAnimationName"];
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type DollOptions = T_MyTypes["Main"]["DollOptions"];
+  type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+
+  const { modelInfoByName, dollNames, prendyOptions } = prendyAssets;
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
-    get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
-  const { makeRules, getPreviousState, getState, setState, getRefs, onNextTick } = storeHelpers;
+    get_dollUtils(prendyAssets, storeHelpers);
+  const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
+  const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
   const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
-  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
+  const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
   type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
@@ -232,8 +225,8 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
             console.warn("tried to use undefined animation", aniName);
             return;
           }
-          if (aniRef && aniRef?.speedRatio !== prendyStartOptions.animationSpeed) {
-            aniRef.speedRatio = prendyStartOptions.animationSpeed;
+          if (aniRef && aniRef?.speedRatio !== prendyOptions.animationSpeed) {
+            aniRef.speedRatio = prendyOptions.animationSpeed;
           }
 
           const animWeight = animWeights[aniName];
@@ -316,7 +309,7 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
     // ___________________________________
     // position
     whenPositionChangesToEdit: itemEffect({
-      run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName, itemState }) {
+      run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
         if (!itemRefs.meshRef) return;
 
         if (itemRefs.canGoThroughWalls) {
@@ -524,9 +517,6 @@ export function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dol
     }),
     whenIsVisibleChanges: itemEffect({
       run({ newValue: isVisible, itemName: dollName, itemRefs: dollRefs }) {
-        const modelName = getModelNameFromDoll(dollName);
-        const modelInfo = modelInfoByName[modelName as unknown as ModelName];
-
         if (!dollRefs.meshRef) return console.warn("isVisible change: no mesh ref for", dollName);
         if (dollName === "shoes") {
           console.log("shoes isVisible change", isVisible);

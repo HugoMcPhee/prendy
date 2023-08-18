@@ -3,11 +3,11 @@ import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { makeRunMovers } from "repond-movers";
+import { cloneObjectWithJson } from "repond/dist/utils";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import { getDefaultInRangeFunction, get_dollStoryUtils, get_dollUtils, } from "../helpers/prendyUtils/dolls";
-import { cloneObjectWithJson } from "repond/dist/utils";
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
 // });
@@ -23,10 +23,11 @@ export const rangeOptionsQuick = {
     talk: rangeOptions.talk * rangeOptions.talk,
     see: rangeOptions.see * rangeOptions.see,
 };
-export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendyStores, prendyAssets) {
-    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
+export function get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers) {
+    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
     const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
-    return makeDynamicRules(({ itemEffect, effect }) => ({
+    const { prendyOptions } = prendyAssets;
+    return makeDynamicRules(({ itemEffect }) => ({
         waitForModelToLoad: itemEffect(({ dollName, modelName }) => ({
             run() {
                 saveModelStuffToDoll({ dollName, modelName });
@@ -38,7 +39,6 @@ export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendySto
         // When the place and all characters are loaded
         whenWholePlaceFinishesLoading: itemEffect(({ dollName, modelName }) => ({
             run() {
-                const dollRefs = getRefs().dolls[dollName];
                 const modelRefs = getRefs().models[modelName];
                 if (modelRefs.materialRefs) {
                     forEach(modelRefs.materialRefs, (materialRef) => setupLightMaterial(materialRef));
@@ -47,7 +47,7 @@ export function get_dollDynamicRules(storeHelpers, prendyStartOptions, prendySto
                 // using modelNamesByPlace, set the doll state to invisible if it's not in the current place
                 const { nowPlaceName } = getState().global.main;
                 // const { modelName } = getState().dolls[dollName];
-                const { modelNamesByPlace } = prendyStartOptions;
+                const { modelNamesByPlace } = prendyOptions;
                 const modelNamesForPlace = modelNamesByPlace[nowPlaceName];
                 const isInPlace = modelNamesForPlace.includes(modelName);
                 if (!isInPlace) {
@@ -84,13 +84,13 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
         });
     };
 }
-export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers, prendyStores, prendyAssets) {
-    const { modelInfoByName, dollNames } = prendyAssets;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(storeHelpers, prendyStores, prendyStartOptions, prendyAssets);
-    const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
-    const { makeRules, getPreviousState, getState, setState, getRefs, onNextTick } = storeHelpers;
+export function get_dollRules(dollDynamicRules, prendyAssets, storeHelpers) {
+    const { modelInfoByName, dollNames, prendyOptions } = prendyAssets;
+    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(prendyAssets, storeHelpers);
+    const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
+    const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
     const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
-    const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils(storeHelpers);
+    const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         // --------------------------------
         // loading model stuff
@@ -174,8 +174,8 @@ export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers
                         console.warn("tried to use undefined animation", aniName);
                         return;
                     }
-                    if (aniRef && (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyStartOptions.animationSpeed) {
-                        aniRef.speedRatio = prendyStartOptions.animationSpeed;
+                    if (aniRef && (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== prendyOptions.animationSpeed) {
+                        aniRef.speedRatio = prendyOptions.animationSpeed;
                     }
                     const animWeight = animWeights[aniName];
                     const animIsStopped = animWeight < 0.003;
@@ -254,7 +254,7 @@ export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         // ___________________________________
         // position
         whenPositionChangesToEdit: itemEffect({
-            run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName, itemState }) {
+            run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
                 if (!itemRefs.meshRef)
                     return;
                 if (itemRefs.canGoThroughWalls) {
@@ -425,8 +425,6 @@ export function get_dollRules(prendyStartOptions, dollDynamicRules, storeHelpers
         }),
         whenIsVisibleChanges: itemEffect({
             run({ newValue: isVisible, itemName: dollName, itemRefs: dollRefs }) {
-                const modelName = getModelNameFromDoll(dollName);
-                const modelInfo = modelInfoByName[modelName];
                 if (!dollRefs.meshRef)
                     return console.warn("isVisible change: no mesh ref for", dollName);
                 if (dollName === "shoes") {

@@ -1,13 +1,13 @@
-import { CharacterName, PrendyAssets } from "../declarations";
+import { MyTypes } from "../declarations";
 import { Point2D } from "chootils/dist/points2d";
-export default function miniBubbles<A_CharacterName extends CharacterName = CharacterName, A_PrendyAssets extends PrendyAssets = PrendyAssets>(prendyAssets: A_PrendyAssets): {
+export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
-        character?: A_CharacterName;
-    }) => {
+        character?: T_MyTypes["Main"]["CharacterName"] | undefined;
+    } | undefined) => {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: A_CharacterName | null;
+        forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
         position: Point2D;
     };
     refs: () => {
@@ -15,11 +15,11 @@ export default function miniBubbles<A_CharacterName extends CharacterName = Char
         textRef: any;
         videoRef: HTMLVideoElement | null;
     };
-    startStates: { [K_CharacterName in A_CharacterName]: {
+    startStates: { [K_CharacterName in T_MyTypes["Main"]["CharacterName"]]: {
         isVisible: boolean;
         isFullyHidden: boolean;
         text: string;
-        forCharacter: A_CharacterName | null;
+        forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
         position: Point2D;
     }; };
 };

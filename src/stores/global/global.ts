@@ -1,22 +1,10 @@
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
-import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
-import {
-  AnyCameraName,
-  AnySegmentName,
-  CharacterName,
-  DollName,
-  ModelName,
-  PickupName,
-  PlaceInfoByName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-} from "../../declarations";
-import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import get_globalStoreUtils from "./globalStoreUtils";
-import { Point2D } from "chootils/dist/points2d";
 import { Point3D } from "chootils/dist/points3d";
+import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
+import { MyTypes } from "../../declarations";
+import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { InRangeForDoll } from "../../helpers/prendyUtils/dolls";
+import get_globalStoreUtils from "./globalStoreUtils";
 
 // save it to global
 export type PrendySaveState = {
@@ -97,33 +85,31 @@ export type PrendySaveState = {
   storyState: Record<any, any>;
 };
 
-export default function global<
-  A_AnyCameraName extends AnyCameraName = AnyCameraName,
-  A_AnySegmentName extends AnySegmentName = AnySegmentName,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_DollName extends DollName = DollName,
-  A_ModelName extends ModelName = ModelName,
-  A_PickupName extends PickupName = PickupName,
-  A_PlaceInfoByName extends PlaceInfoByName = PlaceInfoByName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions
->(prendyStartOptions: A_PrendyOptions, prendyAssets: A_PrendyAssets) {
-  const { musicNames, soundNames, placeInfoByName } = prendyAssets;
+export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type PickupName = T_MyTypes["Main"]["PickupName"];
+  type PlaceInfoByName = T_MyTypes["Main"]["PlaceInfoByName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
 
-  type MaybeSegmentName = null | A_AnySegmentName;
-  type MaybeCam = null | A_AnyCameraName;
+  const { musicNames, soundNames, placeInfoByName, prendyOptions } = prendyAssets;
+
+  type MaybeSegmentName = null | AnySegmentName;
+  type MaybeCam = null | AnyCameraName;
 
   type SegmentNameFromCameraAndPlace<
-    T_Place extends keyof A_PlaceInfoByName,
-    T_Cam extends keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-  > = keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+    T_Place extends keyof PlaceInfoByName,
+    T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
+  > = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
 
-  type CameraNameFromPlace<T_Place extends keyof A_PlaceInfoByName> =
-    keyof A_PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+  type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
+    keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
 
   type CamSegmentRulesOptionsUntyped = Partial<{
-    [P_PlaceName in A_PlaceName]: Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
       [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
         usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
       ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
@@ -132,13 +118,13 @@ export default function global<
 
   const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
 
-  const placeName = prendyStartOptions.place;
+  const placeName = prendyOptions.place;
 
   // State
   const state = () => ({
     // place
-    nowPlaceName: placeName as A_PlaceName,
-    goalPlaceName: null as null | A_PlaceName,
+    nowPlaceName: placeName as PlaceName,
+    goalPlaceName: null as null | PlaceName,
     readyToSwapPlace: false,
     isLoadingBetweenPlaces: true,
     loadingOverlayToggled: true,
@@ -149,34 +135,34 @@ export default function global<
     goalCamNameAtLoop: null as MaybeCam,
     goalCamName: null as MaybeCam, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
     nowCamName:
-      ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
-        ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as A_AnyCameraName)) ??
-      ("testItemCamName" as A_AnyCameraName), // if state() is called with a random itemName
+      ((prendyOptions.place === placeName ? prendyOptions.camera : "") ||
+        ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as AnyCameraName)) ??
+      ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
     // segments and slice video
-    nowSegmentName: prendyStartOptions.segment as A_AnySegmentName,
+    nowSegmentName: prendyOptions.segment as AnySegmentName,
     goalSegmentName: null as MaybeSegmentName,
     goalSegmentNameAtLoop: null as MaybeSegmentName,
     goalSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowSegmentName
     goalSegmentWhenGoalPlaceLoads: null as MaybeSegmentName,
     // changing places
-    modelNamesLoaded: [] as A_ModelName[],
+    modelNamesLoaded: [] as ModelName[],
     newPlaceModelLoaded: false,
     newPlaceVideosLoaded: false,
     newPlaceProbesLoaded: false,
 
     //
     // player
-    playerCharacter: prendyStartOptions.playerCharacter as A_CharacterName, // TODO Move to players ?
+    playerCharacter: prendyOptions.playerCharacter as CharacterName, // TODO Move to players ?
     gravityValue: 5,
     playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
-    focusedDoll: prendyAssets.characterOptions[prendyStartOptions.playerCharacter].doll ?? ("walker" as A_DollName),
+    focusedDoll: prendyAssets.characterOptions[prendyOptions.playerCharacter].doll ?? ("walker" as DollName),
     focusedDollIsInView: false,
     //
     // slate
     ...mover2dState("slatePos"),
     ...moverState("slateZoom", {
-      value: prendyStartOptions.zoomLevels.default,
-      valueGoal: prendyStartOptions.zoomLevels.default,
+      value: prendyOptions.zoomLevels.default,
+      valueGoal: prendyOptions.zoomLevels.default,
       // springStopSpeed: 0.001, // NOTE not used in mover yet
     }), // (like scale)
     slatePosMoveConfigName: "default", // todo move to mover2dState()
@@ -185,7 +171,7 @@ export default function global<
     timeScreenResized: Date.now(),
     interactButtonPressTime: 0,
     // story
-    heldPickups: prendyStartOptions.heldPickups as A_PickupName[],
+    heldPickups: prendyOptions.heldPickups as PickupName[],
     storyOverlayToggled: false, // so the screen can fade out without affecting loading a new place
     alarmTextIsVisible: false,
     alarmText: "⚠ wobble detected ⚠",

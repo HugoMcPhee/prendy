@@ -1,36 +1,31 @@
 import { Mesh, Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
-import {
-  AnyCameraName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  SoundName,
-} from "../../../declarations";
+import { MyTypes } from "../../../declarations";
 import { get_globalUtils } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
 import { get_useModelFile } from "../useModelFile";
 import { get_usePlaceUtils } from "./utils";
 
-export function get_usePlace(
-  storeHelpers: PrendyStoreHelpers,
-  prendyStartOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_usePlace<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type SoundName = T_MyTypes["Main"]["SoundName"];
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+
   const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName, soundFiles } = prendyAssets;
+  const { placeInfoByName, soundFiles, prendyOptions } = prendyAssets;
 
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
   const useModelFile = get_useModelFile(getScene);
 
   const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
+    prendyAssets,
+    storeHelpers
   );
 
   const placesRefs = getRefs().places;
@@ -56,7 +51,7 @@ export function get_usePlace(
 
       // Load any models for this place that weren't already loaded
       const { modelNamesLoaded } = getState().global.main;
-      forEach(prendyStartOptions.modelNamesByPlace[placeName], (modelName) => {
+      forEach(prendyOptions.modelNamesByPlace[placeName], (modelName) => {
         if (!modelNamesLoaded.includes(modelName)) {
           setState({ models: { [modelName]: { wantToLoad: true } } });
         }

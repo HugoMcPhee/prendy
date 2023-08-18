@@ -1,9 +1,9 @@
 import { breakableForEach } from "chootils/dist/loops";
 import { get_sceneStoryHelpers } from "../helpers/prendyHelpers/scene";
-export function get_Player(storeHelpers, prendyStartOptions, prendyAssets) {
-    const { placeInfoByName, characterNames } = prendyAssets;
+export function get_Player(prendyAssets, storeHelpers) {
+    const { placeInfoByName, characterNames, prendyOptions } = prendyAssets;
     const { useStoreItemPropsEffect, getState, setState, useStore } = storeHelpers;
-    const { goToNewPlace } = get_sceneStoryHelpers(storeHelpers, placeInfoByName, characterNames);
+    const { goToNewPlace } = get_sceneStoryHelpers(prendyAssets, storeHelpers);
     return function Player(_props) {
         const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
             type: "global",
@@ -36,7 +36,7 @@ export function get_Player(storeHelpers, prendyStartOptions, prendyAssets) {
                     breakableForEach(placeInfoByName[nowPlaceName].triggerNames, (triggerName) => {
                         var _a;
                         if (atTriggers[triggerName]) {
-                            const toOption = (_a = prendyStartOptions.doorsInfo[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName];
+                            const toOption = (_a = prendyOptions.doorsInfo[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName];
                             if (toOption) {
                                 goToNewPlace(toOption, charName);
                                 return true; // break

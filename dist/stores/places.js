@@ -8,8 +8,7 @@ const defaultCamRefs = () => ({
     //
     isTriggerable: true,
 });
-// export
-export default function places(prendyAssets, prendyStartOptions) {
+export default function places(prendyAssets) {
     const { placeInfoByName } = prendyAssets;
     const placeNames = prendyAssets.placeNames;
     function makeToggledWallsState(placeName) {
@@ -28,7 +27,7 @@ export default function places(prendyAssets, prendyStartOptions) {
         // goalCamNameAtLoop: null as MaybeCam<K_PlaceName>,
         // goalCamName: null as MaybeCam<K_PlaceName>, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
         // nowCamName:
-        //   ((prendyStartOptions.place === placeName ? prendyStartOptions.camera : "") ||
+        //   ((prendyOptions.place === placeName ? prendyOptions.camera : "") ||
         //     ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as AnyCameraName)) ??
         //   ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
     });

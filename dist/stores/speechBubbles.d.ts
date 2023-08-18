@@ -1,11 +1,11 @@
 /// <reference types="node" />
 import { CSSProperties } from "react";
-import { PrendyAssets, CharacterName, FontName, SpeechVidName } from "../declarations";
-export default function speechBubbles<A_PrendyAssets extends PrendyAssets = PrendyAssets, A_CharacterName extends CharacterName = CharacterName, A_FontName extends FontName = FontName, A_SpeechVidName extends SpeechVidName = SpeechVidName>(prendyAssets: A_PrendyAssets): {
+import { MyTypes } from "../declarations";
+export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
-        font?: A_FontName;
-        character?: A_CharacterName;
-    }) => {
+        font?: T_MyTypes["Main"]["FontName"] | undefined;
+        character?: T_MyTypes["Main"]["CharacterName"] | undefined;
+    } | undefined) => {
         isVisible: boolean;
         isFullyHidden: boolean;
         goalText: string;
@@ -14,11 +14,11 @@ export default function speechBubbles<A_PrendyAssets extends PrendyAssets = Pren
         stylesBySpecialText: Record<string, CSSProperties>;
         _specialTextByLetterIndex: Record<number, string>;
         _goalTextWordLetterArrays: string[][];
-        forCharacter: A_CharacterName | null;
+        forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
         position: import("chootils/dist/points2d").Point2D;
         typingFinished: boolean;
-        nowVideoName: A_SpeechVidName | null;
-        font: A_FontName;
+        nowVideoName: T_MyTypes["Main"]["SpeechVidName"] | null;
+        font: T_MyTypes["Main"]["FontName"];
         zIndex: number;
     };
     refs: () => {
@@ -27,7 +27,7 @@ export default function speechBubbles<A_PrendyAssets extends PrendyAssets = Pren
         currentTimeout: NodeJS.Timeout | null;
         videoRef: HTMLVideoElement | null;
     };
-    startStates: { [K_CharacterName in A_CharacterName]: {
+    startStates: { [K_CharacterName in T_MyTypes["Main"]["CharacterName"]]: {
         isVisible: boolean;
         isFullyHidden: boolean;
         goalText: string;
@@ -36,11 +36,11 @@ export default function speechBubbles<A_PrendyAssets extends PrendyAssets = Pren
         stylesBySpecialText: Record<string, CSSProperties>;
         _specialTextByLetterIndex: Record<number, string>;
         _goalTextWordLetterArrays: string[][];
-        forCharacter: A_CharacterName | null;
+        forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
         position: import("chootils/dist/points2d").Point2D;
         typingFinished: boolean;
-        nowVideoName: A_SpeechVidName | null;
-        font: A_FontName;
+        nowVideoName: T_MyTypes["Main"]["SpeechVidName"] | null;
+        font: T_MyTypes["Main"]["FontName"];
         zIndex: number;
     }; };
 };

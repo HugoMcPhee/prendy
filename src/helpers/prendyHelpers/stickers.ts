@@ -1,8 +1,6 @@
-import { PrendyStoreHelpers } from "../../declarations";
+import { MyTypes, PrendyStoreHelpers } from "../../declarations";
 
-export function get_stickerStoryHelpers<A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers>(
-  storeHelpers: A_PrendyStoreHelpers
-) {
+export function get_stickerStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
   const { setState } = storeHelpers;
 
   function moveSticker(x: number, y: number) {

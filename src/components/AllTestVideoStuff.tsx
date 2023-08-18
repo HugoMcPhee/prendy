@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import { PlaceName, PrendyStoreHelpers } from "../declarations";
+import { MyTypes } from "../declarations";
 import { addLayout } from "../helpers/styles";
 
-export function get_AllTestVideoStuff(storeHelpers: PrendyStoreHelpers, placeNames: readonly PlaceName[]) {
+export function get_AllTestVideoStuff<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+
+  const { placeNames } = prendyAssets;
   const { useStore, useStoreItemPropsEffect } = storeHelpers;
 
   function TestVideos({ placeName }: { placeName: PlaceName }) {

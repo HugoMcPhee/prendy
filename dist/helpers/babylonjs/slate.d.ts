@@ -1,6 +1,6 @@
 import { AbstractMesh, Vector3 } from "@babylonjs/core";
 import { Point2D } from "chootils/dist/points2d";
-import { ModelName, PrendyOptions, PrendyStoreHelpers } from "../../declarations";
+import { MyTypes } from "../../declarations";
 export declare function getScreenSize(): {
     x: number;
     y: number;
@@ -9,8 +9,8 @@ export declare const slateSize: {
     x: number;
     y: number;
 };
-export declare function get_slateUtils(storeHelpers: PrendyStoreHelpers, prendyStartOptions: PrendyOptions): {
-    getPositionOnSlate: (theMesh: AbstractMesh, modelName: ModelName) => Vector3;
+export declare function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
+    getPositionOnSlate: (theMesh: AbstractMesh, modelName: T_MyTypes["Main"]["ModelName"]) => Vector3;
     focusSlateOnFocusedDoll: (instant?: "instant") => void;
     getSlatePositionNotOverEdges: (slatePos: Point2D, useGoal?: boolean) => Point2D;
     getViewSize: () => import("chootils/dist/sizes").Size;

@@ -1,5 +1,5 @@
-import { PrendyAssets, PrendyOptions, PrendyStoreHelpers, PrendyStores } from "../../declarations";
-export declare function get_globalVideoRules(storeHelpers: PrendyStoreHelpers, _prendyStores: PrendyStores, prendyStartOptions: PrendyOptions, prendyAssets: PrendyAssets): {
+import { MyTypes } from "../../declarations";
+export declare function get_globalVideoRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], prendyStores: T_MyTypes["Stores"], storeHelpers: T_MyTypes["StoreHelpers"]): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

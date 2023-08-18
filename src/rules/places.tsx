@@ -1,23 +1,17 @@
 import { forEach } from "chootils/dist/loops";
-import {
-  DollName,
-  DollOptions,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  WallNameByPlace,
-} from "../declarations";
+import { MyTypes } from "../declarations";
 
-export function get_placeRules(
-  prendyStartOptions: PrendyOptions,
-  storeHelpers: PrendyStoreHelpers,
-  prendyStores: PrendyStores,
-  prendyAssets: PrendyAssets
+export function get_placeRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type DollOptions = T_MyTypes["Main"]["DollOptions"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type WallNameByPlace = T_MyTypes["Main"]["WallNameByPlace"];
+
   const { placeInfoByName } = prendyAssets;
-  const { makeRules, getPreviousState, getState, setState, getRefs } = storeHelpers;
+  const { makeRules } = storeHelpers;
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
 

@@ -1,11 +1,9 @@
-import { PrendyStoreHelpers } from "../../declarations";
+import { MyTypes, PrendyStoreHelpers } from "../../declarations";
 
-export function get_globalUtils<A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers>(
-  storeHelpers: A_PrendyStoreHelpers
-) {
+export function get_globalUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
   const { getState, setState } = storeHelpers;
 
-  type AllState = ReturnType<A_PrendyStoreHelpers["getState"]>;
+  type AllState = ReturnType<T_MyTypes["StoreHelpers"]["getState"]>;
 
   function setGlobalState<
     GlobalItemState extends AllState["global"]["main"] & Record<any, any>,

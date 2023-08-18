@@ -1,64 +1,41 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import {
-  AnyCameraName,
-  DollName,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SpotNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
+import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
 import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
-import { Point3D } from "chootils/dist/points3d";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
-import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
 
-export function get_globalChangePlaceRules<
-  A_DollName extends DollName = DollName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyAssets extends PrendyAssets = PrendyAssets,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  _prendyStores: A_PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  prendyAssets: A_PrendyAssets
+export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-  const { placeInfoByName } = prendyAssets;
+  const { placeInfoByName, prendyOptions } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
-  const { getSliceVidVideo: getSliceVidVideo } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
+  const { getSliceVidVideo: getSliceVidVideo } = get_sliceVidUtils(prendyAssets, storeHelpers);
 
   const { updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets
-  );
-
-  const { focusSlateOnFocusedDoll } = get_slateUtils(storeHelpers, prendyStartOptions);
-  const { setGlobalState } = get_globalUtils(storeHelpers);
-  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-  const { setDollToSpot, setDollPosition, setDollRotation } = get_dollStoryHelpers(
-    storeHelpers,
-    prendyStartOptions,
-    prendyAssets.modelInfoByName
-  );
-  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<A_PlaceName, A_PrendyStoreHelpers, A_SpotNameByPlace>(
+    prendyAssets,
     storeHelpers
   );
+
+  const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
+  const { setGlobalState } = get_globalUtils(storeHelpers);
+  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+  const { setDollPosition, setDollRotation } = get_dollStoryHelpers(prendyAssets, storeHelpers);
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<T_MyTypes>(storeHelpers);
 
   function setPlayerPositionForNewPlace() {
     const { nowPlaceName, playerCharacter } = getState().global.main;
@@ -78,8 +55,8 @@ export function get_globalChangePlaceRules<
       newRotation = getSpotRotation(nowPlaceName, newSpotName);
     }
 
-    if (newPosition) setDollPosition(dollName as A_DollName, newPosition);
-    if (newRotation) setDollRotation(dollName as A_DollName, newRotation);
+    if (newPosition) setDollPosition(dollName as DollName, newPosition);
+    if (newRotation) setDollRotation(dollName as DollName, newRotation);
 
     setState({ dolls: { [dollName as string]: { goalSpotNameAtNewPlace: null } } });
 
@@ -208,7 +185,7 @@ export function get_globalChangePlaceRules<
           goalSegmentWhenGoalPlaceLoads,
         } = globalState;
         const { goalCamWhenNextPlaceLoads } = getState().global.main;
-        const wantedModelsForPlace = prendyStartOptions.modelNamesByPlace[nowPlaceName].sort();
+        const wantedModelsForPlace = prendyOptions.modelNamesByPlace[nowPlaceName].sort();
         const loadedModelNames = modelNamesLoaded.sort();
         let allModelsAreLoaded = true;
 

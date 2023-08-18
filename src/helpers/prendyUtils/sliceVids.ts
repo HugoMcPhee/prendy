@@ -1,19 +1,13 @@
-import {
-  AnyCameraName,
-  CameraNameByPlace,
-  PlaceName,
-  PrendyAssets,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  SegmentNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { SliceVidState, VidSlice } from "../../stores/sliceVids";
 import { get_cameraChangeUtils } from "./cameraChange";
 import { get_globalUtils } from "./global";
 
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
-export function get_getSliceVidVideo(storeHelpers: PrendyStoreHelpers) {
+export function get_getSliceVidVideo<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+
   const { getRefs, getState } = storeHelpers;
 
   return function getSliceVidVideo(itemName: PlaceName) {
@@ -26,7 +20,11 @@ export function get_getSliceVidVideo(storeHelpers: PrendyStoreHelpers) {
   };
 }
 
-export function get_getSliceVidWaitingVideo(storeHelpers: PrendyStoreHelpers) {
+export function get_getSliceVidWaitingVideo<T_MyTypes extends MyTypes = MyTypes>(
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+
   const { getRefs, getState } = storeHelpers;
 
   return function getSliceVidWaitingVideo(itemName: PlaceName) {
@@ -39,18 +37,21 @@ export function get_getSliceVidWaitingVideo(storeHelpers: PrendyStoreHelpers) {
   };
 }
 
-export function get_sliceVidUtils(
-  storeHelpers: PrendyStoreHelpers,
-  prendyOptions: PrendyOptions,
-  prendyAssets: PrendyAssets
+export function get_sliceVidUtils<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
+  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+
   const { getState, startItemEffect, stopEffect } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
 
   const { getGlobalState } = get_globalUtils(storeHelpers);
   const getSliceVidVideo = get_getSliceVidVideo(storeHelpers);
   const getSliceVidWaitingVideo = get_getSliceVidWaitingVideo(storeHelpers);
-  const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(storeHelpers, prendyOptions, prendyAssets);
+  const { getSafeCamName, getSafeSegmentName } = get_cameraChangeUtils(prendyAssets, storeHelpers);
 
   // temporary rule, that gets removed when it finishes
   function doWhenSliceVidStateChanges(
@@ -120,7 +121,7 @@ export function get_sliceVidUtils(
 
   function checkIfVideoUnloading(placeName: PlaceName) {
     const itemState = getState().sliceVids[placeName];
-    const { nowSlice, sliceVidState } = itemState;
+    const { sliceVidState } = itemState;
 
     return sliceVidState === "unloaded" || sliceVidState === "waitingForUnload";
   }
@@ -142,7 +143,7 @@ export function get_sliceVidUtils(
   function checkForVideoLoop(placeName: PlaceName) {
     // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
     const itemState = getState().sliceVids[placeName];
-    const { nowSlice, sliceVidState } = itemState;
+    const { nowSlice } = itemState;
     const backdropVid = getSliceVidVideo(placeName);
 
     if (checkIfVideoUnloading(placeName)) return false;

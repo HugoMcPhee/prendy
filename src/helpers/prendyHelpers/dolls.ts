@@ -1,80 +1,52 @@
 import { Space, Vector3 } from "@babylonjs/core";
-import { forEach } from "chootils/dist/loops";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
-import {
-  AnimationNameByModel,
-  BoneNameByModel,
-  CharacterName,
-  CharacterOptions,
-  DollName,
-  DollOptions,
-  MeshNameByModel,
-  ModelInfoByName,
-  ModelName,
-  PlaceName,
-  PrendyOptions,
-  PrendyStoreHelpers,
-  PrendyStores,
-  SpotNameByPlace,
-} from "../../declarations";
+import { MyTypes } from "../../declarations";
 import { get_dollStoryUtils } from "../../helpers/prendyUtils/dolls";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 import { vector3ToPoint3d } from "../babylonjs/vectors";
 
-export function get_dollStoryHelpers<
-  A_AnimationNameByModel extends AnimationNameByModel = AnimationNameByModel,
-  A_BoneNameByModel extends BoneNameByModel = BoneNameByModel,
-  A_CharacterName extends CharacterName = CharacterName,
-  A_CharacterOptions extends CharacterOptions = CharacterOptions,
-  A_DollName extends DollName = DollName,
-  A_DollOptions extends DollOptions = DollOptions,
-  A_MeshNameByModel extends MeshNameByModel = MeshNameByModel,
-  A_ModelInfoByName extends ModelInfoByName = ModelInfoByName,
-  A_ModelName extends ModelName = ModelName,
-  A_PlaceName extends PlaceName = PlaceName,
-  A_PrendyOptions extends PrendyOptions = PrendyOptions,
-  A_PrendyStoreHelpers extends PrendyStoreHelpers = PrendyStoreHelpers,
-  A_PrendyStores extends PrendyStores = PrendyStores,
-  A_SpotNameByPlace extends SpotNameByPlace = SpotNameByPlace
->(
-  storeHelpers: A_PrendyStoreHelpers,
-  // prendyStores: PrendyStores,
-  prendyStartOptions: A_PrendyOptions,
-  modelInfoByName: A_ModelInfoByName
+export function get_dollStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
 ) {
+  type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
+  type BoneNameByModel = T_MyTypes["Main"]["BoneNameByModel"];
+  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type CharacterOptions = T_MyTypes["Main"]["CharacterOptions"];
+  type DollName = T_MyTypes["Main"]["DollName"];
+  type DollOptions = T_MyTypes["Main"]["DollOptions"];
+  type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
+  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+
   const { getRefs, getState, setState } = storeHelpers;
+  const { prendyOptions } = prendyAssets;
 
-  type DollNameFromCharacter<T_CharacterName extends A_CharacterName> = A_CharacterOptions[T_CharacterName]["doll"];
+  type DollNameFromCharacter<T_CharacterName extends CharacterName> = CharacterOptions[T_CharacterName]["doll"];
 
-  type ModelNameFromDoll<T_DollName extends A_DollName> = A_DollOptions[T_DollName]["model"];
+  type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
 
-  type ModelNameFromCharacter<T_CharacterName extends A_CharacterName> = ModelNameFromDoll<
+  type ModelNameFromCharacter<T_CharacterName extends CharacterName> = ModelNameFromDoll<
     DollNameFromCharacter<T_CharacterName>
   >;
 
-  type AnimationNameFromCharacter<T_CharacterName extends A_CharacterName> =
-    A_AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
+  type AnimationNameFromCharacter<T_CharacterName extends CharacterName> =
+    AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
-  type MeshNamesFromDoll<T_DollName extends A_DollName> = A_MeshNameByModel[ModelNameFromDoll<T_DollName>];
+  type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
   const { setGlobalState } = get_globalUtils(storeHelpers);
 
-  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<
-    A_DollName,
-    A_PlaceName,
-    A_PrendyStoreHelpers,
-    A_PrendyStores,
-    A_SpotNameByPlace
-  >(storeHelpers);
+  const { getModelNameFromDoll, get2DAngleBetweenDolls, get2DAngleFromDollToSpot } =
+    get_dollStoryUtils<T_MyTypes>(storeHelpers);
 
-  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<A_PlaceName, A_PrendyStoreHelpers, A_SpotNameByPlace>(
-    storeHelpers
-  );
+  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<T_MyTypes>(storeHelpers);
 
   // --------------------------------------------------------------
 
-  function setDollPosition(dollName: A_DollName, newPositon: Vector3) {
+  function setDollPosition(dollName: DollName, newPositon: Vector3) {
     const dollRefs = getRefs().dolls[dollName];
     if (!dollRefs.meshRef) return console.warn("NO MESH REF", dollName);
 
@@ -87,11 +59,11 @@ export function get_dollStoryHelpers<
     });
   }
 
-  function springDollPosition(dollName: A_DollName, newPositon: Vector3) {}
+  function springDollPosition(dollName: DollName, newPositon: Vector3) {}
 
-  function slideDollPosition(dollName: A_DollName, newPositon: Vector3) {}
+  function slideDollPosition(dollName: DollName, newPositon: Vector3) {}
 
-  function setDollRotation(dollName: A_DollName, newRotation: Vector3) {
+  function setDollRotation(dollName: DollName, newRotation: Vector3) {
     const dollRefs = getRefs().dolls[dollName];
     if (!dollRefs.meshRef) return console.warn("no mesh ref", dollName);
 
@@ -101,8 +73,8 @@ export function get_dollStoryHelpers<
   }
 
   function lookAtOtherDoll(
-    dollA: A_DollName,
-    dollB: A_DollName // defaults to playerChaarcter
+    dollA: DollName,
+    dollB: DollName // defaults to playerChaarcter
   ) {
     // NOTE could be async
 
@@ -110,20 +82,20 @@ export function get_dollStoryHelpers<
     springDollRotationY(dollB, angle);
   }
 
-  function dollLooksAtSpot<T_PlaceName extends A_PlaceName>({
+  function dollLooksAtSpot<T_PlaceName extends PlaceName>({
     place,
     spot,
     doll,
   }: {
     place: T_PlaceName;
-    spot: A_SpotNameByPlace[T_PlaceName];
-    doll: A_DollName;
+    spot: SpotNameByPlace[T_PlaceName];
+    doll: DollName;
   }) {
     const angle = get2DAngleFromDollToSpot(doll, place, spot);
     springDollRotationY(doll, angle);
   }
 
-  function setDollRotationY(dollName: A_DollName, newRotationY: number) {
+  function setDollRotationY(dollName: DollName, newRotationY: number) {
     setState({
       dolls: {
         [dollName]: {
@@ -134,11 +106,11 @@ export function get_dollStoryHelpers<
     });
   }
 
-  function springDollRotationY(dollName: A_DollName, newRotation: number) {
+  function springDollRotationY(dollName: DollName, newRotation: number) {
     setState({ dolls: { [dollName]: { rotationYGoal: newRotation } } });
   }
 
-  function springAddToDollRotationY(dollName: A_DollName, addedRotation: number, useShortestAngle: boolean = false) {
+  function springAddToDollRotationY(dollName: DollName, addedRotation: number, useShortestAngle: boolean = false) {
     setState((state) => {
       const currentAngle = state.dolls[dollName].rotationYGoal;
 
@@ -160,30 +132,30 @@ export function get_dollStoryHelpers<
     });
   }
 
-  function setDollAnimation<T_Doll extends A_DollName>(
+  function setDollAnimation<T_Doll extends DollName>(
     doll: T_Doll,
-    animation: A_AnimationNameByModel[ModelNameFromDoll<T_Doll>]
+    animation: AnimationNameByModel[ModelNameFromDoll<T_Doll>]
   ) {
     setState({ dolls: { [doll]: { nowAnimation: animation } } });
   }
 
-  function focusOnDoll<T_Doll extends A_DollName>(dollName: T_Doll, zoom?: number) {
+  function focusOnDoll<T_Doll extends DollName>(dollName: T_Doll, zoom?: number) {
     setGlobalState({
       focusedDoll: dollName,
       slateZoomGoal:
-        zoom !== undefined ? Math.min(zoom, prendyStartOptions.zoomLevels.max) : prendyStartOptions.zoomLevels.default,
+        zoom !== undefined ? Math.min(zoom, prendyOptions.zoomLevels.max) : prendyOptions.zoomLevels.default,
     });
   }
 
-  function setDollToSpot<T_PlaceName extends A_PlaceName>({
+  function setDollToSpot<T_PlaceName extends PlaceName>({
     place,
     spot,
     doll: dollName,
     dontSetRotationState,
   }: {
     place: T_PlaceName;
-    spot: A_SpotNameByPlace[T_PlaceName];
-    doll: A_DollName;
+    spot: SpotNameByPlace[T_PlaceName];
+    doll: DollName;
     dontSetRotationState?: boolean;
   }) {
     const newPositon = getSpotPosition(place, spot);
@@ -198,15 +170,15 @@ export function get_dollStoryHelpers<
 
   // NOTE this isn't really working atm, maybe because falling sortof sets positionMoveMode to "push" ?
   // it was the movement speed being slow so stopping the mover from keeping going
-  function springDollToSpot<T_PlaceName extends A_PlaceName>({
+  function springDollToSpot<T_PlaceName extends PlaceName>({
     place,
     spot,
     doll: dollName,
   }: // useRotation = true,
   {
     place: T_PlaceName;
-    spot: A_SpotNameByPlace[T_PlaceName];
-    doll: A_DollName;
+    spot: SpotNameByPlace[T_PlaceName];
+    doll: DollName;
     // useRotation?: boolean;
   }) {
     const newPositon = getSpotPosition(place, spot);
@@ -226,7 +198,7 @@ export function get_dollStoryHelpers<
     });
   }
 
-  function moveDollAt2DAngle(dollName: A_DollName, angle: number, speed: number = 3) {
+  function moveDollAt2DAngle(dollName: DollName, angle: number, speed: number = 3) {
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { positionIsMoving, positionMoveMode } = dollState;
@@ -244,7 +216,7 @@ export function get_dollStoryHelpers<
     dollRefs.positionMoverRefs.velocity.y = -1.5;
   }
 
-  function pushDollRotationY(dollName: A_DollName, direction: "right" | "left", speed: number = 3) {
+  function pushDollRotationY(dollName: DollName, direction: "right" | "left", speed: number = 3) {
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { rotationYIsMoving, rotationYMoveMode } = dollState;
@@ -270,11 +242,11 @@ export function get_dollStoryHelpers<
     // dollRefs.rotationYMoverRefs.velocity.y = -1.5;
   }
 
-  function hideDoll(dollName: A_DollName, shouldHide: boolean = true) {
+  function hideDoll(dollName: DollName, shouldHide: boolean = true) {
     setState({ dolls: { [dollName]: { isVisible: !shouldHide } } }, () => {});
   }
 
-  function toggleDollMeshes<T_DollName extends A_DollName>(
+  function toggleDollMeshes<T_DollName extends DollName>(
     dollName: T_DollName,
     toggledMeshes: Partial<Record<MeshNamesFromDoll<T_DollName>, boolean>>
   ) {
@@ -301,14 +273,14 @@ export function get_dollStoryHelpers<
     }));
   }
 
-  function getDollBonePosition<T_ModelName extends A_ModelName>({
+  function getDollBonePosition<T_ModelName extends ModelName>({
     doll,
     model,
     bone,
   }: {
-    doll: A_DollName;
+    doll: DollName;
     model: T_ModelName; // TODO update to support auto getting the model name from the doll (when typescript supports keeping generic types for functions (with getStte? or something))
-    bone: A_BoneNameByModel[T_ModelName];
+    bone: BoneNameByModel[T_ModelName];
   }) {
     // ModelNameFromDoll
     const dollRefs = getRefs().dolls.dino;

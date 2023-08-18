@@ -8,12 +8,13 @@ import { makeStartAndStopRules } from "../rules/rules";
 import { get_LoadingModels } from "./LoadingModels";
 import { get_ScreenGui } from "./gui/ScreenGui";
 export function makePrendyApp(options) {
-    const { storeHelpers, prendyOptions, prendyAssets } = options;
+    const { storeHelpers, prendyAssets } = options;
+    const { prendyOptions } = prendyAssets;
     loadStyles();
     const { getRefs, onNextTick, setState } = storeHelpers;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = get_ScreenGui(storeHelpers, prendyOptions, prendyAssets);
-    const LoadingModels = get_LoadingModels(storeHelpers, prendyOptions, prendyAssets);
+    const ScreenGuiDom = get_ScreenGui(prendyAssets, storeHelpers);
+    const LoadingModels = get_LoadingModels(prendyAssets, storeHelpers);
     const StartAndStopRules = makeStartAndStopRules(options);
     // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
     // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);

@@ -1,10 +1,10 @@
 import { get_speechStoryHelpers } from "../../helpers/prendyHelpers/speech";
 import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
-export function get_globalVideoRules(storeHelpers, _prendyStores, prendyStartOptions, prendyAssets) {
+export function get_globalVideoRules(prendyAssets, prendyStores, storeHelpers) {
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-    const { getSliceForPlace, getSliceVidVideo, getSliceVidWaitingVideo, checkForVideoLoop, checkIfVideoAlreadyChanging, } = get_sliceVidUtils(storeHelpers, prendyStartOptions, prendyAssets);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(storeHelpers, prendyStartOptions, prendyAssets);
+    const { getSliceForPlace, getSliceVidVideo, getSliceVidWaitingVideo, checkForVideoLoop, checkIfVideoAlreadyChanging, } = get_sliceVidUtils(prendyAssets, storeHelpers);
+    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(prendyAssets, storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         whenWantToChooseVideoSlice: effect({
             run() {
@@ -190,7 +190,7 @@ export function get_globalVideoRules(storeHelpers, _prendyStores, prendyStartOpt
                 const isPlaying = !backdropVidElement.paused;
                 const isPlayingWait = !backdropVidElementWaiting.paused;
                 const logText = ["isPlaying", isPlaying, "isPlayingWait", isPlayingWait, sliceVidState.sliceVidState].join(" ");
-                const { showAlarmText } = get_speechStoryHelpers(storeHelpers, _prendyStores, prendyStartOptions, ["example"]);
+                const { showAlarmText } = get_speechStoryHelpers(prendyAssets, prendyStores, storeHelpers);
                 // (stateVidState.vidState === "play" || stateVidState.vidState === "beforePlay")
                 if (!isPlaying) {
                     // TODO handle returning from sleep on iOS

@@ -16,6 +16,7 @@ export default function keyboards() {
     Enter: false,
     KeyZ: false,
     KeyM: false,
+    KeyP: false,
   });
 
   const refs = () => ({});

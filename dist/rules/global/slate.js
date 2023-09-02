@@ -8,6 +8,7 @@ export function get_globalSlateRules(prendyAssets, storeHelpers) {
     const { setGlobalState } = get_globalUtils(storeHelpers);
     const { makeRules, getRefs, getState } = storeHelpers;
     const { runMover, runMover2d } = makeRunMovers(storeHelpers);
+    const { prendyOptions } = prendyAssets;
     const globalRefs = getRefs().global.main;
     return makeRules(({ itemEffect, effect }) => ({
         whenSlatePositionChanges: effect({
@@ -85,10 +86,27 @@ export function get_globalSlateRules(prendyAssets, storeHelpers) {
                     return;
                 const { editedHardwareScaling, editedSlateSceneZoom } = getShaderTransformStuff();
                 const screenHeight = window.innerHeight;
+                const screenWidth = window.innerWidth;
                 const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
                 const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
                 engine.setSize(newRenderWidth, newRenderHeight);
                 (_a = globalRefs.depthRenderTarget) === null || _a === void 0 ? void 0 : _a.resize({ width: newRenderWidth, height: newRenderHeight });
+                // if the new screen ratio is equal to or thinner than a vertical 16:9, then set isOnVerticalPhone to true
+                const isOnVerticalScreen = screenHeight / screenWidth >= 1;
+                // check if the screen is super wide (for landscape phones)
+                const isOnSuperWideScreen = screenWidth / screenHeight >= 16 / 7;
+                console.log("isOnSuperWideScreen", isOnSuperWideScreen);
+                let newZoomMultiplier = 1;
+                if (isOnVerticalScreen) {
+                    // ifon a vertical screen, get a multiplier to make the zoom levels smaller
+                    // it should be so that (newZoomMultiplier * prendyOptions.zoomLevels.default) is 1
+                    newZoomMultiplier = 1 / prendyOptions.zoomLevels.default;
+                }
+                else if (isOnSuperWideScreen) {
+                    // it should be so that (newZoomMultiplier * prendyOptions.zoomLevels.default) is 1.025
+                    newZoomMultiplier = 1.025 / prendyOptions.zoomLevels.default;
+                }
+                setGlobalState({ isOnVerticalScreen: true, zoomMultiplier: newZoomMultiplier });
                 focusSlateOnFocusedDoll("instant");
             },
             check: { prop: "timeScreenResized", type: "global" },

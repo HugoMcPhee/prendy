@@ -17,6 +17,7 @@ export default function keyboards(): {
             Enter: boolean;
             KeyZ: boolean;
             KeyM: boolean;
+            KeyP: boolean;
         };
     };
     state: () => {
@@ -36,6 +37,7 @@ export default function keyboards(): {
         Enter: boolean;
         KeyZ: boolean;
         KeyM: boolean;
+        KeyP: boolean;
     };
     refs: () => {};
 };

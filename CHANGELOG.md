@@ -14,6 +14,13 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v 0.9.14
+
+- zooms out more for tall or wide screens
+- hides virtual joystick
+- fixes hopping when going down slopes at a high speed
+- WIP supports pausing and resuming
+
 v 0.9.13
 
 - Cleaned up types to use a single MyTypes type

@@ -162,7 +162,8 @@ export function get_VirtualStick(storeHelpers) {
                 height: "100vh",
                 zIndex: 100,
                 overflow: "hidden",
-                opacity: 0.1,
+                // opacity: 0.1,
+                opacity: 0.0,
                 // background: "green",
             } },
             React.createElement(animated.div, { ref: refs.leftThumbContainer, style: {

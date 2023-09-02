@@ -35,7 +35,7 @@ export function makePrendyApp(options) {
                         engine.stopRenderLoop(); // Each frame is rendered manually inside the video looping check function
                         engine.disableUniformBuffers = true;
                         engine.setHardwareScalingLevel(1); // NOTE could set this based on the zoom level to prevent objects getting blurry when zooming in
-                        engine.setSize(1280, 720);
+                        engine.setSize(1920, 1080);
                         info.scene.performancePriority = ScenePerformancePriority.BackwardCompatible;
                         info.scene.autoClear = false;
                         info.scene.autoClearDepthAndStencil = false;

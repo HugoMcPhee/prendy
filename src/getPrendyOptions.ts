@@ -36,10 +36,7 @@ export function makePrendyOptions<
   heldPickups: PickupName[];
   playerCharacter: CharacterName;
   playerAnimations: { walking: AnyAnimationName; idle: AnyAnimationName };
-  zoomLevels: {
-    default: number;
-    max: number;
-  };
+  zoomLevels: { default: number; max: number };
   walkSpeed: number;
   animationSpeed: number;
   headHeightOffsets: Partial<Record<ModelName, number>>; // maybe eventually move to being automatic by finding a bone with"neck" in its name

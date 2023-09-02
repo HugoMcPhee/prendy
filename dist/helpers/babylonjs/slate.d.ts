@@ -21,7 +21,7 @@ export declare function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(pren
     }) => Point2D;
     checkPointIsInsideSlate: (pointOnSlate: Point2D) => boolean;
     getShaderTransformStuff: () => {
-        editedSlateSceneZoom: any;
+        editedSlateSceneZoom: number;
         editedHardwareScaling: number;
     };
 };

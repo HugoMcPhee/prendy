@@ -152,7 +152,9 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 //assuming we're only using the single camera:
                 const camera = activeCamera;
                 let currentYRotation = dollState.rotationYGoal;
+                let currentWalkSpeed = dollState.nowWalkSpeed;
                 let newYRotation = currentYRotation;
+                let newWalkSpeed = currentWalkSpeed;
                 let newAnimationName = dollState.nowAnimation;
                 let newIsMoving = dollState.positionIsMoving;
                 let newPositionMoveMode = dollState.positionMoveMode;
@@ -167,13 +169,10 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 let desiredMoveDirection = forward
                     .multiplyByFloats(inputVelocity.y, inputVelocity.y, inputVelocity.y)
                     .add(right.multiplyByFloats(-inputVelocity.x, -inputVelocity.x, -inputVelocity.x));
-                if (!pointIsZero(inputVelocity) && !playerMovingPaused) {
+                const canMove = !pointIsZero(inputVelocity) && !playerMovingPaused;
+                if (canMove) {
                     newAnimationName = playerState.animationNames.walking;
                     newIsMoving = true;
-                    newYRotation = getVectorAngle({
-                        x: -desiredMoveDirection.z,
-                        y: -desiredMoveDirection.x,
-                    });
                 }
                 else {
                     if (newAnimationName === playerState.animationNames.walking) {
@@ -187,8 +186,16 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 }
                 //now we can apply the movement:
                 // * frameDuration * 0.1
-                dollRefs.positionMoverRefs.velocity.x = desiredMoveDirection.x * playerRefs.walkSpeed * timerSpeed;
-                dollRefs.positionMoverRefs.velocity.z = desiredMoveDirection.z * playerRefs.walkSpeed * timerSpeed;
+                dollRefs.positionMoverRefs.velocity.x = desiredMoveDirection.x * playerRefs.topWalkSpeed * timerSpeed;
+                dollRefs.positionMoverRefs.velocity.z = desiredMoveDirection.z * playerRefs.topWalkSpeed * timerSpeed;
+                if (canMove) {
+                    const newSpeedAndRotation = getSpeedAndAngleFromVector({
+                        x: -dollRefs.positionMoverRefs.velocity.z,
+                        y: -dollRefs.positionMoverRefs.velocity.x,
+                    });
+                    newYRotation = newSpeedAndRotation.angle;
+                    newWalkSpeed = newSpeedAndRotation.speed;
+                }
                 // dollRefs.positionMoverRefs.velocity.y = -gravityValue * timerSpeed;
                 // if (shouldChangeAngle) {
                 if (!playerMovingPaused)
@@ -211,6 +218,7 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                         [dollName]: {
                             // inputVelocity: newInputVelocity,
                             rotationYGoal: newYRotation,
+                            nowWalkSpeed: newWalkSpeed,
                             // nowAnimation: playerMovingPaused ? undefined : newAnimationName,
                             nowAnimation: newAnimationName,
                             positionMoveMode: newPositionMoveMode,
@@ -289,6 +297,7 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 let currentYRotation = dollState.rotationYGoal;
                 let newAnimationName = dollState.nowAnimation;
                 let newIsMoving = dollState.positionIsMoving;
+                let nowWalkSpeed = dollState.nowWalkSpeed;
                 let newPositionMoveMode = dollState.positionMoveMode;
                 let newIsJumping = isJumping;
                 const { 
@@ -353,7 +362,8 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 const safeSlopeDivider = Math.max(Math.abs(slope) * 0.7, 1);
                 const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
                 if (isAboveDownSlope && newIsOnGround) {
-                    dollPosRefs.velocity.y = -slopeFallSpeed * 4; // need to multiply by player walk speed
+                    console.log("nowWalkSpeed", nowWalkSpeed);
+                    dollPosRefs.velocity.y = -slopeFallSpeed * nowWalkSpeed; // need to multiply by player walk speed
                 }
                 if (newIsOnGround) {
                     if (!isAboveDownSlope) {
@@ -375,6 +385,14 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 }
                 if (dollPosRefs.velocity.y !== 0)
                     newIsMoving = true;
+                // console.log(
+                //   "newIsOnGround",
+                //   newIsOnGround,
+                //   "isAboveDownSlope",
+                //   isAboveDownSlope,
+                //   "isAboveUpSlope",
+                //   isAboveUpSlope
+                // );
                 // if (!playerMovingPaused) newPositionMoveMode = "push";
                 newPositionMoveMode = "push";
                 setState({

@@ -166,6 +166,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
       // springStopSpeed: 0.001, // NOTE not used in mover yet
     }), // (like scale)
     slatePosMoveConfigName: "default", // todo move to mover2dState()
+    isOnVerticalScreen: false,
+    zoomMultiplier: 1, // for vertical screens, zoom out a bit
     //
     // interacting
     timeScreenResized: Date.now(),
@@ -181,6 +183,9 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     aConvoIsHappening: false,
     //
     frameTick: 0,
+    gameTimeElapsed: 0,
+    pauseTimeElapsed: 0,
+    miniGameTimeElapsed: 0, // when not in the pause menu or the main game
     //
     debugMessage: "",
     //
@@ -199,7 +204,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     backdropPostProcessEffect: null as null | Effect,
     fxaaPostProcess: null as null | PostProcess,
     //
-    backdropSize: { width: 1280, height: 720 },
+    backdropSize: { width: 1920, height: 1080 },
     stretchVideoSize: { x: 1, y: 1 },
     stretchVideoGoalSize: { x: 1, y: 1 },
     stretchSceneSize: { x: 1, y: 1 },

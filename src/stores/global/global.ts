@@ -183,9 +183,11 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     aConvoIsHappening: false,
     //
     frameTick: 0,
+    timeMode: "game" as "game" | "pause" | "miniGame",
     gameTimeElapsed: 0,
     pauseTimeElapsed: 0,
     miniGameTimeElapsed: 0, // when not in the pause menu or the main game
+    isGamePaused: false,
     //
     debugMessage: "",
     //

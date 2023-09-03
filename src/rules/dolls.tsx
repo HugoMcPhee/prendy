@@ -282,7 +282,7 @@ export function get_dollRules<
       run({ itemName: dollName, itemRefs: dollRefs, itemState: dollState }) {
         setState({ dolls: { [dollName]: { positionIsMoving: true } } });
         const { positionMoveMode: moveMode } = dollState;
-        // TEMPORARY : ideally this is automatic for movers?
+        // TEMPORARY : ideally this is automatic for movers? (when isMoving becoems true?)
         if (moveMode === "spring") dollRefs.positionMoverRefs.recentSpeeds = [];
       },
       atStepEnd: true,

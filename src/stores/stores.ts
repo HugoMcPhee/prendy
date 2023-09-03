@@ -12,6 +12,7 @@ import speechBubbles from "./speechBubbles";
 import stateVids from "./stateVids";
 
 export const prendyStepNames = [
+  "elapsedTimeUpdates",
   // updating internal video states
   "stateVidStateUpdates",
   "sliceVidStateUpdates",

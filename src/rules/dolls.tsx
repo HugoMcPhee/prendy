@@ -134,11 +134,60 @@ export function get_dollRules<
     get_dollUtils(prendyAssets, storeHelpers);
   const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
   const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
-  const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
+  const { runMover, runMover2d, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
   const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
   type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
+
+  function addMoverRules(
+    moverName: string,
+    store: keyof ReturnType<typeof getState>,
+    moverType: "1d" | "2d" | "3d" | "multi" = "1d"
+  ) {
+    const isMovingKey = `${moverName}IsMoving`;
+    const moveModePropKey = `${moverName}MoveMode`;
+    const moverRefsKey = `${moverName}MoverRefs`;
+
+    const runMoverFunctionsByType = {
+      "1d": runMover,
+      "2d": runMover2d,
+      "3d": runMover3d,
+      multi: runMoverMulti,
+    } as const;
+
+    const runMoverFunction = runMoverFunctionsByType[moverType];
+
+    const valueGoalChangedRule = {
+      run({ previousValue: oldYRotation, newValue: newYRotation, itemName, itemState, itemRefs }) {
+        setState({ [store]: { [itemName]: { [isMovingKey]: true } } });
+        if (moverType === "3d") {
+          const moveMode = itemState[moveModePropKey];
+          // TEMPORARY : ideally this is automatic for movers? (when isMoving becoems true?)
+          // it was there for doll position, bu tput here so it works the same for now
+          if (moveMode === "spring") itemRefs[moverRefsKey].recentSpeeds = [];
+        }
+      },
+      check: { type: store, prop: moverName + "Goal" },
+      step: "moversGoal",
+      atStepEnd: true,
+      _isPerItem: true,
+    };
+    const startedMovingRule = {
+      run({ itemName }) {
+        runMoverFunction({ name: itemName, type: store, mover: moverName });
+      },
+      check: { type: store, prop: isMovingKey, becomes: true },
+      step: "moversStart",
+      atStepEnd: true,
+      _isPerItem: true,
+    };
+
+    return {
+      [`${moverName}GoalChanged`]: valueGoalChangedRule,
+      [`when${moverName}StartedMoving`]: startedMovingRule,
+    };
+  }
 
   return makeRules(({ itemEffect, effect }) => ({
     // --------------------------------
@@ -192,22 +241,7 @@ export function get_dollRules<
       step: "dollAnimation",
       atStepEnd: true,
     }),
-    whenAnimWeightsGoalChanged: itemEffect({
-      run({ itemName: dollName }) {
-        setState({ dolls: { [dollName]: { animWeightsIsMoving: true } } });
-      },
-      check: { type: "dolls", prop: "animWeightsGoal" },
-      step: "dollAnimation2",
-      atStepEnd: true,
-    }),
-    whenAnimationWeightsStartedMoving: itemEffect({
-      run({ itemName: dollName }) {
-        runMoverMulti({ name: dollName, type: "dolls", mover: "animWeights" });
-      },
-      check: { type: "dolls", prop: "animWeightsIsMoving", becomes: true },
-      step: "dollAnimationStartMovers",
-      atStepEnd: true,
-    }),
+
     whenAnimWeightsChanged: itemEffect({
       run({ newValue: animWeights, itemState, itemRefs }) {
         const { modelName } = itemState;
@@ -259,52 +293,6 @@ export function get_dollRules<
       check: { type: "dolls", prop: "rotationY" },
     }),
     //
-
-    whenRotationGoalChanged: itemEffect({
-      run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName }) {
-        const yRotationDifference = oldYRotation - newYRotation;
-
-        if (Math.abs(yRotationDifference) > 180) {
-          const shortestAngle = getShortestAngle(oldYRotation, newYRotation);
-          let editedYRotation = oldYRotation + shortestAngle;
-
-          setState({
-            dolls: { [dollName]: { rotationYGoal: editedYRotation, rotationYIsMoving: true } },
-          });
-        } else {
-          setState({ dolls: { [dollName]: { rotationYIsMoving: true } } });
-        }
-      },
-      check: { type: "dolls", prop: "rotationYGoal" },
-    }),
-
-    whenPositionGoalChanged: itemEffect({
-      run({ itemName: dollName, itemRefs: dollRefs, itemState: dollState }) {
-        setState({ dolls: { [dollName]: { positionIsMoving: true } } });
-        const { positionMoveMode: moveMode } = dollState;
-        // TEMPORARY : ideally this is automatic for movers? (when isMoving becoems true?)
-        if (moveMode === "spring") dollRefs.positionMoverRefs.recentSpeeds = [];
-      },
-      atStepEnd: true,
-      step: "dollAnimation2",
-      check: { type: "dolls", prop: "positionGoal" },
-    }),
-
-    whenStartedMoving: itemEffect({
-      run({ itemName: dollName }) {
-        runMover3d({ name: dollName, type: "dolls", mover: "position" });
-      },
-      check: { type: "dolls", prop: "positionIsMoving", becomes: true },
-      step: "dollAnimationStartMovers",
-      atStepEnd: true,
-    }),
-    whenStartedRotating: itemEffect({
-      run({ itemName: dollName }) {
-        runMover({ name: dollName, type: "dolls", mover: "rotationY" });
-      },
-      check: { type: "dolls", prop: "rotationYIsMoving", becomes: true },
-      atStepEnd: true,
-    }),
 
     // ___________________________________
     // position
@@ -533,5 +521,27 @@ export function get_dollRules<
       step: "default",
       atStepEnd: true,
     }),
+
+    // ------------------------------------
+    // Mover rules
+
+    // rotationY
+    whenRotationGoalChangedToFix: itemEffect({
+      run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName }) {
+        const yRotationDifference = oldYRotation - newYRotation;
+
+        if (Math.abs(yRotationDifference) > 180) {
+          const shortestAngle = getShortestAngle(oldYRotation, newYRotation);
+          let editedYRotation = oldYRotation + shortestAngle;
+          setState({ dolls: { [dollName]: { rotationYGoal: editedYRotation } } });
+        }
+      },
+      check: { type: "dolls", prop: "rotationYGoal" },
+      step: "dollCorrectRotationAndPosition",
+      atStepEnd: true,
+    }),
+    ...addMoverRules("position", "dolls", "3d"),
+    ...addMoverRules("rotationY", "dolls"),
+    ...addMoverRules("animWeights", "dolls", "multi"),
   }));
 }

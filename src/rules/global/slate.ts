@@ -33,30 +33,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
       atStepEnd: true,
       step: "slatePosition",
     }),
-    whenSlatePositionGoalChanges: itemEffect({
-      run: () => setGlobalState({ slatePosIsMoving: true }),
-      check: { prop: "slatePosGoal", type: "global" },
-      atStepEnd: true,
-      step: "slatePosition",
-    }),
-    whenSlatePosIsMoving: itemEffect({
-      run: ({ itemName }) => runMover2d({ name: itemName, type: "global", mover: "slatePos" }),
-      check: { prop: "slatePosIsMoving", type: "global", becomes: true },
-      atStepEnd: true,
-      step: "slatePositionStartMovers",
-    }),
-    whenSlateZoomGoalChanges: itemEffect({
-      run: () => setGlobalState({ slateZoomIsMoving: true }),
-      check: { prop: "slateZoomGoal", type: "global" },
-      atStepEnd: true,
-      step: "slatePosition",
-    }),
-    whenSlateZoomIsMoving: itemEffect({
-      run: ({ itemName }) => runMover({ name: itemName, type: "global", mover: "slateZoom" }),
-      check: { prop: "slateZoomIsMoving", type: "global", becomes: true },
-      atStepEnd: true,
-      step: "slatePositionStartMovers",
-    }),
+
     whenShouldFocusOnDoll: itemEffect({
       run: () => focusSlateOnFocusedDoll(),
       check: {
@@ -133,6 +110,31 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
       check: { prop: "timeScreenResized", type: "global" },
       atStepEnd: true,
       step: "slatePosition",
+    }),
+    // Movers
+    whenSlatePositionGoalChanges: itemEffect({
+      run: () => setGlobalState({ slatePosIsMoving: true }),
+      check: { prop: "slatePosGoal", type: "global" },
+      step: "moversGoal",
+      atStepEnd: true,
+    }),
+    whenSlatePosIsMoving: itemEffect({
+      run: ({ itemName }) => runMover2d({ name: itemName, type: "global", mover: "slatePos" }),
+      check: { prop: "slatePosIsMoving", type: "global", becomes: true },
+      step: "moversStart",
+      atStepEnd: true,
+    }),
+    whenSlateZoomGoalChanges: itemEffect({
+      run: () => setGlobalState({ slateZoomIsMoving: true }),
+      check: { prop: "slateZoomGoal", type: "global" },
+      step: "moversGoal",
+      atStepEnd: true,
+    }),
+    whenSlateZoomIsMoving: itemEffect({
+      run: ({ itemName }) => runMover({ name: itemName, type: "global", mover: "slateZoom" }),
+      check: { prop: "slateZoomIsMoving", type: "global", becomes: true },
+      step: "moversStart",
+      atStepEnd: true,
     }),
   }));
 }

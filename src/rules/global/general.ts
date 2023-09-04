@@ -55,7 +55,7 @@ export function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers) {
         const globalState = getState().global.main;
         const gameTimeElapsed = globalState.gameTimeElapsed;
         // log the value
-        console.log("gameTimeElapsed", gameTimeElapsed);
+        // console.log("gameTimeElapsed", gameTimeElapsed);
       },
       check: { type: ["global"], name: ["main"], prop: ["gameTimeElapsed"] },
       step: "rendering",

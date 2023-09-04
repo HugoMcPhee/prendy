@@ -443,8 +443,6 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
         const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
 
         if (isAboveDownSlope && newIsOnGround) {
-          console.log("nowWalkSpeed", nowWalkSpeed);
-
           dollPosRefs.velocity.y = -slopeFallSpeed * nowWalkSpeed; // need to multiply by player walk speed
         }
 

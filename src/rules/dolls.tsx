@@ -3,7 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeRunMovers } from "repond-movers";
+import { makeMoverUtils } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
 import { MyTypes } from "../declarations";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
@@ -134,60 +134,11 @@ export function get_dollRules<
     get_dollUtils(prendyAssets, storeHelpers);
   const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
   const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
-  const { runMover, runMover2d, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
+  const { addMoverRules } = makeMoverUtils(storeHelpers);
   const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
   type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
-
-  function addMoverRules(
-    moverName: string,
-    store: keyof ReturnType<typeof getState>,
-    moverType: "1d" | "2d" | "3d" | "multi" = "1d"
-  ) {
-    const isMovingKey = `${moverName}IsMoving`;
-    const moveModePropKey = `${moverName}MoveMode`;
-    const moverRefsKey = `${moverName}MoverRefs`;
-
-    const runMoverFunctionsByType = {
-      "1d": runMover,
-      "2d": runMover2d,
-      "3d": runMover3d,
-      multi: runMoverMulti,
-    } as const;
-
-    const runMoverFunction = runMoverFunctionsByType[moverType];
-
-    const valueGoalChangedRule = {
-      run({ previousValue: oldYRotation, newValue: newYRotation, itemName, itemState, itemRefs }) {
-        setState({ [store]: { [itemName]: { [isMovingKey]: true } } });
-        if (moverType === "3d") {
-          const moveMode = itemState[moveModePropKey];
-          // TEMPORARY : ideally this is automatic for movers? (when isMoving becoems true?)
-          // it was there for doll position, bu tput here so it works the same for now
-          if (moveMode === "spring") itemRefs[moverRefsKey].recentSpeeds = [];
-        }
-      },
-      check: { type: store, prop: moverName + "Goal" },
-      step: "moversGoal",
-      atStepEnd: true,
-      _isPerItem: true,
-    };
-    const startedMovingRule = {
-      run({ itemName }) {
-        runMoverFunction({ name: itemName, type: store, mover: moverName });
-      },
-      check: { type: store, prop: isMovingKey, becomes: true },
-      step: "moversStart",
-      atStepEnd: true,
-      _isPerItem: true,
-    };
-
-    return {
-      [`${moverName}GoalChanged`]: valueGoalChangedRule,
-      [`when${moverName}StartedMoving`]: startedMovingRule,
-    };
-  }
 
   return makeRules(({ itemEffect, effect }) => ({
     // --------------------------------
@@ -540,8 +491,8 @@ export function get_dollRules<
       step: "dollCorrectRotationAndPosition",
       atStepEnd: true,
     }),
-    ...addMoverRules("position", "dolls", "3d"),
-    ...addMoverRules("rotationY", "dolls"),
-    ...addMoverRules("animWeights", "dolls", "multi"),
+    ...addMoverRules("dolls", "position", "3d"),
+    ...addMoverRules("dolls", "rotationY"),
+    ...addMoverRules("dolls", "animWeights", "multi"),
   }));
 }

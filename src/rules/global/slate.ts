@@ -1,5 +1,5 @@
 import delay from "delay";
-import { makeRunMovers } from "repond-movers";
+import { makeMoverUtils } from "repond-movers";
 import { MyTypes } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
@@ -15,7 +15,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
   );
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState } = storeHelpers;
-  const { runMover, runMover2d } = makeRunMovers(storeHelpers);
+  const { addMoverRules } = makeMoverUtils(storeHelpers);
 
   const { prendyOptions } = prendyAssets;
 
@@ -111,30 +111,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
       atStepEnd: true,
       step: "slatePosition",
     }),
-    // Movers
-    whenSlatePositionGoalChanges: itemEffect({
-      run: () => setGlobalState({ slatePosIsMoving: true }),
-      check: { prop: "slatePosGoal", type: "global" },
-      step: "moversGoal",
-      atStepEnd: true,
-    }),
-    whenSlatePosIsMoving: itemEffect({
-      run: ({ itemName }) => runMover2d({ name: itemName, type: "global", mover: "slatePos" }),
-      check: { prop: "slatePosIsMoving", type: "global", becomes: true },
-      step: "moversStart",
-      atStepEnd: true,
-    }),
-    whenSlateZoomGoalChanges: itemEffect({
-      run: () => setGlobalState({ slateZoomIsMoving: true }),
-      check: { prop: "slateZoomGoal", type: "global" },
-      step: "moversGoal",
-      atStepEnd: true,
-    }),
-    whenSlateZoomIsMoving: itemEffect({
-      run: ({ itemName }) => runMover({ name: itemName, type: "global", mover: "slateZoom" }),
-      check: { prop: "slateZoomIsMoving", type: "global", becomes: true },
-      step: "moversStart",
-      atStepEnd: true,
-    }),
+    ...addMoverRules("global", "slatePos", "2d"),
+    ...addMoverRules("global", "slateZoom"),
   }));
 }

@@ -310,11 +310,14 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
     // Jumping
     onEachFrame: itemEffect({
       run({
-        // newValue: inputVelocity,
+        newValue: newElapsedTime,
+        previousValue: prevElapsedTime,
         // itemState: playerState,
         // itemRefs: playerRefs,
-        frameDuration,
+        // frameDuration: timeDuration2,
       }) {
+        const timeDuration = newElapsedTime - prevElapsedTime;
+
         // console.log(parseInt(frameDuration));
         // return false;
         // NOTE should be a dynamic rule for each player listening to frame
@@ -440,7 +443,7 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
         }
 
         const safeSlopeDivider = Math.max(Math.abs(slope) * 0.7, 1);
-        const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
+        const slopeFallSpeed = (1 / safeSlopeDivider) * timeDuration;
 
         if (isAboveDownSlope && newIsOnGround) {
           dollPosRefs.velocity.y = -slopeFallSpeed * nowWalkSpeed; // need to multiply by player walk speed
@@ -462,7 +465,7 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
           }
         } else {
           // is falling
-          dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
+          dollPosRefs.velocity.y -= (gravityValue / 160) * timeDuration;
         }
 
         if (dollPosRefs.velocity.y !== 0) newIsMoving = true;
@@ -489,7 +492,7 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
           },
         });
       },
-      check: { type: "global", prop: "frameTick" },
+      check: { type: "global", prop: "elapsedGameTime" },
       step: "input",
       atStepEnd: true,
     }),

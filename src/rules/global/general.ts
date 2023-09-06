@@ -1,9 +1,13 @@
 import { breakableForEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../../declarations";
+import { MyTypes, PrendyStoreHelpers } from "../../declarations";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { clearTimeoutSafe } from "../../helpers/utils";
 
-export function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers) {
+export function get_globalGeneralRules<T_MyTypes extends MyTypes = MyTypes>(
+  prendyAssets: T_MyTypes["Assets"],
+  storeHelpers: T_MyTypes["StoreHelpers"]
+) {
+  const { prendyOptions } = prendyAssets;
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { setGlobalState } = get_globalUtils(storeHelpers);
 
@@ -27,19 +31,41 @@ export function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers) {
         const globalState = getState().global.main;
         // update the elapsed time state based on the time mode
         const timeMode = globalState.timeMode;
+        const gameTimeSpeed = globalState.gameTimeSpeed;
 
-        if (timeMode === "game") {
-          if (globalState.isGamePaused) return;
-          setState({ global: { main: { gameTimeElapsed: globalState.gameTimeElapsed + frameDuration } } });
+        if (timeMode === "game" || "menu") {
+          // if (globalState.isGamePaused) return;
+          if (globalState.gameTimeSpeed === 0) return;
+          setState({
+            global: {
+              main: { elapsedGameTime: globalState.elapsedGameTime + frameDuration * gameTimeSpeed },
+            },
+          });
         } else if (timeMode === "menu") {
           setState({ global: { main: { menuTimeElapsed: globalState.menuTimeElapsed + frameDuration } } });
         } else if (timeMode === "miniGame") {
-          setState({ global: { main: { miniGameTimeElapsed: globalState.miniGameTimeElapsed + frameDuration } } });
+          setState({ global: { main: { elapsedMiniGameTime: globalState.elapsedMiniGameTime + frameDuration } } });
         }
       },
       check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
       step: "elapsedTimeUpdates",
       atStepEnd: true,
+    }),
+    whenGamePaused: effect({
+      run(_diffInfo) {
+        const globalState = getState().global.main;
+        const globalRefs = getRefs().global.main;
+
+        if (globalState.isGamePaused) {
+          // setGlobalState({ timeMode: "menu", gameTimeSpeed: 0.25 });
+          setGlobalState({ timeMode: "menu", gameTimeSpeed: prendyOptions.gameTimeSpeed * 0.1 });
+        } else {
+          setGlobalState({ timeMode: "game", gameTimeSpeed: prendyOptions.gameTimeSpeed });
+        }
+      },
+      check: { type: ["global"], name: ["main"], prop: ["isGamePaused"] },
+      step: "input",
+      // atStepEnd: true,
     }),
     whenPauseKeyPressed: itemEffect({
       run() {
@@ -50,14 +76,14 @@ export function get_globalGeneralRules(storeHelpers: PrendyStoreHelpers) {
       step: "input",
       check: { type: "keyboards", name: "main", prop: ["KeyP"], becomes: true },
     }),
-    whenGameTimeElapsedChanges: effect({
+    whenElapsedGameTimeChanges: effect({
       run(_diffInfo) {
         const globalState = getState().global.main;
-        const gameTimeElapsed = globalState.gameTimeElapsed;
+        const elapsedGameTime = globalState.elapsedGameTime;
         // log the value
-        // console.log("gameTimeElapsed", gameTimeElapsed);
+        // console.log("elapsedGameTime", elapsedGameTime);
       },
-      check: { type: ["global"], name: ["main"], prop: ["gameTimeElapsed"] },
+      check: { type: ["global"], name: ["main"], prop: ["elapsedGameTime"] },
       step: "rendering",
       atStepEnd: true,
     }),

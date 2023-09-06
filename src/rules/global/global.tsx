@@ -12,7 +12,7 @@ export function get_startAllGlobalRules<T_MyTypes extends MyTypes = MyTypes>(
   // making rules
   const globalVideoRules = get_globalVideoRules(prendyAssets, prendyStores, storeHelpers);
   const globalChangePlaceRules = get_globalChangePlaceRules<T_MyTypes>(prendyAssets, storeHelpers);
-  const globalGeneralRules = get_globalGeneralRules(storeHelpers);
+  const globalGeneralRules = get_globalGeneralRules(prendyAssets, storeHelpers);
   const globalSlateRules = get_globalSceneSlateRules(prendyAssets, storeHelpers);
 
   return function startAllGlobalRules() {

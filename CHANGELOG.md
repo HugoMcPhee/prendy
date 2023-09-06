@@ -20,6 +20,7 @@ v 0.9.14
 - hides virtual joystick
 - fixes hopping when going down slopes at a high speed
 - WIP supports pausing and resuming
+- WIP added timespeed option in prendyOptions
 
 v 0.9.13
 

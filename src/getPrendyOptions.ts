@@ -39,6 +39,7 @@ export function makePrendyOptions<
   zoomLevels: { default: number; max: number };
   walkSpeed: number;
   animationSpeed: number;
+  gameTimeSpeed: number;
   headHeightOffsets: Partial<Record<ModelName, number>>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: DoorsInfo;
   modelNamesByPlace: ModelNamesByPlaceLoose; // NOTE Could include chapter too so it can load models later (like fly in eggventure)

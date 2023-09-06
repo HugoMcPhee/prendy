@@ -13,6 +13,7 @@ import stateVids from "./stateVids";
 
 export const prendyStepNames = [
   "elapsedTimeUpdates",
+  "moverUpdates",
   // updating internal video states
   "stateVidStateUpdates",
   "sliceVidStateUpdates",

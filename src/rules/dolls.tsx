@@ -15,6 +15,7 @@ import {
   get_dollStoryUtils,
   get_dollUtils,
 } from "../helpers/prendyUtils/dolls";
+import { timeStatePath } from "../stores/global/global";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -129,12 +130,12 @@ export function get_dollRules<
   type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
   type ModelName = T_MyTypes["Main"]["ModelName"];
 
-  const { modelInfoByName, dollNames, prendyOptions } = prendyAssets;
+  const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
     get_dollUtils(prendyAssets, storeHelpers);
   const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
-  const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
-  const { addMoverRules } = makeMoverUtils(storeHelpers);
+  const { makeRules, getPreviousState, getState, getRefs, setState, onNextTick } = storeHelpers;
+  const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
   const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
@@ -194,14 +195,16 @@ export function get_dollRules<
     }),
 
     whenAnimWeightsChanged: itemEffect({
-      run({ newValue: animWeights, itemState, itemRefs }) {
+      run({ newValue: animWeights, itemState, itemRefs: dollRefs }) {
+        const { gameTimeSpeed } = getState().global.main;
+
         const { modelName } = itemState;
         const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
 
-        if (!itemRefs.aniGroupsRef) return;
+        if (!dollRefs.aniGroupsRef) return;
         forEach(animationNames, (aniName) => {
-          if (!itemRefs.aniGroupsRef) return;
-          const aniRef = itemRefs.aniGroupsRef[aniName];
+          if (!dollRefs.aniGroupsRef) return;
+          const aniRef = dollRefs.aniGroupsRef[aniName];
           // const { timerSpeed } = getRefs().global.main;
           // if (aniRef._speedRatio !== timerSpeed) {
           //   aniRef._speedRatio = timerSpeed;
@@ -210,8 +213,10 @@ export function get_dollRules<
             console.warn("tried to use undefined animation", aniName);
             return;
           }
-          if (aniRef && aniRef?.speedRatio !== prendyOptions.animationSpeed) {
-            aniRef.speedRatio = prendyOptions.animationSpeed;
+          // console.log("gameTimeSpeed", gameTimeSpeed);
+
+          if (aniRef && aniRef?.speedRatio !== gameTimeSpeed) {
+            aniRef.speedRatio = gameTimeSpeed;
           }
 
           const animWeight = animWeights[aniName];
@@ -232,6 +237,57 @@ export function get_dollRules<
       atStepEnd: true,
       step: "dollAnimation2",
     }),
+    whenGameTimeSpeedChanges: itemEffect({
+      run({ newValue: newGameTimeSpeed }) {
+        // loop through all dolls and set the animation speed
+        forEach(dollNames, (dollName) => {
+          const dollRefs = getRefs().dolls[dollName];
+          const { animWeights, modelName } = getState().dolls[dollName];
+          const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
+
+          forEach(animationNames, (aniName) => {
+            const aniRef = dollRefs.aniGroupsRef[aniName];
+            if (!aniRef) return;
+            aniRef.speedRatio = newGameTimeSpeed;
+            // aniRef?.setWeightForAllAnimatables(animWeights[aniName]);
+          });
+        });
+
+        // set the state vid playback speed to gameTimeSpeed
+        //  get all the stateVid video refs
+        // get the names of all state vids
+
+        // get the current place name
+        const { nowPlaceName } = getState().global.main;
+
+        // loop all the camera names for the current place
+        const placeInfo = placeInfoByName[nowPlaceName];
+        const { cameraNames } = placeInfo;
+
+        const sliceVidState = getState().sliceVids[nowPlaceName];
+        const { stateVidId_playing, stateVidId_waiting } = sliceVidState;
+        // if (!stateVidId_playing) return;
+
+        const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
+        const backdropWaitVidRefs = getRefs().stateVids[stateVidId_waiting];
+
+        backdropVidRefs.videoElement.playbackRate = newGameTimeSpeed;
+        backdropWaitVidRefs.videoElement.playbackRate = newGameTimeSpeed;
+
+        // loop all the camera names
+        // forEach(cameraNames, (cameraName) => {
+        //   const { stateVidName } = getState().cameras[cameraName];
+        //   const { videoRef } = getRefs().videos[stateVidName];
+        //   if (!videoRef) return;
+
+        //   videoRef.playbackRate = newGameTimeSpeed;
+        // }
+      },
+      check: { type: "global", prop: "gameTimeSpeed" },
+      atStepEnd: true,
+      step: "dollAnimation2",
+    }),
+
     // --------------------------------
     // other drawing stuff
     // --------------------------------

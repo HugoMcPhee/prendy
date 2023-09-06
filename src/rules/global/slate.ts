@@ -4,6 +4,7 @@ import { MyTypes } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { timeStatePath } from "../../stores/global/global";
 
 export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
@@ -15,7 +16,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
   );
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState } = storeHelpers;
-  const { addMoverRules } = makeMoverUtils(storeHelpers);
+  const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
 
   const { prendyOptions } = prendyAssets;
 

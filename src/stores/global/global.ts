@@ -85,6 +85,8 @@ export type PrendySaveState = {
   storyState: Record<any, any>;
 };
 
+export const timeStatePath = ["global", "main", "elapsedGameTime"] as const;
+
 export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
   type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
@@ -184,10 +186,11 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     //
     frameTick: 0,
     timeMode: "game" as "game" | "pause" | "miniGame",
-    gameTimeElapsed: 0,
-    pauseTimeElapsed: 0,
-    miniGameTimeElapsed: 0, // when not in the pause menu or the main game
+    elapsedGameTime: 0,
+    elapsedPauseTime: 0,
+    elapsedMiniGameTime: 0, // when not in the pause menu or the main game
     isGamePaused: false,
+    gameTimeSpeed: prendyOptions.gameTimeSpeed,
     //
     debugMessage: "",
     //

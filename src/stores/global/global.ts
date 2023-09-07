@@ -191,13 +191,13 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     elapsedMiniGameTime: 0, // when not in the pause menu or the main game
     isGamePaused: false,
     gameTimeSpeed: prendyOptions.gameTimeSpeed,
+    gameIsInBackground: false,
     //
     debugMessage: "",
     //
     latestSave: null as null | PrendySaveState,
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
     //
-    appBecameVisibleTime: Date.now(),
   });
   // Refs
   const refs = () => ({

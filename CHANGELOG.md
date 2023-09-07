@@ -20,7 +20,9 @@ v 0.9.14
 - hides virtual joystick
 - fixes hopping when going down slopes at a high speed
 - WIP supports pausing and resuming
-- WIP added timespeed option in prendyOptions
+- added timespeed option in prendyOptions
+- pauses video when the tab is unfocused (using playback speed)
+- WIP runs timeSpeed rule when palce loaded
 
 v 0.9.13
 

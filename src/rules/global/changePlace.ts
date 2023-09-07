@@ -10,6 +10,7 @@ import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
+import { cachedRules } from "./global";
 
 export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
@@ -231,8 +232,15 @@ export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
                 updateTexturesForNowCamera(nowCamName, true);
                 focusSlateOnFocusedDoll(); // focus on the player
 
+                console.log("cachedRules.globalGeneralRules");
+                console.log(cachedRules.globalGeneralRules);
+
                 // Start fading in the scene
                 setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });
+
+                onNextTick(() => {
+                  cachedRules.globalGeneralRules?.run("whenGameTimeSpeedChanges");
+                });
               });
             }
           });

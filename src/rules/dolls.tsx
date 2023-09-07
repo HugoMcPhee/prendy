@@ -237,56 +237,6 @@ export function get_dollRules<
       atStepEnd: true,
       step: "dollAnimation2",
     }),
-    whenGameTimeSpeedChanges: itemEffect({
-      run({ newValue: newGameTimeSpeed }) {
-        // loop through all dolls and set the animation speed
-        forEach(dollNames, (dollName) => {
-          const dollRefs = getRefs().dolls[dollName];
-          const { animWeights, modelName } = getState().dolls[dollName];
-          const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
-
-          forEach(animationNames, (aniName) => {
-            const aniRef = dollRefs.aniGroupsRef[aniName];
-            if (!aniRef) return;
-            aniRef.speedRatio = newGameTimeSpeed;
-            // aniRef?.setWeightForAllAnimatables(animWeights[aniName]);
-          });
-        });
-
-        // set the state vid playback speed to gameTimeSpeed
-        //  get all the stateVid video refs
-        // get the names of all state vids
-
-        // get the current place name
-        const { nowPlaceName } = getState().global.main;
-
-        // loop all the camera names for the current place
-        const placeInfo = placeInfoByName[nowPlaceName];
-        const { cameraNames } = placeInfo;
-
-        const sliceVidState = getState().sliceVids[nowPlaceName];
-        const { stateVidId_playing, stateVidId_waiting } = sliceVidState;
-        // if (!stateVidId_playing) return;
-
-        const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
-        const backdropWaitVidRefs = getRefs().stateVids[stateVidId_waiting];
-
-        backdropVidRefs.videoElement.playbackRate = newGameTimeSpeed;
-        backdropWaitVidRefs.videoElement.playbackRate = newGameTimeSpeed;
-
-        // loop all the camera names
-        // forEach(cameraNames, (cameraName) => {
-        //   const { stateVidName } = getState().cameras[cameraName];
-        //   const { videoRef } = getRefs().videos[stateVidName];
-        //   if (!videoRef) return;
-
-        //   videoRef.playbackRate = newGameTimeSpeed;
-        // }
-      },
-      check: { type: "global", prop: "gameTimeSpeed" },
-      atStepEnd: true,
-      step: "dollAnimation2",
-    }),
 
     // --------------------------------
     // other drawing stuff

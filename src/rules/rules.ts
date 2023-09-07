@@ -22,7 +22,7 @@ export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyStores: T_MyTypes["Stores"],
   prendyAssets: T_MyTypes["Assets"]
 ) {
-  const { dollNames, characterNames } = prendyAssets;
+  const { dollNames, characterNames, placeInfoByName } = prendyAssets;
 
   // making rules
 
@@ -51,9 +51,42 @@ export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
     ReturnType<typeof get_characterDynamicRules>
   >(characterDynamicRules, characterNames, storeHelpers);
 
+  let hiddenTime = 0;
+
+  const { getState, getRefs } = storeHelpers;
+
+  function handlePausingVideoWhenHidden(isHidden: boolean) {
+    const { nowPlaceName, gameTimeSpeed } = getState().global.main;
+
+    // loop all the camera names for the current place
+    const placeInfo = placeInfoByName[nowPlaceName];
+    const { cameraNames } = placeInfo;
+
+    const sliceVidState = getState().sliceVids[nowPlaceName];
+    const { stateVidId_playing, stateVidId_waiting } = sliceVidState;
+    // if (!stateVidId_playing) return;
+
+    const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
+    const backdropWaitVidRefs = getRefs().stateVids[stateVidId_waiting];
+
+    if (isHidden) {
+      // pause all videos
+      backdropVidRefs.videoElement.playbackRate = 0;
+      backdropWaitVidRefs.videoElement.playbackRate = 0;
+    } else {
+      // resume all videos
+      backdropVidRefs.videoElement.playbackRate = gameTimeSpeed;
+      backdropWaitVidRefs.videoElement.playbackRate = gameTimeSpeed;
+    }
+  }
+
   function updateAppVisibility(event: Event) {
     if (document.visibilityState === "visible") {
-      storeHelpers.setState({ global: { main: { appBecameVisibleTime: Date.now() } } });
+      getRefs().global.main.gameIsInBackground = false;
+      handlePausingVideoWhenHidden(false);
+    } else if (document.visibilityState === "hidden") {
+      getRefs().global.main.gameIsInBackground = true;
+      handlePausingVideoWhenHidden(true);
     }
   }
 

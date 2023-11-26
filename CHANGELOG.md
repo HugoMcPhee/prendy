@@ -24,6 +24,11 @@ v 0.9.15
 - pauses video when the tab is unfocused (using playback speed)
 - WIP runs timeSpeed rule when place loaded
 
+v 0.9.14
+
+- add a npx prendy-init script to update tsconfig to use the src ts types, so declaration merging can work without needing factory functions with generic type parameters
+- TODO will start removing the factory functions and start making helpers directly importable
+
 v 0.9.13
 
 - Cleaned up types to use a single MyTypes type

@@ -1,19 +1,24 @@
 {
   "name": "prendy",
-  "version": "0.9.13",
-  "description": "prerendered backdrop games with babylonjs and pietem",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "files": [
+  "version": "0.9.15",
+  "description": "A modern take for classic ps1 style prerendered backdrop games with the babylonjs game engine and repond state",
+  "_main": "src/index.ts",
+  "_types": "src/index.ts",
+  "_files": [
     "src"
   ],
-  "_main": "dist/index.js",
-  "_types": "dist/index.d.ts",
-  "_files": [
-    "dist"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "bin"
   ],
   "scripts": {
     "build": "npx tsc"
+  },
+  "bin": {
+    "prendy-init": "bin/prendy-init.js"
   },
   "repository": {
     "type": "git",

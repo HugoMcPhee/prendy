@@ -14,7 +14,7 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
-v 0.9.14
+v 0.9.15
 
 - zooms out more for tall or wide screens
 - hides virtual joystick
@@ -22,7 +22,7 @@ v 0.9.14
 - WIP supports pausing and resuming
 - added timespeed option in prendyOptions
 - pauses video when the tab is unfocused (using playback speed)
-- WIP runs timeSpeed rule when palce loaded
+- WIP runs timeSpeed rule when place loaded
 
 v 0.9.13
 

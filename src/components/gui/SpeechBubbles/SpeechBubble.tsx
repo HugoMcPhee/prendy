@@ -33,6 +33,12 @@ export function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(
 
   type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 
+  const SHARED_THEME = {
+    fontSize: "20px",
+    lineHeight: "33px",
+    padding: "8px",
+  };
+
   return function SpeechBubble({ name }: Props) {
     const theRectangle = useRef<HTMLDivElement>(null);
     const theTextRectangle = useRef<HTMLDivElement>(null);
@@ -205,9 +211,9 @@ export function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(
             right: 0,
             // color: "rgb(197, 217, 61)",
             // opacity: 0,
-            fontSize: "30px",
-            lineHeight: "40px",
-            padding: videoIsPlaying ? "15px" : "15px",
+            fontSize: SHARED_THEME.fontSize,
+            lineHeight: SHARED_THEME.lineHeight,
+            padding: videoIsPlaying ? SHARED_THEME.padding : SHARED_THEME.padding,
             fontFamily: font,
             // textAlign: "center",
             // verticalAlign: "middle", // to center emojis with text?
@@ -248,8 +254,8 @@ export function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(
           fontFamily: font,
           textAlign: "center",
           verticalAlign: "middle", // to center emojis with text?
-          fontSize: "30px",
-          lineHeight: "40px",
+          fontSize: SHARED_THEME.fontSize,
+          lineHeight: SHARED_THEME.lineHeight,
           color: "rgb(68, 68, 68)",
         } as const),
       [zIndex]
@@ -287,7 +293,7 @@ export function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(
             style={{
               backgroundColor: "#fafafa",
               width: `${BUBBLE_WIDTH}px`,
-              borderRadius: "40px",
+              borderRadius: "20px",
               borderWidth: "1px",
               paddingBottom: "5px",
               zIndex: 100,

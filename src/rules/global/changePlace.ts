@@ -239,7 +239,9 @@ export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
                 setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });
 
                 onNextTick(() => {
-                  cachedRules.globalGeneralRules?.run("whenGameTimeSpeedChanges");
+                  setTimeout(() => {
+                    cachedRules.globalGeneralRules?.run("whenGameTimeSpeedChanges");
+                  }, 1000);
                 });
               });
             }

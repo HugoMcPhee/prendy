@@ -41,7 +41,7 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
         };
     };
     refs: () => {
-        walkSpeed: number;
+        topWalkSpeed: number;
         canJumpTimeout: NodeJS.Timeout | null;
         canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
         canHideVirtualButtonsTimeout: NodeJS.Timeout | null;

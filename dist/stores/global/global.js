@@ -49,6 +49,8 @@ export default function global(prendyAssets) {
                 // springStopSpeed: 0.001, // NOTE not used in mover yet
             }),
             slatePosMoveConfigName: "default",
+            isOnVerticalScreen: false,
+            zoomMultiplier: 1,
             //
             // interacting
             timeScreenResized: Date.now(),
@@ -64,6 +66,9 @@ export default function global(prendyAssets) {
             aConvoIsHappening: false,
             //
             frameTick: 0,
+            gameTimeElapsed: 0,
+            pauseTimeElapsed: 0,
+            miniGameTimeElapsed: 0,
             //
             debugMessage: "",
             //
@@ -83,7 +88,7 @@ export default function global(prendyAssets) {
         backdropPostProcessEffect: null,
         fxaaPostProcess: null,
         //
-        backdropSize: { width: 1280, height: 720 },
+        backdropSize: { width: 1920, height: 1080 },
         stretchVideoSize: { x: 1, y: 1 },
         stretchVideoGoalSize: { x: 1, y: 1 },
         stretchSceneSize: { x: 1, y: 1 },

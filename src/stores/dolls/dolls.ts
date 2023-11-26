@@ -50,6 +50,7 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
       }), // could have semnticolor icons split by numbers too
       ...moverState("rotationY"),
       //
+      nowWalkSpeed: 0,
       positionOnScreen: defaultPosition2d(),
       // nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName],
       // animation Weights mover

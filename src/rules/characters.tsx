@@ -31,8 +31,6 @@ export function get_characterDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
       }) => ({
         // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
         run({ itemRefs }) {
-          // console.log("prevItemState", other);
-
           // TODO
           // only update the collider stuff here
           // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)

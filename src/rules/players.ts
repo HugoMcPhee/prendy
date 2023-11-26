@@ -177,7 +177,9 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
         const camera = activeCamera as TargetCamera;
 
         let currentYRotation = dollState.rotationYGoal;
+        let currentWalkSpeed = dollState.nowWalkSpeed;
         let newYRotation = currentYRotation;
+        let newWalkSpeed = currentWalkSpeed;
         let newAnimationName = dollState.nowAnimation;
         let newIsMoving = dollState.positionIsMoving;
         let newPositionMoveMode = dollState.positionMoveMode;
@@ -196,14 +198,11 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
           .multiplyByFloats(inputVelocity.y, inputVelocity.y, inputVelocity.y)
           .add(right.multiplyByFloats(-inputVelocity.x, -inputVelocity.x, -inputVelocity.x));
 
-        if (!pointIsZero(inputVelocity) && !playerMovingPaused) {
+        const canMove = !pointIsZero(inputVelocity) && !playerMovingPaused;
+
+        if (canMove) {
           newAnimationName = playerState.animationNames.walking;
           newIsMoving = true;
-
-          newYRotation = getVectorAngle({
-            x: -desiredMoveDirection.z,
-            y: -desiredMoveDirection.x,
-          });
         } else {
           if (newAnimationName === playerState.animationNames.walking) {
             newAnimationName = playerState.animationNames.idle;
@@ -219,8 +218,18 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
         //now we can apply the movement:
         // * frameDuration * 0.1
 
-        dollRefs.positionMoverRefs.velocity.x = desiredMoveDirection.x * playerRefs.walkSpeed * timerSpeed;
-        dollRefs.positionMoverRefs.velocity.z = desiredMoveDirection.z * playerRefs.walkSpeed * timerSpeed;
+        dollRefs.positionMoverRefs.velocity.x = desiredMoveDirection.x * playerRefs.topWalkSpeed * timerSpeed;
+        dollRefs.positionMoverRefs.velocity.z = desiredMoveDirection.z * playerRefs.topWalkSpeed * timerSpeed;
+
+        if (canMove) {
+          const newSpeedAndRotation = getSpeedAndAngleFromVector({
+            x: -dollRefs.positionMoverRefs.velocity.z,
+            y: -dollRefs.positionMoverRefs.velocity.x,
+          });
+
+          newYRotation = newSpeedAndRotation.angle;
+          newWalkSpeed = newSpeedAndRotation.speed;
+        }
 
         // dollRefs.positionMoverRefs.velocity.y = -gravityValue * timerSpeed;
 
@@ -249,6 +258,7 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
             [dollName]: {
               // inputVelocity: newInputVelocity,
               rotationYGoal: newYRotation,
+              nowWalkSpeed: newWalkSpeed,
               // nowAnimation: playerMovingPaused ? undefined : newAnimationName,
               nowAnimation: newAnimationName,
               positionMoveMode: newPositionMoveMode,
@@ -300,11 +310,14 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
     // Jumping
     onEachFrame: itemEffect({
       run({
-        // newValue: inputVelocity,
+        newValue: newElapsedTime,
+        previousValue: prevElapsedTime,
         // itemState: playerState,
         // itemRefs: playerRefs,
-        frameDuration,
+        // frameDuration: timeDuration2,
       }) {
+        const timeDuration = newElapsedTime - prevElapsedTime;
+
         // console.log(parseInt(frameDuration));
         // return false;
         // NOTE should be a dynamic rule for each player listening to frame
@@ -336,6 +349,7 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
         let currentYRotation = dollState.rotationYGoal;
         let newAnimationName = dollState.nowAnimation;
         let newIsMoving = dollState.positionIsMoving;
+        let nowWalkSpeed = dollState.nowWalkSpeed;
 
         let newPositionMoveMode = dollState.positionMoveMode;
         let newIsJumping = isJumping;
@@ -429,10 +443,10 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
         }
 
         const safeSlopeDivider = Math.max(Math.abs(slope) * 0.7, 1);
-        const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
+        const slopeFallSpeed = (1 / safeSlopeDivider) * timeDuration;
 
         if (isAboveDownSlope && newIsOnGround) {
-          dollPosRefs.velocity.y = -slopeFallSpeed * 4; // need to multiply by player walk speed
+          dollPosRefs.velocity.y = -slopeFallSpeed * nowWalkSpeed; // need to multiply by player walk speed
         }
 
         if (newIsOnGround) {
@@ -451,10 +465,19 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
           }
         } else {
           // is falling
-          dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
+          dollPosRefs.velocity.y -= (gravityValue / 160) * timeDuration;
         }
 
         if (dollPosRefs.velocity.y !== 0) newIsMoving = true;
+
+        // console.log(
+        //   "newIsOnGround",
+        //   newIsOnGround,
+        //   "isAboveDownSlope",
+        //   isAboveDownSlope,
+        //   "isAboveUpSlope",
+        //   isAboveUpSlope
+        // );
 
         // if (!playerMovingPaused) newPositionMoveMode = "push";
         newPositionMoveMode = "push";
@@ -469,7 +492,7 @@ export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
           },
         });
       },
-      check: { type: "global", prop: "frameTick" },
+      check: { type: "global", prop: "elapsedGameTime" },
       step: "input",
       atStepEnd: true,
     }),

@@ -11,7 +11,7 @@ export function getScreenSize() {
   return { x: window.innerWidth, y: window.innerHeight };
 }
 
-export const slateSize = { x: 1280, y: 720 };
+export const slateSize = { x: 1920, y: 1080 };
 
 export function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
@@ -189,7 +189,7 @@ export function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(
 
   // This includes after the slate moved
   function convertPointOnSlateToPointOnScreen({
-    pointOnSlate, // point on slate goes from 0 - 1280, 0 - 720, when the point is from the top left to bottom right
+    pointOnSlate, // point on slate goes from 0 - 1920, 0 - 1080, when the point is from the top left to bottom right
     slatePos, // slate position is 0 when centered, then its the amount of offset (in percentage?)
     slateZoom,
   }: {
@@ -275,8 +275,12 @@ export function get_slateUtils<T_MyTypes extends MyTypes = MyTypes>(
   }
 
   function getShaderTransformStuff() {
-    const { slateZoom, slateZoomGoal } = getState().global.main;
-    // const slateZoom = prendyOptions.zoomLevels.default;
+    const { slateZoom: slateZoomUnmultiplied, slateZoomGoal: slateZoomGoalUnmultiplied } = getState().global.main;
+
+    const zoomMultiplier = getGlobalState().zoomMultiplier;
+
+    const slateZoom = slateZoomUnmultiplied * zoomMultiplier;
+    const slateZoomGoal = slateZoomGoalUnmultiplied * zoomMultiplier;
 
     // NOTE engine.getRenderHeight will return the 'retina'/upscaled resolution
     const screenWidth = window.innerWidth;

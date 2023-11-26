@@ -26,7 +26,6 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
     virtualControlsPressTime: Date.now(),
     virtualControlsReleaseTime: Date.now(),
     canShowVirtualButtons: false,
-
     //
 
     animationNames: {
@@ -36,7 +35,7 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
   });
 
   const refs = () => ({
-    walkSpeed: prendyOptions.walkSpeed,
+    topWalkSpeed: prendyOptions.walkSpeed,
     canJumpTimeout: null as null | ReturnType<typeof setTimeout>,
     canShowVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
     canHideVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,

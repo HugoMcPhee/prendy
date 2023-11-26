@@ -3,7 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { makeRunMovers } from "repond-movers";
+import { makeMoverUtils } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
 import { MyTypes } from "../declarations";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
@@ -15,6 +15,7 @@ import {
   get_dollStoryUtils,
   get_dollUtils,
 } from "../helpers/prendyUtils/dolls";
+import { timeStatePath } from "../stores/global/global";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -129,12 +130,12 @@ export function get_dollRules<
   type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
   type ModelName = T_MyTypes["Main"]["ModelName"];
 
-  const { modelInfoByName, dollNames, prendyOptions } = prendyAssets;
+  const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
   const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
     get_dollUtils(prendyAssets, storeHelpers);
   const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
-  const { makeRules, getPreviousState, getState, setState, onNextTick } = storeHelpers;
-  const { runMover, runMover3d, runMoverMulti } = makeRunMovers(storeHelpers);
+  const { makeRules, getPreviousState, getState, getRefs, setState, onNextTick } = storeHelpers;
+  const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
   const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
@@ -192,31 +193,18 @@ export function get_dollRules<
       step: "dollAnimation",
       atStepEnd: true,
     }),
-    whenAnimWeightsGoalChanged: itemEffect({
-      run({ itemName: dollName }) {
-        setState({ dolls: { [dollName]: { animWeightsIsMoving: true } } });
-      },
-      check: { type: "dolls", prop: "animWeightsGoal" },
-      step: "dollAnimation2",
-      atStepEnd: true,
-    }),
-    whenAnimationWeightsStartedMoving: itemEffect({
-      run({ itemName: dollName }) {
-        runMoverMulti({ name: dollName, type: "dolls", mover: "animWeights" });
-      },
-      check: { type: "dolls", prop: "animWeightsIsMoving", becomes: true },
-      step: "dollAnimationStartMovers",
-      atStepEnd: true,
-    }),
+
     whenAnimWeightsChanged: itemEffect({
-      run({ newValue: animWeights, itemState, itemRefs }) {
+      run({ newValue: animWeights, itemState, itemRefs: dollRefs }) {
+        const { gameTimeSpeed } = getState().global.main;
+
         const { modelName } = itemState;
         const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
 
-        if (!itemRefs.aniGroupsRef) return;
+        if (!dollRefs.aniGroupsRef) return;
         forEach(animationNames, (aniName) => {
-          if (!itemRefs.aniGroupsRef) return;
-          const aniRef = itemRefs.aniGroupsRef[aniName];
+          if (!dollRefs.aniGroupsRef) return;
+          const aniRef = dollRefs.aniGroupsRef[aniName];
           // const { timerSpeed } = getRefs().global.main;
           // if (aniRef._speedRatio !== timerSpeed) {
           //   aniRef._speedRatio = timerSpeed;
@@ -225,8 +213,10 @@ export function get_dollRules<
             console.warn("tried to use undefined animation", aniName);
             return;
           }
-          if (aniRef && aniRef?.speedRatio !== prendyOptions.animationSpeed) {
-            aniRef.speedRatio = prendyOptions.animationSpeed;
+          // console.log("gameTimeSpeed", gameTimeSpeed);
+
+          if (aniRef && aniRef?.speedRatio !== gameTimeSpeed) {
+            aniRef.speedRatio = gameTimeSpeed;
           }
 
           const animWeight = animWeights[aniName];
@@ -247,6 +237,7 @@ export function get_dollRules<
       atStepEnd: true,
       step: "dollAnimation2",
     }),
+
     // --------------------------------
     // other drawing stuff
     // --------------------------------
@@ -259,52 +250,6 @@ export function get_dollRules<
       check: { type: "dolls", prop: "rotationY" },
     }),
     //
-
-    whenRotationGoalChanged: itemEffect({
-      run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName }) {
-        const yRotationDifference = oldYRotation - newYRotation;
-
-        if (Math.abs(yRotationDifference) > 180) {
-          const shortestAngle = getShortestAngle(oldYRotation, newYRotation);
-          let editedYRotation = oldYRotation + shortestAngle;
-
-          setState({
-            dolls: { [dollName]: { rotationYGoal: editedYRotation, rotationYIsMoving: true } },
-          });
-        } else {
-          setState({ dolls: { [dollName]: { rotationYIsMoving: true } } });
-        }
-      },
-      check: { type: "dolls", prop: "rotationYGoal" },
-    }),
-
-    whenPositionGoalChanged: itemEffect({
-      run({ itemName: dollName, itemRefs: dollRefs, itemState: dollState }) {
-        setState({ dolls: { [dollName]: { positionIsMoving: true } } });
-        const { positionMoveMode: moveMode } = dollState;
-        // TEMPORARY : ideally this is automatic for movers?
-        if (moveMode === "spring") dollRefs.positionMoverRefs.recentSpeeds = [];
-      },
-      atStepEnd: true,
-      step: "dollAnimation2",
-      check: { type: "dolls", prop: "positionGoal" },
-    }),
-
-    whenStartedMoving: itemEffect({
-      run({ itemName: dollName }) {
-        runMover3d({ name: dollName, type: "dolls", mover: "position" });
-      },
-      check: { type: "dolls", prop: "positionIsMoving", becomes: true },
-      step: "dollAnimationStartMovers",
-      atStepEnd: true,
-    }),
-    whenStartedRotating: itemEffect({
-      run({ itemName: dollName }) {
-        runMover({ name: dollName, type: "dolls", mover: "rotationY" });
-      },
-      check: { type: "dolls", prop: "rotationYIsMoving", becomes: true },
-      atStepEnd: true,
-    }),
 
     // ___________________________________
     // position
@@ -533,5 +478,27 @@ export function get_dollRules<
       step: "default",
       atStepEnd: true,
     }),
+
+    // ------------------------------------
+    // Mover rules
+
+    // rotationY
+    whenRotationGoalChangedToFix: itemEffect({
+      run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName }) {
+        const yRotationDifference = oldYRotation - newYRotation;
+
+        if (Math.abs(yRotationDifference) > 180) {
+          const shortestAngle = getShortestAngle(oldYRotation, newYRotation);
+          let editedYRotation = oldYRotation + shortestAngle;
+          setState({ dolls: { [dollName]: { rotationYGoal: editedYRotation } } });
+        }
+      },
+      check: { type: "dolls", prop: "rotationYGoal" },
+      step: "dollCorrectRotationAndPosition",
+      atStepEnd: true,
+    }),
+    ...addMoverRules("dolls", "position", "3d"),
+    ...addMoverRules("dolls", "rotationY"),
+    ...addMoverRules("dolls", "animWeights", "multi"),
   }));
 }

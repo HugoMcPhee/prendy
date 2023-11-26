@@ -13,7 +13,7 @@ const TEST_START_OPTIONS = makePrendyOptions({
   playerAnimations: { walking: "walker_walking", idle: "walker_idle" },
   zoomLevels: { default: 1.1, max: 2 },
   walkSpeed: 10,
-  animationSpeed: 1,
+  gameTimeSpeed: 1,
   headHeightOffsets: { walker: 2.75 },
   doorsInfo: {
     street: {
@@ -157,6 +157,8 @@ export type PrendyStoreHelpersUntypedType = {
     start: AnyFunction;
     stop: AnyFunction;
     ruleNames: any[];
+    run: AnyFunction;
+    runAll: AnyFunction;
   };
   makeDynamicRules: (...args: any) => {
     stopAll: AnyFunction;
@@ -263,10 +265,11 @@ export type PrendyOptionsUntyped = {
     max: number;
   };
   walkSpeed: number;
-  animationSpeed: number; // 1.75 for rodont
+  gameTimeSpeed: number;
   headHeightOffsets: Record<string, number>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<Record<string, Partial<Record<string, ToNewOptionUntyped>>>>;
   modelNamesByPlace: Record<string, string[]>;
+  //
   // NOTE could add charactersWithSpeechBubbles (or dollsWithSpeechBubbles , or another way to define speechBubbles outside of characters)
   hasInteracting?: boolean;
   hasJumping?: boolean;
@@ -303,7 +306,7 @@ export type PrendyOptionsGeneric<
     max: number;
   };
   walkSpeed: number;
-  animationSpeed: number;
+  gameTimeSpeed: number;
   headHeightOffsets: Record<string, number>; // maybe eventually move to being automatic by finding a bone with"neck" in its name
   doorsInfo?: Partial<
     Record<PlaceName, Partial<Record<string, ToPlaceOption<AnyCameraName, AnySegmentName, PlaceName, AnySpotName>>>>

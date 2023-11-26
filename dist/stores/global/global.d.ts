@@ -63,6 +63,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     startStates: {
         main: {
             slatePosMoveConfigName: string;
+            isOnVerticalScreen: boolean;
+            zoomMultiplier: number;
             timeScreenResized: number;
             interactButtonPressTime: number;
             heldPickups: T_MyTypes["Main"]["PickupName"][];
@@ -72,6 +74,9 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
             aSpeechBubbleIsShowing: boolean;
             aConvoIsHappening: boolean;
             frameTick: number;
+            gameTimeElapsed: number;
+            pauseTimeElapsed: number;
+            miniGameTimeElapsed: number;
             debugMessage: string;
             latestSave: PrendySaveState | null;
             latestLoadTime: number;
@@ -116,6 +121,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     };
     state: () => {
         slatePosMoveConfigName: string;
+        isOnVerticalScreen: boolean;
+        zoomMultiplier: number;
         timeScreenResized: number;
         interactButtonPressTime: number;
         heldPickups: T_MyTypes["Main"]["PickupName"][];
@@ -125,6 +132,9 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
         aSpeechBubbleIsShowing: boolean;
         aConvoIsHappening: boolean;
         frameTick: number;
+        gameTimeElapsed: number;
+        pauseTimeElapsed: number;
+        miniGameTimeElapsed: number;
         debugMessage: string;
         latestSave: PrendySaveState | null;
         latestLoadTime: number;

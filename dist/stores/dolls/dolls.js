@@ -22,6 +22,7 @@ export default function dolls(prendyAssets) {
             }),
             ...moverState("rotationY"),
             //
+            nowWalkSpeed: 0,
             positionOnScreen: defaultPosition2d(),
             // nowAnimation: animationNames[0] as AnimationNameByModel[T_ModelName],
             // animation Weights mover

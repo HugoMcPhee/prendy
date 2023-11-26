@@ -14,6 +14,16 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v 0.9.15
+
+- zooms out more for tall or wide screens
+- hides virtual joystick
+- fixes hopping when going down slopes at a high speed
+- WIP supports pausing and resuming
+- added timespeed option in prendyOptions
+- pauses video when the tab is unfocused (using playback speed)
+- WIP runs timeSpeed rule when place loaded
+
 v 0.9.14
 
 - add a npx prendy-init script to update tsconfig to use the src ts types, so declaration merging can work without needing factory functions with generic type parameters

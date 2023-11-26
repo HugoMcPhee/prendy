@@ -85,6 +85,8 @@ export type PrendySaveState = {
   storyState: Record<any, any>;
 };
 
+export const timeStatePath = ["global", "main", "elapsedGameTime"] as const;
+
 export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
   type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
@@ -166,6 +168,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
       // springStopSpeed: 0.001, // NOTE not used in mover yet
     }), // (like scale)
     slatePosMoveConfigName: "default", // todo move to mover2dState()
+    isOnVerticalScreen: false,
+    zoomMultiplier: 1, // for vertical screens, zoom out a bit
     //
     // interacting
     timeScreenResized: Date.now(),
@@ -181,13 +185,19 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     aConvoIsHappening: false,
     //
     frameTick: 0,
+    timeMode: "game" as "game" | "pause" | "miniGame",
+    elapsedGameTime: 0,
+    elapsedPauseTime: 0,
+    elapsedMiniGameTime: 0, // when not in the pause menu or the main game
+    isGamePaused: false,
+    gameTimeSpeed: prendyOptions.gameTimeSpeed,
+    gameIsInBackground: false,
     //
     debugMessage: "",
     //
     latestSave: null as null | PrendySaveState,
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
     //
-    appBecameVisibleTime: Date.now(),
   });
   // Refs
   const refs = () => ({
@@ -199,7 +209,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     backdropPostProcessEffect: null as null | Effect,
     fxaaPostProcess: null as null | PostProcess,
     //
-    backdropSize: { width: 1280, height: 720 },
+    backdropSize: { width: 1920, height: 1080 },
     stretchVideoSize: { x: 1, y: 1 },
     stretchVideoGoalSize: { x: 1, y: 1 },
     stretchSceneSize: { x: 1, y: 1 },

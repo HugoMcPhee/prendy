@@ -23,6 +23,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 Enter: boolean;
                 KeyZ: boolean;
                 KeyM: boolean;
+                KeyP: boolean;
             };
         };
         state: () => {
@@ -42,6 +43,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             Enter: boolean;
             KeyZ: boolean;
             KeyM: boolean;
+            KeyP: boolean;
         };
         refs: () => {};
     };
@@ -72,6 +74,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         startStates: {
             main: {
                 slatePosMoveConfigName: string;
+                isOnVerticalScreen: boolean;
+                zoomMultiplier: number;
                 timeScreenResized: number;
                 interactButtonPressTime: number;
                 heldPickups: T_MyTypes["Main"]["PickupName"][];
@@ -81,6 +85,9 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 aSpeechBubbleIsShowing: boolean;
                 aConvoIsHappening: boolean;
                 frameTick: number;
+                gameTimeElapsed: number;
+                pauseTimeElapsed: number;
+                miniGameTimeElapsed: number;
                 debugMessage: string;
                 latestSave: import("./global/global").PrendySaveState | null;
                 latestLoadTime: number;
@@ -125,6 +132,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         };
         state: () => {
             slatePosMoveConfigName: string;
+            isOnVerticalScreen: boolean;
+            zoomMultiplier: number;
             timeScreenResized: number;
             interactButtonPressTime: number;
             heldPickups: T_MyTypes["Main"]["PickupName"][];
@@ -134,6 +143,9 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             aSpeechBubbleIsShowing: boolean;
             aConvoIsHappening: boolean;
             frameTick: number;
+            gameTimeElapsed: number;
+            pauseTimeElapsed: number;
+            miniGameTimeElapsed: number;
             debugMessage: string;
             latestSave: import("./global/global").PrendySaveState | null;
             latestLoadTime: number;
@@ -275,6 +287,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+            nowWalkSpeed: number;
             positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
@@ -304,6 +317,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+            nowWalkSpeed: number;
             positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
@@ -333,6 +347,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
             animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+            nowWalkSpeed: number;
             positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
@@ -466,7 +481,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             };
         };
         refs: () => {
-            walkSpeed: number;
+            topWalkSpeed: number;
             canJumpTimeout: NodeJS.Timeout | null;
             canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
             canHideVirtualButtonsTimeout: NodeJS.Timeout | null;

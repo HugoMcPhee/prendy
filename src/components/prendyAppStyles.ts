@@ -4,6 +4,10 @@ export const prendyAppStyles = `
   height: 100vh;
 }
 
+html {
+  background: black;
+}
+
 /* html {
   box-sizing: border-box;
 }
@@ -24,6 +28,7 @@ export const prendyAppStyles = `
   outline: none;
   /* doesn't seem to work */
   /* box-sizing: border-box !important; */
+
 }
 
 /* #scene-canvas {

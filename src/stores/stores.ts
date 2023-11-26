@@ -12,6 +12,8 @@ import speechBubbles from "./speechBubbles";
 import stateVids from "./stateVids";
 
 export const prendyStepNames = [
+  "elapsedTimeUpdates",
+  "moverUpdates",
   // updating internal video states
   "stateVidStateUpdates",
   "sliceVidStateUpdates",
@@ -31,6 +33,7 @@ export const prendyStepNames = [
   "slatePositionStartMovers",
   "dollAnimation",
   "dollAnimation2",
+  "dollCorrectRotationAndPosition",
   "dollAnimationStartMovers",
   "positionUi", // positioned ui like speech bubbles
   "loadNewPlaceModels", //
@@ -41,6 +44,9 @@ export const prendyStepNames = [
   "sliceVidWantsToPlay",
   "sliceVidWantsToPlay2", // just a easier way to react to a second subscriber in sliceVids , instead of inlining what to do when vidLetter_play and vidLetter_wait changes
   "safeVidWantsToPlay",
+  // ...MOVERS_STEPS
+  "moversGoal",
+  "moversStart",
   // drawing to the screen
   "default", // draw components
   "rendering", // = painting, hopefully it can fix the 1 frame delay from resolving videos on default "subscribe"

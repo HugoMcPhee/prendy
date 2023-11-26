@@ -1,9 +1,10 @@
 import delay from "delay";
-import { makeRunMovers } from "repond-movers";
+import { makeMoverUtils } from "repond-movers";
 import { MyTypes } from "../../declarations";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { timeStatePath } from "../../stores/global/global";
 
 export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
@@ -15,7 +16,9 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
   );
   const { setGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState } = storeHelpers;
-  const { runMover, runMover2d } = makeRunMovers(storeHelpers);
+  const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
+
+  const { prendyOptions } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
 
@@ -31,30 +34,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
       atStepEnd: true,
       step: "slatePosition",
     }),
-    whenSlatePositionGoalChanges: itemEffect({
-      run: () => setGlobalState({ slatePosIsMoving: true }),
-      check: { prop: "slatePosGoal", type: "global" },
-      atStepEnd: true,
-      step: "slatePosition",
-    }),
-    whenSlatePosIsMoving: itemEffect({
-      run: ({ itemName }) => runMover2d({ name: itemName, type: "global", mover: "slatePos" }),
-      check: { prop: "slatePosIsMoving", type: "global", becomes: true },
-      atStepEnd: true,
-      step: "slatePositionStartMovers",
-    }),
-    whenSlateZoomGoalChanges: itemEffect({
-      run: () => setGlobalState({ slateZoomIsMoving: true }),
-      check: { prop: "slateZoomGoal", type: "global" },
-      atStepEnd: true,
-      step: "slatePosition",
-    }),
-    whenSlateZoomIsMoving: itemEffect({
-      run: ({ itemName }) => runMover({ name: itemName, type: "global", mover: "slateZoom" }),
-      check: { prop: "slateZoomIsMoving", type: "global", becomes: true },
-      atStepEnd: true,
-      step: "slatePositionStartMovers",
-    }),
+
     whenShouldFocusOnDoll: itemEffect({
       run: () => focusSlateOnFocusedDoll(),
       check: {
@@ -97,6 +77,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
         const { editedHardwareScaling, editedSlateSceneZoom } = getShaderTransformStuff();
 
         const screenHeight = window.innerHeight;
+        const screenWidth = window.innerWidth;
 
         const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
         const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
@@ -104,11 +85,34 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
         engine.setSize(newRenderWidth, newRenderHeight);
         globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
 
+        // if the new screen ratio is equal to or thinner than a vertical 16:9, then set isOnVerticalPhone to true
+        const isOnVerticalScreen = screenHeight / screenWidth >= 1;
+
+        // check if the screen is super wide (for landscape phones)
+        const isOnSuperWideScreen = screenWidth / screenHeight >= 16 / 7;
+
+        console.log("isOnSuperWideScreen", isOnSuperWideScreen);
+
+        let newZoomMultiplier = 1;
+
+        if (isOnVerticalScreen) {
+          // ifon a vertical screen, get a multiplier to make the zoom levels smaller
+          // it should be so that (newZoomMultiplier * prendyOptions.zoomLevels.default) is 1
+          newZoomMultiplier = 1 / prendyOptions.zoomLevels.default;
+        } else if (isOnSuperWideScreen) {
+          // it should be so that (newZoomMultiplier * prendyOptions.zoomLevels.default) is 1.025
+          newZoomMultiplier = 1.025 / prendyOptions.zoomLevels.default;
+        }
+
+        setGlobalState({ isOnVerticalScreen: true, zoomMultiplier: newZoomMultiplier });
+
         focusSlateOnFocusedDoll("instant");
       },
       check: { prop: "timeScreenResized", type: "global" },
       atStepEnd: true,
       step: "slatePosition",
     }),
+    ...addMoverRules("global", "slatePos", "2d"),
+    ...addMoverRules("global", "slateZoom"),
   }));
 }

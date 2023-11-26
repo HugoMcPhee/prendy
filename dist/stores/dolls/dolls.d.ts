@@ -14,6 +14,7 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
         animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
         animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+        nowWalkSpeed: number;
         positionOnScreen: import("chootils/dist/points2d").Point2D;
         rotationY: number;
         rotationYGoal: number;
@@ -43,6 +44,7 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
         animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
         animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+        nowWalkSpeed: number;
         positionOnScreen: import("chootils/dist/points2d").Point2D;
         rotationY: number;
         rotationYGoal: number;
@@ -72,6 +74,7 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
         animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
         animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
+        nowWalkSpeed: number;
         positionOnScreen: import("chootils/dist/points2d").Point2D;
         rotationY: number;
         rotationYGoal: number;

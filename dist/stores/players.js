@@ -22,7 +22,7 @@ export default function players(prendyAssets) {
         }, // maybe typed somehow, from player character?
     });
     const refs = () => ({
-        walkSpeed: prendyOptions.walkSpeed,
+        topWalkSpeed: prendyOptions.walkSpeed,
         canJumpTimeout: null,
         canShowVirtualButtonsTimeout: null,
         canHideVirtualButtonsTimeout: null,

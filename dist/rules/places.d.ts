@@ -5,4 +5,6 @@ export declare function get_placeRules<T_MyTypes extends MyTypes = MyTypes>(pren
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
 };

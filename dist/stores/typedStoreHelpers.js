@@ -11,7 +11,7 @@ const TEST_START_OPTIONS = makePrendyOptions({
     playerAnimations: { walking: "walker_walking", idle: "walker_idle" },
     zoomLevels: { default: 1.1, max: 2 },
     walkSpeed: 10,
-    animationSpeed: 1,
+    gameTimeSpeed: 1,
     headHeightOffsets: { walker: 2.75 },
     doorsInfo: {
         street: {

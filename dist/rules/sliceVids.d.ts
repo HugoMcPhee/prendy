@@ -5,4 +5,6 @@ export declare function get_sliceVidRules<T_MyTypes extends MyTypes = MyTypes>(p
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
 };

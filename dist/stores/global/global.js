@@ -1,5 +1,6 @@
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import get_globalStoreUtils from "./globalStoreUtils";
+export const timeStatePath = ["global", "main", "elapsedGameTime"];
 export default function global(prendyAssets) {
     const { musicNames, soundNames, placeInfoByName, prendyOptions } = prendyAssets;
     const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
@@ -66,16 +67,19 @@ export default function global(prendyAssets) {
             aConvoIsHappening: false,
             //
             frameTick: 0,
-            gameTimeElapsed: 0,
-            pauseTimeElapsed: 0,
-            miniGameTimeElapsed: 0,
+            timeMode: "game",
+            elapsedGameTime: 0,
+            elapsedPauseTime: 0,
+            elapsedMiniGameTime: 0,
+            isGamePaused: false,
+            gameTimeSpeed: prendyOptions.gameTimeSpeed,
+            gameIsInBackground: false,
             //
             debugMessage: "",
             //
             latestSave: null,
-            latestLoadTime: 0,
+            latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
             //
-            appBecameVisibleTime: Date.now(),
         });
     };
     // Refs

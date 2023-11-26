@@ -1,7 +1,7 @@
 /// <reference types="node" />
 /// <reference types="react" />
 import { MyTypes } from "../declarations";
-export declare const prendyStepNames: readonly ["stateVidStateUpdates", "sliceVidStateUpdates", "respondToNewPlace", "respondToNewPlaceStory", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "slatePosition", "slatePositionDontGoOverEdges", "slatePositionStartMovers", "dollAnimation", "dollAnimation2", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSlice", "sliceVidWantsToPlay", "sliceVidWantsToPlay2", "safeVidWantsToPlay", "default", "rendering", "overlay"];
+export declare const prendyStepNames: readonly ["elapsedTimeUpdates", "moverUpdates", "stateVidStateUpdates", "sliceVidStateUpdates", "respondToNewPlace", "respondToNewPlaceStory", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "slatePosition", "slatePositionDontGoOverEdges", "slatePositionStartMovers", "dollAnimation", "dollAnimation2", "dollCorrectRotationAndPosition", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSlice", "sliceVidWantsToPlay", "sliceVidWantsToPlay2", "safeVidWantsToPlay", "moversGoal", "moversStart", "default", "rendering", "overlay"];
 export type PrendyStepName = (typeof prendyStepNames)[number];
 export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     keyboards: {
@@ -85,13 +85,16 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 aSpeechBubbleIsShowing: boolean;
                 aConvoIsHappening: boolean;
                 frameTick: number;
-                gameTimeElapsed: number;
-                pauseTimeElapsed: number;
-                miniGameTimeElapsed: number;
+                timeMode: "pause" | "game" | "miniGame";
+                elapsedGameTime: number;
+                elapsedPauseTime: number;
+                elapsedMiniGameTime: number;
+                isGamePaused: boolean;
+                gameTimeSpeed: number;
+                gameIsInBackground: boolean;
                 debugMessage: string;
                 latestSave: import("./global/global").PrendySaveState | null;
                 latestLoadTime: number;
-                appBecameVisibleTime: number;
                 slateZoom: number;
                 slateZoomGoal: number;
                 slateZoomIsMoving: boolean;
@@ -143,13 +146,16 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             aSpeechBubbleIsShowing: boolean;
             aConvoIsHappening: boolean;
             frameTick: number;
-            gameTimeElapsed: number;
-            pauseTimeElapsed: number;
-            miniGameTimeElapsed: number;
+            timeMode: "pause" | "game" | "miniGame";
+            elapsedGameTime: number;
+            elapsedPauseTime: number;
+            elapsedMiniGameTime: number;
+            isGamePaused: boolean;
+            gameTimeSpeed: number;
+            gameIsInBackground: boolean;
             debugMessage: string;
             latestSave: import("./global/global").PrendySaveState | null;
             latestLoadTime: number;
-            appBecameVisibleTime: number;
             slateZoom: number;
             slateZoomGoal: number;
             slateZoomIsMoving: boolean;

@@ -14,6 +14,11 @@ export function get_SpeechBubble(prendyAssets, storeHelpers) {
     const { getState, useStore, useStoreEffect, getRefs } = storeHelpers;
     const globalRefs = getRefs().global.main;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
+    const SHARED_THEME = {
+        fontSize: "20px",
+        lineHeight: "33px",
+        padding: "8px",
+    };
     return function SpeechBubble({ name }) {
         var _a, _b;
         const theRectangle = useRef(null);
@@ -147,9 +152,9 @@ export function get_SpeechBubble(prendyAssets, storeHelpers) {
                 right: 0,
                 // color: "rgb(197, 217, 61)",
                 // opacity: 0,
-                fontSize: "30px",
-                lineHeight: "40px",
-                padding: videoIsPlaying ? "15px" : "15px",
+                fontSize: SHARED_THEME.fontSize,
+                lineHeight: SHARED_THEME.lineHeight,
+                padding: videoIsPlaying ? SHARED_THEME.padding : SHARED_THEME.padding,
                 fontFamily: font,
                 // textAlign: "center",
                 // verticalAlign: "middle", // to center emojis with text?
@@ -185,8 +190,8 @@ export function get_SpeechBubble(prendyAssets, storeHelpers) {
             fontFamily: font,
             textAlign: "center",
             verticalAlign: "middle",
-            fontSize: "30px",
-            lineHeight: "40px",
+            fontSize: SHARED_THEME.fontSize,
+            lineHeight: SHARED_THEME.lineHeight,
             color: "rgb(68, 68, 68)",
         }), [zIndex]);
         return (React.createElement("div", { id: `speech-bubble-${name}`, style: containerStyle },
@@ -208,7 +213,7 @@ export function get_SpeechBubble(prendyAssets, storeHelpers) {
                 React.createElement(animated.div, { ref: refs.theTextRectangle, key: `textRectangle`, id: `textRectangle`, style: {
                         backgroundColor: "#fafafa",
                         width: `${BUBBLE_WIDTH}px`,
-                        borderRadius: "40px",
+                        borderRadius: "20px",
                         borderWidth: "1px",
                         paddingBottom: "5px",
                         zIndex: 100,

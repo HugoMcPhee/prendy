@@ -1,13 +1,14 @@
 import delay from "delay";
-import { makeRunMovers } from "repond-movers";
+import { makeMoverUtils } from "repond-movers";
 import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { timeStatePath } from "../../stores/global/global";
 export function get_globalSlateRules(prendyAssets, storeHelpers) {
     const { focusSlateOnFocusedDoll, getSlatePositionNotOverEdges, getShaderTransformStuff } = get_slateUtils(prendyAssets, storeHelpers);
     const { setGlobalState } = get_globalUtils(storeHelpers);
     const { makeRules, getRefs, getState } = storeHelpers;
-    const { runMover, runMover2d } = makeRunMovers(storeHelpers);
+    const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
     const { prendyOptions } = prendyAssets;
     const globalRefs = getRefs().global.main;
     return makeRules(({ itemEffect, effect }) => ({
@@ -21,30 +22,6 @@ export function get_globalSlateRules(prendyAssets, storeHelpers) {
             check: { prop: ["slatePos", "slateZoom"], type: "global" },
             atStepEnd: true,
             step: "slatePosition",
-        }),
-        whenSlatePositionGoalChanges: itemEffect({
-            run: () => setGlobalState({ slatePosIsMoving: true }),
-            check: { prop: "slatePosGoal", type: "global" },
-            atStepEnd: true,
-            step: "slatePosition",
-        }),
-        whenSlatePosIsMoving: itemEffect({
-            run: ({ itemName }) => runMover2d({ name: itemName, type: "global", mover: "slatePos" }),
-            check: { prop: "slatePosIsMoving", type: "global", becomes: true },
-            atStepEnd: true,
-            step: "slatePositionStartMovers",
-        }),
-        whenSlateZoomGoalChanges: itemEffect({
-            run: () => setGlobalState({ slateZoomIsMoving: true }),
-            check: { prop: "slateZoomGoal", type: "global" },
-            atStepEnd: true,
-            step: "slatePosition",
-        }),
-        whenSlateZoomIsMoving: itemEffect({
-            run: ({ itemName }) => runMover({ name: itemName, type: "global", mover: "slateZoom" }),
-            check: { prop: "slateZoomIsMoving", type: "global", becomes: true },
-            atStepEnd: true,
-            step: "slatePositionStartMovers",
         }),
         whenShouldFocusOnDoll: itemEffect({
             run: () => focusSlateOnFocusedDoll(),
@@ -113,5 +90,7 @@ export function get_globalSlateRules(prendyAssets, storeHelpers) {
             atStepEnd: true,
             step: "slatePosition",
         }),
+        ...addMoverRules("global", "slatePos", "2d"),
+        ...addMoverRules("global", "slateZoom"),
     }));
 }

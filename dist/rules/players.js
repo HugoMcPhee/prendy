@@ -268,12 +268,13 @@ export function get_playerRules(prendyAssets, storeHelpers) {
         }),
         // Jumping
         onEachFrame: itemEffect({
-            run({ 
-            // newValue: inputVelocity,
+            run({ newValue: newElapsedTime, previousValue: prevElapsedTime,
             // itemState: playerState,
             // itemRefs: playerRefs,
-            frameDuration, }) {
+            // frameDuration: timeDuration2,
+             }) {
                 var _a, _b, _c, _d, _e, _f, _g, _h;
+                const timeDuration = newElapsedTime - prevElapsedTime;
                 // console.log(parseInt(frameDuration));
                 // return false;
                 // NOTE should be a dynamic rule for each player listening to frame
@@ -360,9 +361,8 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                     }
                 }
                 const safeSlopeDivider = Math.max(Math.abs(slope) * 0.7, 1);
-                const slopeFallSpeed = (1 / safeSlopeDivider) * frameDuration;
+                const slopeFallSpeed = (1 / safeSlopeDivider) * timeDuration;
                 if (isAboveDownSlope && newIsOnGround) {
-                    console.log("nowWalkSpeed", nowWalkSpeed);
                     dollPosRefs.velocity.y = -slopeFallSpeed * nowWalkSpeed; // need to multiply by player walk speed
                 }
                 if (newIsOnGround) {
@@ -381,7 +381,7 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                 }
                 else {
                     // is falling
-                    dollPosRefs.velocity.y -= (gravityValue / 160) * frameDuration;
+                    dollPosRefs.velocity.y -= (gravityValue / 160) * timeDuration;
                 }
                 if (dollPosRefs.velocity.y !== 0)
                     newIsMoving = true;
@@ -405,7 +405,7 @@ export function get_playerRules(prendyAssets, storeHelpers) {
                     },
                 });
             },
-            check: { type: "global", prop: "frameTick" },
+            check: { type: "global", prop: "elapsedGameTime" },
             step: "input",
             atStepEnd: true,
         }),

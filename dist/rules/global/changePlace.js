@@ -9,6 +9,7 @@ import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
 import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
+import { cachedRules } from "./global";
 export function get_globalChangePlaceRules(prendyAssets, storeHelpers) {
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
     const { placeInfoByName, prendyOptions } = prendyAssets;
@@ -186,8 +187,14 @@ export function get_globalChangePlaceRules(prendyAssets, storeHelpers) {
                                 whenAllVideosLoadedForPlace();
                                 updateTexturesForNowCamera(nowCamName, true);
                                 focusSlateOnFocusedDoll(); // focus on the player
+                                console.log("cachedRules.globalGeneralRules");
+                                console.log(cachedRules.globalGeneralRules);
                                 // Start fading in the scene
                                 setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });
+                                onNextTick(() => {
+                                    var _a;
+                                    (_a = cachedRules.globalGeneralRules) === null || _a === void 0 ? void 0 : _a.run("whenGameTimeSpeedChanges");
+                                });
                             });
                         }
                     });

@@ -38,6 +38,7 @@ export declare function makePrendyOptions<T_Place extends PlaceName, T_Cam exten
     };
     walkSpeed: number;
     animationSpeed: number;
+    gameTimeSpeed: number;
     headHeightOffsets: Partial<Record<ModelName, number>>;
     doorsInfo?: DoorsInfo;
     modelNamesByPlace: ModelNamesByPlaceLoose;
@@ -59,6 +60,7 @@ export declare function makePrendyOptions<T_Place extends PlaceName, T_Cam exten
     };
     walkSpeed: number;
     animationSpeed: number;
+    gameTimeSpeed: number;
     headHeightOffsets: Partial<Record<ModelName, number>>;
     doorsInfo?: Partial<{
         [x: string]: Partial<{

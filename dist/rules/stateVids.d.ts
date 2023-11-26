@@ -5,4 +5,6 @@ export declare function get_safeVidRules(storeHelpers: PrendyStoreHelpers): {
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
 };

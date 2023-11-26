@@ -6,10 +6,19 @@ import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
-const BUBBLE_WIDTH = 70;
+const BUBBLE_WIDTH = 30; // NOTE not used
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
-const TRIANGLE_SIZE = 25;
+const TRIANGLE_SIZE = 15;
+// when TRIANGLE_SIZE is 50, the svg stroke width is 4
+const SHARED_THEME = {
+    borderColor: "rgb(227, 181, 106)",
+    backgroundColor: "rgb(249, 235, 146)",
+    borderWidth: 2,
+};
+// when the TRIANGLE_SIZE is 50, the SVG is unscaled, so the border width is correct to pixels
+// when the TRIANGLE_SIZE is different the svgs border width (stroke) needs to be scaled accordingly
+const TRIANGLE_BORDER_WIDTH_SCALE = 50 / TRIANGLE_SIZE;
 export function get_MiniBubble(storeHelpers) {
     const { useStoreEffect, useStore, getState } = storeHelpers;
     const getCharDollStuff = get_getCharDollStuff(storeHelpers);
@@ -53,6 +62,27 @@ export function get_MiniBubble(storeHelpers) {
                 positionMiniBubbleToCharacter();
             },
         }), [editedIsVisible]);
+        useEffect(() => {
+            // in an interval of 750ms, make the spring scale (bubble size) increase and decrease slightly, (starting and clearing when editedIsVisible changes)
+            if (!editedIsVisible)
+                return;
+            theSpringApi.start({ scale: 1.05, config: { damping: 100 } });
+            let timeout = setTimeout(() => {
+                theSpringApi.start({ scale: 1, config: { damping: 100 } });
+            }, 350);
+            const interval = setInterval(() => {
+                if (!editedIsVisible)
+                    return;
+                theSpringApi.start({ scale: 1.05, config: { damping: 100 } });
+                timeout = setTimeout(() => {
+                    theSpringApi.start({ scale: 1, config: { damping: 100 } });
+                }, 350);
+            }, 750);
+            return () => {
+                clearTimeout(timeout);
+                clearInterval(interval);
+            };
+        }, [editedIsVisible, theSpringApi]);
         useEffect(() => {
             const newMeasuredHeight = sizeFromRef(refs.theGoalText.current).height;
             if (newMeasuredHeight !== 0) {
@@ -134,26 +164,47 @@ export function get_MiniBubble(storeHelpers) {
                 top: 0,
                 left: 0,
                 right: 0,
-                color: "rgb(61, 61, 61)",
-                fontSize: "30px",
-                padding: "5px",
+                // color: "rgb(61, 61, 61)",
+                color: "rgb(232, 146, 146)",
+                fontSize: "14px",
+                padding: "1px",
                 fontFamily: "Jua",
                 textAlign: "center",
-                verticalAlign: "middle", // to center emojis with text?
+                verticalAlign: "middle",
+                zIndex: 100,
             },
             triangle: {
                 width: "25px",
                 height: "25px",
                 opacity: 1,
-                borderRadius: 5,
-                borderWidth: 1,
-                transform: `translate(0px, -15px) rotate(45deg) scale(0.6) `,
-                backgroundColor: "#fafafa",
+                borderBottomRightRadius: 6,
+                transform: `translate(0px, -20px) rotate(45deg) scale(0.3) `,
+                // backgroundColor: "#fafafa",
+                backgroundColor: SHARED_THEME.backgroundColor,
+                // borderWidth: 1,
+                borderWidth: SHARED_THEME.borderWidth * (1 / 0.3),
+                borderColor: SHARED_THEME.borderColor,
+                borderStyle: "solid",
+            },
+            triangleAbove: {
+                width: "25px",
+                height: "25px",
+                opacity: 1,
+                borderRadius: 0,
+                borderBottomRightRadius: 4,
+                transform: `translate(0px, -9px) rotate(45deg) scale(0.4) `,
+                // backgroundColor: "#fafafa",
+                backgroundColor: SHARED_THEME.backgroundColor,
+                // borderWidth: 1,
+                position: "absolute",
+                // bottom: 3,
+                // left: 10.5,
+                zIndex: 1010,
             },
         }), []);
         return (React.createElement(animated.div, { id: "mini-bubble", style: styles.container },
             React.createElement(animated.div, { ref: refs.theRectangle, key: `theRectangle`, id: `theRectangle`, style: {
-                    width: "70px",
+                    // width: "70px",
                     zIndex: 90,
                     opacity: theSpring.opacity,
                     transform: interpolate([
@@ -168,18 +219,38 @@ export function get_MiniBubble(storeHelpers) {
                     willChange: "transform, opacity",
                 } },
                 React.createElement(animated.div, { ref: refs.theTextRectangle, key: `textRectangle`, id: `textRectangle`, style: {
-                        backgroundColor: "#fafafa",
-                        width: "70px",
-                        borderRadius: "150px",
-                        borderWidth: "1px",
-                        paddingBottom: "5px",
-                        zIndex: 100,
+                        backgroundColor: SHARED_THEME.backgroundColor,
+                        width: "35px",
+                        minHeight: "20px",
+                        borderRadius: "6px",
+                        paddingBottom: "0px",
+                        zIndex: 1000,
                         height: theSpring.height,
                         overflow: "hidden",
                         willChange: "height",
-                        position: "relative", // fixes overflow not working
+                        position: "relative",
+                        borderWidth: SHARED_THEME.borderWidth,
+                        borderColor: SHARED_THEME.borderColor,
+                        borderStyle: "solid",
                     } },
                     React.createElement("div", { ref: theGoalText, id: `visibleText`, style: styles.visibleText }, text)),
-                React.createElement("div", { ref: refs.theTriangle, key: `theTriangle`, id: `theTriangle`, style: styles.triangle }))));
+                React.createElement("div", { style: {
+                        width: TRIANGLE_SIZE,
+                        height: TRIANGLE_SIZE,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        // marginTop: -SHARED_THEME.borderWidth,
+                        transform: `translate(0px, ${-SHARED_THEME.borderWidth - 0.085 * TRIANGLE_SIZE}px)`,
+                        zIndex: 1010,
+                    } },
+                    React.createElement("svg", { viewBox: "0 0 50 50", xmlns: "http://www.w3.org/2000/svg" },
+                        React.createElement("path", { d: "M9402.434 6308.434q2.656-5.652 5.41 0l22.305 45.786q2.753 5.652-2.656 5.652h-43.822q-5.409 0-2.753-5.652Z", style: {
+                                fill: SHARED_THEME.backgroundColor,
+                                stroke: SHARED_THEME.borderColor,
+                                strokeWidth: SHARED_THEME.borderWidth * TRIANGLE_BORDER_WIDTH_SCALE + "px",
+                                transformOrigin: "4715.28px 3172.16px",
+                            }, transform: "matrix(-1 0 0 -1 -.0007 .0007)" }),
+                        React.createElement("path", { style: { fill: SHARED_THEME.backgroundColor, stroke: SHARED_THEME.borderColor, strokeWidth: "0" }, d: "M-.272-6.862h50.544V4.239H-.272z" }))))));
     };
 }

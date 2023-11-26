@@ -18,4 +18,6 @@ export declare function get_dollRules<DollDynamicRules extends ReturnType<typeof
     start: (...args: any) => any;
     stop: (...args: any) => any;
     ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
 };

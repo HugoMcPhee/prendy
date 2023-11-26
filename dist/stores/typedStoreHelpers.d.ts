@@ -24,6 +24,8 @@ export type PrendyStoreHelpersUntypedType = {
         start: AnyFunction;
         stop: AnyFunction;
         ruleNames: any[];
+        run: AnyFunction;
+        runAll: AnyFunction;
     };
     makeDynamicRules: (...args: any) => {
         stopAll: AnyFunction;
@@ -103,7 +105,7 @@ export type PrendyOptionsUntyped = {
         max: number;
     };
     walkSpeed: number;
-    animationSpeed: number;
+    gameTimeSpeed: number;
     headHeightOffsets: Record<string, number>;
     doorsInfo?: Partial<Record<string, Partial<Record<string, ToNewOptionUntyped>>>>;
     modelNamesByPlace: Record<string, string[]>;
@@ -127,7 +129,7 @@ export type PrendyOptionsGeneric<AnyCameraName extends string, AnySegmentName ex
         max: number;
     };
     walkSpeed: number;
-    animationSpeed: number;
+    gameTimeSpeed: number;
     headHeightOffsets: Record<string, number>;
     doorsInfo?: Partial<Record<PlaceName, Partial<Record<string, ToPlaceOption<AnyCameraName, AnySegmentName, PlaceName, AnySpotName>>>>>;
     modelNamesByPlace: Record<PlaceName, ModelName[]>;

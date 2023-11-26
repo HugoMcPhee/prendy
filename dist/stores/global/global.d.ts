@@ -59,6 +59,7 @@ export type PrendySaveState = {
     }>;
     storyState: Record<any, any>;
 };
+export declare const timeStatePath: readonly ["global", "main", "elapsedGameTime"];
 export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
     startStates: {
         main: {
@@ -74,13 +75,16 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
             aSpeechBubbleIsShowing: boolean;
             aConvoIsHappening: boolean;
             frameTick: number;
-            gameTimeElapsed: number;
-            pauseTimeElapsed: number;
-            miniGameTimeElapsed: number;
+            timeMode: "pause" | "game" | "miniGame";
+            elapsedGameTime: number;
+            elapsedPauseTime: number;
+            elapsedMiniGameTime: number;
+            isGamePaused: boolean;
+            gameTimeSpeed: number;
+            gameIsInBackground: boolean;
             debugMessage: string;
             latestSave: PrendySaveState | null;
             latestLoadTime: number;
-            appBecameVisibleTime: number;
             slateZoom: number;
             slateZoomGoal: number;
             slateZoomIsMoving: boolean;
@@ -132,13 +136,16 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
         aSpeechBubbleIsShowing: boolean;
         aConvoIsHappening: boolean;
         frameTick: number;
-        gameTimeElapsed: number;
-        pauseTimeElapsed: number;
-        miniGameTimeElapsed: number;
+        timeMode: "pause" | "game" | "miniGame";
+        elapsedGameTime: number;
+        elapsedPauseTime: number;
+        elapsedMiniGameTime: number;
+        isGamePaused: boolean;
+        gameTimeSpeed: number;
+        gameIsInBackground: boolean;
         debugMessage: string;
         latestSave: PrendySaveState | null;
         latestLoadTime: number;
-        appBecameVisibleTime: number;
         slateZoom: number;
         slateZoomGoal: number;
         slateZoomIsMoving: boolean;

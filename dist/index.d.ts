@@ -19,6 +19,8 @@ export declare const definiedPrendyRules: {
         start: (...args: any) => any;
         stop: (...args: any) => any;
         ruleNames: any[];
+        run: (...args: any) => any;
+        runAll: (...args: any) => any;
     } | null;
 };
 export declare function makeOtherUsefulPrendyUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]): {
@@ -216,6 +218,8 @@ export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(p
             start: (...args: any) => any;
             stop: (...args: any) => any;
             ruleNames: any[];
+            run: (...args: any) => any;
+            runAll: (...args: any) => any;
         };
         makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_3 in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_TriggerName_1 in T_MyTypes["Main"]["TriggerNameByPlace"][P_PlaceName_3]]: Partial<{ [P_PickupName in T_MyTypes["Main"]["PickupName"]]: (usefulStuff: {
             storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
@@ -289,6 +293,8 @@ export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(p
             start: (...args: any) => any;
             stop: (...args: any) => any;
             ruleNames: any[];
+            run: (...args: any) => any;
+            runAll: (...args: any) => any;
         };
         makePlaceUnloadRules: (callBacksObject: Partial<{ [P_PlaceName_4 in T_MyTypes["Main"]["PlaceName"]]: (usefulStuff: {
             storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
@@ -307,6 +313,8 @@ export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(p
             start: (...args: any) => any;
             stop: (...args: any) => any;
             ruleNames: any[];
+            run: (...args: any) => any;
+            runAll: (...args: any) => any;
         };
         makeTouchRules: (callBacksObject: Partial<{ [P_DollName_2 in T_MyTypes["Main"]["DollName"]]: (usefulStuff: {
             storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
@@ -329,6 +337,8 @@ export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(p
             start: (...args: any) => any;
             stop: (...args: any) => any;
             ruleNames: any[];
+            run: (...args: any) => any;
+            runAll: (...args: any) => any;
         };
         makeTriggerRules: (callBacksObject: Partial<{ [P_CharacterName in T_MyTypes["Main"]["CharacterName"]]: Partial<{ [P_PlaceName_5 in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_TriggerName_2 in T_MyTypes["Main"]["TriggerNameByPlace"][P_PlaceName_5]]: (usefulStuff: {
             storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
@@ -349,6 +359,8 @@ export declare function makePrendyHelpers<T_MyTypes extends MyTypes = MyTypes>(p
             start: (...args: any) => any;
             stop: (...args: any) => any;
             ruleNames: any[];
+            run: (...args: any) => any;
+            runAll: (...args: any) => any;
         };
     };
     utils: {

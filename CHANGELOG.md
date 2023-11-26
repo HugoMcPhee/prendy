@@ -14,6 +14,11 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v 0.9.14
+
+- add a npx prendy-init script to update tsconfig to use the src ts types, so declaration merging can work without needing factory functions with generic type parameters
+- TODO will start removing the factory functions and start making helpers directly importable
+
 v 0.9.13
 
 - Cleaned up types to use a single MyTypes type

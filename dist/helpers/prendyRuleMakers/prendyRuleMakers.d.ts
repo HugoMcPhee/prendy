@@ -15,133 +15,139 @@ export declare function getUsefulStoryStuff(): {
     camRefs: any;
 };
 export declare function setStoryState(newState: Partial<StoryState>): void;
-export declare function makeAllStoryRuleMakers(): {
-    makeCamChangeRules: (callBacksObject: Partial<{
-        [x: string]: Partial<Record<string, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
-    }>) => {
-        start: (ruleName: "whenPropertyChanges") => void;
-        stop: (ruleName: "whenPropertyChanges") => void;
-        startAll: () => void;
-        stopAll: () => void;
-        ruleNames: "whenPropertyChanges"[];
-        run: (ruleName: "whenPropertyChanges") => void;
-        runAll: () => void;
-    };
-    makeCamLeaveRules: (callBacksObject: Partial<{
-        [x: string]: Partial<Record<string, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
-    }>) => {
-        start: (ruleName: "whenPropertyChanges") => void;
-        stop: (ruleName: "whenPropertyChanges") => void;
-        startAll: () => void;
-        stopAll: () => void;
-        ruleNames: "whenPropertyChanges"[];
-        run: (ruleName: "whenPropertyChanges") => void;
-        runAll: () => void;
-    };
-    makeCamSegmentRules: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => string;
+type CharacterName = MyTypes["Types"]["CharacterName"];
+type DollName = MyTypes["Types"]["DollName"];
+type PickupName = MyTypes["Types"]["PickupName"];
+type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
+type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
+type SegmentNameFromCameraAndPlace<T_Place extends keyof PlaceInfoByName, T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+type CamChangeRulesParam = Partial<{
+    [P_PlaceName in PlaceName]: Partial<Record<CameraNameFromPlace<P_PlaceName>, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
+}>;
+type CamChangeRulesReturn = {
+    start: (ruleName: "whenPropertyChanges") => void;
+    stop: (ruleName: "whenPropertyChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPropertyChanges"[];
+    run: (ruleName: "whenPropertyChanges") => void;
+    runAll: () => void;
+};
+export declare function makeCamChangeRules(callBacksObject: CamChangeRulesParam): CamChangeRulesReturn;
+export declare function makeCamLeaveRules(callBacksObject: CamChangeRulesParam): CamChangeRulesReturn;
+type CamSegmentRulesOptions = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
+        [P_CamName in CameraNameFromPlace<P_PlaceName>]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+    }>;
+}>;
+export declare function makeCamSegmentRules(callBacksObject: CamSegmentRulesOptions): {
+    startAll(): void;
+    stopAll(): void;
+};
+export declare function makePickupsRules({ onUsePickupAtTrigger, onUsePickupToTalk, onUsePickupGenerally, }: {
+    onUsePickupAtTrigger: ReturnType<typeof makeOnUsePickupAtTrigger>;
+    onUsePickupToTalk: ReturnType<typeof makeOnUsePickupToTalk>;
+    onUsePickupGenerally: ReturnType<typeof makeOnUsePickupGenerally>;
+}): {
+    startAll(): void;
+    stopAll(): void;
+};
+export declare function makeInteractButtonRules({ onInteractAtTrigger, onInteractAtTalk, }: {
+    onInteractAtTrigger: ReturnType<typeof makeOnInteractAtTrigger>;
+    onInteractAtTalk: ReturnType<typeof makeOnInteractToTalk>;
+}): {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
+};
+type OnInteractAtTriggerOptions = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
+        [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+    }>;
+}>;
+export declare function makeOnInteractAtTrigger(callBacksObject: OnInteractAtTriggerOptions, characterName?: CharacterName): () => void;
+type OnInteractToTalkOptions = Partial<{
+    [P_DollName in DollName]: StoryCallback;
+}>;
+export declare function makeOnInteractToTalk(callBacksObject: OnInteractToTalkOptions, distanceType?: "touch" | "talk", characterName?: CharacterName): () => void;
+type OnUsePickupAtTriggerOptions = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
+        [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: Partial<{
+            [P_PickupName in PickupName]: StoryCallback;
         }>;
-    }>) => {
-        startAll(): void;
-        stopAll(): void;
-    };
-    makeOnInteractAtTrigger: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
+    }>;
+}>;
+export declare function makeOnUsePickupAtTrigger(callBacksObject: OnUsePickupAtTriggerOptions, characterName?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+type OnUsePickupGenerallyOptions = Partial<{
+    [P_PickupName in PickupName]: StoryCallback;
+}>;
+export declare function makeOnUsePickupGenerally(callBacksObject: OnUsePickupGenerallyOptions): <T_PickupName extends string>(pickupName: T_PickupName) => void;
+type OnUsePickupToTalkOptions = Partial<{
+    [P_DollName in DollName]: Partial<{
+        [P_PickupName in PickupName]: StoryCallback;
+    }>;
+}>;
+export declare function makeOnUsePickupToTalk(callBacksObject: OnUsePickupToTalkOptions, characterName?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+type PlaceLoadRulesOptions = Partial<{
+    [P_PlaceName in PlaceName]: StoryCallback;
+}>;
+export declare function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksObject: PlaceLoadRulesOptions): {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
+};
+export declare function makePlaceUnloadRules(callBacksObject: PlaceLoadRulesOptions): {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
+};
+type TouchRulesOptions = Partial<{
+    [P_DollName in DollName]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
+}>;
+export declare function makeTouchRules(callBacksObject: TouchRulesOptions, options?: {
+    characterName?: CharacterName;
+    distanceType?: "touch" | "talk" | "see";
+    whenLeave?: boolean;
+}): {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
+};
+type TriggerRulesOptions = Partial<{
+    [P_CharacterName in CharacterName]: Partial<{
+        [P_PlaceName in PlaceName]: Partial<{
+            [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
         }>;
-    }>, characterName?: string) => () => void;
-    makeOnInteractToTalk: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-    }>, distanceType?: "touch" | "talk", characterName?: string) => () => void;
-    makeInteractButtonRules: ({ onInteractAtTrigger, onInteractAtTalk, }: {
-        onInteractAtTrigger: () => void;
-        onInteractAtTalk: () => void;
-    }) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makeOnUsePickupAtTrigger: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: Partial<{
-                [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-            }>;
-        }>;
-    }>, characterName?: string) => <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
-    makeOnUsePickupGenerally: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-    }>) => <T_PickupName_1 extends string>(pickupName: T_PickupName_1) => void;
-    makeOnUsePickupToTalk: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-        }>;
-    }>, characterName?: string) => <T_PickupName_2 extends string>(pickupName: T_PickupName_2) => false | undefined;
-    makePickupsRules: ({ onUsePickupAtTrigger, onUsePickupToTalk, onUsePickupGenerally, }: {
-        onUsePickupAtTrigger: <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
-        onUsePickupToTalk: <T_PickupName_2 extends string>(pickupName: T_PickupName_2) => false | undefined;
-        onUsePickupGenerally: <T_PickupName_1 extends string>(pickupName: T_PickupName_1) => void;
-    }) => {
-        startAll(): void;
-        stopAll(): void;
-    };
-    makePlaceLoadRules: (atStartOfEachPlace: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void, callBacksObject: Partial<{
-        [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-    }>) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makePlaceUnloadRules: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-    }>) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makeTouchRules: (callBacksObject: Partial<{
-        [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-    }>, options?: {
-        characterName?: string | undefined;
-        distanceType?: "touch" | "talk" | "see" | undefined;
-        whenLeave?: boolean | undefined;
-    } | undefined) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makeTriggerRules: (callBacksObject: Partial<{
-        [x: string]: Partial<{
-            [x: string]: Partial<{
-                [x: string]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-            }>;
-        }>;
-    }>, options?: {
-        whenLeave?: boolean;
-    }) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
+    }>;
+}>;
+export declare function makeTriggerRules(callBacksObject: TriggerRulesOptions, options?: {
+    whenLeave?: boolean;
+}): {
+    stopAll: (...args: any) => any;
+    startAll: (...args: any) => any;
+    start: (...args: any) => any;
+    stop: (...args: any) => any;
+    ruleNames: any[];
+    run: (...args: any) => any;
+    runAll: (...args: any) => any;
 };
 export {};

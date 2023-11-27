@@ -39,8 +39,9 @@ export function setStoryState(newState) {
     const { setState } = meta.repond;
     setState({ story: { main: newState } });
 }
-export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterNames, dollNames) {
-    const { getRefs, getState, getPreviousState, setState, makeRules, startItemEffect, stopEffect, onNextTick, makeNestedRuleMaker, makeNestedLeaveRuleMaker, } = storeHelpers;
+export function makeAllStoryRuleMakers() {
+    const { getRefs, getState, getPreviousState, setState, makeRules, startItemEffect, stopEffect, onNextTick, makeNestedRuleMaker, makeNestedLeaveRuleMaker, } = meta.repond;
+    const { dollNames, placeInfoByName, characterNames } = meta.assets;
     const makeCamChangeRules = makeNestedRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
     const makeCamLeaveRules = makeNestedLeaveRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
     function makeCamSegmentRules(callBacksObject) {

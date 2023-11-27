@@ -114,10 +114,6 @@ export function getQuickDistanceBetweenDolls(dollA, dollB) {
     const dollPositonB = getState().dolls[dollB].position;
     return getPointDistanceQuick(dollPositonA, dollPositonB);
 }
-// export type PartialDollsStateWithInRange = Partial<
-//   Record<DollName, Partial<{ inRange: InRangeProperty }>>
-// >;
-const defaultInRange = getDefaultInRangeFunction(meta.assets.dollNames);
 export function inRangesAreTheSame(inRangePropA, inRangePropB) {
     let bothMatch = true;
     breakableForEach(meta.assets.dollNames, (dollName) => {

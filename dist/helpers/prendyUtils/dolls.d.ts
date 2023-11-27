@@ -14,8 +14,8 @@ type AnimationNameByModel = MyTypes["Types"]["AnimationNameByModel"];
 type ModelName = MyTypes["Types"]["ModelName"];
 export declare function setDollAnimWeight<T_DollName extends DollName, T_NewWeights extends Record<AnimationNameByModel[ModelNameFromDoll<T_DollName>], number>>(dollName: T_DollName, newWeights: Partial<T_NewWeights>): void;
 export declare function getQuickDistanceBetweenDolls(dollA: DollName, dollB: DollName): number;
-declare const defaultInRange: () => Record<string, InRangeForDoll>;
-type InRangeProperty = ReturnType<typeof defaultInRange>;
+type InRangeForAllDolls = Record<DollName, InRangeForDoll>;
+type InRangeProperty = InRangeForAllDolls;
 export declare function inRangesAreTheSame(inRangePropA: InRangeProperty, inRangePropB: InRangeProperty): boolean;
 export declare function setupLightMaterial(theMaterial: PBRMaterial | null): void;
 export declare function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName extends DollName>({ modelName, dollName, }: {

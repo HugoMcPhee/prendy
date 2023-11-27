@@ -67,12 +67,7 @@ export function setStoryState(newState: Partial<StoryState>) {
   setState({ story: { main: newState } });
 }
 
-export function makeAllStoryRuleMakers(
-  storeHelpers: MyTypes["Repond"],
-  placeInfoByName: MyTypes["Types"]["PlaceInfoByName"],
-  characterNames: readonly MyTypes["Types"]["CharacterName"][],
-  dollNames: readonly MyTypes["Types"]["DollName"][]
-) {
+export function makeAllStoryRuleMakers() {
   type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
   type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
   type CharacterName = MyTypes["Types"]["CharacterName"];
@@ -94,7 +89,9 @@ export function makeAllStoryRuleMakers(
     onNextTick,
     makeNestedRuleMaker,
     makeNestedLeaveRuleMaker,
-  } = storeHelpers;
+  } = meta.repond!;
+
+  const { dollNames, placeInfoByName, characterNames } = meta.assets!;
 
   type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
 

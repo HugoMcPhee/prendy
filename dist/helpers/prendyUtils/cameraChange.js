@@ -9,10 +9,7 @@ import { getSliceVidVideo } from "./sliceVids";
 export function getSafeCamName(cam) {
     if (cam === null)
         return null;
-    const { getRefs, getState, setState } = meta.repond;
-    const { placeInfoByName, dollNames } = meta.assets;
-    const globalRefs = getRefs().global.main;
-    const placesRefs = getRefs().places;
+    const { placeInfoByName } = meta.assets;
     const { nowPlaceName } = getGlobalState();
     const safePlace = nowPlaceName;
     const { segmentTimesByCamera, cameraNames } = placeInfoByName[safePlace];
@@ -22,10 +19,7 @@ export function getSafeCamName(cam) {
 }
 export function getSafeSegmentName({ cam, place, segment, useStorySegmentRules, }) {
     var _a;
-    const { getRefs, getState, setState } = meta.repond;
     const { placeInfoByName, dollNames } = meta.assets;
-    const globalRefs = getRefs().global.main;
-    const placesRefs = getRefs().places;
     const { nowPlaceName } = getGlobalState();
     const safePlace = nowPlaceName;
     const { segmentNames, segmentTimesByCamera } = placeInfoByName[safePlace];
@@ -159,8 +153,8 @@ export function updateTexturesForNowCamera(newCameraName, didChangePlace = false
     applyProbeToAllParticleMaterials();
 }
 export function addMeshesToRenderLists(newCamRef) {
-    const { getRefs, getState, setState } = meta.repond;
-    const { placeInfoByName, dollNames } = meta.assets;
+    const { getRefs } = meta.repond;
+    const { dollNames } = meta.assets;
     const globalRefs = getRefs().global.main;
     const scene = globalRefs.scene;
     // scene.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
@@ -200,7 +194,7 @@ export function updateVideoTexturesForNewPlace(nowPlaceName) {
 }
 export function updateVideoTexture() {
     var _a, _b;
-    const { getRefs, getState, setState } = meta.repond;
+    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     (_a = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.backdropPostProcessEffect) === null || _a === void 0 ? void 0 : _a.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
     (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.backdropPostProcessEffect) === null || _b === void 0 ? void 0 : _b.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
@@ -238,7 +232,7 @@ export function applyProbeToAllDollMaterials() {
     });
 }
 export function applyProbeToAllParticleMaterials() {
-    const { getRefs, getState, setState } = meta.repond;
+    const { getRefs, getState } = meta.repond;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
     const { nowPlaceName } = getState().global.main;
@@ -262,7 +256,7 @@ export function applyProbeToAllParticleMaterials() {
 }
 // note adding to slice vids cause its easier to follow for now? even though it's not seperated
 export function updateNowStuffWhenSliceChanged() {
-    const { getRefs, getState, setState } = meta.repond;
+    const { getState, setState } = meta.repond;
     // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
     const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
     const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
@@ -293,9 +287,3 @@ export function updateNowStuffWhenSliceChanged() {
     });
     // }
 }
-// {
-//   getSafeCamName,
-//   getSafeSegmentName,
-//   updateTexturesForNowCamera,
-//   updateNowStuffWhenSliceChanged,
-// };

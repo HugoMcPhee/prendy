@@ -15,7 +15,7 @@ export declare function getUsefulStoryStuff(): {
     camRefs: any;
 };
 export declare function setStoryState(newState: Partial<StoryState>): void;
-export declare function makeAllStoryRuleMakers(storeHelpers: MyTypes["Repond"], placeInfoByName: MyTypes["Types"]["PlaceInfoByName"], characterNames: readonly MyTypes["Types"]["CharacterName"][], dollNames: readonly MyTypes["Types"]["DollName"][]): {
+export declare function makeAllStoryRuleMakers(): {
     makeCamChangeRules: (callBacksObject: Partial<{
         [x: string]: Partial<Record<string, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
     }>) => {

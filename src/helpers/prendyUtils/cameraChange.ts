@@ -28,10 +28,7 @@ export function getSafeCamName(cam: null): null;
 export function getSafeCamName(cam: any): any {
   if (cam === null) return null;
 
-  const { getRefs, getState, setState } = meta.repond!;
-  const { placeInfoByName, dollNames } = meta.assets!;
-  const globalRefs = getRefs().global.main;
-  const placesRefs = getRefs().places;
+  const { placeInfoByName } = meta.assets!;
 
   const { nowPlaceName } = getGlobalState();
 
@@ -59,10 +56,7 @@ export function getSafeSegmentName<
   segment: T_SegmentName;
   useStorySegmentRules?: boolean;
 }) {
-  const { getRefs, getState, setState } = meta.repond!;
   const { placeInfoByName, dollNames } = meta.assets!;
-  const globalRefs = getRefs().global.main;
-  const placesRefs = getRefs().places;
 
   const { nowPlaceName } = getGlobalState();
 
@@ -246,8 +240,8 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 }
 
 export function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
-  const { getRefs, getState, setState } = meta.repond!;
-  const { placeInfoByName, dollNames } = meta.assets!;
+  const { getRefs } = meta.repond!;
+  const { dollNames } = meta.assets!;
   const globalRefs = getRefs().global.main;
 
   const scene = globalRefs.scene as Scene;
@@ -294,7 +288,7 @@ export function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
 }
 
 export function updateVideoTexture() {
-  const { getRefs, getState, setState } = meta.repond!;
+  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
@@ -340,7 +334,7 @@ export function applyProbeToAllDollMaterials() {
 }
 
 export function applyProbeToAllParticleMaterials() {
-  const { getRefs, getState, setState } = meta.repond!;
+  const { getRefs, getState } = meta.repond!;
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
@@ -366,7 +360,7 @@ export function applyProbeToAllParticleMaterials() {
 
 // note adding to slice vids cause its easier to follow for now? even though it's not seperated
 export function updateNowStuffWhenSliceChanged() {
-  const { getRefs, getState, setState } = meta.repond!;
+  const { getState, setState } = meta.repond!;
 
   // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
 
@@ -402,10 +396,3 @@ export function updateNowStuffWhenSliceChanged() {
   });
   // }
 }
-
-// {
-//   getSafeCamName,
-//   getSafeSegmentName,
-//   updateTexturesForNowCamera,
-//   updateNowStuffWhenSliceChanged,
-// };

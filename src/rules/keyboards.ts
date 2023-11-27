@@ -1,6 +1,6 @@
-import { PrendyStoreHelpers } from "../declarations";
+import { RepondHelpers } from "../declarations";
 
-export function get_keyboardConnectRules(storeHelpers: PrendyStoreHelpers) {
+export function get_keyboardConnectRules(storeHelpers: RepondHelpers) {
   const { setState, getState } = storeHelpers;
 
   function handleKeyDown(event: KeyboardEvent) {

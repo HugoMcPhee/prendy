@@ -1,14 +1,14 @@
 import { MyTypes } from "./declarations";
-type AnyAnimationName = MyTypes["Main"]["AnyAnimationName"];
-type CameraNameByPlace = MyTypes["Main"]["CameraNameByPlace"];
-type CharacterName = MyTypes["Main"]["CharacterName"];
-type ModelName = MyTypes["Main"]["ModelName"];
-type ModelNamesByPlaceLoose = MyTypes["Main"]["ModelNamesByPlaceLoose"];
-type PickupName = MyTypes["Main"]["PickupName"];
-type PlaceName = MyTypes["Main"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Main"]["SegmentNameByPlace"];
-type SpotNameByPlace = MyTypes["Main"]["SpotNameByPlace"];
-type TriggerNameByPlace = MyTypes["Main"]["TriggerNameByPlace"];
+type AnyAnimationName = MyTypes["Types"]["AnyAnimationName"];
+type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
+type CharacterName = MyTypes["Types"]["CharacterName"];
+type ModelName = MyTypes["Types"]["ModelName"];
+type ModelNamesByPlaceLoose = MyTypes["Types"]["ModelNamesByPlaceLoose"];
+type PickupName = MyTypes["Types"]["PickupName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
+type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
+type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
 type ToNewOption<T_PlaceName extends PlaceName> = {
     [P_PlaceName in Exclude<PlaceName, T_PlaceName>]: {
         toPlace: P_PlaceName;

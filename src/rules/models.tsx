@@ -1,20 +1,18 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
 import { MyTypes } from "../declarations";
-import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
+import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
 
 // handle loading here ??
 
 export function get_modelRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
 
   const { makeRules, setState, getRefs } = storeHelpers;
   const { modelInfoByName } = prendyAssets;
-
-  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
 
   async function startLoadingModel<T_ModelName extends ModelName>(modelName: T_ModelName) {
     setState({ models: { [modelName]: { wantToLoad: false } } });

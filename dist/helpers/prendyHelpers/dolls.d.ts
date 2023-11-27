@@ -1,37 +1,46 @@
 import { Vector3 } from "@babylonjs/core";
 import { MyTypes } from "../../declarations";
-export declare function get_dollStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
-    setDollPosition: (dollName: T_MyTypes["Main"]["DollName"], newPositon: Vector3) => void;
-    setDollRotation: (dollName: T_MyTypes["Main"]["DollName"], newRotation: Vector3) => void;
-    setDollRotationY: (dollName: T_MyTypes["Main"]["DollName"], newRotationY: number) => void;
-    springDollRotationY: (dollName: T_MyTypes["Main"]["DollName"], newRotation: number) => void;
-    springAddToDollRotationY: (dollName: T_MyTypes["Main"]["DollName"], addedRotation: number, useShortestAngle?: boolean) => void;
-    pushDollRotationY: (dollName: T_MyTypes["Main"]["DollName"], direction: "right" | "left", speed?: number) => void;
-    lookAtOtherDoll: (dollA: T_MyTypes["Main"]["DollName"], dollB: T_MyTypes["Main"]["DollName"]) => void;
-    setDollAnimation: <T_Doll extends T_MyTypes["Main"]["DollName"]>(doll: T_Doll, animation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_Doll]["model"]]) => void;
-    focusOnDoll: <T_Doll_1 extends T_MyTypes["Main"]["DollName"]>(dollName: T_Doll_1, zoom?: number) => void;
-    setDollToSpot: <T_PlaceName extends T_MyTypes["Main"]["PlaceName"]>({ place, spot, doll: dollName, dontSetRotationState, }: {
-        place: T_PlaceName;
-        spot: T_MyTypes["Main"]["SpotNameByPlace"][T_PlaceName];
-        doll: T_MyTypes["Main"]["DollName"];
-        dontSetRotationState?: boolean | undefined;
-    }) => void;
-    springDollToSpot: <T_PlaceName_1 extends T_MyTypes["Main"]["PlaceName"]>({ place, spot, doll: dollName, }: {
-        place: T_PlaceName_1;
-        spot: T_MyTypes["Main"]["SpotNameByPlace"][T_PlaceName_1];
-        doll: T_MyTypes["Main"]["DollName"];
-    }) => void;
-    dollLooksAtSpot: <T_PlaceName_2 extends T_MyTypes["Main"]["PlaceName"]>({ place, spot, doll, }: {
-        place: T_PlaceName_2;
-        spot: T_MyTypes["Main"]["SpotNameByPlace"][T_PlaceName_2];
-        doll: T_MyTypes["Main"]["DollName"];
-    }) => void;
-    moveDollAt2DAngle: (dollName: T_MyTypes["Main"]["DollName"], angle: number, speed?: number) => void;
-    hideDoll: (dollName: T_MyTypes["Main"]["DollName"], shouldHide?: boolean) => void;
-    toggleDollMeshes: <T_DollName extends T_MyTypes["Main"]["DollName"]>(dollName: T_DollName, toggledMeshes: Partial<Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName]["model"]], boolean>>) => void;
-    getDollBonePosition: <T_ModelName extends T_MyTypes["Main"]["ModelName"]>({ doll, model, bone, }: {
-        doll: T_MyTypes["Main"]["DollName"];
-        model: T_ModelName;
-        bone: T_MyTypes["Main"]["BoneNameByModel"][T_ModelName];
-    }) => any;
-};
+type AnimationNameByModel = MyTypes["Types"]["AnimationNameByModel"];
+type BoneNameByModel = MyTypes["Types"]["BoneNameByModel"];
+type DollName = MyTypes["Types"]["DollName"];
+type DollOptions = MyTypes["Types"]["DollOptions"];
+type MeshNameByModel = MyTypes["Types"]["MeshNameByModel"];
+type ModelName = MyTypes["Types"]["ModelName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
+type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
+type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
+export declare function setDollPosition(dollName: DollName, newPositon: Vector3): void;
+export declare function setDollRotation(dollName: DollName, newRotation: Vector3): void;
+export declare function lookAtOtherDoll(dollA: DollName, dollB: DollName): void;
+export declare function dollLooksAtSpot<T_PlaceName extends PlaceName>({ place, spot, doll, }: {
+    place: T_PlaceName;
+    spot: SpotNameByPlace[T_PlaceName];
+    doll: DollName;
+}): void;
+export declare function setDollRotationY(dollName: DollName, newRotationY: number): void;
+export declare function springDollRotationY(dollName: DollName, newRotation: number): void;
+export declare function springAddToDollRotationY(dollName: DollName, addedRotation: number, useShortestAngle?: boolean): void;
+export declare function setDollAnimation<T_Doll extends DollName>(doll: T_Doll, animation: AnimationNameByModel[ModelNameFromDoll<T_Doll>]): void;
+export declare function focusOnDoll<T_Doll extends DollName>(dollName: T_Doll, zoom?: number): void;
+export declare function setDollToSpot<T_PlaceName extends PlaceName>({ place, spot, doll: dollName, dontSetRotationState, }: {
+    place: T_PlaceName;
+    spot: SpotNameByPlace[T_PlaceName];
+    doll: DollName;
+    dontSetRotationState?: boolean;
+}): void;
+export declare function springDollToSpot<T_PlaceName extends PlaceName>({ place, spot, doll: dollName, }: {
+    place: T_PlaceName;
+    spot: SpotNameByPlace[T_PlaceName];
+    doll: DollName;
+}): void;
+export declare function moveDollAt2DAngle(dollName: DollName, angle: number, speed?: number): void;
+export declare function pushDollRotationY(dollName: DollName, direction: "right" | "left", speed?: number): void;
+export declare function hideDoll(dollName: DollName, shouldHide?: boolean): void;
+export declare function toggleDollMeshes<T_DollName extends DollName>(dollName: T_DollName, toggledMeshes: Partial<Record<MeshNamesFromDoll<T_DollName>, boolean>>): void;
+export declare function getDollBonePosition<T_ModelName extends ModelName>({ doll, model, bone, }: {
+    doll: DollName;
+    model: T_ModelName;
+    bone: BoneNameByModel[T_ModelName];
+}): any;
+export {};

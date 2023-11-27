@@ -5,11 +5,11 @@ import { MyTypes } from "../../declarations";
 import { InRangeForDoll, defaultInRangeForDoll } from "../../helpers/prendyUtils/dolls";
 
 export default function get_dollStoreUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type DollOptions = T_MyTypes["Main"]["DollOptions"];
-  type ModelName = T_MyTypes["Main"]["ModelName"];
-  type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
+  type AnimationNameByModel = T_MyTypes["Types"]["AnimationNameByModel"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type DollOptions = T_MyTypes["Types"]["DollOptions"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
+  type MeshNameByModel = T_MyTypes["Types"]["MeshNameByModel"];
 
   const { dollNames, modelInfoByName } = prendyAssets;
 

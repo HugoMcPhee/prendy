@@ -1,10 +1,15 @@
 import { MyTypes } from "../../declarations";
-export declare function get_sceneStoryUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]): {
-    getSegmentFromStoryRules: <T_Place extends T_MyTypes["Main"]["PlaceName"], T_Cam extends T_MyTypes["Main"]["CameraNameByPlace"][T_Place]>(place: T_Place, cam: T_Cam) => any;
-    doWhenNowSegmentChanges: (checkingSegmentName: T_MyTypes["Main"]["AnySegmentName"], callback: () => void) => string | null;
-    doWhenNowCamChanges: (checkingCamName: T_MyTypes["Main"]["AnyCameraName"], callback: () => void) => string | null;
-    waitForNowPlaceToChange: (checkingPlaceName: T_MyTypes["Main"]["PlaceName"]) => Promise<void>;
-    waitForPlaceFullyLoaded: (checkingPlaceName: T_MyTypes["Main"]["PlaceName"]) => Promise<void>;
-    waitForNowCamToChange: (checkingCamName: T_MyTypes["Main"]["AnyCameraName"]) => Promise<void>;
-    waitForNextTick: () => Promise<unknown>;
-};
+type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
+type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
+type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+export declare function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(place: T_Place, cam: T_Cam): any;
+export declare function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, callback: () => void): string | null;
+export declare function doWhenNowCamChanges(checkingCamName: AnyCameraName, callback: () => void): string | null;
+export declare function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: () => void): string | null;
+export declare function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: () => void): string | null;
+export declare function waitForPlaceFullyLoaded(checkingPlaceName: PlaceName): Promise<void>;
+export declare function waitForNowPlaceToChange(checkingPlaceName: PlaceName): Promise<void>;
+export declare function waitForNowCamToChange(checkingCamName: AnyCameraName): Promise<void>;
+export declare const waitForNextTick: () => Promise<unknown>;
+export {};

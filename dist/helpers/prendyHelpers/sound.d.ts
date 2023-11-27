@@ -1,10 +1,11 @@
 import { MyTypes } from "../../declarations";
-export declare function get_soundStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
-    playNewMusic: (newMusicName: T_MyTypes["Main"]["MusicName"]) => void;
-    stopAllMusic: () => void;
-    playSound: (soundName: T_MyTypes["Main"]["SoundName"], options?: {
-        loop?: boolean;
-    }) => void;
-    stopSound: (soundName: T_MyTypes["Main"]["SoundName"]) => void;
-    stopAllSounds: () => void;
-};
+type MusicName = MyTypes["Types"]["MusicName"];
+type SoundName = MyTypes["Types"]["SoundName"];
+export declare function playSound(soundName: SoundName, options?: {
+    loop?: boolean;
+}): void;
+export declare function stopSound(soundName: SoundName): void;
+export declare function stopAllSounds(): void;
+export declare function playNewMusic(newMusicName: MusicName): void;
+export declare function stopAllMusic(): void;
+export {};

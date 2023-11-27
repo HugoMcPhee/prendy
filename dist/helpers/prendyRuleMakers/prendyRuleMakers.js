@@ -1,42 +1,46 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { get_getCharDollStuff } from "../prendyUtils/characters";
-// export each of the rule makers stuff from here :)
-export function get_getUsefulStoryStuff(storeHelpers) {
-    const { getRefs, getState } = storeHelpers;
-    return function getUsefulStoryStuff() {
-        const storyState = getState().story.main;
-        const storyRefs = getRefs().story.main;
-        const globalState = getState().global.main;
-        const { nowPlaceName, nowSegmentName } = globalState;
-        const { nowCamName } = globalState;
-        const placesRefs = getRefs().places;
-        const placeRefs = placesRefs[nowPlaceName];
-        const { camsRefs } = placesRefs[nowPlaceName];
-        const camRefs = camsRefs[nowCamName];
-        return {
-            storyState,
-            storyRefs,
-            globalState,
-            nowSegmentName: nowSegmentName,
-            nowPlaceName: nowPlaceName,
-            nowCamName: nowCamName,
-            placesRefs: placesRefs,
-            placeRefs: placeRefs,
-            camsRefs: camsRefs,
-            camRefs: camRefs,
-        };
+import { meta } from "../../meta";
+import { getCharDollStuff } from "../prendyUtils/characters";
+export function getUsefulStoryStuff() {
+    const { getState, getRefs } = meta.repond;
+    const storyState = getState().story.main;
+    const storyRefs = getRefs().story.main;
+    const globalState = getState().global.main;
+    const { nowPlaceName, nowSegmentName } = globalState;
+    const { nowCamName } = globalState;
+    const placesRefs = getRefs().places;
+    const placeRefs = placesRefs[nowPlaceName];
+    const { camsRefs } = placesRefs[nowPlaceName];
+    const camRefs = camsRefs[nowCamName];
+    return {
+        storyState,
+        storyRefs,
+        globalState,
+        nowSegmentName: nowSegmentName,
+        nowPlaceName: nowPlaceName,
+        nowCamName: nowCamName,
+        placesRefs: placesRefs,
+        placeRefs: placeRefs,
+        camsRefs: camsRefs,
+        camRefs: camRefs,
     };
 }
-export function get_setStoryState(storeHelpers) {
-    const { setState } = storeHelpers;
-    return function setStoryState(newState) {
-        setState({ story: { main: newState } });
-    };
+// }
+// ItemState
+// type GetState = typeof getState;
+// type GetRefs = typeof getRefs;
+// // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
+// type ItemType = keyof ReturnType<GetState>;
+//
+// type ItemState<T_ItemType extends ItemType> = ReturnType<
+//   GetState
+// >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
+export function setStoryState(newState) {
+    const { setState } = meta.repond;
+    setState({ story: { main: newState } });
 }
 export function makeAllStoryRuleMakers(storeHelpers, placeInfoByName, characterNames, dollNames) {
     const { getRefs, getState, getPreviousState, setState, makeRules, startItemEffect, stopEffect, onNextTick, makeNestedRuleMaker, makeNestedLeaveRuleMaker, } = storeHelpers;
-    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-    const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
     const makeCamChangeRules = makeNestedRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
     const makeCamLeaveRules = makeNestedLeaveRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff);
     function makeCamSegmentRules(callBacksObject) {

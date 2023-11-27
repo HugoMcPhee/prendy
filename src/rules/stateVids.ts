@@ -1,20 +1,16 @@
 import { StoreHelperTypes } from "repond";
-import { PrendyStoreHelpers } from "../declarations";
+import { RepondHelpers } from "../declarations";
 import { makeVideoElementFromPath } from "../helpers/prendyUtils/stateVids";
 import { VidState } from "../stores/stateVids";
 // import { testAppendVideo } from "../helpers/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
-export function get_safeVidRules(storeHelpers: PrendyStoreHelpers) {
+export function get_safeVidRules(storeHelpers: RepondHelpers) {
   const { getState, makeRules, onNextTick, setState } = storeHelpers;
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]> & keyof ReturnType<PrendyStoreHelpers["getRefs"]>;
-  type HelperType<T extends ItemType> = StoreHelperTypes<
-    PrendyStoreHelpers["getState"],
-    PrendyStoreHelpers["getRefs"],
-    T
-  >;
+  type ItemType = keyof ReturnType<RepondHelpers["getState"]> & keyof ReturnType<RepondHelpers["getRefs"]>;
+  type HelperType<T extends ItemType> = StoreHelperTypes<RepondHelpers["getState"], RepondHelpers["getRefs"], T>;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
   function setVid(itemName: string, newState: Partial<ItemState<"stateVids">>) {

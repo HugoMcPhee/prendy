@@ -3,7 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
 
 export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
 
   const modelNames = prendyAssets.modelNames as ModelName[];
 

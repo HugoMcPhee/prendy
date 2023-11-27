@@ -2,11 +2,11 @@ import { forEach } from "chootils/dist/loops";
 import { AssetsTypes, MyTypes, PrendyAssets } from "../declarations";
 
 export default function characters<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CharacterName = T_MyTypes["Main"]["CharacterName"];
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type AnyTriggerName = T_MyTypes["Main"]["AnyTriggerName"];
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
-  type CharacterOptions = T_MyTypes["Main"]["CharacterOptions"];
+  type CharacterName = T_MyTypes["Types"]["CharacterName"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type AnyTriggerName = T_MyTypes["Types"]["AnyTriggerName"];
+  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
+  type CharacterOptions = T_MyTypes["Types"]["CharacterOptions"];
 
   const { characterNames, dollNames, characterOptions } = prendyAssets;
 

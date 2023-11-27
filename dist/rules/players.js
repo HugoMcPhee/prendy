@@ -1,9 +1,9 @@
 import { Ray, RayHelper, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
-import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { clearTimeoutSafe } from "../helpers/utils";
+import { getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 const downRay = new Ray(Vector3.Zero(), Vector3.Zero());
 const downRayHelper = new RayHelper(downRay);
@@ -23,8 +23,6 @@ export function get_playerRules(prendyAssets, storeHelpers) {
     const { getRefs, getState, makeRules, setState } = storeHelpers;
     const { placeInfoByName, prendyOptions } = prendyAssets;
     const globalRefs = getRefs().global.main;
-    const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
-    const getCharDollStuff = get_getCharDollStuff(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         whenDirectionKeysPressed: effect({
             run() {

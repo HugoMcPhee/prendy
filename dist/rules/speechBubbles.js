@@ -1,6 +1,6 @@
 import { forEach } from "chootils/dist/loops";
 import { indexOf, length, substring, toArray } from "stringz";
-import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
+import { getTypingDelayForLetter } from "../helpers/prendyUtils/speechBubbles";
 let zIndexCounter = 100;
 /*
 Dynamic rules
@@ -10,7 +10,6 @@ When characters position changes
 */
 export function get_speechBubbleRules(storeHelpers, prendyStores) {
     const { makeRules, setState, getRefs } = storeHelpers;
-    const { getTypingDelayForLetter } = get_speechBubblesUtils(storeHelpers, prendyStores);
     return makeRules(({ itemEffect, effect }) => ({
         whenGoalTextChanges: itemEffect({
             run({ itemName, itemRefs, itemState }) {

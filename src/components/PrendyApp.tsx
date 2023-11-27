@@ -6,8 +6,8 @@ import { Globals } from "react-spring";
 import { MyTypes } from "../declarations";
 import loadStyles from "../helpers/loadStyles";
 import { MakeStartRulesOptions, makeStartAndStopRules } from "../rules/rules";
-import { get_LoadingModels } from "./LoadingModels";
-import { get_ScreenGui } from "./gui/ScreenGui";
+import { LoadingModels } from "./LoadingModels";
+import { ScreenGui as ScreenGuiDom } from "./gui/ScreenGui";
 // import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
 
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
@@ -22,8 +22,6 @@ export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(options: Make
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
-  const ScreenGuiDom = get_ScreenGui(prendyAssets, storeHelpers);
-  const LoadingModels = get_LoadingModels<T_MyTypes>(prendyAssets, storeHelpers);
   const StartAndStopRules = makeStartAndStopRules<T_MyTypes>(options);
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
   // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);

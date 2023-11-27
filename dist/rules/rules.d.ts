@@ -1,5 +1,5 @@
 import { MyTypes } from "../declarations";
-export declare function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], prendyStores: T_MyTypes["Stores"], prendyAssets: T_MyTypes["Assets"]): () => () => void;
+export declare function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["Repond"], prendyStores: T_MyTypes["Stores"], prendyAssets: T_MyTypes["Assets"]): () => () => void;
 export type SubscribableRules = Record<any, any> & {
     startAll: () => void;
     stopAll: () => void;
@@ -8,7 +8,7 @@ export declare function rulesToSubscriber(rules: SubscribableRules[]): () => () 
 export declare function combineSubscribers(subscribers: (() => () => void)[]): () => () => void;
 export type MakeStartRulesOptions<T_MyTypes extends MyTypes = MyTypes> = {
     customRules: SubscribableRules[];
-    storeHelpers: T_MyTypes["StoreHelpers"];
+    storeHelpers: T_MyTypes["Repond"];
     stores: T_MyTypes["Stores"];
     prendyAssets: T_MyTypes["Assets"];
 };

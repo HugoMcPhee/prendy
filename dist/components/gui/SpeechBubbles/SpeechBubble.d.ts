@@ -1,5 +1,11 @@
 /// <reference types="react" />
 import { MyTypes } from "../../../declarations";
-export declare function get_SpeechBubble<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): ({ name }: {
-    name: keyof ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["speechBubbles"] & string;
-}) => JSX.Element;
+type PrendyStoreHelpers = MyTypes["Repond"];
+type GetState = PrendyStoreHelpers["getState"];
+type ItemType = keyof ReturnType<GetState>;
+type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
+type Props = {
+    name: keyof AllItemsState<"speechBubbles"> & string;
+};
+export declare function SpeechBubble({ name }: Props): JSX.Element;
+export {};

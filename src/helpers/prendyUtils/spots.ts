@@ -1,23 +1,26 @@
 import { Vector3 } from "@babylonjs/core";
 import { MyTypes } from "../../declarations";
+import { meta } from "../../meta";
 
-export function get_spotStoryUtils<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
-  type A_PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type A_SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
+// export function get_spotStoryUtils<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 
-  const { getRefs } = storeHelpers;
+export function getSpotPosition<T_Place extends PlaceName>(place: T_Place, spot: SpotNameByPlace[T_Place]) {
+  const { getRefs } = meta.repond!;
 
-  function getSpotPosition<T_Place extends A_PlaceName>(place: T_Place, spot: A_SpotNameByPlace[T_Place]) {
-    const placesRefs = getRefs().places;
-    const newPositon: Vector3 = placesRefs[place].spotPositions[spot].clone();
-    return newPositon;
-  }
-
-  function getSpotRotation<T_Place extends A_PlaceName>(place: T_Place, spot: A_SpotNameByPlace[T_Place]) {
-    const placesRefs = getRefs().places;
-    const newRotation: Vector3 = placesRefs[place].spotRotations[spot].clone();
-    return newRotation;
-  }
-
-  return { getSpotPosition, getSpotRotation };
+  const placesRefs = getRefs().places;
+  const newPositon: Vector3 = placesRefs[place].spotPositions[spot].clone();
+  return newPositon;
 }
+
+export function getSpotRotation<T_Place extends PlaceName>(place: T_Place, spot: SpotNameByPlace[T_Place]) {
+  const { getRefs } = meta.repond!;
+
+  const placesRefs = getRefs().places;
+  const newRotation: Vector3 = placesRefs[place].spotRotations[spot].clone();
+  return newRotation;
+}
+
+//  { getSpotPosition, getSpotRotation };
+// }

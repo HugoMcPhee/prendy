@@ -2,9 +2,9 @@ import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
 import { MyTypes } from "../declarations";
-import { get_getSceneOrEngineUtils } from "../helpers/babylonjs/getSceneOrEngineUtils";
-import { get_getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { clearTimeoutSafe } from "../helpers/utils";
+import { getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
@@ -28,18 +28,15 @@ const frontRayRelativeOrigin = new Vector3(
 
 export function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type CharacterName = T_MyTypes["Main"]["CharacterName"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type CharacterName = T_MyTypes["Types"]["CharacterName"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
 
   const { getRefs, getState, makeRules, setState } = storeHelpers;
   const { placeInfoByName, prendyOptions } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
-
-  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
-  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenDirectionKeysPressed: effect({

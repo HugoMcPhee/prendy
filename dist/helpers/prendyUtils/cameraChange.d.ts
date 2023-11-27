@@ -1,15 +1,21 @@
 import { MyTypes } from "../../declarations";
-export declare function get_cameraChangeUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
-    getSafeCamName: {
-        (cam: T_MyTypes["Main"]["AnyCameraName"]): T_MyTypes["Main"]["AnyCameraName"];
-        (cam: null): null;
-    };
-    getSafeSegmentName: <T_PlaceName extends T_MyTypes["Main"]["PlaceName"], T_CameraName extends T_MyTypes["Main"]["AnyCameraName"], T_SegmentName extends T_MyTypes["Main"]["AnySegmentName"]>({ cam, place, segment, useStorySegmentRules, }: {
-        place: T_PlaceName;
-        cam: T_CameraName;
-        segment: T_SegmentName;
-        useStorySegmentRules?: boolean | undefined;
-    }) => any;
-    updateTexturesForNowCamera: (newCameraName: T_MyTypes["Main"]["AnyCameraName"], didChangePlace?: boolean) => void;
-    updateNowStuffWhenSliceChanged: () => void;
-};
+import { DefaultCameraRefs } from "../../stores/places";
+type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
+type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+export declare function getSafeCamName(cam: AnyCameraName): AnyCameraName;
+export declare function getSafeCamName(cam: null): null;
+export declare function getSafeSegmentName<T_PlaceName extends PlaceName, T_CameraName extends AnyCameraName, T_SegmentName extends AnySegmentName>({ cam, place, segment, useStorySegmentRules, }: {
+    place: T_PlaceName;
+    cam: T_CameraName;
+    segment: T_SegmentName;
+    useStorySegmentRules?: boolean;
+}): any;
+export declare function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace?: boolean): void;
+export declare function addMeshesToRenderLists(newCamRef: DefaultCameraRefs): void;
+export declare function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName): void;
+export declare function updateVideoTexture(): void;
+export declare function applyProbeToAllDollMaterials(): void;
+export declare function applyProbeToAllParticleMaterials(): void;
+export declare function updateNowStuffWhenSliceChanged(): void;
+export {};

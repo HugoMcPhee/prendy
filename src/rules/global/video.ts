@@ -1,34 +1,30 @@
 // import { getRefs, getState, makeRules, setState } from "stores";
 import { MyTypes } from "../../declarations";
-import { get_speechStoryHelpers } from "../../helpers/prendyHelpers/speech";
-import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
-import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
+import {
+  getSafeSegmentName,
+  updateNowStuffWhenSliceChanged,
+  updateTexturesForNowCamera,
+} from "../../helpers/prendyUtils/cameraChange";
+import {
+  checkForVideoLoop,
+  checkIfVideoAlreadyChanging,
+  getSliceForPlace,
+  getSliceVidVideo,
+} from "../../helpers/prendyUtils/sliceVids";
 import { VidSlice } from "../../stores/sliceVids";
 
 export function get_globalVideoRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
   prendyStores: T_MyTypes["Stores"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
-  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
-  type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
+  type CameraNameByPlace = T_MyTypes["Types"]["CameraNameByPlace"];
+  type SegmentNameByPlace = T_MyTypes["Types"]["SegmentNameByPlace"];
+  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
+  type AnySegmentName = T_MyTypes["Types"]["AnySegmentName"];
 
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-
-  const {
-    getSliceForPlace,
-    getSliceVidVideo,
-    getSliceVidWaitingVideo,
-    checkForVideoLoop,
-    checkIfVideoAlreadyChanging,
-  } = get_sliceVidUtils(prendyAssets, storeHelpers);
-  const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
-    prendyAssets,
-    storeHelpers
-  );
 
   return makeRules(({ itemEffect, effect }) => ({
     whenWantToChooseVideoSlice: effect({

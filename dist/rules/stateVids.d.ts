@@ -1,5 +1,5 @@
-import { PrendyStoreHelpers } from "../declarations";
-export declare function get_safeVidRules(storeHelpers: PrendyStoreHelpers): {
+import { RepondHelpers } from "../declarations";
+export declare function get_safeVidRules(storeHelpers: RepondHelpers): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;
     start: (...args: any) => any;

@@ -1,17 +1,16 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { MyTypes, PrendyStoreHelpers } from "../../declarations";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
+import { MyTypes, RepondHelpers } from "../../declarations";
 import { clearTimeoutSafe } from "../../helpers/utils";
+import { setGlobalState } from "../../helpers/prendyUtils/global";
 
 export function get_globalGeneralRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type AnyAnimationName = T_MyTypes["Main"]["AnyAnimationName"];
+  type AnyAnimationName = T_MyTypes["Types"]["AnyAnimationName"];
 
   const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-  const { setGlobalState } = get_globalUtils(storeHelpers);
 
   return makeRules(({ effect, itemEffect }) => ({
     whenAnythingChangesForRendering: effect({

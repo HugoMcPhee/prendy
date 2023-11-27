@@ -2,41 +2,28 @@ import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { get_slateUtils } from "../../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
-import { get_dollStoryHelpers } from "../../helpers/prendyHelpers/dolls";
-import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
-import { get_getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
-import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
-import { get_spotStoryUtils } from "../../helpers/prendyUtils/spots";
 import { cachedRules } from "./global";
+import { setGlobalState } from "../../helpers/prendyUtils/global";
+import { setDollPosition, setDollRotation } from "../../helpers/prendyHelpers/dolls";
+import { getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spots";
+import { updateNowStuffWhenSliceChanged, updateTexturesForNowCamera } from "../../helpers/prendyUtils/cameraChange";
+import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
+import { getSliceVidVideo } from "../../helpers/prendyUtils/sliceVids";
 
 export function get_globalChangePlaceRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
+  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
 
   const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
   const { placeInfoByName, prendyOptions } = prendyAssets;
 
   const globalRefs = getRefs().global.main;
-
-  const { getSliceVidVideo: getSliceVidVideo } = get_sliceVidUtils(prendyAssets, storeHelpers);
-
-  const { updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(
-    prendyAssets,
-    storeHelpers
-  );
-
-  const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
-  const { setGlobalState } = get_globalUtils(storeHelpers);
-  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-  const { setDollPosition, setDollRotation } = get_dollStoryHelpers(prendyAssets, storeHelpers);
-  const { getSpotPosition, getSpotRotation } = get_spotStoryUtils<T_MyTypes>(storeHelpers);
 
   function setPlayerPositionForNewPlace() {
     const { nowPlaceName, playerCharacter } = getState().global.main;

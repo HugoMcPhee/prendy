@@ -3,12 +3,12 @@ import { MyTypes } from "../declarations";
 
 export function get_placeRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type DollOptions = T_MyTypes["Main"]["DollOptions"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type WallNameByPlace = T_MyTypes["Main"]["WallNameByPlace"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type DollOptions = T_MyTypes["Types"]["DollOptions"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
+  type WallNameByPlace = T_MyTypes["Types"]["WallNameByPlace"];
 
   const { placeInfoByName } = prendyAssets;
   const { makeRules } = storeHelpers;

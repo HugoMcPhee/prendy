@@ -1,16 +1,25 @@
 import { Point3D } from "chootils/dist/points3d";
 import { MyTypes } from "../../declarations";
-export declare function get_sceneStoryHelpers<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
-    lookAtSpot: <T_Place extends T_MyTypes["Main"]["PlaceName"]>(place: T_Place, spot: T_MyTypes["Main"]["SpotNameByPlace"][T_Place], character?: T_MyTypes["Main"]["CharacterName"] | undefined) => void;
-    hideWallIf: <T_Place_1 extends T_MyTypes["Main"]["PlaceName"], T_Wall extends T_MyTypes["Main"]["WallNameByPlace"][T_Place_1]>(placeName: T_Place_1, wallName: T_Wall, isDisabled: boolean) => void;
-    showStoryView: (isVisible?: boolean) => Promise<void>;
-    setSegment: <T_Place_2 extends T_MyTypes["Main"]["PlaceName"], T_Segment extends T_MyTypes["Main"]["SegmentNameByPlace"][T_Place_2]>(_placeName: T_Place_2, segmentName: T_Segment) => Promise<void>;
-    setCamera: <T_Place_3 extends T_MyTypes["Main"]["PlaceName"], T_Cam extends keyof T_MyTypes["Main"]["PlaceInfoByName"][T_Place_3]["segmentTimesByCamera"] & T_MyTypes["Main"]["AnyCameraName"]>(_placeName: T_Place_3, cameraName: T_Cam, whenToRun?: "now" | "at loop") => Promise<void>;
-    goToNewPlace: <T_PlaceName extends T_MyTypes["Main"]["PlaceName"]>(toOption: {
-        toPlace: T_PlaceName;
-        toSpot?: T_MyTypes["Main"]["SpotNameByPlace"][T_PlaceName] | undefined;
-        toPositon?: Point3D | undefined;
-        toCam?: T_MyTypes["Main"]["CameraNameByPlace"][T_PlaceName] | undefined;
-        toSegment?: T_MyTypes["Main"]["SegmentNameByPlace"][T_PlaceName] | undefined;
-    }, charName?: T_MyTypes["Main"]["CharacterName"]) => void;
+type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
+type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
+type CharacterName = MyTypes["Types"]["CharacterName"];
+type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
+type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
+type WallNameByPlace = MyTypes["Types"]["WallNameByPlace"];
+type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+type ToPlaceOption<T_PlaceName extends PlaceName> = {
+    toPlace: T_PlaceName;
+    toSpot?: SpotNameByPlace[T_PlaceName];
+    toPositon?: Point3D;
+    toCam?: CameraNameByPlace[T_PlaceName];
+    toSegment?: SegmentNameByPlace[T_PlaceName];
 };
+export declare function lookAtSpot<T_Place extends PlaceName>(place: T_Place, spot: SpotNameByPlace[T_Place], character?: CharacterName): void;
+export declare function hideWallIf<T_Place extends PlaceName, T_Wall extends WallNameByPlace[T_Place]>(placeName: T_Place, wallName: T_Wall, isDisabled: boolean): void;
+export declare function showStoryView(isVisible?: boolean): Promise<void>;
+export declare function setSegment<T_Place extends PlaceName, T_Segment extends SegmentNameByPlace[T_Place]>(_placeName: T_Place, segmentName: T_Segment): Promise<void>;
+export declare function setCamera<T_Place extends PlaceName, T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName>(_placeName: T_Place, cameraName: T_Cam, whenToRun?: "now" | "at loop"): Promise<void>;
+export declare function goToNewPlace<T_PlaceName extends PlaceName>(toOption: ToPlaceOption<T_PlaceName>, charName?: CharacterName): void;
+export {};

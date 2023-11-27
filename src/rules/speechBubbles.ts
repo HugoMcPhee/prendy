@@ -2,8 +2,8 @@ import { forEach } from "chootils/dist/loops";
 import { CSSProperties } from "react";
 import { StoreHelperTypes } from "repond";
 import { indexOf, length, substring, toArray } from "stringz";
-import { PrendyStoreHelpers, PrendyStores } from "../declarations";
-import { get_speechBubblesUtils } from "../helpers/prendyUtils/speechBubbles";
+import { RepondHelpers, PrendyStores } from "../declarations";
+import { getTypingDelayForLetter } from "../helpers/prendyUtils/speechBubbles";
 
 let zIndexCounter = 100;
 /*
@@ -13,24 +13,18 @@ When characters position changes
   bubble position to character
 */
 
-export function get_speechBubbleRules(storeHelpers: PrendyStoreHelpers, prendyStores: PrendyStores) {
+export function get_speechBubbleRules(storeHelpers: RepondHelpers, prendyStores: PrendyStores) {
   const { makeRules, setState, getRefs } = storeHelpers;
 
   // AllItemsState,
   // ItemRefs,
   // ItemState,
 
-  type ItemType = keyof ReturnType<PrendyStoreHelpers["getState"]>;
-  type HelperType<T extends ItemType> = StoreHelperTypes<
-    PrendyStoreHelpers["getState"],
-    PrendyStoreHelpers["getRefs"],
-    T
-  >;
+  type ItemType = keyof ReturnType<RepondHelpers["getState"]>;
+  type HelperType<T extends ItemType> = StoreHelperTypes<RepondHelpers["getState"], RepondHelpers["getRefs"], T>;
   type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
   type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
-
-  const { getTypingDelayForLetter } = get_speechBubblesUtils(storeHelpers, prendyStores);
 
   return makeRules(({ itemEffect, effect }) => ({
     whenGoalTextChanges: itemEffect({

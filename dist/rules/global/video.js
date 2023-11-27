@@ -1,9 +1,7 @@
-import { get_cameraChangeUtils } from "../../helpers/prendyUtils/cameraChange";
-import { get_sliceVidUtils } from "../../helpers/prendyUtils/sliceVids";
+import { getSafeSegmentName, updateNowStuffWhenSliceChanged, updateTexturesForNowCamera, } from "../../helpers/prendyUtils/cameraChange";
+import { checkForVideoLoop, checkIfVideoAlreadyChanging, getSliceForPlace, getSliceVidVideo, } from "../../helpers/prendyUtils/sliceVids";
 export function get_globalVideoRules(prendyAssets, prendyStores, storeHelpers) {
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-    const { getSliceForPlace, getSliceVidVideo, getSliceVidWaitingVideo, checkForVideoLoop, checkIfVideoAlreadyChanging, } = get_sliceVidUtils(prendyAssets, storeHelpers);
-    const { getSafeSegmentName, updateTexturesForNowCamera, updateNowStuffWhenSliceChanged } = get_cameraChangeUtils(prendyAssets, storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         whenWantToChooseVideoSlice: effect({
             run() {

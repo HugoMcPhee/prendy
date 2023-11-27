@@ -5,9 +5,8 @@ import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistan
 import { makeMoverUtils } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
-import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
-import { getDefaultInRangeFunction, get_dollStoryUtils, get_dollUtils, } from "../helpers/prendyUtils/dolls";
+import { getDefaultInRangeFunction, getModelNameFromDoll, getQuickDistanceBetweenDolls, inRangesAreTheSame, saveModelStuffToDoll, setDollAnimWeight, setupLightMaterial, updateDollScreenPosition, } from "../helpers/prendyUtils/dolls";
 import { timeStatePath } from "../stores/global/global";
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -25,7 +24,7 @@ export const rangeOptionsQuick = {
     see: rangeOptions.see * rangeOptions.see,
 };
 export function get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers) {
-    const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
+    // const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
     const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
     const { prendyOptions } = prendyAssets;
     return makeDynamicRules(({ itemEffect }) => ({
@@ -87,11 +86,10 @@ export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRu
 }
 export function get_dollRules(dollDynamicRules, prendyAssets, storeHelpers) {
     const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
-    const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } = get_dollUtils(prendyAssets, storeHelpers);
-    const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
+    // const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
+    //   get_dollUtils(prendyAssets, storeHelpers);
     const { makeRules, getPreviousState, getState, getRefs, setState, onNextTick } = storeHelpers;
     const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
-    const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
     return makeRules(({ itemEffect, effect }) => ({
         // --------------------------------
         // loading model stuff

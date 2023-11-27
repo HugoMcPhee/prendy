@@ -1,15 +1,14 @@
 import "@babylonjs/loaders";
-import { get_getSceneOrEngineUtils } from "./helpers/babylonjs/getSceneOrEngineUtils";
 import { point3dToVector3 } from "./helpers/babylonjs/vectors";
 import { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
-import { get_setStoryState, makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
-import { get_globalUtils } from "./helpers/prendyUtils/global";
-import { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
+import { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
+import { getGlobalState, setGlobalState } from "./helpers/prendyUtils/global";
+import { waitForNextTick, waitForNowCamToChange, waitForPlaceFullyLoaded } from "./helpers/prendyUtils/scene";
+import { meta } from "./meta";
 export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
 export { makePrendyOptions } from "./getPrendyOptions";
-export { get_usePlaceUtils as makeUsePlaceUtils } from "./helpers/babylonjs/usePlace/utils";
 export { point3dToVector3, vector3ToPoint3d, vector3ToSafePoint3d } from "./helpers/babylonjs/vectors";
 export { makePrendyStoryHelpers } from "./helpers/prendyHelpers/helpers";
 export { makeAllStoryRuleMakers } from "./helpers/prendyRuleMakers/prendyRuleMakers";
@@ -19,22 +18,14 @@ export { makePrendyStores, prendyStepNames } from "./stores/stores";
 export const definiedPrendyRules = {
     dolls: null,
 };
-export function makeOtherUsefulPrendyUtils(storeHelpers) {
-    const setStoryState = get_setStoryState(storeHelpers);
-    const { getGlobalState, setGlobalState } = get_globalUtils(storeHelpers);
-    const { getScene, getEngine } = get_getSceneOrEngineUtils(storeHelpers);
-    return { setStoryState, getGlobalState, setGlobalState, getScene, getEngine };
-}
-export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
-    const prendyStoryHelpers = makePrendyStoryHelpers(prendyAssets, prendyStores, storeHelpers);
-    const allStoryRuleMakers = makeAllStoryRuleMakers(storeHelpers, prendyAssets.placeInfoByName, prendyAssets.characterNames, prendyAssets.dollNames);
-    const otherPrendyUtils = {
-        ...makePrendyStoryUtils(storeHelpers, prendyStores),
-        ...makeOtherUsefulPrendyUtils(storeHelpers),
-    };
-    const { setGlobalState, getGlobalState } = otherPrendyUtils;
+export function makePrendyHelpers(assets, stores, repond) {
+    meta.assets = assets;
+    meta.repond = repond;
+    meta.stores = stores;
+    const prendyStoryHelpers = makePrendyStoryHelpers();
+    const allStoryRuleMakers = makeAllStoryRuleMakers(repond, assets.placeInfoByName, assets.characterNames, assets.dollNames);
     function savePrendyState() {
-        const storeState = storeHelpers.getState();
+        const storeState = repond.getState();
         const newSaveState = {
             global: {
                 nowCamName: storeState.global.main.nowCamName,
@@ -114,7 +105,7 @@ export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
         }
         const savedState = JSON.parse(savedStateString);
         console.log("savedState", savedState);
-        await otherPrendyUtils.waitForNextTick();
+        await waitForNextTick();
         await prendyStoryHelpers.scene.showStoryView(false);
         const camWillChange = savedState.global.nowCamName !== getGlobalState().nowCamName;
         // if the savedState.global.nowPlaceName is different from the current place, use the helepr to set the place
@@ -125,14 +116,14 @@ export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
                 toSegment: savedState.global.nowSegmentName,
                 toCam: savedState.global.nowCamName,
             });
-            await otherPrendyUtils.waitForPlaceFullyLoaded(savedState.global.nowPlaceName);
+            await waitForPlaceFullyLoaded(savedState.global.nowPlaceName);
         }
         else {
             if (camWillChange && !placeWillChange) {
-                storeHelpers.setState({
+                repond.setState({
                     global: { main: { goalCamName: savedState.global.nowCamName } },
                 });
-                await otherPrendyUtils.waitForNowCamToChange(savedState.global.nowCamName);
+                await waitForNowCamToChange(savedState.global.nowCamName);
             }
         }
         // Set the doll positions manually, since setting the state will check for collisions
@@ -141,7 +132,7 @@ export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
             prendyStoryHelpers.dolls.springDollRotationY(dollName, doll.rotationY);
         });
         // Set the store state to the saved state
-        storeHelpers.setState((state) => {
+        repond.setState((state) => {
             return {
                 global: {
                     main: {
@@ -220,7 +211,7 @@ export function makePrendyHelpers(prendyAssets, prendyStores, storeHelpers) {
     return {
         story: prendyStoryHelpers,
         rules: allStoryRuleMakers,
-        utils: { ...otherPrendyUtils, savePrendyState, loadPrendyState },
+        utils: { savePrendyState, loadPrendyState },
     };
 }
 export function getDefaultDollOptions(modelNames) {

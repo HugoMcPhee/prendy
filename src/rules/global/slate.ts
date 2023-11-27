@@ -1,20 +1,19 @@
 import delay from "delay";
 import { makeMoverUtils } from "repond-movers";
 import { MyTypes } from "../../declarations";
-import { get_getSceneOrEngineUtils } from "../../helpers/babylonjs/getSceneOrEngineUtils";
-import { get_slateUtils } from "../../helpers/babylonjs/slate";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { timeStatePath } from "../../stores/global/global";
+import { setGlobalState } from "../../helpers/prendyUtils/global";
+import { getEngine } from "../../helpers/babylonjs/getSceneOrEngineUtils";
+import {
+  focusSlateOnFocusedDoll,
+  getShaderTransformStuff,
+  getSlatePositionNotOverEdges,
+} from "../../helpers/babylonjs/slate";
 
 export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  const { focusSlateOnFocusedDoll, getSlatePositionNotOverEdges, getShaderTransformStuff } = get_slateUtils(
-    prendyAssets,
-    storeHelpers
-  );
-  const { setGlobalState } = get_globalUtils(storeHelpers);
   const { makeRules, getRefs, getState } = storeHelpers;
   const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
 
@@ -70,7 +69,7 @@ export function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(
       run: async () => {
         await delay(10); // this helps it work on ipad
 
-        const engine = get_getSceneOrEngineUtils(storeHelpers).getEngine();
+        const engine = getEngine();
 
         if (!engine) return;
 

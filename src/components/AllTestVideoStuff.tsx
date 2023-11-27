@@ -4,9 +4,9 @@ import { addLayout } from "../helpers/styles";
 
 export function get_AllTestVideoStuff<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
 
   const { placeNames } = prendyAssets;
   const { useStore, useStoreItemPropsEffect } = storeHelpers;

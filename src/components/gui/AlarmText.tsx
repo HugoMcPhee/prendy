@@ -1,31 +1,29 @@
 // @refresh-reset
 import React from "react";
-import { PrendyStoreHelpers } from "../../declarations";
+import { meta } from "../../meta";
 
-export function get_AlarmText(storeHelpers: PrendyStoreHelpers) {
-  const { useStore } = storeHelpers;
+type Props = {};
 
-  type Props = {};
+export function AlarmText(_props: Props) {
+  const { useStore } = meta.repond!;
 
-  return function AlarmText(_props: Props) {
-    const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
-      type: "global",
-      name: "main",
-      prop: ["alarmText", "alarmTextIsVisible"],
-    });
+  const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
+    type: "global",
+    name: "main",
+    prop: ["alarmText", "alarmTextIsVisible"],
+  });
 
-    if (!alarmTextIsVisible) {
-      return null;
-    }
+  if (!alarmTextIsVisible) {
+    return null;
+  }
 
-    return (
-      <div key={`alarm_text_box`} id={`alarm_text_box`} style={styles.container}>
-        <div id={`alarm_text`} style={styles.text}>
-          {alarmText}
-        </div>
+  return (
+    <div key={`alarm_text_box`} id={`alarm_text_box`} style={styles.container}>
+      <div id={`alarm_text`} style={styles.text}>
+        {alarmText}
       </div>
-    );
-  };
+    </div>
+  );
 }
 
 const styles = {

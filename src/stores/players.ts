@@ -2,7 +2,7 @@ import { Point2D } from "chootils/dist/points2d";
 import { MyTypes } from "../declarations";
 
 export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnyAnimationName = T_MyTypes["Main"]["AnyAnimationName"];
+  type AnyAnimationName = T_MyTypes["Types"]["AnyAnimationName"];
 
   type PlayerAnimationNames = {
     walking: AnyAnimationName;

@@ -1,20 +1,71 @@
-import { get_characterStoryHelpers } from "./characters";
-import { get_dollStoryHelpers } from "./dolls";
-import { get_playerStoryHelpers } from "./players";
-import { get_sceneStoryHelpers } from "./scene";
-import { get_soundStoryHelpers } from "./sound";
-import { get_speechStoryHelpers } from "./speech";
-import { get_stickerStoryHelpers } from "./stickers";
+import { meta } from "../../meta";
+import { lookAtEachother, lookAtOtherCharacter, moveCharacterAt2DAngle, setCharAnimation, setCharPosition, setCharRotationY, springAddToCharRotationY, springCharRotation, } from "./characters";
+import { setDollPosition, setDollRotation, setDollRotationY, springDollRotationY, springAddToDollRotationY, pushDollRotationY, lookAtOtherDoll, setDollAnimation, focusOnDoll, setDollToSpot, springDollToSpot, dollLooksAtSpot, moveDollAt2DAngle, hideDoll, toggleDollMeshes, getDollBonePosition, } from "./dolls";
+import { enableMovement, isHolding, takePickup, setPlayerAnimations } from "./players";
+import { goToNewPlace, hideWallIf, lookAtSpot, setCamera, setSegment, showStoryView } from "./scene";
+import { playNewMusic, playSound, stopAllMusic, stopAllSounds, stopSound } from "./sound";
+import { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } from "./speech";
+import { hideSticker, moveSticker, showSticker } from "./stickers";
 // importing each of the helpers
 // function doThis
-export function makePrendyStoryHelpers(prendyAssets, prendyStores, storeHelpers) {
+export function makePrendyStoryHelpers() {
+    const prendyAssets = meta.assets;
+    const prendyStores = meta.stores;
+    const storeHelpers = meta.repond;
     return {
-        characters: get_characterStoryHelpers(prendyAssets, storeHelpers),
-        dolls: get_dollStoryHelpers(prendyAssets, storeHelpers),
-        players: get_playerStoryHelpers(storeHelpers),
-        scene: get_sceneStoryHelpers(prendyAssets, storeHelpers),
-        sound: get_soundStoryHelpers(prendyAssets, storeHelpers),
-        speech: get_speechStoryHelpers(prendyAssets, prendyStores, storeHelpers),
-        stickers: get_stickerStoryHelpers(storeHelpers),
+        characters: {
+            setCharAnimation,
+            setCharPosition,
+            setCharRotationY,
+            springCharRotation,
+            springAddToCharRotationY,
+            lookAtOtherCharacter,
+            lookAtEachother,
+            moveCharacterAt2DAngle,
+        },
+        dolls: {
+            setDollPosition,
+            setDollRotation,
+            setDollRotationY,
+            springDollRotationY,
+            springAddToDollRotationY,
+            pushDollRotationY,
+            lookAtOtherDoll,
+            setDollAnimation,
+            focusOnDoll,
+            setDollToSpot,
+            springDollToSpot,
+            dollLooksAtSpot,
+            moveDollAt2DAngle,
+            hideDoll,
+            toggleDollMeshes,
+            getDollBonePosition,
+            // springDollPosition,
+            // slideDollPosition,
+        },
+        players: {
+            enableMovement,
+            isHolding,
+            takePickup,
+            setPlayerAnimations,
+        },
+        scene: {
+            // changeSegmentAtLoop,
+            // changeCameraAtLoop,
+            lookAtSpot,
+            hideWallIf,
+            showStoryView,
+            setSegment,
+            setCamera,
+            goToNewPlace,
+        },
+        sound: { playNewMusic, stopAllMusic, playSound, stopSound, stopAllSounds },
+        speech: {
+            showSpeech,
+            showMiniBubble,
+            hideMiniBubble,
+            showAlarmText,
+        },
+        stickers: { moveSticker, showSticker, hideSticker },
     };
 }

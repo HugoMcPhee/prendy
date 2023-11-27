@@ -1,5 +1,5 @@
 import { minMaxRange } from "chootils/dist/numbers";
-import { BEFORE_LOOP_PADDING, get_sliceVidUtils } from "../helpers/prendyUtils/sliceVids";
+import { BEFORE_LOOP_PADDING, doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo, } from "../helpers/prendyUtils/sliceVids";
 import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 function numbersAreClose(a, b, range) {
     return Math.abs(a - b) < range;
@@ -7,7 +7,6 @@ function numbersAreClose(a, b, range) {
 export function get_sliceVidRules(prendyAssets, storeHelpers) {
     // safe Slice Stack Vid Rules
     const { getState, makeRules, setState } = storeHelpers;
-    const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo } = get_sliceVidUtils(prendyAssets, storeHelpers);
     const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } = get_safeVidUtils(storeHelpers);
     return makeRules(({ itemEffect }) => ({
         rulesForSettingNewVideoStates: itemEffect({

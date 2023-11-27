@@ -1,92 +1,87 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import { MyTypes } from "../../declarations";
-import { get_getCharDollStuff } from "../prendyUtils/characters";
+import { meta } from "../../meta";
+import { getCharDollStuff } from "../prendyUtils/characters";
 
 // export each of the rule makers stuff from here :)
 
-export function get_getUsefulStoryStuff<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
-  const { getRefs, getState } = storeHelpers;
+// export function get_getUsefulStoryStuff<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
 
-  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+type PrendyStoreHelpers = MyTypes["Repond"];
 
-  type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
-  type AllRefs = ReturnType<PrendyStoreHelpers["getRefs"]>;
+type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
+type AllRefs = ReturnType<PrendyStoreHelpers["getRefs"]>;
 
-  type StoryState = AllState["story"]["main"];
-  type StoryRefs = AllRefs["story"]["main"];
-  type GlobalState = AllState["global"]["main"];
+type StoryState = AllState["story"]["main"];
+type StoryRefs = AllRefs["story"]["main"];
+type GlobalState = AllState["global"]["main"];
 
-  type AllPlacesState = AllState["places"];
-  type AllPlacesRefs = AllRefs["places"];
+type AllPlacesState = AllState["places"];
+type AllPlacesRefs = AllRefs["places"];
 
-  type APlaceRefs = AllPlacesRefs[keyof AllPlacesRefs];
-  type APlaceRefsCamsRefs = APlaceRefs["camsRefs"];
+type APlaceRefs = AllPlacesRefs[keyof AllPlacesRefs];
+type APlaceRefsCamsRefs = APlaceRefs["camsRefs"];
 
-  return function getUsefulStoryStuff() {
-    const storyState = getState().story.main as StoryState;
-    const storyRefs = getRefs().story.main as StoryRefs;
-    const globalState = getState().global.main as GlobalState;
-    const { nowPlaceName, nowSegmentName } = globalState;
-    const { nowCamName } = globalState;
-    const placesRefs = getRefs().places as AllPlacesRefs;
-    const placeRefs = placesRefs[nowPlaceName];
-    const { camsRefs } = placesRefs[nowPlaceName];
-    const camRefs = camsRefs[nowCamName];
+export function getUsefulStoryStuff() {
+  const { getState, getRefs } = meta.repond!;
 
-    return {
-      storyState,
-      storyRefs,
-      globalState,
-      nowSegmentName: nowSegmentName as GlobalState["nowSegmentName"],
-      nowPlaceName: nowPlaceName as GlobalState["nowPlaceName"],
-      nowCamName: nowCamName as GlobalState["nowCamName"],
-      placesRefs: placesRefs as AllPlacesRefs,
-      placeRefs: placeRefs as APlaceRefs,
-      camsRefs: camsRefs as APlaceRefsCamsRefs,
-      camRefs: camRefs as APlaceRefsCamsRefs[keyof APlaceRefsCamsRefs],
-    };
+  const storyState = getState().story.main as StoryState;
+  const storyRefs = getRefs().story.main as StoryRefs;
+  const globalState = getState().global.main as GlobalState;
+  const { nowPlaceName, nowSegmentName } = globalState;
+  const { nowCamName } = globalState;
+  const placesRefs = getRefs().places as AllPlacesRefs;
+  const placeRefs = placesRefs[nowPlaceName];
+  const { camsRefs } = placesRefs[nowPlaceName];
+  const camRefs = camsRefs[nowCamName];
+
+  return {
+    storyState,
+    storyRefs,
+    globalState,
+    nowSegmentName: nowSegmentName as GlobalState["nowSegmentName"],
+    nowPlaceName: nowPlaceName as GlobalState["nowPlaceName"],
+    nowCamName: nowCamName as GlobalState["nowCamName"],
+    placesRefs: placesRefs as AllPlacesRefs,
+    placeRefs: placeRefs as APlaceRefs,
+    camsRefs: camsRefs as APlaceRefsCamsRefs,
+    camRefs: camRefs as APlaceRefsCamsRefs[keyof APlaceRefsCamsRefs],
   };
 }
+// }
 
-export function get_setStoryState<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]) {
-  const { setState } = storeHelpers;
+// ItemState
 
-  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+// type GetState = typeof getState;
+// type GetRefs = typeof getRefs;
+// // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
+// type ItemType = keyof ReturnType<GetState>;
+//
+// type ItemState<T_ItemType extends ItemType> = ReturnType<
+//   GetState
+// >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 
-  // ItemState
+export function setStoryState(newState: Partial<StoryState>) {
+  const { setState } = meta.repond!;
 
-  // type GetState = typeof getState;
-  // type GetRefs = typeof getRefs;
-  // // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
-  // type ItemType = keyof ReturnType<GetState>;
-  //
-  // type ItemState<T_ItemType extends ItemType> = ReturnType<
-  //   GetState
-  // >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
-
-  type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
-  type StoryState = AllState["story"]["main"];
-
-  return function setStoryState(newState: Partial<StoryState>) {
-    setState({ story: { main: newState } });
-  };
+  setState({ story: { main: newState } });
 }
 
-export function makeAllStoryRuleMakers<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
-  placeInfoByName: T_MyTypes["Main"]["PlaceInfoByName"],
-  characterNames: readonly T_MyTypes["Main"]["CharacterName"][],
-  dollNames: readonly T_MyTypes["Main"]["DollName"][]
+export function makeAllStoryRuleMakers(
+  storeHelpers: MyTypes["Repond"],
+  placeInfoByName: MyTypes["Types"]["PlaceInfoByName"],
+  characterNames: readonly MyTypes["Types"]["CharacterName"][],
+  dollNames: readonly MyTypes["Types"]["DollName"][]
 ) {
-  type AnyTriggerName = T_MyTypes["Main"]["AnyTriggerName"];
-  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
-  type CharacterName = T_MyTypes["Main"]["CharacterName"];
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type PickupName = T_MyTypes["Main"]["PickupName"];
-  type PlaceInfoByName = T_MyTypes["Main"]["PlaceInfoByName"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type StoryPartName = T_MyTypes["Main"]["StoryPartName"];
-  type TriggerNameByPlace = T_MyTypes["Main"]["TriggerNameByPlace"];
+  type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
+  type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
+  type CharacterName = MyTypes["Types"]["CharacterName"];
+  type DollName = MyTypes["Types"]["DollName"];
+  type PickupName = MyTypes["Types"]["PickupName"];
+  type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
+  type PlaceName = MyTypes["Types"]["PlaceName"];
+  type StoryPartName = MyTypes["Types"]["StoryPartName"];
+  type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
 
   const {
     getRefs,
@@ -100,10 +95,6 @@ export function makeAllStoryRuleMakers<T_MyTypes extends MyTypes = MyTypes>(
     makeNestedRuleMaker,
     makeNestedLeaveRuleMaker,
   } = storeHelpers;
-
-  const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-
-  const getUsefulStoryStuff = get_getUsefulStoryStuff(storeHelpers);
 
   type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
 

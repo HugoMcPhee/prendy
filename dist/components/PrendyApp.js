@@ -5,16 +5,14 @@ import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
 import loadStyles from "../helpers/loadStyles";
 import { makeStartAndStopRules } from "../rules/rules";
-import { get_LoadingModels } from "./LoadingModels";
-import { get_ScreenGui } from "./gui/ScreenGui";
+import { LoadingModels } from "./LoadingModels";
+import { ScreenGui as ScreenGuiDom } from "./gui/ScreenGui";
 export function makePrendyApp(options) {
     const { storeHelpers, prendyAssets } = options;
     const { prendyOptions } = prendyAssets;
     loadStyles();
     const { getRefs, onNextTick, setState } = storeHelpers;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const ScreenGuiDom = get_ScreenGui(prendyAssets, storeHelpers);
-    const LoadingModels = get_LoadingModels(prendyAssets, storeHelpers);
     const StartAndStopRules = makeStartAndStopRules(options);
     // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
     // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);

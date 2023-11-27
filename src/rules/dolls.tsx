@@ -7,13 +7,17 @@ import { makeMoverUtils } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
 import { MyTypes } from "../declarations";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
-import { get_slateUtils } from "../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import {
   InRangeForDoll,
   getDefaultInRangeFunction,
-  get_dollStoryUtils,
-  get_dollUtils,
+  getModelNameFromDoll,
+  getQuickDistanceBetweenDolls,
+  inRangesAreTheSame,
+  saveModelStuffToDoll,
+  setDollAnimWeight,
+  setupLightMaterial,
+  updateDollScreenPosition,
 } from "../helpers/prendyUtils/dolls";
 import { timeStatePath } from "../stores/global/global";
 
@@ -39,12 +43,12 @@ export const rangeOptionsQuick = {
 export function get_dollDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
   prendyStores: T_MyTypes["Stores"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
 
-  const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
+  // const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
   const { getRefs, getState, setState, makeDynamicRules } = storeHelpers;
   const { prendyOptions } = prendyAssets;
 
@@ -99,9 +103,9 @@ export function startDynamicDollRulesForInitialState<
   DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
   T_MyTypes extends MyTypes = MyTypes
 >(
-  storeHelpers: T_MyTypes["StoreHelpers"],
+  storeHelpers: T_MyTypes["Repond"],
   dollDynamicRules: DollDynamicRules,
-  dollNames: readonly T_MyTypes["Main"]["DollName"][]
+  dollNames: readonly T_MyTypes["Types"]["DollName"][]
 ) {
   const { getState } = storeHelpers;
 
@@ -123,20 +127,18 @@ export function startDynamicDollRulesForInitialState<
 export function get_dollRules<
   DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
   T_MyTypes extends MyTypes = MyTypes
->(dollDynamicRules: DollDynamicRules, prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]) {
-  type AnyAnimationName = T_MyTypes["Main"]["AnyAnimationName"];
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type DollOptions = T_MyTypes["Main"]["DollOptions"];
-  type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
-  type ModelName = T_MyTypes["Main"]["ModelName"];
+>(dollDynamicRules: DollDynamicRules, prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["Repond"]) {
+  type AnyAnimationName = T_MyTypes["Types"]["AnyAnimationName"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type DollOptions = T_MyTypes["Types"]["DollOptions"];
+  type MeshNameByModel = T_MyTypes["Types"]["MeshNameByModel"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
 
   const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
-  const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
-    get_dollUtils(prendyAssets, storeHelpers);
-  const { focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
+  // const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
+  //   get_dollUtils(prendyAssets, storeHelpers);
   const { makeRules, getPreviousState, getState, getRefs, setState, onNextTick } = storeHelpers;
   const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
-  const { getModelNameFromDoll } = get_dollStoryUtils(storeHelpers);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
   type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];

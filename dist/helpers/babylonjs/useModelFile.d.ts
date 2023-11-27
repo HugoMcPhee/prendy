@@ -1,6 +1,6 @@
-import { AnimationGroup, AssetContainer, Camera, Mesh, PBRMaterial, Scene, Skeleton, Texture, TransformNode } from "@babylonjs/core";
+import { AnimationGroup, AssetContainer, Camera, Mesh, PBRMaterial, Skeleton, Texture, TransformNode } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
-export declare function get_useModelFile(getScene: () => Scene | null): <T_Names extends {
+export declare function useModelFile<T_Names extends {
     meshes: any;
     materials: any;
     animationGroups: any;
@@ -8,7 +8,7 @@ export declare function get_useModelFile(getScene: () => Scene | null): <T_Names
     transformNodes: any;
     skeletons: any;
     cameras: any;
-}>(modelFile: string) => {
+}>(modelFile: string): {
     meshes: Record<T_Names["meshes"], Mesh>;
     materials: Record<T_Names["materials"], PBRMaterial>;
     textures: Record<T_Names["textures"], Texture>;

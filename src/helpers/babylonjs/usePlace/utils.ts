@@ -2,8 +2,9 @@
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../../../declarations";
-import { get_sliceVidUtils } from "../../prendyUtils/sliceVids";
-import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
+import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
+import { meta } from "../../../meta";
+import { getScene } from "../getSceneOrEngineUtils";
 
 export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
   theVideo.width = 160;
@@ -13,80 +14,65 @@ export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementT
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
 
-export function get_usePlaceUtils<T_MyTypes extends MyTypes = MyTypes>(
-  prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
-) {
-  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type SegmentNameByPlace = T_MyTypes["Main"]["SegmentNameByPlace"];
+type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
 
-  const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName, prendyOptions } = prendyAssets;
+export async function loadNowVideosForPlace() {
+  const { getRefs, getState, setState } = meta.repond!;
 
-  const { doWhenSliceVidPlayingAsync, getSliceForPlace } = get_sliceVidUtils(prendyAssets, storeHelpers);
+  const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
+  const { nowCamName, goalCamName } = getState().global.main;
 
-  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
+  const goalSlice = getSliceForPlace(
+    nowPlaceName as PlaceName,
+    (goalCamName ?? nowCamName) as CameraNameByPlace[PlaceName],
+    (goalSegmentName ?? nowSegmentName) as SegmentNameByPlace[PlaceName]
+  );
 
+  setState({ sliceVids: { [nowPlaceName]: { wantToLoad: true, nowSlice: goalSlice } } });
+
+  await doWhenSliceVidPlayingAsync(nowPlaceName as PlaceName);
+
+  return true;
+}
+
+export async function loadProbeImagesForPlace(placeName: PlaceName) {
+  const { getRefs, getState, setState } = meta.repond!;
+  const { placeInfoByName, prendyOptions } = meta.assets!;
   const placesRefs = getRefs().places;
 
-  async function loadNowVideosForPlace() {
-    const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
-    const { nowCamName, goalCamName } = getState().global.main;
+  const placeInfo = placeInfoByName[placeName];
+  const { cameraNames } = placeInfo;
+  const { probesByCamera } = placeInfoByName[placeName];
+  const scene = getScene();
 
-    const goalSlice = getSliceForPlace(
-      nowPlaceName as PlaceName,
-      (goalCamName ?? nowCamName) as CameraNameByPlace[PlaceName],
-      (goalSegmentName ?? nowSegmentName) as SegmentNameByPlace[PlaceName]
+  if (!scene) return;
+
+  let assetsManager = new AssetsManager(scene);
+  assetsManager.useDefaultLoadingScreen = false;
+
+  forEach(cameraNames, (cameraName) => {
+    let assetTask = assetsManager.addCubeTextureTask(
+      `HDRProbeFor_${cameraName}_${placeName}`,
+      probesByCamera[cameraName as keyof typeof probesByCamera]
     );
 
-    setState({ sliceVids: { [nowPlaceName]: { wantToLoad: true, nowSlice: goalSlice } } });
+    assetTask.onSuccess = (task) => {
+      const camRef = placesRefs[placeName].camsRefs[cameraName];
+      camRef.probeTexture = task.texture;
+    };
+  });
 
-    await doWhenSliceVidPlayingAsync(nowPlaceName as PlaceName);
+  return assetsManager.loadAsync();
+}
 
-    return true;
-  }
-
-  async function loadProbeImagesForPlace(placeName: PlaceName) {
-    const placeInfo = placeInfoByName[placeName];
-    const { cameraNames } = placeInfo;
-    const { probesByCamera } = placeInfoByName[placeName];
-    const scene = getScene();
-
-    if (!scene) return;
-
-    let assetsManager = new AssetsManager(scene);
-    assetsManager.useDefaultLoadingScreen = false;
-
-    forEach(cameraNames, (cameraName) => {
-      let assetTask = assetsManager.addCubeTextureTask(
-        `HDRProbeFor_${cameraName}_${placeName}`,
-        probesByCamera[cameraName as keyof typeof probesByCamera]
-      );
-
-      assetTask.onSuccess = (task) => {
-        const camRef = placesRefs[placeName].camsRefs[cameraName];
-        camRef.probeTexture = task.texture;
-      };
-    });
-
-    return assetsManager.loadAsync();
-  }
-
-  function makeCameraFromModel(theCamera: Camera, scene: Scene) {
-    const newCamera = new TargetCamera(theCamera.name + "_made", theCamera.globalPosition, scene);
-    newCamera.rotationQuaternion = theCamera.absoluteRotation;
-    newCamera.fov = theCamera.fov;
-    // should have a visual min maxZ and depth min max Z
-    newCamera.minZ = theCamera.minZ;
-    newCamera.maxZ = theCamera.maxZ;
-    return newCamera;
-  }
-
-  return {
-    testAppendVideo,
-    loadNowVideosForPlace,
-    loadProbeImagesForPlace,
-    makeCameraFromModel,
-  };
+export function makeCameraFromModel(theCamera: Camera, scene: Scene) {
+  const newCamera = new TargetCamera(theCamera.name + "_made", theCamera.globalPosition, scene);
+  newCamera.rotationQuaternion = theCamera.absoluteRotation;
+  newCamera.fov = theCamera.fov;
+  // should have a visual min maxZ and depth min max Z
+  newCamera.minZ = theCamera.minZ;
+  newCamera.maxZ = theCamera.maxZ;
+  return newCamera;
 }

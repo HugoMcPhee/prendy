@@ -1,14 +1,14 @@
-export function get_spotStoryUtils(storeHelpers) {
-    const { getRefs } = storeHelpers;
-    function getSpotPosition(place, spot) {
-        const placesRefs = getRefs().places;
-        const newPositon = placesRefs[place].spotPositions[spot].clone();
-        return newPositon;
-    }
-    function getSpotRotation(place, spot) {
-        const placesRefs = getRefs().places;
-        const newRotation = placesRefs[place].spotRotations[spot].clone();
-        return newRotation;
-    }
-    return { getSpotPosition, getSpotRotation };
+import { meta } from "../../meta";
+const { getRefs } = meta.repond;
+export function getSpotPosition(place, spot) {
+    const placesRefs = getRefs().places;
+    const newPositon = placesRefs[place].spotPositions[spot].clone();
+    return newPositon;
 }
+export function getSpotRotation(place, spot) {
+    const placesRefs = getRefs().places;
+    const newRotation = placesRefs[place].spotRotations[spot].clone();
+    return newRotation;
+}
+//  { getSpotPosition, getSpotRotation };
+// }

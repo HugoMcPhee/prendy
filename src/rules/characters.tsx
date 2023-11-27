@@ -2,19 +2,17 @@ import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
-import { get_slateUtils } from "../helpers/babylonjs/slate";
+import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
 
 export function get_characterDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
-  type AnyTriggerName = T_MyTypes["Main"]["AnyTriggerName"];
+  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
+  type AnyTriggerName = T_MyTypes["Types"]["AnyTriggerName"];
 
   const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
   const { placeInfoByName } = prendyAssets;
-
-  const { focusSlateOnFocusedDoll: focusSlateOnFocusedDoll } = get_slateUtils(prendyAssets, storeHelpers);
 
   const refs = getRefs();
 
@@ -163,8 +161,8 @@ export function get_startDynamicCharacterRulesForInitialState<
   T_MyTypes extends MyTypes = MyTypes
 >(
   characterDynamicRules: CharacterDynamicRules,
-  characterNames: readonly T_MyTypes["Main"]["CharacterName"][],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  characterNames: readonly T_MyTypes["Types"]["CharacterName"][],
+  storeHelpers: T_MyTypes["Repond"]
 ) {
   const { getState } = storeHelpers;
   return function startDynamicCharacterRulesForInitialState() {
@@ -185,9 +183,9 @@ export function get_startDynamicCharacterRulesForInitialState<
 
 export function get_characterRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
 
   const { makeRules, getState, setState } = storeHelpers;
   const { placeInfoByName } = prendyAssets;

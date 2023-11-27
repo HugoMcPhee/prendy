@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { PrendyStoreHelpers } from "../declarations";
+import { RepondHelpers } from "../declarations";
 
-export function get_DebugFrameRate(storeHelpers: PrendyStoreHelpers) {
+export function get_DebugFrameRate(storeHelpers: RepondHelpers) {
   const { useStore, startItemEffect, stopEffect } = storeHelpers;
 
   return function DebugFrameRate() {

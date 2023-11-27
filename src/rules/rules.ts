@@ -18,7 +18,7 @@ import { get_speechBubbleRules } from "./speechBubbles";
 import { get_safeVidRules } from "./stateVids";
 
 export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
-  storeHelpers: T_MyTypes["StoreHelpers"],
+  storeHelpers: T_MyTypes["Repond"],
   prendyStores: T_MyTypes["Stores"],
   prendyAssets: T_MyTypes["Assets"]
 ) {
@@ -183,7 +183,7 @@ export function combineSubscribers(subscribers: (() => () => void)[]) {
 
 export type MakeStartRulesOptions<T_MyTypes extends MyTypes = MyTypes> = {
   customRules: SubscribableRules[];
-  storeHelpers: T_MyTypes["StoreHelpers"];
+  storeHelpers: T_MyTypes["Repond"];
   stores: T_MyTypes["Stores"];
   prendyAssets: T_MyTypes["Assets"];
 };

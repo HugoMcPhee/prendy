@@ -35,7 +35,7 @@ export type VidLetter = "a" | "b";
 export type VidSlice = { time: number; duration: number };
 
 export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
 
   const { placeNames } = prendyAssets;
 

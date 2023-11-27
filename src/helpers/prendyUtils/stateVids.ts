@@ -1,7 +1,7 @@
-import { PrendyStoreHelpers } from "../../declarations";
+import { RepondHelpers } from "../../declarations";
 import { VidState } from "../../stores/stateVids";
 
-export function get_safeVidUtils(storeHelpers: PrendyStoreHelpers) {
+export function get_safeVidUtils(storeHelpers: RepondHelpers) {
   const { getState, startItemEffect, stopEffect } = storeHelpers;
 
   function doWhenStateVidStateChanges(

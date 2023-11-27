@@ -3,7 +3,7 @@ import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
 
 export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CharacterName = T_MyTypes["Main"]["CharacterName"];
+  type CharacterName = T_MyTypes["Types"]["CharacterName"];
 
   const { characterNames, characterOptions } = prendyAssets;
 

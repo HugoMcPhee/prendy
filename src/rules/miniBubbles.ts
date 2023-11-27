@@ -1,5 +1,5 @@
 import { forEach } from "chootils/dist/loops";
-import { PrendyStoreHelpers } from "../declarations";
+import { RepondHelpers } from "../declarations";
 
 /*
 Dynamic rules
@@ -8,7 +8,7 @@ When characters position changes
   bubble position to character
 */
 
-export function get_miniBubbleRules(storeHelpers: PrendyStoreHelpers) {
+export function get_miniBubbleRules(storeHelpers: RepondHelpers) {
   const { makeRules, setState } = storeHelpers;
 
   return makeRules(({ itemEffect, effect }) => ({

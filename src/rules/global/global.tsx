@@ -13,7 +13,7 @@ export const cachedRules = {
 export function get_startAllGlobalRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
   prendyStores: T_MyTypes["Stores"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
   // making rules
   const globalVideoRules = get_globalVideoRules(prendyAssets, prendyStores, storeHelpers);

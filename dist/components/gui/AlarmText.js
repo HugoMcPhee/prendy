@@ -1,19 +1,18 @@
 // @refresh-reset
 import React from "react";
-export function get_AlarmText(storeHelpers) {
-    const { useStore } = storeHelpers;
-    return function AlarmText(_props) {
-        const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
-            type: "global",
-            name: "main",
-            prop: ["alarmText", "alarmTextIsVisible"],
-        });
-        if (!alarmTextIsVisible) {
-            return null;
-        }
-        return (React.createElement("div", { key: `alarm_text_box`, id: `alarm_text_box`, style: styles.container },
-            React.createElement("div", { id: `alarm_text`, style: styles.text }, alarmText)));
-    };
+import { meta } from "../../meta";
+export function AlarmText(_props) {
+    const { useStore } = meta.repond;
+    const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
+        type: "global",
+        name: "main",
+        prop: ["alarmText", "alarmTextIsVisible"],
+    });
+    if (!alarmTextIsVisible) {
+        return null;
+    }
+    return (React.createElement("div", { key: `alarm_text_box`, id: `alarm_text_box`, style: styles.container },
+        React.createElement("div", { id: `alarm_text`, style: styles.text }, alarmText)));
 }
 const styles = {
     container: {

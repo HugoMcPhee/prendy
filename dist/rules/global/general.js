@@ -1,10 +1,9 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { get_globalUtils } from "../../helpers/prendyUtils/global";
 import { clearTimeoutSafe } from "../../helpers/utils";
+import { setGlobalState } from "../../helpers/prendyUtils/global";
 export function get_globalGeneralRules(prendyAssets, storeHelpers) {
     const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
     const { getRefs, getState, makeRules, setState, onNextTick } = storeHelpers;
-    const { setGlobalState } = get_globalUtils(storeHelpers);
     return makeRules(({ effect, itemEffect }) => ({
         whenAnythingChangesForRendering: effect({
             run(_diffInfo, frameDuration) {

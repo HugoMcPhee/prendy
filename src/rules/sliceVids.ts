@@ -1,7 +1,13 @@
 import { minMaxRange } from "chootils/dist/numbers";
 import { StoreHelperTypes } from "repond";
 import { MyTypes } from "../declarations";
-import { BEFORE_LOOP_PADDING, get_sliceVidUtils } from "../helpers/prendyUtils/sliceVids";
+import {
+  BEFORE_LOOP_PADDING,
+  doWhenSliceVidPlaying,
+  getSliceEndTime,
+  getSliceVidVideo,
+  getSliceVidWaitingVideo,
+} from "../helpers/prendyUtils/sliceVids";
 import { get_safeVidUtils } from "../helpers/prendyUtils/stateVids";
 import { SliceVidState } from "../stores/sliceVids";
 
@@ -11,10 +17,10 @@ function numbersAreClose(a: number, b: number, range: number) {
 
 export function get_sliceVidRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
+  storeHelpers: T_MyTypes["Repond"]
 ) {
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type PrendyStoreHelpers = T_MyTypes["StoreHelpers"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
+  type PrendyStoreHelpers = T_MyTypes["Repond"];
 
   // safe Slice Stack Vid Rules
 
@@ -27,11 +33,6 @@ export function get_sliceVidRules<T_MyTypes extends MyTypes = MyTypes>(
     T
   >;
   type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-
-  const { doWhenSliceVidPlaying, getSliceEndTime, getSliceVidVideo, getSliceVidWaitingVideo } = get_sliceVidUtils(
-    prendyAssets,
-    storeHelpers
-  );
 
   const { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked } =
     get_safeVidUtils(storeHelpers);

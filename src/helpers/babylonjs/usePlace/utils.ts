@@ -1,9 +1,10 @@
 // import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
+import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../../declarations";
-import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
 import { meta } from "../../../meta";
+import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
 import { getScene } from "../getSceneOrEngineUtils";
 
 export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
@@ -19,8 +20,6 @@ type PlaceName = MyTypes["Types"]["PlaceName"];
 type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
 
 export async function loadNowVideosForPlace() {
-  const { getRefs, getState, setState } = meta.repond!;
-
   const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
   const { nowCamName, goalCamName } = getState().global.main;
 
@@ -38,7 +37,6 @@ export async function loadNowVideosForPlace() {
 }
 
 export async function loadProbeImagesForPlace(placeName: PlaceName) {
-  const { getRefs, getState, setState } = meta.repond!;
   const { placeInfoByName, prendyOptions } = meta.assets!;
   const placesRefs = getRefs().places;
 

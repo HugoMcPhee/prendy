@@ -27,7 +27,7 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
     const safeSliceVidRules = get_sliceVidRules(prendyAssets, storeHelpers);
     const characterDynamicRules = get_characterDynamicRules(prendyAssets, storeHelpers);
     const characterRules = get_characterRules(prendyAssets, storeHelpers);
-    const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers);
+    const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames);
     let hiddenTime = 0;
     const { getState, getRefs } = storeHelpers;
     function handlePausingVideoWhenHidden(isHidden) {
@@ -78,7 +78,7 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
         dollRules.startAll();
         /*places*/
         placeRules.startAll();
-        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRules, dollNames);
+        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(dollDynamicRules, dollNames);
         /**/
         playerRules.startAll();
         speechBubbleRules.startAll();

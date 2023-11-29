@@ -1,12 +1,11 @@
 // @refresh-reset
 import React from "react";
 import { meta } from "../../meta";
+import { useStore } from "repond";
 
 type Props = {};
 
 export function ShowStates(_props: Props) {
-  const { useStore } = meta.repond!;
-
   const { slateZoom, slateZoomGoal, slatePos, slatePosGoal, slateZoomIsMoving, debugMessage } = useStore(
     (state) => state.global.main,
     {

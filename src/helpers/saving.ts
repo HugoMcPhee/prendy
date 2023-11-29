@@ -1,5 +1,5 @@
+import { getState, setState } from "repond";
 import { MyTypes } from "../declarations";
-import { meta } from "../meta";
 import { PrendySaveState } from "../stores/global/global";
 import { point3dToVector3 } from "./babylonjs/vectors";
 import { setDollPosition, springDollRotationY } from "./prendyHelpers/dolls";
@@ -12,7 +12,6 @@ type PlaceName = MyTypes["Types"]["PlaceName"];
 type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
 
 export function savePrendyState() {
-  const { getState } = meta.repond!;
   const storeState = getState();
 
   const newSaveState: PrendySaveState = {
@@ -99,8 +98,6 @@ export function savePrendyState() {
 }
 
 export async function loadPrendyState() {
-  const { setState } = meta.repond!;
-
   // const savedState: PrendySaveState = getGlobalState().latestSave;
 
   // get latest save state from localStorage

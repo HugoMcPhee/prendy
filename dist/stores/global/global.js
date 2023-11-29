@@ -18,16 +18,16 @@ export default function global(prendyAssets) {
             loadingOverlayFullyShowing: true,
             // cameras
             goalCamWhenNextPlaceLoads: null,
-            goalCamNameWhenVidPlays: null,
+            goalCamNameWhenVidPlays: null, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
             goalCamNameAtLoop: null,
-            goalCamName: null,
+            goalCamName: null, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
             nowCamName: (_c = ((prendyOptions.place === placeName ? prendyOptions.camera : "") ||
-                ((_b = (_a = placeInfoByName === null || placeInfoByName === void 0 ? void 0 : placeInfoByName[placeName]) === null || _a === void 0 ? void 0 : _a.cameraNames) === null || _b === void 0 ? void 0 : _b[0]))) !== null && _c !== void 0 ? _c : "testItemCamName",
+                ((_b = (_a = placeInfoByName === null || placeInfoByName === void 0 ? void 0 : placeInfoByName[placeName]) === null || _a === void 0 ? void 0 : _a.cameraNames) === null || _b === void 0 ? void 0 : _b[0]))) !== null && _c !== void 0 ? _c : "testItemCamName", // if state() is called with a random itemName
             // segments and slice video
             nowSegmentName: prendyOptions.segment,
             goalSegmentName: null,
             goalSegmentNameAtLoop: null,
-            goalSegmentNameWhenVidPlays: null,
+            goalSegmentNameWhenVidPlays: null, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowSegmentName
             goalSegmentWhenGoalPlaceLoads: null,
             // changing places
             modelNamesLoaded: [],
@@ -36,9 +36,9 @@ export default function global(prendyAssets) {
             newPlaceProbesLoaded: false,
             //
             // player
-            playerCharacter: prendyOptions.playerCharacter,
+            playerCharacter: prendyOptions.playerCharacter, // TODO Move to players ?
             gravityValue: 5,
-            playerMovingPaused: false,
+            playerMovingPaused: false, // to be able to prevent moving while theres a cutscene for example
             focusedDoll: (_d = prendyAssets.characterOptions[prendyOptions.playerCharacter].doll) !== null && _d !== void 0 ? _d : "walker",
             focusedDollIsInView: false,
             //
@@ -48,17 +48,17 @@ export default function global(prendyAssets) {
                 value: prendyOptions.zoomLevels.default,
                 valueGoal: prendyOptions.zoomLevels.default,
                 // springStopSpeed: 0.001, // NOTE not used in mover yet
-            }),
-            slatePosMoveConfigName: "default",
+            }), // (like scale)
+            slatePosMoveConfigName: "default", // todo move to mover2dState()
             isOnVerticalScreen: false,
-            zoomMultiplier: 1,
+            zoomMultiplier: 1, // for vertical screens, zoom out a bit
             //
             // interacting
             timeScreenResized: Date.now(),
             interactButtonPressTime: 0,
             // story
             heldPickups: prendyOptions.heldPickups,
-            storyOverlayToggled: false,
+            storyOverlayToggled: false, // so the screen can fade out without affecting loading a new place
             alarmTextIsVisible: false,
             alarmText: "⚠ wobble detected ⚠",
             //
@@ -70,7 +70,7 @@ export default function global(prendyAssets) {
             timeMode: "game",
             elapsedGameTime: 0,
             elapsedPauseTime: 0,
-            elapsedMiniGameTime: 0,
+            elapsedMiniGameTime: 0, // when not in the pause menu or the main game
             isGamePaused: false,
             gameTimeSpeed: prendyOptions.gameTimeSpeed,
             gameIsInBackground: false,
@@ -98,7 +98,7 @@ export default function global(prendyAssets) {
         stretchSceneSize: { x: 1, y: 1 },
         //
         ...mover2dRefs("slatePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
-        ...moverRefs("slateZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }),
+        ...moverRefs("slateZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
         //
         sounds: makeAutomaticSoundStartRefs(),
         music: makeAutomaticMusicStartRefs(),
@@ -115,7 +115,7 @@ export default function global(prendyAssets) {
         //
         aConvoIsHappening_timeout: null,
         //
-        camSegmentRulesOptions: null,
+        camSegmentRulesOptions: null, // NOTE if using the typed version,  might need to define it in consts to remove cyclic dependancy
         // onPickupButtonClick: null as null | ((pickupName: PickupName) => void), // what to do when pressing the pickup button
         onPickupButtonClick: null, // what to do when pressing the pickup button
     });

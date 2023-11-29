@@ -4,6 +4,7 @@ import { MyTypes } from "../declarations";
 import { usePlace } from "../helpers/babylonjs/usePlace/usePlace";
 import { Player } from "./Player";
 import { meta } from "../meta";
+import { useStore } from "repond";
 
 type Props = { children?: ReactNode };
 
@@ -15,8 +16,6 @@ function Place({ name }: { name: PlaceName }) {
 }
 
 export function LoadingModels({ children }: Props) {
-  const { useStore } = meta.repond!;
-
   const { nowPlaceName } = useStore(({ global: { main } }) => main, {
     type: "global",
     name: "main",

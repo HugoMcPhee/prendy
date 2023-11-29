@@ -1,6 +1,5 @@
-import { meta } from "../../meta";
+import { getRefs } from "repond";
 export function getScene() {
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     return globalRefs.scene;
 }

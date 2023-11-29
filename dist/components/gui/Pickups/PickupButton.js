@@ -1,9 +1,9 @@
 // @refresh-reset
 import React, { useRef, useState } from "react";
+import { getRefs } from "repond";
 import { meta } from "../../../meta";
 export function PickupButton({ name }) {
     const { pickupsInfo } = meta.assets;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const pickupInfo = pickupsInfo[name];
     const [isPressed, setIsPressed] = useState(false);

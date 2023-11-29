@@ -3,10 +3,11 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { Point2D, copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
+import { getRefs, getState, onNextTick } from "repond";
 import { MyTypes } from "../../declarations";
+import { meta } from "../../meta";
 import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { getEngine } from "./getSceneOrEngineUtils";
-import { meta } from "../../meta";
 
 export function getScreenSize() {
   return { x: window.innerWidth, y: window.innerHeight };
@@ -53,7 +54,6 @@ export function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { widt
 }
 
 export function getPositionOnSlate(theMesh: AbstractMesh, modelName: ModelName) {
-  const { getRefs, getState } = meta.repond!;
   const { prendyOptions } = meta.assets!;
   const globalRefs = getRefs().global.main;
 
@@ -80,7 +80,6 @@ export function getPositionOnSlate(theMesh: AbstractMesh, modelName: ModelName) 
 }
 
 export function getSlatePositionNotOverEdges(slatePos: Point2D, useGoal?: boolean) {
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const newSlatePos = copyPoint(slatePos);
@@ -124,8 +123,6 @@ function updateSlatePositionToFocusOnMesh({
   instant?: boolean;
   model: ModelName;
 }) {
-  const { onNextTick } = meta.repond!;
-
   function updateSlatePos() {
     const characterPointOnSlate = getPositionOnSlate(meshRef, model);
 
@@ -148,8 +145,6 @@ function updateSlatePositionToFocusOnMesh({
 }
 
 export function focusSlateOnFocusedDoll(instant?: "instant") {
-  const { getRefs, getState, onNextTick } = meta.repond!;
-
   const { focusedDoll } = getState().global.main;
   const { meshRef } = getRefs().dolls[focusedDoll];
 
@@ -169,7 +164,6 @@ export function getViewSize() {
 }
 
 export function checkPointIsInsideSlate(pointOnSlate: Point2D) {
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
   const { backdropSize } = globalRefs;
 
@@ -278,7 +272,6 @@ export function convertPointOnSlateToPointOnScreen({
 }
 
 export function getShaderTransformStuff() {
-  const { getRefs, getState } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const { slateZoom: slateZoomUnmultiplied, slateZoomGoal: slateZoomGoalUnmultiplied } = getState().global.main;

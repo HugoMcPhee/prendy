@@ -1,5 +1,6 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
+import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } from "../../helpers/prendyUtils/dolls";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
@@ -18,7 +19,6 @@ type ModelName = MyTypes["Types"]["ModelName"];
 type PlaceName = MyTypes["Types"]["PlaceName"];
 type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 
-// const { getRefs, getState, setState } = meta.repond!;
 // const { prendyOptions } = meta.assets!;
 
 // type DollNameFromCharacter<T_CharacterName extends CharacterName> = CharacterOptions[T_CharacterName]["doll"];
@@ -34,15 +34,9 @@ type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["m
 
 type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
-// const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<MyTypes>(meta.repond!);
-
-// const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(meta.repond!);
-
 // --------------------------------------------------------------
 
 export function setDollPosition(dollName: DollName, newPositon: Vector3) {
-  const { getRefs, setState } = meta.repond!;
-
   const dollRefs = getRefs().dolls[dollName];
   if (!dollRefs.meshRef) return console.warn("NO MESH REF", dollName);
 
@@ -59,8 +53,6 @@ function springDollPosition(dollName: DollName, newPositon: Vector3) {}
 function slideDollPosition(dollName: DollName, newPositon: Vector3) {}
 
 export function setDollRotation(dollName: DollName, newRotation: Vector3) {
-  const { getRefs, setState } = meta.repond!;
-
   const dollRefs = getRefs().dolls[dollName];
   if (!dollRefs.meshRef) return console.warn("no mesh ref", dollName);
 
@@ -93,8 +85,6 @@ export function dollLooksAtSpot<T_PlaceName extends PlaceName>({
 }
 
 export function setDollRotationY(dollName: DollName, newRotationY: number) {
-  const { setState } = meta.repond!;
-
   setState({
     dolls: {
       [dollName]: {
@@ -106,12 +96,10 @@ export function setDollRotationY(dollName: DollName, newRotationY: number) {
 }
 
 export function springDollRotationY(dollName: DollName, newRotation: number) {
-  const { setState } = meta.repond!;
   setState({ dolls: { [dollName]: { rotationYGoal: newRotation } } });
 }
 
 export function springAddToDollRotationY(dollName: DollName, addedRotation: number, useShortestAngle: boolean = false) {
-  const { setState } = meta.repond!;
   setState((state) => {
     const currentAngle = state.dolls[dollName].rotationYGoal;
 
@@ -137,7 +125,6 @@ export function setDollAnimation<T_Doll extends DollName>(
   doll: T_Doll,
   animation: AnimationNameByModel[ModelNameFromDoll<T_Doll>]
 ) {
-  const { setState } = meta.repond!;
   setState({ dolls: { [doll]: { nowAnimation: animation } } });
 }
 
@@ -160,7 +147,6 @@ export function setDollToSpot<T_PlaceName extends PlaceName>({
   doll: DollName;
   dontSetRotationState?: boolean;
 }) {
-  const { getRefs, getState } = meta.repond!;
   const newPositon = getSpotPosition(place, spot);
   const newRotation = getSpotRotation(place, spot);
 
@@ -184,7 +170,6 @@ export function springDollToSpot<T_PlaceName extends PlaceName>({
   doll: DollName;
   // useRotation?: boolean;
 }) {
-  const { setState } = meta.repond!;
   const newPositon = getSpotPosition(place, spot);
   // const newRotation = getSpotRotation(place, spot);
 
@@ -203,7 +188,6 @@ export function springDollToSpot<T_PlaceName extends PlaceName>({
 }
 
 export function moveDollAt2DAngle(dollName: DollName, angle: number, speed: number = 3) {
-  const { getRefs, getState, setState } = meta.repond!;
   const dollState = getState().dolls[dollName];
   const dollRefs = getRefs().dolls[dollName];
   const { positionIsMoving, positionMoveMode } = dollState;
@@ -222,8 +206,6 @@ export function moveDollAt2DAngle(dollName: DollName, angle: number, speed: numb
 }
 
 export function pushDollRotationY(dollName: DollName, direction: "right" | "left", speed: number = 3) {
-  const { getRefs, getState, setState } = meta.repond!;
-
   const dollState = getState().dolls[dollName];
   const dollRefs = getRefs().dolls[dollName];
   const { rotationYIsMoving, rotationYMoveMode } = dollState;
@@ -250,7 +232,6 @@ export function pushDollRotationY(dollName: DollName, direction: "right" | "left
 }
 
 export function hideDoll(dollName: DollName, shouldHide: boolean = true) {
-  const { setState } = meta.repond!;
   setState({ dolls: { [dollName]: { isVisible: !shouldHide } } }, () => {});
 }
 
@@ -258,7 +239,6 @@ export function toggleDollMeshes<T_DollName extends DollName>(
   dollName: T_DollName,
   toggledMeshes: Partial<Record<MeshNamesFromDoll<T_DollName>, boolean>>
 ) {
-  const { setState } = meta.repond!;
   // IDEA have dollState toggledMeshes and rules to auto enable the meshes
 
   // const { left_shoe, right_shoe, long_teeth } = otherMeshes;
@@ -291,7 +271,6 @@ export function getDollBonePosition<T_ModelName extends ModelName>({
   model: T_ModelName; // TODO update to support auto getting the model name from the doll (when typescript supports keeping generic types for functions (with getStte? or something))
   bone: BoneNameByModel[T_ModelName];
 }) {
-  const { getRefs } = meta.repond!;
   // ModelNameFromDoll
   const dollRefs = getRefs().dolls.dino;
 

@@ -1,15 +1,14 @@
 // @refresh-reset
 import React from "react";
+import { getRefs, useStore } from "repond";
 import { MyTypes } from "../../../declarations";
-import { meta } from "../../../meta";
 import { PickupButton } from "./PickupButton";
 
 type PickupName = MyTypes["Types"]["PickupName"];
 
-type Props = {};
+type Props = { children: React.ReactNode };
 
 export function Pickups(_props: Props) {
-  const { getRefs, useStore } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   // const buttonsHolderRef = useRef<StackPanel>(null);

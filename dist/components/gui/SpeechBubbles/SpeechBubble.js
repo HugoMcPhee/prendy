@@ -2,9 +2,10 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
+import { getState, useStore, useStoreEffect } from "repond";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
-import { meta } from "../../../meta";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { meta } from "../../../meta";
 // import "./SpeechBubble.css";
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
@@ -18,8 +19,6 @@ const SHARED_THEME = {
 export function SpeechBubble({ name }) {
     var _a, _b;
     const { speechVidFiles } = meta.assets;
-    const { getState, useStore, useStoreEffect, getRefs } = meta.repond;
-    const globalRefs = getRefs().global.main;
     const theRectangle = useRef(null);
     const theTextRectangle = useRef(null);
     const theTriangle = useRef(null);
@@ -188,7 +187,7 @@ export function SpeechBubble({ name }) {
         zIndex: zIndex,
         fontFamily: font,
         textAlign: "center",
-        verticalAlign: "middle",
+        verticalAlign: "middle", // to center emojis with text?
         fontSize: SHARED_THEME.fontSize,
         lineHeight: SHARED_THEME.lineHeight,
         color: "rgb(68, 68, 68)",

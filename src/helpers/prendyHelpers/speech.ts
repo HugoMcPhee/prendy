@@ -1,12 +1,13 @@
 import delay from "delay";
 import { CSSProperties } from "react";
+import { getState, onNextTick, setState, startItemEffect, stopEffect } from "repond";
 import { length } from "stringz";
 import { MyTypes } from "../../declarations";
 import { getTypingDelayForText } from "../../helpers/prendyUtils/speechBubbles";
-import { clearTimeoutSafe } from "../utils";
-import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { meta } from "../../meta";
 import { getCharDollStuff } from "../prendyUtils/characters";
+import { getGlobalState, setGlobalState } from "../prendyUtils/global";
+import { clearTimeoutSafe } from "../utils";
 
 type ATimeout = ReturnType<typeof setTimeout> | undefined;
 
@@ -46,7 +47,6 @@ export async function showSpeech(
   }
 ) {
   const { prendyOptions } = meta.assets!;
-  const { getState, onNextTick, setState, startItemEffect, stopEffect } = meta.repond!;
   return new Promise<void>((resolve, _reject) => {
     const { slateZoom: prevSlateZoom } = getGlobalState();
     const playerCharacter = getGlobalState().playerCharacter as CharacterName;
@@ -140,7 +140,6 @@ export async function showSpeech(
 }
 
 export function showMiniBubble(text: string, time: number = 100000) {
-  const { getState, setState } = meta.repond!;
   const { playerCharacter } = getState().global.main;
   setState({ miniBubbles: { [playerCharacter]: { isVisible: true, text } } });
   // 10 second timeout incase the hideMiniBubble() didn't run from leaving a trigger
@@ -151,7 +150,6 @@ export function showMiniBubble(text: string, time: number = 100000) {
 }
 
 export function hideMiniBubble() {
-  const { getState, setState } = meta.repond!;
   const { playerCharacter } = getState().global.main;
   if (showMiniBubbleRefs.closeTimeout !== null) {
     clearTimeout(showMiniBubbleRefs.closeTimeout);

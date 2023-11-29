@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from "react";
 type Props = {};
-export declare function VirtualStick(_: Props): JSX.Element;
+export declare function VirtualStick(_: Props): React.JSX.Element;
 export {};

@@ -1,6 +1,5 @@
-import { meta } from "../../meta";
+import { getState } from "repond";
 export function getTypingDelayForLetter(letter, speechBubbleName) {
-    const { getState } = meta.repond;
     const { typingSpeed } = getState().speechBubbles[speechBubbleName];
     let typingDelay = typingSpeed;
     if (isSpecialLetter(letter))

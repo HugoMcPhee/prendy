@@ -4,10 +4,11 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
+import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
-import { getSpotPosition } from "./spots";
 import { checkPointIsInsideSlate, convertPointOnSlateToPointOnScreen, getPositionOnSlate } from "../babylonjs/slate";
+import { getSpotPosition } from "./spots";
 
 // export function get_dollStoryUtils<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
 type DollName = MyTypes["Types"]["DollName"];
@@ -19,8 +20,6 @@ type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
 type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
 
 export function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
-  const { getState } = meta.repond!;
-
   return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;
 }
 
@@ -29,8 +28,6 @@ export function get2DAngleFromDollToSpot<T_Place extends PlaceName>(
   place: T_Place,
   spot: SpotNameByPlace[T_Place]
 ) {
-  const { getState } = meta.repond!;
-
   const spotPosition = getSpotPosition(place, spot);
 
   if (!dollA || !spotPosition) return 0;
@@ -42,8 +39,6 @@ export function get2DAngleFromDollToSpot<T_Place extends PlaceName>(
 }
 
 export function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName) {
-  const { getState } = meta.repond!;
-
   if (!dollA || !dollB) return 0;
 
   const dollAPos = getState().dolls[dollA].position;
@@ -138,7 +133,6 @@ export function setDollAnimWeight<
   T_DollName extends DollName,
   T_NewWeights extends Record<AnimationNameByModel[ModelNameFromDoll<T_DollName>], number>
 >(dollName: T_DollName, newWeights: Partial<T_NewWeights>) {
-  const { getState, setState } = meta.repond!;
   setState({
     dolls: {
       [dollName]: {
@@ -152,7 +146,6 @@ export function setDollAnimWeight<
 }
 
 export function getQuickDistanceBetweenDolls(dollA: DollName, dollB: DollName) {
-  const { getState } = meta.repond!;
   const dollPositonA = getState().dolls[dollA].position;
   const dollPositonB = getState().dolls[dollB].position;
 
@@ -183,7 +176,6 @@ export function inRangesAreTheSame(inRangePropA: InRangeProperty, inRangePropB: 
 // export function inRangeStatesAreTheSame(inRangeStateA :PartialDollsStateWithInRange , inRangeStateB :PartialDollsStateWithInRange);
 
 export function setupLightMaterial(theMaterial: PBRMaterial | null) {
-  const { getState, getRefs } = meta.repond!;
   const placesRefs = getRefs().places;
   const globalState = getState().global.main;
   const { nowPlaceName } = globalState;
@@ -209,8 +201,6 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
   modelName: T_ModelName;
   dollName: T_DollName;
 }) {
-  const { getState, getRefs } = meta.repond!;
-
   const dollRefs = getRefs().dolls[dollName];
   const modelRefs = getRefs().models[modelName];
   const dollState = getState().dolls[dollName];
@@ -300,7 +290,6 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
 }
 
 export function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {
-  const { getState, setState, getRefs } = meta.repond!;
   // Update screen positions :)
 
   const { meshRef } = getRefs().dolls[dollName];

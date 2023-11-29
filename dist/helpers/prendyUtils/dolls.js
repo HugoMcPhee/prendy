@@ -4,15 +4,14 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
+import { getRefs, getState, setState } from "repond";
 import { meta } from "../../meta";
-import { getSpotPosition } from "./spots";
 import { checkPointIsInsideSlate, convertPointOnSlateToPointOnScreen, getPositionOnSlate } from "../babylonjs/slate";
+import { getSpotPosition } from "./spots";
 export function getModelNameFromDoll(dollName) {
-    const { getState } = meta.repond;
     return getState().dolls[dollName].modelName;
 }
 export function get2DAngleFromDollToSpot(dollA, place, spot) {
-    const { getState } = meta.repond;
     const spotPosition = getSpotPosition(place, spot);
     if (!dollA || !spotPosition)
         return 0;
@@ -22,7 +21,6 @@ export function get2DAngleFromDollToSpot(dollA, place, spot) {
     return getSpeedAndAngleFromVector(subtractPoints(dollPos2D, spotPos2D)).angle;
 }
 export function get2DAngleBetweenDolls(dollA, dollB) {
-    const { getState } = meta.repond;
     if (!dollA || !dollB)
         return 0;
     const dollAPos = getState().dolls[dollA].position;
@@ -96,7 +94,6 @@ export function enableCollisions(theMesh) {
 // type DollName = keyof RepondState["dolls"];
 // type DollName = keyof typeof prendyStores.dolls.startStates;
 export function setDollAnimWeight(dollName, newWeights) {
-    const { getState, setState } = meta.repond;
     setState({
         dolls: {
             [dollName]: {
@@ -109,7 +106,6 @@ export function setDollAnimWeight(dollName, newWeights) {
     });
 }
 export function getQuickDistanceBetweenDolls(dollA, dollB) {
-    const { getState } = meta.repond;
     const dollPositonA = getState().dolls[dollA].position;
     const dollPositonB = getState().dolls[dollB].position;
     return getPointDistanceQuick(dollPositonA, dollPositonB);
@@ -127,7 +123,6 @@ export function inRangesAreTheSame(inRangePropA, inRangePropB) {
 }
 // export function inRangeStatesAreTheSame(inRangeStateA :PartialDollsStateWithInRange , inRangeStateB :PartialDollsStateWithInRange);
 export function setupLightMaterial(theMaterial) {
-    const { getState, getRefs } = meta.repond;
     const placesRefs = getRefs().places;
     const globalState = getState().global.main;
     const { nowPlaceName } = globalState;
@@ -145,7 +140,6 @@ export function setupLightMaterial(theMaterial) {
 }
 export function saveModelStuffToDoll({ modelName, dollName, }) {
     var _a, _b;
-    const { getState, getRefs } = meta.repond;
     const dollRefs = getRefs().dolls[dollName];
     const modelRefs = getRefs().models[modelName];
     const dollState = getState().dolls[dollName];
@@ -204,7 +198,6 @@ export function saveModelStuffToDoll({ modelName, dollName, }) {
     // definiedPrendyRules.dolls?.run("whenNowAnimationChanged");
 }
 export function updateDollScreenPosition({ dollName, instant }) {
-    const { getState, setState, getRefs } = meta.repond;
     // Update screen positions :)
     const { meshRef } = getRefs().dolls[dollName];
     const modelName = getState().dolls[dollName].modelName;

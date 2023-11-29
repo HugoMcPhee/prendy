@@ -2,10 +2,9 @@
 import { getRandomInt } from "chootils/dist/numbers";
 import React from "react";
 import { animated, useSpring } from "react-spring";
-import { meta } from "../../meta";
+import { useStore } from "repond";
 const EDGE_PADDING = 65;
 export function ScreenSticker(_props) {
-    const { useStore } = meta.repond;
     const { screenStickerText, screenStickerIsVisible, screenStickerPosition } = useStore(({ story: { main } }) => main, {
         type: "story",
         name: "main",

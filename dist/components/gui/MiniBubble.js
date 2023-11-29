@@ -2,9 +2,9 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
+import { getState, useStore, useStoreEffect } from "repond";
 import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { meta } from "../../meta";
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
 const BUBBLE_WIDTH = 30; // NOTE not used
@@ -22,7 +22,6 @@ const SHARED_THEME = {
 const TRIANGLE_BORDER_WIDTH_SCALE = 50 / TRIANGLE_SIZE;
 export function MiniBubble({ name }) {
     var _a;
-    const { useStoreEffect, useStore, getState } = meta.repond;
     const theRectangle = useRef(null);
     const theTextRectangle = useRef(null);
     const theTriangle = useRef(null);
@@ -169,7 +168,7 @@ export function MiniBubble({ name }) {
             padding: "1px",
             fontFamily: "Jua",
             textAlign: "center",
-            verticalAlign: "middle",
+            verticalAlign: "middle", // to center emojis with text?
             zIndex: 100,
         },
         triangle: {
@@ -227,7 +226,7 @@ export function MiniBubble({ name }) {
                     height: theSpring.height,
                     overflow: "hidden",
                     willChange: "height",
-                    position: "relative",
+                    position: "relative", // fixes overflow not working,
                     borderWidth: SHARED_THEME.borderWidth,
                     borderColor: SHARED_THEME.borderColor,
                     borderStyle: "solid",

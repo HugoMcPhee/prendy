@@ -1,6 +1,7 @@
 import { forEach } from "chootils/dist/loops";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
+import { getState } from "repond";
 export function get_characterDynamicRules(prendyAssets, storeHelpers) {
     const { getState, setState, getRefs, makeDynamicRules } = storeHelpers;
     const { placeInfoByName } = prendyAssets;
@@ -82,7 +83,7 @@ export function get_characterDynamicRules(prendyAssets, storeHelpers) {
                 }
             },
             check: { type: "dolls", prop: "position", name: dollName },
-            atStepEnd: true,
+            atStepEnd: true, // so it only runs once (it sometimes ran twice with  "derive" (without the "beforePainting" flow I think))
             step: "checkCollisions",
             // NOTE "becomes" isn't working for dynamic rules?
             // becomes: (position, prevPosition) => {
@@ -113,8 +114,7 @@ export function get_characterDynamicRules(prendyAssets, storeHelpers) {
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
 // NOTE rules can be manually triggered atleast, but the rule might not know an item was added
 // TODO add addOrRemovd rules for characters
-export function get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames, storeHelpers) {
-    const { getState } = storeHelpers;
+export function get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames) {
     return function startDynamicCharacterRulesForInitialState() {
         forEach(characterNames, (characterName) => {
             const { dollName } = getState().characters[characterName];
@@ -150,7 +150,7 @@ export function get_characterRules(prendyAssets, storeHelpers) {
                     }
                 });
             },
-            check: { type: "characters", prop: "atCamCubes" },
+            check: { type: "characters", prop: "atCamCubes" }, // NOTE Maybe change this to current player character with dynamic rule
             step: "collisionReaction",
             atStepEnd: true,
         }),

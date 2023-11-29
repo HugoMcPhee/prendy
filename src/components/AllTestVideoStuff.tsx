@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import { MyTypes } from "../declarations";
 import { addLayout } from "../helpers/styles";
 
@@ -11,7 +11,7 @@ export function get_AllTestVideoStuff<T_MyTypes extends MyTypes = MyTypes>(
   const { placeNames } = prendyAssets;
   const { useStore, useStoreItemPropsEffect } = storeHelpers;
 
-  function TestVideos({ placeName }: { placeName: PlaceName }) {
+  function TestVideos({ placeName }: { placeName: PlaceName }): ReactNode {
     const mainRef = useRef<HTMLDivElement>(null);
 
     const vidContainerRefA = useRef<HTMLDivElement>(null);
@@ -105,7 +105,7 @@ export function get_AllTestVideoStuff<T_MyTypes extends MyTypes = MyTypes>(
             <TestVideos placeName={placeName} />
             <TestVideoState placeName={placeName} />
           </div>
-        ))}{" "}
+        ))}
       </>
     );
   };

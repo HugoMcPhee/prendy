@@ -1,8 +1,8 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
+import { getRefs, getState, makeNestedLeaveRuleMaker, makeNestedRuleMaker, makeRules, setState, startItemEffect, stopEffect, } from "repond";
 import { meta } from "../../meta";
 import { getCharDollStuff } from "../prendyUtils/characters";
 export function getUsefulStoryStuff() {
-    const { getState, getRefs } = meta.repond;
     const storyState = getState().story.main;
     const storyRefs = getRefs().story.main;
     const globalState = getState().global.main;
@@ -36,19 +36,15 @@ export function getUsefulStoryStuff() {
 //   GetState
 // >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 export function setStoryState(newState) {
-    const { setState } = meta.repond;
     setState({ story: { main: newState } });
 }
 export function makeCamChangeRules(callBacksObject) {
-    const { makeNestedRuleMaker } = meta.repond;
     return makeNestedRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff)(callBacksObject);
 }
 export function makeCamLeaveRules(callBacksObject) {
-    const { makeNestedLeaveRuleMaker } = meta.repond;
     return makeNestedLeaveRuleMaker(["global", "main", "nowPlaceName"], ["global", "main", "nowCamName"], "cameraChange", getUsefulStoryStuff)(callBacksObject);
 }
 export function makeCamSegmentRules(callBacksObject) {
-    const { getRefs } = meta.repond;
     return {
         startAll() {
             // This sets an options object in global refs that gets checked when changing segment,
@@ -61,7 +57,6 @@ export function makeCamSegmentRules(callBacksObject) {
     };
 }
 export function makePickupsRules({ onUsePickupAtTrigger, onUsePickupToTalk, onUsePickupGenerally, }) {
-    const { getRefs } = meta.repond;
     const onPickupButtonClick = (pickupName) => {
         const didUsePickupAtTrigger = onUsePickupAtTrigger(pickupName);
         const didUsePickupWithDoll = onUsePickupToTalk(pickupName);
@@ -85,7 +80,6 @@ export function makePickupsRules({ onUsePickupAtTrigger, onUsePickupToTalk, onUs
     };
 }
 export function makeInteractButtonRules({ onInteractAtTrigger, onInteractAtTalk, }) {
-    const { makeRules } = meta.repond;
     const interactButtonRules = makeRules(({ itemEffect, effect }) => ({
         whenInteractButtonClicked: itemEffect({
             run() {
@@ -102,7 +96,6 @@ export function makeInteractButtonRules({ onInteractAtTrigger, onInteractAtTalk,
 // the returned function when the interact buttons clicked
 export function makeOnInteractAtTrigger(callBacksObject, characterName = meta.assets.characterNames[0]) {
     const { placeInfoByName } = meta.assets;
-    const { getState } = meta.repond;
     const onClickInteractButton = () => {
         const usefulStoryStuff = getUsefulStoryStuff();
         const { aConvoIsHappening, nowPlaceName, playerMovingPaused } = usefulStoryStuff.globalState;
@@ -123,7 +116,6 @@ export function makeOnInteractAtTrigger(callBacksObject, characterName = meta.as
 }
 // the returned function gets run when interact button's clicked
 export function makeOnInteractToTalk(callBacksObject, distanceType = "talk", characterName = meta.assets.characterNames[0]) {
-    const { getState } = meta.repond;
     const { dollNames } = meta.assets;
     const onClickInteractButton = () => {
         var _a;
@@ -150,7 +142,6 @@ export function makeOnInteractToTalk(callBacksObject, distanceType = "talk", cha
 }
 // the returned function gets run onClick in the pickup picture button gui
 export function makeOnUsePickupAtTrigger(callBacksObject, characterName = meta.assets.characterNames[0]) {
-    const { getState } = meta.repond;
     const { placeInfoByName } = meta.assets;
     const onClickPickupButton = (pickupName) => {
         let didInteractWithSomething = false;
@@ -220,7 +211,6 @@ export function makeOnUsePickupToTalk(callBacksObject, characterName = meta.asse
     return onClickPickupButton;
 }
 export function makePlaceLoadRules(atStartOfEachPlace, callBacksObject) {
-    const { makeRules } = meta.repond;
     return makeRules(({ itemEffect }) => ({
         whenPlaceFinishedLoading: itemEffect({
             run() {
@@ -244,7 +234,6 @@ export function makePlaceLoadRules(atStartOfEachPlace, callBacksObject) {
     }));
 }
 export function makePlaceUnloadRules(callBacksObject) {
-    const { makeRules, startItemEffect, stopEffect } = meta.repond;
     return makeRules(({ itemEffect }) => ({
         whenPlaceFinishedUnloading: itemEffect({
             run({ previousValue: prevPlace, newValue: newPlace }) {
@@ -272,7 +261,6 @@ export function makePlaceUnloadRules(callBacksObject) {
     }));
 }
 export function makeTouchRules(callBacksObject, options) {
-    const { getState, makeRules } = meta.repond;
     const { dollNames } = meta.assets;
     const { characterName, distanceType = "touch", whenLeave = false } = options !== null && options !== void 0 ? options : {};
     const { playerCharacter } = getState().global.main;
@@ -318,7 +306,6 @@ export function makeTriggerRules(callBacksObject, options) {
     // const charName = characterName || playerCharacter;
     const charactersWithTriggers = Object.keys(callBacksObject);
     console.log("charactersWithTriggers", charactersWithTriggers);
-    const { makeRules } = meta.repond;
     const { placeInfoByName } = meta.assets;
     return makeRules(({ itemEffect }) => ({
         whenAtTriggersChanges: itemEffect({

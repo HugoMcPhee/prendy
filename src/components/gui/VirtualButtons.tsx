@@ -1,5 +1,6 @@
 import React, { ReactNode, useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
+import { setState, useStore } from "repond";
 import { meta } from "../../meta";
 
 type VirtualButtonProps = {
@@ -17,8 +18,6 @@ const SIZES = {
 };
 
 function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled }: VirtualButtonProps) {
-  const { getRefs, setState } = meta.repond!;
-
   const [isPressed, setIsPressed] = useState(false);
   // console.log("disabled", disabled);
 
@@ -82,7 +81,6 @@ function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled
 }
 
 export function VirtualButtons(_: Props) {
-  const { getRefs, setState, useStore } = meta.repond!;
   const { prendyOptions } = meta.assets!;
   const { hasInteracting, hasJumping } = prendyOptions;
 

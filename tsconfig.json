@@ -22,7 +22,11 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "baseUrl": "./",
+    "paths": {
+      "react": ["node_modules/@types/react"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

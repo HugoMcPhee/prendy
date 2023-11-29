@@ -1,6 +1,7 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
+import { getRefs, getState, setState } from "repond";
 import { meta } from "../../../meta";
 import { setGlobalState } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
@@ -8,7 +9,6 @@ import { getScene } from "../getSceneOrEngineUtils";
 import { useModelFile } from "../useModelFile";
 import { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
 export function usePlace(placeName) {
-    const { getRefs, getState, setState } = meta.repond;
     const { placeInfoByName, soundFiles, prendyOptions } = meta.assets;
     const placesRefs = getRefs().places;
     const placeInfo = placeInfoByName[placeName];

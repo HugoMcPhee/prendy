@@ -1,6 +1,7 @@
 import { FxaaPostProcess, PBRMaterial, PostProcess, ShaderStore } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
+import { getRefs, getState, setState } from "repond";
 import { meta } from "../../meta";
 import shaders from "../shaders";
 import { getGlobalState } from "./global";
@@ -41,7 +42,6 @@ export function getSafeSegmentName({ cam, place, segment, useStorySegmentRules, 
 // Updates both video textures and probe textures for the new cameras
 export function updateTexturesForNowCamera(newCameraName, didChangePlace = false) {
     var _a, _b, _c, _d;
-    const { getRefs, getState, setState } = meta.repond;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
     const { nowPlaceName } = getState().global.main;
@@ -153,7 +153,6 @@ export function updateTexturesForNowCamera(newCameraName, didChangePlace = false
     applyProbeToAllParticleMaterials();
 }
 export function addMeshesToRenderLists(newCamRef) {
-    const { getRefs } = meta.repond;
     const { dollNames } = meta.assets;
     const globalRefs = getRefs().global.main;
     const scene = globalRefs.scene;
@@ -183,7 +182,6 @@ export function addMeshesToRenderLists(newCamRef) {
     scene._skipEvaluateActiveMeshesCompletely = true;
 }
 export function updateVideoTexturesForNewPlace(nowPlaceName) {
-    const { getRefs, getState, setState } = meta.repond;
     const globalRefs = getRefs().global.main;
     if (globalRefs.backdropVideoTex) {
         const backdropVidElement = getSliceVidVideo(nowPlaceName);
@@ -194,13 +192,11 @@ export function updateVideoTexturesForNewPlace(nowPlaceName) {
 }
 export function updateVideoTexture() {
     var _a, _b;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     (_a = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.backdropPostProcessEffect) === null || _a === void 0 ? void 0 : _a.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
     (_b = globalRefs === null || globalRefs === void 0 ? void 0 : globalRefs.backdropPostProcessEffect) === null || _b === void 0 ? void 0 : _b.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
 }
 export function applyProbeToAllDollMaterials() {
-    const { getRefs, getState } = meta.repond;
     const { dollNames } = meta.assets;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
@@ -232,7 +228,6 @@ export function applyProbeToAllDollMaterials() {
     });
 }
 export function applyProbeToAllParticleMaterials() {
-    const { getRefs, getState } = meta.repond;
     const globalRefs = getRefs().global.main;
     const placesRefs = getRefs().places;
     const { nowPlaceName } = getState().global.main;
@@ -256,7 +251,6 @@ export function applyProbeToAllParticleMaterials() {
 }
 // note adding to slice vids cause its easier to follow for now? even though it's not seperated
 export function updateNowStuffWhenSliceChanged() {
-    const { getState, setState } = meta.repond;
     // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
     const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
     const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;

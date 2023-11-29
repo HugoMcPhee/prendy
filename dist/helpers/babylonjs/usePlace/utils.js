@@ -1,8 +1,9 @@
 // import React from "react";
 import { AssetsManager, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
+import { getRefs, getState, setState } from "repond";
 import { meta } from "../../../meta";
+import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
 import { getScene } from "../getSceneOrEngineUtils";
 export function testAppendVideo(theVideo, id, elementTag = "app") {
     var _a;
@@ -13,7 +14,6 @@ export function testAppendVideo(theVideo, id, elementTag = "app") {
     (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
 }
 export async function loadNowVideosForPlace() {
-    const { getRefs, getState, setState } = meta.repond;
     const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
     const { nowCamName, goalCamName } = getState().global.main;
     const goalSlice = getSliceForPlace(nowPlaceName, (goalCamName !== null && goalCamName !== void 0 ? goalCamName : nowCamName), (goalSegmentName !== null && goalSegmentName !== void 0 ? goalSegmentName : nowSegmentName));
@@ -22,7 +22,6 @@ export async function loadNowVideosForPlace() {
     return true;
 }
 export async function loadProbeImagesForPlace(placeName) {
-    const { getRefs, getState, setState } = meta.repond;
     const { placeInfoByName, prendyOptions } = meta.assets;
     const placesRefs = getRefs().places;
     const placeInfo = placeInfoByName[placeName];

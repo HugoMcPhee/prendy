@@ -1,9 +1,9 @@
 import { breakableForEach } from "chootils/dist/loops";
 import { goToNewPlace } from "../helpers/prendyHelpers/scene";
 import { meta } from "../meta";
+import { useStore, useStoreItemPropsEffect, getState, setState } from "repond";
 export function Player(_props) {
     const { placeInfoByName, prendyOptions } = meta.assets;
-    const { useStoreItemPropsEffect, getState, setState, useStore } = meta.repond;
     const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
         type: "global",
         name: "main",

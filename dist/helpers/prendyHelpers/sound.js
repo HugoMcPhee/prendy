@@ -1,16 +1,15 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { getScene } from "../babylonjs/getSceneOrEngineUtils";
+import { getRefs } from "repond";
 import { meta } from "../../meta";
+import { getScene } from "../babylonjs/getSceneOrEngineUtils";
 // const { musicNames, musicFiles, soundNames, soundFiles } = meta.assets!;
-// const { getRefs } = meta.repond!;
 // const globalRefs = getRefs().global.main;
 // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
 // Auto load music and play it, and stop other music if it's already playing
 export function playSound(soundName, options) {
     var _a, _b;
     const { soundFiles } = meta.assets;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const scene = getScene();
     if (!scene)
@@ -29,21 +28,18 @@ export function playSound(soundName, options) {
     });
 }
 export function stopSound(soundName) {
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const foundSound = globalRefs.sounds[soundName];
     foundSound === null || foundSound === void 0 ? void 0 : foundSound.stop();
 }
 export function stopAllSounds() {
     const { soundNames } = meta.assets;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     forEach(soundNames, (soundName) => { var _a; return (_a = globalRefs.sounds[soundName]) === null || _a === void 0 ? void 0 : _a.stop(); });
 }
 // Auto load music and play it, and stop other music if it's already playing
 export function playNewMusic(newMusicName) {
     const { musicNames, musicFiles } = meta.assets;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const scene = getScene();
     if (!scene)
@@ -68,7 +64,6 @@ export function playNewMusic(newMusicName) {
 }
 export function stopAllMusic() {
     const { musicNames } = meta.assets;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     forEach(musicNames, (musicName) => { var _a; return (_a = globalRefs.music[musicName]) === null || _a === void 0 ? void 0 : _a.stop(); });
 }

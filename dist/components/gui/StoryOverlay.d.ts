@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from "react";
 type Props = {};
-export declare function StoryOverlay(_props: Props): JSX.Element;
+export declare function StoryOverlay(_props: Props): React.JSX.Element;
 export {};

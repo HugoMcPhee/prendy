@@ -1,8 +1,7 @@
 // @refresh-reset
 import React from "react";
-import { meta } from "../../meta";
+import { useStore } from "repond";
 export function AlarmText(_props) {
-    const { useStore } = meta.repond;
     const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
         type: "global",
         name: "main",

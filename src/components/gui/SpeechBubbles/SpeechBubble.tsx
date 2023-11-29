@@ -2,10 +2,11 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
+import { getRefs, getState, useStore, useStoreEffect } from "repond";
 import { MyTypes } from "../../../declarations";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
-import { meta } from "../../../meta";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { meta } from "../../../meta";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
@@ -31,9 +32,6 @@ const SHARED_THEME = {
 
 export function SpeechBubble({ name }: Props) {
   const { speechVidFiles } = meta.assets!;
-  const { getState, useStore, useStoreEffect, getRefs } = meta.repond!;
-
-  const globalRefs = getRefs().global.main;
 
   const theRectangle = useRef<HTMLDivElement>(null);
   const theTextRectangle = useRef<HTMLDivElement>(null);

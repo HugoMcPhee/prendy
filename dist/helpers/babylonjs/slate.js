@@ -3,9 +3,10 @@ import { shortenDecimals } from "chootils/dist/numbers";
 import { copyPoint, defaultPosition } from "chootils/dist/points2d";
 import { measurementToRect, pointInsideRect } from "chootils/dist/rects";
 import { defaultSize } from "chootils/dist/sizes";
+import { getRefs, getState, onNextTick } from "repond";
+import { meta } from "../../meta";
 import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { getEngine } from "./getSceneOrEngineUtils";
-import { meta } from "../../meta";
 export function getScreenSize() {
     return { x: window.innerWidth, y: window.innerHeight };
 }
@@ -29,7 +30,6 @@ export function getProjectionMatrixCustomSize(theCamera, theSize) {
 }
 export function getPositionOnSlate(theMesh, modelName) {
     var _a, _b;
-    const { getRefs, getState } = meta.repond;
     const { prendyOptions } = meta.assets;
     const globalRefs = getRefs().global.main;
     // This is a position on the slate itself
@@ -46,7 +46,6 @@ export function getPositionOnSlate(theMesh, modelName) {
         .multiply(getProjectionMatrixCustomSize(nowCam, globalRefs.backdropSize)), nowCam.viewport.toGlobal(globalRefs.backdropSize.width, globalRefs.backdropSize.height));
 }
 export function getSlatePositionNotOverEdges(slatePos, useGoal) {
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const newSlatePos = copyPoint(slatePos);
     const stretchVideoX = useGoal ? globalRefs.stretchVideoGoalSize.x : globalRefs.stretchVideoSize.x;
@@ -77,7 +76,6 @@ export function getSlatePositionNotOverEdges(slatePos, useGoal) {
     return newSlatePos;
 }
 function updateSlatePositionToFocusOnMesh({ meshRef, instant, model, }) {
-    const { onNextTick } = meta.repond;
     function updateSlatePos() {
         const characterPointOnSlate = getPositionOnSlate(meshRef, model);
         const newSlatePos = getSlatePositionNotOverEdges({
@@ -99,7 +97,6 @@ function updateSlatePositionToFocusOnMesh({ meshRef, instant, model, }) {
     }
 }
 export function focusSlateOnFocusedDoll(instant) {
-    const { getRefs, getState, onNextTick } = meta.repond;
     const { focusedDoll } = getState().global.main;
     const { meshRef } = getRefs().dolls[focusedDoll];
     const model = getState().dolls[focusedDoll].modelName;
@@ -117,14 +114,13 @@ export function getViewSize() {
     };
 }
 export function checkPointIsInsideSlate(pointOnSlate) {
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const { backdropSize } = globalRefs;
     const sceneSize = backdropSize; // 1280x720 (the point is in here)
     const OUT_OF_FRAME_PADDING = 200;
     const pointSortOfIsInsideSlate = pointInsideRect(pointOnSlate, measurementToRect({
         width: sceneSize.width + OUT_OF_FRAME_PADDING,
-        height: sceneSize.height + OUT_OF_FRAME_PADDING * 3,
+        height: sceneSize.height + OUT_OF_FRAME_PADDING * 3, // Y is easier to go over the edges when the camera angle's low
         x: 0 - OUT_OF_FRAME_PADDING,
         y: 0 - OUT_OF_FRAME_PADDING * 3,
     }));
@@ -196,7 +192,6 @@ slateZoom, }) {
     return positionOnScreen;
 }
 export function getShaderTransformStuff() {
-    const { getRefs, getState } = meta.repond;
     const globalRefs = getRefs().global.main;
     const { slateZoom: slateZoomUnmultiplied, slateZoomGoal: slateZoomGoalUnmultiplied } = getState().global.main;
     const zoomMultiplier = getGlobalState().zoomMultiplier;

@@ -2,13 +2,12 @@ import { Vector3 } from "@babylonjs/core";
 import React, { Suspense } from "react";
 import { usePlace } from "../helpers/babylonjs/usePlace/usePlace";
 import { Player } from "./Player";
-import { meta } from "../meta";
+import { useStore } from "repond";
 function Place({ name }) {
     usePlace(name);
     return null;
 }
 export function LoadingModels({ children }) {
-    const { useStore } = meta.repond;
     const { nowPlaceName } = useStore(({ global: { main } }) => main, {
         type: "global",
         name: "main",

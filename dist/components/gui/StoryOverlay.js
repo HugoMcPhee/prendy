@@ -1,9 +1,8 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { meta } from "../../meta";
+import { useStoreItemPropsEffect } from "repond";
 export function StoryOverlay(_props) {
-    const { useStoreItemPropsEffect } = meta.repond;
     const theOverlay = useRef(null);
     const [overlaySpring, overlaySpringApi] = useSpring(() => ({
         opacity: 0,

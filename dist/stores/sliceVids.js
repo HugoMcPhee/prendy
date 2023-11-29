@@ -12,9 +12,9 @@ export default function sliceVids(prendyAssets) {
         wantToLoad: false,
         wantToUnload: false,
         wantToLoop: false,
-        switchSlice_keepProgress: true,
+        switchSlice_keepProgress: true, // maybe always default to true
         //
-        newPlayingVidStartedTime: 0,
+        newPlayingVidStartedTime: 0, // timestamp when the video starts playing after vidLetter_play changes
         nowSliceSeekedTime: 0, // timestamp when the new slice seeked (but not played yet)
         //
     });

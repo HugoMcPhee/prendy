@@ -1,14 +1,13 @@
+import { getRefs, getState, startItemEffect, stopEffect } from "repond";
 import { meta } from "../../meta";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 export function getSegmentFromStoryRules(place, cam) {
     var _a, _b, _c;
-    const { getRefs } = meta.repond;
     const globalRefs = getRefs().global.main;
     const foundRuleSegmentName = (_c = (_b = (_a = globalRefs.camSegmentRulesOptions) === null || _a === void 0 ? void 0 : _a[place]) === null || _b === void 0 ? void 0 : _b[cam]) === null || _c === void 0 ? void 0 : _c.call(_b, getUsefulStoryStuff());
     return foundRuleSegmentName;
 }
 export function doWhenNowSegmentChanges(checkingSegmentName, callback) {
-    const { getState, startItemEffect, stopEffect } = meta.repond;
     const initialNowSegmentName = getState().global.main.nowSegmentName;
     if (checkingSegmentName === initialNowSegmentName) {
         callback();
@@ -34,7 +33,6 @@ export function doWhenNowSegmentChanges(checkingSegmentName, callback) {
 export function doWhenNowCamChanges(
 // WARNING This might mess up if the place changes while the cam change was waiting
 checkingCamName, callback) {
-    const { getState, startItemEffect, stopEffect } = meta.repond;
     const { nowPlaceName } = getState().global.main;
     const initialNowCamName = getState().global.main.nowCamName;
     if (checkingCamName === initialNowCamName) {
@@ -57,7 +55,6 @@ checkingCamName, callback) {
     return ruleName;
 }
 export function doWhenNowPlaceChanges(checkingPlaceName, callback) {
-    const { getState, startItemEffect, stopEffect } = meta.repond;
     const { nowPlaceName } = getState().global.main;
     const initialNowPlaceName = getState().global.main.nowPlaceName;
     if (checkingPlaceName === initialNowPlaceName) {
@@ -80,7 +77,6 @@ export function doWhenNowPlaceChanges(checkingPlaceName, callback) {
     return ruleName;
 }
 export function doWhenPlaceFullyLoaded(checkingPlaceName, callback) {
-    const { getState, startItemEffect, stopEffect } = meta.repond;
     const { nowPlaceName } = getState().global.main;
     const initialNowPlaceName = getState().global.main.nowPlaceName;
     const initialIsLoadingBetweenPlaces = getState().global.main.initialIsLoadingBetweenPlaces;

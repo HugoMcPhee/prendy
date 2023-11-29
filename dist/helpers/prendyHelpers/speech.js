@@ -1,16 +1,17 @@
 import delay from "delay";
+import { getState, onNextTick, setState, startItemEffect, stopEffect } from "repond";
 import { length } from "stringz";
 import { getTypingDelayForText } from "../../helpers/prendyUtils/speechBubbles";
-import { clearTimeoutSafe } from "../utils";
-import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { meta } from "../../meta";
 import { getCharDollStuff } from "../prendyUtils/characters";
+import { getGlobalState, setGlobalState } from "../prendyUtils/global";
+import { clearTimeoutSafe } from "../utils";
 const showSpeechRefs = {
     closeTimeouts: {},
     waitTimeouts: {},
     zoomTimeout: undefined,
-    shownTextBools: {},
-    aSpeechIsShowing: false,
+    shownTextBools: {}, // { ["hello"] : true }
+    aSpeechIsShowing: false, // NOTE probably better as global state or refs
     originalZoomAmount: 1,
 };
 // TODO might need to have it per character if other characts have mini bubbles
@@ -20,7 +21,6 @@ const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character 
 const MIN_AUTO_SPEECH_TIME = 1500;
 export async function showSpeech(text, options) {
     const { prendyOptions } = meta.assets;
-    const { getState, onNextTick, setState, startItemEffect, stopEffect } = meta.repond;
     return new Promise((resolve, _reject) => {
         const { slateZoom: prevSlateZoom } = getGlobalState();
         const playerCharacter = getGlobalState().playerCharacter;
@@ -96,7 +96,6 @@ export async function showSpeech(text, options) {
     });
 }
 export function showMiniBubble(text, time = 100000) {
-    const { getState, setState } = meta.repond;
     const { playerCharacter } = getState().global.main;
     setState({ miniBubbles: { [playerCharacter]: { isVisible: true, text } } });
     // 10 second timeout incase the hideMiniBubble() didn't run from leaving a trigger
@@ -106,7 +105,6 @@ export function showMiniBubble(text, time = 100000) {
     }, time);
 }
 export function hideMiniBubble() {
-    const { getState, setState } = meta.repond;
     const { playerCharacter } = getState().global.main;
     if (showMiniBubbleRefs.closeTimeout !== null) {
         clearTimeout(showMiniBubbleRefs.closeTimeout);

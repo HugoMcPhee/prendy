@@ -1,7 +1,7 @@
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import delay from "delay";
+import { getState, setState } from "repond";
 import { setGlobalState } from "../prendyUtils/global";
-import { meta } from "../../meta";
 export async function enableMovement(canMove = true, revertDelay) {
     setGlobalState({ playerMovingPaused: !canMove });
     if (revertDelay) {
@@ -10,7 +10,6 @@ export async function enableMovement(canMove = true, revertDelay) {
     }
 }
 export function isHolding(pickupName) {
-    const { getState } = meta.repond;
     const { heldPickups } = getState().global.main;
     return heldPickups.includes(pickupName);
 }
@@ -22,6 +21,5 @@ export function takePickup(pickup, toHolding = true) {
     }));
 }
 export function setPlayerAnimations(newAnimationNames) {
-    const { setState } = meta.repond;
     setState({ players: { main: { animationNames: newAnimationNames } } });
 }

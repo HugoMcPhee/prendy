@@ -3,6 +3,7 @@ import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
+import { getState } from "repond";
 
 export function get_characterDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
   prendyAssets: T_MyTypes["Assets"],
@@ -159,12 +160,7 @@ export function get_characterDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
 export function get_startDynamicCharacterRulesForInitialState<
   CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>,
   T_MyTypes extends MyTypes = MyTypes
->(
-  characterDynamicRules: CharacterDynamicRules,
-  characterNames: readonly T_MyTypes["Types"]["CharacterName"][],
-  storeHelpers: T_MyTypes["Repond"]
-) {
-  const { getState } = storeHelpers;
+>(characterDynamicRules: CharacterDynamicRules, characterNames: readonly T_MyTypes["Types"]["CharacterName"][]) {
   return function startDynamicCharacterRulesForInitialState() {
     forEach(characterNames, (characterName) => {
       const { dollName } = getState().characters[characterName];

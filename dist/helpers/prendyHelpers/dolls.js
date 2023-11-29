@@ -1,5 +1,6 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
+import { getRefs, getState, setState } from "repond";
 import { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } from "../../helpers/prendyUtils/dolls";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
@@ -9,7 +10,6 @@ import { getSpotPosition, getSpotRotation } from "../prendyUtils/spots";
 // const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(meta.repond!);
 // --------------------------------------------------------------
 export function setDollPosition(dollName, newPositon) {
-    const { getRefs, setState } = meta.repond;
     const dollRefs = getRefs().dolls[dollName];
     if (!dollRefs.meshRef)
         return console.warn("NO MESH REF", dollName);
@@ -23,7 +23,6 @@ export function setDollPosition(dollName, newPositon) {
 function springDollPosition(dollName, newPositon) { }
 function slideDollPosition(dollName, newPositon) { }
 export function setDollRotation(dollName, newRotation) {
-    const { getRefs, setState } = meta.repond;
     const dollRefs = getRefs().dolls[dollName];
     if (!dollRefs.meshRef)
         return console.warn("no mesh ref", dollName);
@@ -42,7 +41,6 @@ export function dollLooksAtSpot({ place, spot, doll, }) {
     springDollRotationY(doll, angle);
 }
 export function setDollRotationY(dollName, newRotationY) {
-    const { setState } = meta.repond;
     setState({
         dolls: {
             [dollName]: {
@@ -53,11 +51,9 @@ export function setDollRotationY(dollName, newRotationY) {
     });
 }
 export function springDollRotationY(dollName, newRotation) {
-    const { setState } = meta.repond;
     setState({ dolls: { [dollName]: { rotationYGoal: newRotation } } });
 }
 export function springAddToDollRotationY(dollName, addedRotation, useShortestAngle = false) {
-    const { setState } = meta.repond;
     setState((state) => {
         const currentAngle = state.dolls[dollName].rotationYGoal;
         let newAngle = currentAngle + addedRotation;
@@ -76,7 +72,6 @@ export function springAddToDollRotationY(dollName, addedRotation, useShortestAng
     });
 }
 export function setDollAnimation(doll, animation) {
-    const { setState } = meta.repond;
     setState({ dolls: { [doll]: { nowAnimation: animation } } });
 }
 export function focusOnDoll(dollName, zoom) {
@@ -87,7 +82,6 @@ export function focusOnDoll(dollName, zoom) {
     });
 }
 export function setDollToSpot({ place, spot, doll: dollName, dontSetRotationState, }) {
-    const { getRefs, getState } = meta.repond;
     const newPositon = getSpotPosition(place, spot);
     const newRotation = getSpotRotation(place, spot);
     const dollRefs = getRefs().dolls[dollName];
@@ -100,7 +94,6 @@ export function setDollToSpot({ place, spot, doll: dollName, dontSetRotationStat
 // NOTE this isn't really working atm, maybe because falling sortof sets positionMoveMode to "push" ?
 // it was the movement speed being slow so stopping the mover from keeping going
 export function springDollToSpot({ place, spot, doll: dollName, }) {
-    const { setState } = meta.repond;
     const newPositon = getSpotPosition(place, spot);
     // const newRotation = getSpotRotation(place, spot);
     // FIXME , adding random so the same spot can be set as goal twice
@@ -117,7 +110,6 @@ export function springDollToSpot({ place, spot, doll: dollName, }) {
     });
 }
 export function moveDollAt2DAngle(dollName, angle, speed = 3) {
-    const { getRefs, getState, setState } = meta.repond;
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { positionIsMoving, positionMoveMode } = dollState;
@@ -133,7 +125,6 @@ export function moveDollAt2DAngle(dollName, angle, speed = 3) {
     dollRefs.positionMoverRefs.velocity.y = -1.5;
 }
 export function pushDollRotationY(dollName, direction, speed = 3) {
-    const { getRefs, getState, setState } = meta.repond;
     const dollState = getState().dolls[dollName];
     const dollRefs = getRefs().dolls[dollName];
     const { rotationYIsMoving, rotationYMoveMode } = dollState;
@@ -156,11 +147,9 @@ export function pushDollRotationY(dollName, direction, speed = 3) {
     // dollRefs.rotationYMoverRefs.velocity.y = -1.5;
 }
 export function hideDoll(dollName, shouldHide = true) {
-    const { setState } = meta.repond;
     setState({ dolls: { [dollName]: { isVisible: !shouldHide } } }, () => { });
 }
 export function toggleDollMeshes(dollName, toggledMeshes) {
-    const { setState } = meta.repond;
     // IDEA have dollState toggledMeshes and rules to auto enable the meshes
     // const { left_shoe, right_shoe, long_teeth } = otherMeshes;
     // const otherMeshes = getRefs().dolls[dollName].otherMeshes;
@@ -180,7 +169,6 @@ export function toggleDollMeshes(dollName, toggledMeshes) {
 }
 export function getDollBonePosition({ doll, model, bone, }) {
     var _a, _b;
-    const { getRefs } = meta.repond;
     // ModelNameFromDoll
     const dollRefs = getRefs().dolls.dino;
     const dollBone = (_b = (_a = dollRefs.assetRefs) === null || _a === void 0 ? void 0 : _a.bones) === null || _b === void 0 ? void 0 : _b[bone];

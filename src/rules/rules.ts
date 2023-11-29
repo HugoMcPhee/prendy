@@ -32,11 +32,7 @@ export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
   const modelRules = get_modelRules(prendyAssets, storeHelpers);
   const playerRules = get_playerRules(prendyAssets, storeHelpers);
   const dollDynamicRules = get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers);
-  const dollRules = get_dollRules(
-    dollDynamicRules as ReturnType<typeof get_dollDynamicRules>,
-    prendyAssets,
-    storeHelpers
-  );
+  const dollRules = get_dollRules(dollDynamicRules as ReturnType<typeof get_dollDynamicRules>, prendyAssets);
   const placeRules = get_placeRules(prendyAssets, storeHelpers);
   definiedPrendyRules.dolls = dollRules;
 
@@ -49,7 +45,7 @@ export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
 
   const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState<
     ReturnType<typeof get_characterDynamicRules>
-  >(characterDynamicRules, characterNames, storeHelpers);
+  >(characterDynamicRules, characterNames);
 
   let hiddenTime = 0;
 
@@ -113,7 +109,7 @@ export function makeStartPrendyMainRules<T_MyTypes extends MyTypes = MyTypes>(
     placeRules.startAll();
     const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState<
       ReturnType<typeof get_dollDynamicRules>
-    >(storeHelpers, dollDynamicRules as ReturnType<typeof get_dollDynamicRules>, dollNames);
+    >(dollDynamicRules as ReturnType<typeof get_dollDynamicRules>, dollNames);
     /**/
     playerRules.startAll();
     speechBubbleRules.startAll();

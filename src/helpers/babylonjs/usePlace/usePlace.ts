@@ -1,6 +1,7 @@
 import { Mesh, Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
+import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../../declarations";
 import { meta } from "../../../meta";
 import { setGlobalState } from "../../prendyUtils/global";
@@ -14,7 +15,6 @@ type SoundName = MyTypes["Types"]["SoundName"];
 type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
 
 export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
-  const { getRefs, getState, setState } = meta.repond!;
   const { placeInfoByName, soundFiles, prendyOptions } = meta.assets!;
 
   const placesRefs = getRefs().places;

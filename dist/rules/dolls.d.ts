@@ -11,7 +11,7 @@ export declare function get_dollDynamicRules<T_MyTypes extends MyTypes = MyTypes
     stop: (...args: any) => any;
     ruleNames: any[];
 };
-export declare function startDynamicDollRulesForInitialState<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>, T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["Repond"], dollDynamicRules: DollDynamicRules, dollNames: readonly T_MyTypes["Types"]["DollName"][]): () => void;
+export declare function startDynamicDollRulesForInitialState<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>, T_MyTypes extends MyTypes = MyTypes>(dollDynamicRules: DollDynamicRules, dollNames: readonly T_MyTypes["Types"]["DollName"][]): () => void;
 export declare function get_dollRules<DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>, T_MyTypes extends MyTypes = MyTypes>(dollDynamicRules: DollDynamicRules, prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["Repond"]): {
     stopAll: (...args: any) => any;
     startAll: (...args: any) => any;

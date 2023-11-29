@@ -1,6 +1,6 @@
 import { AbstractMesh } from "@babylonjs/core";
+import { getRefs, getState } from "repond";
 import { MyTypes } from "../../declarations";
-import { meta } from "../../meta";
 import { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } from "./dolls";
 
 // export export function get_characterStoryUtils<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
@@ -16,8 +16,6 @@ export function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
   place: T_Place,
   spot: SpotNameByPlace[T_Place]
 ) {
-  const { getState } = meta.repond!;
-
   const charactersState = getState().characters;
   const dollA = charactersState[character].dollName;
 
@@ -25,8 +23,6 @@ export function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
 }
 
 export function get2DAngleBetweenCharacters(charA: CharacterName, charB: CharacterName) {
-  const { getState } = meta.repond!;
-
   const charactersState = getState().characters;
   const dollA = charactersState[charA].dollName;
   const dollB = charactersState[charB].dollName;
@@ -48,8 +44,6 @@ type DollStates = ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
 type DollRefs = ReturnType<PrendyStoreHelpers["getRefs"]>["dolls"];
 
 export function getCharDollStuff<T_CharacterName extends CharacterName>(charName: T_CharacterName) {
-  const { getRefs, getState } = meta.repond!;
-
   const { dollName } = getState().characters[charName];
   const dollState = getState().dolls[dollName];
   const dollRefs = getRefs().dolls[dollName];

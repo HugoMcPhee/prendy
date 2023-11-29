@@ -1,15 +1,15 @@
 // @refresh-reset
 import React, { useRef, useState } from "react";
+import { getRefs } from "repond";
 import { MyTypes } from "../../../declarations";
 import { meta } from "../../../meta";
 
 type PickupName = MyTypes["Types"]["PickupName"];
 
-type Props = { name: PickupName };
+type Props = { name: PickupName; children: React.ReactNode };
 
 export function PickupButton({ name }: Props) {
   const { pickupsInfo } = meta.assets!;
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const pickupInfo = pickupsInfo[name];

@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { animated, useSpring } from "react-spring";
+import { setState, useStore } from "repond";
 import { meta } from "../../meta";
 const SIZES = {
     leftThumbContainer: 110,
 };
 function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled }) {
-    const { getRefs, setState } = meta.repond;
     const [isPressed, setIsPressed] = useState(false);
     // console.log("disabled", disabled);
     const styles = useMemo(() => ({
@@ -56,7 +56,6 @@ function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled
         React.createElement("div", { style: styles.text }, children)));
 }
 export function VirtualButtons(_) {
-    const { getRefs, setState, useStore } = meta.repond;
     const { prendyOptions } = meta.assets;
     const { hasInteracting, hasJumping } = prendyOptions;
     const { canShowVirtualButtons } = useStore(({ players: { main } }) => main, {

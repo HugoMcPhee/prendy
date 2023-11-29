@@ -2,6 +2,7 @@ import { breakableForEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
 import { goToNewPlace } from "../helpers/prendyHelpers/scene";
 import { meta } from "../meta";
+import { useStore, useStoreItemPropsEffect, getState, setState } from "repond";
 
 type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
 type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
@@ -25,7 +26,6 @@ type Props = {};
 
 export function Player(_props: Props) {
   const { placeInfoByName, prendyOptions } = meta.assets!;
-  const { useStoreItemPropsEffect, getState, setState, useStore } = meta.repond!;
 
   const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
     type: "global",

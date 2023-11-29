@@ -1,6 +1,5 @@
-import { meta } from "../../meta";
+import { getState, setState } from "repond";
 export function setGlobalState(newState, callback) {
-    const { setState } = meta.repond;
     if (typeof newState === "function") {
         setState((state) => ({ global: { main: newState(state.global.main) } }), callback);
     }
@@ -9,6 +8,5 @@ export function setGlobalState(newState, callback) {
     }
 }
 export function getGlobalState() {
-    const { getState } = meta.repond;
     return getState().global.main;
 }

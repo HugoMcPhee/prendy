@@ -1,3 +1,3 @@
-/// <reference types="react" />
+import React from "react";
 import { RepondHelpers } from "../declarations";
-export declare function get_DebugFrameRate(storeHelpers: RepondHelpers): () => JSX.Element;
+export declare function get_DebugFrameRate(storeHelpers: RepondHelpers): () => React.JSX.Element;

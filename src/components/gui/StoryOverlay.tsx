@@ -2,12 +2,11 @@
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
 import { meta } from "../../meta";
+import { useStoreItemPropsEffect } from "repond";
 
 type Props = {};
 
 export function StoryOverlay(_props: Props) {
-  const { useStoreItemPropsEffect } = meta.repond!;
-
   const theOverlay = useRef<HTMLDivElement>(null);
 
   const [overlaySpring, overlaySpringApi] = useSpring(() => ({

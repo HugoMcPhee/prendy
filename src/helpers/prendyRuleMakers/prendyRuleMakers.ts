@@ -1,4 +1,14 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
+import {
+  getRefs,
+  getState,
+  makeNestedLeaveRuleMaker,
+  makeNestedRuleMaker,
+  makeRules,
+  setState,
+  startItemEffect,
+  stopEffect,
+} from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { getCharDollStuff } from "../prendyUtils/characters";
@@ -21,8 +31,6 @@ type APlaceRefs = AllPlacesRefs[keyof AllPlacesRefs];
 type APlaceRefsCamsRefs = APlaceRefs["camsRefs"];
 
 export function getUsefulStoryStuff() {
-  const { getState, getRefs } = meta.repond!;
-
   const storyState = getState().story.main as StoryState;
   const storyRefs = getRefs().story.main as StoryRefs;
   const globalState = getState().global.main as GlobalState;
@@ -60,7 +68,6 @@ export function getUsefulStoryStuff() {
 // >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 
 export function setStoryState(newState: Partial<StoryState>) {
-  const { setState } = meta.repond!;
   setState({ story: { main: newState } });
 }
 
@@ -94,9 +101,6 @@ type CamSegmentRulesOptionsUntyped = Partial<{
 // --------------------------------------------------
 //
 //` makeCamChangeRules
-
-// const { getRefs, getState, makeRules, startItemEffect, stopEffect, makeNestedRuleMaker, makeNestedLeaveRuleMaker } =
-//   meta.repond!;
 
 type T_ItemType = keyof ReturnType<MyTypes["Repond"]["getState"]>;
 
@@ -133,7 +137,6 @@ type CamChangeRulesReturn = {
 type CamChangeRules = (callBacksObject: CamChangeRulesParam) => CamChangeRulesReturn;
 
 export function makeCamChangeRules(callBacksObject: CamChangeRulesParam) {
-  const { makeNestedRuleMaker } = meta.repond!;
   return makeNestedRuleMaker(
     ["global", "main", "nowPlaceName"],
     ["global", "main", "nowCamName"],
@@ -143,7 +146,6 @@ export function makeCamChangeRules(callBacksObject: CamChangeRulesParam) {
 }
 
 export function makeCamLeaveRules(callBacksObject: CamChangeRulesParam) {
-  const { makeNestedLeaveRuleMaker } = meta.repond!;
   return makeNestedLeaveRuleMaker(
     ["global", "main", "nowPlaceName"],
     ["global", "main", "nowCamName"],
@@ -164,7 +166,6 @@ type CamSegmentRulesOptions = Partial<{
 }>;
 
 export function makeCamSegmentRules(callBacksObject: CamSegmentRulesOptions) {
-  const { getRefs } = meta.repond!;
   return {
     startAll() {
       // This sets an options object in global refs that gets checked when changing segment,
@@ -186,8 +187,6 @@ export function makePickupsRules({
   onUsePickupToTalk: ReturnType<typeof makeOnUsePickupToTalk>;
   onUsePickupGenerally: ReturnType<typeof makeOnUsePickupGenerally>;
 }) {
-  const { getRefs } = meta.repond!;
-
   const onPickupButtonClick = (pickupName: PickupName) => {
     const didUsePickupAtTrigger = onUsePickupAtTrigger(pickupName);
     const didUsePickupWithDoll = onUsePickupToTalk(pickupName);
@@ -221,8 +220,6 @@ export function makeInteractButtonRules({
   onInteractAtTrigger: ReturnType<typeof makeOnInteractAtTrigger>;
   onInteractAtTalk: ReturnType<typeof makeOnInteractToTalk>;
 }) {
-  const { makeRules } = meta.repond!;
-
   const interactButtonRules = makeRules(({ itemEffect, effect }) => ({
     whenInteractButtonClicked: itemEffect({
       run() {
@@ -253,8 +250,6 @@ export function makeOnInteractAtTrigger(
   characterName: CharacterName = meta.assets!.characterNames[0]
 ) {
   const { placeInfoByName } = meta.assets!;
-
-  const { getState } = meta.repond!;
 
   const onClickInteractButton = () => {
     const usefulStoryStuff = getUsefulStoryStuff();
@@ -291,7 +286,6 @@ export function makeOnInteractToTalk(
   distanceType: "touch" | "talk" = "talk",
   characterName: CharacterName = meta.assets!.characterNames[0]
 ) {
-  const { getState } = meta.repond!;
   const { dollNames } = meta.assets!;
 
   const onClickInteractButton = () => {
@@ -337,7 +331,6 @@ export function makeOnUsePickupAtTrigger(
   callBacksObject: OnUsePickupAtTriggerOptions,
   characterName: CharacterName = meta.assets!.characterNames[0]
 ) {
-  const { getState } = meta.repond!;
   const { placeInfoByName } = meta.assets!;
 
   const onClickPickupButton = <T_PickupName extends PickupName>(pickupName: T_PickupName) => {
@@ -447,8 +440,6 @@ type PlaceLoadRulesOptions = Partial<{
   [P_PlaceName in PlaceName]: StoryCallback;
 }>;
 export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksObject: PlaceLoadRulesOptions) {
-  const { makeRules } = meta.repond!;
-
   return makeRules(({ itemEffect }) => ({
     whenPlaceFinishedLoading: itemEffect({
       run() {
@@ -473,8 +464,6 @@ export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksO
   }));
 }
 export function makePlaceUnloadRules(callBacksObject: PlaceLoadRulesOptions) {
-  const { makeRules, startItemEffect, stopEffect } = meta.repond!;
-
   return makeRules(({ itemEffect }) => ({
     whenPlaceFinishedUnloading: itemEffect({
       run({ previousValue: prevPlace, newValue: newPlace }) {
@@ -516,7 +505,6 @@ export function makeTouchRules(
     whenLeave?: boolean;
   }
 ) {
-  const { getState, makeRules } = meta.repond!;
   const { dollNames } = meta.assets!;
 
   const { characterName, distanceType = "touch", whenLeave = false } = options ?? {};
@@ -588,7 +576,6 @@ export function makeTriggerRules(
 
   const charactersWithTriggers = Object.keys(callBacksObject) as CharacterName[];
   console.log("charactersWithTriggers", charactersWithTriggers);
-  const { makeRules } = meta.repond!;
   const { placeInfoByName } = meta.assets!;
 
   return makeRules(({ itemEffect }) => ({

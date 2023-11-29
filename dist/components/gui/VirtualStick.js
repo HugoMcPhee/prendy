@@ -1,12 +1,11 @@
 import { getSpeedAndAngleFromVector, getVectorFromSpeedAndAngle, getVectorSpeed, } from "chootils/dist/speedAngleDistance2d";
 import React, { useCallback, useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { meta } from "../../meta";
+import { getRefs, getState, setState } from "repond";
 const SIZES = {
     leftThumbContainer: 110,
 };
 export function VirtualStick(_) {
-    const { getRefs, getState, setState } = meta.repond;
     const globalRefs = getRefs().global.main;
     const { current: local } = useRef({
         springAllowed: true,
@@ -23,7 +22,7 @@ export function VirtualStick(_) {
         floatLeft: 0,
         floatTop: 0,
         //
-        pointerDownTime: 0,
+        pointerDownTime: 0, // timestamp
         //
         pointerId: 0,
     });

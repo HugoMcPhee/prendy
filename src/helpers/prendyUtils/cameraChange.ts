@@ -1,6 +1,7 @@
 import { AbstractMesh, Effect, FxaaPostProcess, PBRMaterial, PostProcess, Scene, ShaderStore } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
+import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { DefaultCameraRefs } from "../../stores/places";
@@ -85,7 +86,6 @@ export function getSafeSegmentName<
 
 // Updates both video textures and probe textures for the new cameras
 export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
-  const { getRefs, getState, setState } = meta.repond!;
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
@@ -240,7 +240,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 }
 
 export function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
-  const { getRefs } = meta.repond!;
   const { dollNames } = meta.assets!;
   const globalRefs = getRefs().global.main;
 
@@ -276,7 +275,6 @@ export function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
 }
 
 export function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
-  const { getRefs, getState, setState } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   if (globalRefs.backdropVideoTex) {
@@ -288,7 +286,6 @@ export function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
 }
 
 export function updateVideoTexture() {
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
@@ -296,7 +293,6 @@ export function updateVideoTexture() {
 }
 
 export function applyProbeToAllDollMaterials() {
-  const { getRefs, getState } = meta.repond!;
   const { dollNames } = meta.assets!;
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
@@ -334,7 +330,6 @@ export function applyProbeToAllDollMaterials() {
 }
 
 export function applyProbeToAllParticleMaterials() {
-  const { getRefs, getState } = meta.repond!;
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
@@ -360,8 +355,6 @@ export function applyProbeToAllParticleMaterials() {
 
 // note adding to slice vids cause its easier to follow for now? even though it's not seperated
 export function updateNowStuffWhenSliceChanged() {
-  const { getState, setState } = meta.repond!;
-
   // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
 
   const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;

@@ -69,11 +69,9 @@ export function get_AllTestVideoStuff(prendyAssets, storeHelpers) {
             React.createElement("div", null, `➰ ${stateVidId_waiting}`)));
     }
     return function AllTestVideoStuff() {
-        return (React.createElement(React.Fragment, null,
-            placeNames.map((placeName) => (React.createElement("div", { style: { ...addLayout({ x: "center", y: "center", way: "right" }) } },
-                React.createElement(TestVideos, { placeName: placeName }),
-                React.createElement(TestVideoState, { placeName: placeName })))),
-            " "));
+        return (React.createElement(React.Fragment, null, placeNames.map((placeName) => (React.createElement("div", { style: { ...addLayout({ x: "center", y: "center", way: "right" }) } },
+            React.createElement(TestVideos, { placeName: placeName }),
+            React.createElement(TestVideoState, { placeName: placeName }))))));
     };
 }
 // add this to see scene behind the scene texture rectangle

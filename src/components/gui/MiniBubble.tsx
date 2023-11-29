@@ -2,10 +2,10 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
+import { getState, useStore, useStoreEffect } from "repond";
 import { MyTypes } from "../../declarations";
 import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../helpers/prendyUtils/characters";
-import { meta } from "../../meta";
 
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
@@ -38,8 +38,6 @@ type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemTyp
 type Props = { name: keyof AllItemsState<"miniBubbles"> };
 
 export function MiniBubble({ name }: Props) {
-  const { useStoreEffect, useStore, getState } = meta.repond!;
-
   const theRectangle = useRef<HTMLDivElement>(null);
   const theTextRectangle = useRef<HTMLDivElement>(null);
   const theTriangle = useRef<HTMLDivElement>(null);

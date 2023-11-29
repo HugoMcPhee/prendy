@@ -20,6 +20,7 @@ import {
   updateDollScreenPosition,
 } from "../helpers/prendyUtils/dolls";
 import { timeStatePath } from "../stores/global/global";
+import { getPreviousState, getState, makeRules, onNextTick, setState } from "repond";
 
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
@@ -102,13 +103,7 @@ export function get_dollDynamicRules<T_MyTypes extends MyTypes = MyTypes>(
 export function startDynamicDollRulesForInitialState<
   DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
   T_MyTypes extends MyTypes = MyTypes
->(
-  storeHelpers: T_MyTypes["Repond"],
-  dollDynamicRules: DollDynamicRules,
-  dollNames: readonly T_MyTypes["Types"]["DollName"][]
-) {
-  const { getState } = storeHelpers;
-
+>(dollDynamicRules: DollDynamicRules, dollNames: readonly T_MyTypes["Types"]["DollName"][]) {
   forEach(dollNames, (dollName) => {
     const { modelName } = getState().dolls[dollName];
     if (!modelName) return;
@@ -127,7 +122,7 @@ export function startDynamicDollRulesForInitialState<
 export function get_dollRules<
   DollDynamicRules extends ReturnType<typeof get_dollDynamicRules>,
   T_MyTypes extends MyTypes = MyTypes
->(dollDynamicRules: DollDynamicRules, prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["Repond"]) {
+>(dollDynamicRules: DollDynamicRules, prendyAssets: T_MyTypes["Assets"]) {
   type AnyAnimationName = T_MyTypes["Types"]["AnyAnimationName"];
   type DollName = T_MyTypes["Types"]["DollName"];
   type DollOptions = T_MyTypes["Types"]["DollOptions"];
@@ -137,8 +132,7 @@ export function get_dollRules<
   const { modelInfoByName, dollNames, prendyOptions, placeInfoByName } = prendyAssets;
   // const { getQuickDistanceBetweenDolls, inRangesAreTheSame, setDollAnimWeight, updateDollScreenPosition } =
   //   get_dollUtils(prendyAssets, storeHelpers);
-  const { makeRules, getPreviousState, getState, getRefs, setState, onNextTick } = storeHelpers;
-  const { addMoverRules } = makeMoverUtils(storeHelpers, timeStatePath);
+  const { addMoverRules } = makeMoverUtils(timeStatePath);
 
   type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
   type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];

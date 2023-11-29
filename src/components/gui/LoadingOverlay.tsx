@@ -1,13 +1,11 @@
 // @refresh-reset
 import React, { useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { meta } from "../../meta";
+import { setState, useStoreItemPropsEffect } from "repond";
 
 type Props = {};
 
 export function LoadingOverlay(_props: Props) {
-  const { useStoreItemPropsEffect, setState } = meta.repond!;
-
   const theOverlay = useRef<HTMLDivElement>(null);
 
   const [overlaySpring, overlaySpringApi] = useSpring(() => ({

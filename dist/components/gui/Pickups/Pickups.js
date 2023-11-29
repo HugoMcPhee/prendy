@@ -1,9 +1,8 @@
 // @refresh-reset
 import React from "react";
-import { meta } from "../../../meta";
+import { getRefs, useStore } from "repond";
 import { PickupButton } from "./PickupButton";
 export function Pickups(_props) {
-    const { getRefs, useStore } = meta.repond;
     const globalRefs = getRefs().global.main;
     // const buttonsHolderRef = useRef<StackPanel>(null);
     const { heldPickups } = useStore(({ global: { main } }) => main, {

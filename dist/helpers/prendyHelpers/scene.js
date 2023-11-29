@@ -1,10 +1,10 @@
 import delay from "delay";
-import { setGlobalState } from "../prendyUtils/global";
+import { getState, onNextTick, setState } from "repond";
 import { meta } from "../../meta";
-import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } from "../prendyUtils/scene";
 import { get2DAngleFromCharacterToSpot, getCharDollStuff } from "../prendyUtils/characters";
+import { setGlobalState } from "../prendyUtils/global";
+import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } from "../prendyUtils/scene";
 async function changeSegmentAtLoop(_place, newSegmentName) {
-    const { onNextTick } = meta.repond;
     // NOTE WARNING This will probably break if goalSegmentNameAtLoop changes from somewhere else!!!
     // to fix: could listen to changes to goalSegmentNameAtLoop
     // might be fixed now that doWhenNowSegmentChanges listens to any change, instead of waiting for the expected segment name
@@ -27,7 +27,6 @@ async function changeSegmentAtLoop(_place, newSegmentName) {
 }
 async function changeCameraAtLoop(_place, newCamName) {
     return new Promise((resolve, _reject) => {
-        const { setState } = meta.repond;
         setState((state) => {
             const { goalCamNameAtLoop } = state.global.main;
             if (goalCamNameAtLoop) {
@@ -45,7 +44,6 @@ async function changeCameraAtLoop(_place, newCamName) {
     });
 }
 export function lookAtSpot(place, spot, character) {
-    const { getState, setState } = meta.repond;
     const { playerCharacter } = getState().global.main;
     const editedCharacter = character !== null && character !== void 0 ? character : playerCharacter;
     const charDollStuff = getCharDollStuff(editedCharacter);
@@ -54,7 +52,6 @@ export function lookAtSpot(place, spot, character) {
     setState({ dolls: { [dollName]: { rotationYGoal: angle } } });
 }
 export function hideWallIf(placeName, wallName, isDisabled) {
-    const { setState } = meta.repond;
     // NOTE could update to set properties in a loop to avoid spreading
     setState((state) => ({
         places: {
@@ -86,7 +83,6 @@ export function setSegment(_placeName, segmentName
     });
 }
 export function setCamera(_placeName, cameraName, whenToRun = "now") {
-    const { getState, setState } = meta.repond;
     return new Promise((resolve, _reject) => {
         if (whenToRun === "now") {
             const { nowPlaceName } = getState().global.main;
@@ -106,7 +102,6 @@ export function setCamera(_placeName, cameraName, whenToRun = "now") {
 }
 export function goToNewPlace(toOption, charName = meta.assets.characterNames[0]) {
     var _a;
-    const { onNextTick, setState } = meta.repond;
     const { placeInfoByName } = meta.assets;
     // NOTE could include waitForPlaceFullyLoaded here so it can be awaited
     let { toSpot, toPlace, toPositon, toCam, toSegment } = toOption;

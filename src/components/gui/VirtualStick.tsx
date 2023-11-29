@@ -5,8 +5,7 @@ import {
 } from "chootils/dist/speedAngleDistance2d";
 import React, { useCallback, useEffect, useRef } from "react";
 import { animated, useSpring } from "react-spring";
-import { RepondHelpers } from "../../declarations";
-import { meta } from "../../meta";
+import { getRefs, getState, setState } from "repond";
 
 type Props = {};
 
@@ -15,7 +14,6 @@ const SIZES = {
 };
 
 export function VirtualStick(_: Props) {
-  const { getRefs, getState, setState } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const { current: local } = useRef({

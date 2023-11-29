@@ -1,16 +1,15 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
+import { getRefs } from "repond";
 import { MyTypes } from "../../declarations";
-import { getScene } from "../babylonjs/getSceneOrEngineUtils";
 import { meta } from "../../meta";
+import { getScene } from "../babylonjs/getSceneOrEngineUtils";
 
 // export function get_soundStoryHelpers<MyTypes extends MyTypes = MyTypes>() {
 type MusicName = MyTypes["Types"]["MusicName"];
 type SoundName = MyTypes["Types"]["SoundName"];
 
 // const { musicNames, musicFiles, soundNames, soundFiles } = meta.assets!;
-// const { getRefs } = meta.repond!;
-
 // const globalRefs = getRefs().global.main;
 
 // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
@@ -18,7 +17,6 @@ type SoundName = MyTypes["Types"]["SoundName"];
 // Auto load music and play it, and stop other music if it's already playing
 export function playSound(soundName: SoundName, options?: { loop?: boolean }) {
   const { soundFiles } = meta.assets!;
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const scene = getScene();
@@ -42,7 +40,6 @@ export function playSound(soundName: SoundName, options?: { loop?: boolean }) {
 }
 
 export function stopSound(soundName: SoundName) {
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const foundSound = globalRefs.sounds[soundName];
@@ -52,7 +49,6 @@ export function stopSound(soundName: SoundName) {
 
 export function stopAllSounds() {
   const { soundNames } = meta.assets!;
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
   forEach(soundNames, (soundName) => globalRefs.sounds[soundName]?.stop());
 }
@@ -60,7 +56,6 @@ export function stopAllSounds() {
 // Auto load music and play it, and stop other music if it's already playing
 export function playNewMusic(newMusicName: MusicName) {
   const { musicNames, musicFiles } = meta.assets!;
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   const scene = getScene();
@@ -89,7 +84,6 @@ export function playNewMusic(newMusicName: MusicName) {
 }
 export function stopAllMusic() {
   const { musicNames } = meta.assets!;
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
 
   forEach(musicNames, (musicName) => globalRefs.music[musicName]?.stop());

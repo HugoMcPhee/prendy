@@ -1,8 +1,8 @@
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import delay from "delay";
+import { getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { setGlobalState } from "../prendyUtils/global";
-import { meta } from "../../meta";
 
 type AnyAnimationName = MyTypes["Types"]["AnyAnimationName"];
 type PickupName = MyTypes["Types"]["PickupName"];
@@ -21,7 +21,6 @@ export async function enableMovement(canMove: boolean = true, revertDelay?: numb
 }
 
 export function isHolding(pickupName: PickupName) {
-  const { getState } = meta.repond!;
   const { heldPickups } = getState().global.main;
   return heldPickups.includes(pickupName);
 }
@@ -35,6 +34,5 @@ export function takePickup(pickup: PickupName, toHolding: boolean = true) {
 }
 
 export function setPlayerAnimations(newAnimationNames: PlayerAnimationNames) {
-  const { setState } = meta.repond!;
   setState({ players: { main: { animationNames: newAnimationNames } } });
 }

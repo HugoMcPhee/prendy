@@ -1,15 +1,14 @@
+import { getState } from "repond";
 import { RepondHelpers, PrendyStores } from "../../declarations";
 import { meta } from "../../meta";
 
 // export function get_speechBubblesUtils(storeHelpers: RepondHelpers, prendyStores: PrendyStores) {
-// const { getState } = meta.repond!;
 
 type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"] extends never
   ? string
   : keyof PrendyStores["speechBubbles"]["startStates"];
 
 export function getTypingDelayForLetter(letter: string, speechBubbleName: SpeechBubbleName) {
-  const { getState } = meta.repond!;
   const { typingSpeed } = getState().speechBubbles[speechBubbleName];
 
   let typingDelay = typingSpeed;

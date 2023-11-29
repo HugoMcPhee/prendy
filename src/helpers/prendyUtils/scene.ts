@@ -1,5 +1,5 @@
+import { getRefs, getState, onNextTick, startItemEffect, stopEffect } from "repond";
 import { MyTypes } from "../../declarations";
-import { meta } from "../../meta";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
 type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
@@ -11,7 +11,6 @@ export function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extend
   place: T_Place,
   cam: T_Cam
 ) {
-  const { getRefs } = meta.repond!;
   const globalRefs = getRefs().global.main;
   const foundRuleSegmentName = (globalRefs.camSegmentRulesOptions as any)?.[place]?.[cam]?.(getUsefulStoryStuff());
 
@@ -19,7 +18,6 @@ export function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extend
 }
 
 export function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, callback: () => void) {
-  const { getState, startItemEffect, stopEffect } = meta.repond!;
   const initialNowSegmentName = getState().global.main.nowSegmentName;
   if (checkingSegmentName === initialNowSegmentName) {
     callback();
@@ -47,7 +45,6 @@ export function doWhenNowCamChanges(
   checkingCamName: AnyCameraName,
   callback: () => void
 ) {
-  const { getState, startItemEffect, stopEffect } = meta.repond!;
   const { nowPlaceName } = getState().global.main;
 
   const initialNowCamName = getState().global.main.nowCamName;
@@ -71,7 +68,6 @@ export function doWhenNowCamChanges(
 }
 
 export function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: () => void) {
-  const { getState, startItemEffect, stopEffect } = meta.repond!;
   const { nowPlaceName } = getState().global.main;
 
   const initialNowPlaceName = getState().global.main.nowPlaceName;
@@ -95,7 +91,6 @@ export function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: ()
 }
 
 export function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: () => void) {
-  const { getState, startItemEffect, stopEffect } = meta.repond!;
   const { nowPlaceName } = getState().global.main;
 
   const initialNowPlaceName = getState().global.main.nowPlaceName;
@@ -139,4 +134,4 @@ export async function waitForNowCamToChange(checkingCamName: AnyCameraName) {
   });
 }
 
-export const waitForNextTick = () => new Promise((resolve) => meta.repond!.onNextTick(resolve));
+export const waitForNextTick = () => new Promise((resolve) => onNextTick(resolve));

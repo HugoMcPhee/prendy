@@ -8,14 +8,15 @@ import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalP
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import { getDefaultInRangeFunction, getModelNameFromDoll, getQuickDistanceBetweenDolls, inRangesAreTheSame, saveModelStuffToDoll, setDollAnimWeight, setupLightMaterial, updateDollScreenPosition, } from "../helpers/prendyUtils/dolls";
 import { timeStatePath } from "../stores/global/global";
+import { getState } from "repond";
 // const dollDynamicRules = makeDynamicRules({
 //   whenModelLoadsForDoll
 // });
 // when the models isLoading becomes true
 // TODO add to art options?
 const rangeOptions = {
-    touch: 1,
-    talk: 2,
+    touch: 1, // prev 2
+    talk: 2, // prev 3
     see: 6, // prev 20
 };
 export const rangeOptionsQuick = {
@@ -67,8 +68,7 @@ export function get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers) {
 // FIXME
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
 // NOTE rules can be manually triggered atleast, but the rule might not know an item was added
-export function startDynamicDollRulesForInitialState(storeHelpers, dollDynamicRules, dollNames) {
-    const { getState } = storeHelpers;
+export function startDynamicDollRulesForInitialState(dollDynamicRules, dollNames) {
     forEach(dollNames, (dollName) => {
         const { modelName } = getState().dolls[dollName];
         if (!modelName)

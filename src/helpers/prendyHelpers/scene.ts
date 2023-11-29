@@ -1,10 +1,11 @@
 import { Point3D } from "chootils/dist/points3d";
 import delay from "delay";
+import { getState, onNextTick, setState } from "repond";
 import { MyTypes } from "../../declarations";
-import { setGlobalState } from "../prendyUtils/global";
 import { meta } from "../../meta";
-import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } from "../prendyUtils/scene";
 import { get2DAngleFromCharacterToSpot, getCharDollStuff } from "../prendyUtils/characters";
+import { setGlobalState } from "../prendyUtils/global";
+import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } from "../prendyUtils/scene";
 
 // export function get_sceneStoryHelpers<MyTypes extends MyTypes = MyTypes>(
 type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
@@ -36,8 +37,6 @@ async function changeSegmentAtLoop<
   T_Place extends PlaceName,
   T_Segment extends AnySegmentName // NOTE & might mes with the tye here
 >(_place: T_Place, newSegmentName: T_Segment) {
-  const { onNextTick } = meta.repond!;
-
   // NOTE WARNING This will probably break if goalSegmentNameAtLoop changes from somewhere else!!!
   // to fix: could listen to changes to goalSegmentNameAtLoop
   // might be fixed now that doWhenNowSegmentChanges listens to any change, instead of waiting for the expected segment name
@@ -67,7 +66,6 @@ async function changeCameraAtLoop<
   T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName // NOTE new & type
 >(_place: T_Place, newCamName: T_Cam) {
   return new Promise<void>((resolve, _reject) => {
-    const { setState } = meta.repond!;
     setState((state) => {
       const { goalCamNameAtLoop } = state.global.main;
       if (goalCamNameAtLoop) {
@@ -92,7 +90,6 @@ export function lookAtSpot<T_Place extends PlaceName>(
   spot: SpotNameByPlace[T_Place],
   character?: CharacterName
 ) {
-  const { getState, setState } = meta.repond!;
   const { playerCharacter } = getState().global.main;
   const editedCharacter = character ?? (playerCharacter as CharacterName);
   const charDollStuff = getCharDollStuff(editedCharacter);
@@ -107,7 +104,6 @@ export function hideWallIf<T_Place extends PlaceName, T_Wall extends WallNameByP
   wallName: T_Wall,
   isDisabled: boolean
 ) {
-  const { setState } = meta.repond!;
   // NOTE could update to set properties in a loop to avoid spreading
   setState((state) => ({
     places: {
@@ -148,7 +144,6 @@ export function setCamera<
   T_Place extends PlaceName,
   T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName // NOTE & Type
 >(_placeName: T_Place, cameraName: T_Cam, whenToRun: "now" | "at loop" = "now") {
-  const { getState, setState } = meta.repond!;
   return new Promise<void>((resolve, _reject) => {
     if (whenToRun === "now") {
       const { nowPlaceName } = getState().global.main;
@@ -172,7 +167,6 @@ export function goToNewPlace<T_PlaceName extends PlaceName>(
   toOption: ToPlaceOption<T_PlaceName>,
   charName: CharacterName = meta.assets!.characterNames[0]
 ) {
-  const { onNextTick, setState } = meta.repond!;
   const { placeInfoByName } = meta.assets!;
 
   // NOTE could include waitForPlaceFullyLoaded here so it can be awaited

@@ -1,9 +1,9 @@
+import { getRefs, getState, startItemEffect, stopEffect } from "repond";
 import { meta } from "../../meta";
 import { getSafeCamName, getSafeSegmentName } from "./cameraChange";
 import { getGlobalState } from "./global";
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 export function getSliceVidVideo(itemName) {
-    const { getRefs, getState } = meta.repond;
     const sliceVidState = getState().sliceVids[itemName];
     const { stateVidId_playing } = sliceVidState;
     if (!stateVidId_playing)
@@ -12,7 +12,6 @@ export function getSliceVidVideo(itemName) {
     return backdropVidRefs.videoElement;
 }
 export function getSliceVidWaitingVideo(itemName) {
-    const { getRefs, getState } = meta.repond;
     const sliceVidState = getState().sliceVids[itemName];
     const { stateVidId_waiting } = sliceVidState;
     if (!stateVidId_waiting)
@@ -22,7 +21,6 @@ export function getSliceVidWaitingVideo(itemName) {
 }
 // temporary rule, that gets removed when it finishes
 export function doWhenSliceVidStateChanges(sliceVidId, checkShouldRun, callback) {
-    const { getState, startItemEffect, stopEffect } = meta.repond;
     const { placeInfoByName } = meta.assets;
     const initialVidState = getState().sliceVids[sliceVidId].sliceVidState;
     if (checkShouldRun(initialVidState)) {
@@ -56,7 +54,6 @@ export function getSliceEndTime(slice) {
     return slice.time + slice.duration - BEFORE_LOOP_PADDING;
 }
 export function getSliceForPlace(place, camName, segment) {
-    const { getRefs, getState, startItemEffect, stopEffect } = meta.repond;
     const { placeInfoByName } = meta.assets;
     const { nowPlaceName: safePlace } = getGlobalState();
     const safeCam = getSafeCamName(camName);
@@ -72,13 +69,11 @@ export function getSliceForPlace(place, camName, segment) {
     return { time: newTime, duration: newDuration };
 }
 export function checkIfVideoUnloading(placeName) {
-    const { getRefs, getState, startItemEffect, stopEffect } = meta.repond;
     const itemState = getState().sliceVids[placeName];
     const { sliceVidState } = itemState;
     return sliceVidState === "unloaded" || sliceVidState === "waitingForUnload";
 }
 export function checkIfVideoAlreadyChanging(placeName) {
-    const { getRefs, getState, startItemEffect, stopEffect } = meta.repond;
     const itemState = getState().sliceVids[placeName];
     const { sliceVidState } = itemState;
     const isAlreadyLoopingOrChangingSlice = sliceVidState === "beforeDoLoop" ||
@@ -90,7 +85,6 @@ export function checkIfVideoAlreadyChanging(placeName) {
 // Runs on changes to tick, in the checkVideoLoop flow
 export function checkForVideoLoop(placeName) {
     var _a;
-    const { getRefs, getState, startItemEffect, stopEffect } = meta.repond;
     // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
     const itemState = getState().sliceVids[placeName];
     const { nowSlice } = itemState;

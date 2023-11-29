@@ -1,12 +1,10 @@
-import { meta } from "../../meta";
+import { getRefs } from "repond";
 export function getSpotPosition(place, spot) {
-    const { getRefs } = meta.repond;
     const placesRefs = getRefs().places;
     const newPositon = placesRefs[place].spotPositions[spot].clone();
     return newPositon;
 }
 export function getSpotRotation(place, spot) {
-    const { getRefs } = meta.repond;
     const placesRefs = getRefs().places;
     const newRotation = placesRefs[place].spotRotations[spot].clone();
     return newRotation;

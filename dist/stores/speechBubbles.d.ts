@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { CSSProperties } from "react";
 import { MyTypes } from "../declarations";
 export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
@@ -24,7 +23,7 @@ export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prend
     refs: () => {
         bubbleRef: any;
         textRef: any;
-        currentTimeout: NodeJS.Timeout | null;
+        currentTimeout: number | null;
         videoRef: HTMLVideoElement | null;
     };
     startStates: { [K_CharacterName in T_MyTypes["Types"]["CharacterName"]]: {

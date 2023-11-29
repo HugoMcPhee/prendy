@@ -59,13 +59,13 @@ export declare function makeInteractButtonRules({ onInteractAtTrigger, onInterac
     onInteractAtTrigger: ReturnType<typeof makeOnInteractAtTrigger>;
     onInteractAtTalk: ReturnType<typeof makeOnInteractToTalk>;
 }): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+    start: (ruleName: "whenInteractButtonClicked") => void;
+    stop: (ruleName: "whenInteractButtonClicked") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenInteractButtonClicked"[];
+    run: (ruleName: "whenInteractButtonClicked") => void;
+    runAll: () => void;
 };
 type OnInteractAtTriggerOptions = Partial<{
     [P_PlaceName in PlaceName]: Partial<{
@@ -99,22 +99,22 @@ type PlaceLoadRulesOptions = Partial<{
     [P_PlaceName in PlaceName]: StoryCallback;
 }>;
 export declare function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksObject: PlaceLoadRulesOptions): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+    start: (ruleName: "whenPlaceFinishedLoading") => void;
+    stop: (ruleName: "whenPlaceFinishedLoading") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPlaceFinishedLoading"[];
+    run: (ruleName: "whenPlaceFinishedLoading") => void;
+    runAll: () => void;
 };
 export declare function makePlaceUnloadRules(callBacksObject: PlaceLoadRulesOptions): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+    start: (ruleName: "whenPlaceFinishedUnloading") => void;
+    stop: (ruleName: "whenPlaceFinishedUnloading") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPlaceFinishedUnloading"[];
+    run: (ruleName: "whenPlaceFinishedUnloading") => void;
+    runAll: () => void;
 };
 type TouchRulesOptions = Partial<{
     [P_DollName in DollName]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
@@ -124,13 +124,13 @@ export declare function makeTouchRules(callBacksObject: TouchRulesOptions, optio
     distanceType?: "touch" | "talk" | "see";
     whenLeave?: boolean;
 }): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+    start: (ruleName: "whenInRangeChangesToCheckTouch") => void;
+    stop: (ruleName: "whenInRangeChangesToCheckTouch") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenInRangeChangesToCheckTouch"[];
+    run: (ruleName: "whenInRangeChangesToCheckTouch") => void;
+    runAll: () => void;
 };
 type TriggerRulesOptions = Partial<{
     [P_CharacterName in CharacterName]: Partial<{
@@ -142,12 +142,12 @@ type TriggerRulesOptions = Partial<{
 export declare function makeTriggerRules(callBacksObject: TriggerRulesOptions, options?: {
     whenLeave?: boolean;
 }): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+    start: (ruleName: "whenAtTriggersChanges") => void;
+    stop: (ruleName: "whenAtTriggersChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenAtTriggersChanges"[];
+    run: (ruleName: "whenAtTriggersChanges") => void;
+    runAll: () => void;
 };
 export {};

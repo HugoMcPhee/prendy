@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /// <reference types="react" />
 import { MyTypes } from "../declarations";
 export declare const prendyStepNames: readonly ["elapsedTimeUpdates", "moverUpdates", "stateVidStateUpdates", "sliceVidStateUpdates", "respondToNewPlace", "respondToNewPlaceStory", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "slatePosition", "slatePositionDontGoOverEdges", "slatePositionStartMovers", "dollAnimation", "dollAnimation2", "dollCorrectRotationAndPosition", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSlice", "sliceVidWantsToPlay", "sliceVidWantsToPlay2", "safeVidWantsToPlay", "moversGoal", "moversStart", "default", "rendering", "overlay"];
@@ -207,8 +206,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             };
             solidParticleSystems: Record<string, import("@babylonjs/core").SolidParticleSystem>;
             timerSpeed: number;
-            aConvoIsHappening_timeout: NodeJS.Timeout | null;
-            camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<{ [P_CamName in keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+            aConvoIsHappening_timeout: number | null;
+            camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] extends infer T extends keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] ? { [P_CamName in T]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; } : never>; }> | null;
             onPickupButtonClick: ((pickupName: any) => void) | null;
             slateZoomMoverRefs: {
                 velocity: number;
@@ -488,9 +487,9 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         };
         refs: () => {
             topWalkSpeed: number;
-            canJumpTimeout: NodeJS.Timeout | null;
-            canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
-            canHideVirtualButtonsTimeout: NodeJS.Timeout | null;
+            canJumpTimeout: number | null;
+            canShowVirtualButtonsTimeout: number | null;
+            canHideVirtualButtonsTimeout: number | null;
         };
     };
     speechBubbles: {
@@ -516,7 +515,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         refs: () => {
             bubbleRef: any;
             textRef: any;
-            currentTimeout: NodeJS.Timeout | null;
+            currentTimeout: number | null;
             videoRef: HTMLVideoElement | null;
         };
         startStates: { [K_CharacterName_2 in T_MyTypes["Types"]["CharacterName"]]: {

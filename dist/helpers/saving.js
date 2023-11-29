@@ -1,11 +1,10 @@
-import { meta } from "../meta";
+import { getState, setState } from "repond";
 import { point3dToVector3 } from "./babylonjs/vectors";
 import { setDollPosition, springDollRotationY } from "./prendyHelpers/dolls";
 import { goToNewPlace, showStoryView } from "./prendyHelpers/scene";
 import { getGlobalState, setGlobalState } from "./prendyUtils/global";
 import { waitForNextTick, waitForNowCamToChange, waitForPlaceFullyLoaded } from "./prendyUtils/scene";
 export function savePrendyState() {
-    const { getState } = meta.repond;
     const storeState = getState();
     const newSaveState = {
         global: {
@@ -77,7 +76,6 @@ export function savePrendyState() {
     localStorage.setItem("prendySaveState", JSON.stringify(newSaveState));
 }
 export async function loadPrendyState() {
-    const { setState } = meta.repond;
     // const savedState: PrendySaveState = getGlobalState().latestSave;
     // get latest save state from localStorage
     const savedStateString = localStorage.getItem("prendySaveState");

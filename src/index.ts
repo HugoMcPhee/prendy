@@ -88,11 +88,9 @@ export const definiedPrendyRules = {
 
 export function makePrendy<T_MyTypes extends MyTypes = MyTypes>(
   assets: T_MyTypes["Assets"],
-  stores: T_MyTypes["Stores"],
-  repond: T_MyTypes["Repond"]
+  stores: T_MyTypes["Stores"]
 ) {
   meta.assets = assets;
-  meta.repond = repond;
   meta.stores = stores;
 }
 

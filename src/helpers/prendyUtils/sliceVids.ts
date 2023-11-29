@@ -1,3 +1,4 @@
+import { getRefs, getState, startItemEffect, stopEffect } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { SliceVidState, VidSlice } from "../../stores/sliceVids";
@@ -9,8 +10,6 @@ export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop 
 type PlaceName = MyTypes["Types"]["PlaceName"];
 
 export function getSliceVidVideo(itemName: PlaceName) {
-  const { getRefs, getState } = meta.repond!;
-
   const sliceVidState = getState().sliceVids[itemName];
   const { stateVidId_playing } = sliceVidState;
   if (!stateVidId_playing) return;
@@ -20,8 +19,6 @@ export function getSliceVidVideo(itemName: PlaceName) {
 }
 
 export function getSliceVidWaitingVideo(itemName: PlaceName) {
-  const { getRefs, getState } = meta.repond!;
-
   const sliceVidState = getState().sliceVids[itemName];
   const { stateVidId_waiting } = sliceVidState;
   if (!stateVidId_waiting) return;
@@ -39,7 +36,6 @@ export function doWhenSliceVidStateChanges(
   checkShouldRun: (newVidState: SliceVidState) => boolean,
   callback: () => void
 ) {
-  const { getState, startItemEffect, stopEffect } = meta.repond!;
   const { placeInfoByName } = meta.assets!;
   const initialVidState = getState().sliceVids[sliceVidId].sliceVidState;
   if (checkShouldRun(initialVidState)) {
@@ -82,7 +78,6 @@ export function getSliceForPlace<T_PlaceName extends PlaceName>(
   camName: CameraNameByPlace[T_PlaceName],
   segment: SegmentNameByPlace[T_PlaceName]
 ) {
-  const { getRefs, getState, startItemEffect, stopEffect } = meta.repond!;
   const { placeInfoByName } = meta.assets!;
 
   const { nowPlaceName: safePlace } = getGlobalState();
@@ -105,8 +100,6 @@ export function getSliceForPlace<T_PlaceName extends PlaceName>(
 }
 
 export function checkIfVideoUnloading(placeName: PlaceName) {
-  const { getRefs, getState, startItemEffect, stopEffect } = meta.repond!;
-
   const itemState = getState().sliceVids[placeName];
   const { sliceVidState } = itemState;
 
@@ -114,8 +107,6 @@ export function checkIfVideoUnloading(placeName: PlaceName) {
 }
 
 export function checkIfVideoAlreadyChanging(placeName: PlaceName) {
-  const { getRefs, getState, startItemEffect, stopEffect } = meta.repond!;
-
   const itemState = getState().sliceVids[placeName];
   const { sliceVidState } = itemState;
 
@@ -130,8 +121,6 @@ export function checkIfVideoAlreadyChanging(placeName: PlaceName) {
 
 // Runs on changes to tick, in the checkVideoLoop flow
 export function checkForVideoLoop(placeName: PlaceName) {
-  const { getRefs, getState, startItemEffect, stopEffect } = meta.repond!;
-
   // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
   const itemState = getState().sliceVids[placeName];
   const { nowSlice } = itemState;

@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
 import { Point3D } from "chootils/dist/points3d";
 import { MyTypes } from "../../declarations";
@@ -197,8 +196,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
         };
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
-        aConvoIsHappening_timeout: NodeJS.Timeout | null;
-        camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<{ [P_CamName in keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+        aConvoIsHappening_timeout: number | null;
+        camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] extends infer T extends keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] ? { [P_CamName in T]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; } : never>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         slateZoomMoverRefs: {
             velocity: number;

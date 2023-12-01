@@ -1,10 +1,9 @@
-import { MyTypes } from "../../declarations";
-export declare function get_globalVideoRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], prendyStores: T_MyTypes["Stores"], storeHelpers: T_MyTypes["Repond"]): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare const globalVideoRules: {
+    start: (ruleName: "whenWantToChooseVideoSlice" | "whenSliceVidChangedAndWantToUpdateNowCamAndSegment" | "whenNowCameraChanges" | "whenPlayingVidElementsChanged") => void;
+    stop: (ruleName: "whenWantToChooseVideoSlice" | "whenSliceVidChangedAndWantToUpdateNowCamAndSegment" | "whenNowCameraChanges" | "whenPlayingVidElementsChanged") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("whenWantToChooseVideoSlice" | "whenSliceVidChangedAndWantToUpdateNowCamAndSegment" | "whenNowCameraChanges" | "whenPlayingVidElementsChanged")[];
+    run: (ruleName: "whenWantToChooseVideoSlice" | "whenSliceVidChangedAndWantToUpdateNowCamAndSegment" | "whenNowCameraChanges" | "whenPlayingVidElementsChanged") => void;
+    runAll: () => void;
 };

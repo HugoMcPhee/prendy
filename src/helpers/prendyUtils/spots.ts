@@ -2,7 +2,6 @@ import { Vector3 } from "@babylonjs/core";
 import { getRefs } from "repond";
 import { MyTypes } from "../../declarations";
 
-// export function get_spotStoryUtils<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
 type PlaceName = MyTypes["Types"]["PlaceName"];
 type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 

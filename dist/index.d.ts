@@ -1,6 +1,6 @@
 import "@babylonjs/loaders";
 import { MyTypes } from "./declarations";
-export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
+export { DebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
 export { makePrendyOptions } from "./getPrendyOptions";
@@ -26,18 +26,7 @@ export type CharacterOptionLoose<T_DollName extends string, T_FontName extends s
     doll: T_DollName;
     font: T_FontName;
 }>;
-export declare const definiedPrendyRules: {
-    dolls: {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    } | null;
-};
-export declare function makePrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"], stores: T_MyTypes["Stores"], repond: T_MyTypes["Repond"]): void;
+export declare function initPrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"], stores: T_MyTypes["Stores"]): void;
 export declare function getDefaultDollOptions<T_ModelName extends string>(modelNames: readonly T_ModelName[]): { [K_ModelName in T_ModelName]: {
     model: K_ModelName;
 }; };

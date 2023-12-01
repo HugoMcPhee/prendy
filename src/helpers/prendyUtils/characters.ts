@@ -1,14 +1,10 @@
 import { AbstractMesh } from "@babylonjs/core";
-import { getRefs, getState } from "repond";
+import { AllRefs, AllState, getRefs, getState } from "repond";
 import { MyTypes } from "../../declarations";
 import { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } from "./dolls";
 
-// export export function get_characterStoryUtils<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
 type CharacterName = MyTypes["Types"]["CharacterName"];
-type DollName = MyTypes["Types"]["DollName"];
 type PlaceName = MyTypes["Types"]["PlaceName"];
-type PrendyStoreHelpers = MyTypes["Repond"];
-type PrendyStores = MyTypes["Stores"];
 type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 
 export function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
@@ -35,13 +31,9 @@ export function get2DAngleBetweenCharacters(charA: CharacterName, charB: Charact
 //  { get2DAngleFromCharacterToSpot, get2DAngleBetweenCharacters };
 // }
 
-// export export function get_getCharDollStuff<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
-// type PrendyStoreHelpers = MyTypes["Repond"];
-// type CharacterName = MyTypes["Types"]["CharacterName"];
-
 // NOTE could have character start options as a type to get accurate return types
-type DollStates = ReturnType<PrendyStoreHelpers["getState"]>["dolls"];
-type DollRefs = ReturnType<PrendyStoreHelpers["getRefs"]>["dolls"];
+type DollStates = AllState["dolls"];
+type DollRefs = AllRefs["dolls"];
 
 export function getCharDollStuff<T_CharacterName extends CharacterName>(charName: T_CharacterName) {
   const { dollName } = getState().characters[charName];

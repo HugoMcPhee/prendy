@@ -1,10 +1,9 @@
-import { MyTypes } from "../declarations";
-export declare function get_sliceVidRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["Repond"]): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare const sliceVidRules: {
+    start: (ruleName: "rulesForSettingNewVideoStates" | "whenGoalSliceChanges" | "whenWantToLoad" | "whenWantToUnload" | "whenWantToLoop" | "whenPlayVidChanges" | "whenWaitVidChanges") => void;
+    stop: (ruleName: "rulesForSettingNewVideoStates" | "whenGoalSliceChanges" | "whenWantToLoad" | "whenWantToUnload" | "whenWantToLoop" | "whenPlayVidChanges" | "whenWaitVidChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("rulesForSettingNewVideoStates" | "whenGoalSliceChanges" | "whenWantToLoad" | "whenWantToUnload" | "whenWantToLoop" | "whenPlayVidChanges" | "whenWaitVidChanges")[];
+    run: (ruleName: "rulesForSettingNewVideoStates" | "whenGoalSliceChanges" | "whenWantToLoad" | "whenWantToUnload" | "whenWantToLoop" | "whenPlayVidChanges" | "whenWaitVidChanges") => void;
+    runAll: () => void;
 };

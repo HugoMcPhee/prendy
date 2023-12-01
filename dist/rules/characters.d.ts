@@ -1,18 +1,33 @@
-import { MyTypes } from "../declarations";
-export declare function get_characterDynamicRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["Repond"]): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
+export declare const characterDynamicRules: {
+    start: <K_ChosenRuleName extends "whenPositionChanges">(ruleName: K_ChosenRuleName, options: Parameters<{
+        whenPositionChanges: (options: {
+            characterName: string | any;
+            dollName: string | any;
+        }) => any;
+    }[K_ChosenRuleName]>[0]) => void;
+    stop: <K_ChosenRuleName_1 extends "whenPositionChanges">(ruleName: K_ChosenRuleName_1, options: Parameters<{
+        whenPositionChanges: (options: {
+            characterName: string | any;
+            dollName: string | any;
+        }) => any;
+    }[K_ChosenRuleName_1]>[0]) => void;
+    ruleNames: "whenPositionChanges"[];
+    startAll: (options: {
+        characterName: string | any;
+        dollName: string | any;
+    }) => void;
+    stopAll: (options: {
+        characterName: string | any;
+        dollName: string | any;
+    }) => void;
 };
-export declare function get_startDynamicCharacterRulesForInitialState<CharacterDynamicRules extends ReturnType<typeof get_characterDynamicRules>, T_MyTypes extends MyTypes = MyTypes>(characterDynamicRules: CharacterDynamicRules, characterNames: readonly T_MyTypes["Types"]["CharacterName"][]): () => () => void;
-export declare function get_characterRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["Repond"]): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare function startDynamicCharacterRulesForInitialState(): () => void;
+export declare const characterRules: {
+    start: (ruleName: "whenAtCamCubes" | "whenPlaceChanges") => void;
+    stop: (ruleName: "whenAtCamCubes" | "whenPlaceChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("whenAtCamCubes" | "whenPlaceChanges")[];
+    run: (ruleName: "whenAtCamCubes" | "whenPlaceChanges") => void;
+    runAll: () => void;
 };

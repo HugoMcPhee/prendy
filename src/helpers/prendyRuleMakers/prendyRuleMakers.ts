@@ -1,5 +1,7 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
 import {
+  AllRefs,
+  AllState,
   getRefs,
   getState,
   makeNestedLeaveRuleMaker,
@@ -15,11 +17,6 @@ import { getCharDollStuff } from "../prendyUtils/characters";
 
 // export each of the rule makers stuff from here :)
 
-type PrendyStoreHelpers = MyTypes["Repond"];
-
-type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
-type AllRefs = ReturnType<PrendyStoreHelpers["getRefs"]>;
-
 type StoryState = AllState["story"]["main"];
 type StoryRefs = AllRefs["story"]["main"];
 type GlobalState = AllState["global"]["main"];
@@ -29,6 +26,31 @@ type AllPlacesRefs = AllRefs["places"];
 
 type APlaceRefs = AllPlacesRefs[keyof AllPlacesRefs];
 type APlaceRefsCamsRefs = APlaceRefs["camsRefs"];
+
+type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
+type CharacterName = MyTypes["Types"]["CharacterName"];
+type DollName = MyTypes["Types"]["DollName"];
+type PickupName = MyTypes["Types"]["PickupName"];
+type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
+type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
+
+type SegmentNameFromCameraAndPlace<
+  T_Place extends keyof PlaceInfoByName,
+  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
+> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+
+type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
+  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+
+type CamSegmentRulesOptionsUntyped = Partial<{
+  [P_PlaceName in PlaceName]: Partial<{
+    [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
+      usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
+    ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+  }>;
+}>;
 
 export function getUsefulStoryStuff() {
   const storyState = getState().story.main as StoryState;
@@ -54,69 +76,14 @@ export function getUsefulStoryStuff() {
     camRefs: camRefs as APlaceRefsCamsRefs[keyof APlaceRefsCamsRefs],
   };
 }
-// }
-
-// ItemState
-
-// type GetState = MyTypes["Repond"]["getState"];
-// type GetRefs = typeof getRefs;
-// // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
-// type ItemType = keyof ReturnType<GetState>;
-//
-// type ItemState<T_ItemType extends ItemType> = ReturnType<
-//   GetState
-// >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 
 export function setStoryState(newState: Partial<StoryState>) {
   setState({ story: { main: newState } });
 }
 
-// export function makeAllStoryRuleMakers() {
-type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type DollName = MyTypes["Types"]["DollName"];
-type PickupName = MyTypes["Types"]["PickupName"];
-type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
-
-type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
-
-type SegmentNameFromCameraAndPlace<
-  T_Place extends keyof PlaceInfoByName,
-  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
-
-type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
-
-type CamSegmentRulesOptionsUntyped = Partial<{
-  [P_PlaceName in PlaceName]: Partial<{
-    [P_CamName in CameraNameFromPlace<P_PlaceName>]: (
-      usefulStuff: Record<any, any> // usefulStoryStuff, but before the types for global state exist
-    ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
-  }>;
-}>;
-
 // --------------------------------------------------
 //
 //` makeCamChangeRules
-
-type T_ItemType = keyof ReturnType<MyTypes["Repond"]["getState"]>;
-
-// type HelperType<T extends T_ItemType> = StoreHelperTypes<MyTypes["Repond"]["getState"], typeof getRefs, T>;
-
-// type AllItemsState<T extends T_ItemType> = HelperType<T>["AllItemsState"];
-type AllItemsState = ReturnType<MyTypes["Repond"]["getState"]>;
-// type ItemState<T extends T_ItemType> = HelperType<T>["ItemState"];
-// type ItemRefs<T extends T_ItemType> = HelperType<T>["ItemRefs"];
-
-// Manually typing cause the generic fucntion type isnt kept from repond,
-// maybe it would work if passing a generic type all the way down for PrendyStoreHelpers,
-// or a new custom base level type (like A_CameraName) but it seems like a lot of passed generic types
-// so trying to manually copy some types from repond
-// NOTE ended up not reading from getState becuase that wasn't preserved too, so uses
-// A_PlaceName and A_CameraNameByPlace directly
 
 type CamChangeRulesParam = Partial<{
   [P_PlaceName in PlaceName]: Partial<
@@ -247,11 +214,12 @@ type OnInteractAtTriggerOptions = Partial<{
 // the returned function when the interact buttons clicked
 export function makeOnInteractAtTrigger(
   callBacksObject: OnInteractAtTriggerOptions,
-  characterName: CharacterName = meta.assets!.characterNames[0]
+  characterNameParam?: CharacterName
 ) {
-  const { placeInfoByName } = meta.assets!;
-
   const onClickInteractButton = () => {
+    const { placeInfoByName } = meta.assets!;
+    const characterName = characterNameParam || meta.assets!.characterNames[0];
+
     const usefulStoryStuff = getUsefulStoryStuff();
 
     const { aConvoIsHappening, nowPlaceName, playerMovingPaused } = usefulStoryStuff.globalState;
@@ -284,11 +252,12 @@ type OnInteractToTalkOptions = Partial<{
 export function makeOnInteractToTalk(
   callBacksObject: OnInteractToTalkOptions,
   distanceType: "touch" | "talk" = "talk",
-  characterName: CharacterName = meta.assets!.characterNames[0]
+  characterNameParam?: CharacterName
 ) {
-  const { dollNames } = meta.assets!;
-
   const onClickInteractButton = () => {
+    const characterName = characterNameParam || meta.assets!.characterNames[0];
+    const { dollNames } = meta.assets!;
+
     const usefulStoryStuff = getUsefulStoryStuff();
     const { aConvoIsHappening, playerMovingPaused } = usefulStoryStuff.globalState;
 
@@ -329,14 +298,13 @@ type OnUsePickupAtTriggerOptions = Partial<{
 // the returned function gets run onClick in the pickup picture button gui
 export function makeOnUsePickupAtTrigger(
   callBacksObject: OnUsePickupAtTriggerOptions,
-  characterName: CharacterName = meta.assets!.characterNames[0]
+  characterNameParam?: CharacterName
 ) {
-  const { placeInfoByName } = meta.assets!;
-
   const onClickPickupButton = <T_PickupName extends PickupName>(pickupName: T_PickupName) => {
-    let didInteractWithSomething = false;
-
+    const characterName = characterNameParam || meta.assets!.characterNames[0];
+    const { placeInfoByName } = meta.assets!;
     const usefulStoryStuff = getUsefulStoryStuff();
+    let didInteractWithSomething = false;
 
     const { aConvoIsHappening, nowPlaceName } = usefulStoryStuff.globalState;
     const { atTriggers } = getState().characters[characterName];
@@ -396,12 +364,10 @@ type OnUsePickupToTalkOptions = Partial<{
   }>;
 }>;
 // the returned function gets run onClick in the pickup picture button gui
-export function makeOnUsePickupToTalk(
-  callBacksObject: OnUsePickupToTalkOptions,
-  characterName: CharacterName = meta.assets!.characterNames[0]
-) {
-  const { dollNames } = meta.assets!;
+export function makeOnUsePickupToTalk(callBacksObject: OnUsePickupToTalkOptions, characterNameParam?: CharacterName) {
   const onClickPickupButton = <T_PickupName extends PickupName>(pickupName: T_PickupName) => {
+    const characterName = characterNameParam || meta.assets!.characterNames[0];
+    const { dollNames } = meta.assets!;
     let didInteractWithSomething = false;
 
     const usefulStoryStuff = getUsefulStoryStuff();
@@ -505,16 +471,14 @@ export function makeTouchRules(
     whenLeave?: boolean;
   }
 ) {
-  const { dollNames } = meta.assets!;
-
   const { characterName, distanceType = "touch", whenLeave = false } = options ?? {};
-
-  const { playerCharacter } = getState().global.main;
-  const charName = characterName || playerCharacter;
-
   return makeRules(({ itemEffect }) => ({
     whenInRangeChangesToCheckTouch: itemEffect({
       run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, itemState: dollState }) {
+        const { dollNames } = meta.assets!;
+        const { playerCharacter } = getState().global.main;
+        const charName = characterName || playerCharacter;
+
         const { dollName: charDollName } = getCharDollStuff(charName as CharacterName) ?? {};
 
         // at the moment runs for every doll instead of just the main character,
@@ -542,7 +506,7 @@ export function makeTouchRules(
         prop: ["inRange"],
         type: "dolls",
       },
-      name: `inRangeStoryRules_${charName}_${distanceType}_${whenLeave}`,
+      name: `inRangeStoryRules_${characterName ?? "player"}_${distanceType}_${whenLeave}`,
       step: "collisionReaction",
       atStepEnd: true,
     }),
@@ -571,16 +535,13 @@ export function makeTriggerRules(
   // this won't update the playerCharacter at the moment
   const { whenLeave = false } = options ?? {};
 
-  // const { playerCharacter } = getState().global.main;
-  // const charName = characterName || playerCharacter;
-
   const charactersWithTriggers = Object.keys(callBacksObject) as CharacterName[];
-  console.log("charactersWithTriggers", charactersWithTriggers);
-  const { placeInfoByName } = meta.assets!;
 
   return makeRules(({ itemEffect }) => ({
     whenAtTriggersChanges: itemEffect({
       run({ newValue: atTriggers, previousValue: prevAtTriggers, itemName: characterName }) {
+        const { placeInfoByName } = meta.assets!;
+
         const usefulStoryStuff = getUsefulStoryStuff();
         const { nowPlaceName } = usefulStoryStuff;
 
@@ -608,24 +569,3 @@ export function makeTriggerRules(
     }),
   }));
 }
-
-// return {
-//   makeCamChangeRules,
-//   makeCamLeaveRules,
-//   makeCamSegmentRules,
-//   makeOnInteractAtTrigger,
-//   makeOnInteractToTalk,
-//   makeInteractButtonRules,
-//   makeOnUsePickupAtTrigger,
-//   makeOnUsePickupGenerally,
-//   makeOnUsePickupToTalk,
-//   makePickupsRules,
-//   makePlaceLoadRules,
-//   makePlaceUnloadRules,
-//   makeTouchRules,
-//   makeTriggerRules,
-//   // makeStoryPartRules,
-//   // makeRuleMaker,
-//   // makeNestedRuleMaker,
-//   // makeNestedLeaveRuleMaker,
-// };

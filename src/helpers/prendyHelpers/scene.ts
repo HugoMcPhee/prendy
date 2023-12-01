@@ -7,7 +7,6 @@ import { get2DAngleFromCharacterToSpot, getCharDollStuff } from "../prendyUtils/
 import { setGlobalState } from "../prendyUtils/global";
 import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } from "../prendyUtils/scene";
 
-// export function get_sceneStoryHelpers<MyTypes extends MyTypes = MyTypes>(
 type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
 type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
 type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
@@ -17,9 +16,6 @@ type PlaceName = MyTypes["Types"]["PlaceName"];
 type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
 type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 type WallNameByPlace = MyTypes["Types"]["WallNameByPlace"];
-
-// const { getRefs, getState, onNextTick, setState } = storeHelpers;
-// const { placeInfoByName, characterNames } = prendyAssets;
 
 type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
   keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
@@ -165,8 +161,10 @@ export function setCamera<
 
 export function goToNewPlace<T_PlaceName extends PlaceName>(
   toOption: ToPlaceOption<T_PlaceName>,
-  charName: CharacterName = meta.assets!.characterNames[0]
+  charNameParam: CharacterName
 ) {
+  const charName = charNameParam || meta.assets!.characterNames[0];
+
   const { placeInfoByName } = meta.assets!;
 
   // NOTE could include waitForPlaceFullyLoaded here so it can be awaited

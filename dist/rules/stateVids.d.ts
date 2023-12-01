@@ -1,10 +1,9 @@
-import { RepondHelpers } from "../declarations";
-export declare function get_safeVidRules(storeHelpers: RepondHelpers): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare const safeVidRules: {
+    start: (ruleName: "whenWantToLoad" | "whenWantToUnload" | "whenVideoStateChanges" | "whenWantToSeek" | "whenWantToPlay" | "whenWantToPause") => void;
+    stop: (ruleName: "whenWantToLoad" | "whenWantToUnload" | "whenVideoStateChanges" | "whenWantToSeek" | "whenWantToPlay" | "whenWantToPause") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("whenWantToLoad" | "whenWantToUnload" | "whenVideoStateChanges" | "whenWantToSeek" | "whenWantToPlay" | "whenWantToPause")[];
+    run: (ruleName: "whenWantToLoad" | "whenWantToUnload" | "whenVideoStateChanges" | "whenWantToSeek" | "whenWantToPlay" | "whenWantToPause") => void;
+    runAll: () => void;
 };

@@ -1,6 +1,8 @@
 import "@babylonjs/loaders";
 import { meta } from "./meta";
-export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
+import { initMovers } from "repond-movers";
+import { timeStatePath } from "./stores/global/global";
+export { DebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
 export { makePrendyOptions } from "./getPrendyOptions";
@@ -18,13 +20,10 @@ export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
-export const definiedPrendyRules = {
-    dolls: null,
-};
-export function makePrendy(assets, stores, repond) {
+export function initPrendy(assets, stores) {
     meta.assets = assets;
-    meta.repond = repond;
     meta.stores = stores;
+    initMovers(timeStatePath);
 }
 export function getDefaultDollOptions(modelNames) {
     const modelDollOptions = {};

@@ -1,6 +1,6 @@
 import delay from "delay";
 import { CSSProperties } from "react";
-import { getState, onNextTick, setState, startItemEffect, stopEffect } from "repond";
+import { AllState, getState, onNextTick, setState, startItemEffect, stopEffect } from "repond";
 import { length } from "stringz";
 import { MyTypes } from "../../declarations";
 import { getTypingDelayForText } from "../../helpers/prendyUtils/speechBubbles";
@@ -25,9 +25,8 @@ const showSpeechRefs = {
 const showMiniBubbleRefs = { closeTimeout: null as ReturnType<typeof setTimeout> | null };
 
 type CharacterName = MyTypes["Types"]["CharacterName"];
-type PrendyStores = MyTypes["Stores"];
 
-type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
+type SpeechBubbleName = keyof AllState["speechBubbles"];
 
 const SPEECH_ZOOM_AMOUNT = 1.2;
 const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time

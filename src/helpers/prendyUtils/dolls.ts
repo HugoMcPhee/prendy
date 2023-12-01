@@ -4,20 +4,18 @@ import { breakableForEach, forEach } from "chootils/dist/loops";
 import { subtractPoints } from "chootils/dist/points2d";
 import { getSpeedAndAngleFromVector } from "chootils/dist/speedAngleDistance2d";
 import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
-import { getRefs, getState, setState } from "repond";
+import { AllState, getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { checkPointIsInsideSlate, convertPointOnSlateToPointOnScreen, getPositionOnSlate } from "../babylonjs/slate";
 import { getSpotPosition } from "./spots";
 
-// export function get_dollStoryUtils<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
 type DollName = MyTypes["Types"]["DollName"];
 type PlaceName = MyTypes["Types"]["PlaceName"];
-type PrendyStores = MyTypes["Stores"];
 type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 
-type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
-type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
+type DollsState = NonNullable<AllState["dolls"]>;
+type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<DollsState[T_DollName]>["modelName"];
 
 export function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
   return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;
@@ -117,17 +115,8 @@ export function enableCollisions(theMesh: AbstractMesh) {
   theMesh.rotationQuaternion = null; // allow euler rotation again
 }
 
-// export function get_dollUtils<MyTypes extends MyTypes = MyTypes>(
-//   prendyAssets: MyTypes["Assets"],
-//   storeHelpers: MyTypes["Repond"]
-// ) {
 type AnimationNameByModel = MyTypes["Types"]["AnimationNameByModel"];
 type ModelName = MyTypes["Types"]["ModelName"];
-type PrendyStoreHelpers = MyTypes["Repond"];
-
-// type RepondState = ReturnType<StoreHelpers["getState"]>;
-// type DollName = keyof RepondState["dolls"];
-// type DollName = keyof typeof prendyStores.dolls.startStates;
 
 export function setDollAnimWeight<
   T_DollName extends DollName,
@@ -286,7 +275,7 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
 
   // Once the models loaded, update the animation based on the dolls state
   // console.log("Running animations for doll after it loaded!", dollName, dollState.nowAnimation);
-  // definiedPrendyRules.dolls?.run("whenNowAnimationChanged");
+  // dollRules?.run("whenNowAnimationChanged");
 }
 
 export function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {

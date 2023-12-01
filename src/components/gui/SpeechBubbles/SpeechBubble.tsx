@@ -2,7 +2,7 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { getRefs, getState, useStore, useStoreEffect } from "repond";
+import { AllState, getRefs, getState, useStore, useStoreEffect } from "repond";
 import { MyTypes } from "../../../declarations";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
@@ -15,12 +15,10 @@ const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
 type CharacterName = MyTypes["Types"]["CharacterName"];
-type PrendyStoreHelpers = MyTypes["Repond"];
 type SpeechVidFiles = MyTypes["Types"]["SpeechVidFiles"];
 
-type GetState = PrendyStoreHelpers["getState"];
-type ItemType = keyof ReturnType<GetState>;
-type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
+type ItemType = keyof AllState;
+type AllItemsState<T_ItemType extends ItemType> = AllState[T_ItemType];
 
 type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
 

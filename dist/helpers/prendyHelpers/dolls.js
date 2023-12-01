@@ -6,8 +6,6 @@ import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
 import { vector3ToPoint3d } from "../babylonjs/vectors";
 import { getSpotPosition, getSpotRotation } from "../prendyUtils/spots";
-// const { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } = get_dollStoryUtils<MyTypes>(meta.repond!);
-// const { getSpotPosition, getSpotRotation } = get_spotStoryUtils(meta.repond!);
 // --------------------------------------------------------------
 export function setDollPosition(dollName, newPositon) {
     const dollRefs = getRefs().dolls[dollName];

@@ -1,42 +1,37 @@
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
+import { meta } from "../meta";
+import { makeRules } from "repond";
 
-export function get_placeRules<T_MyTypes extends MyTypes = MyTypes>(
-  prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["Repond"]
-) {
-  type DollName = T_MyTypes["Types"]["DollName"];
-  type DollOptions = T_MyTypes["Types"]["DollOptions"];
-  type PlaceName = T_MyTypes["Types"]["PlaceName"];
-  type WallNameByPlace = T_MyTypes["Types"]["WallNameByPlace"];
+type DollName = MyTypes["Types"]["DollName"];
+type DollOptions = MyTypes["Types"]["DollOptions"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type WallNameByPlace = MyTypes["Types"]["WallNameByPlace"];
 
-  const { placeInfoByName } = prendyAssets;
-  const { makeRules } = storeHelpers;
+type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
 
-  type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
+export const placeRules = makeRules(({ itemEffect, effect }) => ({
+  whenToggledWallsChanges: itemEffect({
+    run({ newValue: toggledWalls, itemName: placeName, itemRefs }) {
+      const { placeInfoByName } = meta.assets!;
+      const { wallMeshes } = itemRefs;
+      if (!wallMeshes) return;
 
-  return makeRules(({ itemEffect, effect }) => ({
-    whenToggledWallsChanges: itemEffect({
-      run({ newValue: toggledWalls, itemName: placeName, itemRefs }) {
-        const { wallMeshes } = itemRefs;
-        if (!wallMeshes) return;
+      type WallNameFromPlace<T_PlaceName extends PlaceName> = WallNameByPlace[T_PlaceName]; // NOTE Maybe this isn't needed
 
-        type WallNameFromPlace<T_PlaceName extends PlaceName> = WallNameByPlace[T_PlaceName]; // NOTE Maybe this isn't needed
+      const placeInfo = placeInfoByName[placeName as unknown as PlaceName];
+      const typedWallNames = placeInfo.wallNames as unknown as WallNameFromPlace<typeof placeName>[];
 
-        const placeInfo = placeInfoByName[placeName as unknown as PlaceName];
-        const typedWallNames = placeInfo.wallNames as unknown as WallNameFromPlace<typeof placeName>[];
+      forEach(typedWallNames, (wallName) => {
+        const newToggle = toggledWalls[wallName];
+        const wallMesh = wallMeshes[wallName];
 
-        forEach(typedWallNames, (wallName) => {
-          const newToggle = toggledWalls[wallName];
-          const wallMesh = wallMeshes[wallName];
-
-          // if (wallMesh && newToggle !== undefined) wallMesh.setEnabled(newToggle);
-          if (wallMesh && newToggle !== undefined) wallMesh.checkCollisions = newToggle;
-        });
-      },
-      check: { type: "places", prop: "toggledWalls" },
-      step: "default",
-      atStepEnd: true,
-    }),
-  }));
-}
+        // if (wallMesh && newToggle !== undefined) wallMesh.setEnabled(newToggle);
+        if (wallMesh && newToggle !== undefined) wallMesh.checkCollisions = newToggle;
+      });
+    },
+    check: { type: "places", prop: "toggledWalls" },
+    step: "default",
+    atStepEnd: true,
+  }),
+}));

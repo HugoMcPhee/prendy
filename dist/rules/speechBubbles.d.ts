@@ -1,10 +1,9 @@
-import { RepondHelpers, PrendyStores } from "../declarations";
-export declare function get_speechBubbleRules(storeHelpers: RepondHelpers, prendyStores: PrendyStores): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare const speechBubbleRules: {
+    start: (ruleName: "whenGoalTextChanges" | "whenVisibleTextChanges" | "whenTypingFinishedBecomesFalse" | "whenAddedOrRemoved" | "whenBecameVisible") => void;
+    stop: (ruleName: "whenGoalTextChanges" | "whenVisibleTextChanges" | "whenTypingFinishedBecomesFalse" | "whenAddedOrRemoved" | "whenBecameVisible") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("whenGoalTextChanges" | "whenVisibleTextChanges" | "whenTypingFinishedBecomesFalse" | "whenAddedOrRemoved" | "whenBecameVisible")[];
+    run: (ruleName: "whenGoalTextChanges" | "whenVisibleTextChanges" | "whenTypingFinishedBecomesFalse" | "whenAddedOrRemoved" | "whenBecameVisible") => void;
+    runAll: () => void;
 };

@@ -195,7 +195,7 @@ export function saveModelStuffToDoll({ modelName, dollName, }) {
     dollRefs.meshRef.setEnabled(dollState.isVisible);
     // Once the models loaded, update the animation based on the dolls state
     // console.log("Running animations for doll after it loaded!", dollName, dollState.nowAnimation);
-    // definiedPrendyRules.dolls?.run("whenNowAnimationChanged");
+    // dollRules?.run("whenNowAnimationChanged");
 }
 export function updateDollScreenPosition({ dollName, instant }) {
     // Update screen positions :)

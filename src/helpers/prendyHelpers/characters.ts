@@ -30,11 +30,6 @@ type ModelNameFromCharacter<T_CharacterName extends CharacterName> = ModelNameFr
 type AnimationNameFromCharacter<T_CharacterName extends CharacterName> =
   AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
-// const { modelInfoByName, characterNames } = prendyAssets;
-
-// const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-// const { get2DAngleBetweenCharacters } = get_characterStoryUtils<MyTypes>(storeHelpers);
-
 export function setCharAnimation<T_Character extends CharacterName>(
   character: T_Character,
   animation: AnimationNameFromCharacter<T_Character> // AnimationNameFromModel might keep the type better
@@ -76,7 +71,8 @@ export function lookAtOtherCharacter(
   springDollRotationY(dollName as DollName, angle);
 }
 
-export function lookAtEachother(characterA: CharacterName, characterB: CharacterName = meta.assets!.characterNames[0]) {
+export function lookAtEachother(characterA: CharacterName, characterBParam: CharacterName) {
+  const characterB = characterBParam || meta.assets!.characterNames[0];
   lookAtOtherCharacter(characterA, characterB);
   lookAtOtherCharacter(characterB, characterA);
 }

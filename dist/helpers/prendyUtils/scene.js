@@ -1,5 +1,4 @@
-import { getRefs, getState, startItemEffect, stopEffect } from "repond";
-import { meta } from "../../meta";
+import { getRefs, getState, onNextTick, startItemEffect, stopEffect } from "repond";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 export function getSegmentFromStoryRules(place, cam) {
     var _a, _b, _c;
@@ -115,4 +114,4 @@ export async function waitForNowCamToChange(checkingCamName) {
         doWhenNowCamChanges(checkingCamName, resolve);
     });
 }
-export const waitForNextTick = () => new Promise((resolve) => meta.repond.onNextTick(resolve));
+export const waitForNextTick = () => new Promise((resolve) => onNextTick(resolve));

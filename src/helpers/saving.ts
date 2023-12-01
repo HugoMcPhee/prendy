@@ -223,7 +223,7 @@ export async function loadPrendyState() {
       };
     },
     () => {
-      // storeHelpers.setState({ global: { main: { latestLoadTime: Date.now() } } }, () => {
+      // setState({ global: { main: { latestLoadTime: Date.now() } } }, () => {
       showStoryView(true);
       // });
     }

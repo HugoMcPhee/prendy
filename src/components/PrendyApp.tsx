@@ -3,32 +3,28 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import React, { ReactNode, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
-import { MyTypes } from "../declarations";
+import { getRefs, onNextTick, setState } from "repond";
 import loadStyles from "../helpers/loadStyles";
-import { MakeStartRulesOptions, makeStartAndStopRules } from "../rules/rules";
+import { SubscribableRules, makeStartAndStopRules } from "../rules/rules";
 import { LoadingModels } from "./LoadingModels";
 import { ScreenGui as ScreenGuiDom } from "./gui/ScreenGui";
-// import { get_AllTestVideoStuff } from "./AllTestVideoStuff";
+import { MyTypes } from "../declarations";
+import { initPrendy } from "../";
 
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
-export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(options: MakeStartRulesOptions<T_MyTypes>) {
-  const { storeHelpers, prendyAssets } = options;
-  const { prendyOptions } = prendyAssets;
-
+export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(
+  assets: T_MyTypes["Assets"],
+  customRules: SubscribableRules[]
+) {
+  initPrendy(assets);
   loadStyles();
-
-  const { getRefs, onNextTick, setState } = storeHelpers;
 
   Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
 
-  const StartAndStopRules = makeStartAndStopRules<T_MyTypes>(options);
-  // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
-  // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);
+  const StartAndStopRules = makeStartAndStopRules(customRules);
 
   return function PrendyApp({ children, extraScenes }: Props) {
-    const globalRefs = getRefs().global.main;
-
     useEffect(() => setState({ global: { main: { frameTick: 1 } } }), []);
 
     return (
@@ -48,6 +44,7 @@ export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(options: Make
           <Scene
             clearColor={Color4.FromColor3(Color3.FromHexString("#000000"), 0.0)}
             onSceneMount={(info) => {
+              const globalRefs = getRefs().global.main;
               globalRefs.scene = info.scene;
               const engine = info.scene.getEngine();
               engine.stopRenderLoop(); // Each frame is rendered manually inside the video looping check function

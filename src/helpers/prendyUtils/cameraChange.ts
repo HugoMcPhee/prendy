@@ -14,9 +14,6 @@ type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
 type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
 type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
 type PlaceName = MyTypes["Types"]["PlaceName"];
-type PrendyAssets = MyTypes["Assets"];
-type PrendyOptions = MyTypes["Types"]["PrendyOptions"];
-type PrendyStoreHelpers = MyTypes["Repond"];
 type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
 
 /*

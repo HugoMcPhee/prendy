@@ -1,9 +1,9 @@
-import { getState, setState } from "repond";
+import { AllState, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 
 export function setGlobalState<
-  GlobalItemState extends ReturnType<MyTypes["Repond"]["getState"]>["global"]["main"] & Record<any, any>,
+  GlobalItemState extends AllState["global"]["main"] & Record<any, any>,
   PartialGlobalState extends Partial<GlobalItemState>
 >(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: () => void) {
   if (typeof newState === "function") {
@@ -14,6 +14,5 @@ export function setGlobalState<
 }
 
 export function getGlobalState() {
-  type AllState = ReturnType<MyTypes["Repond"]["getState"]>;
   return getState().global.main as AllState["global"]["main"];
 }

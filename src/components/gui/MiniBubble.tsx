@@ -2,7 +2,7 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { getState, useStore, useStoreEffect } from "repond";
+import { AllState, getState, useStore, useStoreEffect } from "repond";
 import { MyTypes } from "../../declarations";
 import { getScreenSize } from "../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../helpers/prendyUtils/characters";
@@ -27,13 +27,10 @@ const SHARED_THEME = {
 // when the TRIANGLE_SIZE is different the svgs border width (stroke) needs to be scaled accordingly
 const TRIANGLE_BORDER_WIDTH_SCALE = 50 / TRIANGLE_SIZE;
 
-// export function get_MiniBubble<MyTypes extends MyTypes = MyTypes>(storeHelpers: MyTypes["Repond"]) {
 type CharacterName = MyTypes["Types"]["CharacterName"];
-type PrendyStoreHelpers = MyTypes["Repond"];
 
-type GetState = PrendyStoreHelpers["getState"];
-type ItemType = keyof ReturnType<GetState>;
-type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType] & Record<any, any>;
+type ItemType = keyof AllState;
+type AllItemsState<T_ItemType extends ItemType> = AllState[T_ItemType] & Record<any, any>;
 
 type Props = { name: keyof AllItemsState<"miniBubbles"> };
 

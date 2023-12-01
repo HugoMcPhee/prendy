@@ -1,8 +1,9 @@
 import "@babylonjs/loaders";
 import { MyTypes } from "./declarations";
 import { meta } from "./meta";
-import { get_dollRules } from "./rules/dolls";
-export { get_DebugFrameRate as makeDebugFrameRate } from "./components/DebugFrameRate";
+import { initMovers } from "repond-movers";
+import { timeStatePath } from "./stores/global/global";
+export { DebugFrameRate } from "./components/DebugFrameRate";
 export { makePrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
 export { makePrendyOptions } from "./getPrendyOptions";
@@ -64,7 +65,6 @@ export {
   makeTouchRules,
   makeTriggerRules,
 } from "./helpers/prendyRuleMakers/prendyRuleMakers";
-export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
@@ -82,16 +82,9 @@ export type CharacterOptionLoose<T_DollName extends string, T_FontName extends s
   { doll: T_DollName; font: T_FontName }
 >;
 
-export const definiedPrendyRules = {
-  dolls: null as null | ReturnType<typeof get_dollRules>,
-};
-
-export function makePrendy<T_MyTypes extends MyTypes = MyTypes>(
-  assets: T_MyTypes["Assets"],
-  stores: T_MyTypes["Stores"]
-) {
+export function initPrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"]) {
   meta.assets = assets;
-  meta.stores = stores;
+  initMovers(timeStatePath);
 }
 
 export function getDefaultDollOptions<T_ModelName extends string>(modelNames: readonly T_ModelName[]) {

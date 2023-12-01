@@ -1,43 +1,21 @@
 import { useEffect } from "react";
-import { definiedPrendyRules } from "..";
 import loadGoogleFonts from "../helpers/loadGoogleFonts";
-import { get_characterDynamicRules, get_characterRules, get_startDynamicCharacterRulesForInitialState, } from "./characters";
-import { get_dollDynamicRules, get_dollRules, startDynamicDollRulesForInitialState } from "./dolls";
-import { get_startAllGlobalRules } from "./global/global";
-import { get_keyboardConnectRules } from "./keyboards";
-import { get_modelRules } from "./models";
-import { get_placeRules } from "./places";
-import { get_playerRules } from "./players";
-import { get_sliceVidRules } from "./sliceVids";
-import { get_speechBubbleRules } from "./speechBubbles";
-import { get_safeVidRules } from "./stateVids";
+import { characterRules, startDynamicCharacterRulesForInitialState } from "./characters";
+import { dollRules, startDynamicDollRulesForInitialState } from "./dolls";
+import { keyboardConnectRules } from "./keyboards";
+import { modelRules } from "./models";
+import { placeRules } from "./places";
+import { playerRules } from "./players";
+import { sliceVidRules as safeSliceVidRules } from "./sliceVids";
+import { speechBubbleRules } from "./speechBubbles";
+import { safeVidRules } from "./stateVids";
+import { startAllGlobalRules } from "./global/global";
+import { getRefs, getState } from "repond";
 export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAssets) {
-    const { dollNames, characterNames, placeInfoByName } = prendyAssets;
-    // making rules
-    const keyboardConnectRules = get_keyboardConnectRules(storeHelpers);
-    const startAllGlobalRules = get_startAllGlobalRules(prendyAssets, prendyStores, storeHelpers);
-    const modelRules = get_modelRules(prendyAssets, storeHelpers);
-    const playerRules = get_playerRules(prendyAssets, storeHelpers);
-    const dollDynamicRules = get_dollDynamicRules(prendyAssets, prendyStores, storeHelpers);
-    const dollRules = get_dollRules(dollDynamicRules, prendyAssets, storeHelpers);
-    const placeRules = get_placeRules(prendyAssets, storeHelpers);
-    definiedPrendyRules.dolls = dollRules;
-    const speechBubbleRules = get_speechBubbleRules(storeHelpers, prendyStores);
-    const safeVidRules = get_safeVidRules(storeHelpers);
-    const safeSliceVidRules = get_sliceVidRules(prendyAssets, storeHelpers);
-    const characterDynamicRules = get_characterDynamicRules(prendyAssets, storeHelpers);
-    const characterRules = get_characterRules(prendyAssets, storeHelpers);
-    const startDynamicCharacterRulesForInitialState = get_startDynamicCharacterRulesForInitialState(characterDynamicRules, characterNames);
-    let hiddenTime = 0;
-    const { getState, getRefs } = storeHelpers;
     function handlePausingVideoWhenHidden(isHidden) {
         const { nowPlaceName, gameTimeSpeed } = getState().global.main;
-        // loop all the camera names for the current place
-        const placeInfo = placeInfoByName[nowPlaceName];
-        const { cameraNames } = placeInfo;
         const sliceVidState = getState().sliceVids[nowPlaceName];
         const { stateVidId_playing, stateVidId_waiting } = sliceVidState;
-        // if (!stateVidId_playing) return;
         const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
         const backdropWaitVidRefs = getRefs().stateVids[stateVidId_waiting];
         if (isHidden) {
@@ -67,19 +45,15 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
     function startPrendyMainRules() {
         keyboardConnectRules.startAll();
         document.addEventListener("visibilitychange", updateAppVisibility);
-        // pointerConnectRules.startAll();
-        // keyboardRules.startAll(); // NOTE does nothing
-        const stopAllGlobalRules = startAllGlobalRules();
+        const stopAllGlobalRules = startAllGlobalRules(); // TODO update to rule collection
         modelRules.startAll();
-        /*characters*/
         characterRules.startAll();
+        // TODO update to rule object (with startAll and stopAll)
         const stopDynamicCharacterRulesForInitialState = startDynamicCharacterRulesForInitialState();
-        /*dolls*/
         dollRules.startAll();
-        /*places*/
         placeRules.startAll();
-        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState(dollDynamicRules, dollNames);
-        /**/
+        // TODO update to rule object (with startAll and stopAll)
+        const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState();
         playerRules.startAll();
         speechBubbleRules.startAll();
         safeVidRules.startAll();
@@ -87,19 +61,13 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
         return function stopPrendyMainRules() {
             keyboardConnectRules.stopAll();
             document.removeEventListener("visibilitychange", updateAppVisibility);
-            // pointerConnectRules.stopAll();
-            // keyboardRules.stopAll();
             stopAllGlobalRules();
             modelRules.stopAll();
-            /*characters*/
             characterRules.stopAll();
             stopDynamicCharacterRulesForInitialState();
-            /*dolls*/
             dollRules.stopAll();
             stopDynamicDollRulesForInitialState();
-            /*places*/
             placeRules.stopAll();
-            /**/
             playerRules.stopAll();
             speechBubbleRules.stopAll();
             safeVidRules.stopAll();

@@ -83,15 +83,10 @@ export type PrendyAssets = {
   prendyOptions: AssetsTypes["PrendyOptions"];
 };
 
-// NOTE generic types are used to prevent the typescript compiler simplifying types
-// like Record<PlaceName, Something> to Record<string, Something>
+// NOTE
 // the types are updated from each project (declaration merging)
-// This collect all the custom types into one, so a single generic parameter can be used in prendy functions
-// like example<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"])
 
 export type MyTypes = {
   Types: AssetsTypes;
-  Repond: RepondHelpers;
-  Stores: PrendyStores;
   Assets: PrendyAssets;
 };

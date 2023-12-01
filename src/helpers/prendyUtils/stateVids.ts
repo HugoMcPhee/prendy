@@ -1,70 +1,64 @@
-import { RepondHelpers } from "../../declarations";
+import { getState, startItemEffect, stopEffect } from "repond";
 import { VidState } from "../../stores/stateVids";
 
-export function get_safeVidUtils(storeHelpers: RepondHelpers) {
-  const { getState, startItemEffect, stopEffect } = storeHelpers;
+export function doWhenStateVidStateChanges(
+  stateVidId: string,
+  checkShouldRun: (newVidState: VidState) => boolean,
+  callback: () => void,
+  checkInitial: boolean = true
+) {
+  const initialVidState = getState().stateVids[stateVidId].vidState;
+  if (checkInitial && checkShouldRun(initialVidState)) {
+    callback();
+    return null;
+  }
 
-  function doWhenStateVidStateChanges(
-    stateVidId: string,
-    checkShouldRun: (newVidState: VidState) => boolean,
-    callback: () => void,
-    checkInitial: boolean = true
-  ) {
-    const initialVidState = getState().stateVids[stateVidId].vidState;
-    if (checkInitial && checkShouldRun(initialVidState)) {
+  const ruleName = "doWhenStateVidStateChanges" + Math.random();
+  startItemEffect({
+    name: ruleName,
+    run: ({ newValue: newVidState }) => {
+      if (!checkShouldRun(newVidState)) return;
+      stopEffect(ruleName);
       callback();
-      return null;
-    }
+    },
+    check: { type: "stateVids", prop: "vidState", name: stateVidId },
+    atStepEnd: true,
+    step: "stateVidStateUpdates",
+  });
+  return ruleName;
+}
 
-    const ruleName = "doWhenStateVidStateChanges" + Math.random();
-    startItemEffect({
-      name: ruleName,
-      run: ({ newValue: newVidState }) => {
-        if (!checkShouldRun(newVidState)) return;
-        stopEffect(ruleName);
-        callback();
-      },
-      check: { type: "stateVids", prop: "vidState", name: stateVidId },
-      atStepEnd: true,
-      step: "stateVidStateUpdates",
-    });
-    return ruleName;
-  }
+export function doWhenStateVidStateSeeked(stateVidId: string, callback: () => void) {
+  const ruleName = "doWhenStateVidStateSeeked" + Math.random();
+  startItemEffect({
+    name: ruleName,
+    run: ({ newValue: newVidState }) => {
+      stopEffect(ruleName);
+      callback();
+    },
+    check: { type: "stateVids", prop: "doneSeekingTime", name: stateVidId },
+    atStepEnd: true,
+    step: "stateVidStateUpdates",
+  });
+  return ruleName;
+}
 
-  function doWhenStateVidStateSeeked(stateVidId: string, callback: () => void) {
-    const ruleName = "doWhenStateVidStateSeeked" + Math.random();
-    startItemEffect({
-      name: ruleName,
-      run: ({ newValue: newVidState }) => {
-        stopEffect(ruleName);
-        callback();
-      },
-      check: { type: "stateVids", prop: "doneSeekingTime", name: stateVidId },
-      atStepEnd: true,
-      step: "stateVidStateUpdates",
-    });
-    return ruleName;
-  }
+export function doWhenStateVidStateReady(
+  stateVidId: string,
+  vidStateToCheck: VidState,
+  callback: () => void,
+  checkInitial: boolean = true
+) {
+  return doWhenStateVidStateChanges(stateVidId, (newState) => newState === vidStateToCheck, callback, checkInitial);
+}
 
-  function doWhenStateVidStateReady(
-    stateVidId: string,
-    vidStateToCheck: VidState,
-    callback: () => void,
-    checkInitial: boolean = true
-  ) {
-    return doWhenStateVidStateChanges(stateVidId, (newState) => newState === vidStateToCheck, callback, checkInitial);
-  }
-
-  function doWhenStateVidPlayOrPause(stateVidId: string, callback: () => void, checkInitial: boolean = true) {
-    return doWhenStateVidStateChanges(
-      stateVidId,
-      (newState) => newState === "play" || newState === "pause",
-      callback,
-      checkInitial
-    );
-  }
-
-  return { doWhenStateVidPlayOrPause, doWhenStateVidStateReady, doWhenStateVidStateSeeked };
+export function doWhenStateVidPlayOrPause(stateVidId: string, callback: () => void, checkInitial: boolean = true) {
+  return doWhenStateVidStateChanges(
+    stateVidId,
+    (newState) => newState === "play" || newState === "pause",
+    callback,
+    checkInitial
+  );
 }
 
 export function makeVideoElementFromPath(filepath: string) {

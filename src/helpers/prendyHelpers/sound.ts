@@ -5,12 +5,8 @@ import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { getScene } from "../babylonjs/getSceneOrEngineUtils";
 
-// export function get_soundStoryHelpers<MyTypes extends MyTypes = MyTypes>() {
 type MusicName = MyTypes["Types"]["MusicName"];
 type SoundName = MyTypes["Types"]["SoundName"];
-
-// const { musicNames, musicFiles, soundNames, soundFiles } = meta.assets!;
-// const globalRefs = getRefs().global.main;
 
 // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
 

@@ -24,9 +24,6 @@
     "strict": true,
     "noImplicitAny": false,
     "baseUrl": "./",
-    "paths": {
-      "react": ["node_modules/@types/react"]
-    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

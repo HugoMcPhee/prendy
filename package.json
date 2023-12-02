@@ -1,14 +1,14 @@
 {
   "name": "prendy",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "A modern take for classic ps1 style prerendered backdrop games with the babylonjs game engine and repond state",
   "_main": "src/index.ts",
-  "_types": "src/index.ts",
+  "types": "src/index.ts",
   "_files": [
     "src"
   ],
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "_types": "dist/index.d.ts",
   "files": [
     "dist",
     "src",

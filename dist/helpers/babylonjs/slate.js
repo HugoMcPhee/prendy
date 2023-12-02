@@ -29,17 +29,16 @@ export function getProjectionMatrixCustomSize(theCamera, theSize) {
     return theProjectionMatrix;
 }
 export function getPositionOnSlate(theMesh, modelName) {
-    var _a, _b;
     const { prendyOptions } = meta.assets;
     const globalRefs = getRefs().global.main;
     // This is a position on the slate itself
     const { nowPlaceName, nowCamName } = getState().global.main;
     const placeRefs = getRefs().places[nowPlaceName];
-    const nowCam = (_a = placeRefs.camsRefs[nowCamName]) === null || _a === void 0 ? void 0 : _a.camera;
+    const nowCam = placeRefs.camsRefs[nowCamName]?.camera;
     if (!nowCam)
         return new Vector3();
     // Use the characters head position instead of center position (for speech bubbles)
-    const Y_OFFSET = (_b = prendyOptions.headHeightOffsets[modelName]) !== null && _b !== void 0 ? _b : 2; // default to 2, just above the model
+    const Y_OFFSET = prendyOptions.headHeightOffsets[modelName] ?? 2; // default to 2, just above the model
     return Vector3.Project(new Vector3(theMesh.position.x, theMesh.position.y + Y_OFFSET, theMesh.position.z), Matrix.Identity(), nowCam
         .getViewMatrix()
         // .multiply(currentCamera.getProjectionMatrix()),

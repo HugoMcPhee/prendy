@@ -36,7 +36,7 @@ function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled
             if (disabled)
                 return;
             setIsPressed(true);
-            onPointerDown === null || onPointerDown === void 0 ? void 0 : onPointerDown();
+            onPointerDown?.();
             setState({
                 players: { main: { virtualControlsPressTime: Date.now() } },
             });
@@ -44,7 +44,7 @@ function VirtualButton({ children, onPress, onPointerDown, onPointerUp, disabled
             if (disabled)
                 return;
             setIsPressed(false);
-            onPointerUp === null || onPointerUp === void 0 ? void 0 : onPointerUp();
+            onPointerUp?.();
             setState({
                 players: { main: { virtualControlsReleaseTime: Date.now() } },
             });

@@ -8,7 +8,6 @@ function numbersAreClose(a, b, range) {
 export const sliceVidRules = makeRules(({ itemEffect }) => ({
     rulesForSettingNewVideoStates: itemEffect({
         run({ newValue: vidState, itemName, itemState }) {
-            var _a;
             const setItemState = (newState) => setState({ sliceVids: { [itemName]: newState } });
             // NOTE TODO FIXME? any type while no stores are connected
             const setVidState = (sliceVidState) => setItemState({ sliceVidState });
@@ -27,8 +26,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
                     },
                 });
                 doWhenStateVidStateReady(stateVidId_playing, "play", () => {
-                    var _a;
-                    const goalSeekTime = (_a = nowSlice === null || nowSlice === void 0 ? void 0 : nowSlice.time) !== null && _a !== void 0 ? _a : 0;
+                    const goalSeekTime = nowSlice?.time ?? 0;
                     setState({
                         sliceVids: { [itemName]: { sliceVidState: "play", newPlayingVidStartedTime: Date.now() } },
                         stateVids: {
@@ -120,14 +118,14 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
                         },
                     });
                 }
-                const waitingVidIsAtStartOfSlice = numbersAreClose((_a = waitingVidElement === null || waitingVidElement === void 0 ? void 0 : waitingVidElement.currentTime) !== null && _a !== void 0 ? _a : 0, nowSlice.time, BEFORE_LOOP_PADDING * 1.5);
+                const waitingVidIsAtStartOfSlice = numbersAreClose(waitingVidElement?.currentTime ?? 0, nowSlice.time, BEFORE_LOOP_PADDING * 1.5);
                 if (waitingVidIsAtStartOfSlice) {
                     // if the waiting vid is at the start of the slice, then swap the playing and waiting vids
                     swapPlayingAndWaitingVids();
                 }
                 else {
                     console.log("waiting vid is not at start of slice, seeking to start of slice");
-                    console.log(waitingVidElement === null || waitingVidElement === void 0 ? void 0 : waitingVidElement.currentTime, nowSlice.time);
+                    console.log(waitingVidElement?.currentTime, nowSlice.time);
                     // otherwise, seek the waiting vid to the start of the slice, then swap the playing and waiting vids
                     setState({ stateVids: { [stateVidId_waiting]: { goalSeekTime: nowSlice.time + BEFORE_LOOP_PADDING } } }); // BEFORE_LOOP_PADDING needed to prevent showing part of the previous frame on ios
                     doWhenStateVidStateSeeked(stateVidId_waiting, swapPlayingAndWaitingVids);

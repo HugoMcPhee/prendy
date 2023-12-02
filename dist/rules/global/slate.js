@@ -50,7 +50,6 @@ export const globalSlateRules = makeRules(({ itemEffect, effect }) => ({
     }),
     whenScreenResizes: itemEffect({
         run: async () => {
-            var _a;
             const { prendyOptions } = meta.assets;
             const globalRefs = getRefs().global.main;
             await delay(10); // this helps it work on ipad
@@ -63,7 +62,7 @@ export const globalSlateRules = makeRules(({ itemEffect, effect }) => ({
             const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
             const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
             engine.setSize(newRenderWidth, newRenderHeight);
-            (_a = globalRefs.depthRenderTarget) === null || _a === void 0 ? void 0 : _a.resize({ width: newRenderWidth, height: newRenderHeight });
+            globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
             // if the new screen ratio is equal to or thinner than a vertical 16:9, then set isOnVerticalPhone to true
             const isOnVerticalScreen = screenHeight / screenWidth >= 1;
             // check if the screen is super wide (for landscape phones)

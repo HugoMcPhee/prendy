@@ -136,7 +136,6 @@ export function setupLightMaterial(theMaterial) {
     }
 }
 export function saveModelStuffToDoll({ modelName, dollName, }) {
-    var _a, _b;
     const dollRefs = getRefs().dolls[dollName];
     const modelRefs = getRefs().models[modelName];
     const dollState = getState().dolls[dollName];
@@ -158,7 +157,7 @@ export function saveModelStuffToDoll({ modelName, dollName, }) {
     const meshArray = rootNode.getChildMeshes();
     const meshes = keyBy(meshArray, "name", removePrefix);
     const skeleton = entries.skeletons[0];
-    const bones = ((skeleton === null || skeleton === void 0 ? void 0 : skeleton.bones) ? keyBy(skeleton.bones, "name", removePrefix) : {});
+    const bones = (skeleton?.bones ? keyBy(skeleton.bones, "name", removePrefix) : {});
     const aniGroups = keyBy(entries.animationGroups, "name", (name) => name.replace(namePrefix, ""));
     // NOTE This references the original material, and not duplicated for each doll
     const materials = keyBy(modelRefs.container.materials);
@@ -187,7 +186,7 @@ export function saveModelStuffToDoll({ modelName, dollName, }) {
     });
     dollRefs.assetRefs = assetRefs;
     dollRefs.aniGroupsRef = aniGroups;
-    (_b = (_a = dollRefs.aniGroupsRef) === null || _a === void 0 ? void 0 : _a[dollState.nowAnimation]) === null || _b === void 0 ? void 0 : _b.start(true); // start looping the current animation
+    dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
     enableCollisions(dollRefs.meshRef);
     dollRefs.meshRef.setEnabled(dollState.isVisible);
     // Once the models loaded, update the animation based on the dolls state

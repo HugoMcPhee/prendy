@@ -25,12 +25,12 @@ export async function showSpeech(text, options) {
         const { slateZoom: prevSlateZoom } = getGlobalState();
         const playerCharacter = getGlobalState().playerCharacter;
         const { time, // time = 2600,
-        showOnce = false, character = playerCharacter, zoomAmount = SPEECH_ZOOM_AMOUNT, returnToZoomBeforeConversation = false, stylesBySpecialText, } = options !== null && options !== void 0 ? options : {};
+        showOnce = false, character = playerCharacter, zoomAmount = SPEECH_ZOOM_AMOUNT, returnToZoomBeforeConversation = false, stylesBySpecialText, } = options ?? {};
         const { dollName } = getCharDollStuff(character);
         const { dollName: playerDollName } = getCharDollStuff(playerCharacter);
         // NOTE at the moment CharacterName and SpeechBubbleName are the same
         const timeBasedOnText = MIN_AUTO_SPEECH_TIME + getTypingDelayForText(text, character) * 2;
-        const waitTime = time !== null && time !== void 0 ? time : timeBasedOnText;
+        const waitTime = time ?? timeBasedOnText;
         if (showOnce && showSpeechRefs.shownTextBools[text])
             return;
         function handlePressButton() {

@@ -22,7 +22,7 @@ function setPlayerPositionForNewPlace() {
     let newPosition = goalPositionAtNewPlace ? point3dToVector3(goalPositionAtNewPlace) : undefined;
     let newRotation = goalRotationAtNewPlace ? point3dToVector3(goalRotationAtNewPlace) : undefined;
     if (!newPosition || goalSpotNameAtNewPlace) {
-        const newSpotName = goalSpotNameAtNewPlace !== null && goalSpotNameAtNewPlace !== void 0 ? goalSpotNameAtNewPlace : spotNames[0];
+        const newSpotName = goalSpotNameAtNewPlace ?? spotNames[0];
         newPosition = getSpotPosition(nowPlaceName, newSpotName);
         newRotation = getSpotRotation(nowPlaceName, newSpotName);
     }
@@ -34,10 +34,9 @@ function setPlayerPositionForNewPlace() {
     // setDollToSpot({ doll: dollName as DollName, place: nowPlaceName, spot: newSpotName });
 }
 function whenAllVideosLoadedForPlace() {
-    var _a;
     const globalRefs = getRefs().global.main;
     const { nowPlaceName } = getState().global.main;
-    (_a = globalRefs.backdropVideoTex) === null || _a === void 0 ? void 0 : _a.dispose(); // NOTE maybe don't dispose it?
+    globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
     const backdropVidElement = getSliceVidVideo(nowPlaceName);
     if (backdropVidElement) {
         globalRefs.backdropVideoTex = new CustomVideoTexture("backdropVideoTex", backdropVidElement, globalRefs.scene, false, false, Texture.TRILINEAR_SAMPLINGMODE, // Texture.NEAREST_SAMPLINGMODE, might be better for depth
@@ -112,9 +111,8 @@ export const globalChangePlaceRules = makeRules(({ itemEffect }) => ({
                 const placeRefs = getRefs().places[nowPlaceName];
                 setState({ sliceVids: { [nowPlaceName]: { wantToUnload: true } } });
                 forEach(cameraNames, (camName) => {
-                    var _a;
                     const camRef = placeRefs.camsRefs[camName];
-                    (_a = camRef.probeTexture) === null || _a === void 0 ? void 0 : _a.dispose();
+                    camRef.probeTexture?.dispose();
                     camRef.probeTexture = null;
                 });
                 if (!goalPlaceName)
@@ -130,7 +128,7 @@ export const globalChangePlaceRules = makeRules(({ itemEffect }) => ({
                 });
                 const { nowCamName, goalCamWhenNextPlaceLoads } = getState().global.main;
                 setState({
-                    global: { main: { nowCamName: goalCamWhenNextPlaceLoads !== null && goalCamWhenNextPlaceLoads !== void 0 ? goalCamWhenNextPlaceLoads : nowCamName } },
+                    global: { main: { nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName } },
                 });
             });
         },
@@ -185,7 +183,7 @@ export const globalChangePlaceRules = makeRules(({ itemEffect }) => ({
                             // Start fading in the scene
                             setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });
                             onNextTick(() => {
-                                globalGeneralRules === null || globalGeneralRules === void 0 ? void 0 : globalGeneralRules.run("whenGameTimeSpeedChanges");
+                                globalGeneralRules?.run("whenGameTimeSpeedChanges");
                             });
                         });
                     }

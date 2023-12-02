@@ -134,8 +134,8 @@ export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
                 return;
             const { nowCamName } = getState().global.main;
             const globalChangedBools = diffInfo.propsChangedBool.global.main;
-            const placeChanged = globalChangedBools === null || globalChangedBools === void 0 ? void 0 : globalChangedBools.nowPlaceName;
-            const cameraChanged = globalChangedBools === null || globalChangedBools === void 0 ? void 0 : globalChangedBools.nowCamName;
+            const placeChanged = globalChangedBools?.nowPlaceName;
+            const cameraChanged = globalChangedBools?.nowCamName;
             if (!cameraChanged && !placeChanged)
                 return;
             // if the place or camera changed
@@ -151,7 +151,6 @@ export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
     // it might be okay to run when nowCamName changed (since it always swaps the video between a-b vid_wait to vid_play
     whenPlayingVidElementsChanged: itemEffect({
         run({ itemName: videoPlaceName }) {
-            var _a;
             // so video texture updates for looping vids (and when slice changes)
             const { nowPlaceName } = getState().global.main;
             const globalRefs = getRefs().global.main;
@@ -160,7 +159,7 @@ export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
             const backdropVidElement = getSliceVidVideo(nowPlaceName);
             if (!backdropVidElement)
                 return;
-            (_a = globalRefs.backdropVideoTex) === null || _a === void 0 ? void 0 : _a.updateVid(backdropVidElement);
+            globalRefs.backdropVideoTex?.updateVid(backdropVidElement);
         },
         check: { type: "sliceVids", prop: "newPlayingVidStartedTime" },
         step: "cameraChange",

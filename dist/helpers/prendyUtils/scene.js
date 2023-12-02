@@ -1,9 +1,8 @@
 import { getRefs, getState, onNextTick, startItemEffect, stopEffect } from "repond";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 export function getSegmentFromStoryRules(place, cam) {
-    var _a, _b, _c;
     const globalRefs = getRefs().global.main;
-    const foundRuleSegmentName = (_c = (_b = (_a = globalRefs.camSegmentRulesOptions) === null || _a === void 0 ? void 0 : _a[place]) === null || _b === void 0 ? void 0 : _b[cam]) === null || _c === void 0 ? void 0 : _c.call(_b, getUsefulStoryStuff());
+    const foundRuleSegmentName = globalRefs.camSegmentRulesOptions?.[place]?.[cam]?.(getUsefulStoryStuff());
     return foundRuleSegmentName;
 }
 export function doWhenNowSegmentChanges(checkingSegmentName, callback) {

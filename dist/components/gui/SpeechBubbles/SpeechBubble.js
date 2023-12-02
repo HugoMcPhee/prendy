@@ -17,14 +17,13 @@ const SHARED_THEME = {
     padding: "8px",
 };
 export function SpeechBubble({ name }) {
-    var _a, _b;
     const { speechVidFiles } = meta.assets;
     const theRectangle = useRef(null);
     const theTextRectangle = useRef(null);
     const theTriangle = useRef(null);
     const theText = useRef(null);
     const theTextHolder = useRef(null);
-    const forCharacter = (_a = getState().speechBubbles[name].forCharacter) !== null && _a !== void 0 ? _a : "walker";
+    const forCharacter = getState().speechBubbles[name].forCharacter ?? "walker";
     const [measuredHeight, setMeasuredHeight] = useState(0);
     const refs = {
         theRectangle,
@@ -88,11 +87,10 @@ export function SpeechBubble({ name }) {
         theSpringApi.start({ height: measuredHeight });
     }, [measuredHeight, theSpringApi]);
     const positionSpeechBubbleToCharacter = useCallback(() => {
-        var _a, _b, _c;
         const { forCharacter } = getState().speechBubbles[name];
         if (!forCharacter)
             return;
-        const { dollState, dollName } = (_a = getCharDollStuff(forCharacter)) !== null && _a !== void 0 ? _a : {};
+        const { dollState, dollName } = getCharDollStuff(forCharacter) ?? {};
         if (!dollState || !dollName)
             return;
         const { focusedDoll, focusedDollIsInView } = getState().global.main;
@@ -103,7 +101,7 @@ export function SpeechBubble({ name }) {
         const farRight = viewSize.x / 2;
         const farTop = -viewSize.y / 2;
         const farBottom = viewSize.y / 2;
-        const bubbleHeight = (_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190;
+        const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
         const halfBubbleHeight = bubbleHeight / 2;
         const halfBubbleWidth = BUBBLE_WIDTH / 2;
         const halfTriangleSize = TRIANGLE_SIZE / 2;
@@ -223,7 +221,7 @@ export function SpeechBubble({ name }) {
                 React.createElement("div", { ref: theTextHolder, style: styles.hiddenGoalText },
                     videoIsPlaying && (React.createElement("video", { 
                         // width="100%"
-                        width: `${BUBBLE_WIDTH}px`, height: `${BUBBLE_HEIGHT}px`, autoPlay: true, loop: true, src: (_b = speechVidFiles[nowVideoName !== null && nowVideoName !== void 0 ? nowVideoName : ""]) !== null && _b !== void 0 ? _b : "" })),
+                        width: `${BUBBLE_WIDTH}px`, height: `${BUBBLE_HEIGHT}px`, autoPlay: true, loop: true, src: speechVidFiles[nowVideoName ?? ""] ?? "" })),
                     _goalTextWordLetterArrays.map((wordLetters, wordIndex) => {
                         let letterAmountFromPreviousWords = wordIndex > 0 ? _goalTextWordLetterArrays.slice(0, wordIndex - 1).flat().length : 0;
                         return (React.createElement("span", { className: "SpeechBubble-wordLettersHolder", key: "" + wordLetters + wordIndex }, wordLetters.map((letter, wordLetterIndex) => {

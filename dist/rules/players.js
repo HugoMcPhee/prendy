@@ -92,14 +92,13 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
     //
     whenJumpPressed: itemEffect({
         run({ itemState: playerState, frameDuration }) {
-            var _a;
             const globalRefs = getRefs().global.main;
             const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
             const { timerSpeed } = globalRefs;
-            const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
+            const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter) ?? {};
             const { isOnGround, canJump } = playerState;
             const { scene } = globalRefs;
-            const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
+            const activeCamera = scene?.activeCamera;
             if (!dollRefs || !dollState || !dollName || !activeCamera)
                 return;
             if (playerMovingPaused || !canJump)
@@ -128,13 +127,12 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
     }),
     whenJoystickMoves: itemEffect({
         run({ newValue: inputVelocity, itemState: playerState, itemRefs: playerRefs }) {
-            var _a;
             const { playerCharacter, playerMovingPaused, gravityValue } = getState().global.main;
             const globalRefs = getRefs().global.main;
             const { timerSpeed } = globalRefs;
-            const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
+            const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter) ?? {};
             const { scene } = globalRefs;
-            const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
+            const activeCamera = scene?.activeCamera;
             if (!dollRefs || !dollState || !dollName || !activeCamera)
                 return;
             const { lastSafeInputAngle } = playerState;
@@ -273,7 +271,6 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
         // itemRefs: playerRefs,
         // frameDuration: timeDuration2,
          }) {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
             const timeDuration = newElapsedTime - prevElapsedTime;
             const { placeInfoByName } = meta.assets;
             const globalRefs = getRefs().global.main;
@@ -282,14 +279,14 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
             // NOTE should be a dynamic rule for each player listening to frame
             const { playerCharacter, playerMovingPaused, gravityValue, nowPlaceName } = getState().global.main;
             const { timerSpeed } = globalRefs;
-            const { dollRefs, dollState, dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
+            const { dollRefs, dollState, dollName } = getCharDollStuff(playerCharacter) ?? {};
             const dollPosRefs = dollRefs.positionMoverRefs;
             const { isJumping, isOnGround, inputVelocity } = getState().players.main;
             // if (!dollRefs.canCollide) return;
             // const { scene } = globalRefs;
             const { meshRef } = dollRefs;
             const scene = getScene();
-            const activeCamera = scene === null || scene === void 0 ? void 0 : scene.activeCamera;
+            const activeCamera = scene?.activeCamera;
             const placeInfo = placeInfoByName[nowPlaceName];
             const floorNames = placeInfo.floorNames;
             const wallNames = placeInfo.wallNames;
@@ -305,7 +302,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
             let newIsJumping = isJumping;
             const { 
             // angle: newInputAngle,
-            speed: dollSpeed, } = getSpeedAndAngleFromVector({ x: (_c = (_b = meshRef === null || meshRef === void 0 ? void 0 : meshRef.velocity) === null || _b === void 0 ? void 0 : _b.x) !== null && _c !== void 0 ? _c : 0, y: (_e = (_d = meshRef === null || meshRef === void 0 ? void 0 : meshRef.velocity) === null || _d === void 0 ? void 0 : _d.z) !== null && _e !== void 0 ? _e : 0 });
+            speed: dollSpeed, } = getSpeedAndAngleFromVector({ x: meshRef?.velocity?.x ?? 0, y: meshRef?.velocity?.z ?? 0 });
             // dollPosRefs.velocity.y -=
             //   (gravityValue * frameDuration) / 160;
             // const isGoinDownOrStill = dollPosRefs.velocity.y < 0;
@@ -335,7 +332,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
                 if (centerPick) {
                     let distance = 1000000;
                     if (centerPick.pickedPoint && meshRef.position) {
-                        const pickedPointY = (_f = centerPick.pickedPoint) === null || _f === void 0 ? void 0 : _f.y;
+                        const pickedPointY = centerPick.pickedPoint?.y;
                         const meshYPosition = meshRef.position.y;
                         distance = Math.abs(pickedPointY - meshYPosition);
                     }
@@ -344,8 +341,8 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
                         const RAY_FORWARD_DIST = 0.25;
                         frontRayHelper.attachToMesh(/*mesh*/ meshRef, frontRayDirection, frontRayRelativeOrigin, /*length*/ 10);
                         const frontPick = scene.pickWithRay(frontRay, (mesh) => floorNames.includes(mesh.name) || wallNames.includes(mesh.name), true);
-                        if (frontPick === null || frontPick === void 0 ? void 0 : frontPick.hit) {
-                            const heightDiff = (((_g = frontPick === null || frontPick === void 0 ? void 0 : frontPick.pickedPoint) === null || _g === void 0 ? void 0 : _g.y) || 0) - (((_h = centerPick === null || centerPick === void 0 ? void 0 : centerPick.pickedPoint) === null || _h === void 0 ? void 0 : _h.y) || 0);
+                        if (frontPick?.hit) {
+                            const heightDiff = (frontPick?.pickedPoint?.y || 0) - (centerPick?.pickedPoint?.y || 0);
                             // In degrees, negative is down
                             slopeUnderPlayer = getVectorAngle({
                                 x: RAY_FORWARD_DIST,
@@ -438,10 +435,9 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
     }),
     whenAnimationNamesChange: itemEffect({
         run({ newValue: newAnimationNames, itemState: playerState }) {
-            var _a;
             const { playerCharacter, playerMovingPaused } = getState().global.main;
             const { inputVelocity } = playerState;
-            const { dollName } = (_a = getCharDollStuff(playerCharacter)) !== null && _a !== void 0 ? _a : {};
+            const { dollName } = getCharDollStuff(playerCharacter) ?? {};
             if (!dollName)
                 return;
             let newAnimationName = newAnimationNames.idle;

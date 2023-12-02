@@ -84,14 +84,13 @@ export function checkIfVideoAlreadyChanging(placeName) {
 }
 // Runs on changes to tick, in the checkVideoLoop flow
 export function checkForVideoLoop(placeName) {
-    var _a;
     // maybe add a check, if the video loop has stayed on beforeDoLoop or beforeChangeSlice for too many frames, then do something?
     const itemState = getState().sliceVids[placeName];
     const { nowSlice } = itemState;
     const backdropVid = getSliceVidVideo(placeName);
     if (checkIfVideoUnloading(placeName))
         return false;
-    const currentTime = (_a = backdropVid === null || backdropVid === void 0 ? void 0 : backdropVid.currentTime) !== null && _a !== void 0 ? _a : 0;
+    const currentTime = backdropVid?.currentTime ?? 0;
     const endTime = getSliceEndTime(nowSlice);
     const isAtOrAfterEndOfLoop = currentTime >= endTime;
     const isBeforeStartOfLoop = currentTime < nowSlice.time; // if the current time is before the video slices start time

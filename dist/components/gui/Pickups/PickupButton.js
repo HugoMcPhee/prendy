@@ -13,8 +13,7 @@ export function PickupButton({ name }) {
     return (React.createElement("button", { 
         // onPointerUpCapture={() => globalRefs.onPickupButtonClick?.(name)}
         onPointerDown: handlePointerDown, onPointerUp: (event) => {
-            var _a;
-            (_a = globalRefs.onPickupButtonClick) === null || _a === void 0 ? void 0 : _a.call(globalRefs, name);
+            globalRefs.onPickupButtonClick?.(name);
             handlePointerUp(event);
         }, onPointerCancel: handlePointerUp, onPointerLeave: handlePointerUp, onPointerOut: handlePointerUp, style: {
             pointerEvents: "auto",

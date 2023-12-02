@@ -52,11 +52,10 @@ function numberToPixels(styleNumber) {
     return typeof styleNumber === "number" ? styleNumber.toString() + "px" : styleNumber;
 }
 export function addFixed(options = {}) {
-    var _a, _b;
     const { x, y, top, bottom, left, right } = options;
     const chosenStuff = {
-        top: (_a = top !== null && top !== void 0 ? top : y) !== null && _a !== void 0 ? _a : (bottom === undefined ? 0 : undefined),
-        left: (_b = left !== null && left !== void 0 ? left : x) !== null && _b !== void 0 ? _b : (right === undefined ? 0 : undefined),
+        top: top ?? y ?? (bottom === undefined ? 0 : undefined),
+        left: left ?? x ?? (right === undefined ? 0 : undefined),
         bottom,
         right,
     };

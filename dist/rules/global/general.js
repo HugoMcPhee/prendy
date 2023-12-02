@@ -9,8 +9,8 @@ export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
             const globalRefs = getRefs().global.main;
             const scene = globalRefs.scene;
             // Renders the scene manually
-            if (scene === null || scene === void 0 ? void 0 : scene.activeCamera)
-                scene === null || scene === void 0 ? void 0 : scene.render(false, false);
+            if (scene?.activeCamera)
+                scene?.render(false, false);
             // runs in a callback to set before the new repond frame
             onNextTick(() => setState({ global: { main: { frameTick: getState().global.main.frameTick + 1 } } }));
         },

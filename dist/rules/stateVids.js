@@ -6,7 +6,6 @@ function setVid(itemName, newState) {
 export const safeVidRules = makeRules(({ itemEffect }) => ({
     whenVideoStateChanges: itemEffect({
         run({ newValue: vidState, itemState, itemRefs, itemName }) {
-            var _a;
             const { goalSeekTime, autoplay } = itemState;
             function setVidState(vidState) {
                 setVid(itemName, { vidState });
@@ -16,20 +15,18 @@ export const safeVidRules = makeRules(({ itemEffect }) => ({
                 setVidState("waitingForLoad");
                 itemRefs.videoElement = makeVideoElementFromPath(itemState.videoSource);
                 function onLoad() {
-                    var _a;
-                    (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.removeEventListener("loadedmetadata", onLoad);
+                    itemRefs.videoElement?.removeEventListener("loadedmetadata", onLoad);
                     // uncomment to test videos
                     // itemRefs.videoElement && testAppendVideo(itemRefs.videoElement, itemName, itemName);
                 }
                 itemRefs.videoElement.addEventListener("loadedmetadata", onLoad);
                 // manual alternative for preload / autoplay, make sure the video is loaded and has played like 1 frame
-                (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.play().finally(() => {
-                    var _a;
+                itemRefs.videoElement?.play().finally(() => {
                     if (autoplay) {
                         setVid(itemName, { vidState: "play", playType: "play" });
                     }
                     else {
-                        (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.pause();
+                        itemRefs.videoElement?.pause();
                         setVid(itemName, { vidState: "pause", playType: "pause" });
                     }
                 });
@@ -40,10 +37,9 @@ export const safeVidRules = makeRules(({ itemEffect }) => ({
                     setVid(itemName, { vidState: "waitingForSeek", goalSeekTime: null });
                     // note only works on safari is the video was already loaded / played one frame?
                     function onSeeked() {
-                        var _a;
                         const newState = getState().stateVids[itemName];
                         setState({ stateVids: { [itemName]: { vidState: newState.playType, doneSeekingTime: Date.now() } } });
-                        (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.removeEventListener("seeked", onSeeked); // stop listening to when the video's seeked
+                        itemRefs.videoElement?.removeEventListener("seeked", onSeeked); // stop listening to when the video's seeked
                     }
                     itemRefs.videoElement.addEventListener("seeked", onSeeked); // start listening to when the video's seeked
                     itemRefs.videoElement.currentTime = goalSeekTime; // seek the video
@@ -70,9 +66,8 @@ export const safeVidRules = makeRules(({ itemEffect }) => ({
                 if (itemRefs.videoElement) {
                     setVidState("waitingForPause");
                     function onPaused() {
-                        var _a;
                         setVid(itemName, { vidState: "pause", playType: "pause" });
-                        (_a = itemRefs.videoElement) === null || _a === void 0 ? void 0 : _a.removeEventListener("pause", onPaused);
+                        itemRefs.videoElement?.removeEventListener("pause", onPaused);
                     }
                     itemRefs.videoElement.addEventListener("pause", onPaused);
                     itemRefs.videoElement.pause();

@@ -146,21 +146,21 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
                     return;
                 }
                 // console.log("gameTimeSpeed", gameTimeSpeed);
-                if (aniRef && (aniRef === null || aniRef === void 0 ? void 0 : aniRef.speedRatio) !== gameTimeSpeed) {
+                if (aniRef && aniRef?.speedRatio !== gameTimeSpeed) {
                     aniRef.speedRatio = gameTimeSpeed;
                 }
                 const animWeight = animWeights[aniName];
                 const animIsStopped = animWeight < 0.003;
                 // stops playing if the weight is 0ish
                 if (animIsStopped) {
-                    if (aniRef === null || aniRef === void 0 ? void 0 : aniRef.isPlaying)
+                    if (aniRef?.isPlaying)
                         aniRef.stop();
                 }
                 else {
-                    if (!(aniRef === null || aniRef === void 0 ? void 0 : aniRef.isPlaying))
+                    if (!aniRef?.isPlaying)
                         aniRef.start(itemState.animationLoops);
                 }
-                aniRef === null || aniRef === void 0 ? void 0 : aniRef.setWeightForAllAnimatables(animWeights[aniName]);
+                aniRef?.setWeightForAllAnimatables(animWeights[aniName]);
             });
         },
         check: { type: "dolls", prop: "animWeights" },
@@ -244,7 +244,6 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
                 tempNewDollsState[dollName] = { inRange: defaultInRange() };
                 // get quick distances to each other doll
                 forEach(dollNames, (otherDollName) => {
-                    var _a;
                     const otherDollState = getState().dolls[otherDollName];
                     if (!otherDollState.isVisible)
                         return;
@@ -253,7 +252,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
                         quickDistance = 100000000;
                     }
                     // if the reverse distance was already found use that
-                    if (((_a = newQuickDistancesMap[otherDollName]) === null || _a === void 0 ? void 0 : _a[dollName]) !== undefined) {
+                    if (newQuickDistancesMap[otherDollName]?.[dollName] !== undefined) {
                         quickDistance = newQuickDistancesMap[otherDollName][dollName];
                     }
                     else {
@@ -266,7 +265,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
                 });
                 const currentDollState = getState().dolls[dollName];
                 const tempNewDollState = tempNewDollsState[dollName];
-                if (tempNewDollState === null || tempNewDollState === void 0 ? void 0 : tempNewDollState.inRange) {
+                if (tempNewDollState?.inRange) {
                     if (!inRangesAreTheSame(tempNewDollState.inRange, currentDollState.inRange // FIXME DeepReadonlyObjects
                     )) {
                         newDollsState[dollName] = tempNewDollState;
@@ -303,7 +302,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
                 tempNewAllDollsState[otherDollName].inRange[dollName].talk = false;
                 tempNewAllDollsState[otherDollName].inRange[dollName].see = false;
                 const tempNewDollState = tempNewAllDollsState[otherDollName];
-                if (tempNewDollState === null || tempNewDollState === void 0 ? void 0 : tempNewDollState.inRange) {
+                if (tempNewDollState?.inRange) {
                     if (!inRangesAreTheSame(tempNewDollState.inRange, otherDollState.inRange // FIXME DeepReadonlyObjects
                     )) {
                         newAllDollsState[otherDollName] = tempNewDollState;

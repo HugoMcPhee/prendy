@@ -45,7 +45,7 @@ async function changeCameraAtLoop(_place, newCamName) {
 }
 export function lookAtSpot(place, spot, character) {
     const { playerCharacter } = getState().global.main;
-    const editedCharacter = character !== null && character !== void 0 ? character : playerCharacter;
+    const editedCharacter = character ?? playerCharacter;
     const charDollStuff = getCharDollStuff(editedCharacter);
     const { dollName } = charDollStuff;
     const angle = get2DAngleFromCharacterToSpot(editedCharacter, place, spot);
@@ -101,12 +101,11 @@ export function setCamera(_placeName, cameraName, whenToRun = "now") {
     });
 }
 export function goToNewPlace(toOption, charNameParam) {
-    var _a;
     const charName = charNameParam || meta.assets.characterNames[0];
     const { placeInfoByName } = meta.assets;
     // NOTE could include waitForPlaceFullyLoaded here so it can be awaited
     let { toSpot, toPlace, toPositon, toCam, toSegment } = toOption;
-    const { dollName } = (_a = getCharDollStuff(charName)) !== null && _a !== void 0 ? _a : {};
+    const { dollName } = getCharDollStuff(charName) ?? {};
     if (!dollName)
         return;
     onNextTick(() => {
@@ -117,8 +116,8 @@ export function goToNewPlace(toOption, charNameParam) {
             // toSpot = toSpot ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
             toSpot = toSpot; // ?? (placeInfo.spotNames[0] as SpotNameByPlace[T_PlaceName]);
             toPositon = toPositon;
-            toCam = toCam !== null && toCam !== void 0 ? toCam : placeInfo.cameraNames[0]; // types as a cam for the chosen place
-            toSegment = toSegment !== null && toSegment !== void 0 ? toSegment : placeInfo.segmentNames[0];
+            toCam = toCam ?? placeInfo.cameraNames[0]; // types as a cam for the chosen place
+            toSegment = toSegment ?? placeInfo.segmentNames[0];
             const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
             if (foundRuleSegmentName)
                 toSegment = foundRuleSegmentName;

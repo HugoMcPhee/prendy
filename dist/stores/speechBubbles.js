@@ -3,27 +3,24 @@ import { defaultPosition } from "chootils/dist/points2d";
 export default function speechBubbles(prendyAssets) {
     const { characterNames, characterOptions, fontNames } = prendyAssets;
     const state = (_itemName, options // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
-    ) => {
-        var _a, _b;
-        return ({
-            isVisible: false,
-            isFullyHidden: true,
-            goalText: "",
-            visibleLetterAmount: 0,
-            typingSpeed: 60, // milliseconds between characters
-            stylesBySpecialText: {}, // { "golden banana": { color: "yellow" } } // style snippets of text
-            _specialTextByLetterIndex: {}, // { 0: "golden banana", 1:"golden banana" , 2:"golden banana"}
-            _goalTextWordLetterArrays: [[]],
-            forCharacter: ((_a = options === null || options === void 0 ? void 0 : options.character) !== null && _a !== void 0 ? _a : "walker"),
-            position: defaultPosition(),
-            typingFinished: true,
-            nowVideoName: null,
-            font: (_b = options === null || options === void 0 ? void 0 : options.font) !== null && _b !== void 0 ? _b : fontNames[0],
-            // shouldStartRemovoing: false, // (so it can fade out)
-            // shouldRemove: false, // (after it’s faded out)
-            zIndex: 0,
-        });
-    };
+    ) => ({
+        isVisible: false,
+        isFullyHidden: true,
+        goalText: "",
+        visibleLetterAmount: 0,
+        typingSpeed: 60, // milliseconds between characters
+        stylesBySpecialText: {}, // { "golden banana": { color: "yellow" } } // style snippets of text
+        _specialTextByLetterIndex: {}, // { 0: "golden banana", 1:"golden banana" , 2:"golden banana"}
+        _goalTextWordLetterArrays: [[]],
+        forCharacter: (options?.character ?? "walker"),
+        position: defaultPosition(),
+        typingFinished: true,
+        nowVideoName: null,
+        font: options?.font ?? fontNames[0],
+        // shouldStartRemovoing: false, // (so it can fade out)
+        // shouldRemove: false, // (after it’s faded out)
+        zIndex: 0,
+    });
     const refs = () => ({
         bubbleRef: null,
         textRef: null,

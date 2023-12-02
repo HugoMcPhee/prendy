@@ -21,13 +21,12 @@ const SHARED_THEME = {
 // when the TRIANGLE_SIZE is different the svgs border width (stroke) needs to be scaled accordingly
 const TRIANGLE_BORDER_WIDTH_SCALE = 50 / TRIANGLE_SIZE;
 export function MiniBubble({ name }) {
-    var _a;
     const theRectangle = useRef(null);
     const theTextRectangle = useRef(null);
     const theTriangle = useRef(null);
     const theText = useRef(null);
     const theGoalText = useRef(null);
-    const forCharacter = (_a = getState().miniBubbles[name].forCharacter) !== null && _a !== void 0 ? _a : "walker";
+    const forCharacter = getState().miniBubbles[name].forCharacter ?? "walker";
     const [measuredHeight, setMeasuredHeight] = useState(0);
     const refs = {
         theRectangle,
@@ -91,11 +90,10 @@ export function MiniBubble({ name }) {
         theSpringApi.start({ height: measuredHeight });
     }, [measuredHeight, theSpringApi]);
     const positionMiniBubbleToCharacter = useCallback(() => {
-        var _a, _b, _c;
         const { forCharacter } = getState().speechBubbles[name];
         if (!forCharacter)
             return;
-        const { dollState, dollName } = (_a = getCharDollStuff(forCharacter)) !== null && _a !== void 0 ? _a : {};
+        const { dollState, dollName } = getCharDollStuff(forCharacter) ?? {};
         if (!dollState || !dollName)
             return;
         const { focusedDoll, focusedDollIsInView } = getState().global.main;
@@ -106,7 +104,7 @@ export function MiniBubble({ name }) {
         const farRight = viewSize.x / 2;
         const farTop = -viewSize.y / 2;
         const farBottom = viewSize.y / 2;
-        const bubbleHeight = (_c = (_b = refs.theTextRectangle.current) === null || _b === void 0 ? void 0 : _b.offsetHeight) !== null && _c !== void 0 ? _c : 190;
+        const bubbleHeight = refs.theTextRectangle.current?.offsetHeight ?? 190;
         const halfBubbleHeight = bubbleHeight / 2;
         const halfBubbleWidth = BUBBLE_WIDTH / 2;
         const halfTriangleSize = TRIANGLE_SIZE / 2;

@@ -88,8 +88,7 @@ export function usePlace(placeName) {
         });
         return () => {
             forEach(soundspotNames, (loopedName) => {
-                var _a;
-                (_a = placeRefs.soundspotSounds[loopedName]) === null || _a === void 0 ? void 0 : _a.dispose();
+                placeRefs.soundspotSounds[loopedName]?.dispose();
             });
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps

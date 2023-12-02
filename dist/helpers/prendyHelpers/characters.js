@@ -27,7 +27,7 @@ export function lookAtOtherCharacter(charA, charB // defaults to playerChaarcter
 ) {
     // NOTE could be async
     const { playerCharacter } = getGlobalState();
-    const editedCharB = charB !== null && charB !== void 0 ? charB : playerCharacter;
+    const editedCharB = charB ?? playerCharacter;
     const { dollName } = getCharDollStuff(editedCharB);
     const angle = get2DAngleBetweenCharacters(editedCharB, charA);
     springDollRotationY(dollName, angle);

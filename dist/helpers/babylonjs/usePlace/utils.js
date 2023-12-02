@@ -6,17 +6,16 @@ import { meta } from "../../../meta";
 import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
 import { getScene } from "../getSceneOrEngineUtils";
 export function testAppendVideo(theVideo, id, elementTag = "app") {
-    var _a;
     theVideo.width = 160;
     theVideo.height = 90;
     theVideo.id = id;
     // theVideo.preload = "auto";
-    (_a = document.getElementById(elementTag)) === null || _a === void 0 ? void 0 : _a.appendChild(theVideo);
+    document.getElementById(elementTag)?.appendChild(theVideo);
 }
 export async function loadNowVideosForPlace() {
     const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
     const { nowCamName, goalCamName } = getState().global.main;
-    const goalSlice = getSliceForPlace(nowPlaceName, (goalCamName !== null && goalCamName !== void 0 ? goalCamName : nowCamName), (goalSegmentName !== null && goalSegmentName !== void 0 ? goalSegmentName : nowSegmentName));
+    const goalSlice = getSliceForPlace(nowPlaceName, (goalCamName ?? nowCamName), (goalSegmentName ?? nowSegmentName));
     setState({ sliceVids: { [nowPlaceName]: { wantToLoad: true, nowSlice: goalSlice } } });
     await doWhenSliceVidPlayingAsync(nowPlaceName);
     return true;

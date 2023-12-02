@@ -166,10 +166,9 @@ export function toggleDollMeshes(dollName, toggledMeshes) {
     }));
 }
 export function getDollBonePosition({ doll, model, bone, }) {
-    var _a, _b;
     // ModelNameFromDoll
     const dollRefs = getRefs().dolls.dino;
-    const dollBone = (_b = (_a = dollRefs.assetRefs) === null || _a === void 0 ? void 0 : _a.bones) === null || _b === void 0 ? void 0 : _b[bone];
+    const dollBone = dollRefs.assetRefs?.bones?.[bone];
     if (dollRefs.meshRef) {
         dollRefs.meshRef.scaling = new Vector3(1.95, 1.95, -1.95);
         // dollRefs.canCollide = true;

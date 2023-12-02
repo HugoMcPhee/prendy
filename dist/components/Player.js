@@ -33,9 +33,8 @@ export function Player(_props) {
                 // Check for going to new places at door triggers
                 // TODO move to a rule
                 breakableForEach(placeInfoByName[nowPlaceName].triggerNames, (triggerName) => {
-                    var _a;
                     if (atTriggers[triggerName]) {
-                        const toOption = (_a = prendyOptions.doorsInfo[nowPlaceName]) === null || _a === void 0 ? void 0 : _a[triggerName];
+                        const toOption = prendyOptions.doorsInfo[nowPlaceName]?.[triggerName];
                         if (toOption) {
                             goToNewPlace(toOption, charName);
                             return true; // break

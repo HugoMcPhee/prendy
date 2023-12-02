@@ -5,6 +5,20 @@ import { Texture, Tools } from "@babylonjs/core";
  */
 export class CustomVideoTexture extends Texture {
     /**
+     * Tells whether textures will be updated automatically or user is required to call `updateTexture` manually
+     */
+    autoUpdateTexture;
+    /**
+     * The video instance used by the texture internally
+     */
+    // public readonly video: HTMLVideoElement;
+    video;
+    _generateMipMaps;
+    _stillImageCaptured = false;
+    _settings;
+    _frameId = -1;
+    _currentSrc = null;
+    /**
      * Creates a video texture.
      * If you want to display a video in your scene, this is the special texture for that.
      * This special texture works similar to other textures, with the exception of a few parameters.
@@ -23,56 +37,6 @@ export class CustomVideoTexture extends Texture {
         autoUpdateTexture: true,
     }) {
         super(null, scene, !generateMipMaps, invertY);
-        this._stillImageCaptured = false;
-        this._frameId = -1;
-        this._currentSrc = null;
-        this._createInternalTexture = () => {
-            if (this._texture != null) {
-                return;
-            }
-            if (!this._getEngine().needPOTTextures ||
-                (Tools.IsExponentOfTwo(this.video.videoWidth) && Tools.IsExponentOfTwo(this.video.videoHeight))) {
-                this.wrapU = Texture.WRAP_ADDRESSMODE;
-                this.wrapV = Texture.WRAP_ADDRESSMODE;
-            }
-            else {
-                this.wrapU = Texture.CLAMP_ADDRESSMODE;
-                this.wrapV = Texture.CLAMP_ADDRESSMODE;
-                this._generateMipMaps = false;
-            }
-            this._texture = this._getEngine().createDynamicTexture(this.video.videoWidth, this.video.videoHeight, this._generateMipMaps, 
-            // false,
-            this.samplingMode);
-            if (!this.video.autoplay) {
-            }
-            else {
-                this._updateInternalTexture();
-                if (this.onLoadObservable.hasObservers()) {
-                    this.onLoadObservable.notifyObservers(this);
-                }
-            }
-        };
-        this.reset = () => {
-            if (this._texture == null) {
-                return;
-            }
-            this._texture.dispose();
-            this._texture = null;
-        };
-        this._updateInternalTexture = () => {
-            if (this._texture == null) {
-                return;
-            }
-            if (this.video.readyState < this.video.HAVE_CURRENT_DATA) {
-                return;
-            }
-            let frameId = this.getScene().getFrameId();
-            if (this._frameId === frameId) {
-                return;
-            }
-            this._frameId = frameId;
-            this._getEngine().updateVideoTexture(this._texture, this.video, this._invertY);
-        };
         this._generateMipMaps = generateMipMaps;
         this._initialSamplingMode = samplingMode;
         this.autoUpdateTexture = settings.autoUpdateTexture;
@@ -112,6 +76,39 @@ export class CustomVideoTexture extends Texture {
         }
         return src;
     }
+    _createInternalTexture = () => {
+        if (this._texture != null) {
+            return;
+        }
+        if (!this._getEngine().needPOTTextures ||
+            (Tools.IsExponentOfTwo(this.video.videoWidth) && Tools.IsExponentOfTwo(this.video.videoHeight))) {
+            this.wrapU = Texture.WRAP_ADDRESSMODE;
+            this.wrapV = Texture.WRAP_ADDRESSMODE;
+        }
+        else {
+            this.wrapU = Texture.CLAMP_ADDRESSMODE;
+            this.wrapV = Texture.CLAMP_ADDRESSMODE;
+            this._generateMipMaps = false;
+        }
+        this._texture = this._getEngine().createDynamicTexture(this.video.videoWidth, this.video.videoHeight, this._generateMipMaps, 
+        // false,
+        this.samplingMode);
+        if (!this.video.autoplay) {
+        }
+        else {
+            this._updateInternalTexture();
+            if (this.onLoadObservable.hasObservers()) {
+                this.onLoadObservable.notifyObservers(this);
+            }
+        }
+    };
+    reset = () => {
+        if (this._texture == null) {
+            return;
+        }
+        this._texture.dispose();
+        this._texture = null;
+    };
     /**
      * @hidden Internal method to initiate `update`.
      */
@@ -142,6 +139,20 @@ export class CustomVideoTexture extends Texture {
         this._stillImageCaptured = true;
         this._updateInternalTexture();
     }
+    _updateInternalTexture = () => {
+        if (this._texture == null) {
+            return;
+        }
+        if (this.video.readyState < this.video.HAVE_CURRENT_DATA) {
+            return;
+        }
+        let frameId = this.getScene().getFrameId();
+        if (this._frameId === frameId) {
+            return;
+        }
+        this._frameId = frameId;
+        this._getEngine().updateVideoTexture(this._texture, this.video, this._invertY);
+    };
     updateVid(newVid) {
         // if (this.video === newVid) {
         //   return;

@@ -7,7 +7,6 @@ const RAY_LIMIT = 100;
 const SCALE_DOWN_AMOUNT = 0.00001; // originally 0.00000001 but caused too many iterations
 const ray = new Ray(Vector3.Zero(), Axis.X, 2);
 export default function pointIsInside(point, mesh) {
-    var _a;
     // return false;
     let boundInfo = mesh.getBoundingInfo();
     // let max = boundInfo.maximum;
@@ -41,7 +40,7 @@ export default function pointIsInside(point, mesh) {
     pickInfo = ray.intersectsMesh(mesh);
     while (pickInfo.hit && hitCount < RAY_LIMIT) {
         hitCount++;
-        (_a = pickInfo.pickedPoint) === null || _a === void 0 ? void 0 : _a.addToRef(direction.scale(SCALE_DOWN_AMOUNT), refPoint);
+        pickInfo.pickedPoint?.addToRef(direction.scale(SCALE_DOWN_AMOUNT), refPoint);
         ray.origin = refPoint;
         pickInfo = ray.intersectsMesh(mesh);
     }

@@ -8,7 +8,7 @@ export default function dolls(prendyAssets) {
     const { defaultInRange, makeModelAnimWeightsMoverState, makeToggledMeshesState, modelMoverRefs, modelOtherMeshesRefs, } = get_dollStoreUtils(prendyAssets);
     const defaultModelName = modelNames[0];
     const state = (_dollName, modelName) => {
-        const safeModelName = modelName !== null && modelName !== void 0 ? modelName : defaultModelName;
+        const safeModelName = modelName ?? defaultModelName;
         const { animationNames } = modelInfoByName[safeModelName];
         return {
             modelName: safeModelName, // to reference in refs aswell

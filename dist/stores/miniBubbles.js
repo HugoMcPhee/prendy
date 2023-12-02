@@ -3,16 +3,13 @@ import { forEach } from "chootils/dist/loops";
 export default function miniBubbles(prendyAssets) {
     const { characterNames, characterOptions } = prendyAssets;
     const state = (_itemName, options // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
-    ) => {
-        var _a;
-        return ({
-            isVisible: false,
-            isFullyHidden: true,
-            text: "❕",
-            forCharacter: (_a = options === null || options === void 0 ? void 0 : options.character) !== null && _a !== void 0 ? _a : "walker",
-            position: defaultPosition(),
-        });
-    };
+    ) => ({
+        isVisible: false,
+        isFullyHidden: true,
+        text: "❕",
+        forCharacter: options?.character ?? "walker",
+        position: defaultPosition(),
+    });
     const refs = () => ({
         bubbleRef: null,
         textRef: null,

@@ -200,7 +200,7 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
   // console.log("namePrefix", namePrefix);
 
   let entries = modelRefs.container.instantiateModelsToScene(
-    (sourceName) => {
+    (sourceName: string) => {
       const naeName = `${namePrefix}${sourceName}`;
 
       return `${namePrefix}${sourceName}`;

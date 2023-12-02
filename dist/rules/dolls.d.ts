@@ -43,11 +43,11 @@ export declare const dollDynamicRules: {
 };
 export declare function startDynamicDollRulesForInitialState(): () => void;
 export declare const dollRules: {
-    start: (ruleName: string) => void;
-    stop: (ruleName: string) => void;
+    start: (ruleName: "whenModelNameChanges" | "whenDollAddedOrRemoved" | "whenNowAnimationChanged" | "whenAnimWeightsChanged" | "whenRotationYChanged" | "whenPositionChangesToEdit" | "whenPositionChangesCheckInRange" | "whenHidingUpdateInRange" | "updateDollScreenPositionWhenSlateMoves" | "whenToggledMeshesChanges" | "whenIsVisibleChanges" | "whenRotationGoalChangedToFix") => void;
+    stop: (ruleName: "whenModelNameChanges" | "whenDollAddedOrRemoved" | "whenNowAnimationChanged" | "whenAnimWeightsChanged" | "whenRotationYChanged" | "whenPositionChangesToEdit" | "whenPositionChangesCheckInRange" | "whenHidingUpdateInRange" | "updateDollScreenPositionWhenSlateMoves" | "whenToggledMeshesChanges" | "whenIsVisibleChanges" | "whenRotationGoalChangedToFix") => void;
     startAll: () => void;
     stopAll: () => void;
-    ruleNames: string[];
-    run: (ruleName: string) => void;
+    ruleNames: ("whenModelNameChanges" | "whenDollAddedOrRemoved" | "whenNowAnimationChanged" | "whenAnimWeightsChanged" | "whenRotationYChanged" | "whenPositionChangesToEdit" | "whenPositionChangesCheckInRange" | "whenHidingUpdateInRange" | "updateDollScreenPositionWhenSlateMoves" | "whenToggledMeshesChanges" | "whenIsVisibleChanges" | "whenRotationGoalChangedToFix")[];
+    run: (ruleName: "whenModelNameChanges" | "whenDollAddedOrRemoved" | "whenNowAnimationChanged" | "whenAnimWeightsChanged" | "whenRotationYChanged" | "whenPositionChangesToEdit" | "whenPositionChangesCheckInRange" | "whenHidingUpdateInRange" | "updateDollScreenPositionWhenSlateMoves" | "whenToggledMeshesChanges" | "whenIsVisibleChanges" | "whenRotationGoalChangedToFix") => void;
     runAll: () => void;
 };

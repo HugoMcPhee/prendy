@@ -1,9 +1,9 @@
 export declare const globalSlateRules: {
-    start: (ruleName: string) => void;
-    stop: (ruleName: string) => void;
+    start: (ruleName: "whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes") => void;
+    stop: (ruleName: "whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes") => void;
     startAll: () => void;
     stopAll: () => void;
-    ruleNames: string[];
-    run: (ruleName: string) => void;
+    ruleNames: ("whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes")[];
+    run: (ruleName: "whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes") => void;
     runAll: () => void;
 };

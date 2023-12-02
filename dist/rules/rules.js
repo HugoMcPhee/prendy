@@ -10,8 +10,10 @@ import { sliceVidRules as safeSliceVidRules } from "./sliceVids";
 import { speechBubbleRules } from "./speechBubbles";
 import { safeVidRules } from "./stateVids";
 import { startAllGlobalRules } from "./global/global";
+import { meta } from "../meta";
 import { getRefs, getState } from "repond";
-export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAssets) {
+import { miniBubbleRules } from "./miniBubbles";
+export function makeStartPrendyMainRules() {
     function handlePausingVideoWhenHidden(isHidden) {
         const { nowPlaceName, gameTimeSpeed } = getState().global.main;
         const sliceVidState = getState().sliceVids[nowPlaceName];
@@ -56,6 +58,7 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
         const stopDynamicDollRulesForInitialState = startDynamicDollRulesForInitialState();
         playerRules.startAll();
         speechBubbleRules.startAll();
+        miniBubbleRules.startAll();
         safeVidRules.startAll();
         safeSliceVidRules.startAll();
         return function stopPrendyMainRules() {
@@ -70,6 +73,7 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
             placeRules.stopAll();
             playerRules.stopAll();
             speechBubbleRules.stopAll();
+            miniBubbleRules.stopAll();
             safeVidRules.stopAll();
             safeSliceVidRules.stopAll();
         };
@@ -78,7 +82,7 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
     return function startPrendyRules() {
         const stopPrendyMainRules = startPrendyMainRules();
         if (!didDoOneTimeStartStuff) {
-            loadGoogleFonts(prendyAssets.fontNames); // Auto-import fonts from google fonts :)
+            loadGoogleFonts(meta.assets.fontNames); // Auto-import fonts from google fonts :)
             didDoOneTimeStartStuff = true;
         }
         return function stopPrendyRules() {
@@ -88,7 +92,7 @@ export function makeStartPrendyMainRules(storeHelpers, prendyStores, prendyAsset
 }
 // TODO move this to repond
 // Takes a list of rules and returns a new function that runs startAll for each, and returns a function that runs stopAll for each
-// NOTE it doesn't preoprly merge rules, just runs them all
+// NOTE it doesn't properly merge rules, just runs them all
 export function rulesToSubscriber(rules) {
     return () => {
         rules.forEach((rule) => rule.startAll());
@@ -102,14 +106,14 @@ export function combineSubscribers(subscribers) {
         return () => unsubscribers.forEach((unsubscriber) => unsubscriber());
     };
 }
-export function makeStartPrendyRules({ customRules, prendyAssets, stores, storeHelpers, }) {
-    const startPrendyMainRules = makeStartPrendyMainRules(storeHelpers, stores, prendyAssets);
+export function makeStartPrendyRules(customRules) {
+    const startPrendyMainRules = makeStartPrendyMainRules();
     const startPrendyStoryRules = rulesToSubscriber(customRules);
     const startRules = combineSubscribers([startPrendyMainRules, startPrendyStoryRules]);
     return startRules;
 }
-export function makeStartAndStopRules(options) {
-    const startRules = makeStartPrendyRules(options);
+export function makeStartAndStopRules(customRules) {
+    const startRules = makeStartPrendyRules(customRules);
     return function StartAndStopRules() {
         useEffect(startRules);
         return null;

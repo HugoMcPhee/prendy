@@ -6,10 +6,7 @@ import { setDollPosition, springDollRotationY } from "./prendyHelpers/dolls";
 import { goToNewPlace, showStoryView } from "./prendyHelpers/scene";
 import { getGlobalState, setGlobalState } from "./prendyUtils/global";
 import { waitForNextTick, waitForNowCamToChange, waitForPlaceFullyLoaded } from "./prendyUtils/scene";
-
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
+import { CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../types";
 
 export function savePrendyState() {
   const storeState = getState();

@@ -2,9 +2,6 @@ import { get2DAngleBetweenCharacters, getCharDollStuff } from "../../helpers/pre
 import { getGlobalState } from "../prendyUtils/global";
 import { setDollAnimation, setDollPosition, setDollRotationY, springDollRotationY, springAddToDollRotationY, moveDollAt2DAngle, } from "./dolls";
 import { meta } from "../../meta";
-// const { modelInfoByName, characterNames } = prendyAssets;
-// const getCharDollStuff = get_getCharDollStuff(storeHelpers);
-// const { get2DAngleBetweenCharacters } = get_characterStoryUtils<MyTypes>(storeHelpers);
 export function setCharAnimation(character, animation // AnimationNameFromModel might keep the type better
 ) {
     const { dollName } = getCharDollStuff(character);
@@ -35,7 +32,8 @@ export function lookAtOtherCharacter(charA, charB // defaults to playerChaarcter
     const angle = get2DAngleBetweenCharacters(editedCharB, charA);
     springDollRotationY(dollName, angle);
 }
-export function lookAtEachother(characterA, characterB = meta.assets.characterNames[0]) {
+export function lookAtEachother(characterA, characterBParam) {
+    const characterB = characterBParam || meta.assets.characterNames[0];
     lookAtOtherCharacter(characterA, characterB);
     lookAtOtherCharacter(characterB, characterA);
 }

@@ -1,11 +1,9 @@
 import { AllState, getState, setState } from "repond";
-import { MyTypes } from "../../declarations";
-import { meta } from "../../meta";
 
 export function setGlobalState<
   GlobalItemState extends AllState["global"]["main"] & Record<any, any>,
   PartialGlobalState extends Partial<GlobalItemState>
->(newState: PartialGlobalState | ((state: GlobalItemState) => PartialGlobalState), callback?: () => void) {
+>(newState: PartialGlobalState | ((state: AllState["global"]["main"]) => PartialGlobalState), callback?: () => void) {
   if (typeof newState === "function") {
     setState((state) => ({ global: { main: newState(state.global.main as GlobalItemState) } }), callback);
   } else {

@@ -2,18 +2,14 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
+import { getPreviousState, getRefs, getState, makeDynamicRules, makeRules, onNextTick, setState } from "repond";
 import { addMoverRules } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import { getDefaultInRangeFunction, getModelNameFromDoll, getQuickDistanceBetweenDolls, inRangesAreTheSame, saveModelStuffToDoll, setDollAnimWeight, setupLightMaterial, updateDollScreenPosition, } from "../helpers/prendyUtils/dolls";
-import { getPreviousState, getRefs, getState, makeDynamicRules, makeRules, onNextTick, setState } from "repond";
 import { meta } from "../meta";
-// const dollDynamicRules = makeDynamicRules({
-//   whenModelLoadsForDoll
-// });
-// when the models isLoading becomes true
-// TODO add to art options?
+// TODO add to asset options?
 const rangeOptions = {
     touch: 1, // prev 2
     talk: 2, // prev 3
@@ -24,7 +20,6 @@ export const rangeOptionsQuick = {
     talk: rangeOptions.talk * rangeOptions.talk,
     see: rangeOptions.see * rangeOptions.see,
 };
-// const { saveModelStuffToDoll, setupLightMaterial } = get_dollUtils(prendyAssets, storeHelpers);
 export const dollDynamicRules = makeDynamicRules(({ itemEffect }) => ({
     waitForModelToLoad: itemEffect(({ dollName, modelName }) => ({
         run() {
@@ -43,9 +38,7 @@ export const dollDynamicRules = makeDynamicRules(({ itemEffect }) => ({
                 forEach(modelRefs.materialRefs, (materialRef) => setupLightMaterial(materialRef));
             }
             setupLightMaterial(modelRefs.materialRef);
-            // using modelNamesByPlace, set the doll state to invisible if it's not in the current place
             const { nowPlaceName } = getState().global.main;
-            // const { modelName } = getState().dolls[dollName];
             const { modelNamesByPlace } = prendyOptions;
             const modelNamesForPlace = modelNamesByPlace[nowPlaceName];
             const isInPlace = modelNamesForPlace.includes(modelName);

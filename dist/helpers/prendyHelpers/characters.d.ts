@@ -15,6 +15,6 @@ export declare function setCharRotationY(charName: CharacterName, newRotationY: 
 export declare function springCharRotation(charName: CharacterName, newRotationY: number): void;
 export declare function springAddToCharRotationY(charName: CharacterName, addedRotation: number): void;
 export declare function lookAtOtherCharacter(charA: CharacterName, charB?: CharacterName): void;
-export declare function lookAtEachother(characterA: CharacterName, characterB?: CharacterName): void;
+export declare function lookAtEachother(characterA: CharacterName, characterBParam: CharacterName): void;
 export declare function moveCharacterAt2DAngle(charName: CharacterName, angle: number): void;
 export {};

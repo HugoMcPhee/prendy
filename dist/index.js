@@ -16,13 +16,11 @@ export { playNewMusic, playSound, stopAllMusic, stopAllSounds, stopSound } from 
 export { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } from "./helpers/prendyHelpers/speech";
 export { hideSticker, moveSticker, showSticker } from "./helpers/prendyHelpers/stickers";
 export { makeCamChangeRules, makeCamLeaveRules, makeCamSegmentRules, makeInteractButtonRules, makeOnInteractAtTrigger, makeOnInteractToTalk, makeOnUsePickupAtTrigger, makeOnUsePickupGenerally, makeOnUsePickupToTalk, makePickupsRules, makePlaceLoadRules, makePlaceUnloadRules, makeTouchRules, makeTriggerRules, } from "./helpers/prendyRuleMakers/prendyRuleMakers";
-export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
-export function initPrendy(assets, stores) {
+export function initPrendy(assets) {
     meta.assets = assets;
-    meta.stores = stores;
     initMovers(timeStatePath);
 }
 export function getDefaultDollOptions(modelNames) {

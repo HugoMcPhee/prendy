@@ -1,11 +1,11 @@
 import { AbstractMesh, PBRMaterial } from "@babylonjs/core";
+import { AllState } from "repond";
 import { MyTypes } from "../../declarations";
 type DollName = MyTypes["Types"]["DollName"];
 type PlaceName = MyTypes["Types"]["PlaceName"];
-type PrendyStores = MyTypes["Stores"];
 type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
-type StartState_Dolls = NonNullable<PrendyStores["dolls"]["startStates"]>;
-type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<StartState_Dolls[T_DollName]>["modelName"];
+type DollsState = NonNullable<AllState["dolls"]>;
+type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<DollsState[T_DollName]>["modelName"];
 export declare function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName>;
 export declare function get2DAngleFromDollToSpot<T_Place extends PlaceName>(dollA: DollName, place: T_Place, spot: SpotNameByPlace[T_Place]): number;
 export declare function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName): number;

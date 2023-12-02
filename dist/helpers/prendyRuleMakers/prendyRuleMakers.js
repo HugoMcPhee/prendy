@@ -25,16 +25,6 @@ export function getUsefulStoryStuff() {
         camRefs: camRefs,
     };
 }
-// }
-// ItemState
-// type GetState = MyTypes["Repond"]["getState"];
-// type GetRefs = typeof getRefs;
-// // type ItemType = keyof ReturnType<GetState> & keyof ReturnType<GetRefs>;
-// type ItemType = keyof ReturnType<GetState>;
-//
-// type ItemState<T_ItemType extends ItemType> = ReturnType<
-//   GetState
-// >[T_ItemType][keyof ReturnType<GetState>[T_ItemType]];
 export function setStoryState(newState) {
     setState({ story: { main: newState } });
 }
@@ -94,9 +84,10 @@ export function makeInteractButtonRules({ onInteractAtTrigger, onInteractAtTalk,
     return interactButtonRules;
 }
 // the returned function when the interact buttons clicked
-export function makeOnInteractAtTrigger(callBacksObject, characterName = meta.assets.characterNames[0]) {
-    const { placeInfoByName } = meta.assets;
+export function makeOnInteractAtTrigger(callBacksObject, characterNameParam) {
     const onClickInteractButton = () => {
+        const { placeInfoByName } = meta.assets;
+        const characterName = characterNameParam || meta.assets.characterNames[0];
         const usefulStoryStuff = getUsefulStoryStuff();
         const { aConvoIsHappening, nowPlaceName, playerMovingPaused } = usefulStoryStuff.globalState;
         if (aConvoIsHappening || playerMovingPaused)
@@ -115,10 +106,11 @@ export function makeOnInteractAtTrigger(callBacksObject, characterName = meta.as
     return onClickInteractButton;
 }
 // the returned function gets run when interact button's clicked
-export function makeOnInteractToTalk(callBacksObject, distanceType = "talk", characterName = meta.assets.characterNames[0]) {
-    const { dollNames } = meta.assets;
+export function makeOnInteractToTalk(callBacksObject, distanceType = "talk", characterNameParam) {
     const onClickInteractButton = () => {
         var _a;
+        const characterName = characterNameParam || meta.assets.characterNames[0];
+        const { dollNames } = meta.assets;
         const usefulStoryStuff = getUsefulStoryStuff();
         const { aConvoIsHappening, playerMovingPaused } = usefulStoryStuff.globalState;
         if (aConvoIsHappening || playerMovingPaused)
@@ -141,11 +133,12 @@ export function makeOnInteractToTalk(callBacksObject, distanceType = "talk", cha
     return onClickInteractButton;
 }
 // the returned function gets run onClick in the pickup picture button gui
-export function makeOnUsePickupAtTrigger(callBacksObject, characterName = meta.assets.characterNames[0]) {
-    const { placeInfoByName } = meta.assets;
+export function makeOnUsePickupAtTrigger(callBacksObject, characterNameParam) {
     const onClickPickupButton = (pickupName) => {
-        let didInteractWithSomething = false;
+        const characterName = characterNameParam || meta.assets.characterNames[0];
+        const { placeInfoByName } = meta.assets;
         const usefulStoryStuff = getUsefulStoryStuff();
+        let didInteractWithSomething = false;
         const { aConvoIsHappening, nowPlaceName } = usefulStoryStuff.globalState;
         const { atTriggers } = getState().characters[characterName];
         console.log("makeOnUsePickupAtTrigger, aConvoIsHappening", aConvoIsHappening);
@@ -181,10 +174,11 @@ export function makeOnUsePickupGenerally(callBacksObject) {
     return onClickPickupButton;
 }
 // the returned function gets run onClick in the pickup picture button gui
-export function makeOnUsePickupToTalk(callBacksObject, characterName = meta.assets.characterNames[0]) {
-    const { dollNames } = meta.assets;
+export function makeOnUsePickupToTalk(callBacksObject, characterNameParam) {
     const onClickPickupButton = (pickupName) => {
         var _a;
+        const characterName = characterNameParam || meta.assets.characterNames[0];
+        const { dollNames } = meta.assets;
         let didInteractWithSomething = false;
         const usefulStoryStuff = getUsefulStoryStuff();
         const { aConvoIsHappening } = usefulStoryStuff.globalState;
@@ -261,14 +255,14 @@ export function makePlaceUnloadRules(callBacksObject) {
     }));
 }
 export function makeTouchRules(callBacksObject, options) {
-    const { dollNames } = meta.assets;
     const { characterName, distanceType = "touch", whenLeave = false } = options !== null && options !== void 0 ? options : {};
-    const { playerCharacter } = getState().global.main;
-    const charName = characterName || playerCharacter;
     return makeRules(({ itemEffect }) => ({
         whenInRangeChangesToCheckTouch: itemEffect({
             run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, itemState: dollState }) {
                 var _a;
+                const { dollNames } = meta.assets;
+                const { playerCharacter } = getState().global.main;
+                const charName = characterName || playerCharacter;
                 const { dollName: charDollName } = (_a = getCharDollStuff(charName)) !== null && _a !== void 0 ? _a : {};
                 // at the moment runs for every doll instead of just the main character,
                 // could maybe fix with dynamic rule for character that checks for doll changes (and runs at start)
@@ -292,7 +286,7 @@ export function makeTouchRules(callBacksObject, options) {
                 prop: ["inRange"],
                 type: "dolls",
             },
-            name: `inRangeStoryRules_${charName}_${distanceType}_${whenLeave}`,
+            name: `inRangeStoryRules_${characterName !== null && characterName !== void 0 ? characterName : "player"}_${distanceType}_${whenLeave}`,
             step: "collisionReaction",
             atStepEnd: true,
         }),
@@ -302,14 +296,11 @@ export function makeTriggerRules(callBacksObject, options) {
     // TODO make dynamic rule?
     // this won't update the playerCharacter at the moment
     const { whenLeave = false } = options !== null && options !== void 0 ? options : {};
-    // const { playerCharacter } = getState().global.main;
-    // const charName = characterName || playerCharacter;
     const charactersWithTriggers = Object.keys(callBacksObject);
-    console.log("charactersWithTriggers", charactersWithTriggers);
-    const { placeInfoByName } = meta.assets;
     return makeRules(({ itemEffect }) => ({
         whenAtTriggersChanges: itemEffect({
             run({ newValue: atTriggers, previousValue: prevAtTriggers, itemName: characterName }) {
+                const { placeInfoByName } = meta.assets;
                 const usefulStoryStuff = getUsefulStoryStuff();
                 const { nowPlaceName } = usefulStoryStuff;
                 if (!callBacksObject[characterName]) {
@@ -334,23 +325,3 @@ export function makeTriggerRules(callBacksObject, options) {
         }),
     }));
 }
-// return {
-//   makeCamChangeRules,
-//   makeCamLeaveRules,
-//   makeCamSegmentRules,
-//   makeOnInteractAtTrigger,
-//   makeOnInteractToTalk,
-//   makeInteractButtonRules,
-//   makeOnUsePickupAtTrigger,
-//   makeOnUsePickupGenerally,
-//   makeOnUsePickupToTalk,
-//   makePickupsRules,
-//   makePlaceLoadRules,
-//   makePlaceUnloadRules,
-//   makeTouchRules,
-//   makeTriggerRules,
-//   // makeStoryPartRules,
-//   // makeRuleMaker,
-//   // makeNestedRuleMaker,
-//   // makeNestedLeaveRuleMaker,
-// };

@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference types="react" />
 import { MyTypes } from "../declarations";
 export declare const prendyStepNames: readonly ["elapsedTimeUpdates", "moverUpdates", "stateVidStateUpdates", "sliceVidStateUpdates", "respondToNewPlace", "respondToNewPlaceStory", "cameraChange", "input", "editPosition", "positionReaction", "checkCollisions", "collisionReaction", "story", "storyReaction", "slatePosition", "slatePositionDontGoOverEdges", "slatePositionStartMovers", "dollAnimation", "dollAnimation2", "dollCorrectRotationAndPosition", "dollAnimationStartMovers", "positionUi", "loadNewPlaceModels", "loadNewPlace", "chooseVideoSlice", "sliceVidWantsToPlay", "sliceVidWantsToPlay2", "safeVidWantsToPlay", "moversGoal", "moversStart", "default", "rendering", "overlay"];
@@ -97,14 +98,14 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 slateZoom: number;
                 slateZoomGoal: number;
                 slateZoomIsMoving: boolean;
-                slateZoomMoveMode: import("repond-movers/src/types").MoveMode;
+                slateZoomMoveMode: import("repond-movers/dist/types").MoveMode;
                 slateZoomMoveConfigName: string;
-                slateZoomMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+                slateZoomMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
                 slatePos: import("chootils/dist/points2d").Point2D;
                 slatePosGoal: import("chootils/dist/points2d").Point2D;
                 slatePosIsMoving: boolean;
-                slatePosMoveMode: import("repond-movers/src/types").MoveMode;
-                slatePosMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+                slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
+                slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
                 nowPlaceName: T_MyTypes["Types"]["PlaceName"];
                 goalPlaceName: T_MyTypes["Types"]["PlaceName"] | null;
                 readyToSwapPlace: boolean;
@@ -158,14 +159,14 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             slateZoom: number;
             slateZoomGoal: number;
             slateZoomIsMoving: boolean;
-            slateZoomMoveMode: import("repond-movers/src/types").MoveMode;
+            slateZoomMoveMode: import("repond-movers/dist/types").MoveMode;
             slateZoomMoveConfigName: string;
-            slateZoomMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            slateZoomMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             slatePos: import("chootils/dist/points2d").Point2D;
             slatePosGoal: import("chootils/dist/points2d").Point2D;
             slatePosIsMoving: boolean;
-            slatePosMoveMode: import("repond-movers/src/types").MoveMode;
-            slatePosMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
+            slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             nowPlaceName: T_MyTypes["Types"]["PlaceName"];
             goalPlaceName: T_MyTypes["Types"]["PlaceName"] | null;
             readyToSwapPlace: boolean;
@@ -206,7 +207,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             };
             solidParticleSystems: Record<string, import("@babylonjs/core").SolidParticleSystem>;
             timerSpeed: number;
-            aConvoIsHappening_timeout: number | null;
+            aConvoIsHappening_timeout: NodeJS.Timeout | null;
             camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] extends infer T extends keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] ? { [P_CamName in T]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; } : never>; }> | null;
             onPickupButtonClick: ((pickupName: any) => void) | null;
             slateZoomMoverRefs: {
@@ -217,10 +218,10 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                     valueGoal: "slateZoomGoal";
                     isMoving: "slateZoomIsMoving";
                     moveMode: "slateZoomMoveMode";
-                    physicsConfigName: "slateZoomMoveConfigName" | undefined;
-                    physicsConfigs: "slateZoomMoveConfigs" | undefined;
+                    physicsConfigName: "slateZoomMoveConfigName";
+                    physicsConfigs: "slateZoomMoveConfigs";
                 };
-                physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+                physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
             };
             slatePosMoverRefs: {
                 velocity: import("chootils/dist/points2d").Point2D;
@@ -232,10 +233,10 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                     valueGoal: "slatePosGoal";
                     isMoving: "slatePosIsMoving";
                     moveMode: "slatePosMoveMode";
-                    physicsConfigName: "slatePosMoveConfigName" | undefined;
-                    physicsConfigs: "slatePosMoveConfigs" | undefined;
+                    physicsConfigName: "slatePosMoveConfigName";
+                    physicsConfigs: "slatePosMoveConfigs";
                 };
-                physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+                physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
             };
             scene: import("@babylonjs/core").Scene | null;
             backdropVideoTex: import("../helpers/babylonjs/CustomVideoTexture").CustomVideoTexture | null;
@@ -289,23 +290,23 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], number>;
             animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], number>;
             animWeightsIsMoving: boolean;
-            animWeightsMoveMode: import("repond-movers/src/types").MoveMode;
+            animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
-            animWeightsMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             nowWalkSpeed: number;
             positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
-            rotationYMoveMode: import("repond-movers/src/types").MoveMode;
+            rotationYMoveMode: import("repond-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
-            rotationYMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            rotationYMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             position: import("chootils/dist/points3d").Point3D;
             positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
-            positionMoveMode: import("repond-movers/src/types").MoveMode;
+            positionMoveMode: import("repond-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
-            positionMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]>;
             goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
@@ -319,23 +320,23 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_2], number>;
             animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_2], number>;
             animWeightsIsMoving: boolean;
-            animWeightsMoveMode: import("repond-movers/src/types").MoveMode;
+            animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
-            animWeightsMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             nowWalkSpeed: number;
             positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
-            rotationYMoveMode: import("repond-movers/src/types").MoveMode;
+            rotationYMoveMode: import("repond-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
-            rotationYMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            rotationYMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             position: import("chootils/dist/points3d").Point3D;
             positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
-            positionMoveMode: import("repond-movers/src/types").MoveMode;
+            positionMoveMode: import("repond-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
-            positionMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_ModelName_2>;
             goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
@@ -349,23 +350,23 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], number>;
             animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], number>;
             animWeightsIsMoving: boolean;
-            animWeightsMoveMode: import("repond-movers/src/types").MoveMode;
+            animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
-            animWeightsMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            animWeightsMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             nowWalkSpeed: number;
             positionOnScreen: import("chootils/dist/points2d").Point2D;
             rotationY: number;
             rotationYGoal: number;
             rotationYIsMoving: boolean;
-            rotationYMoveMode: import("repond-movers/src/types").MoveMode;
+            rotationYMoveMode: import("repond-movers/dist/types").MoveMode;
             rotationYMoveConfigName: string;
-            rotationYMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            rotationYMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             position: import("chootils/dist/points3d").Point3D;
             positionGoal: import("chootils/dist/points3d").Point3D;
             positionIsMoving: boolean;
-            positionMoveMode: import("repond-movers/src/types").MoveMode;
+            positionMoveMode: import("repond-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
-            positionMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]>;
             goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
@@ -376,10 +377,10 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                     valueGoal: "animWeightsGoal";
                     isMoving: "animWeightsIsMoving";
                     moveMode: "animWeightsMoveMode";
-                    physicsConfigName: "animWeightsMoveConfigName" | undefined;
-                    physicsConfigs: "animWeightsMoveConfigs" | undefined;
+                    physicsConfigName: "animWeightsMoveConfigName";
+                    physicsConfigs: "animWeightsMoveConfigs";
                 };
-                physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+                physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
                 animRefs: Record<string, {
                     velocity: number;
                     recentSpeeds: number[];
@@ -394,10 +395,10 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                     valueGoal: "rotationYGoal";
                     isMoving: "rotationYIsMoving";
                     moveMode: "rotationYMoveMode";
-                    physicsConfigName: "rotationYMoveConfigName" | undefined;
-                    physicsConfigs: "rotationYMoveConfigs" | undefined;
+                    physicsConfigName: "rotationYMoveConfigName";
+                    physicsConfigs: "rotationYMoveConfigs";
                 };
-                physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+                physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
             };
             positionMoverRefs: {
                 velocity: import("chootils/dist/points3d").Point3D;
@@ -409,10 +410,10 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                     valueGoal: "positionGoal";
                     isMoving: "positionIsMoving";
                     moveMode: "positionMoveMode";
-                    physicsConfigName: "positionMoveConfigName" | undefined;
-                    physicsConfigs: "positionMoveConfigs" | undefined;
+                    physicsConfigName: "positionMoveConfigName";
+                    physicsConfigs: "positionMoveConfigs";
                 };
-                physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+                physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
             };
             meshRef: import("@babylonjs/core").AbstractMesh | null;
             otherMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][NonNullable<T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]>], import("@babylonjs/core").AbstractMesh | null>;
@@ -487,9 +488,9 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         };
         refs: () => {
             topWalkSpeed: number;
-            canJumpTimeout: number | null;
-            canShowVirtualButtonsTimeout: number | null;
-            canHideVirtualButtonsTimeout: number | null;
+            canJumpTimeout: NodeJS.Timeout | null;
+            canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
+            canHideVirtualButtonsTimeout: NodeJS.Timeout | null;
         };
     };
     speechBubbles: {
@@ -515,7 +516,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         refs: () => {
             bubbleRef: any;
             textRef: any;
-            currentTimeout: number | null;
+            currentTimeout: NodeJS.Timeout | null;
             videoRef: HTMLVideoElement | null;
         };
         startStates: { [K_CharacterName_2 in T_MyTypes["Types"]["CharacterName"]]: {

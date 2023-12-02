@@ -14,7 +14,6 @@ export { playNewMusic, playSound, stopAllMusic, stopAllSounds, stopSound } from 
 export { hideMiniBubble, showAlarmText, showMiniBubble, showSpeech } from "./helpers/prendyHelpers/speech";
 export { hideSticker, moveSticker, showSticker } from "./helpers/prendyHelpers/stickers";
 export { makeCamChangeRules, makeCamLeaveRules, makeCamSegmentRules, makeInteractButtonRules, makeOnInteractAtTrigger, makeOnInteractToTalk, makeOnUsePickupAtTrigger, makeOnUsePickupGenerally, makeOnUsePickupToTalk, makePickupsRules, makePlaceLoadRules, makePlaceUnloadRules, makeTouchRules, makeTriggerRules, } from "./helpers/prendyRuleMakers/prendyRuleMakers";
-export { makePrendyStoryUtils } from "./helpers/prendyUtils/prendyUtils";
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
@@ -26,7 +25,7 @@ export type CharacterOptionLoose<T_DollName extends string, T_FontName extends s
     doll: T_DollName;
     font: T_FontName;
 }>;
-export declare function initPrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"], stores: T_MyTypes["Stores"]): void;
+export declare function initPrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"]): void;
 export declare function getDefaultDollOptions<T_ModelName extends string>(modelNames: readonly T_ModelName[]): { [K_ModelName in T_ModelName]: {
     model: K_ModelName;
 }; };

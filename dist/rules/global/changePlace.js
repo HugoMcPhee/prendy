@@ -12,7 +12,6 @@ import { getSliceVidVideo } from "../../helpers/prendyUtils/sliceVids";
 import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spots";
 import { meta } from "../../meta";
 import { globalGeneralRules } from "./general";
-const globalRefs = getRefs().global.main;
 function setPlayerPositionForNewPlace() {
     const { placeInfoByName } = meta.assets;
     const { nowPlaceName, playerCharacter } = getState().global.main;
@@ -36,6 +35,7 @@ function setPlayerPositionForNewPlace() {
 }
 function whenAllVideosLoadedForPlace() {
     var _a;
+    const globalRefs = getRefs().global.main;
     const { nowPlaceName } = getState().global.main;
     (_a = globalRefs.backdropVideoTex) === null || _a === void 0 ? void 0 : _a.dispose(); // NOTE maybe don't dispose it?
     const backdropVidElement = getSliceVidVideo(nowPlaceName);

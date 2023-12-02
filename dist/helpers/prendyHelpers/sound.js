@@ -3,8 +3,6 @@ import { forEach } from "chootils/dist/loops";
 import { getRefs } from "repond";
 import { meta } from "../../meta";
 import { getScene } from "../babylonjs/getSceneOrEngineUtils";
-// const { musicNames, musicFiles, soundNames, soundFiles } = meta.assets!;
-// const globalRefs = getRefs().global.main;
 // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
 // Auto load music and play it, and stop other music if it's already playing
 export function playSound(soundName, options) {

@@ -90,9 +90,6 @@ export function enableCollisions(theMesh) {
     theMesh.useOctreeForCollisions = true;
     theMesh.rotationQuaternion = null; // allow euler rotation again
 }
-// type RepondState = ReturnType<StoreHelpers["getState"]>;
-// type DollName = keyof RepondState["dolls"];
-// type DollName = keyof typeof prendyStores.dolls.startStates;
 export function setDollAnimWeight(dollName, newWeights) {
     setState({
         dolls: {

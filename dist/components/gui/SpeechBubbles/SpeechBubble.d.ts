@@ -1,9 +1,7 @@
 import React from "react";
-import { MyTypes } from "../../../declarations";
-type PrendyStoreHelpers = MyTypes["Repond"];
-type GetState = PrendyStoreHelpers["getState"];
-type ItemType = keyof ReturnType<GetState>;
-type AllItemsState<T_ItemType extends ItemType> = ReturnType<GetState>[T_ItemType];
+import { AllState } from "repond";
+type ItemType = keyof AllState;
+type AllItemsState<T_ItemType extends ItemType> = AllState[T_ItemType];
 type Props = {
     name: keyof AllItemsState<"speechBubbles"> & string;
 };

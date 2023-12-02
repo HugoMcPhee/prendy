@@ -6,7 +6,7 @@ import { meta } from "../../../meta";
 
 type PickupName = MyTypes["Types"]["PickupName"];
 
-type Props = { name: PickupName; children: React.ReactNode };
+type Props = { name: PickupName; children?: React.ReactNode };
 
 export function PickupButton({ name }: Props) {
   const { pickupsInfo } = meta.assets!;

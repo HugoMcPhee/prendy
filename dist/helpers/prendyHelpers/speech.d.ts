@@ -1,8 +1,8 @@
 import { CSSProperties } from "react";
+import { AllState } from "repond";
 import { MyTypes } from "../../declarations";
 type CharacterName = MyTypes["Types"]["CharacterName"];
-type PrendyStores = MyTypes["Stores"];
-type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"];
+type SpeechBubbleName = keyof AllState["speechBubbles"];
 export declare function showSpeech(text: string, options?: {
     time?: number;
     showOnce?: boolean;

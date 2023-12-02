@@ -3,21 +3,18 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import React, { useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { Globals } from "react-spring";
+import { getRefs, onNextTick, setState } from "repond";
 import loadStyles from "../helpers/loadStyles";
 import { makeStartAndStopRules } from "../rules/rules";
 import { LoadingModels } from "./LoadingModels";
 import { ScreenGui as ScreenGuiDom } from "./gui/ScreenGui";
-export function makePrendyApp(options) {
-    const { storeHelpers, prendyAssets } = options;
-    const { prendyOptions } = prendyAssets;
+import { initPrendy } from "../";
+export function makePrendyApp(assets, customRules) {
+    initPrendy(assets);
     loadStyles();
-    const { getRefs, onNextTick, setState } = storeHelpers;
     Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick });
-    const StartAndStopRules = makeStartAndStopRules(options);
-    // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["city", "cityb", "beanshop"]);
-    // const AllTestVideoStuff = get_AllTestVideoStuff(storeHelpers, ["stairy", "basement"]);
+    const StartAndStopRules = makeStartAndStopRules(customRules);
     return function PrendyApp({ children, extraScenes }) {
-        const globalRefs = getRefs().global.main;
         useEffect(() => setState({ global: { main: { frameTick: 1 } } }), []);
         return (React.createElement("div", { id: "app", style: { width: "100vw", height: "100vh", overflow: "hidden" } },
             React.createElement(StartAndStopRules, null),
@@ -28,6 +25,7 @@ export function makePrendyApp(options) {
                     // adaptToDeviceRatio: false,
                 } },
                 React.createElement(Scene, { clearColor: Color4.FromColor3(Color3.FromHexString("#000000"), 0.0), onSceneMount: (info) => {
+                        const globalRefs = getRefs().global.main;
                         globalRefs.scene = info.scene;
                         const engine = info.scene.getEngine();
                         engine.stopRenderLoop(); // Each frame is rendered manually inside the video looping check function

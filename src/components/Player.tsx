@@ -1,16 +1,15 @@
 import { breakableForEach } from "chootils/dist/loops";
-import { MyTypes } from "../declarations";
 import { goToNewPlace } from "../helpers/prendyHelpers/scene";
 import { meta } from "../meta";
 import { useStore, useStoreItemPropsEffect, getState, setState } from "repond";
-
-type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
+import {
+  AnyTriggerName,
+  CameraNameByPlace,
+  CharacterName,
+  PlaceName,
+  SegmentNameByPlace,
+  SpotNameByPlace,
+} from "../types";
 
 type ToPlaceOption<T_PlaceName extends PlaceName> = {
   toPlace: T_PlaceName;

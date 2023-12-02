@@ -1,11 +1,9 @@
-import { MyTypes } from "../declarations";
+import { DollName, ModelName } from "../types";
 export declare const rangeOptionsQuick: {
     readonly touch: number;
     readonly talk: number;
     readonly see: number;
 };
-type DollName = MyTypes["Types"]["DollName"];
-type ModelName = MyTypes["Types"]["ModelName"];
 export declare const dollDynamicRules: {
     start: <K_ChosenRuleName extends "waitForModelToLoad" | "whenWholePlaceFinishesLoading">(ruleName: K_ChosenRuleName, options: Parameters<{
         waitForModelToLoad: (options: {
@@ -53,4 +51,3 @@ export declare const dollRules: {
     run: (ruleName: "whenModelNameChanges" | "whenDollAddedOrRemoved" | "whenNowAnimationChanged" | "whenAnimWeightsChanged" | "whenRotationYChanged" | "whenPositionChangesToEdit" | "whenPositionChangesCheckInRange" | "whenHidingUpdateInRange" | "updateDollScreenPositionWhenSlateMoves" | "whenToggledMeshesChanges" | "whenIsVisibleChanges" | "whenRotationGoalChangedToFix") => void;
     runAll: () => void;
 };
-export {};

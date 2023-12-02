@@ -100,8 +100,9 @@ export function setCamera(_placeName, cameraName, whenToRun = "now") {
         }
     });
 }
-export function goToNewPlace(toOption, charName = meta.assets.characterNames[0]) {
+export function goToNewPlace(toOption, charNameParam) {
     var _a;
+    const charName = charNameParam || meta.assets.characterNames[0];
     const { placeInfoByName } = meta.assets;
     // NOTE could include waitForPlaceFullyLoaded here so it can be awaited
     let { toSpot, toPlace, toPositon, toCam, toSegment } = toOption;

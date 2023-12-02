@@ -161,7 +161,7 @@ export function setCamera<
 
 export function goToNewPlace<T_PlaceName extends PlaceName>(
   toOption: ToPlaceOption<T_PlaceName>,
-  charNameParam: CharacterName
+  charNameParam?: CharacterName
 ) {
   const charName = charNameParam || meta.assets!.characterNames[0];
 

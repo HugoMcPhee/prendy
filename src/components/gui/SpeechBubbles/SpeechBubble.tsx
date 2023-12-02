@@ -7,15 +7,13 @@ import { MyTypes } from "../../../declarations";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
 import { meta } from "../../../meta";
+import { CharacterName } from "../../../types";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
-
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type SpeechVidFiles = MyTypes["Types"]["SpeechVidFiles"];
 
 type ItemType = keyof AllState;
 type AllItemsState<T_ItemType extends ItemType> = AllState[T_ItemType];

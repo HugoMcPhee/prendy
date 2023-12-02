@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Point2D } from "chootils/dist/points2d";
 import { MyTypes } from "../declarations";
 export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
@@ -41,8 +42,8 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
     };
     refs: () => {
         topWalkSpeed: number;
-        canJumpTimeout: number | null;
-        canShowVirtualButtonsTimeout: number | null;
-        canHideVirtualButtonsTimeout: number | null;
+        canJumpTimeout: NodeJS.Timeout | null;
+        canShowVirtualButtonsTimeout: NodeJS.Timeout | null;
+        canHideVirtualButtonsTimeout: NodeJS.Timeout | null;
     };
 };

@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
 import { Point3D } from "chootils/dist/points3d";
 import { MyTypes } from "../../declarations";
@@ -87,14 +88,14 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
             slateZoom: number;
             slateZoomGoal: number;
             slateZoomIsMoving: boolean;
-            slateZoomMoveMode: import("repond-movers/src/types").MoveMode;
+            slateZoomMoveMode: import("repond-movers/dist/types").MoveMode;
             slateZoomMoveConfigName: string;
-            slateZoomMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            slateZoomMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             slatePos: import("chootils/dist/points2d").Point2D;
             slatePosGoal: import("chootils/dist/points2d").Point2D;
             slatePosIsMoving: boolean;
-            slatePosMoveMode: import("repond-movers/src/types").MoveMode;
-            slatePosMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+            slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
+            slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             nowPlaceName: T_MyTypes["Types"]["PlaceName"];
             goalPlaceName: T_MyTypes["Types"]["PlaceName"] | null;
             readyToSwapPlace: boolean;
@@ -148,14 +149,14 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
         slateZoom: number;
         slateZoomGoal: number;
         slateZoomIsMoving: boolean;
-        slateZoomMoveMode: import("repond-movers/src/types").MoveMode;
+        slateZoomMoveMode: import("repond-movers/dist/types").MoveMode;
         slateZoomMoveConfigName: string;
-        slateZoomMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+        slateZoomMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
         slatePos: import("chootils/dist/points2d").Point2D;
         slatePosGoal: import("chootils/dist/points2d").Point2D;
         slatePosIsMoving: boolean;
-        slatePosMoveMode: import("repond-movers/src/types").MoveMode;
-        slatePosMoveConfigs: Record<string, import("repond-movers/src/types").PhysicsOptions>;
+        slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
+        slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
         nowPlaceName: T_MyTypes["Types"]["PlaceName"];
         goalPlaceName: T_MyTypes["Types"]["PlaceName"] | null;
         readyToSwapPlace: boolean;
@@ -196,7 +197,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
         };
         solidParticleSystems: Record<string, SolidParticleSystem>;
         timerSpeed: number;
-        aConvoIsHappening_timeout: number | null;
+        aConvoIsHappening_timeout: NodeJS.Timeout | null;
         camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] extends infer T extends keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] ? { [P_CamName in T]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; } : never>; }> | null;
         onPickupButtonClick: ((pickupName: any) => void) | null;
         slateZoomMoverRefs: {
@@ -207,10 +208,10 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
                 valueGoal: "slateZoomGoal";
                 isMoving: "slateZoomIsMoving";
                 moveMode: "slateZoomMoveMode";
-                physicsConfigName: "slateZoomMoveConfigName" | undefined;
-                physicsConfigs: "slateZoomMoveConfigs" | undefined;
+                physicsConfigName: "slateZoomMoveConfigName";
+                physicsConfigs: "slateZoomMoveConfigs";
             };
-            physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+            physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
         };
         slatePosMoverRefs: {
             velocity: import("chootils/dist/points2d").Point2D;
@@ -222,10 +223,10 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
                 valueGoal: "slatePosGoal";
                 isMoving: "slatePosIsMoving";
                 moveMode: "slatePosMoveMode";
-                physicsConfigName: "slatePosMoveConfigName" | undefined;
-                physicsConfigs: "slatePosMoveConfigs" | undefined;
+                physicsConfigName: "slatePosMoveConfigName";
+                physicsConfigs: "slatePosMoveConfigs";
             };
-            physicsConfigs: import("repond-movers/src/types").DefinedPhysicsConfig | undefined;
+            physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
         };
         scene: Scene | null;
         backdropVideoTex: CustomVideoTexture | null;

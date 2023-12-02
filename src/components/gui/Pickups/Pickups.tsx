@@ -1,12 +1,10 @@
 // @refresh-reset
 import React from "react";
 import { getRefs, useStore } from "repond";
-import { MyTypes } from "../../../declarations";
 import { PickupButton } from "./PickupButton";
+import { PickupName } from "../../../types";
 
-type PickupName = MyTypes["Types"]["PickupName"];
-
-type Props = { children: React.ReactNode };
+type Props = { children?: React.ReactNode };
 
 export function Pickups(_props: Props) {
   const globalRefs = getRefs().global.main;

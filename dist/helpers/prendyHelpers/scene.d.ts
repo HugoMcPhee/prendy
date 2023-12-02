@@ -21,5 +21,5 @@ export declare function hideWallIf<T_Place extends PlaceName, T_Wall extends Wal
 export declare function showStoryView(isVisible?: boolean): Promise<void>;
 export declare function setSegment<T_Place extends PlaceName, T_Segment extends SegmentNameByPlace[T_Place]>(_placeName: T_Place, segmentName: T_Segment): Promise<void>;
 export declare function setCamera<T_Place extends PlaceName, T_Cam extends CameraNameFromPlace<T_Place> & AnyCameraName>(_placeName: T_Place, cameraName: T_Cam, whenToRun?: "now" | "at loop"): Promise<void>;
-export declare function goToNewPlace<T_PlaceName extends PlaceName>(toOption: ToPlaceOption<T_PlaceName>, charName?: CharacterName): void;
+export declare function goToNewPlace<T_PlaceName extends PlaceName>(toOption: ToPlaceOption<T_PlaceName>, charNameParam?: CharacterName): void;
 export {};

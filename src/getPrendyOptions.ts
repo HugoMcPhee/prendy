@@ -1,15 +1,16 @@
 import { MyTypes } from "./declarations";
-
-type AnyAnimationName = MyTypes["Types"]["AnyAnimationName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type ModelName = MyTypes["Types"]["ModelName"];
-type ModelNamesByPlaceLoose = MyTypes["Types"]["ModelNamesByPlaceLoose"];
-type PickupName = MyTypes["Types"]["PickupName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
-type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
+import {
+  PlaceName,
+  SpotNameByPlace,
+  CameraNameByPlace,
+  SegmentNameByPlace,
+  TriggerNameByPlace,
+  PickupName,
+  CharacterName,
+  AnyAnimationName,
+  ModelName,
+  ModelNamesByPlaceLoose,
+} from "./types";
 
 type ToNewOption<T_PlaceName extends PlaceName> = {
   [P_PlaceName in Exclude<PlaceName, T_PlaceName>]: {

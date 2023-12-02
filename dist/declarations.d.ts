@@ -68,7 +68,5 @@ export type PrendyAssets = {
 };
 export type MyTypes = {
     Types: AssetsTypes;
-    Repond: RepondHelpers;
-    Stores: PrendyStores;
     Assets: PrendyAssets;
 };

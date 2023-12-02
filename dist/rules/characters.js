@@ -3,13 +3,13 @@ import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
 import { getRefs, getState, makeDynamicRules, makeRules, setState } from "repond";
 import { meta } from "../meta";
-const { placeInfoByName } = meta.assets;
 export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
     whenPositionChanges: itemEffect(({ characterName, dollName, }) => ({
         // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
         run({ itemRefs }) {
             const refs = getRefs();
             const placesRefs = refs.places;
+            const { placeInfoByName } = meta.assets;
             // TODO
             // only update the collider stuff here
             // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)
@@ -133,6 +133,7 @@ export function startDynamicCharacterRulesForInitialState() {
 export const characterRules = makeRules(({ itemEffect }) => ({
     whenAtCamCubes: itemEffect({
         run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
+            const { placeInfoByName } = meta.assets;
             const { playerCharacter } = getState().global.main;
             if (charName !== playerCharacter)
                 return; // NOTE maybe dynamic rule better (since the listener wont run for other characters)

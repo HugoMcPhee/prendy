@@ -1,20 +1,6 @@
+import { AllState } from "repond";
 import { MyTypes } from "../../declarations";
-type PrendyStoreHelpers = MyTypes["Repond"];
-type AllState = ReturnType<PrendyStoreHelpers["getState"]>;
 type StoryState = AllState["story"]["main"];
-export declare function getUsefulStoryStuff(): {
-    storyState: Record<any, any>;
-    storyRefs: Record<any, any>;
-    globalState: Record<any, any>;
-    nowSegmentName: any;
-    nowPlaceName: any;
-    nowCamName: any;
-    placesRefs: Record<any, Record<any, any>>;
-    placeRefs: Record<any, any>;
-    camsRefs: any;
-    camRefs: any;
-};
-export declare function setStoryState(newState: Partial<StoryState>): void;
 type CharacterName = MyTypes["Types"]["CharacterName"];
 type DollName = MyTypes["Types"]["DollName"];
 type PickupName = MyTypes["Types"]["PickupName"];
@@ -24,6 +10,19 @@ type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
 type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
 type SegmentNameFromCameraAndPlace<T_Place extends keyof PlaceInfoByName, T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
 type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+export declare function getUsefulStoryStuff(): {
+    storyState: any;
+    storyRefs: any;
+    globalState: any;
+    nowSegmentName: any;
+    nowPlaceName: any;
+    nowCamName: any;
+    placesRefs: Record<string, any>;
+    placeRefs: any;
+    camsRefs: any;
+    camRefs: any;
+};
+export declare function setStoryState(newState: Partial<StoryState>): void;
 type CamChangeRulesParam = Partial<{
     [P_PlaceName in PlaceName]: Partial<Record<CameraNameFromPlace<P_PlaceName>, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
 }>;
@@ -72,11 +71,11 @@ type OnInteractAtTriggerOptions = Partial<{
         [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
     }>;
 }>;
-export declare function makeOnInteractAtTrigger(callBacksObject: OnInteractAtTriggerOptions, characterName?: CharacterName): () => void;
+export declare function makeOnInteractAtTrigger(callBacksObject: OnInteractAtTriggerOptions, characterNameParam?: CharacterName): () => void;
 type OnInteractToTalkOptions = Partial<{
     [P_DollName in DollName]: StoryCallback;
 }>;
-export declare function makeOnInteractToTalk(callBacksObject: OnInteractToTalkOptions, distanceType?: "touch" | "talk", characterName?: CharacterName): () => void;
+export declare function makeOnInteractToTalk(callBacksObject: OnInteractToTalkOptions, distanceType?: "touch" | "talk", characterNameParam?: CharacterName): () => void;
 type OnUsePickupAtTriggerOptions = Partial<{
     [P_PlaceName in PlaceName]: Partial<{
         [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: Partial<{
@@ -84,7 +83,7 @@ type OnUsePickupAtTriggerOptions = Partial<{
         }>;
     }>;
 }>;
-export declare function makeOnUsePickupAtTrigger(callBacksObject: OnUsePickupAtTriggerOptions, characterName?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+export declare function makeOnUsePickupAtTrigger(callBacksObject: OnUsePickupAtTriggerOptions, characterNameParam?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
 type OnUsePickupGenerallyOptions = Partial<{
     [P_PickupName in PickupName]: StoryCallback;
 }>;
@@ -94,7 +93,7 @@ type OnUsePickupToTalkOptions = Partial<{
         [P_PickupName in PickupName]: StoryCallback;
     }>;
 }>;
-export declare function makeOnUsePickupToTalk(callBacksObject: OnUsePickupToTalkOptions, characterName?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+export declare function makeOnUsePickupToTalk(callBacksObject: OnUsePickupToTalkOptions, characterNameParam?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
 type PlaceLoadRulesOptions = Partial<{
     [P_PlaceName in PlaceName]: StoryCallback;
 }>;

@@ -14,14 +14,14 @@ export default function stateVids(prendyAssets) {
     }
     const state = (itemName) => ({
         vidState: "unloaded",
-        playType: "pause",
-        goalSeekTime: null,
-        wantToPlay: false,
+        playType: "pause", // playing | paused (so it knows what it’ll return to after seeking)
+        goalSeekTime: null, // when this changes, it starts seeking
+        wantToPlay: false, // boolean, set to true to start the play state stuff automatically (instead of needing to set to vidState = beforePlayAndPaused etc
         wantToPause: false,
         wantToUnload: false,
         wantToLoad: false,
         videoSource: placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.backdrop,
-        autoplay: false,
+        autoplay: false, // maybe doesn't work well with stackvids beofre (cause they both woudn't play)
         //
         // isControlledExternally: true, // to wait for vidState to be updated externally before playing etc,
         doneSeekingTime: null, // when this changes, it’s finished seeking

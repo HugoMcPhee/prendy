@@ -25,7 +25,7 @@ export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     refs: () => {
         waitingForPlayToDoLoopRuleName: string | null;
     };
-    startStates: Record<T_MyTypes["Main"]["PlaceName"], {
+    startStates: Record<T_MyTypes["Types"]["PlaceName"], {
         stateVidId_playing: string | null;
         stateVidId_waiting: string | null;
         sliceVidState: SliceVidState;

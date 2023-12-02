@@ -10,9 +10,9 @@ export default function speechBubbles(prendyAssets) {
             isFullyHidden: true,
             goalText: "",
             visibleLetterAmount: 0,
-            typingSpeed: 60,
-            stylesBySpecialText: {},
-            _specialTextByLetterIndex: {},
+            typingSpeed: 60, // milliseconds between characters
+            stylesBySpecialText: {}, // { "golden banana": { color: "yellow" } } // style snippets of text
+            _specialTextByLetterIndex: {}, // { 0: "golden banana", 1:"golden banana" , 2:"golden banana"}
             _goalTextWordLetterArrays: [[]],
             forCharacter: ((_a = options === null || options === void 0 ? void 0 : options.character) !== null && _a !== void 0 ? _a : "walker"),
             position: defaultPosition(),

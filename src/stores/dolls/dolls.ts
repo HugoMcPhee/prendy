@@ -9,14 +9,14 @@ import get_dollStoreUtils from "./dollStoreUtils";
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 
 export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnimationNameByModel = T_MyTypes["Main"]["AnimationNameByModel"];
-  type AnySpotName = T_MyTypes["Main"]["AnySpotName"];
-  type BoneNameByModel = T_MyTypes["Main"]["BoneNameByModel"];
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type DollOptions = T_MyTypes["Main"]["DollOptions"];
-  type MaterialNameByModel = T_MyTypes["Main"]["MaterialNameByModel"];
-  type MeshNameByModel = T_MyTypes["Main"]["MeshNameByModel"];
-  type ModelName = T_MyTypes["Main"]["ModelName"];
+  type AnimationNameByModel = T_MyTypes["Types"]["AnimationNameByModel"];
+  type AnySpotName = T_MyTypes["Types"]["AnySpotName"];
+  type BoneNameByModel = T_MyTypes["Types"]["BoneNameByModel"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type DollOptions = T_MyTypes["Types"]["DollOptions"];
+  type MaterialNameByModel = T_MyTypes["Types"]["MaterialNameByModel"];
+  type MeshNameByModel = T_MyTypes["Types"]["MeshNameByModel"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
 
   const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyAssets;
 

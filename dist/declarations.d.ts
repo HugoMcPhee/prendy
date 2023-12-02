@@ -1,4 +1,4 @@
-import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyOptionsUntyped, PrendyStoreHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
+import { DollOptionsPlaceholder, ModelInfoByNamePlaceholder, PlaceInfoByNamePlaceholder, PrendyOptionsUntyped, PrendyStoreHelpersUntyped as RepondHelpersUntyped, PrendyStoresUntyped } from "./stores/typedStoreHelpers";
 export interface AssetsTypesUntyped {
     PrendyOptions: PrendyOptionsUntyped;
     PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
@@ -8,18 +8,21 @@ export interface AssetsTypesUntyped {
     ModelName: string;
     DollName: string;
     CharacterName: string;
+    PlaceName: string;
+    SoundName: string;
+    MusicName: string;
+    FontName: string;
+    MusicFiles: Record<string, string>;
+    SpeechVidFiles: Record<string, string>;
+    SoundFiles: Record<string, string>;
+    PickupsInfo: any;
     AnyCameraName: string;
     AnySegmentName: string;
     AnySpotName: string;
     AnyTriggerName: string;
-    PlaceName: string;
     PickupName: string;
     AnyAnimationName: string;
-    SoundName: string;
-    MusicName: string;
-    FontName: string;
     SpeechVidName: string;
-    StoryPartName: string;
     CameraNameByPlace: Record<string, string>;
     SoundspotNameByPlace: Record<string, string>;
     SpotNameByPlace: Record<string, string>;
@@ -31,20 +34,17 @@ export interface AssetsTypesUntyped {
     MeshNameByModel: Record<string, string>;
     ModelNamesByPlaceLoose: any;
     SegmentNameByPlace: Record<string, string>;
-    MusicFiles: Record<string, string>;
-    SpeechVidFiles: Record<string, string>;
-    SoundFiles: Record<string, string>;
-    PickupsInfo: any;
+    StoryPartName: string;
 }
 export interface CustomAssetsTypes {
 }
-export interface CustomStoreHelpers {
+export interface CustomRepondHelpers {
 }
 export interface CustomPrendyStores {
 }
 export interface AssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {
 }
-export interface PrendyStoreHelpers extends Omit<PrendyStoreHelpersUntyped, keyof CustomStoreHelpers>, CustomStoreHelpers {
+export interface RepondHelpers extends Omit<RepondHelpersUntyped, keyof CustomRepondHelpers>, CustomRepondHelpers {
 }
 export interface PrendyStores extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {
 }
@@ -67,8 +67,6 @@ export type PrendyAssets = {
     prendyOptions: AssetsTypes["PrendyOptions"];
 };
 export type MyTypes = {
-    Main: AssetsTypes;
-    StoreHelpers: PrendyStoreHelpers;
-    Stores: PrendyStores;
+    Types: AssetsTypes;
     Assets: PrendyAssets;
 };

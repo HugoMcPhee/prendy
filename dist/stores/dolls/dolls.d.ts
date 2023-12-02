@@ -2,14 +2,14 @@ import { AbstractMesh, AnimationGroup, Bone, InstantiatedEntries, Material, Skel
 import { Point3D } from "chootils/dist/points3d";
 import { MyTypes } from "../../declarations";
 export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]): {
-    startStates: { [K_DollName in T_MyTypes["Main"]["DollName"]]: {
-        toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], boolean>;
-        nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]];
+    startStates: { [K_DollName in T_MyTypes["Types"]["DollName"]]: {
+        toggledMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], boolean>;
+        nowAnimation: T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]];
         animationLoops: boolean;
-        inRange: Record<T_MyTypes["Main"]["DollName"], import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
+        inRange: Record<T_MyTypes["Types"]["DollName"], import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         isVisible: boolean;
-        animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], number>;
-        animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], number>;
+        animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], number>;
+        animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], number>;
         animWeightsIsMoving: boolean;
         animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
@@ -28,18 +28,18 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
         positionMoveMode: import("repond-movers/dist/types").MoveMode;
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        modelName: NonNullable<T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]>;
-        goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
+        modelName: NonNullable<T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]>;
+        goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
         goalPositionAtNewPlace: Point3D | null;
     }; };
-    state: <T_DollName extends string, T_ModelName extends T_MyTypes["Main"]["ModelName"]>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
-        toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_ModelName], boolean>;
-        nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName];
+    state: <T_DollName extends string, T_ModelName extends T_MyTypes["Types"]["ModelName"]>(_dollName: T_DollName, modelName?: T_ModelName | undefined) => {
+        toggledMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][T_ModelName], boolean>;
+        nowAnimation: T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName];
         animationLoops: boolean;
-        inRange: Record<T_MyTypes["Main"]["DollName"], import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
+        inRange: Record<T_MyTypes["Types"]["DollName"], import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         isVisible: boolean;
-        animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName], number>;
-        animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName], number>;
+        animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName], number>;
+        animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName], number>;
         animWeightsIsMoving: boolean;
         animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
@@ -59,17 +59,17 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
         modelName: NonNullable<T_ModelName>;
-        goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
+        goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
         goalPositionAtNewPlace: Point3D | null;
     };
-    refs: <T_DollName_1 extends T_MyTypes["Main"]["DollName"], T_ModelName_1 extends T_MyTypes["Main"]["ModelName"]>(dollName: T_DollName_1, itemState: {
-        toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], boolean>;
-        nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]];
+    refs: <T_DollName_1 extends T_MyTypes["Types"]["DollName"], T_ModelName_1 extends T_MyTypes["Types"]["ModelName"]>(dollName: T_DollName_1, itemState: {
+        toggledMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], boolean>;
+        nowAnimation: T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]];
         animationLoops: boolean;
-        inRange: Record<T_MyTypes["Main"]["DollName"], import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
+        inRange: Record<T_MyTypes["Types"]["DollName"], import("../../helpers/prendyUtils/dolls").InRangeForDoll>;
         isVisible: boolean;
-        animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], number>;
-        animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], number>;
+        animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], number>;
+        animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], number>;
         animWeightsIsMoving: boolean;
         animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
         animWeightsMoveConfigName: string;
@@ -88,8 +88,8 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
         positionMoveMode: import("repond-movers/dist/types").MoveMode;
         positionMoveConfigName: string;
         positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-        modelName: NonNullable<T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]>;
-        goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
+        modelName: NonNullable<T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]>;
+        goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
         goalPositionAtNewPlace: Point3D | null;
     }) => {
         animWeightsMoverRefs: {
@@ -137,15 +137,15 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
             physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
         };
         meshRef: AbstractMesh | null;
-        otherMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][NonNullable<T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]>], AbstractMesh | null>;
+        otherMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][NonNullable<T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]>], AbstractMesh | null>;
         entriesRef: InstantiatedEntries | null;
-        aniGroupsRef: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_1], AnimationGroup> | null;
+        aniGroupsRef: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_1], AnimationGroup> | null;
         assetRefs: {
-            meshes: Record<"__root__" | T_MyTypes["Main"]["MeshNameByModel"][T_ModelName_1], AbstractMesh>;
+            meshes: Record<"__root__" | T_MyTypes["Types"]["MeshNameByModel"][T_ModelName_1], AbstractMesh>;
             skeleton: Skeleton;
-            bones: Record<T_MyTypes["Main"]["BoneNameByModel"][T_ModelName_1], Bone>;
-            aniGroups: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_1], AnimationGroup>;
-            materials: Record<T_MyTypes["Main"]["MaterialNameByModel"][T_ModelName_1], Material>;
+            bones: Record<T_MyTypes["Types"]["BoneNameByModel"][T_ModelName_1], Bone>;
+            aniGroups: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_1], AnimationGroup>;
+            materials: Record<T_MyTypes["Types"]["MaterialNameByModel"][T_ModelName_1], Material>;
         } | null;
         groundRef: AbstractMesh | null;
         canGoThroughWalls: boolean;

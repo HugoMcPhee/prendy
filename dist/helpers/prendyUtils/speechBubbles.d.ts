@@ -1,7 +1,7 @@
-import { PrendyStoreHelpers, PrendyStores } from "../../declarations";
-export declare function get_speechBubblesUtils(storeHelpers: PrendyStoreHelpers, prendyStores: PrendyStores): {
-    getTypingDelayForLetter: (letter: string, speechBubbleName: string) => any;
-    getTypingDelayForText: (text: string, speechBubbleName: string) => number;
-    isSpecialLetter: (text: string) => RegExpMatchArray | null;
-    isWhitespace: (text: string) => boolean;
-};
+import { PrendyStores } from "../../declarations";
+type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"] extends never ? string : keyof PrendyStores["speechBubbles"]["startStates"];
+export declare function getTypingDelayForLetter(letter: string, speechBubbleName: SpeechBubbleName): any;
+export declare function getTypingDelayForText(text: string, speechBubbleName: SpeechBubbleName): number;
+export declare function isSpecialLetter(text: string): RegExpMatchArray | null;
+export declare function isWhitespace(text: string): boolean;
+export {};

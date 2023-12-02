@@ -1,15 +1,12 @@
-export function get_globalUtils(storeHelpers) {
-    const { getState, setState } = storeHelpers;
-    function setGlobalState(newState, callback) {
-        if (typeof newState === "function") {
-            setState((state) => ({ global: { main: newState(state.global.main) } }), callback);
-        }
-        else {
-            setState({ global: { main: newState } }, callback);
-        }
+import { getState, setState } from "repond";
+export function setGlobalState(newState, callback) {
+    if (typeof newState === "function") {
+        setState((state) => ({ global: { main: newState(state.global.main) } }), callback);
     }
-    function getGlobalState() {
-        return getState().global.main;
+    else {
+        setState({ global: { main: newState } }, callback);
     }
-    return { setGlobalState, getGlobalState };
+}
+export function getGlobalState() {
+    return getState().global.main;
 }

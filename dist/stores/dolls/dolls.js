@@ -11,15 +11,15 @@ export default function dolls(prendyAssets) {
         const safeModelName = modelName !== null && modelName !== void 0 ? modelName : defaultModelName;
         const { animationNames } = modelInfoByName[safeModelName];
         return {
-            modelName: safeModelName,
+            modelName: safeModelName, // to reference in refs aswell
             //  New room
-            goalSpotNameAtNewPlace: null,
-            goalPositionAtNewPlace: null,
+            goalSpotNameAtNewPlace: null, // when going to new place, start at this spot
+            goalPositionAtNewPlace: null, // when going to new place, start at this spot
             //  Movers
             ...mover3dState("position", {
                 value: HIDDEN_POSITION,
                 valueGoal: HIDDEN_POSITION,
-            }),
+            }), // could have semnticolor icons split by numbers too
             ...moverState("rotationY"),
             //
             nowWalkSpeed: 0,
@@ -28,8 +28,8 @@ export default function dolls(prendyAssets) {
             // animation Weights mover
             ...makeModelAnimWeightsMoverState(safeModelName)("animWeights"),
             toggledMeshes: makeToggledMeshesState(safeModelName),
-            nowAnimation: animationNames[0],
-            animationLoops: true,
+            nowAnimation: animationNames[0], // NOTE AnimationNameFromDoll might work here?
+            animationLoops: true, // currently unused
             //
             inRange: defaultInRange(),
             //
@@ -52,7 +52,7 @@ export default function dolls(prendyAssets) {
                 damping: 0.5,
                 friction: 0.5,
                 stiffness: 0.65,
-            }),
+            }), // maybe also start movers using the main name
             ...moverRefs("rotationY", { mass: 100, damping: 2, stiffness: 20, friction: 20 }),
             ...modelMoverRefs(modelName, "animWeights"),
         };

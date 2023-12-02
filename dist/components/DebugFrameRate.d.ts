@@ -1,3 +1,2 @@
-/// <reference types="react" />
-import { PrendyStoreHelpers } from "../declarations";
-export declare function get_DebugFrameRate(storeHelpers: PrendyStoreHelpers): () => JSX.Element;
+import React from "react";
+export declare function DebugFrameRate(): React.JSX.Element;

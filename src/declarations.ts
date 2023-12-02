@@ -3,11 +3,12 @@ import {
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
   PrendyOptionsUntyped,
-  PrendyStoreHelpersUntyped,
+  PrendyStoreHelpersUntyped as RepondHelpersUntyped,
   PrendyStoresUntyped,
 } from "./stores/typedStoreHelpers";
 
 export interface AssetsTypesUntyped {
+  // Directly used for asset types
   PrendyOptions: PrendyOptionsUntyped;
   PlaceInfoByName: PlaceInfoByNamePlaceholder<string>;
   ModelInfoByName: ModelInfoByNamePlaceholder<string>;
@@ -16,18 +17,22 @@ export interface AssetsTypesUntyped {
   ModelName: string;
   DollName: string;
   CharacterName: string;
+  PlaceName: string;
+  SoundName: string;
+  MusicName: string;
+  FontName: string;
+  MusicFiles: Record<string, string>;
+  SpeechVidFiles: Record<string, string>;
+  SoundFiles: Record<string, string>;
+  PickupsInfo: any;
+  // Only used as type helpers
   AnyCameraName: string;
   AnySegmentName: string;
   AnySpotName: string;
   AnyTriggerName: string;
-  PlaceName: string;
   PickupName: string;
   AnyAnimationName: string;
-  SoundName: string;
-  MusicName: string;
-  FontName: string;
   SpeechVidName: string;
-  StoryPartName: string;
   CameraNameByPlace: Record<string, string>;
   SoundspotNameByPlace: Record<string, string>;
   SpotNameByPlace: Record<string, string>;
@@ -39,17 +44,15 @@ export interface AssetsTypesUntyped {
   MeshNameByModel: Record<string, string>;
   ModelNamesByPlaceLoose: any;
   SegmentNameByPlace: Record<string, string>;
-  MusicFiles: Record<string, string>;
-  SpeechVidFiles: Record<string, string>;
-  SoundFiles: Record<string, string>;
-  PickupsInfo: any;
+  // TODO remove these
+  StoryPartName: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CustomAssetsTypes {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CustomStoreHelpers {}
+export interface CustomRepondHelpers {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CustomPrendyStores {}
@@ -57,9 +60,7 @@ export interface CustomPrendyStores {}
 // The final usable assets types, with the custom types overriding the default ones
 export interface AssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {}
 // The final usable store helpers types, with the custom types overriding the default ones
-export interface PrendyStoreHelpers
-  extends Omit<PrendyStoreHelpersUntyped, keyof CustomStoreHelpers>,
-    CustomStoreHelpers {}
+export interface RepondHelpers extends Omit<RepondHelpersUntyped, keyof CustomRepondHelpers>, CustomRepondHelpers {}
 // The final usable store types, with the custom types overriding the default ones
 export interface PrendyStores extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {}
 
@@ -82,15 +83,10 @@ export type PrendyAssets = {
   prendyOptions: AssetsTypes["PrendyOptions"];
 };
 
-// NOTE generic types are used to prevent the typescript compiler simplifying types
-// like Record<PlaceName, Something> to Record<string, Something>
+// NOTE
 // the types are updated from each project (declaration merging)
-// This collect all the custom types into one, so a single generic parameter can be used in prendy functions
-// like example<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"])
 
 export type MyTypes = {
-  Main: AssetsTypes;
-  StoreHelpers: PrendyStoreHelpers;
-  Stores: PrendyStores;
+  Types: AssetsTypes;
   Assets: PrendyAssets;
 };

@@ -1,248 +1,152 @@
+import { AllState } from "repond";
 import { MyTypes } from "../../declarations";
-export declare function get_getUsefulStoryStuff<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]): () => {
-    storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-    storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-    globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-    nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-    nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-    nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-    placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-    placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-    camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-    camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
+type StoryState = AllState["story"]["main"];
+type CharacterName = MyTypes["Types"]["CharacterName"];
+type DollName = MyTypes["Types"]["DollName"];
+type PickupName = MyTypes["Types"]["PickupName"];
+type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type TriggerNameByPlace = MyTypes["Types"]["TriggerNameByPlace"];
+type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
+type SegmentNameFromCameraAndPlace<T_Place extends keyof PlaceInfoByName, T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+export declare function getUsefulStoryStuff(): {
+    storyState: any;
+    storyRefs: any;
+    globalState: any;
+    nowSegmentName: any;
+    nowPlaceName: any;
+    nowCamName: any;
+    placesRefs: Record<string, any>;
+    placeRefs: any;
+    camsRefs: any;
+    camRefs: any;
 };
-export declare function get_setStoryState<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"]): (newState: Partial<ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"]>) => void;
-export declare function makeAllStoryRuleMakers<T_MyTypes extends MyTypes = MyTypes>(storeHelpers: T_MyTypes["StoreHelpers"], placeInfoByName: T_MyTypes["Main"]["PlaceInfoByName"], characterNames: readonly T_MyTypes["Main"]["CharacterName"][], dollNames: readonly T_MyTypes["Main"]["DollName"][]): {
-    makeCamChangeRules: (callBacksObject: Partial<{ [P_PlaceName in T_MyTypes["Main"]["PlaceName"]]: Partial<Record<keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"], (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void>>; }>) => {
-        start: (ruleName: "whenPropertyChanges") => void;
-        stop: (ruleName: "whenPropertyChanges") => void;
-        startAll: () => void;
-        stopAll: () => void;
-        ruleNames: "whenPropertyChanges"[];
-        run: (ruleName: "whenPropertyChanges") => void;
-        runAll: () => void;
-    };
-    makeCamLeaveRules: (callBacksObject: Partial<{ [P_PlaceName in T_MyTypes["Main"]["PlaceName"]]: Partial<Record<keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"], (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void>>; }>) => {
-        start: (ruleName: "whenPropertyChanges") => void;
-        stop: (ruleName: "whenPropertyChanges") => void;
-        startAll: () => void;
-        stopAll: () => void;
-        ruleNames: "whenPropertyChanges"[];
-        run: (ruleName: "whenPropertyChanges") => void;
-        runAll: () => void;
-    };
-    makeCamSegmentRules: (callBacksObject: Partial<{ [P_PlaceName_1 in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_CamName in keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName_1]["segmentTimesByCamera"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName_1]["segmentTimesByCamera"][P_CamName]; }>; }>) => {
-        startAll(): void;
-        stopAll(): void;
-    };
-    makeOnInteractAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_2 in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_TriggerName in T_MyTypes["Main"]["TriggerNameByPlace"][P_PlaceName_2]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>, characterName?: T_MyTypes["Main"]["CharacterName"]) => () => void;
-    makeOnInteractToTalk: (callBacksObject: Partial<{ [P_DollName in T_MyTypes["Main"]["DollName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>, distanceType?: "touch" | "talk", characterName?: T_MyTypes["Main"]["CharacterName"]) => () => void;
-    makeInteractButtonRules: ({ onInteractAtTrigger, onInteractAtTalk, }: {
-        onInteractAtTrigger: () => void;
-        onInteractAtTalk: () => void;
-    }) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makeOnUsePickupAtTrigger: (callBacksObject: Partial<{ [P_PlaceName_3 in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_TriggerName_1 in T_MyTypes["Main"]["TriggerNameByPlace"][P_PlaceName_3]]: Partial<{ [P_PickupName in T_MyTypes["Main"]["PickupName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>; }>, characterName?: T_MyTypes["Main"]["CharacterName"]) => <T_PickupName extends T_MyTypes["Main"]["PickupName"]>(pickupName: T_PickupName) => false | undefined;
-    makeOnUsePickupGenerally: (callBacksObject: Partial<{ [P_PickupName_1 in T_MyTypes["Main"]["PickupName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>) => <T_PickupName_1 extends T_MyTypes["Main"]["PickupName"]>(pickupName: T_PickupName_1) => void;
-    makeOnUsePickupToTalk: (callBacksObject: Partial<{ [P_DollName_1 in T_MyTypes["Main"]["DollName"]]: Partial<{ [P_PickupName_2 in T_MyTypes["Main"]["PickupName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>, characterName?: T_MyTypes["Main"]["CharacterName"]) => <T_PickupName_2 extends T_MyTypes["Main"]["PickupName"]>(pickupName: T_PickupName_2) => false | undefined;
-    makePickupsRules: ({ onUsePickupAtTrigger, onUsePickupToTalk, onUsePickupGenerally, }: {
-        onUsePickupAtTrigger: <T_PickupName extends T_MyTypes["Main"]["PickupName"]>(pickupName: T_PickupName) => false | undefined;
-        onUsePickupToTalk: <T_PickupName_2 extends T_MyTypes["Main"]["PickupName"]>(pickupName: T_PickupName_2) => false | undefined;
-        onUsePickupGenerally: <T_PickupName_1 extends T_MyTypes["Main"]["PickupName"]>(pickupName: T_PickupName_1) => void;
-    }) => {
-        startAll(): void;
-        stopAll(): void;
-    };
-    makePlaceLoadRules: (atStartOfEachPlace: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void, callBacksObject: Partial<{ [P_PlaceName_4 in T_MyTypes["Main"]["PlaceName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makePlaceUnloadRules: (callBacksObject: Partial<{ [P_PlaceName_4 in T_MyTypes["Main"]["PlaceName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makeTouchRules: (callBacksObject: Partial<{ [P_DollName_2 in T_MyTypes["Main"]["DollName"]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>, options?: {
-        characterName?: T_MyTypes["Main"]["CharacterName"] | undefined;
-        distanceType?: "touch" | "talk" | "see" | undefined;
-        whenLeave?: boolean | undefined;
-    } | undefined) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
-    makeTriggerRules: (callBacksObject: Partial<{ [P_CharacterName in T_MyTypes["Main"]["CharacterName"]]: Partial<{ [P_PlaceName_5 in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_TriggerName_2 in T_MyTypes["Main"]["TriggerNameByPlace"][P_PlaceName_5]]: (usefulStuff: {
-        storyState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["story"]["main"];
-        storyRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["story"]["main"];
-        globalState: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"];
-        nowSegmentName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowSegmentName"];
-        nowPlaceName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowPlaceName"];
-        nowCamName: ReturnType<T_MyTypes["StoreHelpers"]["getState"]>["global"]["main"]["nowCamName"];
-        placesRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"];
-        placeRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]];
-        camsRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"];
-        camRefs: ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"][keyof ReturnType<T_MyTypes["StoreHelpers"]["getRefs"]>["places"]]["camsRefs"]];
-    }) => void; }>; }>; }>, options?: {
-        whenLeave?: boolean;
-    }) => {
-        stopAll: (...args: any) => any;
-        startAll: (...args: any) => any;
-        start: (...args: any) => any;
-        stop: (...args: any) => any;
-        ruleNames: any[];
-        run: (...args: any) => any;
-        runAll: (...args: any) => any;
-    };
+export declare function setStoryState(newState: Partial<StoryState>): void;
+type CamChangeRulesParam = Partial<{
+    [P_PlaceName in PlaceName]: Partial<Record<CameraNameFromPlace<P_PlaceName>, (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void>>;
+}>;
+type CamChangeRulesReturn = {
+    start: (ruleName: "whenPropertyChanges") => void;
+    stop: (ruleName: "whenPropertyChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPropertyChanges"[];
+    run: (ruleName: "whenPropertyChanges") => void;
+    runAll: () => void;
 };
+export declare function makeCamChangeRules(callBacksObject: CamChangeRulesParam): CamChangeRulesReturn;
+export declare function makeCamLeaveRules(callBacksObject: CamChangeRulesParam): CamChangeRulesReturn;
+type CamSegmentRulesOptions = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
+        [P_CamName in CameraNameFromPlace<P_PlaceName>]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
+    }>;
+}>;
+export declare function makeCamSegmentRules(callBacksObject: CamSegmentRulesOptions): {
+    startAll(): void;
+    stopAll(): void;
+};
+export declare function makePickupsRules({ onUsePickupAtTrigger, onUsePickupToTalk, onUsePickupGenerally, }: {
+    onUsePickupAtTrigger: ReturnType<typeof makeOnUsePickupAtTrigger>;
+    onUsePickupToTalk: ReturnType<typeof makeOnUsePickupToTalk>;
+    onUsePickupGenerally: ReturnType<typeof makeOnUsePickupGenerally>;
+}): {
+    startAll(): void;
+    stopAll(): void;
+};
+export declare function makeInteractButtonRules({ onInteractAtTrigger, onInteractAtTalk, }: {
+    onInteractAtTrigger: ReturnType<typeof makeOnInteractAtTrigger>;
+    onInteractAtTalk: ReturnType<typeof makeOnInteractToTalk>;
+}): {
+    start: (ruleName: "whenInteractButtonClicked") => void;
+    stop: (ruleName: "whenInteractButtonClicked") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenInteractButtonClicked"[];
+    run: (ruleName: "whenInteractButtonClicked") => void;
+    runAll: () => void;
+};
+type OnInteractAtTriggerOptions = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
+        [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+    }>;
+}>;
+export declare function makeOnInteractAtTrigger(callBacksObject: OnInteractAtTriggerOptions, characterNameParam?: CharacterName): () => void;
+type OnInteractToTalkOptions = Partial<{
+    [P_DollName in DollName]: StoryCallback;
+}>;
+export declare function makeOnInteractToTalk(callBacksObject: OnInteractToTalkOptions, distanceType?: "touch" | "talk", characterNameParam?: CharacterName): () => void;
+type OnUsePickupAtTriggerOptions = Partial<{
+    [P_PlaceName in PlaceName]: Partial<{
+        [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: Partial<{
+            [P_PickupName in PickupName]: StoryCallback;
+        }>;
+    }>;
+}>;
+export declare function makeOnUsePickupAtTrigger(callBacksObject: OnUsePickupAtTriggerOptions, characterNameParam?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+type OnUsePickupGenerallyOptions = Partial<{
+    [P_PickupName in PickupName]: StoryCallback;
+}>;
+export declare function makeOnUsePickupGenerally(callBacksObject: OnUsePickupGenerallyOptions): <T_PickupName extends string>(pickupName: T_PickupName) => void;
+type OnUsePickupToTalkOptions = Partial<{
+    [P_DollName in DollName]: Partial<{
+        [P_PickupName in PickupName]: StoryCallback;
+    }>;
+}>;
+export declare function makeOnUsePickupToTalk(callBacksObject: OnUsePickupToTalkOptions, characterNameParam?: CharacterName): <T_PickupName extends string>(pickupName: T_PickupName) => false | undefined;
+type PlaceLoadRulesOptions = Partial<{
+    [P_PlaceName in PlaceName]: StoryCallback;
+}>;
+export declare function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksObject: PlaceLoadRulesOptions): {
+    start: (ruleName: "whenPlaceFinishedLoading") => void;
+    stop: (ruleName: "whenPlaceFinishedLoading") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPlaceFinishedLoading"[];
+    run: (ruleName: "whenPlaceFinishedLoading") => void;
+    runAll: () => void;
+};
+export declare function makePlaceUnloadRules(callBacksObject: PlaceLoadRulesOptions): {
+    start: (ruleName: "whenPlaceFinishedUnloading") => void;
+    stop: (ruleName: "whenPlaceFinishedUnloading") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenPlaceFinishedUnloading"[];
+    run: (ruleName: "whenPlaceFinishedUnloading") => void;
+    runAll: () => void;
+};
+type TouchRulesOptions = Partial<{
+    [P_DollName in DollName]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
+}>;
+export declare function makeTouchRules(callBacksObject: TouchRulesOptions, options?: {
+    characterName?: CharacterName;
+    distanceType?: "touch" | "talk" | "see";
+    whenLeave?: boolean;
+}): {
+    start: (ruleName: "whenInRangeChangesToCheckTouch") => void;
+    stop: (ruleName: "whenInRangeChangesToCheckTouch") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenInRangeChangesToCheckTouch"[];
+    run: (ruleName: "whenInRangeChangesToCheckTouch") => void;
+    runAll: () => void;
+};
+type TriggerRulesOptions = Partial<{
+    [P_CharacterName in CharacterName]: Partial<{
+        [P_PlaceName in PlaceName]: Partial<{
+            [P_TriggerName in TriggerNameByPlace[P_PlaceName]]: StoryCallback;
+        }>;
+    }>;
+}>;
+export declare function makeTriggerRules(callBacksObject: TriggerRulesOptions, options?: {
+    whenLeave?: boolean;
+}): {
+    start: (ruleName: "whenAtTriggersChanges") => void;
+    stop: (ruleName: "whenAtTriggersChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: "whenAtTriggersChanges"[];
+    run: (ruleName: "whenAtTriggersChanges") => void;
+    runAll: () => void;
+};
+export {};

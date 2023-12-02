@@ -1,10 +1,9 @@
-import { MyTypes } from "../../declarations";
-export declare function get_globalSlateRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare const globalSlateRules: {
+    start: (ruleName: "whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes") => void;
+    stop: (ruleName: "whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes")[];
+    run: (ruleName: "whenSlatePositionChanges" | "whenShouldFocusOnDoll" | "whenSlateZoomChangesToSlatePanOverEdges" | "whenNowCamChanges" | "whenScreenResizes") => void;
+    runAll: () => void;
 };

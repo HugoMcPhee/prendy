@@ -17,8 +17,8 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
             virtualControlsReleaseTime: number;
             canShowVirtualButtons: boolean;
             animationNames: {
-                walking: T_MyTypes["Main"]["AnyAnimationName"];
-                idle: T_MyTypes["Main"]["AnyAnimationName"];
+                walking: T_MyTypes["Types"]["AnyAnimationName"];
+                idle: T_MyTypes["Types"]["AnyAnimationName"];
             };
         };
     };
@@ -36,8 +36,8 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
         virtualControlsReleaseTime: number;
         canShowVirtualButtons: boolean;
         animationNames: {
-            walking: T_MyTypes["Main"]["AnyAnimationName"];
-            idle: T_MyTypes["Main"]["AnyAnimationName"];
+            walking: T_MyTypes["Types"]["AnyAnimationName"];
+            idle: T_MyTypes["Types"]["AnyAnimationName"];
         };
     };
     refs: () => {

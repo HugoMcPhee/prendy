@@ -1,3 +1,6 @@
-/// <reference types="react" />
-import { MyTypes } from "../../../declarations";
-export declare function get_Pickups<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): (_props: {}) => JSX.Element;
+import React from "react";
+type Props = {
+    children?: React.ReactNode;
+};
+export declare function Pickups(_props: Props): React.JSX.Element;
+export {};

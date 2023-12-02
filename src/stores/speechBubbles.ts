@@ -4,9 +4,9 @@ import { CSSProperties } from "react";
 import { AssetsTypes, MyTypes, PrendyAssets } from "../declarations";
 
 export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CharacterName = T_MyTypes["Main"]["CharacterName"];
-  type FontName = T_MyTypes["Main"]["FontName"];
-  type SpeechVidName = T_MyTypes["Main"]["SpeechVidName"];
+  type CharacterName = T_MyTypes["Types"]["CharacterName"];
+  type FontName = T_MyTypes["Types"]["FontName"];
+  type SpeechVidName = T_MyTypes["Types"]["SpeechVidName"];
 
   const { characterNames, characterOptions, fontNames } = prendyAssets;
 

@@ -88,14 +88,14 @@ export type PrendySaveState = {
 export const timeStatePath = ["global", "main", "elapsedGameTime"] as const;
 
 export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
-  type AnySegmentName = T_MyTypes["Main"]["AnySegmentName"];
-  type CharacterName = T_MyTypes["Main"]["CharacterName"];
-  type DollName = T_MyTypes["Main"]["DollName"];
-  type ModelName = T_MyTypes["Main"]["ModelName"];
-  type PickupName = T_MyTypes["Main"]["PickupName"];
-  type PlaceInfoByName = T_MyTypes["Main"]["PlaceInfoByName"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
+  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
+  type AnySegmentName = T_MyTypes["Types"]["AnySegmentName"];
+  type CharacterName = T_MyTypes["Types"]["CharacterName"];
+  type DollName = T_MyTypes["Types"]["DollName"];
+  type ModelName = T_MyTypes["Types"]["ModelName"];
+  type PickupName = T_MyTypes["Types"]["PickupName"];
+  type PlaceInfoByName = T_MyTypes["Types"]["PlaceInfoByName"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
 
   const { musicNames, soundNames, placeInfoByName, prendyOptions } = prendyAssets;
 

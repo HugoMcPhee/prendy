@@ -1,142 +1,129 @@
 import { Mesh, Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
+import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../../declarations";
-import { get_globalUtils } from "../../prendyUtils/global";
+import { meta } from "../../../meta";
+import { setGlobalState } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
-import { get_getSceneOrEngineUtils } from "../getSceneOrEngineUtils";
-import { get_useModelFile } from "../useModelFile";
-import { get_usePlaceUtils } from "./utils";
+import { getScene } from "../getSceneOrEngineUtils";
+import { useModelFile } from "../useModelFile";
+import { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
 
-export function get_usePlace<T_MyTypes extends MyTypes = MyTypes>(
-  prendyAssets: T_MyTypes["Assets"],
-  storeHelpers: T_MyTypes["StoreHelpers"]
-) {
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type SoundName = T_MyTypes["Main"]["SoundName"];
-  type AnyCameraName = T_MyTypes["Main"]["AnyCameraName"];
+type PlaceName = MyTypes["Types"]["PlaceName"];
+type SoundName = MyTypes["Types"]["SoundName"];
+type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
 
-  const { getRefs, getState, setState } = storeHelpers;
-  const { placeInfoByName, soundFiles, prendyOptions } = prendyAssets;
-
-  const { setGlobalState } = get_globalUtils(storeHelpers);
-  const { getScene } = get_getSceneOrEngineUtils(storeHelpers);
-  const useModelFile = get_useModelFile(getScene);
-
-  const { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } = get_usePlaceUtils(
-    prendyAssets,
-    storeHelpers
-  );
+export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
+  const { placeInfoByName, soundFiles, prendyOptions } = meta.assets!;
 
   const placesRefs = getRefs().places;
 
-  return function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
-    const placeInfo = placeInfoByName[placeName];
-    const { modelFile, cameraNames, floorNames, triggerNames, spotNames, soundspotNames, wallNames } = placeInfo;
-    const placeRefs = placesRefs[placeName];
-    const scene = getScene();
+  const placeInfo = placeInfoByName[placeName];
+  const { modelFile, cameraNames, floorNames, triggerNames, spotNames, soundspotNames, wallNames } = placeInfo;
+  const placeRefs = placesRefs[placeName];
+  const scene = getScene();
 
-    const { container, meshes, cameras, transformNodes } = useModelFile<any>(modelFile);
+  const { container, meshes, cameras, transformNodes } = useModelFile<any>(modelFile);
 
-    // this runs after useModelFile finished
-    useEffect(() => {
-      setGlobalState({ newPlaceModelLoaded: true });
+  // this runs after useModelFile finished
+  useEffect(() => {
+    setGlobalState({ newPlaceModelLoaded: true });
 
-      if (!scene) return;
+    if (!scene) return;
 
-      forEach(cameraNames, (cameraName) => {
-        const camRef = placeRefs.camsRefs[cameraName];
-        camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
-      });
+    forEach(cameraNames, (cameraName) => {
+      const camRef = placeRefs.camsRefs[cameraName];
+      camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
+    });
 
-      // Load any models for this place that weren't already loaded
-      const { modelNamesLoaded } = getState().global.main;
-      forEach(prendyOptions.modelNamesByPlace[placeName], (modelName) => {
-        if (!modelNamesLoaded.includes(modelName)) {
-          setState({ models: { [modelName]: { wantToLoad: true } } });
-        }
-      });
-
-      loadNowVideosForPlace()
-        .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
-        .catch((error) => console.warn("error loading videos", error));
-
-      loadProbeImagesForPlace(placeName)
-        .then(() => setGlobalState({ newPlaceProbesLoaded: true }))
-        .catch((error) => console.warn("error loading probes", error));
-
-      placeRefs.rootMesh = meshes["__root__"];
-
-      function setupWallOrFloor(mesh: Mesh) {
-        mesh.checkCollisions = true;
-        mesh.collisionGroup = 11;
-        mesh.useOctreeForCollisions = true;
-        mesh.isVisible = false;
-        mesh.freezeWorldMatrix();
-        mesh.doNotSyncBoundingInfo = true;
+    // Load any models for this place that weren't already loaded
+    const { modelNamesLoaded } = getState().global.main;
+    forEach(prendyOptions.modelNamesByPlace[placeName], (modelName) => {
+      if (!modelNamesLoaded.includes(modelName)) {
+        setState({ models: { [modelName]: { wantToLoad: true } } });
       }
+    });
 
-      forEach(floorNames, (name) => setupWallOrFloor(meshes[name]));
+    loadNowVideosForPlace()
+      .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
+      .catch((error) => console.warn("error loading videos", error));
 
-      forEach(wallNames, (name) => {
-        setupWallOrFloor(meshes[name]);
-        placeRefs.wallMeshes[name] = meshes[name];
+    loadProbeImagesForPlace(placeName)
+      .then(() => setGlobalState({ newPlaceProbesLoaded: true }))
+      .catch((error) => console.warn("error loading probes", error));
+
+    placeRefs.rootMesh = meshes["__root__"];
+
+    function setupWallOrFloor(mesh: Mesh) {
+      mesh.checkCollisions = true;
+      mesh.collisionGroup = 11;
+      mesh.useOctreeForCollisions = true;
+      mesh.isVisible = false;
+      mesh.freezeWorldMatrix();
+      mesh.doNotSyncBoundingInfo = true;
+    }
+
+    forEach(floorNames, (name) => setupWallOrFloor(meshes[name]));
+
+    forEach(wallNames, (name) => {
+      setupWallOrFloor(meshes[name]);
+      placeRefs.wallMeshes[name] = meshes[name];
+    });
+
+    forEach(triggerNames, (name) => {
+      meshes[name].isVisible = false;
+      meshes[name].freezeWorldMatrix();
+      meshes[name].doNotSyncBoundingInfo = true;
+      // const { material } = meshes[name];
+      // if (material) material.alpha = 0.5;
+      placeRefs.triggerMeshes[name] = meshes[name];
+    });
+
+    forEach(spotNames, (name) => {
+      const spotNode = transformNodes[name];
+      placeRefs.spotPositions[name] = spotNode.getAbsolutePosition();
+      spotNode.computeWorldMatrix(true);
+      placeRefs.spotRotations[name] = getAbsoluteRotation(spotNode);
+      spotNode.freezeWorldMatrix();
+    });
+
+    forEach(soundspotNames, (name) => {
+      const soundspotBaseName = name.split(".")[0] as SoundName;
+
+      const newSound = new Sound(
+        name,
+        soundFiles[soundspotBaseName], // `${soundspotBaseName}.mp3`,
+        scene,
+        null,
+        { loop: true, autoplay: true, spatialSound: true }
+      );
+      newSound.setPosition(transformNodes[name].getAbsolutePosition());
+
+      placeRefs.soundspotSounds[name] = newSound;
+    });
+
+    forEach(container.meshes, (loopedMesh) => {
+      if (loopedMesh.name.includes("camBox_")) {
+        const loopedCamNameWithNumber = loopedMesh.name.replace("camBox_", "");
+        const cameraName = loopedCamNameWithNumber.split(".")[0] as AnyCameraName;
+        loopedMesh.isVisible = false;
+
+        loopedMesh.freezeWorldMatrix();
+        loopedMesh.doNotSyncBoundingInfo = true;
+
+        const camRef = placeRefs.camsRefs[cameraName];
+        if (camRef) camRef.camCubeMeshes.push(loopedMesh);
+      }
+    });
+
+    return () => {
+      forEach(soundspotNames, (loopedName) => {
+        placeRefs.soundspotSounds[loopedName]?.dispose();
       });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placeName]);
 
-      forEach(triggerNames, (name) => {
-        meshes[name].isVisible = false;
-        meshes[name].freezeWorldMatrix();
-        meshes[name].doNotSyncBoundingInfo = true;
-        // const { material } = meshes[name];
-        // if (material) material.alpha = 0.5;
-        placeRefs.triggerMeshes[name] = meshes[name];
-      });
-
-      forEach(spotNames, (name) => {
-        const spotNode = transformNodes[name];
-        placeRefs.spotPositions[name] = spotNode.getAbsolutePosition();
-        spotNode.computeWorldMatrix(true);
-        placeRefs.spotRotations[name] = getAbsoluteRotation(spotNode);
-        spotNode.freezeWorldMatrix();
-      });
-
-      forEach(soundspotNames, (name) => {
-        const soundspotBaseName = name.split(".")[0] as SoundName;
-
-        const newSound = new Sound(
-          name,
-          soundFiles[soundspotBaseName], // `${soundspotBaseName}.mp3`,
-          scene,
-          null,
-          { loop: true, autoplay: true, spatialSound: true }
-        );
-        newSound.setPosition(transformNodes[name].getAbsolutePosition());
-
-        placeRefs.soundspotSounds[name] = newSound;
-      });
-
-      forEach(container.meshes, (loopedMesh) => {
-        if (loopedMesh.name.includes("camBox_")) {
-          const loopedCamNameWithNumber = loopedMesh.name.replace("camBox_", "");
-          const cameraName = loopedCamNameWithNumber.split(".")[0] as AnyCameraName;
-          loopedMesh.isVisible = false;
-
-          loopedMesh.freezeWorldMatrix();
-          loopedMesh.doNotSyncBoundingInfo = true;
-
-          const camRef = placeRefs.camsRefs[cameraName];
-          if (camRef) camRef.camCubeMeshes.push(loopedMesh);
-        }
-      });
-
-      return () => {
-        forEach(soundspotNames, (loopedName) => {
-          placeRefs.soundspotSounds[loopedName]?.dispose();
-        });
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [placeName]);
-
-    return { container, meshes, cameras };
-  };
+  return { container, meshes, cameras };
 }

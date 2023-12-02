@@ -14,12 +14,12 @@ const defaultCamRefs = () => ({
 export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
 
 export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CameraNameByPlace = T_MyTypes["Main"]["CameraNameByPlace"];
-  type PlaceName = T_MyTypes["Main"]["PlaceName"];
-  type SoundspotNameByPlace = T_MyTypes["Main"]["SoundspotNameByPlace"];
-  type SpotNameByPlace = T_MyTypes["Main"]["SpotNameByPlace"];
-  type TriggerNameByPlace = T_MyTypes["Main"]["TriggerNameByPlace"];
-  type WallNameByPlace = T_MyTypes["Main"]["WallNameByPlace"];
+  type CameraNameByPlace = T_MyTypes["Types"]["CameraNameByPlace"];
+  type PlaceName = T_MyTypes["Types"]["PlaceName"];
+  type SoundspotNameByPlace = T_MyTypes["Types"]["SoundspotNameByPlace"];
+  type SpotNameByPlace = T_MyTypes["Types"]["SpotNameByPlace"];
+  type TriggerNameByPlace = T_MyTypes["Types"]["TriggerNameByPlace"];
+  type WallNameByPlace = T_MyTypes["Types"]["WallNameByPlace"];
 
   const { placeInfoByName } = prendyAssets;
   const placeNames = prendyAssets.placeNames as PlaceName[];

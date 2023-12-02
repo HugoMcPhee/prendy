@@ -49,12 +49,12 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
     };
     miniBubbles: {
         state: <T_ItemName extends string>(_itemName: T_ItemName, options?: {
-            character?: T_MyTypes["Main"]["CharacterName"] | undefined;
+            character?: T_MyTypes["Types"]["CharacterName"] | undefined;
         } | undefined) => {
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
+            forCharacter: T_MyTypes["Types"]["CharacterName"] | null;
             position: import("chootils/dist/points2d").Point2D;
         };
         refs: () => {
@@ -62,11 +62,11 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             textRef: any;
             videoRef: HTMLVideoElement | null;
         };
-        startStates: { [K_CharacterName in T_MyTypes["Main"]["CharacterName"]]: {
+        startStates: { [K_CharacterName in T_MyTypes["Types"]["CharacterName"]]: {
             isVisible: boolean;
             isFullyHidden: boolean;
             text: string;
-            forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
+            forCharacter: T_MyTypes["Types"]["CharacterName"] | null;
             position: import("chootils/dist/points2d").Point2D;
         }; };
     };
@@ -78,7 +78,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 zoomMultiplier: number;
                 timeScreenResized: number;
                 interactButtonPressTime: number;
-                heldPickups: T_MyTypes["Main"]["PickupName"][];
+                heldPickups: T_MyTypes["Types"]["PickupName"][];
                 storyOverlayToggled: boolean;
                 alarmTextIsVisible: boolean;
                 alarmText: string;
@@ -106,27 +106,27 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 slatePosIsMoving: boolean;
                 slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
                 slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-                nowPlaceName: T_MyTypes["Main"]["PlaceName"];
-                goalPlaceName: T_MyTypes["Main"]["PlaceName"] | null;
+                nowPlaceName: T_MyTypes["Types"]["PlaceName"];
+                goalPlaceName: T_MyTypes["Types"]["PlaceName"] | null;
                 readyToSwapPlace: boolean;
                 isLoadingBetweenPlaces: boolean;
                 loadingOverlayToggled: boolean;
                 loadingOverlayFullyShowing: boolean;
-                goalCamWhenNextPlaceLoads: T_MyTypes["Main"]["AnyCameraName"] | null;
-                goalCamNameWhenVidPlays: T_MyTypes["Main"]["AnyCameraName"] | null;
-                goalCamNameAtLoop: T_MyTypes["Main"]["AnyCameraName"] | null;
-                goalCamName: T_MyTypes["Main"]["AnyCameraName"] | null;
+                goalCamWhenNextPlaceLoads: T_MyTypes["Types"]["AnyCameraName"] | null;
+                goalCamNameWhenVidPlays: T_MyTypes["Types"]["AnyCameraName"] | null;
+                goalCamNameAtLoop: T_MyTypes["Types"]["AnyCameraName"] | null;
+                goalCamName: T_MyTypes["Types"]["AnyCameraName"] | null;
                 nowCamName: string;
-                nowSegmentName: T_MyTypes["Main"]["AnySegmentName"];
-                goalSegmentName: T_MyTypes["Main"]["AnySegmentName"] | null;
-                goalSegmentNameAtLoop: T_MyTypes["Main"]["AnySegmentName"] | null;
-                goalSegmentNameWhenVidPlays: T_MyTypes["Main"]["AnySegmentName"] | null;
-                goalSegmentWhenGoalPlaceLoads: T_MyTypes["Main"]["AnySegmentName"] | null;
-                modelNamesLoaded: T_MyTypes["Main"]["ModelName"][];
+                nowSegmentName: T_MyTypes["Types"]["AnySegmentName"];
+                goalSegmentName: T_MyTypes["Types"]["AnySegmentName"] | null;
+                goalSegmentNameAtLoop: T_MyTypes["Types"]["AnySegmentName"] | null;
+                goalSegmentNameWhenVidPlays: T_MyTypes["Types"]["AnySegmentName"] | null;
+                goalSegmentWhenGoalPlaceLoads: T_MyTypes["Types"]["AnySegmentName"] | null;
+                modelNamesLoaded: T_MyTypes["Types"]["ModelName"][];
                 newPlaceModelLoaded: boolean;
                 newPlaceVideosLoaded: boolean;
                 newPlaceProbesLoaded: boolean;
-                playerCharacter: T_MyTypes["Main"]["CharacterName"];
+                playerCharacter: T_MyTypes["Types"]["CharacterName"];
                 gravityValue: number;
                 playerMovingPaused: boolean;
                 focusedDoll: any;
@@ -139,7 +139,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             zoomMultiplier: number;
             timeScreenResized: number;
             interactButtonPressTime: number;
-            heldPickups: T_MyTypes["Main"]["PickupName"][];
+            heldPickups: T_MyTypes["Types"]["PickupName"][];
             storyOverlayToggled: boolean;
             alarmTextIsVisible: boolean;
             alarmText: string;
@@ -167,27 +167,27 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             slatePosIsMoving: boolean;
             slatePosMoveMode: import("repond-movers/dist/types").MoveMode;
             slatePosMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-            nowPlaceName: T_MyTypes["Main"]["PlaceName"];
-            goalPlaceName: T_MyTypes["Main"]["PlaceName"] | null;
+            nowPlaceName: T_MyTypes["Types"]["PlaceName"];
+            goalPlaceName: T_MyTypes["Types"]["PlaceName"] | null;
             readyToSwapPlace: boolean;
             isLoadingBetweenPlaces: boolean;
             loadingOverlayToggled: boolean;
             loadingOverlayFullyShowing: boolean;
-            goalCamWhenNextPlaceLoads: T_MyTypes["Main"]["AnyCameraName"] | null;
-            goalCamNameWhenVidPlays: T_MyTypes["Main"]["AnyCameraName"] | null;
-            goalCamNameAtLoop: T_MyTypes["Main"]["AnyCameraName"] | null;
-            goalCamName: T_MyTypes["Main"]["AnyCameraName"] | null;
+            goalCamWhenNextPlaceLoads: T_MyTypes["Types"]["AnyCameraName"] | null;
+            goalCamNameWhenVidPlays: T_MyTypes["Types"]["AnyCameraName"] | null;
+            goalCamNameAtLoop: T_MyTypes["Types"]["AnyCameraName"] | null;
+            goalCamName: T_MyTypes["Types"]["AnyCameraName"] | null;
             nowCamName: string;
-            nowSegmentName: T_MyTypes["Main"]["AnySegmentName"];
-            goalSegmentName: T_MyTypes["Main"]["AnySegmentName"] | null;
-            goalSegmentNameAtLoop: T_MyTypes["Main"]["AnySegmentName"] | null;
-            goalSegmentNameWhenVidPlays: T_MyTypes["Main"]["AnySegmentName"] | null;
-            goalSegmentWhenGoalPlaceLoads: T_MyTypes["Main"]["AnySegmentName"] | null;
-            modelNamesLoaded: T_MyTypes["Main"]["ModelName"][];
+            nowSegmentName: T_MyTypes["Types"]["AnySegmentName"];
+            goalSegmentName: T_MyTypes["Types"]["AnySegmentName"] | null;
+            goalSegmentNameAtLoop: T_MyTypes["Types"]["AnySegmentName"] | null;
+            goalSegmentNameWhenVidPlays: T_MyTypes["Types"]["AnySegmentName"] | null;
+            goalSegmentWhenGoalPlaceLoads: T_MyTypes["Types"]["AnySegmentName"] | null;
+            modelNamesLoaded: T_MyTypes["Types"]["ModelName"][];
             newPlaceModelLoaded: boolean;
             newPlaceVideosLoaded: boolean;
             newPlaceProbesLoaded: boolean;
-            playerCharacter: T_MyTypes["Main"]["CharacterName"];
+            playerCharacter: T_MyTypes["Types"]["CharacterName"];
             gravityValue: number;
             playerMovingPaused: boolean;
             focusedDoll: any;
@@ -208,7 +208,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             solidParticleSystems: Record<string, import("@babylonjs/core").SolidParticleSystem>;
             timerSpeed: number;
             aConvoIsHappening_timeout: NodeJS.Timeout | null;
-            camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Main"]["PlaceName"]]: Partial<{ [P_CamName in keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"]]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Main"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; }>; }> | null;
+            camSegmentRulesOptions: Partial<{ [P_PlaceName in T_MyTypes["Types"]["PlaceName"]]: Partial<keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] extends infer T extends keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"] ? { [P_CamName in T]: (usefulStuff: Record<any, any>) => keyof T_MyTypes["Types"]["PlaceInfoByName"][P_PlaceName]["segmentTimesByCamera"][P_CamName]; } : never>; }> | null;
             onPickupButtonClick: ((pickupName: any) => void) | null;
             slateZoomMoverRefs: {
                 velocity: number;
@@ -264,31 +264,31 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         };
     };
     models: {
-        startStates: { [K_ModelName in T_MyTypes["Main"]["ModelName"]]: {
+        startStates: { [K_ModelName in T_MyTypes["Types"]["ModelName"]]: {
             wantToLoad: boolean;
             isLoading: boolean;
             isLoaded: boolean;
         }; };
-        state: <T_ModelName extends T_MyTypes["Main"]["ModelName"]>(_modelName: T_ModelName) => {
+        state: <T_ModelName extends T_MyTypes["Types"]["ModelName"]>(_modelName: T_ModelName) => {
             wantToLoad: boolean;
             isLoading: boolean;
             isLoaded: boolean;
         };
-        refs: <T_ModelName_1 extends T_MyTypes["Main"]["ModelName"]>(_modelName: T_ModelName_1) => {
+        refs: <T_ModelName_1 extends T_MyTypes["Types"]["ModelName"]>(_modelName: T_ModelName_1) => {
             container: import("@babylonjs/core").AssetContainer | null;
             materialRef: import("@babylonjs/core").PBRMaterial | null;
             materialRefs: import("@babylonjs/core").PBRMaterial[] | null;
         };
     };
     dolls: {
-        startStates: { [K_DollName in T_MyTypes["Main"]["DollName"]]: {
-            toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], boolean>;
-            nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]];
+        startStates: { [K_DollName in T_MyTypes["Types"]["DollName"]]: {
+            toggledMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], boolean>;
+            nowAnimation: T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]];
             animationLoops: boolean;
-            inRange: Record<T_MyTypes["Main"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
+            inRange: Record<T_MyTypes["Types"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             isVisible: boolean;
-            animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], number>;
-            animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]], number>;
+            animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], number>;
+            animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]], number>;
             animWeightsIsMoving: boolean;
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
@@ -307,18 +307,18 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             positionMoveMode: import("repond-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
             positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-            modelName: NonNullable<T_MyTypes["Main"]["DollOptions"][K_DollName]["model"]>;
-            goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
+            modelName: NonNullable<T_MyTypes["Types"]["DollOptions"][K_DollName]["model"]>;
+            goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
         }; };
-        state: <T_DollName extends string, T_ModelName_2 extends T_MyTypes["Main"]["ModelName"]>(_dollName: T_DollName, modelName?: T_ModelName_2 | undefined) => {
-            toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_ModelName_2], boolean>;
-            nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_2];
+        state: <T_DollName extends string, T_ModelName_2 extends T_MyTypes["Types"]["ModelName"]>(_dollName: T_DollName, modelName?: T_ModelName_2 | undefined) => {
+            toggledMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][T_ModelName_2], boolean>;
+            nowAnimation: T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_2];
             animationLoops: boolean;
-            inRange: Record<T_MyTypes["Main"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
+            inRange: Record<T_MyTypes["Types"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             isVisible: boolean;
-            animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_2], number>;
-            animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_2], number>;
+            animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_2], number>;
+            animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_2], number>;
             animWeightsIsMoving: boolean;
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
@@ -338,17 +338,17 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             positionMoveConfigName: string;
             positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
             modelName: NonNullable<T_ModelName_2>;
-            goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
+            goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
         };
-        refs: <T_DollName_1 extends T_MyTypes["Main"]["DollName"], T_ModelName_3 extends T_MyTypes["Main"]["ModelName"]>(dollName: T_DollName_1, itemState: {
-            toggledMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], boolean>;
-            nowAnimation: T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]];
+        refs: <T_DollName_1 extends T_MyTypes["Types"]["DollName"], T_ModelName_3 extends T_MyTypes["Types"]["ModelName"]>(dollName: T_DollName_1, itemState: {
+            toggledMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], boolean>;
+            nowAnimation: T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]];
             animationLoops: boolean;
-            inRange: Record<T_MyTypes["Main"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
+            inRange: Record<T_MyTypes["Types"]["DollName"], import("../helpers/prendyUtils/dolls").InRangeForDoll>;
             isVisible: boolean;
-            animWeights: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], number>;
-            animWeightsGoal: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]], number>;
+            animWeights: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], number>;
+            animWeightsGoal: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]], number>;
             animWeightsIsMoving: boolean;
             animWeightsMoveMode: import("repond-movers/dist/types").MoveMode;
             animWeightsMoveConfigName: string;
@@ -367,8 +367,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             positionMoveMode: import("repond-movers/dist/types").MoveMode;
             positionMoveConfigName: string;
             positionMoveConfigs: Record<string, import("repond-movers/dist/types").PhysicsOptions>;
-            modelName: NonNullable<T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]>;
-            goalSpotNameAtNewPlace: T_MyTypes["Main"]["AnySpotName"] | null;
+            modelName: NonNullable<T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]>;
+            goalSpotNameAtNewPlace: T_MyTypes["Types"]["AnySpotName"] | null;
             goalPositionAtNewPlace: import("chootils/dist/points3d").Point3D | null;
         }) => {
             animWeightsMoverRefs: {
@@ -416,31 +416,31 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 physicsConfigs: import("repond-movers/dist/types").DefinedPhysicsConfig;
             };
             meshRef: import("@babylonjs/core").AbstractMesh | null;
-            otherMeshes: Record<T_MyTypes["Main"]["MeshNameByModel"][NonNullable<T_MyTypes["Main"]["DollOptions"][T_DollName_1]["model"]>], import("@babylonjs/core").AbstractMesh | null>;
+            otherMeshes: Record<T_MyTypes["Types"]["MeshNameByModel"][NonNullable<T_MyTypes["Types"]["DollOptions"][T_DollName_1]["model"]>], import("@babylonjs/core").AbstractMesh | null>;
             entriesRef: import("@babylonjs/core").InstantiatedEntries | null;
-            aniGroupsRef: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_3], import("@babylonjs/core").AnimationGroup> | null;
+            aniGroupsRef: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_3], import("@babylonjs/core").AnimationGroup> | null;
             assetRefs: {
-                meshes: Record<"__root__" | T_MyTypes["Main"]["MeshNameByModel"][T_ModelName_3], import("@babylonjs/core").AbstractMesh>;
+                meshes: Record<"__root__" | T_MyTypes["Types"]["MeshNameByModel"][T_ModelName_3], import("@babylonjs/core").AbstractMesh>;
                 skeleton: import("@babylonjs/core").Skeleton;
-                bones: Record<T_MyTypes["Main"]["BoneNameByModel"][T_ModelName_3], import("@babylonjs/core").Bone>;
-                aniGroups: Record<T_MyTypes["Main"]["AnimationNameByModel"][T_ModelName_3], import("@babylonjs/core").AnimationGroup>;
-                materials: Record<T_MyTypes["Main"]["MaterialNameByModel"][T_ModelName_3], import("@babylonjs/core").Material>;
+                bones: Record<T_MyTypes["Types"]["BoneNameByModel"][T_ModelName_3], import("@babylonjs/core").Bone>;
+                aniGroups: Record<T_MyTypes["Types"]["AnimationNameByModel"][T_ModelName_3], import("@babylonjs/core").AnimationGroup>;
+                materials: Record<T_MyTypes["Types"]["MaterialNameByModel"][T_ModelName_3], import("@babylonjs/core").Material>;
             } | null;
             groundRef: import("@babylonjs/core").AbstractMesh | null;
             canGoThroughWalls: boolean;
         };
     };
     characters: {
-        startStates: { [K_CharacterName_1 in T_MyTypes["Main"]["CharacterName"]]: {
-            dollName: T_MyTypes["Main"]["CharacterOptions"][K_CharacterName_1]["doll"];
-            atTriggers: Partial<Record<T_MyTypes["Main"]["AnyTriggerName"], boolean>>;
-            atCamCubes: Partial<Record<T_MyTypes["Main"]["AnyCameraName"], boolean>>;
+        startStates: { [K_CharacterName_1 in T_MyTypes["Types"]["CharacterName"]]: {
+            dollName: T_MyTypes["Types"]["CharacterOptions"][K_CharacterName_1]["doll"];
+            atTriggers: Partial<Record<T_MyTypes["Types"]["AnyTriggerName"], boolean>>;
+            atCamCubes: Partial<Record<T_MyTypes["Types"]["AnyCameraName"], boolean>>;
             hasLeftFirstTrigger: boolean;
         }; };
-        state: <T_CharacterName extends string, T_DollName_2 extends T_MyTypes["Main"]["DollName"]>(_characterName: T_CharacterName, dollName?: T_DollName_2 | undefined) => {
+        state: <T_CharacterName extends string, T_DollName_2 extends T_MyTypes["Types"]["DollName"]>(_characterName: T_CharacterName, dollName?: T_DollName_2 | undefined) => {
             dollName: T_DollName_2;
-            atTriggers: Partial<Record<T_MyTypes["Main"]["AnyTriggerName"], boolean>>;
-            atCamCubes: Partial<Record<T_MyTypes["Main"]["AnyCameraName"], boolean>>;
+            atTriggers: Partial<Record<T_MyTypes["Types"]["AnyTriggerName"], boolean>>;
+            atCamCubes: Partial<Record<T_MyTypes["Types"]["AnyCameraName"], boolean>>;
             hasLeftFirstTrigger: boolean;
         };
         refs: <T_CharacterName_1 extends string>(_characterName: T_CharacterName_1) => {
@@ -463,8 +463,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
                 virtualControlsReleaseTime: number;
                 canShowVirtualButtons: boolean;
                 animationNames: {
-                    walking: T_MyTypes["Main"]["AnyAnimationName"];
-                    idle: T_MyTypes["Main"]["AnyAnimationName"];
+                    walking: T_MyTypes["Types"]["AnyAnimationName"];
+                    idle: T_MyTypes["Types"]["AnyAnimationName"];
                 };
             };
         };
@@ -482,8 +482,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             virtualControlsReleaseTime: number;
             canShowVirtualButtons: boolean;
             animationNames: {
-                walking: T_MyTypes["Main"]["AnyAnimationName"];
-                idle: T_MyTypes["Main"]["AnyAnimationName"];
+                walking: T_MyTypes["Types"]["AnyAnimationName"];
+                idle: T_MyTypes["Types"]["AnyAnimationName"];
             };
         };
         refs: () => {
@@ -495,8 +495,8 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
     };
     speechBubbles: {
         state: <T_ItemName_1 extends string>(_itemName: T_ItemName_1, options?: {
-            font?: T_MyTypes["Main"]["FontName"] | undefined;
-            character?: T_MyTypes["Main"]["CharacterName"] | undefined;
+            font?: T_MyTypes["Types"]["FontName"] | undefined;
+            character?: T_MyTypes["Types"]["CharacterName"] | undefined;
         } | undefined) => {
             isVisible: boolean;
             isFullyHidden: boolean;
@@ -506,11 +506,11 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             stylesBySpecialText: Record<string, import("react").CSSProperties>;
             _specialTextByLetterIndex: Record<number, string>;
             _goalTextWordLetterArrays: string[][];
-            forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
+            forCharacter: T_MyTypes["Types"]["CharacterName"] | null;
             position: import("chootils/dist/points2d").Point2D;
             typingFinished: boolean;
-            nowVideoName: T_MyTypes["Main"]["SpeechVidName"] | null;
-            font: T_MyTypes["Main"]["FontName"];
+            nowVideoName: T_MyTypes["Types"]["SpeechVidName"] | null;
+            font: T_MyTypes["Types"]["FontName"];
             zIndex: number;
         };
         refs: () => {
@@ -519,7 +519,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             currentTimeout: NodeJS.Timeout | null;
             videoRef: HTMLVideoElement | null;
         };
-        startStates: { [K_CharacterName_2 in T_MyTypes["Main"]["CharacterName"]]: {
+        startStates: { [K_CharacterName_2 in T_MyTypes["Types"]["CharacterName"]]: {
             isVisible: boolean;
             isFullyHidden: boolean;
             goalText: string;
@@ -528,29 +528,29 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
             stylesBySpecialText: Record<string, import("react").CSSProperties>;
             _specialTextByLetterIndex: Record<number, string>;
             _goalTextWordLetterArrays: string[][];
-            forCharacter: T_MyTypes["Main"]["CharacterName"] | null;
+            forCharacter: T_MyTypes["Types"]["CharacterName"] | null;
             position: import("chootils/dist/points2d").Point2D;
             typingFinished: boolean;
-            nowVideoName: T_MyTypes["Main"]["SpeechVidName"] | null;
-            font: T_MyTypes["Main"]["FontName"];
+            nowVideoName: T_MyTypes["Types"]["SpeechVidName"] | null;
+            font: T_MyTypes["Types"]["FontName"];
             zIndex: number;
         }; };
     };
     places: {
-        startStates: { [K_PlaceName in T_MyTypes["Main"]["PlaceName"]]: {
-            toggledWalls: Record<T_MyTypes["Main"]["WallNameByPlace"][K_PlaceName], boolean>;
+        startStates: { [K_PlaceName in T_MyTypes["Types"]["PlaceName"]]: {
+            toggledWalls: Record<T_MyTypes["Types"]["WallNameByPlace"][K_PlaceName], boolean>;
         }; };
-        state: <K_PlaceName_1 extends T_MyTypes["Main"]["PlaceName"]>(itemName: string | K_PlaceName_1) => {
-            toggledWalls: Record<T_MyTypes["Main"]["WallNameByPlace"][T_MyTypes["Main"]["PlaceName"]], boolean>;
+        state: <K_PlaceName_1 extends T_MyTypes["Types"]["PlaceName"]>(itemName: string | K_PlaceName_1) => {
+            toggledWalls: Record<T_MyTypes["Types"]["WallNameByPlace"][T_MyTypes["Types"]["PlaceName"]], boolean>;
         };
-        refs: <K_PlaceName_2 extends T_MyTypes["Main"]["PlaceName"]>(itemName: K_PlaceName_2 & string) => {
+        refs: <K_PlaceName_2 extends T_MyTypes["Types"]["PlaceName"]>(itemName: K_PlaceName_2 & string) => {
             rootMesh: import("@babylonjs/core").AbstractMesh | null;
-            spotPositions: { [P_SpotName in T_MyTypes["Main"]["SpotNameByPlace"][T_MyTypes["Main"]["PlaceName"]]]: import("@babylonjs/core").Vector3; };
-            spotRotations: { [P_SpotName_1 in T_MyTypes["Main"]["SpotNameByPlace"][T_MyTypes["Main"]["PlaceName"]]]: import("@babylonjs/core").Vector3; };
-            soundspotSounds: { [P_SoundName in T_MyTypes["Main"]["SoundspotNameByPlace"][T_MyTypes["Main"]["PlaceName"]]]: import("@babylonjs/core").Sound | null; };
-            triggerMeshes: { [P_TriggerName in T_MyTypes["Main"]["TriggerNameByPlace"][T_MyTypes["Main"]["PlaceName"]]]: import("@babylonjs/core").AbstractMesh | null; };
-            wallMeshes: { [P_WallName in T_MyTypes["Main"]["WallNameByPlace"][T_MyTypes["Main"]["PlaceName"]]]: import("@babylonjs/core").AbstractMesh | null; };
-            camsRefs: { [P_CameraName in T_MyTypes["Main"]["CameraNameByPlace"][T_MyTypes["Main"]["PlaceName"]]]: {
+            spotPositions: { [P_SpotName in T_MyTypes["Types"]["SpotNameByPlace"][T_MyTypes["Types"]["PlaceName"]]]: import("@babylonjs/core").Vector3; };
+            spotRotations: { [P_SpotName_1 in T_MyTypes["Types"]["SpotNameByPlace"][T_MyTypes["Types"]["PlaceName"]]]: import("@babylonjs/core").Vector3; };
+            soundspotSounds: { [P_SoundName in T_MyTypes["Types"]["SoundspotNameByPlace"][T_MyTypes["Types"]["PlaceName"]]]: import("@babylonjs/core").Sound | null; };
+            triggerMeshes: { [P_TriggerName in T_MyTypes["Types"]["TriggerNameByPlace"][T_MyTypes["Types"]["PlaceName"]]]: import("@babylonjs/core").AbstractMesh | null; };
+            wallMeshes: { [P_WallName in T_MyTypes["Types"]["WallNameByPlace"][T_MyTypes["Types"]["PlaceName"]]]: import("@babylonjs/core").AbstractMesh | null; };
+            camsRefs: { [P_CameraName in T_MyTypes["Types"]["CameraNameByPlace"][T_MyTypes["Types"]["PlaceName"]]]: {
                 camera: import("@babylonjs/core").TargetCamera | null;
                 camCubeMeshes: import("@babylonjs/core").AbstractMesh[];
                 probeTexture: import("@babylonjs/core").CubeTexture | null;
@@ -607,7 +607,7 @@ export declare function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(pr
         refs: () => {
             waitingForPlayToDoLoopRuleName: string | null;
         };
-        startStates: Record<T_MyTypes["Main"]["PlaceName"], {
+        startStates: Record<T_MyTypes["Types"]["PlaceName"], {
             stateVidId_playing: string | null;
             stateVidId_waiting: string | null;
             sliceVidState: import("./sliceVids").SliceVidState;

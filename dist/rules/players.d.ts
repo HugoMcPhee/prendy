@@ -1,10 +1,9 @@
-import { MyTypes } from "../declarations";
-export declare function get_playerRules<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"], storeHelpers: T_MyTypes["StoreHelpers"]): {
-    stopAll: (...args: any) => any;
-    startAll: (...args: any) => any;
-    start: (...args: any) => any;
-    stop: (...args: any) => any;
-    ruleNames: any[];
-    run: (...args: any) => any;
-    runAll: (...args: any) => any;
+export declare const playerRules: {
+    start: (ruleName: "whenDirectionKeysPressed" | "whenInteractKeyPressed" | "whenJumpKeyPressed" | "whenJumpKeyReleased" | "whenJumpPressed" | "whenJumpReleased" | "whenJoystickMoves" | "whenVirtualControlsPressed" | "whenVirtualControlsReleased" | "onEachFrame" | "whenIsOnGroundChanges" | "whenAnimationNamesChange" | "whenCameraChanges" | "whenPlayerMovementPausedChanges") => void;
+    stop: (ruleName: "whenDirectionKeysPressed" | "whenInteractKeyPressed" | "whenJumpKeyPressed" | "whenJumpKeyReleased" | "whenJumpPressed" | "whenJumpReleased" | "whenJoystickMoves" | "whenVirtualControlsPressed" | "whenVirtualControlsReleased" | "onEachFrame" | "whenIsOnGroundChanges" | "whenAnimationNamesChange" | "whenCameraChanges" | "whenPlayerMovementPausedChanges") => void;
+    startAll: () => void;
+    stopAll: () => void;
+    ruleNames: ("whenDirectionKeysPressed" | "whenInteractKeyPressed" | "whenJumpKeyPressed" | "whenJumpKeyReleased" | "whenJumpPressed" | "whenJumpReleased" | "whenJoystickMoves" | "whenVirtualControlsPressed" | "whenVirtualControlsReleased" | "onEachFrame" | "whenIsOnGroundChanges" | "whenAnimationNamesChange" | "whenCameraChanges" | "whenPlayerMovementPausedChanges")[];
+    run: (ruleName: "whenDirectionKeysPressed" | "whenInteractKeyPressed" | "whenJumpKeyPressed" | "whenJumpKeyReleased" | "whenJumpPressed" | "whenJumpReleased" | "whenJoystickMoves" | "whenVirtualControlsPressed" | "whenVirtualControlsReleased" | "onEachFrame" | "whenIsOnGroundChanges" | "whenAnimationNamesChange" | "whenCameraChanges" | "whenPlayerMovementPausedChanges") => void;
+    runAll: () => void;
 };

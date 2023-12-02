@@ -14,6 +14,11 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.10.0
+
+- Removed factory functions!, everything can access assets and repond stores directly
+- simplified initializing
+
 v 0.9.15
 
 - zooms out more for tall or wide screens

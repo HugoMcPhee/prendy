@@ -1,3 +1,4 @@
-/// <reference types="react" />
-import { PrendyStoreHelpers } from "../../declarations";
-export declare function get_ScreenSticker(storeHelpers: PrendyStoreHelpers): (_props: {}) => JSX.Element | null;
+import React from "react";
+type Props = {};
+export declare function ScreenSticker(_props: Props): React.JSX.Element | null;
+export {};

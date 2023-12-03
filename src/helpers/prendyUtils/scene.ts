@@ -1,11 +1,6 @@
 import { getRefs, getState, onNextTick, startItemEffect, stopEffect } from "repond";
-import { MyTypes } from "../../declarations";
+import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../types";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
-
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
-type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
 
 export function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(
   place: T_Place,

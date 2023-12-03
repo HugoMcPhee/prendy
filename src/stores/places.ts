@@ -1,6 +1,16 @@
 import { AbstractMesh, CubeTexture, Sound, TargetCamera, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
+import {
+  PlaceName,
+  CameraNameByPlace,
+  WallNameByPlace,
+  SpotPositions,
+  SpotRotations,
+  SoundspotSounds,
+  TriggerMeshes,
+  WallMeshes,
+} from "../types";
 
 const defaultCamRefs = () => ({
   camera: null as null | TargetCamera,
@@ -12,36 +22,13 @@ const defaultCamRefs = () => ({
 });
 
 export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;
+export type CameraRefs<T_PlaceName extends PlaceName> = {
+  [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
+};
 
 export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CameraNameByPlace = T_MyTypes["Types"]["CameraNameByPlace"];
-  type PlaceName = T_MyTypes["Types"]["PlaceName"];
-  type SoundspotNameByPlace = T_MyTypes["Types"]["SoundspotNameByPlace"];
-  type SpotNameByPlace = T_MyTypes["Types"]["SpotNameByPlace"];
-  type TriggerNameByPlace = T_MyTypes["Types"]["TriggerNameByPlace"];
-  type WallNameByPlace = T_MyTypes["Types"]["WallNameByPlace"];
-
   const { placeInfoByName } = prendyAssets;
   const placeNames = prendyAssets.placeNames as PlaceName[];
-
-  type SpotPositions<T_PlaceName extends PlaceName> = {
-    [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
-  };
-  type SpotRotations<T_PlaceName extends PlaceName> = {
-    [P_SpotName in SpotNameByPlace[T_PlaceName]]: Vector3;
-  };
-  type SoundspotSounds<T_PlaceName extends PlaceName> = {
-    [P_SoundName in SoundspotNameByPlace[T_PlaceName]]: Sound | null;
-  };
-  type TriggerMeshes<T_PlaceName extends PlaceName> = {
-    [P_TriggerName in TriggerNameByPlace[T_PlaceName]]: AbstractMesh | null;
-  };
-  type WallMeshes<T_PlaceName extends PlaceName> = {
-    [P_WallName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
-  };
-  type CameraRefs<T_PlaceName extends PlaceName> = {
-    [P_CameraName in CameraNameByPlace[T_PlaceName]]: ReturnType<typeof defaultCamRefs>;
-  };
 
   function makeToggledWallsState<K_PlaceName extends PlaceName>(placeName: K_PlaceName) {
     const placeInfo = placeInfoByName[placeName];

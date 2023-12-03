@@ -1,4 +1,3 @@
-// import React from "react";
 import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getRefs, getState, setState } from "repond";
@@ -6,6 +5,7 @@ import { MyTypes } from "../../../declarations";
 import { meta } from "../../../meta";
 import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
 import { getScene } from "../getSceneOrEngineUtils";
+import { PlaceName, CameraNameByPlace, SegmentNameByPlace } from "../../../types";
 
 export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
   theVideo.width = 160;
@@ -14,10 +14,6 @@ export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementT
   // theVideo.preload = "auto";
   document.getElementById(elementTag)?.appendChild(theVideo);
 }
-
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
 
 export async function loadNowVideosForPlace() {
   const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;

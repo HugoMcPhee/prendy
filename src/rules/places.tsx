@@ -2,13 +2,7 @@ import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
 import { meta } from "../meta";
 import { makeRules } from "repond";
-
-type DollName = MyTypes["Types"]["DollName"];
-type DollOptions = MyTypes["Types"]["DollOptions"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type WallNameByPlace = MyTypes["Types"]["WallNameByPlace"];
-
-type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
+import { PlaceName, WallNameByPlace } from "../types";
 
 export const placeRules = makeRules(({ itemEffect, effect }) => ({
   whenToggledWallsChanges: itemEffect({

@@ -3,8 +3,6 @@ import {
   ModelInfoByNamePlaceholder,
   PlaceInfoByNamePlaceholder,
   PrendyOptionsUntyped,
-  PrendyStoreHelpersUntyped as RepondHelpersUntyped,
-  PrendyStoresUntyped,
 } from "./stores/typedStoreHelpers";
 
 export interface AssetsTypesUntyped {
@@ -51,18 +49,8 @@ export interface AssetsTypesUntyped {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CustomAssetsTypes {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CustomRepondHelpers {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CustomPrendyStores {}
-
 // The final usable assets types, with the custom types overriding the default ones
 export interface AssetsTypes extends Omit<AssetsTypesUntyped, keyof CustomAssetsTypes>, CustomAssetsTypes {}
-// The final usable store helpers types, with the custom types overriding the default ones
-export interface RepondHelpers extends Omit<RepondHelpersUntyped, keyof CustomRepondHelpers>, CustomRepondHelpers {}
-// The final usable store types, with the custom types overriding the default ones
-export interface PrendyStores extends Omit<PrendyStoresUntyped, keyof CustomPrendyStores>, CustomPrendyStores {}
 
 export type PrendyAssets = {
   placeInfoByName: AssetsTypes["PlaceInfoByName"];

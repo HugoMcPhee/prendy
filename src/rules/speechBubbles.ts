@@ -2,8 +2,8 @@ import { forEach } from "chootils/dist/loops";
 import { CSSProperties } from "react";
 import { AllState, StoreHelperTypes, getRefs, getState, makeRules, setState } from "repond";
 import { indexOf, length, substring, toArray } from "stringz";
-import { RepondHelpers } from "../declarations";
 import { getTypingDelayForLetter } from "../helpers/prendyUtils/speechBubbles";
+import { AllItemsState, ItemRefs, ItemState } from "../types";
 
 let zIndexCounter = 100;
 /*
@@ -16,12 +16,6 @@ When characters position changes
 // AllItemsState,
 // ItemRefs,
 // ItemState,
-
-type ItemType = keyof AllState;
-type HelperType<T extends ItemType> = StoreHelperTypes<typeof getState, typeof getRefs, T>;
-type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
 export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
   whenGoalTextChanges: itemEffect({

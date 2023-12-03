@@ -7,15 +7,11 @@ import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import { AllState, getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
+import { DollName, ModelNameFromDoll, PlaceName, SpotNameByPlace } from "../../types";
 import { checkPointIsInsideSlate, convertPointOnSlateToPointOnScreen, getPositionOnSlate } from "../babylonjs/slate";
 import { getSpotPosition } from "./spots";
 
-type DollName = MyTypes["Types"]["DollName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
-
 type DollsState = NonNullable<AllState["dolls"]>;
-type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<DollsState[T_DollName]>["modelName"];
 
 export function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
   return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;

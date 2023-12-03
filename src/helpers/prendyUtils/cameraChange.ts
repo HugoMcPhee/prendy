@@ -9,12 +9,7 @@ import shaders from "../shaders";
 import { getGlobalState } from "./global";
 import { getSegmentFromStoryRules } from "./scene";
 import { getSliceVidVideo } from "./sliceVids";
-
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
-type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
+import { AnyCameraName, PlaceName, AnySegmentName, CameraNameByPlace, SegmentNameByPlace } from "../../types";
 
 /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,

@@ -1,6 +1,6 @@
 import delay from "delay";
 import { getRefs, getState, makeRules } from "repond";
-import { addMoverRules, initMovers } from "repond-movers";
+import { addMoverRules } from "repond-movers";
 import { getEngine } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import {
   focusSlateOnFocusedDoll,
@@ -9,7 +9,6 @@ import {
 } from "../../helpers/babylonjs/slate";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
-import { timeStatePath } from "../../stores/global/global";
 
 export const globalSlateRules = makeRules(({ itemEffect, effect }) => ({
   whenSlatePositionChanges: effect({

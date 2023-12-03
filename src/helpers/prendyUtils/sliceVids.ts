@@ -2,12 +2,11 @@ import { getRefs, getState, startItemEffect, stopEffect } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { SliceVidState, VidSlice } from "../../stores/sliceVids";
+import { PlaceName } from "../../types";
 import { getSafeCamName, getSafeSegmentName } from "./cameraChange";
 import { getGlobalState } from "./global";
 
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
 
 export function getSliceVidVideo(itemName: PlaceName) {
   const sliceVidState = getState().sliceVids[itemName];

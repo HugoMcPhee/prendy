@@ -129,63 +129,7 @@ export type DollOptionsPlaceholder<DollName extends string, ModelName extends st
 // export type PrendyStoresUntypedType = typeof placeholderPrendyStores;
 // export type PrendyStoreHelpersUntypedType = typeof storeHelpers;
 
-// NOTE use these two when using prendys library
-export type PrendyStoresUntypedType = Record<
-  any,
-  {
-    state: (itemName: any) => any;
-    refs: (itemName: any, type: any) => any;
-    startStates?: Record<any, any>;
-  }
->;
-export type PrendyStoreHelpersUntypedType = {
-  getState: () => Record<any, Record<any, Record<any, any | any[]>>>;
-  getPreviousState: () => Record<any, Record<any, Record<any, any | any[]>>>;
-  getRefs: () => Record<any, Record<any, Record<any, any | any[]>>>;
-  setState: (
-    newState:
-      | Record<any, Record<any, Record<any, any | any[]>>>
-      | ((state: Record<any, Record<any, Record<any, any | any[]>>>) => any),
-    callback?: (nextFrameDuration: number) => any
-  ) => void;
-  startItemEffect: AnyFunction;
-  startEffect: AnyFunction;
-  stopEffect: AnyFunction;
-  makeRules: (...args: any) => {
-    stopAll: AnyFunction;
-    startAll: AnyFunction;
-    start: AnyFunction;
-    stop: AnyFunction;
-    ruleNames: any[];
-    run: AnyFunction;
-    runAll: AnyFunction;
-  };
-  makeDynamicRules: (...args: any) => {
-    stopAll: AnyFunction;
-    startAll: AnyFunction;
-    start: AnyFunction;
-    stop: AnyFunction;
-    ruleNames: any[];
-  };
-  makeRuleMaker: AnyFunction;
-  makeNestedRuleMaker: AnyFunction;
-  makeNestedLeaveRuleMaker: AnyFunction;
-  onNextTick: AnyFunction;
-  addItem: AnyFunction;
-  removeItem: AnyFunction;
-
-  getItem: AnyFunction;
-  useStore: AnyFunction;
-  useStoreItem: AnyFunction;
-  useStoreEffect: AnyFunction;
-  useStoreItemEffect: AnyFunction;
-  useStoreItemPropsEffect: AnyFunction;
-};
-
 type AnyFunction = (...args: any) => any;
-
-export interface PrendyStoresUntyped extends PrendyStoresUntypedType {}
-export interface PrendyStoreHelpersUntyped extends PrendyStoreHelpersUntypedType {}
 
 // type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
 // type HelperType<T extends ItemType> = StoreHelperTypes<

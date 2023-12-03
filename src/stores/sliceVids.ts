@@ -1,5 +1,6 @@
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
+import { PlaceName } from "../types";
 
 /*
 A way to loop and change "slices" of videos seamlessly 
@@ -35,8 +36,6 @@ export type VidLetter = "a" | "b";
 export type VidSlice = { time: number; duration: number };
 
 export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type PlaceName = T_MyTypes["Types"]["PlaceName"];
-
   const { placeNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(itemName: T_ItemName) => ({

@@ -10,12 +10,11 @@ import {
 } from "../helpers/prendyUtils/sliceVids";
 import { SliceVidState } from "../stores/sliceVids";
 import { doWhenStateVidStateReady, doWhenStateVidStateSeeked } from "../helpers/prendyUtils/stateVids";
+import { PlaceName } from "../types";
 
 function numbersAreClose(a: number, b: number, range: number) {
   return Math.abs(a - b) < range;
 }
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
 
 // safe Slice Stack Vid Rules
 

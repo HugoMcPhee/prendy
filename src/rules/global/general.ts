@@ -1,11 +1,9 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { MyTypes, RepondHelpers } from "../../declarations";
-import { clearTimeoutSafe } from "../../helpers/utils";
-import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { getRefs, getState, makeRules, onNextTick, setState } from "repond";
+import { setGlobalState } from "../../helpers/prendyUtils/global";
+import { clearTimeoutSafe } from "../../helpers/utils";
 import { meta } from "../../meta";
-
-type AnyAnimationName = MyTypes["Types"]["AnyAnimationName"];
+import { AnyAnimationName } from "../../types";
 
 export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
   whenAnythingChangesForRendering: effect({

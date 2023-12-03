@@ -1,5 +1,4 @@
 import { forEach } from "chootils/dist/loops";
-import { RepondHelpers } from "../declarations";
 import { makeRules, setState } from "repond";
 
 /*

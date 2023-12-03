@@ -7,6 +7,7 @@ import { getCharDollStuff } from "../helpers/prendyUtils/characters";
 import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { meta } from "../meta";
 import { getRefs, makeRules, getState, setState } from "repond";
+import { CharacterName } from "../types";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
 
@@ -27,9 +28,6 @@ const frontRayRelativeOrigin = new Vector3(
   RAY_FRONT_DIST
   // dollPosRefs.velocity.z * 0.1
 );
-
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
 
 export const playerRules = makeRules(({ itemEffect, effect }) => ({
   whenDirectionKeysPressed: effect({

@@ -5,9 +5,7 @@ import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
 import { getRefs, getState, makeDynamicRules, makeRules, setState } from "repond";
 import { meta } from "../meta";
-
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
-type AnyTriggerName = MyTypes["Types"]["AnyTriggerName"];
+import { AnyTriggerName, AnyCameraName } from "../types";
 
 export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
   whenPositionChanges: itemEffect(

@@ -13,12 +13,7 @@ import {
   getSliceVidVideo,
 } from "../../helpers/prendyUtils/sliceVids";
 import { VidSlice } from "../../stores/sliceVids";
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
-type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
+import { PlaceName, CameraNameByPlace, AnyCameraName, SegmentNameByPlace, AnySegmentName } from "../../types";
 
 export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
   whenWantToChooseVideoSlice: effect({

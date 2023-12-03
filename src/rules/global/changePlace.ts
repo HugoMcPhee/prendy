@@ -1,7 +1,6 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getRefs, getState, makeRules, onNextTick, setState } from "repond";
-import { MyTypes } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
@@ -12,11 +11,8 @@ import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { getSliceVidVideo } from "../../helpers/prendyUtils/sliceVids";
 import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spots";
 import { meta } from "../../meta";
+import { AnyCameraName, DollName, PlaceName } from "../../types";
 import { globalGeneralRules } from "./general";
-
-type DollName = MyTypes["Types"]["DollName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
 
 function setPlayerPositionForNewPlace() {
   const { placeInfoByName } = meta.assets!;

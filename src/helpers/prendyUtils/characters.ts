@@ -1,11 +1,7 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { AllRefs, AllState, getRefs, getState } from "repond";
-import { MyTypes } from "../../declarations";
+import { CharacterName, PlaceName, SpotNameByPlace } from "../../types";
 import { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } from "./dolls";
-
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 
 export function get2DAngleFromCharacterToSpot<T_Place extends PlaceName>(
   character: CharacterName,

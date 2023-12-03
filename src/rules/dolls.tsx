@@ -21,7 +21,7 @@ import {
   updateDollScreenPosition,
 } from "../helpers/prendyUtils/dolls";
 import { meta } from "../meta";
-import { DollName, ModelName } from "../types";
+import { AnyAnimationName, DollName, MeshNamesFromDoll, ModelName } from "../types";
 
 // TODO add to asset options?
 const rangeOptions = {
@@ -95,12 +95,6 @@ export function startDynamicDollRulesForInitialState() {
     });
   };
 }
-
-type AnyAnimationName = MyTypes["Types"]["AnyAnimationName"];
-type DollOptions = MyTypes["Types"]["DollOptions"];
-type MeshNameByModel = MyTypes["Types"]["MeshNameByModel"];
-type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
-type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
 export const dollRules = makeRules(({ itemEffect, effect }) => ({
   // --------------------------------

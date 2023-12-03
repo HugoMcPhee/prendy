@@ -1,14 +1,11 @@
 import { Vector3 } from "@babylonjs/core";
 import React, { ReactNode, Suspense } from "react";
-import { MyTypes } from "../declarations";
-import { usePlace } from "../helpers/babylonjs/usePlace/usePlace";
-import { Player } from "./Player";
-import { meta } from "../meta";
 import { useStore } from "repond";
+import { usePlace } from "../helpers/babylonjs/usePlace/usePlace";
+import { PlaceName } from "../types";
+import { Player } from "./Player";
 
 type Props = { children?: ReactNode };
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
 
 function Place({ name }: { name: PlaceName }) {
   usePlace(name);

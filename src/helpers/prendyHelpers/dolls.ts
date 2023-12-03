@@ -1,23 +1,21 @@
 import { Space, Vector3 } from "@babylonjs/core";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
 import { getRefs, getState, setState } from "repond";
-import { MyTypes } from "../../declarations";
 import { get2DAngleBetweenDolls, get2DAngleFromDollToSpot } from "../../helpers/prendyUtils/dolls";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
+import {
+  AnimationNameByModel,
+  BoneNameByModel,
+  DollName,
+  DollOptions,
+  MeshNameByModel,
+  ModelName,
+  PlaceName,
+  SpotNameByPlace,
+} from "../../types";
 import { vector3ToPoint3d } from "../babylonjs/vectors";
 import { getSpotPosition, getSpotRotation } from "../prendyUtils/spots";
-
-type AnimationNameByModel = MyTypes["Types"]["AnimationNameByModel"];
-type BoneNameByModel = MyTypes["Types"]["BoneNameByModel"];
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type CharacterOptions = MyTypes["Types"]["CharacterOptions"];
-type DollName = MyTypes["Types"]["DollName"];
-type DollOptions = MyTypes["Types"]["DollOptions"];
-type MeshNameByModel = MyTypes["Types"]["MeshNameByModel"];
-type ModelName = MyTypes["Types"]["ModelName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
 
 // const { prendyOptions } = meta.assets!;
 

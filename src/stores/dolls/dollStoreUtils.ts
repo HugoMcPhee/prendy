@@ -3,14 +3,9 @@ import { forEach } from "chootils/dist/loops";
 import { makeMoverStateMaker, moverMultiRefs } from "repond-movers";
 import { MyTypes } from "../../declarations";
 import { InRangeForDoll, defaultInRangeForDoll } from "../../helpers/prendyUtils/dolls";
+import { ModelName, AnimationNameByModel, MeshNameByModel, DollName } from "../../types";
 
 export default function get_dollStoreUtils<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnimationNameByModel = T_MyTypes["Types"]["AnimationNameByModel"];
-  type DollName = T_MyTypes["Types"]["DollName"];
-  type DollOptions = T_MyTypes["Types"]["DollOptions"];
-  type ModelName = T_MyTypes["Types"]["ModelName"];
-  type MeshNameByModel = T_MyTypes["Types"]["MeshNameByModel"];
-
   const { dollNames, modelInfoByName } = prendyAssets;
 
   function makeModelAnimWeightsMoverState<T_ModelName extends ModelName>(modelName: T_ModelName) {

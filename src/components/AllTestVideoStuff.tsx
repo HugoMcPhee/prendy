@@ -3,8 +3,7 @@ import { MyTypes } from "../declarations";
 import { addLayout } from "../helpers/styles";
 import { meta } from "../meta";
 import { useStore, useStoreItemPropsEffect } from "repond";
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
+import { PlaceName } from "../types";
 
 function TestVideos({ placeName }: { placeName: PlaceName }): ReactNode {
   const mainRef = useRef<HTMLDivElement>(null);

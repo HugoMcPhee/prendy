@@ -8,14 +8,13 @@ import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { getEngine } from "./getSceneOrEngineUtils";
+import { ModelName } from "../../types";
 
 export function getScreenSize() {
   return { x: window.innerWidth, y: window.innerHeight };
 }
 
 export const slateSize = { x: 1920, y: 1080 };
-
-type ModelName = MyTypes["Types"]["ModelName"];
 
 export function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { width: number; height: number }) {
   // Only for perspective camera here :)

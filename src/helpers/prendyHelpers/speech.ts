@@ -8,6 +8,7 @@ import { meta } from "../../meta";
 import { getCharDollStuff } from "../prendyUtils/characters";
 import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { clearTimeoutSafe } from "../utils";
+import { SpeechBubbleName, CharacterName } from "../../types";
 
 type ATimeout = ReturnType<typeof setTimeout> | undefined;
 
@@ -23,10 +24,6 @@ const showSpeechRefs = {
 };
 // TODO might need to have it per character if other characts have mini bubbles
 const showMiniBubbleRefs = { closeTimeout: null as ReturnType<typeof setTimeout> | null };
-
-type CharacterName = MyTypes["Types"]["CharacterName"];
-
-type SpeechBubbleName = keyof AllState["speechBubbles"];
 
 const SPEECH_ZOOM_AMOUNT = 1.2;
 const SPEECH_CLOSE_DELAY = 700; // close if no more messages from the character after 1this time

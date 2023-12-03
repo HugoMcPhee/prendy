@@ -1,9 +1,6 @@
 import { Vector3 } from "@babylonjs/core";
 import { getRefs } from "repond";
-import { MyTypes } from "../../declarations";
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
+import { PlaceName, SpotNameByPlace } from "../../types";
 
 export function getSpotPosition<T_Place extends PlaceName>(place: T_Place, spot: SpotNameByPlace[T_Place]) {
   const placesRefs = getRefs().places;

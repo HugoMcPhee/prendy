@@ -199,7 +199,7 @@ export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
   // NOTE FIXME TODO WARNING - this might not be still okay to use
   // it might be okay to run when nowCamName changed (since it always swaps the video between a-b vid_wait to vid_play
   whenPlayingVidElementsChanged: itemEffect({
-    run({ itemName: videoPlaceName }) {
+    run({ itemId: videoPlaceName }) {
       // so video texture updates for looping vids (and when slice changes)
       const { nowPlaceName } = getState().global.main;
       const globalRefs = getRefs().global.main;

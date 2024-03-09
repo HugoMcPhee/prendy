@@ -11,6 +11,8 @@ import { ScreenGui as ScreenGuiDom } from "./gui/ScreenGui";
 import { MyTypes } from "../declarations";
 import { initPrendy } from "../";
 
+console.log("using dev prnedy");
+
 type Props = { children?: ReactNode; extraScenes?: ReactNode };
 
 export function makePrendyApp<T_MyTypes extends MyTypes = MyTypes>(

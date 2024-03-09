@@ -10,6 +10,7 @@ import { ModelName } from "../types";
 
 async function startLoadingModel<T_ModelName extends ModelName>(modelName: T_ModelName) {
   setState({ models: { [modelName]: { wantToLoad: false } } });
+
   const { modelInfoByName } = meta.assets!;
 
   const { modelFile } = modelInfoByName[modelName];
@@ -34,7 +35,7 @@ async function startLoadingModel<T_ModelName extends ModelName>(modelName: T_Mod
 
 export const modelRules = makeRules(({ itemEffect }) => ({
   whenWantsToLoad: itemEffect({
-    run({ itemName: modelName }) {
+    run({ itemId: modelName }) {
       // load the model async here, and store the result in refs,
       // and also hide  /disable the model mesh ?
       startLoadingModel(modelName as ModelName);
@@ -43,7 +44,7 @@ export const modelRules = makeRules(({ itemEffect }) => ({
     atStepEnd: true,
   }),
   whenIsLoaded: itemEffect({
-    run({ itemName: modelName }) {
+    run({ itemId: modelName }) {
       setState((state) => {
         // if (state.global.main.modelNamesLoaded.includes(modelName)) return {};
 

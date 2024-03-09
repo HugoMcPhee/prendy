@@ -1,11 +1,11 @@
-// @refresh-reset
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { AllState, getState, useStore, useStoreEffect } from "repond";
-import { MyTypes } from "../../declarations";
-import { getScreenSize } from "../../helpers/babylonjs/slate";
-import { getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { getState, useStore, useStoreEffect } from "repond";
+import { getScreenSize } from "../../../helpers/babylonjs/slate";
+import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
+import { AllItemsState, CharacterName } from "../../../types";
+import { BubbleTriangle } from "./BubbleTriangle";
 
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
 // So some of it could be shared code
@@ -15,21 +15,12 @@ const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 15;
 
-// when TRIANGLE_SIZE is 50, the svg stroke width is 4
-
 const SHARED_THEME = {
   borderColor: "rgb(227, 181, 106)",
   backgroundColor: "rgb(249, 235, 146)",
   borderWidth: 2,
+  rounding: 6,
 };
-
-// when the TRIANGLE_SIZE is 50, the SVG is unscaled, so the border width is correct to pixels
-// when the TRIANGLE_SIZE is different the svgs border width (stroke) needs to be scaled accordingly
-const TRIANGLE_BORDER_WIDTH_SCALE = 50 / TRIANGLE_SIZE;
-
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type ItemType = keyof AllState;
-type AllItemsState<T_ItemType extends ItemType> = AllState[T_ItemType] & Record<any, any>;
 
 type Props = { name: keyof AllItemsState<"miniBubbles"> };
 
@@ -119,13 +110,12 @@ export function MiniBubble({ name }: Props) {
   const positionMiniBubbleToCharacter = useCallback(() => {
     const { forCharacter } = getState().speechBubbles[name];
     if (!forCharacter) return;
+
     const { dollState, dollName } = getCharDollStuff(forCharacter as CharacterName) ?? {};
 
     if (!dollState || !dollName) return;
-    const { focusedDoll, focusedDollIsInView } = getState().global.main;
+    const { focusedDoll } = getState().global.main;
     const positionOnScreen = dollState.positionOnScreen;
-
-    // if (dollName === focusedDoll && !focusedDollIsInView) {}
 
     const viewSize = getScreenSize();
 
@@ -144,9 +134,7 @@ export function MiniBubble({ name }: Props) {
     // need function to get position on screen
 
     let newPositionX = positionOnScreen.x - screenSize.x / 2;
-
     let yOffset = bubbleHeight / 2;
-
     let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
 
     // Keep the focused dolls speech bubble inside the view
@@ -165,8 +153,6 @@ export function MiniBubble({ name }: Props) {
         newPositionY = farBottom - halfBubbleHeight - halfTriangleSize;
       }
     }
-
-    // console.log("newPositionX", newPositionX);
 
     theSpringApi.start({
       position: [newPositionX, newPositionY],
@@ -216,34 +202,6 @@ export function MiniBubble({ name }: Props) {
           verticalAlign: "middle", // to center emojis with text?
           zIndex: 100,
         },
-        triangle: {
-          width: "25px",
-          height: "25px",
-          opacity: 1,
-          borderBottomRightRadius: 6,
-          transform: `translate(0px, -20px) rotate(45deg) scale(0.3) `,
-          // backgroundColor: "#fafafa",
-          backgroundColor: SHARED_THEME.backgroundColor,
-          // borderWidth: 1,
-          borderWidth: SHARED_THEME.borderWidth * (1 / 0.3),
-          borderColor: SHARED_THEME.borderColor,
-          borderStyle: "solid",
-        },
-        triangleAbove: {
-          width: "25px",
-          height: "25px",
-          opacity: 1,
-          borderRadius: 0,
-          borderBottomRightRadius: 4,
-          transform: `translate(0px, -9px) rotate(45deg) scale(0.4) `,
-          // backgroundColor: "#fafafa",
-          backgroundColor: SHARED_THEME.backgroundColor,
-          // borderWidth: 1,
-          position: "absolute",
-          // bottom: 3,
-          // left: 10.5,
-          zIndex: 1010,
-        },
       } as const),
     []
   );
@@ -281,13 +239,13 @@ export function MiniBubble({ name }: Props) {
             backgroundColor: SHARED_THEME.backgroundColor,
             width: "35px",
             minHeight: "20px",
-            borderRadius: "6px",
             paddingBottom: "0px",
             zIndex: 1000,
             height: theSpring.height,
             overflow: "hidden",
             willChange: "height",
             position: "relative", // fixes overflow not working,
+            borderRadius: SHARED_THEME.rounding + "px",
             borderWidth: SHARED_THEME.borderWidth,
             borderColor: SHARED_THEME.borderColor,
             borderStyle: "solid",
@@ -298,37 +256,8 @@ export function MiniBubble({ name }: Props) {
             {text}
           </div>
         </animated.div>
-        <div
-          style={{
-            width: TRIANGLE_SIZE,
-            height: TRIANGLE_SIZE,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // marginTop: -SHARED_THEME.borderWidth,
-            transform: `translate(0px, ${-SHARED_THEME.borderWidth - 0.085 * TRIANGLE_SIZE}px)`,
-            zIndex: 1010,
-          }}
-        >
-          <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M9402.434 6308.434q2.656-5.652 5.41 0l22.305 45.786q2.753 5.652-2.656 5.652h-43.822q-5.409 0-2.753-5.652Z"
-              style={{
-                fill: SHARED_THEME.backgroundColor,
-                stroke: SHARED_THEME.borderColor,
-                strokeWidth: SHARED_THEME.borderWidth * TRIANGLE_BORDER_WIDTH_SCALE + "px",
-                transformOrigin: "4715.28px 3172.16px",
-              }}
-              transform="matrix(-1 0 0 -1 -.0007 .0007)"
-            />
-            <path
-              style={{ fill: SHARED_THEME.backgroundColor, stroke: SHARED_THEME.borderColor, strokeWidth: "0" }}
-              d="M-.272-6.862h50.544V4.239H-.272z"
-            />
-          </svg>
-        </div>
+        <BubbleTriangle />
       </animated.div>
     </animated.div>
   );
 }
-// }

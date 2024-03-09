@@ -8,7 +8,7 @@ export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prend
   const { characterNames, characterOptions, fontNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(
-    _itemName: T_ItemName,
+    _itemId: T_ItemName,
     options?: { font?: FontName; character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,

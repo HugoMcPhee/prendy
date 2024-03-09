@@ -23,7 +23,7 @@ export function makeTouchRules(
   const { characterName, distanceType = "touch", whenLeave = false } = options ?? {};
   return makeRules(({ itemEffect }) => ({
     whenInRangeChangesToCheckTouch: itemEffect({
-      run({ newValue: inRange, previousValue: prevInRange, itemName: changedDollName, itemState: dollState }) {
+      run({ newValue: inRange, prevValue: prevInRange, itemId: changedDollName, itemState: dollState }) {
         const { dollNames } = meta.assets!;
         const { playerCharacter } = getState().global.main;
         const charName = characterName || playerCharacter;

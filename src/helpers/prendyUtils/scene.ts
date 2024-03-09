@@ -1,4 +1,4 @@
-import { getRefs, getState, onNextTick, startItemEffect, stopEffect } from "repond";
+import { getRefs, getState, onNextTick, startNewItemEffect, stopNewEffect } from "repond";
 import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../types";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
@@ -19,16 +19,16 @@ export function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, cal
     return null;
   }
   const ruleName = "doWhenNowSegmentChanges" + Math.random();
-  startItemEffect({
-    name: ruleName,
+  startNewItemEffect({
+    id: ruleName,
     run: ({ newValue: newNowSegmentName }) => {
       // if (newNowSegmentName !== checkingSegmentName) return;
       // wait until the segment changed from the original (even if it doesn't change to the new one)
       if (newNowSegmentName === initialNowSegmentName) return;
-      stopEffect(ruleName);
+      stopNewEffect(ruleName);
       callback();
     },
-    check: { type: "global", prop: "nowSegmentName", name: "main" },
+    check: { type: "global", prop: "nowSegmentName", id: "main" },
     step: "cameraChange",
     atStepEnd: true,
   });
@@ -48,11 +48,11 @@ export function doWhenNowCamChanges(
     return null;
   }
   const ruleName = "doWhenNowCamChanges" + Math.random();
-  startItemEffect({
-    name: ruleName,
+  startNewItemEffect({
+    id: ruleName,
     run: ({ newValue: newNowCamName }) => {
       if (newNowCamName === initialNowCamName) return;
-      stopEffect(ruleName);
+      stopNewEffect(ruleName);
       callback();
     },
     check: { type: "global", prop: "nowCamName" },
@@ -70,19 +70,19 @@ export function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: ()
     callback();
     return null;
   }
-  const ruleName = "doWhenNowPlaceChanges" + Math.random();
-  startItemEffect({
-    name: ruleName,
+  const effectId = "doWhenNowPlaceChanges" + Math.random();
+  startNewItemEffect({
+    id: effectId,
     run: ({ newValue: newNowCamName }) => {
       if (newNowCamName === initialNowPlaceName) return;
-      stopEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
     check: { type: "global", prop: "nowPlaceName" },
     step: "default",
     atStepEnd: true,
   });
-  return ruleName;
+  return effectId;
 }
 
 export function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: () => void) {
@@ -94,21 +94,21 @@ export function doWhenPlaceFullyLoaded(checkingPlaceName: PlaceName, callback: (
     callback();
     return null;
   }
-  const ruleName = "doWhenPlaceFullyLoaded" + Math.random();
-  startItemEffect({
-    name: ruleName,
+  const effectId = "doWhenPlaceFullyLoaded" + Math.random();
+  startNewItemEffect({
+    id: effectId,
     run: ({ newValue: isLoadingBetweenPlaces }) => {
       const nowPlaceName = getState().global.main.nowPlaceName;
 
       if (isLoadingBetweenPlaces === true || nowPlaceName !== checkingPlaceName) return;
-      stopEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
     check: { type: "global", prop: "isLoadingBetweenPlaces" },
     step: "default",
     atStepEnd: true,
   });
-  return ruleName;
+  return effectId;
 }
 
 export async function waitForPlaceFullyLoaded(checkingPlaceName: PlaceName) {

@@ -272,7 +272,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
   }),
 
   whenVirtualControlsPressed: itemEffect({
-    run({ itemRefs: playerRefs, itemName: playerName }) {
+    run({ itemRefs: playerRefs, itemId: playerName }) {
       clearTimeoutSafe(playerRefs.canShowVirtualButtonsTimeout);
       playerRefs.canShowVirtualButtonsTimeout = setTimeout(() => {
         const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
@@ -287,7 +287,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
     atStepEnd: true,
   }),
   whenVirtualControlsReleased: itemEffect({
-    run({ itemRefs: playerRefs, itemName: playerName }) {
+    run({ itemRefs: playerRefs, itemId: playerName }) {
       clearTimeoutSafe(playerRefs.canHideVirtualButtonsTimeout);
       playerRefs.canHideVirtualButtonsTimeout = setTimeout(() => {
         const { virtualControlsPressTime, virtualControlsReleaseTime } = getState().players[playerName];
@@ -306,7 +306,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
   onEachFrame: itemEffect({
     run({
       newValue: newElapsedTime,
-      previousValue: prevElapsedTime,
+      prevValue: prevElapsedTime,
       // itemState: playerState,
       // itemRefs: playerRefs,
       // frameDuration: timeDuration2,
@@ -495,7 +495,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
   }),
 
   whenIsOnGroundChanges: itemEffect({
-    run({ newValue: isOnGround, previousValue: prevIsOnGround, itemState: playerState, itemRefs: playerRefs }) {
+    run({ newValue: isOnGround, prevValue: prevIsOnGround, itemState: playerState, itemRefs: playerRefs }) {
       clearTimeoutSafe(playerRefs.canJumpTimeout);
 
       const { isJumping } = playerState;

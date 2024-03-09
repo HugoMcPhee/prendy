@@ -30,7 +30,7 @@ export function makeTriggerRules(
 
   return makeRules(({ itemEffect }) => ({
     whenAtTriggersChanges: itemEffect({
-      run({ newValue: atTriggers, previousValue: prevAtTriggers, itemName: characterName }) {
+      run({ newValue: atTriggers, prevValue: prevAtTriggers, itemId: characterName }) {
         const { placeInfoByName } = meta.assets!;
 
         const usefulStoryStuff = getUsefulStoryStuff();

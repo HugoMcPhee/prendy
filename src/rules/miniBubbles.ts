@@ -12,25 +12,25 @@ export const miniBubbleRules = makeRules(({ itemEffect, effect }) => ({
   // The position changing based on camera and character position are inside the MiniBubble component
   whenAddedOrRemoved: effect({
     run(diffInfo) {
-      forEach(diffInfo.itemsAdded.miniBubbles, (itemName) => {
+      forEach(diffInfo.itemsAdded.miniBubbles, (itemId) => {
         // speechBubbleDynamicRules.startAll character position
       });
-      forEach(diffInfo.itemsRemoved.miniBubbles, (itemName) => {
+      forEach(diffInfo.itemsRemoved.miniBubbles, (itemId) => {
         // speechBubbleDynamicRules.stopAll
       });
     },
     check: { addedOrRemoved: true, type: "miniBubbles" },
   }),
   whenBecameVisible: itemEffect({
-    run({ itemName }) {
-      setState({ miniBubbles: { [itemName]: { isFullyHidden: false } } });
+    run({ itemId }) {
+      setState({ miniBubbles: { [itemId]: { isFullyHidden: false } } });
     },
     check: { prop: "isVisible", type: "miniBubbles", becomes: true },
   }),
   // whenShouldRemoveBecomesTrue: make({
-  //   run({ itemName }) {
+  //   run({ itemId }) {
   //     // removeItem()
-  //     removeItem({ name: itemName, type: "miniBubbles" });
+  //     removeItem({ name: itemId, type: "miniBubbles" });
   //   },
   //   check: { prop: "shouldRemove", type: "miniBubbles" },
   // }),

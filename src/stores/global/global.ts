@@ -139,7 +139,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     nowCamName:
       ((prendyOptions.place === placeName ? prendyOptions.camera : "") ||
         ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as AnyCameraName)) ??
-      ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
+      ("testItemCamName" as AnyCameraName), // if state() is called with a random itemId
     // segments and slice video
     nowSegmentName: prendyOptions.segment as AnySegmentName,
     goalSegmentName: null as MaybeSegmentName,

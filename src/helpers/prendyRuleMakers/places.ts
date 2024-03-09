@@ -1,4 +1,4 @@
-import { makeRules, startItemEffect, stopEffect } from "repond";
+import { makeRules, startNewItemEffect, stopNewEffect } from "repond";
 import { PlaceName, StoryCallback } from "../../types";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
 
@@ -22,11 +22,7 @@ export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksO
         (callBacksObject as Record<any, any>)[nowPlaceName]?.(usefulStoryStuff);
         // });
       },
-      check: {
-        type: "global",
-        prop: ["isLoadingBetweenPlaces"],
-        becomes: false,
-      },
+      check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },
       // step: "respondToNewPlace",
       step: "respondToNewPlaceStory",
       atStepEnd: true,
@@ -36,10 +32,10 @@ export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksO
 export function makePlaceUnloadRules(callBacksObject: PlaceLoadRulesOptions) {
   return makeRules(({ itemEffect }) => ({
     whenPlaceFinishedUnloading: itemEffect({
-      run({ previousValue: prevPlace, newValue: newPlace }) {
-        let ruleName = startItemEffect({
+      run({ prevValue: prevPlace, newValue: newPlace }) {
+        let ruleName = startNewItemEffect({
           run() {
-            stopEffect(ruleName);
+            stopNewEffect(ruleName);
             // console.log("unload rules for", prevPlace);
             const usefulStoryStuff = getUsefulStoryStuff();
             (callBacksObject as Record<any, any>)[prevPlace]?.(usefulStoryStuff);

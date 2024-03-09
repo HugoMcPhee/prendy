@@ -24,9 +24,9 @@ type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
 
 export const sliceVidRules = makeRules(({ itemEffect }) => ({
   rulesForSettingNewVideoStates: itemEffect({
-    run({ newValue: vidState, itemName, itemState }) {
+    run({ newValue: vidState, itemId, itemState }) {
       const setItemState = (newState: Partial<ItemState<"sliceVids">>) =>
-        setState({ sliceVids: { [itemName]: newState } });
+        setState({ sliceVids: { [itemId]: newState } });
       // NOTE TODO FIXME? any type while no stores are connected
       const setVidState = (sliceVidState: SliceVidState) => setItemState({ sliceVidState } as any);
 
@@ -53,7 +53,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
             const goalSeekTime = nowSlice?.time ?? 0;
 
             setState({
-              sliceVids: { [itemName]: { sliceVidState: "play", newPlayingVidStartedTime: Date.now() } },
+              sliceVids: { [itemId]: { sliceVidState: "play", newPlayingVidStartedTime: Date.now() } },
               stateVids: {
                 [stateVidId_playing]: { goalSeekTime },
                 [stateVidId_waiting]: { goalSeekTime },
@@ -68,7 +68,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
       if (vidState === "beforeUnload") {
         // set all child videos to wantToLoad, and set autoplay? only on the playing one, or no autoplay
         setState({
-          sliceVids: { [itemName]: { sliceVidState: "waitingForUnload" } },
+          sliceVids: { [itemId]: { sliceVidState: "waitingForUnload" } },
           stateVids: {
             [stateVidId_playing]: { wantToUnload: true },
             [stateVidId_waiting]: { wantToUnload: true },
@@ -90,7 +90,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
         if (switchSlice_keepProgress) {
           //    set it based on the playing vids current time and the previous nowSliceInfo
 
-          const backdropVidElement = getSliceVidVideo(itemName as PlaceName);
+          const backdropVidElement = getSliceVidVideo(itemId as PlaceName);
           if (backdropVidElement) {
             const nowSliceStartTime = nowSlice.time;
             let elapsedTime = backdropVidElement.currentTime - nowSliceStartTime;
@@ -112,7 +112,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
 
         setState({
           sliceVids: {
-            [itemName]: {
+            [itemId]: {
               sliceVidState: "waitingForChangeSlice",
               nowSlice: goalSlice,
               goalSlice: null,
@@ -126,7 +126,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
         doWhenStateVidStateSeeked(stateVidId_waiting, () => {
           setState({
             sliceVids: {
-              [itemName]: {
+              [itemId]: {
                 nowSliceSeekedTime: Date.now(),
                 stateVidId_playing: stateVidId_waiting,
                 stateVidId_waiting: stateVidId_playing,
@@ -145,7 +145,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
         // it assumes the waiting vid is at the start of the looping slice
 
         // cehck the current seek time of the waiting vid
-        const waitingVidElement = getSliceVidWaitingVideo(itemName as PlaceName);
+        const waitingVidElement = getSliceVidWaitingVideo(itemId as PlaceName);
         // if (!waitingVidElement) return;
         // console.log("waitingVid time", waitingVidElement?.currentTime);
         // console.log("nowSlice time", nowSlice.time);
@@ -153,7 +153,7 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
         function swapPlayingAndWaitingVids() {
           setState({
             sliceVids: {
-              [itemName]: {
+              [itemId]: {
                 sliceVidState: "waitingForDoLoop",
                 stateVidId_playing: stateVidId_waiting,
                 stateVidId_waiting: stateVidId_playing,
@@ -188,50 +188,50 @@ export const sliceVidRules = makeRules(({ itemEffect }) => ({
 
   // Wjhen goals change
   whenGoalSliceChanges: itemEffect({
-    run({ newValue: goalSlice, itemName, itemState }) {
+    run({ newValue: goalSlice, itemId, itemState }) {
       if (goalSlice === null || itemState.sliceVidState === "unloaded") return; // don't react if goalSlice changed to null
-      setState({ sliceVids: { [itemName]: { sliceVidState: "beforeChangeSlice" } } });
+      setState({ sliceVids: { [itemId]: { sliceVidState: "beforeChangeSlice" } } });
     },
     check: { type: "sliceVids", prop: "goalSlice" },
     step: "sliceVidWantsToPlay",
   }),
   whenWantToLoad: itemEffect({
-    run({ itemName, itemState: { sliceVidState } }) {
+    run({ itemId, itemState: { sliceVidState } }) {
       if (sliceVidState === "unloaded") {
-        setState({ sliceVids: { [itemName]: { sliceVidState: "beforeLoad", wantToLoad: false } } });
+        setState({ sliceVids: { [itemId]: { sliceVidState: "beforeLoad", wantToLoad: false } } });
       } else {
-        console.warn("tried to load", itemName, " when it was already loaded");
-        setState({ sliceVids: { [itemName]: { wantToLoad: false } } });
+        console.warn("tried to load", itemId, " when it was already loaded");
+        setState({ sliceVids: { [itemId]: { wantToLoad: false } } });
       }
     },
     check: { type: "sliceVids", prop: "wantToLoad", becomes: true },
     step: "sliceVidWantsToPlay",
   }),
   whenWantToUnload: itemEffect({
-    run({ itemName, itemState: { sliceVidState } }) {
+    run({ itemId, itemState: { sliceVidState } }) {
       if (sliceVidState !== "unloaded") {
-        doWhenSliceVidPlaying(itemName as PlaceName, () => {
-          setState({ sliceVids: { [itemName]: { sliceVidState: "beforeUnload", wantToUnload: false } } });
+        doWhenSliceVidPlaying(itemId as PlaceName, () => {
+          setState({ sliceVids: { [itemId]: { sliceVidState: "beforeUnload", wantToUnload: false } } });
         });
       } else {
-        console.warn("tried to unload", itemName, " when it was unloaded");
-        setState({ stateVids: { [itemName]: { wantToUnload: false } } });
+        console.warn("tried to unload", itemId, " when it was unloaded");
+        setState({ stateVids: { [itemId]: { wantToUnload: false } } });
       }
     },
     check: { type: "sliceVids", prop: "wantToUnload", becomes: true },
     step: "sliceVidWantsToPlay",
   }),
   whenWantToLoop: itemEffect({
-    run({ itemName, itemState: { sliceVidState }, frameDuration }) {
+    run({ itemId, itemState: { sliceVidState }, frameDuration }) {
       if (sliceVidState === "beforeLoad" || sliceVidState === "unloaded") return;
-      setState({ sliceVids: { [itemName]: { sliceVidState: "beforeDoLoop", wantToLoop: false } } });
+      setState({ sliceVids: { [itemId]: { sliceVidState: "beforeDoLoop", wantToLoop: false } } });
     },
     check: { type: "sliceVids", prop: "wantToLoop", becomes: true },
     step: "sliceVidWantsToPlay",
   }),
   // When the play and wait vids swap (loop a and b vids)
   whenPlayVidChanges: itemEffect({
-    run({ newValue: stateVidId_playing, itemName: sliceVidName }) {
+    run({ newValue: stateVidId_playing, itemId: sliceVidName }) {
       if (!stateVidId_playing) return;
       setState({ stateVids: { [stateVidId_playing]: { wantToPlay: true } } });
 

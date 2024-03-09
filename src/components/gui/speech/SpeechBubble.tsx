@@ -8,6 +8,7 @@ import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
 import { meta } from "../../../meta";
 import { CharacterName } from "../../../types";
+import { BubbleTriangle } from "./BubbleTriangle";
 // import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
@@ -24,7 +25,14 @@ const SHARED_THEME = {
   fontSize: "20px",
   lineHeight: "33px",
   padding: "8px",
+  borderColor: "rgb(227, 181, 106)",
+  backgroundColor: "rgb(249, 235, 146)",
+  borderWidth: 2,
+  rounding: 12,
 };
+// when the TRIANGLE_SIZE is 50, the SVG is unscaled, so the border width is correct to pixels
+// when the TRIANGLE_SIZE is different the svgs border width (stroke) needs to be scaled accordingly
+const TRIANGLE_BORDER_WIDTH_SCALE = 50 / TRIANGLE_SIZE;
 
 export function SpeechBubble({ name }: Props) {
   const { speechVidFiles } = meta.assets!;
@@ -58,7 +66,7 @@ export function SpeechBubble({ name }: Props) {
     stylesBySpecialText,
     nowVideoName,
   } = useStore((state) => state.speechBubbles[name], {
-    name,
+    id: name,
     type: ["speechBubbles"],
     prop: [
       // TODO fix types?
@@ -145,9 +153,7 @@ export function SpeechBubble({ name }: Props) {
     // need function to get position on screen
 
     let newPositionX = positionOnScreen.x - screenSize.x / 2;
-
     let yOffset = bubbleHeight / 2;
-
     let newPositionY = positionOnScreen.y - yOffset - screenSize.y / 2;
 
     // Keep the focused dolls speech bubble inside the view
@@ -167,8 +173,6 @@ export function SpeechBubble({ name }: Props) {
       }
     }
 
-    // console.log("newPositionX", newPositionX);
-
     theSpringApi.start({
       position: [newPositionX, newPositionY],
       immediate: true,
@@ -179,11 +183,11 @@ export function SpeechBubble({ name }: Props) {
   useStoreEffect(
     positionSpeechBubbleToCharacter,
     [
-      { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
-      { type: ["global"], name: "main", prop: ["slatePos"] },
-      { type: ["global"], name: "main", prop: ["slateZoom"] },
-      { type: ["story"], name: "main", prop: ["storyPart"] },
-      { type: ["global"], name: "main", prop: ["nowCamName"] },
+      { type: ["dolls"], id: forCharacter, prop: ["positionOnScreen"] },
+      { type: ["global"], id: "main", prop: ["slatePos"] },
+      { type: ["global"], id: "main", prop: ["slateZoom"] },
+      { type: ["story"], id: "main", prop: ["storyPart"] },
+      { type: ["global"], id: "main", prop: ["nowCamName"] },
     ],
     [nowPlaceName]
   );
@@ -212,15 +216,6 @@ export function SpeechBubble({ name }: Props) {
           // justifyContent: textIsVeryShort ? "center" : "flex-start",
           flexDirection: "row",
           flexWrap: "wrap",
-        },
-        triangle: {
-          width: TRIANGLE_SIZE + "px",
-          height: TRIANGLE_SIZE + "px",
-          opacity: 1,
-          borderRadius: 5,
-          borderWidth: 1,
-          transform: `translate(0px, -15px) rotate(45deg) scale(0.8) `,
-          backgroundColor: "#fafafa",
         },
       } as const),
     [font, videoIsPlaying]
@@ -282,20 +277,21 @@ export function SpeechBubble({ name }: Props) {
           style={{
             backgroundColor: "#fafafa",
             width: `${BUBBLE_WIDTH}px`,
-            borderRadius: "20px",
-            borderWidth: "1px",
             paddingBottom: "5px",
             zIndex: 100,
             height: theSpring.height,
             overflow: "hidden",
             willChange: "height",
             position: "relative", // fixes overflow not working
+            // borderRadius: "20px",
+            // borderWidth: "1px",
+            borderRadius: SHARED_THEME.rounding + "px",
+            borderWidth: SHARED_THEME.borderWidth,
+            borderColor: SHARED_THEME.borderColor,
+            borderStyle: "solid",
           }}
         >
           {/* hidden goal text */}
-          {/* <div ref={theTextHolder} id={`goalText`} style={styles.hiddenGoalText}>
-      {goalText}
-      </div> */}
           {/* visible typed text */}
           <div ref={theTextHolder} style={styles.hiddenGoalText}>
             {videoIsPlaying && (
@@ -335,9 +331,8 @@ export function SpeechBubble({ name }: Props) {
               );
             })}
           </div>
-          {/* <SpeechBubbleVisibleText name={name} /> */}
         </animated.div>
-        <div ref={refs.theTriangle} key={`theTriangle`} id={`theTriangle`} style={styles.triangle}></div>
+        <BubbleTriangle />
       </animated.div>
     </div>
   );

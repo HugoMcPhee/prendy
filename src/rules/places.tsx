@@ -6,7 +6,7 @@ import { PlaceName, WallNameByPlace } from "../types";
 
 export const placeRules = makeRules(({ itemEffect, effect }) => ({
   whenToggledWallsChanges: itemEffect({
-    run({ newValue: toggledWalls, itemName: placeName, itemRefs }) {
+    run({ newValue: toggledWalls, itemId: placeName, itemRefs }) {
       const { placeInfoByName } = meta.assets!;
       const { wallMeshes } = itemRefs;
       if (!wallMeshes) return;

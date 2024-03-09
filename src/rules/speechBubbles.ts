@@ -19,11 +19,11 @@ When characters position changes
 
 export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
   whenGoalTextChanges: itemEffect({
-    run({ itemName, itemRefs, itemState }) {
+    run({ itemId, itemRefs, itemState }) {
       const { goalText, stylesBySpecialText } = itemState;
       setState({
         speechBubbles: {
-          [itemName]: {
+          [itemId]: {
             typingFinished: false,
             visibleLetterAmount: 0,
             _specialTextByLetterIndex: getSpecialTextByLetterIndex(goalText, stylesBySpecialText),
@@ -32,19 +32,19 @@ export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
         },
       });
 
-      showNewLetter({ itemName, itemRefs, itemState });
+      showNewLetter({ itemId, itemRefs, itemState });
     },
     check: { prop: "goalText", type: "speechBubbles" },
   }),
   whenVisibleTextChanges: itemEffect({
-    run({ itemRefs, itemState, itemName }) {
-      showNewLetter({ itemName, itemRefs, itemState });
+    run({ itemRefs, itemState, itemId }) {
+      showNewLetter({ itemId, itemRefs, itemState });
     },
     check: { prop: "visibleLetterAmount", type: "speechBubbles" },
   }),
   whenTypingFinishedBecomesFalse: itemEffect({
-    run({ itemRefs, itemState, itemName }) {
-      showNewLetter({ itemName, itemRefs, itemState });
+    run({ itemRefs, itemState, itemId }) {
+      showNewLetter({ itemId, itemRefs, itemState });
     },
     check: {
       prop: "typingFinished",
@@ -55,24 +55,24 @@ export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
   // The position changing based on camera and character position are inside the SpeechBubble component
   whenAddedOrRemoved: effect({
     run(diffInfo) {
-      // forEach(diffInfo.itemsAdded.speechBubbles, (itemName) => {
+      // forEach(diffInfo.itemsAdded.speechBubbles, (itemId) => {
       //   // speechBubbleDynamicRules.startAll character position
       // });
 
-      forEach(diffInfo.itemsRemoved.speechBubbles, (itemName) => {
+      forEach(diffInfo.itemsRemoved.speechBubbles, (itemId) => {
         // speechBubbleDynamicRules.stopAll
         const speechBubblesRefs = getRefs().speechBubbles;
-        const { currentTimeout } = speechBubblesRefs[itemName as keyof typeof speechBubblesRefs];
+        const { currentTimeout } = speechBubblesRefs[itemId as keyof typeof speechBubblesRefs];
         if (currentTimeout !== null) clearTimeout(currentTimeout);
       });
     },
     check: { addedOrRemoved: true, type: "speechBubbles" },
   }),
   whenBecameVisible: itemEffect({
-    run({ itemName }) {
+    run({ itemId }) {
       setState({
         speechBubbles: {
-          [itemName]: { isFullyHidden: false, zIndex: zIndexCounter },
+          [itemId]: { isFullyHidden: false, zIndex: zIndexCounter },
         },
       });
       zIndexCounter += 1;
@@ -81,9 +81,9 @@ export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
     step: "positionUi",
   }),
   // whenShouldRemoveBecomesTrue: itemEffect({
-  //   run({ itemName }) {
+  //   run({ itemId }) {
   //     // removeItem()
-  //     removeItem({ name: itemName, type: "speechBubbles" });
+  //     removeItem({ name: itemId, type: "speechBubbles" });
   //   },
   //   check: { prop: "shouldRemove", type: "speechBubbles" },
   // }),
@@ -143,11 +143,11 @@ function getSpecialTextByLetterIndex(text: string, stylesBySpecialText: Record<s
 function showNewLetter({
   itemRefs,
   itemState,
-  itemName,
+  itemId,
 }: {
   itemRefs: ItemRefs<"speechBubbles">;
   itemState: ItemState<"speechBubbles">;
-  itemName: keyof AllItemsState<"speechBubbles">;
+  itemId: keyof AllItemsState<"speechBubbles">;
 }) {
   if (itemRefs.currentTimeout !== null) clearTimeout(itemRefs.currentTimeout);
 
@@ -165,12 +165,12 @@ function showNewLetter({
     newTypingFinished = true;
   }
 
-  const typingDelay = getTypingDelayForLetter(latestLetter, itemName);
+  const typingDelay = getTypingDelayForLetter(latestLetter, itemId);
 
   itemRefs.currentTimeout = setTimeout(() => {
     setState({
       speechBubbles: {
-        [itemName]: {
+        [itemId]: {
           visibleLetterAmount: newVisibleLetterAmount,
           typingFinished: newTypingFinished,
         },

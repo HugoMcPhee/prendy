@@ -38,9 +38,9 @@ export type VidSlice = { time: number; duration: number };
 export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   const { placeNames } = prendyAssets;
 
-  const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
-    stateVidId_playing: `${itemName}_a` as string | null,
-    stateVidId_waiting: `${itemName}_b` as string | null,
+  const state = <T_ItemName extends string>(itemId: T_ItemName) => ({
+    stateVidId_playing: `${itemId}_a` as string | null,
+    stateVidId_waiting: `${itemId}_b` as string | null,
     //
     sliceVidState: "unloaded" as SliceVidState,
     //

@@ -1,4 +1,4 @@
-import { getRefs, getState, startItemEffect, stopEffect } from "repond";
+import { getRefs, getState, startNewItemEffect, stopNewEffect } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { SliceVidState, VidSlice } from "../../stores/sliceVids";
@@ -8,8 +8,8 @@ import { getGlobalState } from "./global";
 
 export const BEFORE_LOOP_PADDING = 0.05; // seconds before video end to do loop (50ms)
 
-export function getSliceVidVideo(itemName: PlaceName) {
-  const sliceVidState = getState().sliceVids[itemName];
+export function getSliceVidVideo(itemId: PlaceName) {
+  const sliceVidState = getState().sliceVids[itemId];
   const { stateVidId_playing } = sliceVidState;
   if (!stateVidId_playing) return;
 
@@ -17,8 +17,8 @@ export function getSliceVidVideo(itemName: PlaceName) {
   return backdropVidRefs.videoElement;
 }
 
-export function getSliceVidWaitingVideo(itemName: PlaceName) {
-  const sliceVidState = getState().sliceVids[itemName];
+export function getSliceVidWaitingVideo(itemId: PlaceName) {
+  const sliceVidState = getState().sliceVids[itemId];
   const { stateVidId_waiting } = sliceVidState;
   if (!stateVidId_waiting) return;
 
@@ -42,20 +42,20 @@ export function doWhenSliceVidStateChanges(
     return null;
   }
 
-  const ruleName = "doWhenSliceVidStateChanges" + Math.random() + Math.random();
+  const effectId = "doWhenSliceVidStateChanges" + Math.random() + Math.random();
 
-  startItemEffect({
-    name: ruleName,
+  startNewItemEffect({
+    id: effectId,
     run: ({ newValue: newVidState }) => {
       if (!checkShouldRun(newVidState)) return;
-      stopEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
-    check: { type: "sliceVids", prop: "sliceVidState", name: sliceVidId },
+    check: { type: "sliceVids", prop: "sliceVidState", id: sliceVidId },
     step: "sliceVidStateUpdates",
     atStepEnd: true,
   });
-  return ruleName;
+  return effectId;
 }
 
 export function doWhenSliceVidPlaying(sliceVidId: PlaceName, callback: () => void) {

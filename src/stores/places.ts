@@ -50,7 +50,7 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     // nowCamName:
     //   ((prendyOptions.place === placeName ? prendyOptions.camera : "") ||
     //     ((placeInfoByName as any)?.[placeName as any]?.cameraNames?.[0] as unknown as AnyCameraName)) ??
-    //   ("testItemCamName" as AnyCameraName), // if state() is called with a random itemName
+    //   ("testItemCamName" as AnyCameraName), // if state() is called with a random itemId
   });
   type PlaceRefs<K_PlaceName extends PlaceName> = {
     rootMesh: null | AbstractMesh;
@@ -137,14 +137,14 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   /*
 
   as <PlaceName extends PlaceName>(
-  itemName: PlaceName | string
+  itemId: PlaceName | string
 ) => PlaceRefs<PlaceName>
 
 */
 
   return {
     startStates: startStates as StartStates,
-    state: state as <K_PlaceName extends PlaceName>(itemName: K_PlaceName | string) => ReturnType<typeof state>,
-    refs: refs as <K_PlaceName extends PlaceName>(itemName: K_PlaceName & string) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
+    state: state as <K_PlaceName extends PlaceName>(itemId: K_PlaceName | string) => ReturnType<typeof state>,
+    refs: refs as <K_PlaceName extends PlaceName>(itemId: K_PlaceName & string) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
   };
 }

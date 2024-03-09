@@ -9,13 +9,7 @@ import { AnyTriggerName, AnyCameraName } from "../types";
 
 export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
   whenPositionChanges: itemEffect(
-    ({
-      characterName,
-      dollName,
-    }: {
-      characterName: string | any; // CharacterName
-      dollName: string | any; // DollName
-    }) => ({
+    ({ characterName, dollName }: { characterName: string | any; dollName: string | any }) => ({
       // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
       run({ itemRefs }) {
         const refs = getRefs();
@@ -26,7 +20,7 @@ export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
         // only update the collider stuff here
         // Also listen to dolls positions, and return if not the same dollName (easier than dynamic rules for now)
 
-        // if (samePoints(newValue ?? defaultPosition, previousValue ?? defaultPosition)) return;
+        // if (samePoints(newValue ?? defaultPosition, prevValue ?? defaultPosition)) return;
 
         // NOTE this rule used to use effect instead of itemEffect, which has typescript errors, but was possibly working? or not working and returning early
         if (!itemRefs.meshRef) return;
@@ -134,8 +128,8 @@ export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
   //     dollName: DollName;
   //   }) => ({
   //     // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-  //     run({ newValue: newInRange, itemName }) {
-  //       // console.log(itemName, " in range");
+  //     run({ newValue: newInRange, itemId }) {
+  //       // console.log(itemId, " in range");
   //       // console.log(newInRange.cat);
   //     },
   //     check: { type: "dolls", prop: "inRange", name: dollName },
@@ -168,7 +162,7 @@ export function startDynamicCharacterRulesForInitialState() {
 
 export const characterRules = makeRules(({ itemEffect }) => ({
   whenAtCamCubes: itemEffect({
-    run({ newValue: newAtCamCubes, previousValue: prevAtCamCubes, itemName: charName }) {
+    run({ newValue: newAtCamCubes, prevValue: prevAtCamCubes, itemId: charName }) {
       const { placeInfoByName } = meta.assets!;
       const { playerCharacter } = getState().global.main;
 

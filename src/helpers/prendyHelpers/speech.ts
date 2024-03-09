@@ -1,14 +1,13 @@
 import delay from "delay";
 import { CSSProperties } from "react";
-import { AllState, getState, onNextTick, setState, startItemEffect, stopEffect } from "repond";
+import { getState, onNextTick, setState, startNewItemEffect, stopNewEffect } from "repond";
 import { length } from "stringz";
-import { MyTypes } from "../../declarations";
 import { getTypingDelayForText } from "../../helpers/prendyUtils/speechBubbles";
 import { meta } from "../../meta";
+import { CharacterName, SpeechBubbleName } from "../../types";
 import { getCharDollStuff } from "../prendyUtils/characters";
 import { getGlobalState, setGlobalState } from "../prendyUtils/global";
 import { clearTimeoutSafe } from "../utils";
-import { SpeechBubbleName, CharacterName } from "../../types";
 
 type ATimeout = ReturnType<typeof setTimeout> | undefined;
 
@@ -74,11 +73,11 @@ export async function showSpeech(
         // reading done!
       } else whenWaitingDone();
     }
-    const ruleName = "showSpeech_handlePressButton" + Math.random();
+    const effectId = "showSpeech_handlePressButton" + Math.random();
     // on next tick so it doesnt react to the first press that shows the speech bubble
     onNextTick(() => {
-      startItemEffect({
-        name: ruleName,
+      startNewItemEffect({
+        id: effectId,
         run: handlePressButton,
         check: { type: "players", prop: "interactButtonPressTime" },
       });
@@ -121,7 +120,7 @@ export async function showSpeech(
     }
 
     function whenWaitingDone() {
-      stopEffect(ruleName);
+      stopNewEffect(effectId);
       clearTimeoutSafe(showSpeechRefs.waitTimeouts[character]);
       clearTimeoutSafe(showSpeechRefs.closeTimeouts[character]);
       clearTimeoutSafe(showSpeechRefs.zoomTimeout);

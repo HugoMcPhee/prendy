@@ -7,7 +7,7 @@ export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyA
   const { characterNames, characterOptions } = prendyAssets;
 
   const state = <T_ItemName extends string>(
-    _itemName: T_ItemName,
+    _itemId: T_ItemName,
     options?: { character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,

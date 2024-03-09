@@ -3,8 +3,8 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { getPreviousState, getRefs, getState, makeDynamicRules, makeRules, onNextTick, setState } from "repond";
-import { addMoverRules } from "repond-movers";
+import { getPrevState, getRefs, getState, makeDynamicRules, makeRules, onNextTick, setState } from "repond";
+import { addMoverEffects } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
 import { MyTypes } from "../declarations";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
@@ -101,7 +101,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
   // loading model stuff
   // --------------------------------
   whenModelNameChanges: itemEffect({
-    run({ itemName: dollName, newValue: newModelName, previousValue: prevModelName }) {
+    run({ itemId: dollName, newValue: newModelName, prevValue: prevModelName }) {
       // stop the previous dynamic rule, and start the new one
       dollDynamicRules.stopAll({ dollName, modelName: prevModelName });
       dollDynamicRules.startAll({ dollName, modelName: newModelName });
@@ -114,7 +114,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
 
       // stop the previous dynamic rule, and start the new one
       forEach(diffInfo.itemsRemoved.dolls as DollName[], (dollName) => {
-        const { modelName } = getPreviousState().dolls[dollName];
+        const { modelName } = getPrevState().dolls[dollName];
         dollDynamicRules.stopAll({ dollName, modelName });
       });
       forEach(diffInfo.itemsAdded.dolls as DollName[], (dollName) => {
@@ -128,7 +128,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
   // animations
   // --------------------------------
   whenNowAnimationChanged: itemEffect({
-    run({ newValue: nowAnimation, itemState, itemName: dollName }) {
+    run({ newValue: nowAnimation, itemState, itemId: dollName }) {
       const { modelInfoByName } = meta.assets!;
       const { modelName } = itemState;
       const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
@@ -211,7 +211,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
   // ___________________________________
   // position
   whenPositionChangesToEdit: itemEffect({
-    run({ newValue: newPosition, previousValue: prevPosition, itemRefs, itemName: dollName }) {
+    run({ newValue: newPosition, prevValue: prevPosition, itemRefs, itemId: dollName }) {
       if (!itemRefs.meshRef) return;
 
       if (itemRefs.canGoThroughWalls) {
@@ -334,7 +334,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
     step: "checkCollisions",
   }),
   whenHidingUpdateInRange: itemEffect({
-    run({ newValue: newIsVisible, itemName: dollName }) {
+    run({ newValue: newIsVisible, itemId: dollName }) {
       const { dollNames } = meta.assets!;
       // return early if it didn't just hide
       if (newIsVisible) return;
@@ -400,7 +400,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
     atStepEnd: true,
   }),
   whenToggledMeshesChanges: itemEffect({
-    run({ newValue: toggledMeshes, itemName: dollName, itemRefs }) {
+    run({ newValue: toggledMeshes, itemId: dollName, itemRefs }) {
       const { modelInfoByName } = meta.assets!;
       const { otherMeshes } = itemRefs;
       if (!otherMeshes) return;
@@ -421,7 +421,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
     atStepEnd: true,
   }),
   whenIsVisibleChanges: itemEffect({
-    run({ newValue: isVisible, itemName: dollName, itemRefs: dollRefs }) {
+    run({ newValue: isVisible, itemId: dollName, itemRefs: dollRefs }) {
       if (!dollRefs.meshRef) return console.warn("isVisible change: no mesh ref for", dollName);
       if (dollName === "shoes") {
         console.log("shoes isVisible change", isVisible);
@@ -444,7 +444,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
 
   // rotationY
   whenRotationGoalChangedToFix: itemEffect({
-    run({ previousValue: oldYRotation, newValue: newYRotation, itemName: dollName }) {
+    run({ prevValue: oldYRotation, newValue: newYRotation, itemId: dollName }) {
       const yRotationDifference = oldYRotation - newYRotation;
 
       if (Math.abs(yRotationDifference) > 180) {
@@ -457,7 +457,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
     step: "dollCorrectRotationAndPosition",
     atStepEnd: true,
   }),
-  ...addMoverRules("dolls", "position", "3d"),
-  ...addMoverRules("dolls", "rotationY"),
-  ...addMoverRules("dolls", "animWeights", "multi"),
+  ...addMoverEffects("dolls", "position", "3d"),
+  ...addMoverEffects("dolls", "rotationY"),
+  ...addMoverEffects("dolls", "animWeights", "multi"),
 }));

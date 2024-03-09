@@ -45,6 +45,13 @@ export type StoryState = AllState["story"]["main"];
 export type StoryRefs = AllRefs["story"]["main"];
 export type GlobalState = AllState["global"]["main"];
 
+export type ItemType = keyof AllState;
+export type HelperType<T extends ItemType> = StoreHelperTypes<typeof getState, typeof getRefs, T>;
+export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
+// export type AllItemsState<T extends ItemType> = AllState[T] & Record<any, any>;
+export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
+export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
+
 export type AllPlacesState = AllState["places"];
 export type AllPlacesRefs = AllRefs["places"];
 
@@ -79,11 +86,5 @@ export type TriggerMeshes<T_PlaceName extends PlaceName> = {
 export type WallMeshes<T_PlaceName extends PlaceName> = {
   [P_WallName in WallNameByPlace[T_PlaceName]]: AbstractMesh | null;
 };
-
-export type ItemType = keyof AllState;
-export type HelperType<T extends ItemType> = StoreHelperTypes<typeof getState, typeof getRefs, T>;
-export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
 export type StoryCallback = (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;

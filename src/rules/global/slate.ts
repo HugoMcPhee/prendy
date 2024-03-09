@@ -1,6 +1,6 @@
 import delay from "delay";
 import { getRefs, getState, makeRules } from "repond";
-import { addMoverRules } from "repond-movers";
+import { addMoverEffects } from "repond-movers";
 import { getEngine } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import {
   focusSlateOnFocusedDoll,
@@ -103,6 +103,6 @@ export const globalSlateRules = makeRules(({ itemEffect, effect }) => ({
     atStepEnd: true,
     step: "slatePosition",
   }),
-  ...addMoverRules("global", "slatePos", "2d"),
-  ...addMoverRules("global", "slateZoom"),
+  ...addMoverEffects("global", "slatePos", "2d"),
+  ...addMoverEffects("global", "slateZoom"),
 }));

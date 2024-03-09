@@ -1,4 +1,4 @@
-import { getState, startItemEffect, stopEffect } from "repond";
+import { getState, startNewItemEffect, stopNewEffect } from "repond";
 import { VidState } from "../../stores/stateVids";
 
 export function doWhenStateVidStateChanges(
@@ -13,30 +13,30 @@ export function doWhenStateVidStateChanges(
     return null;
   }
 
-  const ruleName = "doWhenStateVidStateChanges" + Math.random();
-  startItemEffect({
-    name: ruleName,
+  const effectId = "doWhenStateVidStateChanges" + Math.random();
+  startNewItemEffect({
+    id: effectId,
     run: ({ newValue: newVidState }) => {
       if (!checkShouldRun(newVidState)) return;
-      stopEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
-    check: { type: "stateVids", prop: "vidState", name: stateVidId },
+    check: { type: "stateVids", prop: "vidState", id: stateVidId },
     atStepEnd: true,
     step: "stateVidStateUpdates",
   });
-  return ruleName;
+  return effectId;
 }
 
 export function doWhenStateVidStateSeeked(stateVidId: string, callback: () => void) {
   const ruleName = "doWhenStateVidStateSeeked" + Math.random();
-  startItemEffect({
-    name: ruleName,
+  startNewItemEffect({
+    id: ruleName,
     run: ({ newValue: newVidState }) => {
-      stopEffect(ruleName);
+      stopNewEffect(ruleName);
       callback();
     },
-    check: { type: "stateVids", prop: "doneSeekingTime", name: stateVidId },
+    check: { type: "stateVids", prop: "doneSeekingTime", id: stateVidId },
     atStepEnd: true,
     step: "stateVidStateUpdates",
   });

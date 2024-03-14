@@ -53,16 +53,16 @@ export const prendyParamEffectGroups = {
 function startPrendyMainRules() {
   connectKeyboardInputsToState();
   document.addEventListener("visibilitychange", updateAppVisibility);
-  startAllEffectGroups();
   startDynamicCharacterRulesForInitialState();
   startDynamicDollRulesForInitialState();
+  startAllEffectGroups();
 }
 function stopPrendyMainRules() {
   disconnectKeyboardInputsToState();
   document.removeEventListener("visibilitychange", updateAppVisibility);
-  stopAllEffectGroups();
   stopDynamicCharacterRulesForInitialState();
   stopDynamicDollRulesForInitialState();
+  stopAllEffectGroups();
 }
 
 export function StartAndStopPrendyRules({}: {}) {

@@ -14,6 +14,11 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.1
+
+- Fix imports from repond with new version 0.14.2
+- Prevent issue if doll mesh doesn't exist
+
 v0.11.0
 
 - Updated to new repond 0.14 with Effects and Param Effects (from rules and dynamic rules)

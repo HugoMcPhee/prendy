@@ -3,10 +3,19 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { getPrevState, getRefs, getState, makeEffects, makeParamEffects, onNextTick, setState } from "repond";
+import {
+  getPrevState,
+  getRefs,
+  getState,
+  makeEffects,
+  makeParamEffects,
+  onNextTick,
+  setState,
+  startParamEffectsGroup,
+  stopParamEffectsGroup,
+} from "repond";
 import { addMoverEffects } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
-import { startParamEffectsGroup, stopParamEffectsGroup } from "repond/src/usable/paramEffects";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import {
@@ -161,7 +170,7 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
       if (!dollRefs.aniGroupsRef) return;
       forEach(animationNames, (aniName) => {
         if (!dollRefs.aniGroupsRef) return;
-        const aniRef = dollRefs.aniGroupsRef[aniName];
+        const aniRef = dollRefs?.aniGroupsRef?.[aniName];
         // const { timerSpeed } = getRefs().global.main;
         // if (aniRef._speedRatio !== timerSpeed) {
         //   aniRef._speedRatio = timerSpeed;

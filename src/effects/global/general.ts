@@ -123,7 +123,7 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
         const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
 
         forEach(animationNames, (aniName) => {
-          const aniRef = dollRefs.aniGroupsRef[aniName];
+          const aniRef = dollRefs?.aniGroupsRef?.[aniName];
           if (!aniRef) return;
           aniRef.speedRatio = newGameTimeSpeed;
           // aniRef?.setWeightForAllAnimatables(animWeights[aniName]);

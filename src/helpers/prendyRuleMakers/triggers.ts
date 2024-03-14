@@ -1,12 +1,8 @@
 import { forEach } from "chootils/dist/loops";
-import { makeRules } from "repond";
+import { makeEffects } from "repond";
 import { meta } from "../../meta";
 import { AnyTriggerName, CharacterName, PlaceName, StoryCallback, TriggerNameByPlace } from "../../types";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
-
-// --------------------------------------------------
-//
-// makeTriggerRules
 
 type TriggerRulesOptions = Partial<{
   [P_CharacterName in CharacterName]: Partial<{
@@ -15,8 +11,9 @@ type TriggerRulesOptions = Partial<{
     }>;
   }>;
 }>;
-export function makeTriggerRules(
-  callBacksObject: TriggerRulesOptions,
+
+export function makeTriggerEffects(
+  callbacksMap: TriggerRulesOptions,
   options?: {
     // characterName?: CharacterName;
     whenLeave?: boolean;
@@ -26,9 +23,9 @@ export function makeTriggerRules(
   // this won't update the playerCharacter at the moment
   const { whenLeave = false } = options ?? {};
 
-  const charactersWithTriggers = Object.keys(callBacksObject) as CharacterName[];
+  const charactersWithTriggers = Object.keys(callbacksMap) as CharacterName[];
 
-  return makeRules(({ itemEffect }) => ({
+  return makeEffects(({ itemEffect }) => ({
     whenAtTriggersChanges: itemEffect({
       run({ newValue: atTriggers, prevValue: prevAtTriggers, itemId: characterName }) {
         const { placeInfoByName } = meta.assets!;
@@ -36,7 +33,7 @@ export function makeTriggerRules(
         const usefulStoryStuff = getUsefulStoryStuff();
         const { nowPlaceName } = usefulStoryStuff;
 
-        if (!(callBacksObject as Record<any, any>)[characterName]) {
+        if (!(callbacksMap as Record<any, any>)[characterName]) {
           return;
         }
 
@@ -47,14 +44,14 @@ export function makeTriggerRules(
           const justLeft = !atTriggers[triggerName] && prevAtTriggers[triggerName];
 
           if ((whenLeave && justLeft) || (!whenLeave && justEntered)) {
-            (callBacksObject as Record<any, any>)[characterName]?.[nowPlaceName]?.[triggerName]?.(usefulStoryStuff);
+            (callbacksMap as Record<any, any>)[characterName]?.[nowPlaceName]?.[triggerName]?.(usefulStoryStuff);
           }
         });
       },
       check: {
         prop: ["atTriggers"],
         type: "characters",
-        name: charactersWithTriggers,
+        id: charactersWithTriggers,
       },
       step: "collisionReaction",
     }),

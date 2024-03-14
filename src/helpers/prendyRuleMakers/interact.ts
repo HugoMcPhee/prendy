@@ -1,18 +1,18 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { getState, makeRules } from "repond";
+import { getState, makeEffects } from "repond";
 import { meta } from "../../meta";
 import { AnyTriggerName, CharacterName, DollName, PlaceName, StoryCallback, TriggerNameByPlace } from "../../types";
 import { getCharDollStuff } from "../prendyUtils/characters";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
 
-export function makeInteractButtonRules({
+export function makeInteractButtonEffects({
   onInteractAtTrigger,
   onInteractAtTalk,
 }: {
   onInteractAtTrigger: ReturnType<typeof makeOnInteractAtTrigger>;
   onInteractAtTalk: ReturnType<typeof makeOnInteractToTalk>;
 }) {
-  const interactButtonRules = makeRules(({ itemEffect, effect }) => ({
+  return makeEffects(({ itemEffect, effect }) => ({
     whenInteractButtonClicked: itemEffect({
       run() {
         onInteractAtTrigger();
@@ -23,7 +23,6 @@ export function makeInteractButtonRules({
       step: "story", // story insead of input, so virtual stick animations dont overwrite the story click ones
     }),
   }));
-  return interactButtonRules;
 }
 
 // --------------------------------------------------

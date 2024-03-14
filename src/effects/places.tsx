@@ -1,10 +1,9 @@
 import { forEach } from "chootils/dist/loops";
-import { MyTypes } from "../declarations";
+import { makeEffects } from "repond";
 import { meta } from "../meta";
-import { makeRules } from "repond";
 import { PlaceName, WallNameByPlace } from "../types";
 
-export const placeRules = makeRules(({ itemEffect, effect }) => ({
+export const placeEffects = makeEffects(({ itemEffect, effect }) => ({
   whenToggledWallsChanges: itemEffect({
     run({ newValue: toggledWalls, itemId: placeName, itemRefs }) {
       const { placeInfoByName } = meta.assets!;

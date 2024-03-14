@@ -1,6 +1,4 @@
-// import { getRefs, getState, makeRules, setState } from "stores";
-import { makeRules, getState, setState, getRefs } from "repond";
-import { MyTypes } from "../../declarations";
+import { getRefs, getState, makeEffects, setState } from "repond";
 import {
   getSafeSegmentName,
   updateNowStuffWhenSliceChanged,
@@ -13,9 +11,9 @@ import {
   getSliceVidVideo,
 } from "../../helpers/prendyUtils/sliceVids";
 import { VidSlice } from "../../stores/sliceVids";
-import { PlaceName, CameraNameByPlace, AnyCameraName, SegmentNameByPlace, AnySegmentName } from "../../types";
+import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName, SegmentNameByPlace } from "../../types";
 
-export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
+export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
   whenWantToChooseVideoSlice: effect({
     run() {
       const {
@@ -161,7 +159,7 @@ export const globalVideoRules = makeRules(({ itemEffect, effect }) => ({
       });
     },
     // check every frame so it can handle goal things that didnt get set yet because there was already a waiting slice vid!
-    check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
+    check: { type: ["global"], id: ["main"], prop: ["frameTick"] },
     step: "chooseVideoSlice",
     // atStepEnd: true, // NOTE changed this recently
   }),

@@ -1,15 +1,16 @@
 import { AbstractMesh } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { MyTypes } from "../declarations";
+import { getRefs, getState, makeEffects, makeParamEffects, setState } from "repond";
 import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
-import { getRefs, getState, makeDynamicRules, makeRules, setState } from "repond";
 import { meta } from "../meta";
-import { AnyTriggerName, AnyCameraName } from "../types";
+import { AnyCameraName, AnyTriggerName } from "../types";
+import { startParamEffectsGroup, stopParamEffectsGroup } from "repond/src/usable/paramEffects";
 
-export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
-  whenPositionChanges: itemEffect(
-    ({ characterName, dollName }: { characterName: string | any; dollName: string | any }) => ({
+export const characterParamEffects = makeParamEffects(
+  { characterName: "", dollName: "" }, // defaultParams
+  ({ itemEffect, params: { characterName, dollName } }) => ({
+    whenPositionChanges: itemEffect({
       // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
       run({ itemRefs }) {
         const refs = getRefs();
@@ -108,7 +109,7 @@ export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
           focusSlateOnFocusedDoll();
         }
       },
-      check: { type: "dolls", prop: "position", name: dollName },
+      check: { type: "dolls", prop: "position", id: dollName },
       atStepEnd: true, // so it only runs once (it sometimes ran twice with  "derive" (without the "beforePainting" flow I think))
       step: "checkCollisions",
       // NOTE "becomes" isn't working for dynamic rules?
@@ -117,26 +118,26 @@ export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
 
       //   return samePoints(position ?? defaultPosition, prevPosition ?? defaultPosition);
       // },
-    })
-  ),
-  // whenInRangeChanges: itemEffect(
-  //   ({
-  //     characterName,
-  //     dollName,
-  //   }: {
-  //     characterName: CharacterName;
-  //     dollName: DollName;
-  //   }) => ({
-  //     // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
-  //     run({ newValue: newInRange, itemId }) {
-  //       // console.log(itemId, " in range");
-  //       // console.log(newInRange.cat);
-  //     },
-  //     check: { type: "dolls", prop: "inRange", name: dollName },
-  //     atStepEnd: true,
-  //   })
-  // ),
-}));
+    }),
+    // whenInRangeChanges: itemEffect(
+    //   ({
+    //     characterName,
+    //     dollName,
+    //   }: {
+    //     characterName: CharacterName;
+    //     dollName: DollName;
+    //   }) => ({
+    //     // nameThisRule: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
+    //     run({ newValue: newInRange, itemId }) {
+    //       // console.log(itemId, " in range");
+    //       // console.log(newInRange.cat);
+    //     },
+    //     check: { type: "dolls", prop: "inRange", id: dollName },
+    //     atStepEnd: true,
+    //   })
+    // ),
+  })
+);
 
 // FIXME
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
@@ -145,22 +146,21 @@ export const characterDynamicRules = makeDynamicRules(({ itemEffect }) => ({
 
 export function startDynamicCharacterRulesForInitialState() {
   const { characterNames } = meta.assets!;
-
   forEach(characterNames, (characterName) => {
     const { dollName } = getState().characters[characterName];
-    if (!dollName) return;
-    characterDynamicRules.startAll({ characterName, dollName });
+    if (dollName) startParamEffectsGroup("character", { characterName, dollName });
   });
-  return function stopDynamicCharacterRulesForInitialState() {
-    forEach(characterNames, (characterName) => {
-      const { dollName } = getState().characters[characterName];
-      if (!dollName) return;
-      characterDynamicRules.stopAll({ characterName, dollName });
-    });
-  };
 }
 
-export const characterRules = makeRules(({ itemEffect }) => ({
+export function stopDynamicCharacterRulesForInitialState() {
+  const { characterNames } = meta.assets!;
+  forEach(characterNames, (characterName) => {
+    const { dollName } = getState().characters[characterName];
+    if (dollName) stopParamEffectsGroup("character", { characterName, dollName });
+  });
+}
+
+export const characterEffects = makeEffects(({ itemEffect }) => ({
   whenAtCamCubes: itemEffect({
     run({ newValue: newAtCamCubes, prevValue: prevAtCamCubes, itemId: charName }) {
       const { placeInfoByName } = meta.assets!;
@@ -187,11 +187,7 @@ export const characterRules = makeRules(({ itemEffect }) => ({
   whenPlaceChanges: itemEffect({
     run() {
       setState((state) => ({
-        characters: {
-          [state.global.main.playerCharacter]: {
-            hasLeftFirstTrigger: false,
-          },
-        },
+        characters: { [state.global.main.playerCharacter]: { hasLeftFirstTrigger: false } },
       }));
     },
     check: { type: "global", prop: "nowPlaceName" },

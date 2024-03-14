@@ -29,18 +29,18 @@ export function doWhenStateVidStateChanges(
 }
 
 export function doWhenStateVidStateSeeked(stateVidId: string, callback: () => void) {
-  const ruleName = "doWhenStateVidStateSeeked" + Math.random();
+  const effectId = "doWhenStateVidStateSeeked" + Math.random();
   startNewItemEffect({
-    id: ruleName,
+    id: effectId,
     run: ({ newValue: newVidState }) => {
-      stopNewEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
     check: { type: "stateVids", prop: "doneSeekingTime", id: stateVidId },
     atStepEnd: true,
     step: "stateVidStateUpdates",
   });
-  return ruleName;
+  return effectId;
 }
 
 export function doWhenStateVidStateReady(

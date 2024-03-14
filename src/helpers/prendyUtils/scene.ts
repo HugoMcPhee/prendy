@@ -2,7 +2,7 @@ import { getRefs, getState, onNextTick, startNewItemEffect, stopNewEffect } from
 import { AnyCameraName, AnySegmentName, CameraNameByPlace, PlaceName } from "../../types";
 import { getUsefulStoryStuff } from "../prendyRuleMakers/prendyRuleMakers";
 
-export function getSegmentFromStoryRules<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(
+export function getSegmentFromSegmentRules<T_Place extends PlaceName, T_Cam extends CameraNameByPlace[T_Place]>(
   place: T_Place,
   cam: T_Cam
 ) {
@@ -18,21 +18,21 @@ export function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, cal
     callback();
     return null;
   }
-  const ruleName = "doWhenNowSegmentChanges" + Math.random();
+  const effectId = "doWhenNowSegmentChanges" + Math.random();
   startNewItemEffect({
-    id: ruleName,
+    id: effectId,
     run: ({ newValue: newNowSegmentName }) => {
       // if (newNowSegmentName !== checkingSegmentName) return;
       // wait until the segment changed from the original (even if it doesn't change to the new one)
       if (newNowSegmentName === initialNowSegmentName) return;
-      stopNewEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
     check: { type: "global", prop: "nowSegmentName", id: "main" },
     step: "cameraChange",
     atStepEnd: true,
   });
-  return ruleName;
+  return effectId;
 }
 
 export function doWhenNowCamChanges(
@@ -47,19 +47,19 @@ export function doWhenNowCamChanges(
     callback();
     return null;
   }
-  const ruleName = "doWhenNowCamChanges" + Math.random();
+  const effectId = "doWhenNowCamChanges" + Math.random();
   startNewItemEffect({
-    id: ruleName,
+    id: effectId,
     run: ({ newValue: newNowCamName }) => {
       if (newNowCamName === initialNowCamName) return;
-      stopNewEffect(ruleName);
+      stopNewEffect(effectId);
       callback();
     },
     check: { type: "global", prop: "nowCamName" },
     step: "cameraChange",
     atStepEnd: true,
   });
-  return ruleName;
+  return effectId;
 }
 
 export function doWhenNowPlaceChanges(checkingPlaceName: PlaceName, callback: () => void) {

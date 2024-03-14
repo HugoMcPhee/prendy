@@ -1,5 +1,5 @@
 import delay from "delay";
-import { getRefs, getState, makeRules } from "repond";
+import { getRefs, getState, makeEffects } from "repond";
 import { addMoverEffects } from "repond-movers";
 import { getEngine } from "../../helpers/babylonjs/getSceneOrEngineUtils";
 import {
@@ -10,7 +10,7 @@ import {
 import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
 
-export const globalSlateRules = makeRules(({ itemEffect, effect }) => ({
+export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
   whenSlatePositionChanges: effect({
     run(diffInfo) {
       const positionChanged = diffInfo.propsChangedBool.global.main.slatePos;

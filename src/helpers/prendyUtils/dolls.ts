@@ -67,19 +67,19 @@ export function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName) {
 //     callback();
 //     return null;
 //   }
-//   const ruleName = "doWhenModelsLoaded" + Math.random();
+//   const effectId = "doWhenModelsLoaded" + Math.random();
 //   startItemEffect({
-//     name: ruleName,
+//     id: effectId,
 //     run: ({ newValue: newNowSegmentName }) => {
 //       if (newNowSegmentName !== checkingSegmentName) return;
-//       stopEffect(ruleName);
+//       stopEffect(effectId);
 //       callback();
 //     },
-//     check: { type: "global", prop: "nowSegmentName", name: "main" },
+//     check: { type: "global", prop: "nowSegmentName", id: "main" },
 //     step: "",
 //     atStepEnd: true,
 //   });
-//   return ruleName;
+//   return effectId;
 // }
 
 // {

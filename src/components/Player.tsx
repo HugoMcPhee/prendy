@@ -28,13 +28,13 @@ export function Player(_props: Props) {
 
   const { playerCharacter: charName } = useStore(({ global: { main } }) => main, {
     type: "global",
-    name: "main",
+    id: "main",
     prop: ["playerCharacter"],
   });
 
   // TODO Move to story dynamic rules for the player character ?
   useStoreItemPropsEffect(
-    { type: "characters", name: charName },
+    { type: "characters", id: charName },
     {
       atTriggers({ newValue: atTriggers }) {
         // if atTriggers changes, respond here

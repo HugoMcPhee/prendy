@@ -13,7 +13,7 @@ export function Pickups(_props: Props) {
 
   const { heldPickups } = useStore(({ global: { main } }) => main, {
     type: "global",
-    name: "main",
+    id: "main",
     prop: ["heldPickups"],
   });
 

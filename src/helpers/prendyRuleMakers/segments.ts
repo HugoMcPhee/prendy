@@ -1,4 +1,4 @@
-import { getRefs } from "repond";
+import { getRefs, onNextTick } from "repond";
 import { CameraNameFromPlace, PlaceName, SegmentNameFromCameraAndPlace } from "../../types";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
 
@@ -18,15 +18,18 @@ type CamSegmentRulesOptions = Partial<{
   }>;
 }>;
 
-export function makeCamSegmentRules(callBacksObject: CamSegmentRulesOptions) {
-  return {
-    startAll() {
-      // This sets an options object in global refs that gets checked when changing segment,
-      // so no rules are actually started here, but it uses the same format as the other rule makers
-      getRefs().global.main.camSegmentRulesOptions = callBacksObject as CamSegmentRulesOptionsUntyped;
-    },
-    stopAll() {
-      /* nothing to stop */
-    },
-  };
+export function initCamSegmentEffects(callbacksMap: CamSegmentRulesOptions) {
+  onNextTick(() => {
+    getRefs().global.main.camSegmentRulesOptions = callbacksMap as CamSegmentRulesOptionsUntyped;
+  });
+  // return {
+  //   startAll() {
+  //     // This sets an options object in global refs that gets checked when changing segment,
+  //     // so no rules are actually started here, but it uses the same format as the other rule makers
+  //     getRefs().global.main.camSegmentRulesOptions = callbacksMap as CamSegmentRulesOptionsUntyped;
+  //   },
+  //   stopAll() {
+  //     /* nothing to stop */
+  //   },
+  // };
 }

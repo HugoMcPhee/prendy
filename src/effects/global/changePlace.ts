@@ -1,6 +1,6 @@
 import { Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
-import { getRefs, getState, makeRules, onNextTick, setState } from "repond";
+import { getRefs, getState, makeEffects, onNextTick, runEffect, setState } from "repond";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
@@ -12,7 +12,6 @@ import { getSliceVidVideo } from "../../helpers/prendyUtils/sliceVids";
 import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spots";
 import { meta } from "../../meta";
 import { AnyCameraName, DollName, PlaceName } from "../../types";
-import { globalGeneralRules } from "./general";
 
 function setPlayerPositionForNewPlace() {
   const { placeInfoByName } = meta.assets!;
@@ -61,7 +60,7 @@ function whenAllVideosLoadedForPlace() {
   }
 }
 
-export const globalChangePlaceRules = makeRules(({ itemEffect }) => ({
+export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
   whenPlaceNameChanges: itemEffect({
     run({ newValue: goalPlaceName, itemState: globalState }) {
       // remove goalPlaceName if it's the same as nowPlaceName
@@ -218,7 +217,7 @@ export const globalChangePlaceRules = makeRules(({ itemEffect }) => ({
               setState({ global: { main: { loadingOverlayToggled: false, loadingOverlayFullyShowing: false } } });
 
               onNextTick(() => {
-                globalGeneralRules?.run("whenGameTimeSpeedChanges");
+                runEffect("globalGeneral", "whenGameTimeSpeedChanges");
               });
             });
           }

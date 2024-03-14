@@ -123,23 +123,11 @@ export type DollOptionsPlaceholder<DollName extends string, ModelName extends st
 // });
 
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 // NOTE Use these to typeof to have known types while making prendys library
 // export type PrendyStoresUntypedType = typeof placeholderPrendyStores;
 // export type PrendyStoreHelpersUntypedType = typeof storeHelpers;
 
 type AnyFunction = (...args: any) => any;
-
-// type ItemType = keyof ReturnType<PrendyStoreHelpersUntyped["getState"]>;
-// type HelperType<T extends ItemType> = StoreHelperTypes<
-//   PrendyStoreHelpersUntyped["getState"],
-//   PrendyStoreHelpersUntyped["getRefs"],
-//   T
-// >;
-// export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-// export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-// export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
 export type PlaceInfoByNamePlaceholder<
   PlaceName extends string

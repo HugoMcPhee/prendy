@@ -1,5 +1,5 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { getRefs, getState } from "repond";
+import { getRefs, getState, onNextTick } from "repond";
 import { meta } from "../../meta";
 import {
   AnyTriggerName,
@@ -13,7 +13,7 @@ import {
 import { getCharDollStuff } from "../prendyUtils/characters";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
 
-export function makePickupsRules({
+export function initPickupsEffects({
   onUsePickupAtTrigger,
   onUsePickupToTalk,
   onUsePickupGenerally,
@@ -36,16 +36,11 @@ export function makePickupsRules({
     }
   };
 
-  return {
-    startAll() {
-      // This sets an onClick callback in global refs that gets called when clicking the pickup button,
-      // so no rules are actually started here, but it uses the same format as the other rule makers
-      getRefs().global.main.onPickupButtonClick = onPickupButtonClick;
-    },
-    stopAll() {
-      /* nothing to stop */
-    },
-  };
+  onNextTick(() => {
+    // This sets an onClick callback in global refs that gets called when clicking the pickup button,
+    // so no rules are actually started here, but it uses the same format as the other rule makers
+    getRefs().global.main.onPickupButtonClick = onPickupButtonClick;
+  });
 }
 
 // --------------------------------------------------

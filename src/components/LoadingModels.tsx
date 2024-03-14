@@ -15,7 +15,7 @@ function Place({ name }: { name: PlaceName }) {
 export function LoadingModels({ children }: Props) {
   const { nowPlaceName } = useStore(({ global: { main } }) => main, {
     type: "global",
-    name: "main",
+    id: "main",
     prop: ["nowPlaceName"],
   });
 

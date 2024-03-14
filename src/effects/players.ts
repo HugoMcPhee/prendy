@@ -1,12 +1,11 @@
 import { Ray, RayHelper, TargetCamera, Vector3 } from "@babylonjs/core";
 import { defaultPosition, pointIsZero } from "chootils/dist/points2d";
 import { getShortestAngle, getSpeedAndAngleFromVector, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { MyTypes } from "../declarations";
-import { clearTimeoutSafe } from "../helpers/utils";
-import { getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { getRefs, getState, makeEffects, setState } from "repond";
 import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
+import { getCharDollStuff } from "../helpers/prendyUtils/characters";
+import { clearTimeoutSafe } from "../helpers/utils";
 import { meta } from "../meta";
-import { getRefs, makeRules, getState, setState } from "repond";
 import { CharacterName } from "../types";
 
 const LEAVE_GROUND_CANT_JUMP_DELAY = 100; // ms
@@ -29,7 +28,7 @@ const frontRayRelativeOrigin = new Vector3(
   // dollPosRefs.velocity.z * 0.1
 );
 
-export const playerRules = makeRules(({ itemEffect, effect }) => ({
+export const playerEffects = makeEffects(({ itemEffect, effect }) => ({
   whenDirectionKeysPressed: effect({
     run() {
       const { ArrowDown, ArrowLeft, ArrowUp, ArrowRight, KeyW, KeyA, KeyS, KeyD } = getState().keyboards.main;
@@ -58,7 +57,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
     step: "input",
     check: {
       type: "keyboards",
-      name: "main",
+      id: "main",
       prop: ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "KeyW", "KeyA", "KeyS", "KeyD"],
     },
   }),
@@ -71,7 +70,7 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
     step: "input",
     check: {
       type: "keyboards",
-      name: "main",
+      id: "main",
       // prop: ["Space", "Enter", "KeyZ"],
       // prop: ["Space", "Enter"],
       prop: ["KeyE", "Enter"],
@@ -131,14 +130,14 @@ export const playerRules = makeRules(({ itemEffect, effect }) => ({
       });
     },
     step: "input",
-    check: { type: "players", name: "main", prop: ["jumpButtonPressTime"] },
+    check: { type: "players", id: "main", prop: ["jumpButtonPressTime"] },
   }),
   whenJumpReleased: itemEffect({
     run() {
       setState({ players: { main: { jumpButtonReleaseTime: Date.now() } } });
     },
     step: "input",
-    check: { type: "players", name: "main", prop: ["jumpButtonPressTime"] },
+    check: { type: "players", id: "main", prop: ["jumpButtonPressTime"] },
   }),
 
   whenJoystickMoves: itemEffect({

@@ -1,9 +1,8 @@
 import { PBRMaterial, SceneLoader } from "@babylonjs/core";
 import { addItemToUniqueArray } from "chootils/dist/arrays";
-import { MyTypes } from "../declarations";
+import { getRefs, makeEffects, setState } from "repond";
 import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { meta } from "../meta";
-import { setState, getRefs, makeRules } from "repond";
 import { ModelName } from "../types";
 
 // handle loading here ??
@@ -33,7 +32,7 @@ async function startLoadingModel<T_ModelName extends ModelName>(modelName: T_Mod
   // maybe ideally type the AssetContainer based on modelInfoByName :) ?
 }
 
-export const modelRules = makeRules(({ itemEffect }) => ({
+export const modelEffects = makeEffects(({ itemEffect }) => ({
   whenWantsToLoad: itemEffect({
     run({ itemId: modelName }) {
       // load the model async here, and store the result in refs,

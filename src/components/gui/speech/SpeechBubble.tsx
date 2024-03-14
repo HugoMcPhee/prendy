@@ -1,25 +1,19 @@
-// @refresh-reset
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { AllState, getRefs, getState, useStore, useStoreEffect } from "repond";
-import { MyTypes } from "../../../declarations";
+import { AllState, getState, useStore, useStoreEffect } from "repond";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
 import { meta } from "../../../meta";
 import { CharacterName } from "../../../types";
 import { BubbleTriangle } from "./BubbleTriangle";
-// import "./SpeechBubble.css";
 
 const BUBBLE_WIDTH = 230;
 const BUBBLE_HEIGHT_RATIO = 0.74814;
 const BUBBLE_HEIGHT = BUBBLE_WIDTH * BUBBLE_HEIGHT_RATIO;
 const TRIANGLE_SIZE = 25;
 
-type ItemType = keyof AllState;
-type AllItemsState<T_ItemType extends ItemType> = AllState[T_ItemType];
-
-type Props = { name: keyof AllItemsState<"speechBubbles"> & string };
+type Props = { name: keyof AllState["speechBubbles"] & string };
 
 const SHARED_THEME = {
   fontSize: "20px",

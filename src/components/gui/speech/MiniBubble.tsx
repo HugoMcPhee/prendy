@@ -1,10 +1,10 @@
 import { sizeFromRef } from "chootils/dist/elements";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated, interpolate, useSpring } from "react-spring";
-import { getState, useStore, useStoreEffect } from "repond";
+import { AllState, getState, useStore, useStoreEffect } from "repond";
 import { getScreenSize } from "../../../helpers/babylonjs/slate";
 import { getCharDollStuff } from "../../../helpers/prendyUtils/characters";
-import { AllItemsState, CharacterName } from "../../../types";
+import { CharacterName } from "../../../types";
 import { BubbleTriangle } from "./BubbleTriangle";
 
 // NOTE the whole positionMiniBubbleToCharacter function is copied from SpeechBubble.tsx
@@ -22,7 +22,7 @@ const SHARED_THEME = {
   rounding: 6,
 };
 
-type Props = { name: keyof AllItemsState<"miniBubbles"> };
+type Props = { name: keyof AllState["miniBubbles"] };
 
 export function MiniBubble({ name }: Props) {
   const theRectangle = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ export function MiniBubble({ name }: Props) {
   };
 
   const { text, isVisible } = useStore((state) => state.miniBubbles[name], {
-    name: name as string,
+    id: name as string,
     type: ["miniBubbles"],
     prop: ["text", "isVisible"],
   });
@@ -164,11 +164,11 @@ export function MiniBubble({ name }: Props) {
   useStoreEffect(
     positionMiniBubbleToCharacter,
     [
-      { type: ["dolls"], name: forCharacter, prop: ["positionOnScreen"] },
-      { type: ["global"], name: "main", prop: ["slatePos"] },
-      { type: ["global"], name: "main", prop: ["slateZoom"] },
-      { type: ["global"], name: "main", prop: ["nowCamName"] },
-      { type: ["story"], name: "main", prop: ["storyPart"] },
+      { type: ["dolls"], id: forCharacter, prop: ["positionOnScreen"] },
+      { type: ["global"], id: "main", prop: ["slatePos"] },
+      { type: ["global"], id: "main", prop: ["slateZoom"] },
+      { type: ["global"], id: "main", prop: ["nowCamName"] },
+      { type: ["story"], id: "main", prop: ["storyPart"] },
     ],
     [nowPlaceName]
   );

@@ -16,16 +16,11 @@ function handleKeyUp(event: KeyboardEvent) {
   }
 }
 
-function connectKeyboardInputsToState() {
+export function connectKeyboardInputsToState() {
   document.addEventListener("keydown", handleKeyDown, false);
   document.addEventListener("keyup", handleKeyUp, false);
 }
-function disconnectKeyboardInputsToState() {
+export function disconnectKeyboardInputsToState() {
   document.removeEventListener("keydown", handleKeyDown, false);
   document.removeEventListener("keyup", handleKeyUp, false);
 }
-
-export const keyboardConnectRules = {
-  startAll: connectKeyboardInputsToState,
-  stopAll: disconnectKeyboardInputsToState,
-};

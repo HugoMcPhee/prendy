@@ -1,23 +1,17 @@
 import { forEach } from "chootils/dist/loops";
 import { CSSProperties } from "react";
-import { AllState, StoreHelperTypes, getRefs, getState, makeRules, setState } from "repond";
+import { AllRefs, AllState, getRefs, makeEffects, setState } from "repond";
 import { indexOf, length, substring, toArray } from "stringz";
 import { getTypingDelayForLetter } from "../helpers/prendyUtils/speechBubbles";
-import { AllItemsState, ItemRefs, ItemState } from "../types";
 
 let zIndexCounter = 100;
 /*
-Dynamic rules
-
+Param Effects?
 When characters position changes
   bubble position to character
 */
 
-// AllItemsState,
-// ItemRefs,
-// ItemState,
-
-export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
+export const speechBubbleEffects = makeEffects(({ itemEffect, effect }) => ({
   whenGoalTextChanges: itemEffect({
     run({ itemId, itemRefs, itemState }) {
       const { goalText, stylesBySpecialText } = itemState;
@@ -56,11 +50,11 @@ export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
   whenAddedOrRemoved: effect({
     run(diffInfo) {
       // forEach(diffInfo.itemsAdded.speechBubbles, (itemId) => {
-      //   // speechBubbleDynamicRules.startAll character position
+      //   potentially start param effects here
       // });
 
       forEach(diffInfo.itemsRemoved.speechBubbles, (itemId) => {
-        // speechBubbleDynamicRules.stopAll
+        // potentially stop param effects here
         const speechBubblesRefs = getRefs().speechBubbles;
         const { currentTimeout } = speechBubblesRefs[itemId as keyof typeof speechBubblesRefs];
         if (currentTimeout !== null) clearTimeout(currentTimeout);
@@ -83,7 +77,7 @@ export const speechBubbleRules = makeRules(({ itemEffect, effect }) => ({
   // whenShouldRemoveBecomesTrue: itemEffect({
   //   run({ itemId }) {
   //     // removeItem()
-  //     removeItem({ name: itemId, type: "speechBubbles" });
+  //     removeItem({ id: itemId, type: "speechBubbles" });
   //   },
   //   check: { prop: "shouldRemove", type: "speechBubbles" },
   // }),
@@ -145,9 +139,9 @@ function showNewLetter({
   itemState,
   itemId,
 }: {
-  itemRefs: ItemRefs<"speechBubbles">;
-  itemState: ItemState<"speechBubbles">;
-  itemId: keyof AllItemsState<"speechBubbles">;
+  itemRefs: AllRefs["speechBubbles"][keyof AllRefs["speechBubbles"]];
+  itemState: AllState["speechBubbles"][keyof AllState["speechBubbles"]];
+  itemId: keyof AllState["speechBubbles"];
 }) {
   if (itemRefs.currentTimeout !== null) clearTimeout(itemRefs.currentTimeout);
 

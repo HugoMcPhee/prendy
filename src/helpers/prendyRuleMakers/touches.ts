@@ -1,19 +1,16 @@
 import { forEach } from "chootils/dist/loops";
-import { getState, makeRules } from "repond";
+import { getState, makeEffects } from "repond";
 import { meta } from "../../meta";
 import { CharacterName, DollName } from "../../types";
 import { getCharDollStuff } from "../prendyUtils/characters";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
 
-// --------------------------------------------------
-// makeTouchRules
-// doll touch rules
-
 type TouchRulesOptions = Partial<{
   [P_DollName in DollName]: (usefulStuff: ReturnType<typeof getUsefulStoryStuff>) => void;
 }>;
-export function makeTouchRules(
-  callBacksObject: TouchRulesOptions,
+
+export function makeTouchEffects(
+  callbacksMap: TouchRulesOptions,
   options?: {
     characterName?: CharacterName;
     distanceType?: "touch" | "talk" | "see";
@@ -21,7 +18,7 @@ export function makeTouchRules(
   }
 ) {
   const { characterName, distanceType = "touch", whenLeave = false } = options ?? {};
-  return makeRules(({ itemEffect }) => ({
+  return makeEffects(({ itemEffect }) => ({
     whenInRangeChangesToCheckTouch: itemEffect({
       run({ newValue: inRange, prevValue: prevInRange, itemId: changedDollName, itemState: dollState }) {
         const { dollNames } = meta.assets!;
@@ -45,7 +42,7 @@ export function makeTouchRules(
           const justEntered = inRange[dollName][distanceType] && !prevInRange[dollName][distanceType];
           const justLeft = !inRange[dollName][distanceType] && prevInRange[dollName][distanceType];
 
-          const whatToRun = callBacksObject[dollName];
+          const whatToRun = callbacksMap[dollName];
           if (dollName !== charDollName) {
             if ((whenLeave && justLeft) || (!whenLeave && justEntered)) whatToRun?.(usefulStoryStuff);
           }
@@ -55,7 +52,7 @@ export function makeTouchRules(
         prop: ["inRange"],
         type: "dolls",
       },
-      name: `inRangeStoryRules_${characterName ?? "player"}_${distanceType}_${whenLeave}`,
+      id: `inRangeStoryEffects_${characterName ?? "player"}_${distanceType}_${whenLeave}`,
       step: "collisionReaction",
       atStepEnd: true,
     }),

@@ -8,7 +8,7 @@ export function DebugFrameRate() {
   });
 
   useEffect(() => {
-    const ruleName = startNewItemEffect({
+    const effectId = startNewItemEffect({
       run({ frameDuration }) {
         if (!canvasRefs.ctx) return;
         canvasRefs.ctx.fillStyle = "#e0fcd3cc";
@@ -24,7 +24,7 @@ export function DebugFrameRate() {
       step: "default",
     });
 
-    return () => stopNewEffect(ruleName);
+    return () => stopNewEffect(effectId);
   });
 
   return (

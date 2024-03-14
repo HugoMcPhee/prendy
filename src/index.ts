@@ -3,8 +3,13 @@ import { initMovers } from "repond-movers";
 import { MyTypes } from "./declarations";
 import { meta } from "./meta";
 import { timeStatePath } from "./stores/global/global";
+import loadGoogleFonts from "./helpers/loadGoogleFonts";
+import loadStyles from "./helpers/loadStyles";
+import { Globals } from "react-spring";
+import { onNextTick } from "repond";
+export { prendyEffectGroups, prendyParamEffectGroups } from "./effects/rules";
 export { DebugFrameRate } from "./components/DebugFrameRate";
-export { makePrendyApp } from "./components/PrendyApp";
+export { PrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
 export { makePrendyOptions } from "./getPrendyOptions";
 export * from "./helpers/babylonjs/vectors";
@@ -24,7 +29,6 @@ export * from "./helpers/prendyRuleMakers/segments";
 export * from "./helpers/prendyRuleMakers/touches";
 export * from "./helpers/prendyRuleMakers/triggers";
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
-export { makeStartAndStopRules, makeStartPrendyMainRules, makeStartPrendyRules } from "./rules/rules";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
 
 // NOTE update to export all from?
@@ -43,6 +47,9 @@ export type CharacterOptionLoose<T_DollName extends string, T_FontName extends s
 export function initPrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"]) {
   meta.assets = assets;
   initMovers(timeStatePath);
+  loadGoogleFonts(meta.assets!.fontNames); // Auto-import fonts from google fonts :)
+  loadStyles();
+  Globals.assign({ frameLoop: "always", requestAnimationFrame: onNextTick }); // for react-spring
 }
 
 export function getDefaultDollOptions<T_ModelName extends string>(modelNames: readonly T_ModelName[]) {

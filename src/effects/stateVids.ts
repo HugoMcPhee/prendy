@@ -1,16 +1,15 @@
-import { getState, makeRules, onNextTick, setState } from "repond";
+import { AllState, getState, makeEffects, onNextTick, setState } from "repond";
 import { makeVideoElementFromPath } from "../helpers/prendyUtils/stateVids";
 import { VidState } from "../stores/stateVids";
-import { ItemState } from "../types";
 // import { testAppendVideo } from "../helpers/babylonjs/usePlace/utils";
 
 // NOTE may need to update the safeVidWantsToPlay rules to update on subscribe
 
-function setVid(itemId: string, newState: Partial<ItemState<"stateVids">>) {
+function setVid(itemId: string, newState: Partial<AllState["stateVids"][string]>) {
   setState({ stateVids: { [itemId]: newState } });
 }
 
-export const safeVidRules = makeRules(({ itemEffect }) => ({
+export const safeVidEffects = makeEffects(({ itemEffect }) => ({
   whenVideoStateChanges: itemEffect({
     run({ newValue: vidState, itemState, itemRefs, itemId }) {
       const { goalSeekTime, autoplay } = itemState;

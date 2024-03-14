@@ -86,7 +86,7 @@ export function VirtualButtons(_: Props) {
 
   const { canShowVirtualButtons } = useStore(({ players: { main } }) => main, {
     type: "players",
-    name: "main",
+    id: "main",
     prop: ["canShowVirtualButtons"],
   });
 

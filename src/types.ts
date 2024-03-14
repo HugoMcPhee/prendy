@@ -1,6 +1,6 @@
 import { AbstractMesh, Sound, Vector3 } from "@babylonjs/core";
 import { MyTypes } from "./declarations";
-import { AllRefs, AllState, StoreHelperTypes, getRefs, getState } from "repond";
+import { AllRefs, AllState, getRefs, getState } from "repond";
 import { getUsefulStoryStuff } from "./helpers/prendyRuleMakers/prendyRuleMakers";
 
 export type DollName = MyTypes["Types"]["DollName"];
@@ -44,13 +44,6 @@ export type SegmentNameFromCameraAndPlace<
 export type StoryState = AllState["story"]["main"];
 export type StoryRefs = AllRefs["story"]["main"];
 export type GlobalState = AllState["global"]["main"];
-
-export type ItemType = keyof AllState;
-export type HelperType<T extends ItemType> = StoreHelperTypes<typeof getState, typeof getRefs, T>;
-export type AllItemsState<T extends ItemType> = HelperType<T>["AllItemsState"];
-// export type AllItemsState<T extends ItemType> = AllState[T] & Record<any, any>;
-export type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-export type ItemRefs<T extends ItemType> = HelperType<T>["ItemRefs"];
 
 export type AllPlacesState = AllState["places"];
 export type AllPlacesRefs = AllRefs["places"];

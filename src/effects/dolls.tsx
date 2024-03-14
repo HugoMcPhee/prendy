@@ -3,10 +3,10 @@ import { forEach } from "chootils/dist/loops";
 import { subtractPointsSafer } from "chootils/dist/points3d";
 import { toRadians } from "chootils/dist/speedAngleDistance";
 import { getShortestAngle, getVectorAngle } from "chootils/dist/speedAngleDistance2d";
-import { getPrevState, getRefs, getState, makeDynamicRules, makeRules, onNextTick, setState } from "repond";
+import { getPrevState, getRefs, getState, makeEffects, makeParamEffects, onNextTick, setState } from "repond";
 import { addMoverEffects } from "repond-movers";
 import { cloneObjectWithJson } from "repond/dist/utils";
-import { MyTypes } from "../declarations";
+import { startParamEffectsGroup, stopParamEffectsGroup } from "repond/src/usable/paramEffects";
 import { setGlobalPositionWithCollisions } from "../helpers/babylonjs/setGlobalPositionWithCollisions";
 import { point3dToVector3 } from "../helpers/babylonjs/vectors";
 import {
@@ -36,18 +36,19 @@ export const rangeOptionsQuick = {
   see: rangeOptions.see * rangeOptions.see,
 } as const;
 
-export const dollDynamicRules = makeDynamicRules(({ itemEffect }) => ({
-  waitForModelToLoad: itemEffect(({ dollName, modelName }: { dollName: DollName; modelName: ModelName }) => ({
-    run() {
-      saveModelStuffToDoll({ dollName, modelName });
-    },
-    name: `doll_waitForModelToLoad${dollName}_${modelName}`,
-    check: { type: "models", name: modelName, prop: "isLoaded", becomes: true },
-    atStepEnd: true,
-  })),
-  // When the place and all characters are loaded
-  whenWholePlaceFinishesLoading: itemEffect(
-    ({ dollName, modelName }: { dollName: DollName; modelName: ModelName }) => ({
+export const dollParamEffects = makeParamEffects(
+  { dollName: "", modelName: "" }, // defaultParams
+  ({ itemEffect, params: { dollName, modelName } }) => ({
+    waitForModelToLoad: itemEffect({
+      run() {
+        saveModelStuffToDoll({ dollName, modelName });
+      },
+      id: `doll_waitForModelToLoad${dollName}_${modelName}`,
+      check: { type: "models", id: modelName, prop: "isLoaded", becomes: true },
+      atStepEnd: true,
+    }),
+    // When the place and all characters are loaded
+    whenWholePlaceFinishesLoading: itemEffect({
       run() {
         const { prendyOptions } = meta.assets!;
         const modelRefs = getRefs().models[modelName];
@@ -67,13 +68,13 @@ export const dollDynamicRules = makeDynamicRules(({ itemEffect }) => ({
           setState({ dolls: { [dollName]: { isVisible: true } } });
         }
       },
-      name: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
+      id: `doll_whenWholePlaceFinishesLoading${dollName}_${modelName}`,
       check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },
       atStepEnd: true,
       step: "respondToNewPlace",
-    })
-  ),
-}));
+    }),
+  })
+);
 
 // FIXME
 // maybe allow repond to run 'addedOrRemoved' rules for initialState?
@@ -83,28 +84,27 @@ export function startDynamicDollRulesForInitialState() {
   const { dollNames } = meta.assets!;
   forEach(dollNames, (dollName) => {
     const { modelName } = getState().dolls[dollName];
-    if (!modelName) return;
-
-    dollDynamicRules.startAll({ dollName, modelName });
+    if (modelName) startParamEffectsGroup("doll", { dollName, modelName });
   });
-  return function stopDynamicDollRulesForInitialState() {
-    forEach(dollNames, (dollName) => {
-      const { modelName } = getState().dolls[dollName];
-      if (!modelName) return;
-      dollDynamicRules.stopAll({ dollName, modelName });
-    });
-  };
 }
 
-export const dollRules = makeRules(({ itemEffect, effect }) => ({
+export function stopDynamicDollRulesForInitialState() {
+  const { dollNames } = meta.assets!;
+  forEach(dollNames, (dollName) => {
+    const { modelName } = getState().dolls[dollName];
+    if (modelName) stopParamEffectsGroup("doll", { dollName, modelName });
+  });
+}
+
+export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
   // --------------------------------
   // loading model stuff
   // --------------------------------
   whenModelNameChanges: itemEffect({
     run({ itemId: dollName, newValue: newModelName, prevValue: prevModelName }) {
       // stop the previous dynamic rule, and start the new one
-      dollDynamicRules.stopAll({ dollName, modelName: prevModelName });
-      dollDynamicRules.startAll({ dollName, modelName: newModelName });
+      stopParamEffectsGroup("doll", { dollName, modelName: prevModelName });
+      startParamEffectsGroup("doll", { dollName, modelName: newModelName });
     },
     check: { type: "dolls", prop: "modelName" },
   }),
@@ -115,11 +115,11 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
       // stop the previous dynamic rule, and start the new one
       forEach(diffInfo.itemsRemoved.dolls as DollName[], (dollName) => {
         const { modelName } = getPrevState().dolls[dollName];
-        dollDynamicRules.stopAll({ dollName, modelName });
+        stopParamEffectsGroup("doll", { dollName, modelName });
       });
       forEach(diffInfo.itemsAdded.dolls as DollName[], (dollName) => {
         const { modelName } = getState().dolls[dollName];
-        dollDynamicRules.startAll({ dollName, modelName });
+        startParamEffectsGroup("doll", { dollName, modelName });
       });
     },
     check: { type: "dolls", addedOrRemoved: true },
@@ -391,7 +391,7 @@ export const dollRules = makeRules(({ itemEffect, effect }) => ({
       const { dollName } = getState().characters[playerCharacter];
       if (!dollName) return;
 
-      // NOTE TODO ideally add for each character automatically as a dynamic rule?
+      // NOTE TODO ideally add for each character automatically as a param effects?
       forEach(dollNames, (dollName) => updateDollScreenPosition({ dollName: dollName, instant: false }));
     },
     // this happens before rendering because its in "derive" instead of "subscribe"

@@ -1,11 +1,11 @@
 import { breakableForEach, forEach } from "chootils/dist/loops";
-import { getRefs, getState, makeRules, onNextTick, setState } from "repond";
+import { getRefs, getState, makeEffects, onNextTick, setState } from "repond";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { clearTimeoutSafe } from "../../helpers/utils";
 import { meta } from "../../meta";
 import { AnyAnimationName } from "../../types";
 
-export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
+export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
   whenAnythingChangesForRendering: effect({
     run(_diffInfo, frameDuration) {
       const globalRefs = getRefs().global.main;
@@ -15,7 +15,7 @@ export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
       // runs in a callback to set before the new repond frame
       onNextTick(() => setState({ global: { main: { frameTick: getState().global.main.frameTick + 1 } } }));
     },
-    check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
+    check: { type: ["global"], id: ["main"], prop: ["frameTick"] },
     step: "rendering",
     atStepEnd: true,
   }),
@@ -41,7 +41,7 @@ export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
         setState({ global: { main: { elapsedMiniGameTime: globalState.elapsedMiniGameTime + frameDuration } } });
       }
     },
-    check: { type: ["global"], name: ["main"], prop: ["frameTick"] },
+    check: { type: ["global"], id: ["main"], prop: ["frameTick"] },
     step: "elapsedTimeUpdates",
     atStepEnd: true,
   }),
@@ -56,7 +56,7 @@ export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
         setGlobalState({ timeMode: "game", gameTimeSpeed: prendyOptions.gameTimeSpeed });
       }
     },
-    check: { type: ["global"], name: ["main"], prop: ["isGamePaused"] },
+    check: { type: ["global"], id: ["main"], prop: ["isGamePaused"] },
     step: "input",
     // atStepEnd: true,
   }),
@@ -65,7 +65,7 @@ export const globalGeneralRules = makeRules(({ effect, itemEffect }) => ({
       setState((state) => ({ global: { main: { isGamePaused: !state.global.main.isGamePaused } } }));
     },
     step: "input",
-    check: { type: "keyboards", name: "main", prop: ["KeyP"], becomes: true },
+    check: { type: "keyboards", id: "main", prop: ["KeyP"], becomes: true },
   }),
   // whenElapsedGameTimeChanges: effect({
   //   run(_diffInfo) {

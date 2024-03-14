@@ -1,6 +1,5 @@
 import { minMaxRange } from "chootils/dist/numbers";
-import { AllRefs, AllState, StoreHelperTypes, getRefs, getState, makeRules, setState } from "repond";
-import { MyTypes } from "../declarations";
+import { AllState, makeEffects, setState } from "repond";
 import {
   BEFORE_LOOP_PADDING,
   doWhenSliceVidPlaying,
@@ -8,8 +7,8 @@ import {
   getSliceVidVideo,
   getSliceVidWaitingVideo,
 } from "../helpers/prendyUtils/sliceVids";
-import { SliceVidState } from "../stores/sliceVids";
 import { doWhenStateVidStateReady, doWhenStateVidStateSeeked } from "../helpers/prendyUtils/stateVids";
+import { SliceVidState } from "../stores/sliceVids";
 import { PlaceName } from "../types";
 
 function numbersAreClose(a: number, b: number, range: number) {
@@ -18,14 +17,10 @@ function numbersAreClose(a: number, b: number, range: number) {
 
 // safe Slice Stack Vid Rules
 
-type ItemType = keyof AllState & keyof AllRefs;
-type HelperType<T extends ItemType> = StoreHelperTypes<typeof getState, typeof getRefs, T>;
-type ItemState<T extends ItemType> = HelperType<T>["ItemState"];
-
-export const sliceVidRules = makeRules(({ itemEffect }) => ({
+export const sliceVidEffects = makeEffects(({ itemEffect }) => ({
   rulesForSettingNewVideoStates: itemEffect({
     run({ newValue: vidState, itemId, itemState }) {
-      const setItemState = (newState: Partial<ItemState<"sliceVids">>) =>
+      const setItemState = (newState: Partial<AllState["sliceVids"][string]>) =>
         setState({ sliceVids: { [itemId]: newState } });
       // NOTE TODO FIXME? any type while no stores are connected
       const setVidState = (sliceVidState: SliceVidState) => setItemState({ sliceVidState } as any);

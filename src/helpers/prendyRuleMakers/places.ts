@@ -1,4 +1,4 @@
-import { makeRules, startNewItemEffect, stopNewEffect } from "repond";
+import { makeEffects, startNewItemEffect, stopNewEffect } from "repond";
 import { PlaceName, StoryCallback } from "../../types";
 import { getUsefulStoryStuff } from "./prendyRuleMakers";
 
@@ -9,8 +9,8 @@ import { getUsefulStoryStuff } from "./prendyRuleMakers";
 type PlaceLoadRulesOptions = Partial<{
   [P_PlaceName in PlaceName]: StoryCallback;
 }>;
-export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksObject: PlaceLoadRulesOptions) {
-  return makeRules(({ itemEffect }) => ({
+export function makePlaceLoadEffects(atStartOfEachPlace: StoryCallback, callbacksMap: PlaceLoadRulesOptions) {
+  return makeEffects(({ itemEffect }) => ({
     whenPlaceFinishedLoading: itemEffect({
       run() {
         // onNextTick(() => {
@@ -19,7 +19,7 @@ export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksO
 
         atStartOfEachPlace?.(usefulStoryStuff);
 
-        (callBacksObject as Record<any, any>)[nowPlaceName]?.(usefulStoryStuff);
+        (callbacksMap as Record<any, any>)[nowPlaceName]?.(usefulStoryStuff);
         // });
       },
       check: { type: "global", prop: ["isLoadingBetweenPlaces"], becomes: false },
@@ -29,16 +29,17 @@ export function makePlaceLoadRules(atStartOfEachPlace: StoryCallback, callBacksO
     }),
   }));
 }
-export function makePlaceUnloadRules(callBacksObject: PlaceLoadRulesOptions) {
-  return makeRules(({ itemEffect }) => ({
+
+export function makePlaceUnloadEffects(callbacksMap: PlaceLoadRulesOptions) {
+  return makeEffects(({ itemEffect }) => ({
     whenPlaceFinishedUnloading: itemEffect({
       run({ prevValue: prevPlace, newValue: newPlace }) {
-        let ruleName = startNewItemEffect({
+        let effectId = startNewItemEffect({
           run() {
-            stopNewEffect(ruleName);
+            stopNewEffect(effectId);
             // console.log("unload rules for", prevPlace);
             const usefulStoryStuff = getUsefulStoryStuff();
-            (callBacksObject as Record<any, any>)[prevPlace]?.(usefulStoryStuff);
+            (callbacksMap as Record<any, any>)[prevPlace]?.(usefulStoryStuff);
           },
           check: {
             type: "global",

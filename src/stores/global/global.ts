@@ -4,7 +4,17 @@ import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers"
 import { MyTypes } from "../../declarations";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
 import { InRangeForDoll } from "../../helpers/prendyUtils/dolls";
-import get_globalStoreUtils from "./globalStoreUtils";
+import { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } from "./globalStoreUtils";
+import {
+  AnyCameraName,
+  AnySegmentName,
+  CharacterName,
+  DollName,
+  ModelName,
+  PickupName,
+  PlaceInfoByName,
+  PlaceName,
+} from "../../types";
 
 // save it to global
 export type PrendySaveState = {
@@ -88,15 +98,6 @@ export type PrendySaveState = {
 export const timeStatePath = ["global", "main", "elapsedGameTime"] as const;
 
 export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnyCameraName = T_MyTypes["Types"]["AnyCameraName"];
-  type AnySegmentName = T_MyTypes["Types"]["AnySegmentName"];
-  type CharacterName = T_MyTypes["Types"]["CharacterName"];
-  type DollName = T_MyTypes["Types"]["DollName"];
-  type ModelName = T_MyTypes["Types"]["ModelName"];
-  type PickupName = T_MyTypes["Types"]["PickupName"];
-  type PlaceInfoByName = T_MyTypes["Types"]["PlaceInfoByName"];
-  type PlaceName = T_MyTypes["Types"]["PlaceName"];
-
   const { musicNames, soundNames, placeInfoByName, prendyOptions } = prendyAssets;
 
   type MaybeSegmentName = null | AnySegmentName;
@@ -117,8 +118,6 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
       ) => SegmentNameFromCameraAndPlace<P_PlaceName, P_CamName>;
     }>;
   }>;
-
-  const { makeAutomaticMusicStartRefs, makeAutomaticSoundStartRefs } = get_globalStoreUtils(musicNames, soundNames);
 
   const placeName = prendyOptions.place;
 
@@ -197,7 +196,6 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     //
     latestSave: null as null | PrendySaveState,
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
-    //
   });
   // Refs
   const refs = () => ({
@@ -217,8 +215,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     ...mover2dRefs("slatePos", { mass: 41.5, stiffness: 50, damping: 10, friction: 0.35, stopSpeed: 0.003 }),
     ...moverRefs("slateZoom", { mass: 41.5, stiffness: 25, damping: 10, friction: 0.35 }), // NOTE stopSpeed not on 1dMover
     //
-    sounds: makeAutomaticSoundStartRefs(),
-    music: makeAutomaticMusicStartRefs(),
+    sounds: makeAutomaticSoundStartRefs(soundNames),
+    music: makeAutomaticMusicStartRefs(musicNames),
     musicEffects: {
       lowPass: null as null | BiquadFilterNode,
       compress: null as null | DynamicsCompressorNode,

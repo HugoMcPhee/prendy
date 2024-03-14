@@ -1,9 +1,5 @@
 import { getState } from "repond";
-import { PrendyStores } from "../../declarations";
-
-type SpeechBubbleName = keyof PrendyStores["speechBubbles"]["startStates"] extends never
-  ? string
-  : keyof PrendyStores["speechBubbles"]["startStates"];
+import { SpeechBubbleName } from "../../types";
 
 export function getTypingDelayForLetter(letter: string, speechBubbleName: SpeechBubbleName) {
   const { typingSpeed } = getState().speechBubbles[speechBubbleName];

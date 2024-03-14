@@ -1,12 +1,9 @@
 import { Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getRefs } from "repond";
-import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
+import { MusicName, SoundName } from "../../types";
 import { getScene } from "../babylonjs/getSceneOrEngineUtils";
-
-type MusicName = MyTypes["Types"]["MusicName"];
-type SoundName = MyTypes["Types"]["SoundName"];
 
 // NOTE sounds only support one sound per sound name at the moment, not multiple (with id's)
 

@@ -15,7 +15,7 @@ export function StoryOverlay(_props: Props) {
   }));
 
   useStoreItemPropsEffect(
-    { type: "global", name: "main" },
+    { type: "global", id: "main" },
     {
       storyOverlayToggled({ newValue: isFadeToggled }) {
         overlaySpringApi.start({

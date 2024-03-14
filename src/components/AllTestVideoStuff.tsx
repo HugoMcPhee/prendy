@@ -3,8 +3,7 @@ import { MyTypes } from "../declarations";
 import { addLayout } from "../helpers/styles";
 import { meta } from "../meta";
 import { useStore, useStoreItemPropsEffect } from "repond";
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
+import { PlaceName } from "../types";
 
 function TestVideos({ placeName }: { placeName: PlaceName }): ReactNode {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -24,7 +23,7 @@ function TestVideos({ placeName }: { placeName: PlaceName }): ReactNode {
 
   // show one vid at a time
   useStoreItemPropsEffect(
-    { type: "sliceVids", name: placeName },
+    { type: "sliceVids", id: placeName },
     {
       stateVidId_playing() {
         // vidLetter_play({ newValue }) {
@@ -69,12 +68,12 @@ function TestVideoState({ placeName }: { placeName: PlaceName }) {
   const sliceVidState = useStore((state) => state.sliceVids[placeName].sliceVidState, {
     type: "sliceVids",
     prop: ["sliceVidState"],
-    name: placeName,
+    id: placeName,
   });
   const { stateVidId_waiting, stateVidId_playing } = useStore((state) => state.sliceVids[placeName], {
     type: "sliceVids",
     prop: ["stateVidId_waiting", "stateVidId_playing"],
-    name: placeName,
+    id: placeName,
   });
 
   return (

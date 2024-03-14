@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { startItemEffect, stopEffect } from "repond";
+import { startNewItemEffect, stopNewEffect } from "repond";
 
 export function DebugFrameRate() {
   const { current: canvasRefs } = useRef({
@@ -8,7 +8,7 @@ export function DebugFrameRate() {
   });
 
   useEffect(() => {
-    const ruleName = startItemEffect({
+    const effectId = startNewItemEffect({
       run({ frameDuration }) {
         if (!canvasRefs.ctx) return;
         canvasRefs.ctx.fillStyle = "#e0fcd3cc";
@@ -20,11 +20,11 @@ export function DebugFrameRate() {
           canvasRefs.frameCounter = 0;
         }
       },
-      check: { type: "global", name: "main", prop: ["frameTick"] },
+      check: { type: "global", id: "main", prop: ["frameTick"] },
       step: "default",
     });
 
-    return () => stopEffect(ruleName);
+    return () => stopNewEffect(effectId);
   });
 
   return (

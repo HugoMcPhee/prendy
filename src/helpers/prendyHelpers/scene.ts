@@ -1,24 +1,21 @@
 import { Point3D } from "chootils/dist/points3d";
 import delay from "delay";
 import { getState, onNextTick, setState } from "repond";
-import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
+import {
+  AnyCameraName,
+  AnySegmentName,
+  CameraNameByPlace,
+  CameraNameFromPlace,
+  CharacterName,
+  PlaceName,
+  SegmentNameByPlace,
+  SpotNameByPlace,
+  WallNameByPlace,
+} from "../../types";
 import { get2DAngleFromCharacterToSpot, getCharDollStuff } from "../prendyUtils/characters";
 import { setGlobalState } from "../prendyUtils/global";
-import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromStoryRules } from "../prendyUtils/scene";
-
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
-type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type PlaceInfoByName = MyTypes["Types"]["PlaceInfoByName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
-type WallNameByPlace = MyTypes["Types"]["WallNameByPlace"];
-
-type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromSegmentRules } from "../prendyUtils/scene";
 
 type ToPlaceOption<T_PlaceName extends PlaceName> = {
   toPlace: T_PlaceName;
@@ -185,7 +182,7 @@ export function goToNewPlace<T_PlaceName extends PlaceName>(
       toCam = toCam ?? (placeInfo.cameraNames[0] as NonNullable<typeof toCam>); // types as a cam for the chosen place
       toSegment = toSegment ?? (placeInfo.segmentNames[0] as SegmentNameByPlace[T_PlaceName]);
 
-      const foundRuleSegmentName = getSegmentFromStoryRules(toPlace, toCam);
+      const foundRuleSegmentName = getSegmentFromSegmentRules(toPlace, toCam);
       if (foundRuleSegmentName) toSegment = foundRuleSegmentName;
 
       return {

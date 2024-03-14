@@ -1,34 +1,16 @@
 import { Vector3 } from "@babylonjs/core";
-import { MyTypes } from "../../declarations";
 import { get2DAngleBetweenCharacters, getCharDollStuff } from "../../helpers/prendyUtils/characters";
+import { meta } from "../../meta";
+import { AnimationNameFromCharacter, CharacterName, DollName } from "../../types";
 import { getGlobalState } from "../prendyUtils/global";
 import {
+  moveDollAt2DAngle,
   setDollAnimation,
   setDollPosition,
   setDollRotationY,
-  springDollRotationY,
   springAddToDollRotationY,
-  moveDollAt2DAngle,
+  springDollRotationY,
 } from "./dolls";
-import { meta } from "../../meta";
-
-// export export function get_characterStoryHelpers<MyTypes extends MyTypes = MyTypes>() {
-type AnimationNameByModel = MyTypes["Types"]["AnimationNameByModel"];
-type CharacterName = MyTypes["Types"]["CharacterName"];
-type CharacterOptions = MyTypes["Types"]["CharacterOptions"];
-type DollName = MyTypes["Types"]["DollName"];
-type DollOptions = MyTypes["Types"]["DollOptions"];
-
-type DollNameFromCharacter<T_CharacterName extends CharacterName> = CharacterOptions[T_CharacterName]["doll"];
-
-type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["model"];
-
-type ModelNameFromCharacter<T_CharacterName extends CharacterName> = ModelNameFromDoll<
-  DollNameFromCharacter<T_CharacterName>
->;
-
-type AnimationNameFromCharacter<T_CharacterName extends CharacterName> =
-  AnimationNameByModel[ModelNameFromCharacter<T_CharacterName>];
 
 export function setCharAnimation<T_Character extends CharacterName>(
   character: T_Character,

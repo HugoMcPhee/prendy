@@ -2,17 +2,13 @@ import { Mesh, Sound } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
 import { getRefs, getState, setState } from "repond";
-import { MyTypes } from "../../../declarations";
 import { meta } from "../../../meta";
+import { AnyCameraName, PlaceName, SoundName } from "../../../types";
 import { setGlobalState } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { getScene } from "../getSceneOrEngineUtils";
 import { useModelFile } from "../useModelFile";
 import { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
-
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SoundName = MyTypes["Types"]["SoundName"];
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
 
 export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
   const { placeInfoByName, soundFiles, prendyOptions } = meta.assets!;

@@ -11,7 +11,7 @@ const EDGE_PADDING = 65;
 export function ScreenSticker(_props: Props) {
   const { screenStickerText, screenStickerIsVisible, screenStickerPosition } = useStore(({ story: { main } }) => main, {
     type: "story",
-    name: "main",
+    id: "main",
     prop: ["screenStickerText", "screenStickerIsVisible", "screenStickerPosition"],
   });
 

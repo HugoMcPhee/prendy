@@ -14,7 +14,7 @@ export function LoadingOverlay(_props: Props) {
   }));
 
   useStoreItemPropsEffect(
-    { type: "global", name: "main", step: "default" },
+    { type: "global", id: "main", step: "default" },
     {
       loadingOverlayToggled({ newValue: isFadeToggled }) {
         overlaySpringApi.start({

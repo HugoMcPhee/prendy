@@ -5,19 +5,20 @@ import { Point3D } from "chootils/dist/points3d";
 import { mover3dRefs, mover3dState, moverRefs, moverState } from "repond-movers";
 import { MyTypes } from "../../declarations";
 import get_dollStoreUtils from "./dollStoreUtils";
+import {
+  ModelName,
+  AnySpotName,
+  AnimationNameByModel,
+  MeshNameByModel,
+  BoneNameByModel,
+  MaterialNameByModel,
+  DollName,
+  DollOptions,
+} from "../../types";
 
 const HIDDEN_POSITION = { x: 0, y: 0, z: -1000 };
 
 export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type AnimationNameByModel = T_MyTypes["Types"]["AnimationNameByModel"];
-  type AnySpotName = T_MyTypes["Types"]["AnySpotName"];
-  type BoneNameByModel = T_MyTypes["Types"]["BoneNameByModel"];
-  type DollName = T_MyTypes["Types"]["DollName"];
-  type DollOptions = T_MyTypes["Types"]["DollOptions"];
-  type MaterialNameByModel = T_MyTypes["Types"]["MaterialNameByModel"];
-  type MeshNameByModel = T_MyTypes["Types"]["MeshNameByModel"];
-  type ModelName = T_MyTypes["Types"]["ModelName"];
-
   const { modelNames, dollNames, modelInfoByName, dollOptions } = prendyAssets;
 
   const {

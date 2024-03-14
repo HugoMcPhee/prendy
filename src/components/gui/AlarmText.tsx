@@ -8,7 +8,7 @@ type Props = {};
 export function AlarmText(_props: Props) {
   const { alarmText, alarmTextIsVisible } = useStore(({ global: { main } }) => main, {
     type: "global",
-    name: "main",
+    id: "main",
     prop: ["alarmText", "alarmTextIsVisible"],
   });
 

@@ -1,11 +1,8 @@
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import delay from "delay";
 import { getState, setState } from "repond";
-import { MyTypes } from "../../declarations";
+import { AnyAnimationName, PickupName } from "../../types";
 import { setGlobalState } from "../prendyUtils/global";
-
-type AnyAnimationName = MyTypes["Types"]["AnyAnimationName"];
-type PickupName = MyTypes["Types"]["PickupName"];
 
 type PlayerAnimationNames = {
   walking: AnyAnimationName;

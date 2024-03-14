@@ -7,14 +7,9 @@ import { meta } from "../../meta";
 import { DefaultCameraRefs } from "../../stores/places";
 import shaders from "../shaders";
 import { getGlobalState } from "./global";
-import { getSegmentFromStoryRules } from "./scene";
+import { getSegmentFromSegmentRules } from "./scene";
 import { getSliceVidVideo } from "./sliceVids";
-
-type AnyCameraName = MyTypes["Types"]["AnyCameraName"];
-type AnySegmentName = MyTypes["Types"]["AnySegmentName"];
-type CameraNameByPlace = MyTypes["Types"]["CameraNameByPlace"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SegmentNameByPlace = MyTypes["Types"]["SegmentNameByPlace"];
+import { AnyCameraName, PlaceName, AnySegmentName, CameraNameByPlace, SegmentNameByPlace } from "../../types";
 
 /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -71,7 +66,7 @@ export function getSafeSegmentName<
 
   // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
   const foundRuleSegmentName = useStorySegmentRules
-    ? getSegmentFromStoryRules(safePlace, safeCam as CameraNameByPlace[typeof safePlace])
+    ? getSegmentFromSegmentRules(safePlace, safeCam as CameraNameByPlace[typeof safePlace])
     : undefined;
 
   return chooseClosestBeforeItemInArray({

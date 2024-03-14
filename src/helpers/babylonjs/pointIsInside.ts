@@ -13,7 +13,7 @@ import {
 const RAY_LIMIT = 100;
 const SCALE_DOWN_AMOUNT = 0.00001; // originally 0.00000001 but caused too many iterations
 
-const ray = new Ray(Vector3.Zero(), Axis.X, 2);
+// const ray = new Ray(Vector3.Zero(), Axis.X, 2);
 
 export default function pointIsInside(point: Vector3, mesh: AbstractMesh) {
   // return false;

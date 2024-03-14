@@ -2,16 +2,13 @@ import { forEach } from "chootils/dist/loops";
 import { defaultPosition } from "chootils/dist/points2d";
 import { CSSProperties } from "react";
 import { AssetsTypes, MyTypes, PrendyAssets } from "../declarations";
+import { FontName, CharacterName, SpeechVidName } from "../types";
 
 export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CharacterName = T_MyTypes["Types"]["CharacterName"];
-  type FontName = T_MyTypes["Types"]["FontName"];
-  type SpeechVidName = T_MyTypes["Types"]["SpeechVidName"];
-
   const { characterNames, characterOptions, fontNames } = prendyAssets;
 
   const state = <T_ItemName extends string>(
-    _itemName: T_ItemName,
+    _itemId: T_ItemName,
     options?: { font?: FontName; character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,

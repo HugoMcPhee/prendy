@@ -55,6 +55,8 @@ export const prendyStepNames = [
 
 export type PrendyStepName = (typeof prendyStepNames)[number];
 
+// NOTE stores are made before prendy is initialized, so they probably have to be made as a factory function with assets passed in
+
 export function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   return {
     keyboards: keyboards(),

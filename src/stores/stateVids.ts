@@ -43,7 +43,7 @@ export default function stateVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     return vidName;
   }
 
-  const state = <T_ItemName extends string>(itemName: T_ItemName) => ({
+  const state = <T_ItemName extends string>(itemId: T_ItemName) => ({
     vidState: "unloaded" as VidState,
     playType: "pause" as "play" | "pause", // playing | paused (so it knows what it’ll return to after seeking)
     goalSeekTime: null as null | number, // when this changes, it starts seeking
@@ -51,7 +51,7 @@ export default function stateVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     wantToPause: false,
     wantToUnload: false,
     wantToLoad: false,
-    videoSource: placeInfoByName[vidNameToPlaceName(itemName)].videoFiles.backdrop,
+    videoSource: placeInfoByName[vidNameToPlaceName(itemId)].videoFiles.backdrop,
     autoplay: false, // maybe doesn't work well with stackvids beofre (cause they both woudn't play)
     //
     // isControlledExternally: true, // to wait for vidState to be updated externally before playing etc,

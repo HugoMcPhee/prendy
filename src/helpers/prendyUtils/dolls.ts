@@ -7,15 +7,11 @@ import { getPointDistanceQuick } from "chootils/dist/speedAngleDistance3d";
 import { AllState, getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
+import { DollName, ModelNameFromDoll, PlaceName, SpotNameByPlace } from "../../types";
 import { checkPointIsInsideSlate, convertPointOnSlateToPointOnScreen, getPositionOnSlate } from "../babylonjs/slate";
 import { getSpotPosition } from "./spots";
 
-type DollName = MyTypes["Types"]["DollName"];
-type PlaceName = MyTypes["Types"]["PlaceName"];
-type SpotNameByPlace = MyTypes["Types"]["SpotNameByPlace"];
-
 type DollsState = NonNullable<AllState["dolls"]>;
-type ModelNameFromDoll<T_DollName extends DollName> = NonNullable<DollsState[T_DollName]>["modelName"];
 
 export function getModelNameFromDoll<T_DollName extends DollName>(dollName: T_DollName): ModelNameFromDoll<T_DollName> {
   return getState().dolls[dollName].modelName as ModelNameFromDoll<T_DollName>;
@@ -71,19 +67,19 @@ export function get2DAngleBetweenDolls(dollA: DollName, dollB: DollName) {
 //     callback();
 //     return null;
 //   }
-//   const ruleName = "doWhenModelsLoaded" + Math.random();
+//   const effectId = "doWhenModelsLoaded" + Math.random();
 //   startItemEffect({
-//     name: ruleName,
+//     id: effectId,
 //     run: ({ newValue: newNowSegmentName }) => {
 //       if (newNowSegmentName !== checkingSegmentName) return;
-//       stopEffect(ruleName);
+//       stopEffect(effectId);
 //       callback();
 //     },
-//     check: { type: "global", prop: "nowSegmentName", name: "main" },
+//     check: { type: "global", prop: "nowSegmentName", id: "main" },
 //     step: "",
 //     atStepEnd: true,
 //   });
-//   return ruleName;
+//   return effectId;
 // }
 
 // {

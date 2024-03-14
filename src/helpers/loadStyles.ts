@@ -1,5 +1,5 @@
 import { prendyAppStyles } from "../components/prendyAppStyles";
-import { speechBubbleStyles } from "../components/gui/SpeechBubbles/speechBubbleStyles";
+import { speechBubbleStyles } from "../components/gui/speech/speechBubbleStyles";
 
 export default function loadStyles() {
   const stylesToUse = `

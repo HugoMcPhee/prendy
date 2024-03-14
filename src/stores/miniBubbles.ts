@@ -1,14 +1,13 @@
 import { AssetsTypes, PrendyAssets, MyTypes } from "../declarations";
 import { defaultPosition, Point2D } from "chootils/dist/points2d";
 import { forEach } from "chootils/dist/loops";
+import { CharacterName } from "../types";
 
 export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
-  type CharacterName = T_MyTypes["Types"]["CharacterName"];
-
   const { characterNames, characterOptions } = prendyAssets;
 
   const state = <T_ItemName extends string>(
-    _itemName: T_ItemName,
+    _itemId: T_ItemName,
     options?: { character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
     isVisible: false,

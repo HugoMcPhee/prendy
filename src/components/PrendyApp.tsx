@@ -3,7 +3,7 @@ import { toRadians } from "chootils/dist/speedAngleDistance";
 import React, { ReactNode, useEffect } from "react";
 import { Engine, Scene } from "react-babylonjs";
 import { getRefs, setState } from "repond";
-import { StartAndStopPrendyRules } from "../effects/rules";
+import { StartAndStopPrendyRules } from "../effects/effects";
 import { LoadingModels } from "./LoadingModels";
 import { ScreenGui as ScreenGuiDom } from "./gui/ScreenGui";
 

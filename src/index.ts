@@ -7,7 +7,7 @@ import loadGoogleFonts from "./helpers/loadGoogleFonts";
 import loadStyles from "./helpers/loadStyles";
 import { Globals } from "react-spring";
 import { onNextTick } from "repond";
-export { prendyEffectGroups, prendyParamEffectGroups } from "./effects/rules";
+export { prendyEffectGroups, prendyParamEffectGroups } from "./effects/effects";
 export { DebugFrameRate } from "./components/DebugFrameRate";
 export { PrendyApp } from "./components/PrendyApp";
 export * from "./declarations";

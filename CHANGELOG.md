@@ -14,6 +14,11 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.0
+
+- Updated to new repond 0.14 with Effects and Param Effects (from rules and dynamic rules)
+- Uses more repond types
+
 v0.10.0
 
 - Removed factory functions!, everything can access assets and repond stores directly

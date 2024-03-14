@@ -5,7 +5,7 @@ import pointIsInside from "../helpers/babylonjs/pointIsInside";
 import { focusSlateOnFocusedDoll } from "../helpers/babylonjs/slate";
 import { meta } from "../meta";
 import { AnyCameraName, AnyTriggerName } from "../types";
-import { startParamEffectsGroup, stopParamEffectsGroup } from "repond/src/usable/paramEffects";
+import { startParamEffectsGroup, stopParamEffectsGroup } from "repond";
 
 export const characterParamEffects = makeParamEffects(
   { characterName: "", dollName: "" }, // defaultParams

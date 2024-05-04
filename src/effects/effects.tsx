@@ -25,9 +25,11 @@ import { playerEffects } from "./players";
 import { sliceVidEffects } from "./sliceVids";
 import { speechBubbleEffects } from "./speechBubbles";
 import { safeVidEffects } from "./stateVids";
+import { repondEventsEffectGroups, repondEventsParamEffectGroups } from "repond-events";
 
 // Export the paramEffects to be used in the project with initEffectGroups
 export const prendyEffectGroups = {
+  ...repondEventsEffectGroups,
   globalVideoEffects,
   globalChangePlaceEffects,
   globalSlateEffects,
@@ -45,6 +47,7 @@ export const prendyEffectGroups = {
 
 // Export the paramEffects to be used in the project with initParamEffectGroups
 export const prendyParamEffectGroups = {
+  ...repondEventsParamEffectGroups,
   characterParamEffects,
   dollParamEffects,
 };

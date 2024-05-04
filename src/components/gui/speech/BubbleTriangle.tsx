@@ -32,7 +32,7 @@ export function BubbleTriangle({}: Props) {
         zIndex: 1010,
       }}
     >
-      <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" width={TRIANGLE_SIZE} height={TRIANGLE_SIZE}>
         <path
           d="M9402.434 6308.434q2.656-5.652 5.41 0l22.305 45.786q2.753 5.652-2.656 5.652h-43.822q-5.409 0-2.753-5.652Z"
           style={{

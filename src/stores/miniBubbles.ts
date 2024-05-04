@@ -6,7 +6,7 @@ import { CharacterName } from "../types";
 export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   const { characterNames, characterOptions } = prendyAssets;
 
-  const state = <T_ItemName extends string>(
+  const getDefaultState = <T_ItemName extends string>(
     _itemId: T_ItemName,
     options?: { character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
@@ -17,20 +17,20 @@ export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyA
     position: defaultPosition(),
   });
 
-  const refs = () => ({
+  const getDefaultRefs = () => ({
     bubbleRef: null as null | any,
     textRef: null as null | any,
     videoRef: null as null | HTMLVideoElement, // note: only the source changes, the video element is the same?
   });
 
   type MiniBubbleStartStates = {
-    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in CharacterName]: ReturnType<typeof getDefaultState>;
   };
 
   function makeAutmaticCharacterMinibubbleStartStates() {
     const partialStates = {} as Partial<MiniBubbleStartStates>;
     forEach(characterNames as CharacterName[], (characterName) => {
-      partialStates[characterName] = state(characterName, {
+      partialStates[characterName] = getDefaultState(characterName, {
         character: characterName,
       });
     });
@@ -50,7 +50,7 @@ export default function miniBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyA
     // },
   };
 
-  return { state, refs, startStates };
+  return { getDefaultState, getDefaultRefs, startStates };
 }
 
 // export type Store_MiniBubbles<T_ItemName extends string, CharacterName> = {

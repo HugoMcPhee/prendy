@@ -1,6 +1,6 @@
 {
   "name": "prendy",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "description": "Make games with prerendered backdrops using babylonjs and repond",
   "_main": "src/index.ts",
   "types": "src/index.ts",
@@ -45,10 +45,11 @@
     "react-dom": "^18.2.0",
     "react-promise-suspense": "^0.3.3",
     "react-spring": "^9.4.4",
-    "repond": "^0.14.2",
+    "repond": "^0.17.3",
+    "repond-movers": "^0.11.2",
+    "repond-events": "^0.2.4",
     "stringz": "^2.1.0",
-    "typescript": "^5.1.6",
-    "repond-movers": "^0.11.2"
+    "typescript": "^5.1.6"
   },
   "prettier": {
     "printWidth": 120

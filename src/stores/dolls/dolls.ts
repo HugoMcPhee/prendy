@@ -31,7 +31,7 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
 
   const defaultModelName = modelNames[0];
 
-  const state = <T_DollName extends string, T_ModelName extends ModelName>(
+  const getDefaultState = <T_DollName extends string, T_ModelName extends ModelName>(
     _dollName: T_DollName,
     modelName?: T_ModelName
   ) => {
@@ -74,9 +74,9 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
     materials: Record<MaterialNameByModel[T_ModelName], Material>;
   };
 
-  const refs = <T_DollName extends DollName, T_ModelName extends ModelName>(
+  const getDefaultRefs = <T_DollName extends DollName, T_ModelName extends ModelName>(
     dollName: T_DollName,
-    itemState: ReturnType<typeof state<T_DollName, DollOptions[T_DollName]["model"]>>
+    itemState: ReturnType<typeof getDefaultState<T_DollName, DollOptions[T_DollName]["model"]>>
   ) => {
     const modelName = itemState.modelName;
 
@@ -113,13 +113,13 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
   // };
 
   type DollStartStates = {
-    [K_DollName in DollName]: ReturnType<typeof state<K_DollName, DollOptions[K_DollName]["model"]>>;
+    [K_DollName in DollName]: ReturnType<typeof getDefaultState<K_DollName, DollOptions[K_DollName]["model"]>>;
   };
 
   function makeAutmaticModelDollStartStates() {
     const partialDollStates = {} as Partial<DollStartStates>;
     forEach(dollNames as DollName[], (dollName) => {
-      partialDollStates[dollName] = state(dollName, dollOptions[dollName].model);
+      partialDollStates[dollName] = getDefaultState(dollName, dollOptions[dollName].model);
     });
     return partialDollStates as DollStartStates;
   }
@@ -129,5 +129,5 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
     ...makeAutmaticModelDollStartStates(),
   };
 
-  return { startStates, state, refs };
+  return { startStates, getDefaultState, getDefaultRefs };
 }

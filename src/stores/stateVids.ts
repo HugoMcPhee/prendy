@@ -43,7 +43,7 @@ export default function stateVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     return vidName;
   }
 
-  const state = <T_ItemName extends string>(itemId: T_ItemName) => ({
+  const getDefaultState = <T_ItemName extends string>(itemId: T_ItemName) => ({
     vidState: "unloaded" as VidState,
     playType: "pause" as "play" | "pause", // playing | paused (so it knows what it’ll return to after seeking)
     goalSeekTime: null as null | number, // when this changes, it starts seeking
@@ -58,25 +58,25 @@ export default function stateVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     doneSeekingTime: null as null | number, // when this changes, it’s finished seeking
   });
 
-  const refs = () => ({
+  const getDefaultRefs = () => ({
     videoElement: null as null | HTMLVideoElement,
   });
 
   function makeStartStatesForPlaces() {
-    const newStartStates = {} as InitialItemsState<typeof state>;
+    const newStartStates = {} as InitialItemsState<typeof getDefaultState>;
     // { windynest_a_color: state("windynest_a_color") }
 
     forEach(placeNames, (placeName) => {
       forEach(abLetters, (letter) => {
         const loopedName = `${placeName}_${letter}`;
-        newStartStates[loopedName] = state(loopedName);
+        newStartStates[loopedName] = getDefaultState(loopedName);
       });
     });
     return newStartStates;
   }
 
   // const startStates: InitialItemsState<typeof state> = {
-  const startStates: InitialItemsState<typeof state> = makeStartStatesForPlaces();
+  const startStates: InitialItemsState<typeof getDefaultState> = makeStartStatesForPlaces();
 
-  return { state, refs, startStates };
+  return { getDefaultState, getDefaultRefs, startStates };
 }

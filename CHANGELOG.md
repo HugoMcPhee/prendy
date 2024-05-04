@@ -14,6 +14,13 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.3
+
+- Fix speech bubble positions for tall and wide screens
+- Fix speech bubble triangle on safari
+- add first versions of repond-events to replace helpers
+- Fix new store naming with repond 0.17.3
+
 v0.11.2
 
 - Fix imports from repond with new version 0.14.2

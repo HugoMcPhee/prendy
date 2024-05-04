@@ -40,7 +40,7 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   }
 
   // State
-  const state = <K_PlaceName extends PlaceName>(placeName: K_PlaceName) => ({
+  const getDefaultState = <K_PlaceName extends PlaceName>(placeName: K_PlaceName) => ({
     toggledWalls: makeToggledWallsState(placeName),
     // testState: 0,
     // goalCamWhenNextPlaceLoads: null as MaybeCam<K_PlaceName>,
@@ -63,7 +63,7 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   };
 
   // Refs
-  function refs<K_PlaceName extends PlaceName>(placeName: K_PlaceName): PlaceRefs<K_PlaceName> {
+  function getDefaultRefs<K_PlaceName extends PlaceName>(placeName: K_PlaceName): PlaceRefs<K_PlaceName> {
     const { spotNames, soundspotNames, triggerNames, wallNames, cameraNames } = placeInfoByName[placeName];
 
     const spotPositions: Partial<SpotPositions<K_PlaceName>> = {};
@@ -109,13 +109,13 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   };
 
   type StartStates = {
-    [K_PlaceName in PlaceName]: ReturnType<typeof state<K_PlaceName>>;
+    [K_PlaceName in PlaceName]: ReturnType<typeof getDefaultState<K_PlaceName>>;
   };
 
   function makeAutmaticPlaceStartStates() {
     const partialDollStates = {} as Partial<StartStates>;
     forEach(placeNames, (placeName) => {
-      partialDollStates[placeName] = state(placeName);
+      partialDollStates[placeName] = getDefaultState(placeName);
     });
     return partialDollStates as StartStates;
   }
@@ -123,7 +123,7 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   // const startStates: InitialItemsState<typeof state> = {
   const startRefs: Partial<StartRefs> = {};
   forEach(placeNames, (placeName) => {
-    startRefs[placeName] = refs(placeName);
+    startRefs[placeName] = getDefaultRefs(placeName);
   });
   const startStates = {
     // Automatically make place states
@@ -131,7 +131,7 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   };
 
   forEach(placeNames, (placeName) => {
-    (startStates[placeName] as any) = state(placeName);
+    (startStates[placeName] as any) = getDefaultState(placeName);
   });
 
   /*
@@ -144,7 +144,11 @@ export default function places<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
 
   return {
     startStates: startStates as StartStates,
-    state: state as <K_PlaceName extends PlaceName>(itemId: K_PlaceName | string) => ReturnType<typeof state>,
-    refs: refs as <K_PlaceName extends PlaceName>(itemId: K_PlaceName & string) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
+    getDefaultState: getDefaultState as <K_PlaceName extends PlaceName>(
+      itemId: K_PlaceName | string
+    ) => ReturnType<typeof getDefaultState>,
+    getDefaultRefs: getDefaultRefs as <K_PlaceName extends PlaceName>(
+      itemId: K_PlaceName & string
+    ) => PlaceRefs<PlaceName>, // TODO change to PlaceRefs<K_PlaceName> when ReturnType is generic
   };
 }

@@ -17,6 +17,7 @@ export async function enableMovement(canMove: boolean = true, revertDelay?: numb
   }
 }
 
+// toDo move to utils/getters
 export function isHolding(pickupName: PickupName) {
   const { heldPickups } = getState().global.main;
   return heldPickups.includes(pickupName);

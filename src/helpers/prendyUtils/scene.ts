@@ -12,13 +12,15 @@ export function getSegmentFromSegmentRules<T_Place extends PlaceName, T_Cam exte
   return foundRuleSegmentName;
 }
 
-export function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, callback: () => void) {
+export function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, callback: () => void, effectId?: string) {
   const initialNowSegmentName = getState().global.main.nowSegmentName;
   if (checkingSegmentName === initialNowSegmentName) {
     callback();
     return null;
   }
-  const effectId = "doWhenNowSegmentChanges" + Math.random();
+
+  if (!effectId) effectId = "doWhenNowSegmentChanges" + Math.random();
+
   startNewItemEffect({
     id: effectId,
     run: ({ newValue: newNowSegmentName }) => {
@@ -38,7 +40,8 @@ export function doWhenNowSegmentChanges(checkingSegmentName: AnySegmentName, cal
 export function doWhenNowCamChanges(
   // WARNING This might mess up if the place changes while the cam change was waiting
   checkingCamName: AnyCameraName,
-  callback: () => void
+  callback: () => void,
+  effectId?: string
 ) {
   const { nowPlaceName } = getState().global.main;
 
@@ -47,7 +50,7 @@ export function doWhenNowCamChanges(
     callback();
     return null;
   }
-  const effectId = "doWhenNowCamChanges" + Math.random();
+  if (!effectId) effectId = "doWhenNowCamChanges" + Math.random();
   startNewItemEffect({
     id: effectId,
     run: ({ newValue: newNowCamName }) => {

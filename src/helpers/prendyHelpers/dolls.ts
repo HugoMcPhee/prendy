@@ -260,6 +260,8 @@ export function toggleDollMeshes<T_DollName extends DollName>(
   }));
 }
 
+// TODO move to utils
+// (or maybe rename utils to getters, and the rest are in events)
 export function getDollBonePosition<T_ModelName extends ModelName>({
   doll,
   model,

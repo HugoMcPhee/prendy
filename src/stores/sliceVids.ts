@@ -38,7 +38,7 @@ export type VidSlice = { time: number; duration: number };
 export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   const { placeNames } = prendyAssets;
 
-  const state = <T_ItemName extends string>(itemId: T_ItemName) => ({
+  const getDefaultState = <T_ItemName extends string>(itemId: T_ItemName) => ({
     stateVidId_playing: `${itemId}_a` as string | null,
     stateVidId_waiting: `${itemId}_b` as string | null,
     //
@@ -56,22 +56,22 @@ export default function sliceVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     //
   });
 
-  const refs = () => ({
+  const getDefaultRefs = () => ({
     waitingForPlayToDoLoopRuleName: null as null | string,
     // waitingForPlayToChangeSliceRuleName: null as null | string,
   });
 
   function makeStartStatesForPlaces() {
     // enable autocompleted names and properties , (when using name directly)
-    const newStartStates = {} as Record<PlaceName, ReturnType<typeof state>>;
+    const newStartStates = {} as Record<PlaceName, ReturnType<typeof getDefaultState>>;
     // enable autocompleted properties when using a variable for name
     // const newStartStates = {} as InitialItemsState<typeof state>;
 
-    forEach(placeNames as PlaceName[], (placeName) => (newStartStates[placeName] = state(placeName)));
+    forEach(placeNames as PlaceName[], (placeName) => (newStartStates[placeName] = getDefaultState(placeName)));
     return newStartStates;
   }
 
   const startStates = makeStartStatesForPlaces();
 
-  return { state, refs, startStates };
+  return { getDefaultState, getDefaultRefs, startStates };
 }

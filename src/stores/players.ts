@@ -11,7 +11,7 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
 
   const { prendyOptions } = prendyAssets;
 
-  const state = () => ({
+  const getDefaultState = () => ({
     // player input stuff
     lastSafeInputAngle: 0 as number | null,
     inputVelocity: { x: 0, y: 0 } as Point2D,
@@ -34,14 +34,14 @@ export default function players<T_MyTypes extends MyTypes = MyTypes>(prendyAsset
     } as PlayerAnimationNames, // maybe typed somehow, from player character?
   });
 
-  const refs = () => ({
+  const getDefaultRefs = () => ({
     topWalkSpeed: prendyOptions.walkSpeed,
     canJumpTimeout: null as null | ReturnType<typeof setTimeout>,
     canShowVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
     canHideVirtualButtonsTimeout: null as null | ReturnType<typeof setTimeout>,
   });
 
-  const startStates = { main: state() };
+  const startStates = { main: getDefaultState() };
 
-  return { startStates, state, refs };
+  return { startStates, getDefaultState, getDefaultRefs };
 }

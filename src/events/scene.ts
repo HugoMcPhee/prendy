@@ -114,7 +114,7 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
       setState((state) => ({
         places: {
           [placeName]: {
-            toggledWalls: { ...(state.places[placeName].toggledWalls as any), [wallName]: shouldHideWall },
+            toggledWalls: { ...(state.places[placeName].toggledWalls as any), [wallName]: !shouldHideWall },
           },
         },
       }));

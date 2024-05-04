@@ -14,6 +14,10 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.4
+
+- fix setCharAnimation and hideWallIf
+
 v0.11.3
 
 - Fix speech bubble positions for tall and wide screens

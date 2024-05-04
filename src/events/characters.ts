@@ -10,7 +10,7 @@ export const characterEvents = makeEventTypes(({ event }) => ({
     run: ({ character, animation }, { liveId, isFirstAdd }) => {
       if (!isFirstAdd) return;
       const { dollName } = getCharDollStuff(character);
-      addSubEvents(liveId, [toDo("doll", "setAnimation", { dollName, animation })]);
+      addSubEvents(liveId, [toDo("doll", "setDollAnimation", { doll: dollName, animation })]);
     },
     params: {
       character: "" as CharacterName,

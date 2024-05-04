@@ -28,10 +28,10 @@ export * from "./helpers/prendyRuleMakers/prendyRuleMakers";
 export * from "./helpers/prendyRuleMakers/segments";
 export * from "./helpers/prendyRuleMakers/touches";
 export * from "./helpers/prendyRuleMakers/triggers";
+// NOTE update to export all from?
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
-
-// NOTE update to export all from?
+export { prendyEventGroups } from "./events/events";
 
 export type DollOptionLoose<T_ModelName extends string> = { model: T_ModelName };
 // export type DollOptionsLoose<T_ModelName extends string> = {

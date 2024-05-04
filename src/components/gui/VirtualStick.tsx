@@ -200,8 +200,8 @@ export function VirtualStick(_: Props) {
         height: "100vh",
         zIndex: 100,
         overflow: "hidden",
-        // opacity: 0.1,
-        opacity: 0.0,
+        opacity: 0.1,
+        // opacity: 0.0,
         // background: "green",
       }}
     >

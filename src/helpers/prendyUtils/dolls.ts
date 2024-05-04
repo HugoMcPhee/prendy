@@ -280,20 +280,21 @@ export function updateDollScreenPosition({ dollName, instant }: { dollName: Doll
   const { meshRef } = getRefs().dolls[dollName];
   const modelName = getState().dolls[dollName].modelName;
   if (!meshRef || !modelName) return;
-  const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom } = getState().global.main;
+  const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom, zoomMultiplier } =
+    getState().global.main;
   const characterPointOnSlate = getPositionOnSlate(meshRef, modelName);
 
-  const characterPointOnScreen = convertPointOnSlateToPointOnScreen({
+  const dollPointOnScreen = convertPointOnSlateToPointOnScreen({
     pointOnSlate: characterPointOnSlate,
     slatePos: instant ? slatePosGoal : slatePos,
-    slateZoom,
+    slateZoom: slateZoom * zoomMultiplier,
   });
 
   const newFocusedDollIsInView =
     dollName === focusedDoll ? checkPointIsInsideSlate(characterPointOnSlate) : focusedDollIsInView;
 
   setState({
-    dolls: { [dollName]: { positionOnScreen: characterPointOnScreen } },
+    dolls: { [dollName]: { positionOnScreen: dollPointOnScreen } },
     global: { main: { focusedDollIsInView: newFocusedDollIsInView } },
   });
 }

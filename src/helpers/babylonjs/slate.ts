@@ -187,7 +187,7 @@ export function checkPointIsInsideSlate(pointOnSlate: Point2D) {
 export function convertPointOnSlateToPointOnScreen({
   pointOnSlate, // point on slate goes from 0 - 1920, 0 - 1080, when the point is from the top left to bottom right
   slatePos, // slate position is 0 when centered, then its the amount of offset (in percentage?)
-  slateZoom,
+  slateZoom, // NOTE make sure to include the zoom multiplier
 }: {
   pointOnSlate: Point2D;
   slatePos: Point2D;

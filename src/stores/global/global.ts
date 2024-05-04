@@ -122,7 +122,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   const placeName = prendyOptions.place;
 
   // State
-  const state = () => ({
+  const getDefaultState = () => ({
     // place
     nowPlaceName: placeName as PlaceName,
     goalPlaceName: null as null | PlaceName,
@@ -198,7 +198,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
   });
   // Refs
-  const refs = () => ({
+  const getDefaultRefs = () => ({
     scene: null as null | Scene,
     backdropVideoTex: null as null | CustomVideoTexture,
     depthRenderer: null as DepthRenderer | null,
@@ -237,8 +237,8 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
 
   // const startStates: InitialItemsState<typeof state> = {
   const startStates = {
-    main: state(),
+    main: getDefaultState(),
   };
 
-  return { startStates, state, refs };
+  return { startStates, getDefaultState, getDefaultRefs };
 }

@@ -7,7 +7,7 @@ import { FontName, CharacterName, SpeechVidName } from "../types";
 export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   const { characterNames, characterOptions, fontNames } = prendyAssets;
 
-  const state = <T_ItemName extends string>(
+  const getDefaultState = <T_ItemName extends string>(
     _itemId: T_ItemName,
     options?: { font?: FontName; character?: CharacterName } // TODO maybe this should be a partial of the initial statea, but might need to add types twice..
   ) => ({
@@ -29,7 +29,7 @@ export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prend
     zIndex: 0,
   });
 
-  const refs = () => ({
+  const getDefaultRefs = () => ({
     bubbleRef: null as null | any,
     textRef: null as null | any,
     currentTimeout: null as null | ReturnType<typeof setTimeout>,
@@ -42,13 +42,13 @@ export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prend
   //   [K_CharacterName in CharacterName]: ReturnType<typeof state>;
   // };
   type SpeechBubbleStartStates = {
-    [K_CharacterName in CharacterName]: ReturnType<typeof state>;
+    [K_CharacterName in CharacterName]: ReturnType<typeof getDefaultState>;
   };
 
   function makeAutmaticCharacterSpeechbubbleStartStates() {
     const partialStates = {} as Partial<SpeechBubbleStartStates>;
     forEach(characterNames as CharacterName[], (characterName) => {
-      partialStates[characterName] = state(characterName, {
+      partialStates[characterName] = getDefaultState(characterName, {
         character: characterName,
         font: characterOptions[characterName].font,
       });
@@ -68,5 +68,5 @@ export default function speechBubbles<T_MyTypes extends MyTypes = MyTypes>(prend
   // export
   // const speechBubbleNames = Object.keys(startStates) as SpeechBubbleName[];
 
-  return { state, refs, startStates: startStates as SpeechBubbleStartStates };
+  return { getDefaultState, getDefaultRefs, startStates: startStates as SpeechBubbleStartStates };
 }

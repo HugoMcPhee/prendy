@@ -1,5 +1,5 @@
 export default function keyboards() {
-  const state = () => ({
+  const getDefaultState = () => ({
     KeyW: false,
     KeyA: false,
     KeyS: false,
@@ -19,12 +19,12 @@ export default function keyboards() {
     KeyP: false,
   });
 
-  const refs = () => ({});
+  const getDefaultRefs = () => ({});
 
   // const startStates: InitialItemsState<typeof state> = {
   const startStates = {
-    main: state(),
+    main: getDefaultState(),
   };
 
-  return { startStates, state, refs };
+  return { startStates, getDefaultState, getDefaultRefs };
 }

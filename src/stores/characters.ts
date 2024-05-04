@@ -5,7 +5,7 @@ import { AnyCameraName, AnyTriggerName, CharacterName, CharacterOptions, DollNam
 export default function characters<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   const { characterNames, dollNames, characterOptions } = prendyAssets;
 
-  const state = <T_CharacterName extends string, T_DollName extends DollName>(
+  const getDefaultState = <T_CharacterName extends string, T_DollName extends DollName>(
     _characterName: T_CharacterName,
     dollName?: T_DollName
   ) => {
@@ -18,7 +18,7 @@ export default function characters<T_MyTypes extends MyTypes = MyTypes>(prendyAs
     };
   };
 
-  const refs = <T_CharacterName extends string>(_characterName: T_CharacterName) => ({
+  const getDefaultRefs = <T_CharacterName extends string>(_characterName: T_CharacterName) => ({
     testRef: null,
   });
 
@@ -27,7 +27,7 @@ export default function characters<T_MyTypes extends MyTypes = MyTypes>(prendyAs
   class StateReturnType_Generic_Helper<T_A extends CharacterName, T_B extends DollName> {
     // wrapped has no explicit return type so we can infer it
     wrapped(a: T_A, b: T_B) {
-      return state<T_A, T_B>(a, b);
+      return getDefaultState<T_A, T_B>(a, b);
     }
   }
   type StateReturnType<T_A extends CharacterName, T_B extends DollName> = ReturnType<
@@ -41,7 +41,7 @@ export default function characters<T_MyTypes extends MyTypes = MyTypes>(prendyAs
   function makeAutmaticCharacterStartStates() {
     const partialModelStates = {} as Partial<CharacterStartStates>;
     forEach(characterNames as CharacterName[], (characterName) => {
-      partialModelStates[characterName] = state(characterName, characterOptions[characterName].doll);
+      partialModelStates[characterName] = getDefaultState(characterName, characterOptions[characterName].doll);
     });
     return partialModelStates as CharacterStartStates;
   }
@@ -51,5 +51,5 @@ export default function characters<T_MyTypes extends MyTypes = MyTypes>(prendyAs
     // friend: state("friend", "friend"),
   };
 
-  return { startStates, state, refs };
+  return { startStates, getDefaultState, getDefaultRefs };
 }

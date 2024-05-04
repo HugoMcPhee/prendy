@@ -26,8 +26,8 @@ export function initPickupsEffects({
     const didUsePickupAtTrigger = onUsePickupAtTrigger(pickupName);
     const didUsePickupWithDoll = onUsePickupToTalk(pickupName);
 
-    console.log("didUsePickupAtTrigger", didUsePickupAtTrigger);
-    console.log("didUsePickupWithDoll", didUsePickupWithDoll);
+    // console.log("didUsePickupAtTrigger", didUsePickupAtTrigger);
+    // console.log("didUsePickupWithDoll", didUsePickupWithDoll);
 
     // NOTE the top two functions can return true if they ran,
     // and if neither returned true, it runs the general one

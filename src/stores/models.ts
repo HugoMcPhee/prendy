@@ -7,7 +7,7 @@ export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
 
   const modelNames = prendyAssets.modelNames as ModelName[];
 
-  const state = <T_ModelName extends ModelName>(_modelName: T_ModelName) => {
+  const getDefaultState = <T_ModelName extends ModelName>(_modelName: T_ModelName) => {
     return {
       wantToLoad: false,
       isLoading: false,
@@ -15,7 +15,7 @@ export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     };
   };
 
-  const refs = <T_ModelName extends ModelName>(_modelName: T_ModelName) => ({
+  const getDefaultRefs = <T_ModelName extends ModelName>(_modelName: T_ModelName) => ({
     // originalMeshRef: null,
     container: null as null | AssetContainer,
     materialRef: null as null | PBRMaterial,
@@ -25,7 +25,7 @@ export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   class FuncTypeWrapper<T_ModelName extends ModelName> {
     // wrapped has no explicit return type so we can infer it
     wrapped(modelName: T_ModelName) {
-      return state<T_ModelName>(modelName);
+      return getDefaultState<T_ModelName>(modelName);
     }
   }
   type StateType<T extends ModelName> = ReturnType<FuncTypeWrapper<T>["wrapped"]>;
@@ -38,7 +38,7 @@ export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     const partialModelStates = {} as Partial<ModelStartStates>;
 
     forEach(modelNames, (modelName) => {
-      partialModelStates[modelName] = state(modelName);
+      partialModelStates[modelName] = getDefaultState(modelName);
     });
 
     return partialModelStates as ModelStartStates;
@@ -51,5 +51,5 @@ export default function models<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   //   bucket: state("bucket"),
   // };
 
-  return { startStates, state, refs };
+  return { startStates, getDefaultState, getDefaultRefs };
 }

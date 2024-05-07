@@ -1,16 +1,16 @@
 import "@babylonjs/loaders";
-import { initMovers } from "repond-movers";
-import { MyTypes } from "./declarations";
-import { meta } from "./meta";
-import { timeStatePath } from "./stores/global/global";
-import loadGoogleFonts from "./helpers/loadGoogleFonts";
-import loadStyles from "./helpers/loadStyles";
 import { Globals } from "react-spring";
 import { onNextTick } from "repond";
-export { prendyEffectGroups, prendyParamEffectGroups } from "./effects/effects";
+import { initMovers } from "repond-movers";
+import { MyTypes } from "./declarations";
+import loadGoogleFonts from "./helpers/loadGoogleFonts";
+import loadStyles from "./helpers/loadStyles";
+import { meta } from "./meta";
+import { timeStatePath } from "./stores/global/global";
 export { DebugFrameRate } from "./components/DebugFrameRate";
 export { PrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
+export { prendyEffectGroups, prendyParamEffectGroups } from "./effects/effects";
 export { makePrendyOptions } from "./getPrendyOptions";
 export * from "./helpers/babylonjs/vectors";
 export * from "./helpers/prendyHelpers/characters";
@@ -28,10 +28,11 @@ export * from "./helpers/prendyRuleMakers/prendyRuleMakers";
 export * from "./helpers/prendyRuleMakers/segments";
 export * from "./helpers/prendyRuleMakers/touches";
 export * from "./helpers/prendyRuleMakers/triggers";
+export { isHolding } from "./helpers/prendyUtils/player";
 // NOTE update to export all from?
+export { PrendyEventParameters, prendyEventGroups } from "./events/events";
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
-export { prendyEventGroups, PrendyEventParameters } from "./events/events";
 
 export type DollOptionLoose<T_ModelName extends string> = { model: T_ModelName };
 // export type DollOptionsLoose<T_ModelName extends string> = {

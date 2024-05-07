@@ -14,6 +14,10 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.6
+
+- Re-export isHolding from repond
+
 v0.11.5
 
 - Update prendy events with nicer names and params

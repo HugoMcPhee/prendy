@@ -1,6 +1,6 @@
 {
   "name": "prendy",
-  "version": "0.11.5",
+  "version": "0.11.6",
   "description": "Make games with prerendered backdrops using babylonjs and repond",
   "_main": "src/index.ts",
   "types": "src/index.ts",

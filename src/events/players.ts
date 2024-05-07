@@ -1,7 +1,7 @@
 import { addItemToUniqueArray, removeItemFromArray } from "chootils/dist/arrays";
 import delay from "delay";
 import { setState } from "repond";
-import { makeEventTypes } from "repond-events";
+import { II, addSubEvents, makeEventTypes } from "repond-events";
 import { setGlobalState } from "../helpers/prendyUtils/global";
 import { AnyAnimationName, PickupName } from "../types";
 
@@ -12,18 +12,20 @@ type PlayerAnimationNames = {
 
 export const playerEvents = makeEventTypes(({ event }) => ({
   enableMovement: event({
-    run: async ({ canMove, revertDelay }, { runMode }) => {
+    run: async ({ canMove = true, revertDelay }, { runMode, liveId }) => {
       if (runMode !== "start") return;
       setGlobalState({ playerMovingPaused: !canMove });
       if (revertDelay) {
-        await delay(revertDelay);
-        setGlobalState({ playerMovingPaused: canMove });
+        addSubEvents(liveId, [
+          II("basic", "wait", { time: revertDelay }),
+          II("setState", "setState", { global: { main: { playerMovingPaused: !canMove } } }),
+        ]);
       }
     },
-    params: { canMove: true, revertDelay: 0 },
+    params: { canMove: undefined as boolean | undefined, revertDelay: undefined as undefined | number },
   }),
   takePickup: event({
-    run: ({ pickup, toHolding }, { runMode }) => {
+    run: ({ which: pickup, toHolding = true }, { runMode }) => {
       if (runMode !== "start") return;
       setGlobalState((state) => ({
         heldPickups: toHolding
@@ -31,13 +33,13 @@ export const playerEvents = makeEventTypes(({ event }) => ({
           : removeItemFromArray(state.heldPickups, pickup),
       }));
     },
-    params: { pickup: "" as PickupName, toHolding: true },
+    params: { which: "" as PickupName, toHolding: undefined as undefined | boolean },
   }),
-  setPlayerAnimations: event({
-    run: ({ newAnimationNames }, { runMode }) => {
+  setAnimations: event({
+    run: ({ animations }, { runMode }) => {
       if (runMode !== "start") return;
-      setState({ players: { main: { animationNames: newAnimationNames } } });
+      setState({ players: { main: { animationNames: animations } } });
     },
-    params: { newAnimationNames: { walking: "", idle: "" } as PlayerAnimationNames },
+    params: { animations: { walking: "", idle: "" } as PlayerAnimationNames },
   }),
 }));

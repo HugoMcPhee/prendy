@@ -1,7 +1,7 @@
 import { Vector3 } from "@babylonjs/core";
 import { getShortestAngle, getVectorFromSpeedAndAngle } from "chootils/dist/speedAngleDistance2d";
 import { getRefs, getState, setState } from "repond";
-import { addSubEvents, makeEventTypes, toDo } from "repond-events";
+import { II, addSubEvents, makeEventTypes } from "repond-events";
 import { vector3ToPoint3d } from "../helpers/babylonjs/vectors";
 import { get2DAngleBetweenCharacters } from "../helpers/prendyUtils/characters";
 import { get2DAngleFromDollToSpot } from "../helpers/prendyUtils/dolls";
@@ -15,102 +15,87 @@ type ModelNameFromDoll<T_DollName extends DollName> = DollOptions[T_DollName]["m
 type MeshNamesFromDoll<T_DollName extends DollName> = MeshNameByModel[ModelNameFromDoll<T_DollName>];
 
 export const dollEvents = makeEventTypes(({ event }) => ({
-  setDollPosition: event({
-    run: ({ dollName, newPositon }, { liveId, runMode }) => {
+  setPosition: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
-      const dollRefs = getRefs().dolls[dollName];
-      if (!dollRefs.meshRef) return console.warn("NO MESH REF", dollName);
+      const dollRefs = getRefs().dolls[doll];
+      if (!dollRefs.meshRef) return console.warn("NO MESH REF", doll);
 
       dollRefs.canGoThroughWalls = true;
 
-      setState({ dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } }, () => {
+      setState({ dolls: { [doll]: { position: vector3ToPoint3d(to) } } }, () => {
         dollRefs.canGoThroughWalls = false;
-        setState({ dolls: { [dollName]: { position: vector3ToPoint3d(newPositon) } } });
+        setState({ dolls: { [doll]: { position: vector3ToPoint3d(to) } } });
       });
     },
-    params: {
-      dollName: "" as DollName,
-      newPositon: new Vector3(),
-    },
+    params: { which: "" as DollName, to: new Vector3() },
   }),
-  springDollPosition: event({
-    run: ({ dollName, newPositon }, { liveId, runMode }) => {
+  springPosition: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
       // TODO
     },
-    params: {
-      dollName: "" as DollName,
-      newPositon: new Vector3(),
-    },
+    params: { which: "" as DollName, to: new Vector3() },
   }),
-  slideDollPosition: event({
-    run: ({ dollName, newPositon }, { liveId, runMode }) => {
+  slidePosition: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
       // TODO
     },
-    params: {
-      dollName: "" as DollName,
-      newPositon: new Vector3(),
-    },
+    params: { which: "" as DollName, to: new Vector3() },
   }),
-  setDollRotation: event({
-    run: ({ dollName, newRotation }, { liveId, runMode }) => {
+  setRotation: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
-      const dollRefs = getRefs().dolls[dollName];
-      if (!dollRefs.meshRef) return console.warn("no mesh ref", dollName);
+      const dollRefs = getRefs().dolls[doll];
+      if (!dollRefs.meshRef) return console.warn("no mesh ref", doll);
 
       dollRefs.meshRef.rotationQuaternion = null;
-      dollRefs.meshRef.rotation = newRotation;
+      dollRefs.meshRef.rotation = to;
     },
-    params: {
-      dollName: "" as DollName,
-      newRotation: new Vector3(),
-    },
+    params: { which: "" as DollName, to: new Vector3() },
   }),
   lookAtOtherDoll: event({
-    run: ({ dollA, dollB }, { liveId, runMode }) => {
+    run: ({ whichA: dollA, whichB: dollB }, { liveId, runMode }) => {
       if (runMode !== "start") return;
       const dollRefs = getRefs().dolls[dollB];
       const angle = get2DAngleBetweenCharacters(dollB, dollA);
       dollRefs.meshRef.rotation.y = angle;
     },
-    params: {
-      dollA: "" as DollName,
-      dollB: "" as DollName,
-    },
+    params: { whichA: "" as DollName, whichB: "" as DollName },
   }),
-  dollLooksAtSpot: event({
-    run: ({ place, spot, doll }, { liveId, runMode }) => {
+  lookAtSpot: event({
+    run: async ({ place, spot, which: doll }, { runMode }) => {
       if (runMode !== "start") return;
       const angle = get2DAngleFromDollToSpot(doll, place, spot);
-      addSubEvents;
+      setState({ dolls: { [doll]: { rotationYGoal: angle } } });
     },
     params: {
       place: "" as PlaceName,
       spot: "" as SpotNameByPlace[PlaceName],
-      doll: "" as DollName,
+      which: "" as DollName,
     },
   }),
-  setDollRotationY: event({
-    run: ({ dollName, newRotationY }, { liveId, runMode }) => {
+  setRotationY: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
-      setState({ dolls: { [dollName]: { rotationY: newRotationY } } });
+      setState({ dolls: { [doll]: { rotationY: to } } });
       // rotationYGoal: newRotationY, // NOTE setting both can make the goal rotate multiple times, it might not be finding the shortest angle
     },
-    params: { dollName: "" as DollName, newRotationY: 0 },
+    params: { which: "" as DollName, to: 0 },
   }),
-  springDollRotationY: event({
-    run: ({ dollName, newRotation }, { liveId, runMode }) => {
+  springRotationY: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
-      setState({ dolls: { [dollName]: { rotationYGoal: newRotation } } });
+      setState({ dolls: { [doll]: { rotationYGoal: to } } });
     },
-    params: { dollName: "" as DollName, newRotation: 0 },
+    params: { which: "" as DollName, to: 0 },
   }),
-  springAddToDollRotationY: event({
-    run: ({ dollName, addedRotation, useShortestAngle }, { liveId, runMode }) => {
+  springAddToRotationY: event({
+    run: ({ which: doll, degrees: addedRotation, useShortestAngle }, { liveId, runMode }) => {
       if (runMode !== "start") return;
       setState((state) => {
-        const currentAngle = state.dolls[dollName].rotationYGoal;
+        const currentAngle = state.dolls[doll].rotationYGoal;
 
         let newAngle = currentAngle + addedRotation;
 
@@ -119,56 +104,53 @@ export const dollEvents = makeEventTypes(({ event }) => ({
         }
 
         return {
-          dolls: { [dollName]: { rotationYGoal: newAngle, rotationYIsMoving: true, rotationYMoveMode: "spring" } },
+          dolls: { [doll]: { rotationYGoal: newAngle, rotationYIsMoving: true, rotationYMoveMode: "spring" } },
         };
       });
     },
-    params: { dollName: "" as DollName, addedRotation: 0, useShortestAngle: false as boolean | undefined },
+    params: { which: "" as DollName, degrees: 0, useShortestAngle: false as boolean | undefined },
   }),
-  setDollAnimation: event({
-    run: ({ doll, animation }, { liveId, runMode }) => {
+  setAnimation: event({
+    run: ({ which: doll, to }, { liveId, runMode }) => {
       if (runMode !== "start") return;
-      setState({ dolls: { [doll]: { nowAnimation: animation } } });
+      setState({ dolls: { [doll]: { nowAnimation: to } } });
     },
-    params: {
-      doll: "" as DollName,
-      animation: "" as AnimationNameByModel[ModelNameFromDoll<DollName>],
-    },
+    params: { which: "" as DollName, to: "" as AnimationNameByModel[ModelNameFromDoll<DollName>] },
   }),
-  focusOnDoll: event({
-    run: ({ dollName, zoom }, { liveId, runMode }) => {
+  focusOn: event({
+    run: ({ which: doll, zoom }, { liveId, runMode }) => {
       if (runMode !== "start") return;
       const { prendyOptions } = meta.assets!;
       setGlobalState({
-        focusedDoll: dollName,
+        focusedDoll: doll,
         slateZoomGoal:
           zoom !== undefined ? Math.min(zoom, prendyOptions.zoomLevels.max) : prendyOptions.zoomLevels.default,
       });
     },
-    params: { dollName: "" as DollName, zoom: 0 },
+    params: { which: "" as DollName, zoom: undefined as number | undefined },
   }),
-  setDollToSpot: event({
-    run: ({ place, spot, doll, dontSetRotationState }, { liveId, runMode }) => {
+  setToSpot: event({
+    run: ({ place, spot, which, dontSetRotationState }, { liveId, runMode }) => {
       // TODO check subEvents can be added on start
       if (runMode !== "start") return;
       const newPositon = getSpotPosition(place, spot);
       const newRotation = getSpotRotation(place, spot);
 
-      const dollRefs = getRefs().dolls[doll];
-      if (!dollRefs.meshRef) return console.warn("no mesh ref for", doll);
+      const dollRefs = getRefs().dolls[which];
+      if (!dollRefs.meshRef) return console.warn("no mesh ref for", which);
 
-      addSubEvents(liveId, [toDo("doll", "setDollPosition", { dollName: doll, newPositon })]);
-      if (!dontSetRotationState) addSubEvents(liveId, [toDo("doll", "setDollRotation", { doll, newRotation })]);
+      addSubEvents(liveId, [II("doll", "setDollPosition", { which, to: newPositon })]);
+      if (!dontSetRotationState) addSubEvents(liveId, [II("doll", "setDollRotation", { which, to: newRotation })]);
     },
     params: {
+      which: "" as DollName,
       place: "" as PlaceName,
       spot: "" as SpotNameByPlace[PlaceName],
-      doll: "" as DollName,
       dontSetRotationState: false as boolean | undefined,
     },
   }),
-  springDollToSpot: event({
-    run: ({ place, spot, doll }, { liveId, runMode }) => {
+  springToSpot: event({
+    run: ({ place, spot, which: doll }, { runMode }) => {
       if (runMode !== "start") return;
       const newPositon = getSpotPosition(place, spot);
       // const newRotation = getSpotRotation(place, spot);
@@ -182,12 +164,12 @@ export const dollEvents = makeEventTypes(({ event }) => ({
     params: {
       place: "" as PlaceName,
       spot: "" as SpotNameByPlace[PlaceName],
-      doll: "" as DollName,
+      which: "" as DollName,
       // useRotation?: boolean;
     },
   }),
-  moveDollAt2DAngle: event({
-    run: ({ doll, angle, speed }, { liveId, runMode }) => {
+  moveAt2DAngle: event({
+    run: ({ which: doll, angle, speed }, { runMode }) => {
       if (runMode !== "start") return;
       const dollState = getState().dolls[doll];
       const dollRefs = getRefs().dolls[doll];
@@ -205,10 +187,10 @@ export const dollEvents = makeEventTypes(({ event }) => ({
       dollRefs.positionMoverRefs.velocity.x = newVelocity.y;
       dollRefs.positionMoverRefs.velocity.y = -1.5;
     },
-    params: { doll: "" as DollName, angle: 0, speed: 3 },
+    params: { which: "" as DollName, angle: 0, speed: 3 },
   }),
-  pushDollRotationY: event({
-    run: ({ doll, direction, speed }, { liveId, runMode }) => {
+  pushRotationY: event({
+    run: ({ which: doll, direction, speed }, { runMode }) => {
       if (runMode !== "start") return;
       const dollState = getState().dolls[doll];
       const dollRefs = getRefs().dolls[doll];
@@ -220,11 +202,7 @@ export const dollEvents = makeEventTypes(({ event }) => ({
       }
 
       if (!rotationYIsMoving || rotationYMoveMode !== "push") {
-        setState({
-          dolls: {
-            [doll]: { rotationYIsMoving: true, rotationYMoveMode: "push" },
-          },
-        });
+        setState({ dolls: { [doll]: { rotationYIsMoving: true, rotationYMoveMode: "push" } } });
       }
 
       let newVelocity = direction === "right" ? speed : -speed;
@@ -234,17 +212,17 @@ export const dollEvents = makeEventTypes(({ event }) => ({
       // dollRefs.rotationYMoverRefs.velocity.x = newVelocity.y;
       // dollRefs.rotationYMoverRefs.velocity.y = -1.5;
     },
-    params: { doll: "" as DollName, direction: "right" as "right" | "left", speed: 3 },
+    params: { which: "" as DollName, direction: "right" as "right" | "left", speed: 3 },
   }),
-  hideDoll: event({
-    run: ({ doll, shouldHide }, { liveId, runMode }) => {
+  hide: event({
+    run: ({ which: doll, shouldHide = true }, { runMode }) => {
       if (runMode !== "start") return;
       setState({ dolls: { [doll]: { isVisible: !shouldHide } } }, () => {});
     },
-    params: { doll: "" as DollName, shouldHide: true },
+    params: { which: "" as DollName, shouldHide: undefined as boolean | undefined },
   }),
-  toggleDollMeshes: event({
-    run: ({ doll, toggledMeshes }, { liveId, runMode }) => {
+  toggleMeshes: event({
+    run: ({ which, toggledMeshes }, { runMode }) => {
       if (runMode !== "start") return;
       // IDEA have dollState toggledMeshes and rules to auto enable the meshes
 
@@ -265,18 +243,57 @@ export const dollEvents = makeEventTypes(({ event }) => ({
 
       // NOTE could update to set properties in a loop to avoid spreading
       setState((state) => ({
-        dolls: { [doll]: { toggledMeshes: { ...(state.dolls[doll].toggledMeshes as any), ...toggledMeshes } } },
+        dolls: { [which]: { toggledMeshes: { ...(state.dolls[which].toggledMeshes as any), ...toggledMeshes } } },
       }));
     },
     params: {
-      doll: "" as DollName,
+      which: "" as DollName,
       toggledMeshes: {} as Partial<Record<MeshNamesFromDoll<DollName>, boolean>>,
     },
   }),
 }));
 
-// TOXO Add CustomEventParams type for
-// - dollLooksAtSpot
-// - setDollAnimation
-// - setDollToSpot
-// - toggleDollMeshes
+// Special types
+
+type DollLookAtSpotParams<T_Place extends PlaceName> = {
+  which: DollName;
+  place: T_Place;
+  to: SpotNameByPlace[T_Place];
+};
+
+type DollSetAnimationParams<T_Doll extends DollName> = {
+  which: DollName;
+  to: AnimationNameByModel[ModelNameFromDoll<T_Doll>];
+};
+
+type DollSetToSpotParams<T_Place extends PlaceName> = {
+  which: DollName;
+  place: T_Place;
+  spot: SpotNameByPlace[T_Place];
+  dontSetRotationState?: boolean;
+};
+
+type DollSpringToSpotParams<T_Place extends PlaceName> = {
+  which: DollName;
+  place: T_Place;
+  spot: SpotNameByPlace[T_Place];
+};
+
+type ToggleMeshesParams<T_Doll extends DollName> = {
+  which: T_Doll;
+  toggledMeshes: Partial<Record<MeshNamesFromDoll<T_Doll>, boolean>>;
+};
+
+export type DollEventParameters<T_Group, T_Event, T_GenericParamA> = T_Group extends "doll"
+  ? T_Event extends "lookAtSpot"
+    ? DollLookAtSpotParams<T_GenericParamA & PlaceName>
+    : T_Event extends "setAnimation"
+    ? DollSetAnimationParams<T_GenericParamA & DollName>
+    : T_Event extends "setToSpot"
+    ? DollSetToSpotParams<T_GenericParamA & PlaceName>
+    : T_Event extends "springToSpot"
+    ? DollSpringToSpotParams<T_GenericParamA & PlaceName>
+    : T_Event extends "toggleMeshes"
+    ? ToggleMeshesParams<T_GenericParamA & DollName>
+    : never
+  : never;

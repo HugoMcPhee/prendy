@@ -31,7 +31,7 @@ export * from "./helpers/prendyRuleMakers/triggers";
 // NOTE update to export all from?
 export { loadPrendyState, savePrendyState } from "./helpers/saving";
 export { makePrendyStores, prendyStepNames } from "./stores/stores";
-export { prendyEventGroups } from "./events/events";
+export { prendyEventGroups, PrendyEventParameters } from "./events/events";
 
 export type DollOptionLoose<T_ModelName extends string> = { model: T_ModelName };
 // export type DollOptionsLoose<T_ModelName extends string> = {

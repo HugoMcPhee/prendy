@@ -51,7 +51,8 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
       const globalState = getState().global.main;
 
       if (globalState.isGamePaused) {
-        setGlobalState({ timeMode: "menu", gameTimeSpeed: prendyOptions.gameTimeSpeed * 0.1 });
+        // setGlobalState({ timeMode: "menu", gameTimeSpeed: prendyOptions.gameTimeSpeed * 0.1 });
+        setGlobalState({ timeMode: "menu", gameTimeSpeed: prendyOptions.gameTimeSpeed * 4 });
       } else {
         setGlobalState({ timeMode: "game", gameTimeSpeed: prendyOptions.gameTimeSpeed });
       }

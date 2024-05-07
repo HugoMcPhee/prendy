@@ -1,3 +1,4 @@
+import { repondEventsStores } from "repond-events";
 import { MyTypes } from "../declarations";
 import characters from "./characters";
 import dolls from "./dolls/dolls";
@@ -60,6 +61,7 @@ export type PrendyStepName = (typeof prendyStepNames)[number];
 
 export function makePrendyStores<T_MyTypes extends MyTypes = MyTypes>(prendyAssets: T_MyTypes["Assets"]) {
   return {
+    ...repondEventsStores,
     keyboards: keyboards(),
     miniBubbles: miniBubbles<T_MyTypes>(prendyAssets),
     global: global<T_MyTypes>(prendyAssets),

@@ -4,7 +4,7 @@ import { getRefs } from "repond";
 import { makeEventTypes } from "repond-events";
 import { getScene } from "../helpers/babylonjs/getSceneOrEngineUtils";
 import { meta } from "../meta";
-import { AnyAnimationName } from "../types";
+import { AnyAnimationName, MusicName, SoundName } from "../types";
 
 type PlayerAnimationNames = {
   walking: AnyAnimationName;
@@ -13,7 +13,7 @@ type PlayerAnimationNames = {
 
 export const soundEvents = makeEventTypes(({ event }) => ({
   playSound: event({
-    run: ({ soundName, loop }, { runMode }) => {
+    run: ({ which: sound, loop }, { runMode }) => {
       if (runMode !== "start") return;
       const { soundFiles } = meta.assets!;
       const globalRefs = getRefs().global.main;
@@ -23,7 +23,7 @@ export const soundEvents = makeEventTypes(({ event }) => ({
 
       // note could have currentlyPlayingMusic state? and update that
 
-      const existingSound = globalRefs.sounds[soundName];
+      const existingSound = globalRefs.sounds[sound];
 
       if (existingSound) {
         existingSound.loop = loop ?? false;
@@ -31,24 +31,22 @@ export const soundEvents = makeEventTypes(({ event }) => ({
         return;
       }
 
-      globalRefs.sounds[soundName] = new Sound(soundName, soundFiles[soundName], scene, null, {
+      globalRefs.sounds[sound] = new Sound(sound, soundFiles[sound], scene, null, {
         loop: loop ?? false,
         autoplay: true,
         spatialSound: false,
       });
     },
-    params: { soundName: "", loop: false },
+    params: { which: "" as SoundName, loop: undefined as boolean | undefined },
   }),
   stopSound: event({
-    run: ({ soundName }, { runMode }) => {
+    run: ({ which: sound }, { runMode }) => {
       if (runMode !== "start") return;
       const globalRefs = getRefs().global.main;
-
-      const foundSound = globalRefs.sounds[soundName];
-
+      const foundSound = globalRefs.sounds[sound];
       foundSound?.stop();
     },
-    params: { soundName: "" },
+    params: { which: "" as SoundName },
   }),
   stopAllSounds: event({
     run: (_, { runMode }) => {
@@ -60,7 +58,7 @@ export const soundEvents = makeEventTypes(({ event }) => ({
     params: {},
   }),
   playNewMusic: event({
-    run: ({ newMusicName }, { runMode }) => {
+    run: ({ which }, { runMode }) => {
       if (runMode !== "start") return;
       const { musicNames, musicFiles } = meta.assets!;
       const globalRefs = getRefs().global.main;
@@ -73,23 +71,23 @@ export const soundEvents = makeEventTypes(({ event }) => ({
       forEach(musicNames, (musicName) => {
         const foundMusic = globalRefs.music[musicName];
         // const foundMusic = globalRefs.music[musicName];
-        if (musicName !== newMusicName) foundMusic?.stop();
+        if (musicName !== which) foundMusic?.stop();
       });
 
-      const existingMusic = globalRefs.music[newMusicName];
+      const existingMusic = globalRefs.music[which];
 
       if (existingMusic) {
         existingMusic.play();
         return;
       }
 
-      globalRefs.music[newMusicName] = new Sound(newMusicName, musicFiles[newMusicName], scene, null, {
+      globalRefs.music[which] = new Sound(which, musicFiles[which], scene, null, {
         loop: true,
         autoplay: true,
         spatialSound: false,
       });
     },
-    params: { newMusicName: "" },
+    params: { which: "" as MusicName },
   }),
   stopAllMusic: event({
     run: (_, { runMode }) => {

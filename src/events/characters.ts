@@ -1,82 +1,120 @@
-import { addSubEvents, eventDo, makeEventTypes, runEvent, setLiveEventState, toDo } from "repond-events";
-import { get2DAngleBetweenCharacters, getCharDollStuff } from "../helpers/prendyUtils/characters";
-import { AnimationNameFromCharacter, CharacterName, DollName } from "../types";
+import { addSubEvents, eventDo, makeEventTypes, runEvent, setLiveEventState, II } from "repond-events";
+import {
+  get2DAngleBetweenCharacters,
+  get2DAngleFromCharacterToSpot,
+  getCharDollStuff,
+} from "../helpers/prendyUtils/characters";
+import { AnimationNameFromCharacter, CharacterName, DollName, PlaceName, SpotNameByPlace } from "../types";
 import { Vector3 } from "@babylonjs/core";
+import { getState, setState } from "repond";
 
-// type CharacterAndAnimationPair =
+// type whor =
 
 export const characterEvents = makeEventTypes(({ event }) => ({
-  setCharAnimation: event({
-    run: ({ character, animation }, { liveId, isFirstAdd }) => {
+  setAnimation: event({
+    run: ({ who, to }, { liveId, isFirstAdd }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(character);
-      addSubEvents(liveId, [toDo("doll", "setDollAnimation", { doll: dollName, animation })]);
+      const { dollName } = getCharDollStuff(who);
+      addSubEvents(liveId, [II("doll", "setAnimation", { which: dollName, to })]);
     },
     params: {
-      character: "" as CharacterName,
-      animation: "" as AnimationNameFromCharacter<CharacterName>, // AnimationNameFromModel might keep the type better
+      who: "" as CharacterName,
+      to: "" as AnimationNameFromCharacter<CharacterName>, // AnimationNameFromModel might keep the type better
     },
   }),
-  setCharPosition: event({
-    run: ({ character, newPosition }, { isFirstAdd, liveId }) => {
+  setPosition: event({
+    run: ({ who, to }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(character);
-      addSubEvents(liveId, [toDo("doll", "setDollPosition", { dollName, newPosition })]);
+      const { dollName } = getCharDollStuff(who);
+      addSubEvents(liveId, [II("doll", "setPosition", { which: dollName, to })]);
     },
-    params: { character: "" as CharacterName, newPosition: new Vector3(0, 0, 0) },
+    params: { who: "" as CharacterName, to: new Vector3(0, 0, 0) },
   }),
-  setCharRotationY: event({
-    run: ({ character, newRotationY }, { isFirstAdd, liveId }) => {
+  setRotationY: event({
+    run: ({ who, to: to }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(character);
-      addSubEvents(liveId, [toDo("doll", "setDollRotationY", { dollName, newRotationY })]);
+      const { dollName } = getCharDollStuff(who);
+      addSubEvents(liveId, [II("doll", "setRotationY", { which: dollName, to })]);
     },
-    params: { character: "" as CharacterName, newRotationY: 0 },
+    params: { who: "" as CharacterName, to: 0 },
   }),
-  springCharRotation: event({
-    run: ({ character, newRotationY }, { isFirstAdd, liveId }) => {
+  springRotation: event({
+    run: ({ who, to }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(character);
-      addSubEvents(liveId, [toDo("doll", "springDollRotationY", { dollName, newRotationY })]);
+      const { dollName } = getCharDollStuff(who);
+      addSubEvents(liveId, [II("doll", "springRotationY", { which: dollName, to })]);
     },
-    params: { character: "" as CharacterName, newRotationY: 0 },
+    params: { who: "" as CharacterName, to: 0 },
   }),
-  springAddToCharRotationY: event({
-    run: ({ character, addedRotation }, { isFirstAdd, liveId }) => {
+  springAddToRotationY: event({
+    run: ({ who, addedRotation }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(character);
-      addSubEvents(liveId, [toDo("doll", "springAddToDollRotationY", { dollName, addedRotation })]);
+      const { dollName } = getCharDollStuff(who);
+      addSubEvents(liveId, [II("doll", "springAddToRotationY", { which: dollName, addedRotation })]);
     },
-    params: { character: "" as CharacterName, addedRotation: 0 },
+    params: { who: "" as CharacterName, addedRotation: 0 },
   }),
-  lookAtOtherCharacter: event({
-    run: ({ charA, charB }, { isFirstAdd, liveId }) => {
+  lookAtOther: event({
+    run: ({ whoA: whoA, whoB }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(charB);
-      const angle = get2DAngleBetweenCharacters(charB, charA);
-      addSubEvents(liveId, [toDo("doll", "springDollRotationY", { dollName, angle })]);
+      const { dollName } = getCharDollStuff(whoB);
+      const angle = get2DAngleBetweenCharacters(whoB, whoA);
+      addSubEvents(liveId, [II("doll", "springRotationY", { which: dollName, angle })]);
     },
-    params: { charA: "" as CharacterName, charB: "" as CharacterName },
+    params: { whoA: "" as CharacterName, whoB: "" as CharacterName },
   }),
   lookAtEachother: event({
-    run: ({ characterA, characterB }, { isFirstAdd, liveId }) => {
+    run: ({ whoA, whoB }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
       addSubEvents(liveId, [
-        toDo("doll", "lookAtOtherCharacter", { characterA, characterB }),
-        toDo("doll", "lookAtOtherCharacter", { characterA: characterB, characterB: characterA }),
+        II("character", "lookAtOther", { whoA, whoB }),
+        II("character", "lookAtOther", { whoA: whoB, whoB: whoA }),
       ]);
     },
-    params: { characterA: "" as CharacterName, characterB: "" as CharacterName },
+    params: { whoA: "" as CharacterName, whoB: "" as CharacterName },
   }),
-  moveCharacterAt2DAngle: event({
-    run: ({ charName, angle }, { isFirstAdd, liveId }) => {
+  lookAtSpot: event({
+    run: async ({ place, spot, who }, { isFirstAdd, liveId }) => {
       if (!isFirstAdd) return;
-      const { dollName } = getCharDollStuff(charName);
-      addSubEvents(liveId, [toDo("doll", "moveDollAt2DAngle", { dollName, angle })]);
+      const { playerCharacter } = getState().global.main;
+      const character = who ?? (playerCharacter as CharacterName);
+      const { dollName } = getCharDollStuff(character);
+
+      addSubEvents(liveId, [II("doll", "lookAtSpot", { which: dollName, place, spot })]);
     },
-    params: { charName: "" as CharacterName, angle: 0 },
+    params: {
+      place: "" as PlaceName,
+      spot: "" as SpotNameByPlace[PlaceName],
+      who: undefined as undefined | CharacterName,
+    },
+  }),
+  moveAt2DAngle: event({
+    run: ({ who, angle }, { isFirstAdd, liveId }) => {
+      if (!isFirstAdd) return;
+      const { dollName } = getCharDollStuff(who);
+      addSubEvents(liveId, [II("doll", "moveAt2DAngle", { which: dollName, angle })]);
+    },
+    params: { who: "" as CharacterName, angle: 0 },
   }),
 }));
 
-// TOXO Add CustomEventParams type for
-// - setCharAnimation
+// Special types
+
+type CharacterSetAnimationParams<T_Character extends CharacterName> = {
+  who: T_Character;
+  to: AnimationNameFromCharacter<CharacterName>;
+};
+
+type CharacterLookAtSpotParams<T_Place extends PlaceName> = {
+  who: CharacterName;
+  place: T_Place;
+  to: SpotNameByPlace[T_Place];
+};
+
+export type CharacterEventParameters<T_Group, T_Event, T_GenericParamA> = T_Group extends "character"
+  ? T_Event extends "setAnimation"
+    ? CharacterSetAnimationParams<T_GenericParamA & CharacterName>
+    : T_Event extends "lookAtSpot"
+    ? CharacterLookAtSpotParams<T_GenericParamA & PlaceName>
+    : never
+  : never;

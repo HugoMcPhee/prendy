@@ -1,12 +1,19 @@
 import { Point3D } from "chootils/dist/points3d";
 import { meta } from "../meta";
 import { StatePath, getState, onNextTick, setState, stopNewEffect } from "repond";
-import { addSubEvents, makeEventTypes, toDo } from "repond-events";
-import { getStatePathState } from "repond/src/usable/getSet";
+import { addSubEvents, makeEventTypes, II } from "repond-events";
+import { getStateAtPath } from "repond";
 import { get2DAngleFromCharacterToSpot, getCharDollStuff } from "../helpers/prendyUtils/characters";
-import { setGlobalState } from "../helpers/prendyUtils/global";
+import { getGlobalState, setGlobalState } from "../helpers/prendyUtils/global";
 import { doWhenNowCamChanges, doWhenNowSegmentChanges, getSegmentFromSegmentRules } from "../helpers/prendyUtils/scene";
-import { CameraNameByPlace, CharacterName, PlaceName, SegmentNameByPlace, SpotNameByPlace } from "../types";
+import {
+  CameraNameByPlace,
+  CharacterName,
+  PlaceName,
+  SegmentNameByPlace,
+  SpotNameByPlace,
+  WallNameByPlace,
+} from "../types";
 
 type ToPlaceOption<T_PlaceName extends PlaceName> = {
   toPlace: T_PlaceName;
@@ -19,7 +26,7 @@ type ToPlaceOption<T_PlaceName extends PlaceName> = {
 
 export const sceneEvents = makeEventTypes(({ event }) => ({
   changeSegmentAtLoop: event({
-    run: async ({ place, newSegmentName }, { runMode, liveId }) => {
+    run: async ({ place, segment }, { runMode, liveId }) => {
       const segmentChangeEffectId = "changeSegmentAtLoop" + "_" + liveId;
 
       const stopSegmentChangeEffect = () => stopNewEffect(segmentChangeEffectId);
@@ -45,21 +52,21 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
             }
 
             // End this event once the segment changes
-            doWhenNowSegmentChanges(newSegmentName, () => endEvent(), segmentChangeEffectId);
+            doWhenNowSegmentChanges(segment, () => endEvent(), segmentChangeEffectId);
 
             // Set the goal segment name for when the backdrop video loops
-            return { goalSegmentNameAtLoop: newSegmentName };
+            return { goalSegmentNameAtLoop: segment };
           });
         });
       } else {
         stopSegmentChangeEffect();
       }
     },
-    params: { place: "" as PlaceName, newSegmentName: "" as SegmentNameByPlace[PlaceName] },
+    params: { place: "" as PlaceName, segment: "" as SegmentNameByPlace[PlaceName] },
     duration: Infinity,
   }),
   changeCameraAtLoop: event({
-    run: async ({ place, newCamName }, { runMode, liveId }) => {
+    run: async ({ place, cam }, { runMode, liveId }) => {
       const camChangeEffectId = "changeCameraAtLoop" + "_" + liveId;
 
       const stopCamChangeEffect = () => stopNewEffect(camChangeEffectId);
@@ -78,73 +85,59 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
             return {};
           }
 
-          doWhenNowCamChanges(newCamName, () => endEvent(), camChangeEffectId);
+          doWhenNowCamChanges(cam, () => endEvent(), camChangeEffectId);
 
           return {
             // AnyCameraName needed if there's only 1 place
-            global: { main: { goalCamNameAtLoop: newCamName } },
+            global: { main: { goalCamNameAtLoop: cam } },
           };
         });
       } else {
         stopCamChangeEffect();
       }
     },
-    params: { place: "" as PlaceName, newCamName: "" as CameraNameByPlace[PlaceName] },
+    params: { place: "" as PlaceName, cam: "" as CameraNameByPlace[PlaceName] },
     duration: Infinity,
   }),
-  lookAtSpot: event({
-    run: async ({ place, spot, character }, { runMode }) => {
+  hideWall: event({
+    run: async ({ place, wall, unhide }, { runMode }) => {
       if (runMode !== "start") return;
+      let wallShouldShow = false;
+      if (unhide) wallShouldShow = true;
 
-      const { playerCharacter } = getState().global.main;
-      const editedCharacter = character ?? (playerCharacter as CharacterName);
-      const charDollStuff = getCharDollStuff(editedCharacter);
-      const { dollName } = charDollStuff;
-
-      const angle = get2DAngleFromCharacterToSpot(editedCharacter, place, spot);
-      setState({ dolls: { [dollName]: { rotationYGoal: angle } } });
-    },
-    params: { place: "" as PlaceName, spot: "" as SpotNameByPlace[PlaceName], character: "" },
-  }),
-  hideWallIf: event({
-    run: async ({ placeName, wallName, statePath }, { runMode }) => {
-      if (runMode !== "start") return;
-      if (!statePath[0]) return console.error("hideWallIf: statePath[0] is empty");
-      const shouldHideWall = getStatePathState(statePath);
       setState((state) => ({
         places: {
-          [placeName]: {
-            toggledWalls: { ...(state.places[placeName].toggledWalls as any), [wallName]: !shouldHideWall },
-          },
+          [place]: { toggledWalls: { ...(state.places[place].toggledWalls as any), [wall]: wallShouldShow } },
         },
       }));
     },
-    params: { placeName: "" as PlaceName, wallName: "", statePath: ["", "", ""] as StatePath<any, any> },
+    params: {
+      place: "" as PlaceName,
+      wall: "",
+      unhide: undefined as undefined | boolean,
+    },
   }),
   showStoryView: event({
-    run: async ({ isVisible }, { runMode, liveId, elapsedTime }) => {
+    run: async ({ hide = false }, { runMode, liveId, elapsedTime }) => {
       if (runMode !== "start") return;
       const GUESSED_FADE_TIME = 1000; // note could listen to something like isFullyFaded and return here, but maybe a set time is okay
-      setGlobalState({ storyOverlayToggled: !isVisible });
+      setGlobalState({ storyOverlayToggled: hide });
       // await delay(GUESSED_FADE_TIME);
       setState({ liveEvents: { [liveId]: { goalEndTime: elapsedTime + GUESSED_FADE_TIME } } });
     },
-    params: { isVisible: true },
+    params: { hide: undefined as boolean | undefined },
     duration: Infinity,
   }),
   setSegment: event({
-    run: async ({ placeName, segmentName }, { runMode, isFirstAdd, liveId }) => {
-      if (isFirstAdd)
-        addSubEvents(liveId, [toDo("scene", "changeSegmentAtLoop", { place: placeName, newSegmentName: segmentName })]);
+    run: async ({ place, segment }, { runMode, isFirstAdd, liveId }) => {
+      if (isFirstAdd) addSubEvents(liveId, [II("scene", "changeSegmentAtLoop", { place, segment })]);
     },
-    params: { placeName: "" as PlaceName, segmentName: "" as SegmentNameByPlace[PlaceName] },
+    params: { place: "" as PlaceName, segment: "" as SegmentNameByPlace[PlaceName] },
   }),
   setCamera: event({
-    run: async ({ placeName, cameraName, whenToRun }, { runMode, isFirstAdd, liveId }) => {
+    run: async ({ place, cam, whenToRun = "at loop" }, { runMode, isFirstAdd, liveId }) => {
       if (whenToRun === "at loop") {
-        if (isFirstAdd) {
-          addSubEvents(liveId, [toDo("scene", "changeCameraAtLoop", { place: placeName, newCamName: cameraName })]);
-        }
+        if (isFirstAdd) addSubEvents(liveId, [II("scene", "changeCameraAtLoop", { place, cam })]);
       } else {
         if (runMode === "start") {
           const endEvent = () => setState({ liveEvents: { [liveId]: { goalEndTime: 0 } } });
@@ -153,32 +146,33 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
           const { nowCamName } = getState().global.main;
 
           // already on that camera
-          if (nowCamName === cameraName) {
+          if (nowCamName === cam) {
             endEvent();
             return;
           }
 
           // AnyCameraName needed if there's only 1 place
-          setState({ global: { main: { goalCamName: cameraName } } }, () => endEvent());
+          setState({ global: { main: { goalCamName: cam } } }, () => endEvent());
         }
       }
     },
     params: {
-      placeName: "" as PlaceName,
-      cameraName: "" as CameraNameByPlace[PlaceName],
-      whenToRun: "at loop" as "at loop" | "now",
+      place: "" as PlaceName,
+      cam: "" as CameraNameByPlace[PlaceName],
+      whenToRun: undefined as "at loop" | "now" | undefined,
     },
   }),
   goToNewPlace: event({
-    run: async ({ toOption, charNameParam }, { runMode, liveId }) => {
+    run: async ({ toOption, who }, { runMode, liveId }) => {
       if (runMode !== "start") return;
-      const charName = charNameParam || meta.assets!.characterNames[0];
+      const playerCharacter = getGlobalState().playerCharacter as CharacterName;
+      const character = who || playerCharacter;
 
       const { placeInfoByName } = meta.assets!;
 
       // NOTE could include waitForPlaceFullyLoaded here so it can be awaited
       let { toSpot, toPlace, toPositon, toCam, toSegment } = toOption;
-      const { dollName } = getCharDollStuff(charName) ?? {};
+      const { dollName } = getCharDollStuff(character) ?? {};
 
       if (!dollName) return;
 
@@ -212,14 +206,12 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
     },
     params: {
       toOption: { toPlace: "" as PlaceName } as ToPlaceOption<PlaceName>,
-      charNameParam: undefined as undefined | CharacterName,
+      who: undefined as undefined | CharacterName,
     },
   }),
 }));
 
-// TOXO Add CustomEventParams type for
-// - lookAtSpot
-// - hideWallIf
+// TODO Add CustomEventParams type for
 // - setSegment
 // - setCamera
 // - goToNewPlace;
@@ -228,3 +220,39 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
 
 // disable/enable camCubes ?
 // start/stop characterFollowinglayer ?
+
+// Special types
+
+type SceneHideWallParams<T_Place extends PlaceName> = {
+  place: T_Place;
+  wall: WallNameByPlace[T_Place];
+  unhide?: boolean;
+};
+
+type SceneSetSegmentParams<T_Place extends PlaceName> = {
+  place: T_Place;
+  segment: SegmentNameByPlace[T_Place];
+};
+
+type SceneSetCameraParams<T_Place extends PlaceName> = {
+  place: T_Place;
+  cam: CameraNameByPlace[T_Place];
+  whenToRun: "at loop" | "now" | undefined;
+};
+
+type SceneGoToNewPlaceParams<T_Place extends PlaceName> = {
+  toOption: ToPlaceOption<T_Place>;
+  who: undefined | CharacterName;
+};
+
+export type SceneEventParameters<T_Group, T_Event, T_GenericParamA> = T_Group extends "scene"
+  ? T_Event extends "hideWall"
+    ? SceneHideWallParams<T_GenericParamA & PlaceName>
+    : T_Event extends "setSegment"
+    ? SceneSetSegmentParams<T_GenericParamA & PlaceName>
+    : T_Event extends "setCamera"
+    ? SceneSetCameraParams<T_GenericParamA & PlaceName>
+    : T_Event extends "goToNewPlace"
+    ? SceneGoToNewPlaceParams<T_GenericParamA & PlaceName>
+    : never
+  : never;

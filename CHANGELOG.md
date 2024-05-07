@@ -14,6 +14,13 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.5
+
+- Update prendy events with nicer names and params
+- Temporarily change pause button from slow motion to speed up
+- Export special types for prendy events
+- Include repondEventsStores in prendyStores
+
 v0.11.4
 
 - fix setCharAnimation and hideWallIf

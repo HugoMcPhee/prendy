@@ -139,8 +139,8 @@ export const dollEvents = makeEventTypes(({ event }) => ({
       const dollRefs = getRefs().dolls[which];
       if (!dollRefs.meshRef) return console.warn("no mesh ref for", which);
 
-      addSubEvents(liveId, [II("doll", "setDollPosition", { which, to: newPositon })]);
-      if (!dontSetRotationState) addSubEvents(liveId, [II("doll", "setDollRotation", { which, to: newRotation })]);
+      addSubEvents(liveId, [II("doll", "setPosition", { which, to: newPositon })]);
+      if (!dontSetRotationState) addSubEvents(liveId, [II("doll", "setRotation", { which, to: newRotation })]);
     },
     params: {
       which: "" as DollName,

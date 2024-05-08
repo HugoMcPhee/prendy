@@ -135,7 +135,7 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
     params: { place: "" as PlaceName, segment: "" as SegmentNameByPlace[PlaceName] },
   }),
   setCamera: event({
-    run: async ({ place, cam, whenToRun = "at loop" }, { runMode, isFirstAdd, liveId }) => {
+    run: async ({ place, cam, whenToRun = "now" }, { runMode, isFirstAdd, liveId }) => {
       if (whenToRun === "at loop") {
         if (isFirstAdd) addSubEvents(liveId, [II("scene", "changeCameraAtLoop", { place, cam })]);
       } else {
@@ -237,7 +237,7 @@ type SceneSetSegmentParams<T_Place extends PlaceName> = {
 type SceneSetCameraParams<T_Place extends PlaceName> = {
   place: T_Place;
   cam: CameraNameByPlace[T_Place];
-  whenToRun: "at loop" | "now" | undefined;
+  whenToRun?: "at loop" | "now" | undefined;
 };
 
 type SceneGoToNewPlaceParams<T_Place extends PlaceName> = {

@@ -14,6 +14,12 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v0.11.7
+
+- Make whenToRun optional in scene setCamera
+- Default setCamera to run "now" (how it used to be before events)
+- Remove extra info from basic log event
+
 v0.11.6
 
 - Re-export isHolding from repond

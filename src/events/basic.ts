@@ -5,8 +5,6 @@ import { getStateAtPath } from "repond";
 export const basicEvents = makeEventTypes(({ event }) => ({
   wait: event({
     run: ({ time }, { runMode, liveId, elapsedTime }) => {
-      // if (runMode === "add") console.log("wait added");
-
       if (runMode === "start") setLiveEventState(liveId, { goalEndTime: elapsedTime + time * 1000 });
     },
     params: { time: 1 },
@@ -14,7 +12,7 @@ export const basicEvents = makeEventTypes(({ event }) => ({
   }),
   log: event({
     run: ({ text }, { runMode, liveId, elapsedTime }) => {
-      console.log("log", { text, runMode, liveId, elapsedTime });
+      console.log("log", { text });
 
       // if (runMode === "add") console.log("log added");
       if (runMode === "start") console.log(text);

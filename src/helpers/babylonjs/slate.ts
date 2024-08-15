@@ -16,12 +16,12 @@ export function getScreenSize() {
 
 export const slateSize = { x: 1920, y: 1080 };
 
-export function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { width: number; height: number }) {
+export function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { x: number; y: number }) {
   // Only for perspective camera here :)
   const scene = theCamera.getScene();
 
   // const aspectRatio = engine.getAspectRatio(theCamera);
-  const aspectRatio = theSize.width / theSize.height;
+  const aspectRatio = theSize.x / theSize.y;
 
   let theProjectionMatrix = Matrix.Identity();
 
@@ -73,8 +73,8 @@ export function getPositionOnSlate(theMesh: AbstractMesh, modelName: ModelName) 
     nowCam
       .getViewMatrix()
       // .multiply(currentCamera.getProjectionMatrix()),
-      .multiply(getProjectionMatrixCustomSize(nowCam, globalRefs.backdropSize)),
-    nowCam.viewport.toGlobal(globalRefs.backdropSize.width, globalRefs.backdropSize.height)
+      .multiply(getProjectionMatrixCustomSize(nowCam, slateSize)),
+    nowCam.viewport.toGlobal(slateSize.x, slateSize.y)
   );
 }
 
@@ -164,17 +164,16 @@ export function getViewSize() {
 
 export function checkPointIsInsideSlate(pointOnSlate: Point2D) {
   const globalRefs = getRefs().global.main;
-  const { backdropSize } = globalRefs;
 
-  const sceneSize = backdropSize; // 1280x720 (the point is in here)
+  const sceneSize = slateSize; // 1920x1080 (the point is in here)
 
   const OUT_OF_FRAME_PADDING = 200;
 
   const pointSortOfIsInsideSlate = pointInsideRect(
     pointOnSlate,
     measurementToRect({
-      width: sceneSize.width + OUT_OF_FRAME_PADDING,
-      height: sceneSize.height + OUT_OF_FRAME_PADDING * 3, // Y is easier to go over the edges when the camera angle's low
+      width: sceneSize.x + OUT_OF_FRAME_PADDING,
+      height: sceneSize.y + OUT_OF_FRAME_PADDING * 3, // Y is easier to go over the edges when the camera angle's low
       x: 0 - OUT_OF_FRAME_PADDING,
       y: 0 - OUT_OF_FRAME_PADDING * 3,
     })

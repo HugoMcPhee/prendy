@@ -6,6 +6,7 @@ import {
   focusSlateOnFocusedDoll,
   getShaderTransformStuff,
   getSlatePositionNotOverEdges,
+  slateSize,
 } from "../../helpers/babylonjs/slate";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
@@ -70,7 +71,10 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
       const screenHeight = window.innerHeight;
       const screenWidth = window.innerWidth;
 
-      const newRenderWidth = screenHeight * (16 / 9) * (1 / editedHardwareScaling);
+      // get the slate size here for the ratio instead of 16:9
+      const slateRatio = slateSize.x / slateSize.y; // originally 16/9
+
+      const newRenderWidth = screenHeight * slateRatio * (1 / editedHardwareScaling);
       const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
 
       engine.setSize(newRenderWidth, newRenderHeight);

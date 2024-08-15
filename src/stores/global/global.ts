@@ -206,8 +206,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     backdropPostProcess: null as null | PostProcess,
     backdropPostProcessEffect: null as null | Effect,
     fxaaPostProcess: null as null | PostProcess,
-    //
-    backdropSize: { width: 1920, height: 1080 },
+    // Video shader stuff
     stretchVideoSize: { x: 1, y: 1 },
     stretchVideoGoalSize: { x: 1, y: 1 },
     stretchSceneSize: { x: 1, y: 1 },

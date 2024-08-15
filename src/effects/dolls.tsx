@@ -255,10 +255,7 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
         }
       }
 
-      updateDollScreenPosition({
-        dollName: dollName as DollName,
-        instant: false,
-      });
+      updateDollScreenPosition(dollName);
     },
     check: { type: "dolls", prop: "position" },
     step: "editPosition",
@@ -401,7 +398,7 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
       if (!dollName) return;
 
       // NOTE TODO ideally add for each character automatically as a param effects?
-      forEach(dollNames, (dollName) => updateDollScreenPosition({ dollName: dollName, instant: false }));
+      forEach(dollNames, (dollName) => updateDollScreenPosition(dollName));
     },
     // this happens before rendering because its in "derive" instead of "subscribe"
     check: { type: "global", prop: ["slatePos", "slateZoom"] },

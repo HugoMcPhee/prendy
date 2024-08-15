@@ -274,19 +274,18 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
   // dollRules?.run("whenNowAnimationChanged");
 }
 
-export function updateDollScreenPosition({ dollName, instant }: { dollName: DollName; instant?: boolean }) {
+export function updateDollScreenPosition(dollName: DollName) {
   // Update screen positions :)
 
   const { meshRef } = getRefs().dolls[dollName];
   const modelName = getState().dolls[dollName].modelName;
   if (!meshRef || !modelName) return;
-  const { slatePos, slatePosGoal, focusedDoll, focusedDollIsInView, slateZoom, zoomMultiplier } =
-    getState().global.main;
+  const { slatePos, focusedDoll, focusedDollIsInView, slateZoom, zoomMultiplier } = getState().global.main;
   const characterPointOnSlate = getPositionOnSlate(meshRef, modelName);
 
   const dollPointOnScreen = convertPointOnSlateToPointOnScreen({
     pointOnSlate: characterPointOnSlate,
-    slatePos: instant ? slatePosGoal : slatePos,
+    slatePos: slatePos,
     slateZoom: slateZoom * zoomMultiplier,
   });
 
@@ -298,16 +297,6 @@ export function updateDollScreenPosition({ dollName, instant }: { dollName: Doll
     global: { main: { focusedDollIsInView: newFocusedDollIsInView } },
   });
 }
-
-// {
-//   setDollAnimWeight,
-//   getQuickDistanceBetweenDolls,
-//   inRangesAreTheSame,
-//   setupLightMaterial,
-//   saveModelStuffToDoll,
-//   updateDollScreenPosition,
-// };
-// }
 
 // -------------------------------------------------------------
 // doll store utils

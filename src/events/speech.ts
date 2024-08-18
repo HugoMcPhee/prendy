@@ -9,7 +9,7 @@ import { meta } from "../meta";
 import { CharacterName, DollName, SpeechBubbleName } from "../types";
 
 const RESET_CAMERA_FOCUS_CHAIN_ID = "resetCameraFocus";
-const HIDE_ALARM_TEXT_CHAIN_ID = "hideAlarmText";
+const HIDE_TITLE_TEXT_CHAIN_ID = "hideAlarmText";
 const getCloseCharacterSpeechBubbleChainId = (character: CharacterName) => `closeSpeechBubble_${character}`;
 const getCloseCharacterMiniBubbleChainId = (character: CharacterName) => `closeMiniBubble_${character}`;
 
@@ -197,11 +197,12 @@ export const speechEvents = makeEventTypes(({ event }) => ({
       if (runMode !== "start") return;
       // NOTE alarm text in 'global' instead of project-specific 'story' ?
       setGlobalState({ alarmText: text, alarmTextIsVisible: true });
-      setLiveEventState(liveId, { goalEndTime: elapsedTime + time });
+      const timeInMilliseconds = time * 1000;
+      setLiveEventState(liveId, { goalEndTime: elapsedTime + timeInMilliseconds });
       // Set it to close the next one
-      chainDo("cancel", HIDE_ALARM_TEXT_CHAIN_ID);
+      chainDo("cancel", HIDE_TITLE_TEXT_CHAIN_ID);
       runEvents([II("basic", "wait", { time }), II("speech", "hideTitle", {})], {
-        chainId: HIDE_ALARM_TEXT_CHAIN_ID,
+        chainId: HIDE_TITLE_TEXT_CHAIN_ID,
       });
     },
     params: { text: "", time: undefined as number | undefined },

@@ -162,6 +162,35 @@ export const sceneEvents = makeEventTypes(({ event }) => ({
       whenToRun: undefined as "at loop" | "now" | undefined,
     },
   }),
+  canTriggerCamera: event({
+    run: async ({ place, cam, whenToRun = "now" }, { runMode, isFirstAdd, liveId }) => {
+      if (whenToRun === "at loop") {
+        if (isFirstAdd) addSubEvents(liveId, [II("scene", "changeCameraAtLoop", { place, cam })]);
+      } else {
+        if (runMode === "start") {
+          const endEvent = () => setState({ liveEvents: { [liveId]: { goalEndTime: 0 } } });
+
+          const { nowPlaceName } = getState().global.main;
+          const { nowCamName } = getState().global.main;
+
+          // already on that camera
+          if (nowCamName === cam) {
+            endEvent();
+            return;
+          }
+
+          // AnyCameraName needed if there's only 1 place
+          setState({ global: { main: { goalCamName: cam } } }, () => endEvent());
+        }
+      }
+    },
+    params: {
+      place: "" as PlaceName,
+      cam: "" as CameraNameByPlace[PlaceName],
+      whenToRun: undefined as "at loop" | "now" | undefined,
+    },
+  }),
+
   goToNewPlace: event({
     run: async ({ toOption, who }, { runMode, liveId }) => {
       if (runMode !== "start") return;
@@ -242,7 +271,13 @@ type SceneSetCameraParams<T_Place extends PlaceName> = {
 
 type SceneGoToNewPlaceParams<T_Place extends PlaceName> = {
   toOption: ToPlaceOption<T_Place>;
-  who: undefined | CharacterName;
+  who?: undefined | CharacterName;
+};
+
+type CanTriggerCameraParams<T_Place extends PlaceName> = {
+  place: T_Place;
+  cam: CameraNameByPlace[T_Place];
+  can?: boolean | undefined;
 };
 
 export type SceneEventParameters<T_Group, T_Event, T_GenericParamA> = T_Group extends "scene"
@@ -254,5 +289,7 @@ export type SceneEventParameters<T_Group, T_Event, T_GenericParamA> = T_Group ex
     ? SceneSetCameraParams<T_GenericParamA & PlaceName>
     : T_Event extends "goToNewPlace"
     ? SceneGoToNewPlaceParams<T_GenericParamA & PlaceName>
+    : T_Event extends "canTriggerCamera"
+    ? CanTriggerCameraParams<T_GenericParamA & PlaceName>
     : never
   : never;

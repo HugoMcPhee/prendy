@@ -19,6 +19,8 @@ const defaultCamRefs = () => ({
   probeTexture: null as null | CubeTexture,
   //
   isTriggerable: true,
+  //
+  focusPointOnSlate: { x: null, y: null } as { x: number | null; y: number | null },
 });
 
 export type DefaultCameraRefs = ReturnType<typeof defaultCamRefs>;

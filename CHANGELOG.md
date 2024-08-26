@@ -14,6 +14,19 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v 0.11.10
+
+- Use focused square videos
+- Keep zoom on vertical views
+
+v0.11.9
+
+- Add scene canTriggerCamera event
+
+v0.11.8
+
+- Support any video size
+
 v0.11.7
 
 - Make whenToRun optional in scene setCamera

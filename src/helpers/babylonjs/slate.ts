@@ -14,7 +14,7 @@ export function getScreenSize() {
   return { x: window.innerWidth, y: window.innerHeight };
 }
 
-export const slateSize = { x: 1920, y: 1080 };
+export const slateSize = { x: 1440, y: 1440 };
 
 export function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { x: number; y: number }) {
   // Only for perspective camera here :)
@@ -113,6 +113,14 @@ export function getSlatePositionNotOverEdges(slatePos: Point2D, useGoal?: boolea
   return newSlatePos;
 }
 
+function getMidNumber(a: number, b: number) {
+  return a + (b - a) / 2;
+}
+
+function weightedInterpolation(a: number, b: number, weight) {
+  return a * weight + b * (1 - weight);
+}
+
 function updateSlatePositionToFocusOnMesh({
   meshRef,
   instant,
@@ -125,9 +133,25 @@ function updateSlatePositionToFocusOnMesh({
   function updateSlatePos() {
     const characterPointOnSlate = getPositionOnSlate(meshRef, model);
 
+    const { nowPlaceName, nowCamName } = getState().global.main;
+    const camRefs = getRefs().places[nowPlaceName].camsRefs[nowCamName];
+
+    const defaultFocusPointOnSlateY = slateSize.y / 2; // focus on the middle of the screen, so widescreen can be composed nicely
+    const focusPointOnSlateX = camRefs.focusPointOnSlate.x;
+    const focusPointOnSlateY = camRefs.focusPointOnSlate.y ?? defaultFocusPointOnSlateY;
+
+    const finalFocusPointOnSlate = {
+      x: focusPointOnSlateX
+        ? weightedInterpolation(focusPointOnSlateX, characterPointOnSlate.x, 0.5)
+        : characterPointOnSlate.x,
+      y: focusPointOnSlateY
+        ? weightedInterpolation(focusPointOnSlateY, characterPointOnSlate.y, 0.5)
+        : characterPointOnSlate.y,
+    };
+
     const newSlatePos = getSlatePositionNotOverEdges({
-      x: characterPointOnSlate.x / slateSize.x - 0.5,
-      y: 1 - characterPointOnSlate.y / slateSize.y - 0.5,
+      x: finalFocusPointOnSlate.x / slateSize.x - 0.5,
+      y: 1 - finalFocusPointOnSlate.y / slateSize.y - 0.5,
     });
 
     if (instant) {

@@ -93,7 +93,8 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
       if (isOnVerticalScreen) {
         // ifon a vertical screen, get a multiplier to make the zoom levels smaller
         // it should be so that (newZoomMultiplier * prendyOptions.zoomLevels.default) is 1
-        newZoomMultiplier = 1 / prendyOptions.zoomLevels.default;
+        // newZoomMultiplier = 1 / prendyOptions.zoomLevels.default;
+        // NOTE turned this off, now that there's square videos
       } else if (isOnSuperWideScreen) {
         // it should be so that (newZoomMultiplier * prendyOptions.zoomLevels.default) is 1.025
         newZoomMultiplier = 1.025 / prendyOptions.zoomLevels.default;

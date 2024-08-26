@@ -1,4 +1,4 @@
-import { Mesh, Sound } from "@babylonjs/core";
+import { Camera, Matrix, Mesh, Sound, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
 import { getRefs, getState, setState } from "repond";
@@ -9,6 +9,22 @@ import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { getScene } from "../getSceneOrEngineUtils";
 import { useModelFile } from "../useModelFile";
 import { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
+import { Point3D } from "chootils/dist/points3d";
+import { getProjectionMatrixCustomSize, slateSize } from "../../../helpers/babylonjs/slate";
+
+function getPositionOnSlate(position: Vector3, camera: Camera) {
+  const positionOnSlate = Vector3.Project(
+    position,
+    Matrix.Identity(),
+    camera
+      .getViewMatrix()
+      // .multiply(currentCamera.getProjectionMatrix()),
+      .multiply(getProjectionMatrixCustomSize(camera, slateSize)),
+    camera.viewport.toGlobal(slateSize.x, slateSize.y)
+  );
+
+  return positionOnSlate;
+}
 
 export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) {
   const { placeInfoByName, soundFiles, prendyOptions } = meta.assets!;
@@ -31,6 +47,24 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
     forEach(cameraNames, (cameraName) => {
       const camRef = placeRefs.camsRefs[cameraName];
       camRef.camera = makeCameraFromModel(cameras[cameraName], scene);
+
+      // Find the focus nodes
+      const focusYNode = transformNodes[`${cameraName}_focus_y`];
+      const focusXNode = transformNodes[`${cameraName}_focus_x`];
+      const focusNode = transformNodes[`${cameraName}_focus`];
+      const focusNodePosition = focusNode?.getAbsolutePosition();
+      const focusXNodePosition = focusXNode?.getAbsolutePosition();
+      const focusYNodePosition = focusYNode?.getAbsolutePosition();
+
+      // find the position on the slate
+      const focusPositionOnSlate = focusNodePosition && getPositionOnSlate(focusNodePosition, camRef.camera);
+      const focusXPositionOnSlate = focusXNodePosition && getPositionOnSlate(focusXNodePosition, camRef.camera);
+      const focusYPositionOnSlate = focusYNodePosition && getPositionOnSlate(focusYNodePosition, camRef.camera);
+
+      const finalSlateFocusX = focusXPositionOnSlate?.x ?? focusPositionOnSlate?.x ?? null;
+      const finalSlateFocusY = focusYPositionOnSlate?.y ?? focusPositionOnSlate?.y ?? null;
+
+      camRef.focusPointOnSlate = { x: finalSlateFocusX, y: finalSlateFocusY };
     });
 
     // Load any models for this place that weren't already loaded

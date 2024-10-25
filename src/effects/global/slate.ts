@@ -102,7 +102,7 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
 
       setGlobalState({ isOnVerticalScreen: true, zoomMultiplier: newZoomMultiplier });
 
-      // focusSlateOnFocusedDoll("instant");
+      focusSlateOnFocusedDoll("instant");
     },
     check: { prop: "timeScreenResized", type: "global" },
     atStepEnd: true,

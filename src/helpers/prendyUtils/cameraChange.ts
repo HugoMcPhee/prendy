@@ -189,9 +189,9 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
     // // const appliedProcess = postProcess.apply();
 
-    onNextTick(() => {
-      focusSlateOnFocusedDoll("instant");
-    });
+    // onNextTick(() => {
+    // focusSlateOnFocusedDoll("instant");
+    // });
 
     updateVideoTexture();
     // focusSlateOnFocusedDoll("instant");

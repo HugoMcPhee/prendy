@@ -1,4 +1,4 @@
-import { AbstractMesh, CubeTexture, Sound, TargetCamera, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, CubeTexture, Sound, TargetCamera, Texture, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { MyTypes } from "../declarations";
 import {
@@ -17,6 +17,8 @@ const defaultCamRefs = () => ({
   camCubeMeshes: [] as AbstractMesh[],
   //
   probeTexture: null as null | CubeTexture,
+  //
+  backdropTexturesBySegment: {} as Record<string, { color: Texture; depth: Texture }>, //
   //
   isTriggerable: true,
   //

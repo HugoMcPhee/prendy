@@ -8,7 +8,12 @@ import { setGlobalState } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { getScene } from "../getSceneOrEngineUtils";
 import { useModelFile } from "../useModelFile";
-import { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
+import {
+  loadBackdropTexturesForPlace,
+  loadProbeImagesForPlace,
+  makeCameraFromModel,
+  unloadBackdropTexturesForPlace,
+} from "./utils";
 import { Point3D } from "chootils/dist/points3d";
 import { getProjectionMatrixCustomSize, slateSize } from "../../../helpers/babylonjs/slate";
 
@@ -75,9 +80,13 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
       }
     });
 
-    loadNowVideosForPlace()
-      .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
-      .catch((error) => console.warn("error loading videos", error));
+    loadBackdropTexturesForPlace(placeName)
+      .then(() => {
+        console.log("textures loaded");
+
+        setGlobalState({ newPlaceVideosLoaded: true });
+      })
+      .catch((error) => console.warn("error loading backdrops", error));
 
     loadProbeImagesForPlace(placeName)
       .then(() => setGlobalState({ newPlaceProbesLoaded: true }))

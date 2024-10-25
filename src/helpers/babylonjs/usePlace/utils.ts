@@ -1,35 +1,88 @@
-import { AssetsManager, Camera, Scene, TargetCamera } from "@babylonjs/core";
+import { AssetsManager, Camera, Scene, TargetCamera, Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getRefs, getState, setState } from "repond";
 import { MyTypes } from "../../../declarations";
 import { meta } from "../../../meta";
-import { doWhenSliceVidPlayingAsync, getSliceForPlace } from "../../prendyUtils/sliceVids";
 import { getScene } from "../getSceneOrEngineUtils";
 import { PlaceName, CameraNameByPlace, SegmentNameByPlace } from "../../../types";
 
-export function testAppendVideo(theVideo: HTMLVideoElement, id: string, elementTag = "app") {
-  theVideo.width = 160;
-  theVideo.height = 90;
-  theVideo.id = id;
-  // theVideo.preload = "auto";
-  document.getElementById(elementTag)?.appendChild(theVideo);
+export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
+  const { placeInfoByName, prendyOptions } = meta.assets!;
+  const placesRefs = getRefs().places;
+
+  const placeInfo = placeInfoByName[placeName];
+  const { cameraNames, segmentTimesByCamera, probesByCamera, backdropsByCamera } = placeInfo;
+  const scene = getScene();
+
+  if (!scene) return;
+
+  let assetsManager = new AssetsManager(scene);
+  assetsManager.useDefaultLoadingScreen = false;
+
+  forEach(cameraNames, (cameraName) => {
+    const segmentNamesForCamera = Object.keys(segmentTimesByCamera[cameraName as keyof typeof segmentTimesByCamera]);
+
+    forEach(segmentNamesForCamera, (segmentName) => {
+      const colorTexturePath = backdropsByCamera[cameraName][segmentName].color;
+      const depthTexturePath = backdropsByCamera[cameraName][segmentName].depth;
+
+      let colorAssetTask = assetsManager.addTextureTask(
+        `ColorBackdropFor_${cameraName}_${segmentName}_${placeName}`,
+        colorTexturePath,
+        true,
+        true,
+        Texture.NEAREST_SAMPLINGMODE
+      );
+
+      colorAssetTask.onSuccess = (task) => {
+        const camRef = placesRefs[placeName].camsRefs[cameraName];
+        if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = {};
+        camRef.backdropTexturesBySegment[segmentName].color = task.texture;
+      };
+
+      let depthAssetTask = assetsManager.addTextureTask(
+        `DepthBackdropFor_${cameraName}_${segmentName}_${placeName}`,
+        depthTexturePath,
+        true,
+        true,
+        Texture.NEAREST_SAMPLINGMODE
+      );
+
+      depthAssetTask.onSuccess = (task) => {
+        const camRef = placesRefs[placeName].camsRefs[cameraName];
+        if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = {};
+        camRef.backdropTexturesBySegment[segmentName].depth = task.texture;
+      };
+    });
+  });
+
+  return assetsManager.loadAsync();
 }
 
-export async function loadNowVideosForPlace() {
-  const { nowPlaceName, nowSegmentName, goalSegmentName } = getState().global.main;
-  const { nowCamName, goalCamName } = getState().global.main;
+export async function unloadBackdropTexturesForPlace(placeName: PlaceName) {
+  const placesRefs = getRefs().places;
 
-  const goalSlice = getSliceForPlace(
-    nowPlaceName as PlaceName,
-    (goalCamName ?? nowCamName) as CameraNameByPlace[PlaceName],
-    (goalSegmentName ?? nowSegmentName) as SegmentNameByPlace[PlaceName]
-  );
+  const placeRefs = placesRefs[placeName];
+  const { cameraNames } = placeRefs;
 
-  setState({ sliceVids: { [nowPlaceName]: { wantToLoad: true, nowSlice: goalSlice } } });
+  forEach(cameraNames, (cameraName) => {
+    const camRef = placeRefs.camsRefs[cameraName as keyof typeof placeRefs.camsRefs];
 
-  await doWhenSliceVidPlayingAsync(nowPlaceName as PlaceName);
+    const segmentNamesForCamera = Object.keys(camRef.backdropTexturesBySegment);
 
-  return true;
+    forEach(segmentNamesForCamera, (segmentName) => {
+      const textures = camRef.backdropTexturesBySegment[segmentName];
+      if (textures.color) {
+        textures.color.dispose();
+        delete textures.color;
+      }
+
+      if (textures.depth) {
+        textures.depth.dispose();
+        delete textures.depth;
+      }
+    });
+  });
 }
 
 export async function loadProbeImagesForPlace(placeName: PlaceName) {

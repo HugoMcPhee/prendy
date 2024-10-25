@@ -1,15 +1,15 @@
 import { AbstractMesh, Effect, FxaaPostProcess, PBRMaterial, PostProcess, Scene, ShaderStore } from "@babylonjs/core";
 import { chooseClosestBeforeItemInArray } from "chootils/dist/arrays";
 import { forEach } from "chootils/dist/loops";
-import { getRefs, getState, setState } from "repond";
+import { getRefs, getState, onNextTick, setState } from "repond";
 import { MyTypes } from "../../declarations";
 import { meta } from "../../meta";
 import { DefaultCameraRefs } from "../../stores/places";
 import shaders from "../shaders";
 import { getGlobalState } from "./global";
 import { getSegmentFromSegmentRules } from "./scene";
-import { getSliceVidVideo } from "./sliceVids";
 import { AnyCameraName, PlaceName, AnySegmentName, CameraNameByPlace, SegmentNameByPlace } from "../../types";
+import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
 
 /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -76,12 +76,16 @@ export function getSafeSegmentName<
   });
 }
 
-// Updates both video textures and probe textures for the new cameras
+// Updates both backdrop textures and probe textures for the new cameras
 export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
+  console.log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=");
+  console.log("updateTexturesForNowCamera", newCameraName, didChangePlace);
+  focusSlateOnFocusedDoll("instant");
+
   const globalRefs = getRefs().global.main;
   const placesRefs = getRefs().places;
 
-  const { nowPlaceName } = getState().global.main;
+  const { nowPlaceName, nowSegmentName } = getState().global.main;
   const scene = globalRefs.scene as Scene;
 
   const placeRef = placesRefs[nowPlaceName];
@@ -90,11 +94,19 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
   if (scene === null) return;
   if (!newCamRef.camera) return;
-  // if (!scene.activeCamera) return;
 
   // Render target
   if (globalRefs.backdropPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.backdropPostProcess);
   if (globalRefs.fxaaPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.fxaaPostProcess);
+
+  // const newCamera = goalCamName;
+  const newCamera = newCameraName;
+  // const placesRefs = getRefs().places;
+  const camRef = placesRefs[nowPlaceName].camsRefs[newCamera];
+  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName].color;
+  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
+  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName].depth;
+  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropFramesTexDepth);
 
   scene.activeCamera = newCamRef.camera;
 
@@ -131,7 +143,13 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
       "backdropAndDepthShader",
       "depthy",
       ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
-      ["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
+      [
+        "textureSampler",
+        "SceneDepthTexture",
+        "BackdropTextureSample",
+        "BackdropColorTextureSample",
+        "BackdropDepthTextureSample",
+      ], // textures
       1,
       scene.activeCamera,
       // globalRefs.activeCamera
@@ -171,7 +189,25 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
     // // const appliedProcess = postProcess.apply();
 
+    onNextTick(() => {
+      focusSlateOnFocusedDoll("instant");
+    });
+
+    updateVideoTexture();
+    // focusSlateOnFocusedDoll("instant");
+
+    // NOTE this is only needed for the first time the camera loads, it should probably be somewhere else
+    setTimeout(() => {
+      setState({ global: { main: { timeScreenResized: Date.now() } } });
+    }, 10);
+
+    console.log("donkey kong");
+
     globalRefs.backdropPostProcess.onApply = (effect) => {
+      updateVideoTexture();
+
+      // console.log("backdropPostProcess.onApply", Date.now() - originalTime);
+
       const { slatePos, slatePosGoal, slateZoom } = getState().global.main;
       if (!globalRefs.backdropPostProcessEffect) {
         globalRefs.backdropPostProcessEffect = effect;
@@ -181,11 +217,8 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
 
         // setState({ global: { main: { timeScreenResized: Date.now() } } });
-        setTimeout(() => {
-          setState({ global: { main: { timeScreenResized: Date.now() } } });
-        }, 10);
 
-        updateVideoTexturesForNewPlace(nowPlaceName);
+        // updateVideoTexture();
       }
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
@@ -214,7 +247,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
           slatePos.y * stretchVideoSize.y
         );
       }
-      updateVideoTexture();
     };
   }
 
@@ -224,7 +256,7 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
   if (didChangePlace) {
     addMeshesToRenderLists(newCamRef);
-    updateVideoTexturesForNewPlace(nowPlaceName);
+    updateVideoTexture();
   }
 
   applyProbeToAllDollMaterials();
@@ -266,21 +298,11 @@ export function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
   scene._skipEvaluateActiveMeshesCompletely = true;
 }
 
-export function updateVideoTexturesForNewPlace(nowPlaceName: PlaceName) {
-  const globalRefs = getRefs().global.main;
-
-  if (globalRefs.backdropVideoTex) {
-    const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
-    if (backdropVidElement) globalRefs.backdropVideoTex.updateVid(backdropVidElement);
-  }
-
-  updateVideoTexture();
-}
-
 export function updateVideoTexture() {
   const globalRefs = getRefs().global.main;
 
-  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropTextureSample", globalRefs.backdropVideoTex);
+  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
+  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropFramesTexDepth);
   globalRefs?.backdropPostProcessEffect?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
 }
 
@@ -343,41 +365,4 @@ export function applyProbeToAllParticleMaterials() {
 
     globalRefs.depthRenderTarget?.renderList?.push(particleSystem.mesh);
   });
-}
-
-// note adding to slice vids cause its easier to follow for now? even though it's not seperated
-export function updateNowStuffWhenSliceChanged() {
-  // I think everything is a 'goal' state , and this function swaps them all to 'now' states at once
-
-  const { nowPlaceName, goalSegmentNameWhenVidPlays, nowSegmentName } = getState().global.main;
-  const { goalCamNameWhenVidPlays, nowCamName } = getState().global.main;
-
-  const waitingForASliceToChange = goalSegmentNameWhenVidPlays || goalCamNameWhenVidPlays;
-
-  // if no segment or camera was waiting for the sliceVid to change, return early
-  if (!waitingForASliceToChange) return;
-
-  const goalCamNameWhenVidPlaysSafe = goalCamNameWhenVidPlays
-    ? getSafeCamName(goalCamNameWhenVidPlays as AnyCameraName)
-    : null;
-  const goalSegmentNameWhenVidPlaysSafe = goalSegmentNameWhenVidPlays
-    ? getSafeSegmentName({
-        cam: (goalCamNameWhenVidPlaysSafe ?? nowCamName) as CameraNameByPlace[PlaceName] & AnyCameraName,
-        place: nowPlaceName as PlaceName,
-        segment: goalSegmentNameWhenVidPlays as SegmentNameByPlace[PlaceName],
-        useStorySegmentRules: true,
-      })
-    : null;
-
-  setState({
-    global: {
-      main: {
-        nowSegmentName: goalSegmentNameWhenVidPlaysSafe || nowSegmentName,
-        goalSegmentNameWhenVidPlays: null,
-        nowCamName: goalCamNameWhenVidPlaysSafe || nowCamName,
-        goalCamNameWhenVidPlays: null,
-      },
-    },
-  });
-  // }
 }

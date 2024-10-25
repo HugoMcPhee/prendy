@@ -1,17 +1,19 @@
-import { Texture } from "@babylonjs/core";
+import { Engine, RawTexture2DArray, Texture } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { getRefs, getState, makeEffects, onNextTick, runEffect, setState } from "repond";
 import { CustomVideoTexture } from "../../helpers/babylonjs/CustomVideoTexture";
-import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
+import { focusSlateOnFocusedDoll, slateSize } from "../../helpers/babylonjs/slate";
 import { point3dToVector3 } from "../../helpers/babylonjs/vectors";
 import { setDollPosition, setDollRotation } from "../../helpers/prendyHelpers/dolls";
-import { updateNowStuffWhenSliceChanged, updateTexturesForNowCamera } from "../../helpers/prendyUtils/cameraChange";
+import { updateTexturesForNowCamera } from "../../helpers/prendyUtils/cameraChange";
 import { getCharDollStuff } from "../../helpers/prendyUtils/characters";
 import { setGlobalState } from "../../helpers/prendyUtils/global";
-import { getSliceVidVideo } from "../../helpers/prendyUtils/sliceVids";
 import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spots";
 import { meta } from "../../meta";
 import { AnyCameraName, DollName, PlaceName } from "../../types";
+import { unloadBackdropTexturesForPlace } from "prendy/src/helpers/babylonjs/usePlace/utils";
+
+const cachedTextures = {} as Record<string, Texture>;
 
 function setPlayerPositionForNewPlace() {
   const { placeInfoByName } = meta.assets!;
@@ -42,26 +44,26 @@ function setPlayerPositionForNewPlace() {
 
 function whenAllVideosLoadedForPlace() {
   const globalRefs = getRefs().global.main;
-  const { nowPlaceName } = getState().global.main;
+  const { nowPlaceName, nowCamName, nowSegmentName } = getState().global.main;
   globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
 
-  const backdropVidElement = getSliceVidVideo(nowPlaceName as PlaceName);
+  const { placeInfoByName, prendyOptions } = meta.assets!;
+  const placesRefs = getRefs().places;
+  const camRef = placesRefs[nowPlaceName].camsRefs[nowCamName];
 
-  if (backdropVidElement) {
-    globalRefs.backdropVideoTex = new CustomVideoTexture(
-      "backdropVideoTex",
-      backdropVidElement,
-      globalRefs.scene,
-      false,
-      false,
-      Texture.TRILINEAR_SAMPLINGMODE, // Texture.NEAREST_SAMPLINGMODE, might be better for depth
-      { autoPlay: false, loop: false, autoUpdateTexture: true }
-    );
-  }
+  console.log("nowCamName");
+  console.log(nowCamName);
+  console.log("camRef");
+  console.log(camRef);
+  console.log("camRef.backdropTexturesBySegment");
+  console.log(camRef.backdropTexturesBySegment);
+
+  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName].color;
+  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName].depth;
 }
 
 export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
-  whenPlaceNameChanges: itemEffect({
+  whenGoalPlaceNameChanges: itemEffect({
     run({ newValue: goalPlaceName, itemState: globalState }) {
       // remove goalPlaceName if it's the same as nowPlaceName
       const isNowPlace = goalPlaceName === globalState.nowPlaceName;
@@ -84,6 +86,9 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
   }),
   whenGoalCamNameChanges: itemEffect({
     run({ newValue: goalCamName, itemState: globalState }) {
+      const globalRefs = getRefs().global.main;
+      const { nowPlaceName, nowCamName, nowSegmentName } = globalState;
+
       // remove goalCamName if it's the same as nowCamName
       const isNowSegment = goalCamName === globalState.nowCamName;
       if (isNowSegment) setState({ global: { main: { goalCamName: null } } });
@@ -119,6 +124,7 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
       const { placeInfoByName } = meta.assets!;
 
       // run on the start of the next repond frame, so all the flows can run again
+      // NOTE might be better with onNextTick
       setState({}, () => {
         const { nowPlaceName, goalPlaceName } = globalState;
         const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
@@ -131,6 +137,8 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
           camRef.probeTexture?.dispose();
           camRef.probeTexture = null;
         });
+
+        unloadBackdropTexturesForPlace(nowPlaceName);
 
         if (!goalPlaceName) return;
 
@@ -175,10 +183,6 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
         if (!loadedModelNames.includes(loopedCharacterName)) allModelsAreLoaded = false;
       });
 
-      // when a new place loads it handles checking and clearing
-      // goalSegmentNameWhenVidPlays & goalCamNameWhenVidPlays
-      // otheriwse the video wont loop because it thinks its waiting for a slice to change
-
       if (newPlaceVideosLoaded) {
         if (goalSegmentWhenGoalPlaceLoads) {
           setGlobalState({
@@ -208,7 +212,6 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
             onNextTick(() => {
               const { nowCamName } = getState().global.main;
 
-              updateNowStuffWhenSliceChanged();
               whenAllVideosLoadedForPlace();
               updateTexturesForNowCamera(nowCamName, true);
               focusSlateOnFocusedDoll(); // focus on the player

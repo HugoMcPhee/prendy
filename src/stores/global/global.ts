@@ -1,4 +1,12 @@
-import { DepthRenderer, Effect, PostProcess, RenderTargetTexture, Scene, SolidParticleSystem } from "@babylonjs/core";
+import {
+  DepthRenderer,
+  Effect,
+  PostProcess,
+  RawTexture2DArray,
+  RenderTargetTexture,
+  Scene,
+  SolidParticleSystem,
+} from "@babylonjs/core";
 import { Point3D } from "chootils/dist/points3d";
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
 import { MyTypes } from "../../declarations";
@@ -132,7 +140,6 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     loadingOverlayFullyShowing: true,
     // cameras
     goalCamWhenNextPlaceLoads: null as MaybeCam,
-    goalCamNameWhenVidPlays: null as MaybeCam, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowCamName
     goalCamNameAtLoop: null as MaybeCam,
     goalCamName: null as MaybeCam, // NOTE always set goalCamName? and never nowCamName? to prepare everything first?
     nowCamName:
@@ -143,7 +150,6 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     nowSegmentName: prendyOptions.segment as AnySegmentName,
     goalSegmentName: null as MaybeSegmentName,
     goalSegmentNameAtLoop: null as MaybeSegmentName,
-    goalSegmentNameWhenVidPlays: null as MaybeSegmentName, // near the start of a frame, when the slice vid has finished changing, this is used as the new nowSegmentName
     goalSegmentWhenGoalPlaceLoads: null as MaybeSegmentName,
     // changing places
     modelNamesLoaded: [] as ModelName[],
@@ -176,12 +182,16 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     // story
     heldPickups: prendyOptions.heldPickups as PickupName[],
     storyOverlayToggled: false, // so the screen can fade out without affecting loading a new place
-    alarmTextIsVisible: false,
-    alarmText: "⚠ wobble detected ⚠",
+    alarmTextIsVisible: false, // TODO rename to title text?
+    alarmText: "⚠ wobble detected ⚠", // TODO rename to title text?
     //
     // meta
     aSpeechBubbleIsShowing: false,
     aConvoIsHappening: false,
+    //
+    // backdrop times
+    backdropTime: 0, // this is how far into the backdrop animation it is, it gets reset when reaching the end of a segment, and updated in the frame ticks
+    backdropFrame: 0, // this is the current frame of the backdrop animation, based on the time and frame rate
     //
     frameTick: 0,
     timeMode: "game" as "game" | "pause" | "miniGame",
@@ -197,10 +207,21 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     latestSave: null as null | PrendySaveState,
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
   });
+
+  console.log("=============================");
+  console.log("=============================");
+  console.log("=============================");
+  console.log("=============================");
+  console.log("=============================");
+  console.log("getDefaultState nowCamName");
+  console.log(getDefaultState().nowCamName);
+
   // Refs
   const getDefaultRefs = () => ({
     scene: null as null | Scene,
     backdropVideoTex: null as null | CustomVideoTexture,
+    backdropFramesTex: null as null | RawTexture2DArray,
+    backdropFramesDepthTex: null as null | RawTexture2DArray,
     depthRenderer: null as DepthRenderer | null,
     depthRenderTarget: null as null | RenderTargetTexture,
     backdropPostProcess: null as null | PostProcess,

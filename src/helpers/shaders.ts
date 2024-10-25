@@ -14,6 +14,7 @@ const shaders = {
     // Output
     varying vec2 vUV;
     varying vec2 newUv;
+    varying vec2 newUvFlipped;
     varying vec2 vUVdepth;
     varying vec2 vUVbackdrop;
     
@@ -70,6 +71,9 @@ const shaders = {
       newCoord.xy*= 1./target_res;
       
       newUv = vec2(newCoord.x, newCoord.y);
+
+      // make the same as newUv but flipped on the y axis
+      newUvFlipped = vec2(newCoord.x, 1.0 - newCoord.y);
       
       vec3 newVideoCoord = vec3(vUV.xy,1.0);                
       newVideoCoord = mt*newVideoCoord; 
@@ -99,6 +103,9 @@ precision highp float;
 /// <summary>
 uniform sampler2D DepthTextureSample; // picture Depth texture
 uniform sampler2D BackdropTextureSample; // Backdrop texture
+// uniform highp sampler2DArray BackdropColorTextureSample; // Backdrop array texture
+uniform highp sampler2D BackdropColorTextureSample; // Backdrop texture
+uniform highp sampler2D BackdropDepthTextureSample; // Backdrop texture
 uniform highp sampler2D SceneDepthTexture;
 uniform sampler2D textureSampler; // color texture from webgl?
 
@@ -107,6 +114,7 @@ uniform sampler2D textureSampler; // color texture from webgl?
 /// <summary>
 varying vec2 vUV;
 varying vec2 newUv;
+varying vec2 newUvFlipped;
 varying vec2 vUVdepth;
 varying vec2 vUVbackdrop;
 
@@ -143,8 +151,12 @@ void main(void)
 
 vec4 color = texture2D(textureSampler, newUv);
 vec4 sceneDepthTexture = texture2D(SceneDepthTexture, newUv);
-vec4 depthTexture = texture2D(BackdropTextureSample, vUVdepth);
-vec4 backdropTexture = texture2D(BackdropTextureSample, vUVbackdrop);
+// vec4 depthTexture = texture2D(BackdropTextureSample, vUVdepth);
+// vec4 backdropTexture = texture2D(BackdropTextureSample, vUVbackdrop);
+// vec4 newColor = texture2D(BackdropColorTextureSample, vec3(newUv, 0));
+vec4 depthTexture = texture2D(BackdropDepthTextureSample, newUvFlipped);
+vec4 backdropTexture = texture2D(BackdropColorTextureSample, newUvFlipped);
+
 
 float imageDepth = depthTexture.x;
 float sceneDepth = sceneDepthTexture.r;	// depth value from DepthRenderer: 0 to 1
@@ -160,6 +172,8 @@ vec4 sceneOnBackdropColorSmoother = mix(backdropTexture, sceneOnBackdropColor, c
 // should both be a number combined make 1
 
 gl_FragColor = sceneOnBackdropColorSmoother;
+// gl_FragColor = newColor;
+// gl_FragColor = backdropTexture;
 
 
 

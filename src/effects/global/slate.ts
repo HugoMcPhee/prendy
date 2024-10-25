@@ -49,12 +49,12 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
     atStepEnd: true,
     step: "slatePositionDontGoOverEdges",
   }),
-  whenNowCamChanges: itemEffect({
-    run: () => focusSlateOnFocusedDoll("instant"),
-    check: { prop: "nowCamName", type: "global" },
-    // atStepEnd: true, // if it runs at step end, then the speech bubble changes position one frame after the camera changes
-    step: "slatePosition",
-  }),
+  // whenNowCamChanges: itemEffect({
+  //   run: () => focusSlateOnFocusedDoll("instant"),
+  //   check: { prop: "nowCamName", type: "global" },
+  //   // atStepEnd: true, // if it runs at step end, then the speech bubble changes position one frame after the camera changes
+  //   step: "slatePosition",
+  // }),
   whenScreenResizes: itemEffect({
     run: async () => {
       const { prendyOptions } = meta.assets!;
@@ -102,7 +102,7 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
 
       setGlobalState({ isOnVerticalScreen: true, zoomMultiplier: newZoomMultiplier });
 
-      focusSlateOnFocusedDoll("instant");
+      // focusSlateOnFocusedDoll("instant");
     },
     check: { prop: "timeScreenResized", type: "global" },
     atStepEnd: true,

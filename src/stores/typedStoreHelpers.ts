@@ -146,6 +146,7 @@ export type PlaceInfoByNamePlaceholder<
     spotNames: readonly string[];
     soundspotNames: readonly string[];
     probesByCamera: Record<string, string>;
+    backdropsByCamera: Record<string, Record<string, { color: string; depth: string; frameRate: number }>>; // by camera, by segment
     segmentTimesByCamera: Record<string, Record<string, number>>;
   }
 >;

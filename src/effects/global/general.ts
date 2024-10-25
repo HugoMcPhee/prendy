@@ -142,16 +142,6 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
       const placeInfo = placeInfoByName[nowPlaceName];
       const { cameraNames } = placeInfo;
 
-      const sliceVidState = getState().sliceVids[nowPlaceName];
-      const { stateVidId_playing, stateVidId_waiting } = sliceVidState;
-      // if (!stateVidId_playing) return;
-
-      const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
-      const backdropWaitVidRefs = getRefs().stateVids[stateVidId_waiting];
-
-      backdropVidRefs.videoElement.playbackRate = newGameTimeSpeed;
-      backdropWaitVidRefs.videoElement.playbackRate = newGameTimeSpeed;
-
       // loop all the camera names
       // forEach(cameraNames, (cameraName) => {
       //   const { stateVidName } = getState().cameras[cameraName];

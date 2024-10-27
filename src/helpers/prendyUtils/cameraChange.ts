@@ -142,7 +142,15 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
     globalRefs.backdropPostProcess = new PostProcess(
       "backdropAndDepthShader",
       "depthy",
-      ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
+      [
+        "slatePos",
+        "stretchSceneAmount",
+        "stretchVideoAmount",
+        "currentFrameIndex",
+        "framesPerRow",
+        "framesPerColumn",
+        "frameSize",
+      ],
       [
         "textureSampler",
         "SceneDepthTexture",
@@ -201,25 +209,51 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
       setState({ global: { main: { timeScreenResized: Date.now() } } });
     }, 10);
 
-    console.log("donkey kong");
-
     globalRefs.backdropPostProcess.onApply = (effect) => {
+      // TODO move this to calcuate once when changing camera/segment, and save it in global refs or state
+
+      const { placeInfoByName } = meta.assets!;
+      const { nowPlaceName, nowSegmentName, nowCamName } = getGlobalState();
+      const { segmentTimesByCamera, cameraNames, backdropsByCamera } = placeInfoByName[nowPlaceName];
+      const backdropInfo = backdropsByCamera[nowCamName][nowSegmentName];
+      const maxFramesPerRow = backdropInfo.maxFramesPerRow;
+      const totalFrames = backdropInfo.totalFrames;
+      const framesPerRow = Math.min(totalFrames, maxFramesPerRow);
+      const framesPerColumn = Math.ceil(totalFrames / maxFramesPerRow);
+      const frameSize = { x: 1 / framesPerRow, y: 1 / framesPerColumn };
+
       updateVideoTexture();
 
       // console.log("backdropPostProcess.onApply", Date.now() - originalTime);
 
-      const { slatePos, slatePosGoal, slateZoom } = getState().global.main;
+      const { slatePos, slatePosGoal, slateZoom, backdropFrame } = getState().global.main;
       if (!globalRefs.backdropPostProcessEffect) {
         globalRefs.backdropPostProcessEffect = effect;
 
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("slatePos", slatePosGoal.x, slatePosGoal.y);
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchSceneAmount", slateZoom, slateZoom);
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2("stretchVideoAmount", 1, 1);
+        effect.setFloat2("slatePos", slatePosGoal.x, slatePosGoal.y);
+        effect.setFloat2("stretchSceneAmount", slateZoom, slateZoom);
+        effect.setFloat2("stretchVideoAmount", 1, 1);
+
+        effect.setFloat("currentFrameIndex", backdropFrame);
+        effect.setFloat("framesPerRow", framesPerRow);
+        effect.setFloat("framesPerColumn", framesPerColumn);
+
+        // effect.setFloat2("frameSizeY", frameSize.y);
+        effect.setVector2("frameSize", frameSize);
 
         // setState({ global: { main: { timeScreenResized: Date.now() } } });
 
         // updateVideoTexture();
       }
+
+      effect.setFloat("currentFrameIndex", backdropFrame);
+      effect.setFloat("framesPerRow", framesPerRow);
+      effect.setFloat("framesPerColumn", framesPerColumn);
+
+      // effect.setFloat2("frameSizeY", frameSize.y);
+      effect.setVector2("frameSize", frameSize);
+
+      effect.setFloat("currentFrameIndex", backdropFrame);
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "stretchVideoAmount",

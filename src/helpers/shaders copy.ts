@@ -86,14 +86,12 @@ const shaders = {
       
       newUv = vec2(newCoord.x, newCoord.y);
 
+      // make the same as newUv but flipped on the y axis
+      newUvFlipped = vec2(newCoord.x, 1.0 - newCoord.y);
 
       // Compute the column and row indices for the current frame
       float col = mod(currentFrameIndex, framesPerRow);
       float row = floor(currentFrameIndex / framesPerRow);
-
-      // make the same as newUv but flipped on the y axis
-      newUvFlipped = vec2((newCoord.x * frameSize.x) + (col * frameSize.x), ((1.0 - newCoord.y) * frameSize.y)+ + (row * frameSize.y));
-
 
       // Adjust the original UV coordinates to select the correct frame
       // vec2 frameUV = newUvFlipped * frameSize + vec2(col * frameSize.x, row * frameSize.y);

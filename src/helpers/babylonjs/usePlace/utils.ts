@@ -31,7 +31,7 @@ export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
         colorTexturePath,
         true,
         true,
-        Texture.NEAREST_SAMPLINGMODE
+        Texture.TRILINEAR_SAMPLINGMODE
       );
 
       colorAssetTask.onSuccess = (task) => {
@@ -45,7 +45,7 @@ export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
         depthTexturePath,
         true,
         true,
-        Texture.NEAREST_SAMPLINGMODE
+        Texture.TRILINEAR_SAMPLINGMODE
       );
 
       depthAssetTask.onSuccess = (task) => {

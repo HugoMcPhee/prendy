@@ -155,4 +155,20 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
     atStepEnd: true,
     step: "dollAnimation2",
   }),
+
+  // whenBackdropFrameChanges: itemEffect({
+  //   run({ newValue: newFrameValue }) {
+  //     // console.log("whenBackdropFrameChanges", newFrameValue);
+
+  //     const globalRefs = getRefs().global.main;
+  //     const postProcess = globalRefs.backdropPostProcessEffect;
+  //     console.log("newFrameValue", newFrameValue);
+
+  //     // postProcess?.setFloat("currentFrameIndex", newFrameValue);
+  //     // postProcess.setVector2("frameSize", { x: 0.25, y: 0.5 });
+  //   },
+  //   check: { type: "global", prop: "backdropFrame" },
+  //   atStepEnd: true,
+  //   step: "default",
+  // }),
 }));

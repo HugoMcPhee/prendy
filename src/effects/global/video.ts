@@ -87,18 +87,25 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
       let new_backdropTime = backdropTime + frameDuration * gameTimeSpeed;
 
       // get the segment duration, and check if the time is over the duration
-      const segmentTimesByName = nowPlaceInfo.segmentTimesByCamera[nowCamName as AnyCameraName];
-      const segmentDuration = segmentTimesByName[nowSegmentName as AnySegmentName];
+      const segmentDuration = nowPlaceInfo.segmentDurations[nowSegmentName as AnySegmentName] * 1000; // in milliseconds
 
-      const frameRate =
-        nowPlaceInfo.backdropsByCamera[nowCamName as AnyCameraName][nowSegmentName as AnySegmentName].frameRate;
-      if (new_backdropTime > segmentDuration) {
-        // if the time is over the duration, then it should loop
+      const backdropInfo =
+        nowPlaceInfo.backdropsByCamera[nowCamName as AnyCameraName][nowSegmentName as AnySegmentName];
+
+      const { frameRate, totalFrames } = backdropInfo;
+
+      // if (new_backdropTime > segmentDuration) {
+      //   // if the time is over the duration, then it should loop
+      //   new_backdropTime = 0;
+      //   new_wantToLoop = true;
+      // }
+      let new_backdropFrame = Math.floor((new_backdropTime * frameRate) / 1000);
+
+      if (new_backdropFrame >= totalFrames) {
+        new_backdropFrame = 0;
         new_backdropTime = 0;
         new_wantToLoop = true;
       }
-      let new_backdropFrame = Math.floor(new_backdropTime * frameRate);
-
       // NOTE I think it always keeps the segment time when changing cameras
 
       // ------------------------------------------------
@@ -128,6 +135,8 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
             nowCamName: new_goalCamName ?? nowCamName,
             goalCamNameAtLoop: new_goalCamNameAtLoop,
             // switchSegment_keepProgress
+            backdropFrame: new_backdropFrame,
+            backdropTime: new_backdropTime,
           },
         },
       });

@@ -148,7 +148,15 @@ export type PlaceInfoByNamePlaceholder<
     probesByCamera: Record<string, string>;
     backdropsByCamera: Record<
       string,
-      Record<string, { color: string; depth: string; frameRate: number; totalFrames: number; maxFramesPerRow: number }>
+      Record<
+        string,
+        {
+          frameRate: number;
+          totalFrames: number;
+          maxFramesPerRow: number;
+          textures: Array<{ color: string; depth: string }>;
+        }
+      >
     >; // by camera, by segment
     segmentTimesByCamera: Record<string, Record<string, number>>;
   }

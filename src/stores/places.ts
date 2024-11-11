@@ -18,7 +18,7 @@ const defaultCamRefs = () => ({
   //
   probeTexture: null as null | CubeTexture,
   //
-  backdropTexturesBySegment: {} as Record<string, { color: Texture; depth: Texture }>, //
+  backdropTexturesBySegment: {} as Record<string, Array<{ color: Texture; depth: Texture }>>, //
   //
   isTriggerable: true,
   //

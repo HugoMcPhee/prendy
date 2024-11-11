@@ -12,6 +12,7 @@ import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spot
 import { meta } from "../../meta";
 import { AnyCameraName, DollName, PlaceName } from "../../types";
 import { unloadBackdropTexturesForPlace } from "prendy/src/helpers/babylonjs/usePlace/utils";
+import { getNowBackdropFrameInfo } from "prendy/src/helpers/prendyUtils/backdrops";
 
 const cachedTextures = {} as Record<string, Texture>;
 
@@ -58,8 +59,11 @@ function whenAllVideosLoadedForPlace() {
   console.log("camRef.backdropTexturesBySegment");
   console.log(camRef.backdropTexturesBySegment);
 
-  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName].color;
-  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName].depth;
+  const { nowTextureIndex } = getNowBackdropFrameInfo();
+
+  console.log("bing C");
+  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].color;
+  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].depth;
 }
 
 export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({

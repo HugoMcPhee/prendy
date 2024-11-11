@@ -23,36 +23,46 @@ export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
     const segmentNamesForCamera = Object.keys(segmentTimesByCamera[cameraName as keyof typeof segmentTimesByCamera]);
 
     forEach(segmentNamesForCamera, (segmentName) => {
-      const colorTexturePath = backdropsByCamera[cameraName][segmentName].color;
-      const depthTexturePath = backdropsByCamera[cameraName][segmentName].depth;
+      const textureItemsToLoad = backdropsByCamera[cameraName][segmentName].textures;
+      const camRef = placesRefs[placeName].camsRefs[cameraName];
+      if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = [];
 
-      let colorAssetTask = assetsManager.addTextureTask(
-        `ColorBackdropFor_${cameraName}_${segmentName}_${placeName}`,
-        colorTexturePath,
-        true,
-        true,
-        Texture.TRILINEAR_SAMPLINGMODE
-      );
+      forEach(textureItemsToLoad, (texurePathsItem, textureIndex) => {
+        const colorTexturePath = texurePathsItem.color;
+        const depthTexturePath = texurePathsItem.depth;
 
-      colorAssetTask.onSuccess = (task) => {
-        const camRef = placesRefs[placeName].camsRefs[cameraName];
-        if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = {};
-        camRef.backdropTexturesBySegment[segmentName].color = task.texture;
-      };
+        let colorAssetTask = assetsManager.addTextureTask(
+          `ColorBackdropFor_${cameraName}_${segmentName}_${placeName}_${textureIndex}`,
+          colorTexturePath,
+          true,
+          true,
+          Texture.TRILINEAR_SAMPLINGMODE
+        );
 
-      let depthAssetTask = assetsManager.addTextureTask(
-        `DepthBackdropFor_${cameraName}_${segmentName}_${placeName}`,
-        depthTexturePath,
-        true,
-        true,
-        Texture.TRILINEAR_SAMPLINGMODE
-      );
+        colorAssetTask.onSuccess = (task) => {
+          const camRef = placesRefs[placeName].camsRefs[cameraName];
+          if (!camRef.backdropTexturesBySegment[segmentName][textureIndex]) {
+            camRef.backdropTexturesBySegment[segmentName][textureIndex] = {};
+          }
+          camRef.backdropTexturesBySegment[segmentName][textureIndex].color = task.texture;
+        };
 
-      depthAssetTask.onSuccess = (task) => {
-        const camRef = placesRefs[placeName].camsRefs[cameraName];
-        if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = {};
-        camRef.backdropTexturesBySegment[segmentName].depth = task.texture;
-      };
+        let depthAssetTask = assetsManager.addTextureTask(
+          `DepthBackdropFor_${cameraName}_${segmentName}_${placeName}_${textureIndex}`,
+          depthTexturePath,
+          true,
+          true,
+          Texture.TRILINEAR_SAMPLINGMODE
+        );
+
+        depthAssetTask.onSuccess = (task) => {
+          const camRef = placesRefs[placeName].camsRefs[cameraName];
+          if (!camRef.backdropTexturesBySegment[segmentName][textureIndex]) {
+            camRef.backdropTexturesBySegment[segmentName][textureIndex] = {};
+          }
+          camRef.backdropTexturesBySegment[segmentName][textureIndex].depth = task.texture;
+        };
+      });
     });
   });
 

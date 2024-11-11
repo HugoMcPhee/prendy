@@ -10,6 +10,7 @@ import { getGlobalState } from "./global";
 import { getSegmentFromSegmentRules } from "./scene";
 import { AnyCameraName, PlaceName, AnySegmentName, CameraNameByPlace, SegmentNameByPlace } from "../../types";
 import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
+import { getBackdropFrameInfo, getNowBackdropFrameInfo } from "../../helpers/prendyUtils/backdrops";
 
 /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -103,9 +104,13 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
   const newCamera = newCameraName;
   // const placesRefs = getRefs().places;
   const camRef = placesRefs[nowPlaceName].camsRefs[newCamera];
-  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName].color;
+
+  const { nowTextureIndex } = getNowBackdropFrameInfo();
+  console.log("bing A");
+
+  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
   globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
-  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName].depth;
+  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
   globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropFramesTexDepth);
 
   scene.activeCamera = newCamRef.camera;
@@ -212,21 +217,28 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
     globalRefs.backdropPostProcess.onApply = (effect) => {
       // TODO move this to calcuate once when changing camera/segment, and save it in global refs or state
 
-      const { placeInfoByName } = meta.assets!;
-      const { nowPlaceName, nowSegmentName, nowCamName } = getGlobalState();
-      const { segmentTimesByCamera, cameraNames, backdropsByCamera } = placeInfoByName[nowPlaceName];
-      const backdropInfo = backdropsByCamera[nowCamName][nowSegmentName];
-      const maxFramesPerRow = backdropInfo.maxFramesPerRow;
-      const totalFrames = backdropInfo.totalFrames;
-      const framesPerRow = Math.min(totalFrames, maxFramesPerRow);
-      const framesPerColumn = Math.ceil(totalFrames / maxFramesPerRow);
-      const frameSize = { x: 1 / framesPerRow, y: 1 / framesPerColumn };
+      const { frameSize, framesPerColumn, framesPerRow, maxFramesForTexture } = getBackdropFrameInfo();
 
       updateVideoTexture();
 
-      // console.log("backdropPostProcess.onApply", Date.now() - originalTime);
-
       const { slatePos, slatePosGoal, slateZoom, backdropFrame } = getState().global.main;
+
+      // There can be multiple atlas textures, so we need to calculate the correct frame for the current texture
+      // And also which texture should be used, based on the current frame and the max frames per texture
+
+      const { nowTextureIndex, backdropFrameForNowTexture } = getNowBackdropFrameInfo();
+
+      // update the active texture
+      console.log("bing B");
+      globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.color;
+      globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.depth;
+
+      if (!globalRefs.backdropFramesTex) {
+        console.log("no backdropFramesTex");
+        console.log("camRef.backdropTexturesBySegment", camRef.backdropTexturesBySegment);
+        console.log("nowSegmentName", nowSegmentName);
+        console.log("nowTextureIndex", nowTextureIndex);
+      }
       if (!globalRefs.backdropPostProcessEffect) {
         globalRefs.backdropPostProcessEffect = effect;
 
@@ -234,26 +246,17 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         effect.setFloat2("stretchSceneAmount", slateZoom, slateZoom);
         effect.setFloat2("stretchVideoAmount", 1, 1);
 
-        effect.setFloat("currentFrameIndex", backdropFrame);
+        effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
         effect.setFloat("framesPerRow", framesPerRow);
         effect.setFloat("framesPerColumn", framesPerColumn);
 
-        // effect.setFloat2("frameSizeY", frameSize.y);
         effect.setVector2("frameSize", frameSize);
-
-        // setState({ global: { main: { timeScreenResized: Date.now() } } });
-
-        // updateVideoTexture();
       }
 
-      effect.setFloat("currentFrameIndex", backdropFrame);
+      effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
       effect.setFloat("framesPerRow", framesPerRow);
       effect.setFloat("framesPerColumn", framesPerColumn);
-
-      // effect.setFloat2("frameSizeY", frameSize.y);
       effect.setVector2("frameSize", frameSize);
-
-      effect.setFloat("currentFrameIndex", backdropFrame);
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "stretchVideoAmount",
@@ -266,8 +269,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         globalRefs.stretchSceneSize.y
       );
 
-      // const positionChanged = diffInfo.propsChangedBool.global.main.slatePos;
-      // const zoomChanged = diffInfo.propsChangedBool.global.main.slateZoom;
       const positionChanged = true;
       const zoomChanged = true;
 

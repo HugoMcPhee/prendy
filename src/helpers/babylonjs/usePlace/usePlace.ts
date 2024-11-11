@@ -143,9 +143,21 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
     });
 
     forEach(container.meshes, (loopedMesh) => {
-      if (loopedMesh.name.includes("camBox_")) {
-        const loopedCamNameWithNumber = loopedMesh.name.replace("camBox_", "");
-        const cameraName = loopedCamNameWithNumber.split(".")[0] as AnyCameraName;
+      // NOTE this used to check for "camBox_" but now it checks for "cambox_"
+      // Also, it checked for a "." but now will cehck for an underscore with a number after it
+      if (loopedMesh.name.includes("cambox_") || loopedMesh.name.includes("camBox_")) {
+        let loopedCamNameWithNumber = loopedMesh.name.replace("cambox_", "");
+        loopedCamNameWithNumber = loopedMesh.name.replace("camBox_", "");
+        // split at the last underscore with a number after it
+
+        let cameraName = loopedCamNameWithNumber.replace(/_\d+$/, "");
+        // If the camBox has a "." in it, get the number after the last "."
+        if (cameraName.includes(".")) {
+          cameraName = cameraName.split(".")[0];
+        }
+        console.log("=-=-=-=-=-=-=-=-=-=--=");
+        console.log("cameraName", cameraName);
+
         loopedMesh.isVisible = false;
 
         loopedMesh.freezeWorldMatrix();

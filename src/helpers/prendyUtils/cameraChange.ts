@@ -10,7 +10,7 @@ import { getGlobalState } from "./global";
 import { getSegmentFromSegmentRules } from "./scene";
 import { AnyCameraName, PlaceName, AnySegmentName, CameraNameByPlace, SegmentNameByPlace } from "../../types";
 import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
-import { getBackdropFrameInfo, getNowBackdropFrameInfo } from "../../helpers/prendyUtils/backdrops";
+import { getNowBackdropFrameInfo } from "../../helpers/prendyUtils/backdrops";
 
 /*
   T_CameraName extends CameraNameFromPlace<T_PlaceName>,
@@ -106,12 +106,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
   const camRef = placesRefs[nowPlaceName].camsRefs[newCamera];
 
   const { nowTextureIndex } = getNowBackdropFrameInfo();
-  console.log("bing A");
-
-  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
-  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
-  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
-  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropFramesTexDepth);
 
   scene.activeCamera = newCamRef.camera;
 
@@ -217,7 +211,7 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
     globalRefs.backdropPostProcess.onApply = (effect) => {
       // TODO move this to calcuate once when changing camera/segment, and save it in global refs or state
 
-      const { frameSize, framesPerColumn, framesPerRow, maxFramesForTexture } = getBackdropFrameInfo();
+      const { frameSize, framesPerColumn, framesPerRow } = getNowBackdropFrameInfo();
 
       updateVideoTexture();
 
@@ -230,8 +224,8 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
       // update the active texture
       console.log("bing B");
-      globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.color;
-      globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.depth;
+      // globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.color;
+      // globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.depth;
 
       if (!globalRefs.backdropFramesTex) {
         console.log("no backdropFramesTex");
@@ -245,18 +239,23 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         effect.setFloat2("slatePos", slatePosGoal.x, slatePosGoal.y);
         effect.setFloat2("stretchSceneAmount", slateZoom, slateZoom);
         effect.setFloat2("stretchVideoAmount", 1, 1);
-
-        effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
-        effect.setFloat("framesPerRow", framesPerRow);
-        effect.setFloat("framesPerColumn", framesPerColumn);
-
-        effect.setVector2("frameSize", frameSize);
       }
 
       effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
       effect.setFloat("framesPerRow", framesPerRow);
       effect.setFloat("framesPerColumn", framesPerColumn);
       effect.setVector2("frameSize", frameSize);
+
+      // globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.color;
+      // globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.depth;
+
+      globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
+      globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
+      globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
+      globalRefs?.backdropPostProcessEffect?.setTexture(
+        "BackdropDepthTextureSample",
+        globalRefs.backdropFramesTexDepth
+      );
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "stretchVideoAmount",

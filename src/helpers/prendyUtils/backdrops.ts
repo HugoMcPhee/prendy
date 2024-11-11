@@ -2,45 +2,51 @@ import { getState } from "repond";
 import { getGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
 
-export function getBackdropFrameInfo() {
+export function getNowBackdropFrameInfo() {
   const { placeInfoByName } = meta.assets!;
   const { nowPlaceName, nowSegmentName, nowCamName } = getGlobalState();
-  const { segmentTimesByCamera, cameraNames, backdropsByCamera } = placeInfoByName[nowPlaceName];
+  const { backdropsByCamera } = placeInfoByName[nowPlaceName];
   const backdropInfo = backdropsByCamera[nowCamName][nowSegmentName];
+
   const maxFramesPerRow = backdropInfo.maxFramesPerRow;
-  const maxFramesPerColumn = backdropInfo.maxFramesPerRow; // Because it's a square
-  const maxFramesForTexture = maxFramesPerRow * maxFramesPerColumn;
   const totalFrames = backdropInfo.totalFrames;
-  const framesPerRow = Math.min(totalFrames, maxFramesPerRow);
-  const framesPerColumn = Math.ceil(totalFrames / maxFramesPerRow);
-  const frameSize = { x: 1 / framesPerRow, y: 1 / framesPerColumn };
-  const texutresAmount = backdropsByCamera[nowCamName][nowSegmentName].textures.length;
+  const texturesAmount = backdropInfo.textures.length;
 
-  return {
-    frameSize,
-    framesPerRow,
-    framesPerColumn,
-    maxFramesForTexture,
-    texutresAmount,
-  };
-}
+  const maxFramesForTexture = maxFramesPerRow * maxFramesPerRow; // Assuming square grid for full textures
 
-export function getNowBackdropFrameInfo() {
-  const { frameSize, framesPerRow, framesPerColumn, maxFramesForTexture, texutresAmount } = getBackdropFrameInfo();
-  const { slatePos, slatePosGoal, slateZoom, backdropFrame } = getState().global.main;
+  const { backdropFrame } = getState().global.main;
 
-  // There can be multiple atlas textures, so we need to calculate the correct frame for the current texture
-  // And also which texture should be used, based on the current frame and the max frames per texture
+  // Calculate the current texture index
   let nowTextureIndex = Math.floor(backdropFrame / maxFramesForTexture);
-  const backdropFrameForNowTexture = backdropFrame % maxFramesForTexture;
-  // limit the texture index to the number of textures available
-  nowTextureIndex = Math.min(nowTextureIndex, texutresAmount - 1);
+  nowTextureIndex = Math.min(nowTextureIndex, texturesAmount - 1);
+
+  // Calculate the frame index within the current texture
+  const backdropFrameForNowTexture = backdropFrame - nowTextureIndex * maxFramesForTexture;
+
+  // Determine the number of frames in the current texture
+  let framesInCurrentTexture;
+  if (nowTextureIndex < texturesAmount - 1) {
+    // Full texture
+    framesInCurrentTexture = maxFramesForTexture;
+  } else {
+    // Last texture (might have fewer frames)
+    framesInCurrentTexture = totalFrames - maxFramesForTexture * (texturesAmount - 1);
+  }
+
+  // Calculate framesPerColumn for the current texture
+  const framesPerRow = maxFramesPerRow;
+  const framesPerColumn = Math.ceil(framesInCurrentTexture / framesPerRow);
+
+  // Calculate frame size in UV coordinates
+  const frameSize = {
+    x: 1 / framesPerRow,
+    y: 1 / framesPerColumn,
+  };
 
   return {
     frameSize,
     framesPerRow,
     framesPerColumn,
-    maxFramesForTexture,
     nowTextureIndex,
     backdropFrameForNowTexture,
   };

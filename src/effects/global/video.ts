@@ -86,9 +86,6 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
       // Backrop times:
       let new_backdropTime = backdropTime + frameDuration * gameTimeSpeed;
 
-      // get the segment duration, and check if the time is over the duration
-      const segmentDuration = nowPlaceInfo.segmentDurations[nowSegmentName as AnySegmentName] * 1000; // in milliseconds
-
       const backdropInfo =
         nowPlaceInfo.backdropsByCamera[nowCamName as AnyCameraName][nowSegmentName as AnySegmentName];
 
@@ -157,10 +154,13 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
       const { nowCamName } = getState().global.main;
       const globalChangedBools = diffInfo.propsChangedBool.global.main;
 
+      const placeIsLoading = globalChangedBools?.nowPlaceName;
       const placeChanged = globalChangedBools?.nowPlaceName;
       const cameraChanged = globalChangedBools?.nowCamName;
 
-      if (!cameraChanged && !placeChanged) return;
+      console.log("placeIsLoading", placeIsLoading);
+
+      if ((!cameraChanged && !placeChanged) || placeIsLoading) return;
       // if the place or camera changed
       // onNextTick(() => {
       // onNextTick(() => {

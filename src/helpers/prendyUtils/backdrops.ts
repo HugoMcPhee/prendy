@@ -2,9 +2,11 @@ import { getState } from "repond";
 import { getGlobalState } from "../../helpers/prendyUtils/global";
 import { meta } from "../../meta";
 
-export function getNowBackdropFrameInfo() {
+export function getNowBackdropFrameInfo(cameraName: string) {
   const { placeInfoByName } = meta.assets!;
-  const { nowPlaceName, nowSegmentName, nowCamName } = getGlobalState();
+  // const { nowPlaceName, nowSegmentName, nowCamName } = getGlobalState();
+  const { nowPlaceName, nowSegmentName } = getGlobalState();
+  const nowCamName = cameraName;
   const { backdropsByCamera } = placeInfoByName[nowPlaceName];
   const backdropInfo = backdropsByCamera[nowCamName][nowSegmentName];
 

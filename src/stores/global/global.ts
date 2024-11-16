@@ -113,11 +113,11 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
 
   type SegmentNameFromCameraAndPlace<
     T_Place extends keyof PlaceInfoByName,
-    T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-  > = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+    T_Cam extends keyof PlaceInfoByName[T_Place]["segmentNamesByCamera"]
+  > = keyof PlaceInfoByName[T_Place]["segmentNamesByCamera"][T_Cam];
 
   type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-    keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+    keyof PlaceInfoByName[T_Place]["segmentNamesByCamera"];
 
   type CamSegmentRulesOptionsUntyped = Partial<{
     [P_PlaceName in PlaceName]: Partial<{
@@ -220,7 +220,7 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
   const getDefaultRefs = () => ({
     scene: null as null | Scene,
     backdropVideoTex: null as null | CustomVideoTexture,
-    backdropFramesTex: null as null | RawTexture2DArray,
+    backdropTex: null as null | RawTexture2DArray,
     backdropFramesDepthTex: null as null | RawTexture2DArray,
     depthRenderer: null as DepthRenderer | null,
     depthRenderTarget: null as null | RenderTargetTexture,

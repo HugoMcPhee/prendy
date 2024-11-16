@@ -59,17 +59,17 @@ function whenAllVideosLoadedForPlace() {
   console.log("camRef.backdropTexturesBySegment");
   console.log(camRef.backdropTexturesBySegment);
 
-  const { nowTextureIndex } = getNowBackdropFrameInfo();
+  const { nowTextureIndex } = getNowBackdropFrameInfo(nowCamName);
 
   console.log("bing C");
-  globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].color;
-  globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].depth;
+  globalRefs.backdropTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].color;
+  globalRefs.backdropTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].depth;
 }
 
 export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
   whenGoalPlaceNameChanges: itemEffect({
     run({ newValue: goalPlaceName, itemState: globalState }) {
-      // remove goalPlaceName if it's the same as nowPlaceName
+      // Remove goalPlaceName if it's the same as nowPlaceName
       const isNowPlace = goalPlaceName === globalState.nowPlaceName;
       if (isNowPlace) setState({ global: { main: { goalPlaceName: null } } });
 
@@ -81,7 +81,7 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
   }),
   whenSegmentNameChanges: itemEffect({
     run({ newValue: goalSegmentName, itemState: globalState }) {
-      // remove goalSegmentName if it's the same as nowSegmentName
+      // Remove goalSegmentName if it's the same as nowSegmentName
       const isNowSegment = goalSegmentName === globalState.nowSegmentName;
       if (isNowSegment) setState({ global: { main: { goalSegmentName: null } } });
     },
@@ -90,10 +90,7 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
   }),
   whenGoalCamNameChanges: itemEffect({
     run({ newValue: goalCamName, itemState: globalState }) {
-      const globalRefs = getRefs().global.main;
-      const { nowPlaceName, nowCamName, nowSegmentName } = globalState;
-
-      // remove goalCamName if it's the same as nowCamName
+      // Remove goalCamName if it's the same as nowCamName
       const isNowSegment = goalCamName === globalState.nowCamName;
       if (isNowSegment) setState({ global: { main: { goalCamName: null } } });
     },
@@ -102,37 +99,29 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
   }),
   whenOverlayFadedOut: itemEffect({
     run({ itemState }) {
-      if (!itemState.goalPlaceName) return;
-      setState({ global: { main: { readyToSwapPlace: true } } });
+      if (itemState.goalPlaceName) setState({ global: { main: { readyToSwapPlace: true } } });
     },
-    check: {
-      type: "global",
-      prop: "loadingOverlayFullyShowing",
-      becomes: true,
-    },
+    check: { type: "global", prop: "loadingOverlayFullyShowing", becomes: true },
     step: "loadNewPlace",
   }),
   whenOverlayToggledOff: itemEffect({
     run() {
       setGlobalState({ loadingOverlayFullyShowing: false });
     },
-    check: {
-      type: "global",
-      prop: "loadingOverlayToggled",
-      becomes: false,
-    },
+    check: { type: "global", prop: "loadingOverlayToggled", becomes: false },
     step: "loadNewPlace",
   }),
   whenReadyToSwapPlace: itemEffect({
     run({ itemState: globalState }) {
       const { placeInfoByName } = meta.assets!;
 
-      // run on the start of the next repond frame, so all the flows can run again
-      // NOTE might be better with onNextTick
-      setState({}, () => {
+      // Run on the start of the next repond tick, so all the steps effects can run again
+      onNextTick(() => {
         const { nowPlaceName, goalPlaceName } = globalState;
+        if (!goalPlaceName) return;
         const cameraNames = placeInfoByName[nowPlaceName].cameraNames as AnyCameraName[];
         const placeRefs = getRefs().places[nowPlaceName];
+        const globalRefs = getRefs().global.main;
 
         setState({ sliceVids: { [nowPlaceName]: { wantToUnload: true } } });
 
@@ -142,9 +131,9 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
           camRef.probeTexture = null;
         });
 
-        unloadBackdropTexturesForPlace(nowPlaceName);
+        globalRefs.backdropPostProcess.onApply = null;
 
-        if (!goalPlaceName) return;
+        unloadBackdropTexturesForPlace(nowPlaceName);
 
         setGlobalState({
           nowPlaceName: goalPlaceName,
@@ -157,10 +146,7 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
         });
 
         const { nowCamName, goalCamWhenNextPlaceLoads } = getState().global.main;
-
-        setState({
-          global: { main: { nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName } },
-        });
+        setState({ global: { main: { nowCamName: goalCamWhenNextPlaceLoads ?? nowCamName } } });
       });
     },
     check: { type: "global", prop: "readyToSwapPlace", becomes: true },

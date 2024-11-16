@@ -27,10 +27,10 @@ export function getSafeCamName(cam: any): any {
   const { nowPlaceName } = getGlobalState();
 
   const safePlace = nowPlaceName;
-  const { segmentTimesByCamera, cameraNames } = placeInfoByName[safePlace];
+  const { segmentNamesByCamera, cameraNames } = placeInfoByName[safePlace];
 
   // if the camera isn't in the nowPlace, then use the first camera for the nowPlace
-  const safeCam = segmentTimesByCamera?.[cam as keyof typeof segmentTimesByCamera] ? cam : cameraNames[0];
+  const safeCam = segmentNamesByCamera?.[cam as keyof typeof segmentNamesByCamera] ? cam : cameraNames[0];
 
   return safeCam;
 }
@@ -55,7 +55,7 @@ export function getSafeSegmentName<
   const { nowPlaceName } = getGlobalState();
 
   const safePlace = nowPlaceName;
-  const { segmentNames, segmentTimesByCamera } = placeInfoByName[safePlace];
+  const { segmentNames, segmentNamesByCamera } = placeInfoByName[safePlace];
 
   const safeCam = getSafeCamName(cam);
 
@@ -63,7 +63,7 @@ export function getSafeSegmentName<
     console.warn("tried to getSafeSegment name for not current place", place);
   }
 
-  const camSegmentNames = Object.keys(segmentTimesByCamera?.[safeCam as keyof typeof segmentTimesByCamera] ?? {});
+  const camSegmentNames = segmentNamesByCamera?.[safeCam as keyof typeof segmentNamesByCamera] ?? {};
 
   // disabling for now to allow getSafeSegmentName to work in video.ts (looping stuff) when changing segment?
   const foundRuleSegmentName = useStorySegmentRules
@@ -79,8 +79,6 @@ export function getSafeSegmentName<
 
 // Updates both backdrop textures and probe textures for the new cameras
 export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChangePlace = false) {
-  console.log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=");
-  console.log("updateTexturesForNowCamera", newCameraName, didChangePlace);
   focusSlateOnFocusedDoll("instant");
 
   const globalRefs = getRefs().global.main;
@@ -100,25 +98,20 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
   if (globalRefs.backdropPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.backdropPostProcess);
   if (globalRefs.fxaaPostProcess) scene.activeCamera?.detachPostProcess(globalRefs.fxaaPostProcess);
 
-  // const newCamera = goalCamName;
-  const newCamera = newCameraName;
-  // const placesRefs = getRefs().places;
-  const camRef = placesRefs[nowPlaceName].camsRefs[newCamera];
-
-  const { nowTextureIndex } = getNowBackdropFrameInfo();
-
   scene.activeCamera = newCamRef.camera;
 
   if (globalRefs.backdropPostProcess) scene.activeCamera?.attachPostProcess(globalRefs.backdropPostProcess);
   if (globalRefs.fxaaPostProcess) scene.activeCamera?.attachPostProcess(globalRefs.fxaaPostProcess);
 
+  // Create the depth renderer
   if (!globalRefs.depthRenderer) globalRefs.depthRenderer = scene.enableDepthRenderer(newCamRef.camera, false);
-
+  // Update the depth renderer camera, without disposing it
   // @ts-ignore
   globalRefs.depthRenderer._camera = newCamRef.camera;
 
+  // Create the depth render target
   if (!globalRefs.depthRenderTarget) globalRefs.depthRenderTarget = globalRefs.depthRenderer.getDepthMap();
-
+  // Update the depth render target camera
   globalRefs.depthRenderTarget.activeCamera = newCamRef.camera;
 
   if (!scene.customRenderTargets.length) {
@@ -127,16 +120,8 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
   }
 
   if (scene.activeCamera && !globalRefs.backdropPostProcess) {
-    // const shaderStore = ShaderStore.GetShadersStore();
-    // shaderStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
-    // shaderStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
-    // console.log("shaderStore", shaderStore);
-    // console.log("ShaderStore.ShadersStore", ShaderStore.ShadersStore);
     ShaderStore.ShadersStore["depthyPixelShader"] = shaders.backdropAndDepth.backdropFragment;
     ShaderStore.ShadersStore["depthyVertexShader"] = shaders.backdropAndDepth.backdropVertex;
-
-    // ShaderStore.ShadersStore["translatedFxaaPixelShader"] = shaders.translatedFxaa.translatedFxaaFragment;
-    // ShaderStore.ShadersStore["translatedFxaaVertexShader"] = shaders.translatedFxaa.translatedFxaaVertex;
 
     globalRefs.backdropPostProcess = new PostProcess(
       "backdropAndDepthShader",
@@ -159,10 +144,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
       ], // textures
       1,
       scene.activeCamera,
-      // globalRefs.activeCamera
-      // Texture.NEAREST_SAMPLINGMODE // sampling
-      // globalRefs.scene.engine // engine,
-      // Texture.BILINEAR_SAMPLINGMODE,
       undefined,
       undefined,
       undefined,
@@ -170,35 +151,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
       undefined,
       "depthy"
     );
-    // setTimeout(() => {
-    //   globalRefs.backdropPostProcess = new PostProcess(
-    //     "backdropAndDepthShader",
-    //     "translatedFxaa",
-    //     null, // ["slatePos", "stretchSceneAmount", "stretchVideoAmount"],
-    //     null, //["textureSampler", "SceneDepthTexture", "BackdropTextureSample"], // textures
-    //     1,
-    //     globalRefs.scene.activeCamera,
-    //     // globalRefs.activeCamera
-    //     // Texture.NEAREST_SAMPLINGMODE // sampling
-    //     // globalRefs.scene.engine // engine,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     "translatedFxaa"
-    //   );
-    // }, 4000);
-
-    // const fxaaPP = new FxaaPostProcess("fxaa", 1.0, globalRefs.scene.activeCamera);
-
-    // fxaaPP.
-
-    // // const appliedProcess = postProcess.apply();
-
-    // onNextTick(() => {
-    // focusSlateOnFocusedDoll("instant");
-    // });
 
     updateVideoTexture();
     // focusSlateOnFocusedDoll("instant");
@@ -207,32 +159,41 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
     setTimeout(() => {
       setState({ global: { main: { timeScreenResized: Date.now() } } });
     }, 10);
+  }
+
+  // Set the onApply for the post process
+  if (!globalRefs.backdropPostProcess.onApply) {
+    console.log("Updating postProcess onApply");
 
     globalRefs.backdropPostProcess.onApply = (effect) => {
+      let newCamera = getState().global.main.nowCamName;
+      let { readyToSwapPlace, goalPlaceName, goalCamName, goalCamWhenNextPlaceLoads, goalCamNameAtLoop } =
+        getState().global.main;
+      const isLoadingPlace = readyToSwapPlace;
+      if (isLoadingPlace) {
+        console.log("readyToSwapPlace", readyToSwapPlace);
+        console.log("newCamera", newCamera);
+        console.log("goalCamWhenNextPlaceLoads", goalCamWhenNextPlaceLoads);
+        console.log("goalCamNameAtLoop", goalCamNameAtLoop);
+
+        return;
+      }
+      let camRef = placesRefs[nowPlaceName].camsRefs[newCamera];
+
       // TODO move this to calcuate once when changing camera/segment, and save it in global refs or state
 
-      const { frameSize, framesPerColumn, framesPerRow } = getNowBackdropFrameInfo();
+      const { frameSize, framesPerColumn, framesPerRow, nowTextureIndex, backdropFrameForNowTexture } =
+        getNowBackdropFrameInfo(newCamera);
 
       updateVideoTexture();
 
-      const { slatePos, slatePosGoal, slateZoom, backdropFrame } = getState().global.main;
+      const { slatePos, slatePosGoal, slateZoom } = getState().global.main;
 
       // There can be multiple atlas textures, so we need to calculate the correct frame for the current texture
       // And also which texture should be used, based on the current frame and the max frames per texture
 
-      const { nowTextureIndex, backdropFrameForNowTexture } = getNowBackdropFrameInfo();
-
       // update the active texture
-      console.log("bing B");
-      // globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.color;
-      // globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.depth;
 
-      if (!globalRefs.backdropFramesTex) {
-        console.log("no backdropFramesTex");
-        console.log("camRef.backdropTexturesBySegment", camRef.backdropTexturesBySegment);
-        console.log("nowSegmentName", nowSegmentName);
-        console.log("nowTextureIndex", nowTextureIndex);
-      }
       if (!globalRefs.backdropPostProcessEffect) {
         globalRefs.backdropPostProcessEffect = effect;
 
@@ -240,22 +201,15 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         effect.setFloat2("stretchSceneAmount", slateZoom, slateZoom);
         effect.setFloat2("stretchVideoAmount", 1, 1);
       }
-
       effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
       effect.setFloat("framesPerRow", framesPerRow);
       effect.setFloat("framesPerColumn", framesPerColumn);
       effect.setVector2("frameSize", frameSize);
 
-      // globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.color;
-      // globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment?.[nowSegmentName]?.[nowTextureIndex]?.depth;
-
-      globalRefs.backdropFramesTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
-      globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
-      globalRefs.backdropFramesTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
-      globalRefs?.backdropPostProcessEffect?.setTexture(
-        "BackdropDepthTextureSample",
-        globalRefs.backdropFramesTexDepth
-      );
+      globalRefs.backdropTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
+      globalRefs.backdropTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
+      globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropTex);
+      globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropTexDepth);
 
       (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
         "stretchVideoAmount",
@@ -284,6 +238,7 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
     };
   }
 
+  // Make the FXAA post process
   if (scene.activeCamera && !globalRefs.fxaaPostProcess) {
     globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, scene.activeCamera);
   }
@@ -300,7 +255,6 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 export function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
   const { dollNames } = meta.assets!;
   const globalRefs = getRefs().global.main;
-
   const scene = globalRefs.scene as Scene;
 
   // scene.freeActiveMeshes(); // hm? different to freezeActiveMeshes , maybe unintentional
@@ -335,8 +289,8 @@ export function addMeshesToRenderLists(newCamRef: DefaultCameraRefs) {
 export function updateVideoTexture() {
   const globalRefs = getRefs().global.main;
 
-  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropFramesTex);
-  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropFramesTexDepth);
+  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropTex);
+  globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropTexDepth);
   globalRefs?.backdropPostProcessEffect?.setTexture("SceneDepthTexture", globalRefs.depthRenderTarget);
 }
 

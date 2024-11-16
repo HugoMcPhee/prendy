@@ -11,7 +11,7 @@ export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
   const placesRefs = getRefs().places;
 
   const placeInfo = placeInfoByName[placeName];
-  const { cameraNames, segmentTimesByCamera, probesByCamera, backdropsByCamera } = placeInfo;
+  const { cameraNames, segmentNamesByCamera, probesByCamera, backdropsByCamera } = placeInfo;
   const scene = getScene();
 
   if (!scene) return;
@@ -20,9 +20,15 @@ export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
   assetsManager.useDefaultLoadingScreen = false;
 
   forEach(cameraNames, (cameraName) => {
-    const segmentNamesForCamera = Object.keys(segmentTimesByCamera[cameraName as keyof typeof segmentTimesByCamera]);
+    console.log("segmentNamesByCamera", segmentNamesByCamera);
+
+    const segmentNamesForCamera = segmentNamesByCamera[cameraName as keyof typeof segmentNamesByCamera];
 
     forEach(segmentNamesForCamera, (segmentName) => {
+      console.log("loading backdrops for", cameraName, segmentName, placeName);
+      console.log("backdropsByCamera");
+      console.log(backdropsByCamera);
+
       const textureItemsToLoad = backdropsByCamera[cameraName][segmentName].textures;
       const camRef = placesRefs[placeName].camsRefs[cameraName];
       if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = [];
@@ -73,7 +79,8 @@ export async function unloadBackdropTexturesForPlace(placeName: PlaceName) {
   const placesRefs = getRefs().places;
 
   const placeRefs = placesRefs[placeName];
-  const { cameraNames } = placeRefs;
+  const placeInfo = meta.assets!.placeInfoByName[placeName];
+  const { cameraNames } = placeInfo;
 
   forEach(cameraNames, (cameraName) => {
     const camRef = placeRefs.camsRefs[cameraName as keyof typeof placeRefs.camsRefs];

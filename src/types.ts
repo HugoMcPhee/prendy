@@ -37,8 +37,8 @@ export type MusicName = MyTypes["Types"]["MusicName"];
 
 export type SegmentNameFromCameraAndPlace<
   T_Place extends keyof PlaceInfoByName,
-  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"]
-> = keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"][T_Cam];
+  T_Cam extends keyof PlaceInfoByName[T_Place]["segmentNamesByCamera"]
+> = keyof PlaceInfoByName[T_Place]["segmentNamesByCamera"][T_Cam];
 
 // Store types
 export type StoryState = AllState["story"]["main"];
@@ -56,7 +56,7 @@ export type SpeechBubbleName = keyof AllState["speechBubbles"] extends never ? s
 
 // Helper types
 export type CameraNameFromPlace<T_Place extends keyof PlaceInfoByName> =
-  keyof PlaceInfoByName[T_Place]["segmentTimesByCamera"];
+  keyof PlaceInfoByName[T_Place]["segmentNamesByCamera"];
 export type DollNameFromCharacter<T_CharacterName extends CharacterName> = CharacterOptions[T_CharacterName]["doll"];
 export type ModelNameFromCharacter<T_CharacterName extends CharacterName> = ModelNameFromDoll<
   DollNameFromCharacter<T_CharacterName>

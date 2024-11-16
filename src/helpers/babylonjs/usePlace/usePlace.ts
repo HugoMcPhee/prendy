@@ -2,20 +2,14 @@ import { Camera, Matrix, Mesh, Sound, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
 import { getRefs, getState, setState } from "repond";
+import { getProjectionMatrixCustomSize, slateSize } from "../../../helpers/babylonjs/slate";
 import { meta } from "../../../meta";
-import { AnyCameraName, PlaceName, SoundName } from "../../../types";
+import { PlaceName, SoundName } from "../../../types";
 import { setGlobalState } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { getScene } from "../getSceneOrEngineUtils";
 import { useModelFile } from "../useModelFile";
-import {
-  loadBackdropTexturesForPlace,
-  loadProbeImagesForPlace,
-  makeCameraFromModel,
-  unloadBackdropTexturesForPlace,
-} from "./utils";
-import { Point3D } from "chootils/dist/points3d";
-import { getProjectionMatrixCustomSize, slateSize } from "../../../helpers/babylonjs/slate";
+import { loadBackdropTexturesForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
 
 function getPositionOnSlate(position: Vector3, camera: Camera) {
   const positionOnSlate = Vector3.Project(
@@ -147,7 +141,7 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
       // Also, it checked for a "." but now will cehck for an underscore with a number after it
       if (loopedMesh.name.includes("cambox_") || loopedMesh.name.includes("camBox_")) {
         let loopedCamNameWithNumber = loopedMesh.name.replace("cambox_", "");
-        loopedCamNameWithNumber = loopedMesh.name.replace("camBox_", "");
+        loopedCamNameWithNumber = loopedCamNameWithNumber.replace("camBox_", "");
         // split at the last underscore with a number after it
 
         let cameraName = loopedCamNameWithNumber.replace(/_\d+$/, "");
@@ -155,8 +149,6 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
         if (cameraName.includes(".")) {
           cameraName = cameraName.split(".")[0];
         }
-        console.log("=-=-=-=-=-=-=-=-=-=--=");
-        console.log("cameraName", cameraName);
 
         loopedMesh.isVisible = false;
 

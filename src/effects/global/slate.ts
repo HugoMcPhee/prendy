@@ -86,8 +86,6 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
       // check if the screen is super wide (for landscape phones)
       const isOnSuperWideScreen = screenWidth / screenHeight >= 16 / 7;
 
-      console.log("isOnSuperWideScreen", isOnSuperWideScreen);
-
       let newZoomMultiplier = 1;
 
       if (isOnVerticalScreen) {

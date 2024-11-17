@@ -115,8 +115,6 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
     run({ newValue: newGameTimeSpeed }) {
       const { modelInfoByName, dollNames, placeInfoByName } = meta.assets!;
 
-      console.log("whenGameTimeSpeedChanges");
-
       // loop through all dolls and set the animation speed
       forEach(dollNames, (dollName) => {
         const dollRefs = getRefs().dolls[dollName];

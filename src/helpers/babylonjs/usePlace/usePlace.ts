@@ -76,8 +76,6 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
 
     loadBackdropTexturesForPlace(placeName)
       .then(() => {
-        console.log("textures loaded");
-
         setGlobalState({ newPlaceVideosLoaded: true });
       })
       .catch((error) => console.warn("error loading backdrops", error));

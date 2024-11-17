@@ -6,6 +6,7 @@ import {
   RenderTargetTexture,
   Scene,
   SolidParticleSystem,
+  Texture,
 } from "@babylonjs/core";
 import { Point3D } from "chootils/dist/points3d";
 import { mover2dRefs, mover2dState, moverRefs, moverState } from "repond-movers";
@@ -208,20 +209,11 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     latestLoadTime: 0, // so things can be initialed after loading state, like isVisible
   });
 
-  console.log("=============================");
-  console.log("=============================");
-  console.log("=============================");
-  console.log("=============================");
-  console.log("=============================");
-  console.log("getDefaultState nowCamName");
-  console.log(getDefaultState().nowCamName);
-
   // Refs
   const getDefaultRefs = () => ({
     scene: null as null | Scene,
-    backdropVideoTex: null as null | CustomVideoTexture,
-    backdropTex: null as null | RawTexture2DArray,
-    backdropFramesDepthTex: null as null | RawTexture2DArray,
+    backdropTex: null as null | Texture,
+    backdropTexDepth: null as null | Texture,
     depthRenderer: null as DepthRenderer | null,
     depthRenderTarget: null as null | RenderTargetTexture,
     backdropPostProcess: null as null | PostProcess,

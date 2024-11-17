@@ -14,9 +14,6 @@ export const prendyStepNames = [
   "elapsedTimeUpdates",
   "eventUpdates",
   "moverUpdates",
-  // updating internal video states
-  // "stateVidStateUpdates",
-  // "sliceVidStateUpdates",
   "updateBackdropFrameInfo", // when game logic changes to choose a new video slice ( like when goalCamera or segment changes)
   // game stuff
   "respondToNewPlace", // TODO Maybe use this for when a place loads, and the other "loadNewPlace" for starting to load a place?
@@ -39,8 +36,6 @@ export const prendyStepNames = [
   "positionUi", // positioned ui like speech bubbles
   "loadNewPlaceModels", //
   "loadNewPlace", // might ned a load new place, and respondToNewPlace seperate parts
-  // deciding and changing for next videos
-  // "checkVideoLoop", // handling video loop? // note this wasn't working when done before "updateBackdropFrameInfo" , so mvoed to the last flow as a quick probably temporary fix
   // ...MOVERS_STEPS
   "moversGoal",
   "moversStart",

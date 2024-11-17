@@ -163,21 +163,8 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
   // Set the onApply for the post process
   if (!globalRefs.backdropPostProcess.onApply) {
-    console.log("Updating postProcess onApply");
-
     globalRefs.backdropPostProcess.onApply = (effect) => {
       let newCamera = getState().global.main.nowCamName;
-      let { readyToSwapPlace, goalPlaceName, goalCamName, goalCamWhenNextPlaceLoads, goalCamNameAtLoop } =
-        getState().global.main;
-      const isLoadingPlace = readyToSwapPlace;
-      if (isLoadingPlace) {
-        console.log("readyToSwapPlace", readyToSwapPlace);
-        console.log("newCamera", newCamera);
-        console.log("goalCamWhenNextPlaceLoads", goalCamWhenNextPlaceLoads);
-        console.log("goalCamNameAtLoop", goalCamNameAtLoop);
-
-        return;
-      }
       let camRef = placesRefs[nowPlaceName].camsRefs[newCamera];
 
       // TODO move this to calcuate once when changing camera/segment, and save it in global refs or state

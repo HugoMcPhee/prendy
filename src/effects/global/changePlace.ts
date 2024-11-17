@@ -46,22 +46,10 @@ function setPlayerPositionForNewPlace() {
 function whenAllVideosLoadedForPlace() {
   const globalRefs = getRefs().global.main;
   const { nowPlaceName, nowCamName, nowSegmentName } = getState().global.main;
-  globalRefs.backdropVideoTex?.dispose(); // NOTE maybe don't dispose it?
-
-  const { placeInfoByName, prendyOptions } = meta.assets!;
   const placesRefs = getRefs().places;
   const camRef = placesRefs[nowPlaceName].camsRefs[nowCamName];
-
-  console.log("nowCamName");
-  console.log(nowCamName);
-  console.log("camRef");
-  console.log(camRef);
-  console.log("camRef.backdropTexturesBySegment");
-  console.log(camRef.backdropTexturesBySegment);
-
   const { nowTextureIndex } = getNowBackdropFrameInfo(nowCamName);
 
-  console.log("bing C");
   globalRefs.backdropTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].color;
   globalRefs.backdropTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex ?? 0].depth;
 }
@@ -202,7 +190,7 @@ export const globalChangePlaceEffects = makeEffects(({ itemEffect }) => ({
             onNextTick(() => {
               const { nowCamName } = getState().global.main;
 
-              whenAllVideosLoadedForPlace();
+              // whenAllVideosLoadedForPlace();
               updateTexturesForNowCamera(nowCamName, true);
               focusSlateOnFocusedDoll(); // focus on the player
 

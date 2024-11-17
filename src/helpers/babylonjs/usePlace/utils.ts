@@ -20,15 +20,9 @@ export async function loadBackdropTexturesForPlace(placeName: PlaceName) {
   assetsManager.useDefaultLoadingScreen = false;
 
   forEach(cameraNames, (cameraName) => {
-    console.log("segmentNamesByCamera", segmentNamesByCamera);
-
     const segmentNamesForCamera = segmentNamesByCamera[cameraName as keyof typeof segmentNamesByCamera];
 
     forEach(segmentNamesForCamera, (segmentName) => {
-      console.log("loading backdrops for", cameraName, segmentName, placeName);
-      console.log("backdropsByCamera");
-      console.log(backdropsByCamera);
-
       const textureItemsToLoad = backdropsByCamera[cameraName][segmentName].textures;
       const camRef = placesRefs[placeName].camsRefs[cameraName];
       if (!camRef.backdropTexturesBySegment[segmentName]) camRef.backdropTexturesBySegment[segmentName] = [];

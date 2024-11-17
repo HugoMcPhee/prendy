@@ -5,7 +5,7 @@ import { meta } from "../../meta";
 import { focusSlateOnFocusedDoll } from "../../helpers/babylonjs/slate";
 
 export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
-  whenWantToupdateBackdropFrameInfo: effect({
+  whenWantToUpdateBackdropFrameInfo: effect({
     run({}, frameDuration) {
       const {
         nowPlaceName,
@@ -15,6 +15,7 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
         goalSegmentNameWhenVidPlays,
         goalPlaceName, // checking this as a very early way to know if its loading a new place, goToNewPlace , which sets goalSegmentName and goalCamName also sets goalPlaceName
         isLoadingBetweenPlaces,
+        readyToSwapPlace,
         //
         backdropTime,
         backdropFrame,
@@ -42,8 +43,7 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
       if (goalPlaceName) {
         // NOTE , might still want to loop the videos when it's loading a new place ?
         // but it should fade out so hopefully don't need to, it might just show a little bit of the next part of the video while fading , but it can be fixed here if wanted
-
-        return;
+        // return;
       }
 
       if (isLoadingBetweenPlaces) return;
@@ -154,13 +154,10 @@ export const globalVideoEffects = makeEffects(({ itemEffect, effect }) => ({
       const { nowCamName } = getState().global.main;
       const globalChangedBools = diffInfo.propsChangedBool.global.main;
 
-      const placeIsLoading = globalChangedBools?.nowPlaceName;
       const placeChanged = globalChangedBools?.nowPlaceName;
       const cameraChanged = globalChangedBools?.nowCamName;
 
-      console.log("placeIsLoading", placeIsLoading);
-
-      if ((!cameraChanged && !placeChanged) || placeIsLoading) return;
+      if (!cameraChanged && !placeChanged) return;
       // if the place or camera changed
       // onNextTick(() => {
       // onNextTick(() => {

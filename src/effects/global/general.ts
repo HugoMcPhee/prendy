@@ -115,8 +115,6 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
     run({ newValue: newGameTimeSpeed }) {
       const { modelInfoByName, dollNames, placeInfoByName } = meta.assets!;
 
-      console.log("whenGameTimeSpeedChanges");
-
       // loop through all dolls and set the animation speed
       forEach(dollNames, (dollName) => {
         const dollRefs = getRefs().dolls[dollName];
@@ -142,16 +140,6 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
       const placeInfo = placeInfoByName[nowPlaceName];
       const { cameraNames } = placeInfo;
 
-      const sliceVidState = getState().sliceVids[nowPlaceName];
-      const { stateVidId_playing, stateVidId_waiting } = sliceVidState;
-      // if (!stateVidId_playing) return;
-
-      const backdropVidRefs = getRefs().stateVids[stateVidId_playing];
-      const backdropWaitVidRefs = getRefs().stateVids[stateVidId_waiting];
-
-      backdropVidRefs.videoElement.playbackRate = newGameTimeSpeed;
-      backdropWaitVidRefs.videoElement.playbackRate = newGameTimeSpeed;
-
       // loop all the camera names
       // forEach(cameraNames, (cameraName) => {
       //   const { stateVidName } = getState().cameras[cameraName];
@@ -165,4 +153,20 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
     atStepEnd: true,
     step: "dollAnimation2",
   }),
+
+  // whenBackdropFrameChanges: itemEffect({
+  //   run({ newValue: newFrameValue }) {
+  //     // console.log("whenBackdropFrameChanges", newFrameValue);
+
+  //     const globalRefs = getRefs().global.main;
+  //     const postProcess = globalRefs.backdropPostProcessEffect;
+  //     console.log("newFrameValue", newFrameValue);
+
+  //     // postProcess?.setFloat("currentFrameIndex", newFrameValue);
+  //     // postProcess.setVector2("frameSize", { x: 0.25, y: 0.5 });
+  //   },
+  //   check: { type: "global", prop: "backdropFrame" },
+  //   atStepEnd: true,
+  //   step: "default",
+  // }),
 }));

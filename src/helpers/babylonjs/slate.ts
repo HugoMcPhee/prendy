@@ -14,7 +14,7 @@ export function getScreenSize() {
   return { x: window.innerWidth, y: window.innerHeight };
 }
 
-export const slateSize = { x: 1440, y: 1440 };
+export const slateSize = { x: 2048, y: 2048 };
 
 export function getProjectionMatrixCustomSize(theCamera: Camera, theSize: { x: number; y: number }) {
   // Only for perspective camera here :)

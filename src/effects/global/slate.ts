@@ -49,12 +49,12 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
     atStepEnd: true,
     step: "slatePositionDontGoOverEdges",
   }),
-  whenNowCamChanges: itemEffect({
-    run: () => focusSlateOnFocusedDoll("instant"),
-    check: { prop: "nowCamName", type: "global" },
-    // atStepEnd: true, // if it runs at step end, then the speech bubble changes position one frame after the camera changes
-    step: "slatePosition",
-  }),
+  // whenNowCamChanges: itemEffect({
+  //   run: () => focusSlateOnFocusedDoll("instant"),
+  //   check: { prop: "nowCamName", type: "global" },
+  //   // atStepEnd: true, // if it runs at step end, then the speech bubble changes position one frame after the camera changes
+  //   step: "slatePosition",
+  // }),
   whenScreenResizes: itemEffect({
     run: async () => {
       const { prendyOptions } = meta.assets!;
@@ -74,8 +74,12 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
       // get the slate size here for the ratio instead of 16:9
       const slateRatio = slateSize.x / slateSize.y; // originally 16/9
 
-      const newRenderWidth = screenHeight * slateRatio * (1 / editedHardwareScaling);
-      const newRenderHeight = screenHeight * (1 / editedHardwareScaling);
+      // TODO redo this to try and get the render resolution to matfch the backdrops, including the zoom
+
+      const QUALITY = 2; // 1 is normal browser pixel ratio, 2 is retina, 3 is super retina
+
+      const newRenderWidth = screenHeight * slateRatio * (1 / (editedHardwareScaling / QUALITY));
+      const newRenderHeight = screenHeight * (1 / (editedHardwareScaling / QUALITY));
 
       engine.setSize(newRenderWidth, newRenderHeight);
       globalRefs.depthRenderTarget?.resize({ width: newRenderWidth, height: newRenderHeight });
@@ -85,8 +89,6 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
 
       // check if the screen is super wide (for landscape phones)
       const isOnSuperWideScreen = screenWidth / screenHeight >= 16 / 7;
-
-      console.log("isOnSuperWideScreen", isOnSuperWideScreen);
 
       let newZoomMultiplier = 1;
 

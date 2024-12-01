@@ -51,7 +51,8 @@ export default function stateVids<T_MyTypes extends MyTypes = MyTypes>(prendyAss
     wantToPause: false,
     wantToUnload: false,
     wantToLoad: false,
-    videoSource: placeInfoByName[vidNameToPlaceName(itemId)].videoFiles.backdrop,
+    // videoSource: placeInfoByName[vidNameToPlaceName(itemId)].videoFiles.backdrop,
+    videoSource: null,
     autoplay: false, // maybe doesn't work well with stackvids beofre (cause they both woudn't play)
     //
     // isControlledExternally: true, // to wait for vidState to be updated externally before playing etc,

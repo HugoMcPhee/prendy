@@ -2,15 +2,14 @@ import { Camera, Matrix, Mesh, Sound, Vector3 } from "@babylonjs/core";
 import { forEach } from "chootils/dist/loops";
 import { useEffect } from "react";
 import { getRefs, getState, setState } from "repond";
+import { getProjectionMatrixCustomSize, slateSize } from "../../../helpers/babylonjs/slate";
 import { meta } from "../../../meta";
-import { AnyCameraName, PlaceName, SoundName } from "../../../types";
+import { PlaceName, SoundName } from "../../../types";
 import { setGlobalState } from "../../prendyUtils/global";
 import { getAbsoluteRotation } from "../getAbsoluteRotation";
 import { getScene } from "../getSceneOrEngineUtils";
 import { useModelFile } from "../useModelFile";
-import { loadNowVideosForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
-import { Point3D } from "chootils/dist/points3d";
-import { getProjectionMatrixCustomSize, slateSize } from "../../../helpers/babylonjs/slate";
+import { loadBackdropTexturesForPlace, loadProbeImagesForPlace, makeCameraFromModel } from "./utils";
 
 function getPositionOnSlate(position: Vector3, camera: Camera) {
   const positionOnSlate = Vector3.Project(
@@ -75,9 +74,11 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
       }
     });
 
-    loadNowVideosForPlace()
-      .then(() => setGlobalState({ newPlaceVideosLoaded: true }))
-      .catch((error) => console.warn("error loading videos", error));
+    loadBackdropTexturesForPlace(placeName)
+      .then(() => {
+        setGlobalState({ newPlaceVideosLoaded: true });
+      })
+      .catch((error) => console.warn("error loading backdrops", error));
 
     loadProbeImagesForPlace(placeName)
       .then(() => setGlobalState({ newPlaceProbesLoaded: true }))
@@ -134,9 +135,19 @@ export function usePlace<T_PlaceName extends PlaceName>(placeName: T_PlaceName) 
     });
 
     forEach(container.meshes, (loopedMesh) => {
-      if (loopedMesh.name.includes("camBox_")) {
-        const loopedCamNameWithNumber = loopedMesh.name.replace("camBox_", "");
-        const cameraName = loopedCamNameWithNumber.split(".")[0] as AnyCameraName;
+      // NOTE this used to check for "camBox_" but now it checks for "cambox_"
+      // Also, it checked for a "." but now will cehck for an underscore with a number after it
+      if (loopedMesh.name.includes("cambox_") || loopedMesh.name.includes("camBox_")) {
+        let loopedCamNameWithNumber = loopedMesh.name.replace("cambox_", "");
+        loopedCamNameWithNumber = loopedCamNameWithNumber.replace("camBox_", "");
+        // split at the last underscore with a number after it
+
+        let cameraName = loopedCamNameWithNumber.replace(/_\d+$/, "");
+        // If the camBox has a "." in it, get the number after the last "."
+        if (cameraName.includes(".")) {
+          cameraName = cameraName.split(".")[0];
+        }
+
         loopedMesh.isVisible = false;
 
         loopedMesh.freezeWorldMatrix();

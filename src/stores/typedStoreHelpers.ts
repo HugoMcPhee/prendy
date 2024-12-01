@@ -56,7 +56,7 @@ const testArtStuff = {
   placeInfoByName: {
     placeA: {
       modelFile: "test",
-      videoFiles: { backdrop: "test" },
+      // videoFiles: { backdrop: "test" },
       cameraNames: testNames,
       segmentDurations: { start: 1 } as Record<string, number>,
       segmentNames: testNames,
@@ -66,7 +66,7 @@ const testArtStuff = {
       spotNames: testNames,
       soundspotNames: testNames,
       probesByCamera: { camA: "test" },
-      segmentTimesByCamera: { camA: { start: 0 } } as Record<string, Record<string, number>>,
+      segmentNamesByCamera: { camA: ["start"] } as Record<string, Array<string>>,
     } as const,
   },
   dollOptions: {
@@ -136,9 +136,8 @@ export type PlaceInfoByNamePlaceholder<
   PlaceName,
   {
     modelFile: string;
-    videoFiles: { backdrop: string };
+    // videoFiles: { backdrop: string };
     cameraNames: readonly string[];
-    segmentDurations: Record<string, number>;
     segmentNames: readonly string[];
     wallNames: readonly string[];
     floorNames: readonly string[];
@@ -146,7 +145,19 @@ export type PlaceInfoByNamePlaceholder<
     spotNames: readonly string[];
     soundspotNames: readonly string[];
     probesByCamera: Record<string, string>;
-    segmentTimesByCamera: Record<string, Record<string, number>>;
+    backdropsByCamera: Record<
+      string,
+      Record<
+        string,
+        {
+          frameRate: number;
+          totalFrames: number;
+          maxFramesPerRow: number;
+          textures: Array<{ color: string; depth: string }>;
+        }
+      >
+    >; // by camera, by segment
+    segmentNamesByCamera: Record<string, Array<string>>;
   }
 >;
 

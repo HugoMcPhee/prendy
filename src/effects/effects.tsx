@@ -22,9 +22,7 @@ import { miniBubbleEffects } from "./miniBubbles";
 import { modelEffects } from "./models";
 import { placeEffects } from "./places";
 import { playerEffects } from "./players";
-import { sliceVidEffects } from "./sliceVids";
 import { speechBubbleEffects } from "./speechBubbles";
-import { safeVidEffects } from "./stateVids";
 import { repondEventsEffectGroups, repondEventsParamEffectGroups } from "repond-events";
 
 // Export the paramEffects to be used in the project with initEffectGroups
@@ -39,9 +37,7 @@ export const prendyEffectGroups = {
   modelEffects,
   placeEffects,
   playerEffects,
-  sliceVidEffects,
   speechBubbleEffects,
-  safeVidEffects,
   miniBubbleEffects,
 };
 

@@ -14,6 +14,10 @@ fixes
 - (ios) support returning from sleep, video pauses and doesn't play again
 - video is blank white in iphone, but works on ipad
 
+v 0.12.0
+
+- Use KTX2 textures for backdrops for more predictability!
+
 v 0.11.10
 
 - Use focused square videos

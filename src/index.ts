@@ -7,6 +7,7 @@ import loadGoogleFonts from "./helpers/loadGoogleFonts";
 import loadStyles from "./helpers/loadStyles";
 import { meta } from "./meta";
 import { timeStatePath } from "./stores/global/global";
+import { initializeKTX2Decoder, WorkerConstructor } from "./initializeKTX2Decoder";
 export { DebugFrameRate } from "./components/DebugFrameRate";
 export { PrendyApp } from "./components/PrendyApp";
 export * from "./declarations";
@@ -45,7 +46,12 @@ export type CharacterOptionLoose<T_DollName extends string, T_FontName extends s
   { doll: T_DollName; font: T_FontName }
 >;
 
-export function initPrendy<T_MyTypes extends MyTypes = MyTypes>(assets: T_MyTypes["Assets"]) {
+export async function initPrendy<T_MyTypes extends MyTypes = MyTypes>(
+  assets: T_MyTypes["Assets"],
+  KTX2Worker: WorkerConstructor
+) {
+  // Initialize the KTX2 decoder
+  await initializeKTX2Decoder(KTX2Worker);
   meta.assets = assets;
   initMovers(timeStatePath);
   loadGoogleFonts(meta.assets!.fontNames); // Auto-import fonts from google fonts :)

@@ -5,6 +5,7 @@ import { initializeWebWorker } from "@babylonjs/core/Misc/khronosTextureContaine
 import "@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader";
 
 // Import the WASM transcoder as a URL
+// @ts-ignore
 import wasmMSCTranscoderURL from "@babylonjs/ktx2decoder/wasm/msc_basis_transcoder.wasm?url";
 
 // Define the type for the worker constructor

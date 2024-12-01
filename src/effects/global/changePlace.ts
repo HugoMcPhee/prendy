@@ -11,8 +11,8 @@ import { setGlobalState } from "../../helpers/prendyUtils/global";
 import { getSpotPosition, getSpotRotation } from "../../helpers/prendyUtils/spots";
 import { meta } from "../../meta";
 import { AnyCameraName, DollName, PlaceName } from "../../types";
-import { unloadBackdropTexturesForPlace } from "prendy/src/helpers/babylonjs/usePlace/utils";
-import { getNowBackdropFrameInfo } from "prendy/src/helpers/prendyUtils/backdrops";
+import { unloadBackdropTexturesForPlace } from "../../helpers/babylonjs/usePlace/utils";
+import { getNowBackdropFrameInfo } from "../../helpers/prendyUtils/backdrops";
 
 const cachedTextures = {} as Record<string, Texture>;
 

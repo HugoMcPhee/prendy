@@ -171,12 +171,17 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
       forEach(animationNames, (aniName) => {
         if (!dollRefs.aniGroupsRef) return;
         const aniRef = dollRefs?.aniGroupsRef?.[aniName];
+        const aniInfoRef = dollRefs?.aniInfoMap?.[aniName];
         // const { timerSpeed } = getRefs().global.main;
         // if (aniRef._speedRatio !== timerSpeed) {
         //   aniRef._speedRatio = timerSpeed;
         // }
         if (!aniRef) {
           console.warn("tried to use undefined animation", aniName);
+          return;
+        }
+        if (!aniInfoRef) {
+          console.warn("tried to use no info animation", aniName);
           return;
         }
         // console.log("gameTimeSpeed", gameTimeSpeed);
@@ -191,9 +196,11 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
         // stops playing if the weight is 0ish
 
         if (animIsStopped) {
-          if (aniRef?.isPlaying) aniRef.stop();
+          // if (aniRef?.isPlaying) aniRef.stop();
+          if (aniInfoRef.isPlaying) aniInfoRef.isPlaying = false;
         } else {
-          if (!aniRef?.isPlaying) aniRef.start(itemState.animationLoops);
+          // if (!aniRef?.isPlaying) aniRef.start(itemState.animationLoops);
+          if (!aniInfoRef.isPlaying) aniInfoRef.isPlaying = true;
         }
 
         aniRef?.setWeightForAllAnimatables(animWeights[aniName]);
@@ -209,8 +216,17 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
   // --------------------------------
   whenRotationYChanged: itemEffect({
     run({ newValue: newRotationY, itemRefs }) {
+      const globalState = getState().global.main;
+      const elapsedGameTime = globalState.elapsedGameTime;
       if (!itemRefs.meshRef) return;
-      itemRefs.meshRef.rotation.y = toRadians(newRotationY);
+      const lastStopMotionUpdateTime = itemRefs.lastStopMotionUpdateTime;
+      const timeSinceLastUpdate = elapsedGameTime - lastStopMotionUpdateTime;
+      if (timeSinceLastUpdate > 50) {
+        itemRefs.meshRef.rotation.y = toRadians(newRotationY);
+        itemRefs.lastStopMotionUpdateTime = elapsedGameTime;
+      }
+
+      // itemRefs.meshRef.rotation.y = toRadians(newRotationY);
     },
     atStepEnd: true,
     check: { type: "dolls", prop: "rotationY" },
@@ -461,6 +477,62 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
     },
     check: { type: "dolls", prop: "rotationYGoal" },
     step: "dollCorrectRotationAndPosition",
+    atStepEnd: true,
+  }),
+  whenShouldUpdateAnimation: itemEffect({
+    run({ newValue: newBackdropFrame }) {
+      // update all dolls animations based on each animations playback speed
+      // But it only updates when the backdrop frame changes to keep in sync with the backdrop
+      const { dollNames } = meta.assets!;
+      const { modelInfoByName } = meta.assets!;
+      const { gameTimeSpeed } = getState().global.main;
+
+      const globalState = getState().global.main;
+      const elapsedGameTime = globalState.elapsedGameTime;
+
+      forEach(dollNames, (dollName) => {
+        const dollState = getState().dolls[dollName];
+        const dollRefs = getRefs().dolls[dollName];
+
+        const { modelName } = dollState;
+        const animationNames = modelInfoByName[modelName].animationNames as AnyAnimationName[];
+
+        // console.log("newBackdropFrame", newBackdropFrame);
+
+        if (!dollRefs.aniGroupsRef) return;
+        forEach(animationNames, (aniName) => {
+          if (!dollRefs.aniGroupsRef) return;
+          const aniRef = dollRefs?.aniGroupsRef?.[aniName];
+          const aniInfoRef = dollRefs?.aniInfoMap?.[aniName];
+          // console.log(aniRef.from, aniRef.to);
+          // console.log(dollRefs?.aniInfoMap);
+          const firstFrame = aniRef.from;
+          const lastFrame = aniRef.to;
+          // const totalFrames = lastFrame - firstFrame;
+
+          if (aniInfoRef) {
+            if (aniInfoRef.isPlaying) {
+              const timeSinceLastFrame = elapsedGameTime - aniInfoRef.timeOfLastFrame;
+              // console.log("timeSinceLastFrame", timeSinceLastFrame);
+
+              if (timeSinceLastFrame > 100) {
+                aniInfoRef.timeOfLastFrame = elapsedGameTime;
+                aniInfoRef.nowFrame = aniInfoRef.nowFrame + 8;
+                if (aniInfoRef.nowFrame > lastFrame) {
+                  aniInfoRef.nowFrame = firstFrame;
+                }
+                // console.log("nowFrame", aniInfoRef.nowFrame, aniName);
+                aniRef.start(true);
+                aniRef.goToFrame(aniInfoRef.nowFrame);
+                aniRef.stop();
+              }
+            }
+          }
+        });
+      });
+    },
+    check: { type: "global", prop: "frameTick" },
+    step: "default",
     atStepEnd: true,
   }),
   ...addMoverEffects("dolls", "position", "3d"),

@@ -151,6 +151,10 @@ uniform highp sampler2D BackdropColorTextureSample; // Backdrop texture
 uniform highp sampler2D BackdropDepthTextureSample; // Backdrop texture
 uniform highp sampler2D SceneDepthTexture;
 uniform sampler2D textureSampler; // color texture from webgl?
+uniform highp float randomNumber;
+uniform highp float randomNumberB;
+uniform highp float randomNumberC;
+
 
 /// <summary>
 /// Varying variables.
@@ -171,6 +175,30 @@ varying vec2 vUVbackdrop;
 // uniform vec2 slatePos;
 // uniform vec2 stretchSceneAmount;
 // uniform vec2 stretchVideoAmount;
+
+float gradientNoise(in vec2 uv, in float seed)
+{
+	// return fract(52.9829189 * fract(dot(uv, vec2(0.06711056, 0.00583715))));
+  return fract(52.9829189 * fract(dot(uv + vec2(seed), vec2(0.06711056, 0.00583715))));
+}
+
+// // Function to adjust contrast
+// vec3 adjustContrast(vec3 color, float contrast) {
+//     return ((color - 0.5) * contrast) + 0.5;
+// }
+
+// // Function to adjust saturation
+// vec3 adjustSaturation(vec3 color, float saturation) {
+//     // Calculate luminance
+//     float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
+//     return mix(vec3(luminance), color, saturation);
+// }
+
+// // Function to adjust brightness
+// vec3 adjustBrightness(vec3 color, float brightness) {
+//     return color + vec3(brightness);
+// }
+
 
 
 mat3 makeTranslation(vec2 t) {  
@@ -206,7 +234,46 @@ float imageDepth = depthTexture.x;
 float sceneDepth = sceneDepthTexture.r;	// depth value from DepthRenderer: 0 to 1
 
 
+// Define the number of noise layers you want to apply
+const float noiseLayers_color = 18.0;
+
+// Calculate the noise once
+float noise_color = gradientNoise(gl_FragCoord.xy, randomNumber);
+
+// Scale the noise by the number of layers and adjust the offset
+color += vec4((noise_color * noiseLayers_color / 255.0) - (0.5 * noiseLayers_color / 255.0));
+
+
+
+
+// Apply brightness adjustment
+// color.rgb = adjustBrightness(color.rgb, -0.3);
+
+// Apply contrast adjustment
+// color.rgb = adjustContrast(color.rgb, 0.9);
+// color.rgb = adjustContrast(color.rgb, 1.0);
+
+// Apply saturation adjustment
+// color.rgb = adjustSaturation(color.rgb, 1.025);
+
+
+// Clamp the color to [0.0, 1.0] to avoid artifacts
+// color.rgb = clamp(color.rgb, 0.0, 1.0);
+
+
+// Define the number of noise layers you want to apply
+const float noiseLayers_backrop = 18.0;
+
+// Calculate the noise once
+float noise_backrop = gradientNoise(gl_FragCoord.xy, randomNumber);
+
+// Scale the noise by the number of layers and adjust the offset
+backdropTexture += vec4((noise_backrop * noiseLayers_backrop / 255.0) - (0.5 * noiseLayers_backrop / 255.0));
+
+
 vec4 sceneOnBackdropColor = (sceneDepth >= imageDepth) ?   backdropTexture : color;
+
+
 
 // this one prevents the weird white outlines
 vec4 sceneOnBackdropColorSmoother = mix(backdropTexture, sceneOnBackdropColor, color.w);
@@ -214,6 +281,20 @@ vec4 sceneOnBackdropColorSmoother = mix(backdropTexture, sceneOnBackdropColor, c
 // amount for color
 // amount for backdrop
 // should both be a number combined make 1
+
+
+// gl_FragColor = vec4(bgcolor, 1.0);
+
+
+// Define the number of noise layers you want to apply
+const float noiseLayers_combined = 8.0;
+
+// Calculate the noise once
+float noise_combined = gradientNoise(gl_FragCoord.xy, randomNumber);
+
+// Scale the noise by the number of layers and adjust the offset
+backdropTexture += vec4((noise_combined * noiseLayers_combined / 255.0) - (0.5 * noiseLayers_combined / 255.0));
+
 
 gl_FragColor = sceneOnBackdropColorSmoother;
 // gl_FragColor = newColor;

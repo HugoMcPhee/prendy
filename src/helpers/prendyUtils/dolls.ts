@@ -171,7 +171,10 @@ export function setupLightMaterial(theMaterial: PBRMaterial | null) {
   if (theMaterial) {
     theMaterial.enableSpecularAntiAliasing = true;
     theMaterial.roughness = 0.95;
-    theMaterial.environmentIntensity = 2;
+    theMaterial.environmentIntensity = 10;
+    theMaterial.cameraExposure = 0.4;
+    theMaterial.cameraContrast = 1.8;
+    // theMaterial.cameraToneMappingEnabled = true;
     theMaterial.reflectionTexture = placeRefs.camsRefs[nowCamName].probeTexture;
     // theMaterial.enableSpecularAntiAliasing = false;
     // theMaterial.cameraToneMappingEnabled = true;
@@ -264,7 +267,17 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
 
   dollRefs.assetRefs = assetRefs;
   dollRefs.aniGroupsRef = aniGroups;
-  dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
+  dollRefs.aniInfoMap = {};
+  for (const aniName of animationNames) {
+    dollRefs.aniInfoMap[aniName] = {
+      nowFrame: 0,
+      timeOfLastFrame: 0,
+      isPlaying: false,
+    };
+  }
+
+  // dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
+  dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.stop(true); // start looping the current animation
 
   enableCollisions(dollRefs.meshRef);
   dollRefs.meshRef.setEnabled(dollState.isVisible);

@@ -74,6 +74,12 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
     materials: Record<MaterialNameByModel[T_ModelName], Material>;
   };
 
+  type CustomAnimationInfo = {
+    nowFrame: number;
+    timeOfLastFrame: number;
+    isPlaying: boolean;
+  };
+
   const getDefaultRefs = <T_DollName extends DollName, T_ModelName extends ModelName>(
     dollName: T_DollName,
     itemState: ReturnType<typeof getDefaultState<T_DollName, DollOptions[T_DollName]["model"]>>
@@ -86,6 +92,9 @@ export default function dolls<T_MyTypes extends MyTypes = MyTypes>(prendyAssets:
       otherMeshes: modelOtherMeshesRefs(modelName),
       entriesRef: null as null | InstantiatedEntries,
       aniGroupsRef: null as null | Record<AnimationNameByModel[T_ModelName], AnimationGroup>,
+      aniInfoMap: null as null | Record<AnimationNameByModel[T_ModelName], CustomAnimationInfo>,
+      // NOTE could use this same value for knowing if the animation should update too, instead of storing for each animation
+      lastStopMotionUpdateTime: 0,
       assetRefs: null as null | DollAssetRefs<T_ModelName>,
       groundRef: null as null | AbstractMesh,
       canGoThroughWalls: false,

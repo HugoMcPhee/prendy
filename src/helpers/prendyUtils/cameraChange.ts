@@ -141,8 +141,11 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         "BackdropTextureSample",
         "BackdropColorTextureSample",
         "BackdropDepthTextureSample",
+        "randomNumber",
+        "randomNumberB",
+        "randomNumberC",
       ], // textures
-      1,
+      2,
       scene.activeCamera,
       undefined,
       undefined,
@@ -189,25 +192,20 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         effect.setFloat2("stretchVideoAmount", 1, 1);
       }
       effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
+      effect.setFloat("randomNumber", Math.random() * 5);
+      effect.setFloat("randomNumberB", Math.random() * 5);
+      effect.setFloat("randomNumberC", Math.random() * 5);
       effect.setFloat("framesPerRow", framesPerRow);
       effect.setFloat("framesPerColumn", framesPerColumn);
       effect.setVector2("frameSize", frameSize);
 
       globalRefs.backdropTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
       globalRefs.backdropTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
-      globalRefs?.backdropPostProcessEffect?.setTexture("BackdropColorTextureSample", globalRefs.backdropTex);
-      globalRefs?.backdropPostProcessEffect?.setTexture("BackdropDepthTextureSample", globalRefs.backdropTexDepth);
+      effect.setTexture("BackdropColorTextureSample", globalRefs.backdropTex);
+      effect.setTexture("BackdropDepthTextureSample", globalRefs.backdropTexDepth);
 
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        "stretchVideoAmount",
-        globalRefs.stretchVideoSize.x,
-        globalRefs.stretchVideoSize.y
-      );
-      (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-        "stretchSceneAmount",
-        globalRefs.stretchSceneSize.x,
-        globalRefs.stretchSceneSize.y
-      );
+      effect.setFloat2("stretchVideoAmount", globalRefs.stretchVideoSize.x, globalRefs.stretchVideoSize.y);
+      effect.setFloat2("stretchSceneAmount", globalRefs.stretchSceneSize.x, globalRefs.stretchSceneSize.y);
 
       const positionChanged = true;
       const zoomChanged = true;
@@ -216,11 +214,7 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
       if (engine && (positionChanged || zoomChanged)) {
         const stretchVideoSize = globalRefs.stretchVideoSize;
 
-        (globalRefs?.backdropPostProcessEffect as Effect | null)?.setFloat2(
-          "slatePos",
-          slatePos.x * stretchVideoSize.x,
-          slatePos.y * stretchVideoSize.y
-        );
+        effect?.setFloat2("slatePos", slatePos.x * stretchVideoSize.x, slatePos.y * stretchVideoSize.y);
       }
     };
   }
@@ -301,6 +295,8 @@ export function applyProbeToAllDollMaterials() {
 
     if (modelRefs.materialRef && newCamRef.probeTexture) {
       modelRefs.materialRef.reflectionTexture = newCamRef.probeTexture;
+    } else {
+      console.warn("no material ref or probe texture", modelRefs.materialRef, newCamRef.probeTexture);
     }
   });
 
@@ -313,7 +309,7 @@ export function applyProbeToAllDollMaterials() {
 
     if (dollRefs.meshRef) {
       dollRefs.meshRef.material = modelRefs.materialRef;
-      dollRefs.meshRef.material?.freeze();
+      // dollRefs.meshRef.material?.freeze();
     }
   });
 }

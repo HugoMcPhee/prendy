@@ -27,6 +27,7 @@ export function PrendyApp({ children, extraScenes }: Props) {
         engineOptions={{
           disableWebGL2Support: false,
           powerPreference: "high-performance",
+          antialias: true,
           // adaptToDeviceRatio: true, // NOTE this can mess with the calculating video stretch with engine.getRenderWidth(), but it does make the edges cleaner and higher res!
           // adaptToDeviceRatio: false,
         }}

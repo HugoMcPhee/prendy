@@ -276,8 +276,8 @@ export function saveModelStuffToDoll<T_ModelName extends ModelName, T_DollName e
     };
   }
 
-  // dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
-  dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.stop(true); // start looping the current animation
+  dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.start(true); // start looping the current animation
+  // dollRefs.aniGroupsRef?.[dollState.nowAnimation]?.stop(true); // start looping the current animation
 
   enableCollisions(dollRefs.meshRef);
   dollRefs.meshRef.setEnabled(dollState.isVisible);

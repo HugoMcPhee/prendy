@@ -196,11 +196,11 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
         // stops playing if the weight is 0ish
 
         if (animIsStopped) {
-          // if (aniRef?.isPlaying) aniRef.stop();
-          if (aniInfoRef.isPlaying) aniInfoRef.isPlaying = false;
+          if (aniRef?.isPlaying) aniRef.stop();
+          // if (aniInfoRef.isPlaying) aniInfoRef.isPlaying = false;
         } else {
-          // if (!aniRef?.isPlaying) aniRef.start(itemState.animationLoops);
-          if (!aniInfoRef.isPlaying) aniInfoRef.isPlaying = true;
+          if (!aniRef?.isPlaying) aniRef.start(itemState.animationLoops);
+          // if (!aniInfoRef.isPlaying) aniInfoRef.isPlaying = true;
         }
 
         aniRef?.setWeightForAllAnimatables(animWeights[aniName]);
@@ -216,17 +216,17 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
   // --------------------------------
   whenRotationYChanged: itemEffect({
     run({ newValue: newRotationY, itemRefs }) {
-      const globalState = getState().global.main;
-      const elapsedGameTime = globalState.elapsedGameTime;
+      // const globalState = getState().global.main;
+      // const elapsedGameTime = globalState.elapsedGameTime;
       if (!itemRefs.meshRef) return;
-      const lastStopMotionUpdateTime = itemRefs.lastStopMotionUpdateTime;
-      const timeSinceLastUpdate = elapsedGameTime - lastStopMotionUpdateTime;
-      if (timeSinceLastUpdate > 50) {
-        itemRefs.meshRef.rotation.y = toRadians(newRotationY);
-        itemRefs.lastStopMotionUpdateTime = elapsedGameTime;
-      }
+      // const lastStopMotionUpdateTime = itemRefs.lastStopMotionUpdateTime;
+      // const timeSinceLastUpdate = elapsedGameTime - lastStopMotionUpdateTime;
+      // if (timeSinceLastUpdate > 50) {
+      //   itemRefs.meshRef.rotation.y = toRadians(newRotationY);
+      //   itemRefs.lastStopMotionUpdateTime = elapsedGameTime;
+      // }
 
-      // itemRefs.meshRef.rotation.y = toRadians(newRotationY);
+      itemRefs.meshRef.rotation.y = toRadians(newRotationY);
     },
     atStepEnd: true,
     check: { type: "dolls", prop: "rotationY" },
@@ -515,17 +515,17 @@ export const dollEffects = makeEffects(({ itemEffect, effect }) => ({
               const timeSinceLastFrame = elapsedGameTime - aniInfoRef.timeOfLastFrame;
               // console.log("timeSinceLastFrame", timeSinceLastFrame);
 
-              if (timeSinceLastFrame > 100) {
-                aniInfoRef.timeOfLastFrame = elapsedGameTime;
-                aniInfoRef.nowFrame = aniInfoRef.nowFrame + 8;
-                if (aniInfoRef.nowFrame > lastFrame) {
-                  aniInfoRef.nowFrame = firstFrame;
-                }
-                // console.log("nowFrame", aniInfoRef.nowFrame, aniName);
-                aniRef.start(true);
-                aniRef.goToFrame(aniInfoRef.nowFrame);
-                aniRef.stop();
-              }
+              // if (timeSinceLastFrame > 100) {
+              //   aniInfoRef.timeOfLastFrame = elapsedGameTime;
+              //   aniInfoRef.nowFrame = aniInfoRef.nowFrame + 8;
+              //   if (aniInfoRef.nowFrame > lastFrame) {
+              //     aniInfoRef.nowFrame = firstFrame;
+              //   }
+              //   // console.log("nowFrame", aniInfoRef.nowFrame, aniName);
+              //   aniRef.start(true);
+              //   aniRef.goToFrame(aniInfoRef.nowFrame);
+              //   aniRef.stop();
+              // }
             }
           }
         });

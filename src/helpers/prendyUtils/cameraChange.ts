@@ -145,7 +145,7 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         "randomNumberB",
         "randomNumberC",
       ], // textures
-      2,
+      1.0,
       scene.activeCamera,
       undefined,
       undefined,
@@ -221,7 +221,8 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
 
   // Make the FXAA post process
   if (scene.activeCamera && !globalRefs.fxaaPostProcess) {
-    globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1.0, scene.activeCamera);
+    // globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 0.25, scene.activeCamera);
+    globalRefs.fxaaPostProcess = new FxaaPostProcess("fxaa", 1, scene.activeCamera);
   }
 
   if (didChangePlace) {

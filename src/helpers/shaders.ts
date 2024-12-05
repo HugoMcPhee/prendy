@@ -234,8 +234,20 @@ float imageDepth = depthTexture.x;
 float sceneDepth = sceneDepthTexture.r;	// depth value from DepthRenderer: 0 to 1
 
 
+// Good for low compression
+// float quantizationLevelsA = 100.0;
+// Good for high compression
+float quantizationLevelsA = 64.0;
+
+// Quantize each color channel
+color.r = floor(color.r * quantizationLevelsA) / quantizationLevelsA;
+color.g = floor(color.g * quantizationLevelsA) / quantizationLevelsA;
+color.b = floor(color.b * quantizationLevelsA) / quantizationLevelsA;
+    
+
 // Define the number of noise layers you want to apply
-const float noiseLayers_color = 18.0;
+// const float noiseLayers_color = 18.0;
+const float noiseLayers_color = 6.0;
 
 // Calculate the noise once
 float noise_color = gradientNoise(gl_FragCoord.xy, randomNumber);
@@ -243,6 +255,16 @@ float noise_color = gradientNoise(gl_FragCoord.xy, randomNumber);
 // Scale the noise by the number of layers and adjust the offset
 color += vec4((noise_color * noiseLayers_color / 255.0) - (0.5 * noiseLayers_color / 255.0));
 
+// Good for low compression
+// float quantizationLevels = 10.0;
+// Good for high compression
+float quantizationLevels = 32.0;
+
+// Quantize each color channel
+color.r = floor(color.r * quantizationLevels) / quantizationLevels;
+color.g = floor(color.g * quantizationLevels) / quantizationLevels;
+color.b = floor(color.b * quantizationLevels) / quantizationLevels;
+    
 
 
 

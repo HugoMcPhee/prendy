@@ -76,7 +76,10 @@ export const globalSlateEffects = makeEffects(({ itemEffect, effect }) => ({
 
       // TODO redo this to try and get the render resolution to matfch the backdrops, including the zoom
 
-      const QUALITY = 1; // 1 is normal browser pixel ratio, 2 is retina, 3 is super retina
+      // const QUALITY = 2; // 1 is normal browser pixel ratio, 2 is retina, 3 is super retina // 0.8 is good for low quality textures
+      // const QUALITY = window.devicePixelRatio; // 1 is normal browser pixel ratio, 2 is retina, 3 is super retina // 0.8 is good for low quality textures
+      // const QUALITY = Math.max(1, window.devicePixelRatio / 2);
+      const QUALITY = 1;
 
       const newRenderWidth = screenHeight * slateRatio * (1 / (editedHardwareScaling / QUALITY));
       const newRenderHeight = screenHeight * (1 / (editedHardwareScaling / QUALITY));

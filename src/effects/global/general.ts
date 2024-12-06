@@ -154,19 +154,37 @@ export const globalGeneralEffects = makeEffects(({ effect, itemEffect }) => ({
     step: "dollAnimation2",
   }),
 
-  // whenBackdropFrameChanges: itemEffect({
-  //   run({ newValue: newFrameValue }) {
-  //     // console.log("whenBackdropFrameChanges", newFrameValue);
+  whenBackdropFrameChanges: itemEffect({
+    run({ newValue: newFrameValue }) {
+      // console.log("whenBackdropFrameChanges", newFrameValue);
 
-  //     const globalRefs = getRefs().global.main;
-  //     const postProcess = globalRefs.backdropPostProcessEffect;
-  //     console.log("newFrameValue", newFrameValue);
+      const globalRefs = getRefs().global.main;
+      const postProcess = globalRefs.backdropPostProcessEffect;
+      // console.log("newFrameValue", newFrameValue);
 
-  //     // postProcess?.setFloat("currentFrameIndex", newFrameValue);
-  //     // postProcess.setVector2("frameSize", { x: 0.25, y: 0.5 });
-  //   },
-  //   check: { type: "global", prop: "backdropFrame" },
-  //   atStepEnd: true,
-  //   step: "default",
-  // }),
+      const MAX_PAINT_AMOUNT = 0.55;
+      const MIN_PAINT_AMOUNT = 0.0;
+      // Random between min and max
+      const newPaintAmount = Math.random() * (MAX_PAINT_AMOUNT - MIN_PAINT_AMOUNT) + MIN_PAINT_AMOUNT;
+      // console.log("newPaintAmount", newPaintAmount);
+
+      // globalRefs.frameShaderValues.randomNumber = Math.random() * 5;
+      // globalRefs.frameShaderValues.randomNumberB = Math.random() * 5;
+      // globalRefs.frameShaderValues.randomNumberC = Math.random() * 5;
+      globalRefs.frameShaderValues.paintAmount = newPaintAmount;
+
+      // postProcess.setFloat2("paintAmount", newPaintAmount);
+
+      // postProcess.setFloat("randomNumber", Math.random() * 5);
+      // postProcess.setFloat("randomNumberB", Math.random() * 5);
+      // postProcess.setFloat("randomNumberC", Math.random() * 5);
+
+      // postProcess?.setFloat("currentFrameIndex", newFrameValue);
+      // postProcess?.setFloat("currentFrameIndex", newFrameValue);
+      // postProcess.setVector2("frameSize", { x: 0.25, y: 0.5 });
+    },
+    check: { type: "global", prop: "backdropFrame" },
+    // atStepEnd: true,
+    step: "default",
+  }),
 }));

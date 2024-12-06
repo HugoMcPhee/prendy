@@ -42,6 +42,11 @@ const shaders = {
         return m;
     }
 
+    // Hash function to generate a pseudo-random float based on two inputs
+    float customRand(vec2 co){
+        return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+    }
+
 
     
     #define CUSTOM_VERTEX_DEFINITIONS
@@ -49,6 +54,17 @@ const shaders = {
     void main(void) {
     
     #define CUSTOM_VERTEX_MAIN_BEGIN
+
+    const float wobbleIntensity = 0.0005;
+    const float wobbleFrequency = 0.1;
+    
+    // Use this in vUV to make the screen shake!
+    // const float wobbleIntensity = 0.005;
+    // const float wobbleFrequency = 0.1;
+    // vec2 pos = position;
+    // pos.x += sin(currentFrameIndex * wobbleFrequency + pos.y * 10.0) * wobbleIntensity;
+    // pos.y += cos(currentFrameIndex * wobbleFrequency + pos.x * 10.0) * wobbleIntensity;
+    
       
     
       vUV = (position * madd + madd) * scale;
@@ -85,6 +101,23 @@ const shaders = {
       newCoord.xy*= 1./target_res;
       
       newUv = vec2(newCoord.x, newCoord.y);
+
+    // vec2 pos = position;
+    // newUv.x += sin(currentFrameIndex * wobbleFrequency + newUv.y * 10.0) * wobbleIntensity;
+    // newUv.y += cos(currentFrameIndex * wobbleFrequency + newUv.x * 10.0) * wobbleIntensity;
+    
+    // Generate a unique seed for each vertex based on position and frame index
+    vec2 seed = vec2(position.x, position.y) + currentFrameIndex;
+
+    // Generate random offsets
+    float offsetX = (customRand(seed) - 0.5) * 2.0 * wobbleIntensity; // Range: [-wobbleIntensity, +wobbleIntensity]
+    float offsetY = (customRand(seed + vec2(1.0, 0.0)) - 0.5) * 2.0 * wobbleIntensity;
+
+    // Apply the offsets to the vertex position
+    // vec3 pos = position;
+    newUv.x += offsetX;
+    newUv.y += offsetY;
+
 
 
       // Compute the column and row indices for the current frame
@@ -154,6 +187,7 @@ uniform sampler2D textureSampler; // color texture from webgl?
 uniform highp float randomNumber;
 uniform highp float randomNumberB;
 uniform highp float randomNumberC;
+uniform highp float paintAmount;
 
 
 /// <summary>
@@ -216,12 +250,73 @@ mat3 makeScale(vec2 s) {
     return m;
 }
 
+
+// Kuwahara Filter Function
+vec4 kuwaharaFilter(sampler2D tex, vec2 uv, float texelScale) {
+    const vec2 resolution = vec2(512.0, 512.0);
+
+    // Define texel size
+    vec2 texel = texelScale / resolution;
+
+    // Define offsets for a 3x3 window
+    vec2 offsets[9];
+    offsets[0] = vec2(-texel.x, -texel.y);
+    offsets[1] = vec2( 0.0f,    -texel.y);
+    offsets[2] = vec2( texel.x, -texel.y);
+    offsets[3] = vec2(-texel.x,  0.0f);
+    offsets[4] = vec2( 0.0f,     0.0f);
+    offsets[5] = vec2( texel.x,  0.0f);
+    offsets[6] = vec2(-texel.x,  texel.y);
+    offsets[7] = vec2( 0.0f,     texel.y);
+    offsets[8] = vec2( texel.x,  texel.y);
+
+    // Initialize variables to store region statistics
+    float minVariance = 1e20;
+    vec4 meanColor = vec4(0.0);
+
+    // Define four regions (quadrants)
+    int regions = 4;
+    for(int r = 0; r < regions; r++) {
+        vec4 sum = vec4(0.0);
+        vec4 sumSq = vec4(0.0);
+        int samples = 0;
+
+        // Define each region's sample indices
+        // Region 0: Top-left
+        // Region 1: Top-right
+        // Region 2: Bottom-left
+        // Region 3: Bottom-right
+        for(int i = 0; i < 4; i++) {
+            int idx = r * 2 + i;
+            if(idx >= 0 && idx < 9) { // Ensure index is within bounds
+                vec4 the_sample = texture2D(tex, uv + offsets[idx]);
+                sum += the_sample;
+                sumSq += the_sample * the_sample;
+                samples++;
+            }
+        }
+
+        // Calculate mean and variance
+        vec4 mean = sum / float(samples);
+        vec4 variance = (sumSq / float(samples)) - (mean * mean);
+        float var = (variance.r + variance.g + variance.b) / 3.0;
+
+        // Select the region with the smallest variance
+        if(var < minVariance) {
+            minVariance = var;
+            meanColor = mean;
+        }
+    }
+
+    return meanColor;
+}
+
 void main(void)
 {
 
 
 
-vec4 color = texture2D(textureSampler, newUv);
+// vec4 color = texture2D(textureSampler, newUv);
 vec4 sceneDepthTexture = texture2D(SceneDepthTexture, newUv);
 // vec4 depthTexture = texture2D(BackdropTextureSample, vUVdepth);
 // vec4 backdropTexture = texture2D(BackdropTextureSample, vUVbackdrop);
@@ -232,6 +327,10 @@ vec4 backdropTexture = texture2D(BackdropColorTextureSample, newUvFlipped);
 
 float imageDepth = depthTexture.x;
 float sceneDepth = sceneDepthTexture.r;	// depth value from DepthRenderer: 0 to 1
+
+// const float texelScale = 2.0;
+// vec4 color = kuwaharaFilter(textureSampler, newUv, texelScale);
+vec4 color = kuwaharaFilter(textureSampler, newUv, paintAmount);
 
 
 // Good for low compression
@@ -287,7 +386,7 @@ color.b = floor(color.b * quantizationLevels) / quantizationLevels;
 const float noiseLayers_backrop = 18.0;
 
 // Calculate the noise once
-float noise_backrop = gradientNoise(gl_FragCoord.xy, randomNumber);
+float noise_backrop = gradientNoise(gl_FragCoord.xy, randomNumberB);
 
 // Scale the noise by the number of layers and adjust the offset
 backdropTexture += vec4((noise_backrop * noiseLayers_backrop / 255.0) - (0.5 * noiseLayers_backrop / 255.0));
@@ -295,10 +394,8 @@ backdropTexture += vec4((noise_backrop * noiseLayers_backrop / 255.0) - (0.5 * n
 
 vec4 sceneOnBackdropColor = (sceneDepth >= imageDepth) ?   backdropTexture : color;
 
-
-
 // this one prevents the weird white outlines
-vec4 sceneOnBackdropColorSmoother = mix(backdropTexture, sceneOnBackdropColor, color.w);
+vec4 sceneOnBackdropColorSmoother = mix(backdropTexture, sceneOnBackdropColor, color.a);
 
 // amount for color
 // amount for backdrop
@@ -312,7 +409,7 @@ vec4 sceneOnBackdropColorSmoother = mix(backdropTexture, sceneOnBackdropColor, c
 const float noiseLayers_combined = 8.0;
 
 // Calculate the noise once
-float noise_combined = gradientNoise(gl_FragCoord.xy, randomNumber);
+float noise_combined = gradientNoise(gl_FragCoord.xy, randomNumberC);
 
 // Scale the noise by the number of layers and adjust the offset
 backdropTexture += vec4((noise_combined * noiseLayers_combined / 255.0) - (0.5 * noiseLayers_combined / 255.0));

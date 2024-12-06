@@ -245,6 +245,13 @@ export default function global<T_MyTypes extends MyTypes = MyTypes>(prendyAssets
     camSegmentRulesOptions: null as null | CamSegmentRulesOptionsUntyped, // NOTE if using the typed version,  might need to define it in consts to remove cyclic dependancy
     // onPickupButtonClick: null as null | ((pickupName: PickupName) => void), // what to do when pressing the pickup button
     onPickupButtonClick: null as null | ((pickupName: any) => void), // what to do when pressing the pickup button
+
+    frameShaderValues: {
+      randomNumber: 0.5,
+      randomNumberB: 0.5,
+      randomNumberC: 0.5,
+      paintAmount: 0.5,
+    },
   });
 
   // const startStates: InitialItemsState<typeof state> = {

@@ -144,6 +144,7 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         "randomNumber",
         "randomNumberB",
         "randomNumberC",
+        "paintAmount",
       ], // textures
       1.0,
       scene.activeCamera,
@@ -190,14 +191,22 @@ export function updateTexturesForNowCamera(newCameraName: AnyCameraName, didChan
         effect.setFloat2("slatePos", slatePosGoal.x, slatePosGoal.y);
         effect.setFloat2("stretchSceneAmount", slateZoom, slateZoom);
         effect.setFloat2("stretchVideoAmount", 1, 1);
+        // effect.setFloat("paintAmount", 0.5);
       }
       effect.setFloat("currentFrameIndex", backdropFrameForNowTexture);
-      effect.setFloat("randomNumber", Math.random() * 5);
-      effect.setFloat("randomNumberB", Math.random() * 5);
-      effect.setFloat("randomNumberC", Math.random() * 5);
       effect.setFloat("framesPerRow", framesPerRow);
       effect.setFloat("framesPerColumn", framesPerColumn);
       effect.setVector2("frameSize", frameSize);
+      const randomNumber = Math.random() * 5;
+      effect.setFloat("randomNumber", randomNumber);
+      effect.setFloat("randomNumberB", randomNumber);
+      effect.setFloat("randomNumberC", randomNumber);
+      const frameShaderValues = globalRefs.frameShaderValues;
+      // effect.setFloat("randomNumber", frameShaderValues.randomNumber);
+      // effect.setFloat("randomNumberB", frameShaderValues.randomNumberB);
+      // effect.setFloat("randomNumberC", frameShaderValues.randomNumberC);
+      effect.setFloat("paintAmount", frameShaderValues.paintAmount);
+      // console.log(frameShaderValues.paintAmount);
 
       globalRefs.backdropTex = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].color;
       globalRefs.backdropTexDepth = camRef.backdropTexturesBySegment[nowSegmentName][nowTextureIndex].depth;
